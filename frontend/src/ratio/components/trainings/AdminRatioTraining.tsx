@@ -50,22 +50,20 @@ const AdminRatioTraining: React.FC<Props> = ({ slug }) => {
           <Page.Main>
             <PaddedBlock width="max">
               <Column>
-                <Row vCentered>
-                  <Label>Когда:</Label>
-                  <strong>{training.date}</strong>
-                </Row>
+                {training.date && (
+                  <Row vCentered>
+                    <Label>Когда:</Label>
+                    <strong>{training.date}</strong>
+                  </Row>
+                )}
 
-                <LinkWithIcon
-                  href={`/admin/ratio/training/${training.id}/change/`}
-                  text="Править в Django-админке"
-                  icon={FaEdit}
-                />
-
-                <LinkWithIcon
-                  href={`/team/ratio/training/${training.slug}/schedule`}
-                  text="Расписание"
-                  icon={FaRegListAlt}
-                />
+                {training.date && (
+                  <LinkWithIcon
+                    href={`/team/ratio/training/${training.slug}/schedule`}
+                    text="Расписание"
+                    icon={FaRegListAlt}
+                  />
+                )}
 
                 {training.telegram_link && (
                   <LinkWithIcon

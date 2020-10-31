@@ -10,6 +10,7 @@ import AdminRatioTraining from '../components/trainings/AdminRatioTraining';
 
 const tabs = [
   { title: 'Тренинги', name: 'trainings' },
+  { title: 'Продукты', name: 'products' },
   { title: 'Заказы', name: 'orders' },
 ];
 
@@ -25,8 +26,10 @@ const AdminRatioIndexPage: NextApolloPage = () => {
         if (isSingleTraining()) {
           return <AdminRatioTraining slug={router.query.slug as string} />;
         } else {
-          return <TrainingCollectionBlock />;
+          return <TrainingCollectionBlock eternal={false} />;
         }
+      case 'products':
+        return <TrainingCollectionBlock eternal={true} />;
       case 'orders':
         return <OrderCollectionBlock />;
       default:
@@ -40,6 +43,8 @@ const AdminRatioIndexPage: NextApolloPage = () => {
       return 'trainings';
     } else if (isSingleTraining()) {
       return 'trainings';
+    } else if (route === '/team/ratio/products') {
+      return 'products';
     } else if (route === '/team/ratio/orders') {
       return 'orders';
     } else {
@@ -52,6 +57,7 @@ const AdminRatioIndexPage: NextApolloPage = () => {
     const name2path: Record<string, string> = {
       trainings: '/team/ratio',
       orders: '/team/ratio/orders',
+      products: '/team/ratio/products',
     };
     const path = name2path[name];
     if (path) {
@@ -62,6 +68,8 @@ const AdminRatioIndexPage: NextApolloPage = () => {
   const getPageTitle = () => {
     if (selected === 'orders') {
       return 'Заказы на рацио-тренинги';
+    } else if (selected === 'products') {
+      return 'Заказы на рацио-продукты';
     } else if (selected === 'trainings') {
       return isSingleTraining() ? 'Загружается...' : 'Рацио-тренинги';
     } else {

@@ -15,8 +15,8 @@ class Training(models.Model):
     name = models.CharField('Название', max_length=255)
     slug = models.SlugField(unique=True)
 
-    date = models.DateField('Дата начала')
-    telegram_link = models.URLField('Телеграм-чат')
+    date = models.DateField('Дата начала', blank=True, null=True)
+    telegram_link = models.URLField('Телеграм-чат', blank=True)
     pre_survey_link = models.URLField('Форма предрассылки', blank=True)
     post_survey_link = models.URLField('Форма пострассылки', blank=True)
     gdrive_link = models.URLField('Материалы', blank=True)
@@ -50,6 +50,9 @@ class Training(models.Model):
     total_income.short_description = 'Суммарный доход'
 
     def add_day(self, date):
+        if not self.date:
+            raise Exception("This training doesn't have a start date")
+
         if date < self.date:
             raise Exception(
                 "Can't add day for date which is earlier than training's start date"
@@ -57,10 +60,16 @@ class Training(models.Model):
 
         from .training_day import TrainingDay
 
-        day = TrainingDay.objects.create(training=self, date=date,)
+        day = TrainingDay.objects.create(
+            training=self,
+            date=date,
+        )
         return day
 
     def copy_schedule_from(self, src_training):
+        if not self.date:
+            raise Exception("This training doesn't have a start date")
+
         # late import - avoiding circular dependency
         from .training_day import TrainingDay
 
@@ -72,13 +81,15 @@ class Training(models.Model):
         for src_day in src_training.days.all():
             logger.info(f'Copying day {src_day}')
             day = TrainingDay.objects.create(
-                training=self, date=src_day.date - src_training.date + self.date,
+                training=self,
+                date=src_day.date - src_training.date + self.date,
             )
             for activity in src_day.schedule.all():
                 activity.pk = None
                 activity.training_day = day
                 activity.save()
 
+    # deprecated
     @property
     def long_name(self) -> str:
         return (

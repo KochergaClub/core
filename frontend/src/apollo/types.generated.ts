@@ -1962,6 +1962,7 @@ export type QueryRatioTrainingsArgs = {
   after?: Maybe<Scalars['String']>;
   first?: Maybe<Scalars['Int']>;
   last?: Maybe<Scalars['Int']>;
+  filter?: Maybe<RatioTrainingsFilterInput>;
 };
 
 
@@ -2026,8 +2027,8 @@ export type RatioAddTicketInput = {
 export type RatioAddTrainingInput = {
   name: Scalars['String'];
   slug: Scalars['String'];
-  date: Scalars['String'];
-  telegram_link: Scalars['String'];
+  date?: Maybe<Scalars['String']>;
+  telegram_link?: Maybe<Scalars['String']>;
 };
 
 export type RatioBriefingBlock = WagtailBlock & {
@@ -2257,7 +2258,7 @@ export type RatioTicketType = {
 };
 
 export type RatioTicketTypesInput = {
-  id: Scalars['ID'];
+  id?: Maybe<Scalars['ID']>;
 };
 
 export type RatioTrainer = {
@@ -2272,7 +2273,7 @@ export type RatioTraining = {
   id: Scalars['ID'];
   name: Scalars['String'];
   slug: Scalars['String'];
-  date: Scalars['String'];
+  date?: Maybe<Scalars['String']>;
   telegram_link: Scalars['String'];
   salaries_paid: Scalars['Boolean'];
   tickets: Array<RatioTicket>;
@@ -2321,6 +2322,10 @@ export type RatioTrainingSendEmailInput = {
 export type RatioTrainingSendEmailResult = {
   __typename?: 'RatioTrainingSendEmailResult';
   draft_link: Scalars['String'];
+};
+
+export type RatioTrainingsFilterInput = {
+  eternal?: Maybe<Scalars['Boolean']>;
 };
 
 export type SearchInput = {

@@ -66,6 +66,10 @@ const EditModal: React.FC<ModalProps> = ({ ticketType, close }) => {
       <form onSubmit={form.handleSubmit(updateCb)}>
         <Modal.Body>
           <Column gutter={16} stretch>
+            <small>
+              Якорь для Тильды:{' '}
+              <code>#kocherga_order:ticket_type={ticketType.id}</code>
+            </small>
             <BasicInputField
               title="Название"
               name="name"

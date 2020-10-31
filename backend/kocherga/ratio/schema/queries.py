@@ -1,3 +1,4 @@
+from typing import Optional
 from kocherga.graphql import g, helpers
 from kocherga.graphql.permissions import user_perm
 
@@ -11,11 +12,19 @@ c = helpers.Collection()
 
 @c.class_field
 class ratioTrainings(helpers.BaseField):
-    def resolve(self, _, info, **pager):
-        return models.Training.objects.relay_page(**pager)
+    def resolve(self, _, info, filter=None, **pager):
+        qs = models.Training.objects.all()
+        if filter:
+            if 'eternal' in filter:
+                qs = qs.filter(date__isnull=filter['eternal'])
+        return qs.relay_page(**pager)
 
     permissions = [user_perm('ratio.manage')]
-    args = helpers.connection_args()
+
+    FilterInput = g.InputObjectType(
+        'RatioTrainingsFilterInput', g.input_fields({'eternal': Optional[bool]})
+    )
+    args = {**helpers.connection_args(), 'filter': FilterInput}
     result = g.NN(types.RatioTrainingConnection)
 
 

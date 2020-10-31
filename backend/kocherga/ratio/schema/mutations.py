@@ -22,21 +22,24 @@ c = helpers.Collection()
 @c.class_field
 class ratioAddTraining(helpers.BaseFieldWithInput):
     def resolve(self, _, info, params):
-        date_str = params['date']
-        date = datetime.datetime.strptime(date_str, '%Y-%m-%d').date()
+        date = None
+        if 'date' in params:
+            date_str = params['date']
+            date = datetime.datetime.strptime(date_str, '%Y-%m-%d').date()
+
         return models.Training.objects.create(
             name=params['name'],
             slug=params['slug'],
             date=date,
-            telegram_link=params['telegram_link'],
+            telegram_link=params.get('telegram_link', ''),
         )
 
     permissions = [user_perm('ratio.manage')]
     input = {
         'name': str,
         'slug': str,
-        'date': str,
-        'telegram_link': str,
+        'date': Optional[str],
+        'telegram_link': Optional[str],
     }
     input_argument_name = 'params'  # TODO
 

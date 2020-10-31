@@ -33,10 +33,12 @@ const TrainingCard: React.FC<{ training: RatioTrainingFragment }> = ({
           </MutationButton>
         )}
       </Row>
-      <Row vCentered>
-        <Label>Дата:</Label>
-        <div>{training.date}</div>
-      </Row>
+      {training.date && (
+        <Row vCentered>
+          <Label>Дата:</Label>
+          <div>{training.date}</div>
+        </Row>
+      )}
       <Row vCentered>
         <Label>Билетов:</Label>
         <div>{training.tickets_count}</div>

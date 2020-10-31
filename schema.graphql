@@ -1121,7 +1121,7 @@ type Query {
   eventsPublicGoogleCalendar: EventsGoogleCalendar
   staffMembersAll: [StaffMember!]!
   staffMember(id: ID!): StaffMember!
-  ratioTrainings(before: String, after: String, first: Int, last: Int): RatioTrainingConnection!
+  ratioTrainings(before: String, after: String, first: Int, last: Int, filter: RatioTrainingsFilterInput): RatioTrainingConnection!
   ratioTrainingBySlug(slug: String!): RatioTraining!
   ratioTrainersAll: [RatioTrainer!]!
   ratioTrainingEmailPrototype(training_id: ID!, type: String!): String!
@@ -1164,8 +1164,8 @@ input RatioAddTicketInput {
 input RatioAddTrainingInput {
   name: String!
   slug: String!
-  date: String!
-  telegram_link: String!
+  date: String
+  telegram_link: String
 }
 
 type RatioBriefingBlock implements WagtailBlock {
@@ -1370,7 +1370,7 @@ type RatioTicketType {
 }
 
 input RatioTicketTypesInput {
-  id: ID!
+  id: ID
 }
 
 type RatioTrainer {
@@ -1383,7 +1383,7 @@ type RatioTraining {
   id: ID!
   name: String!
   slug: String!
-  date: String!
+  date: String
   telegram_link: String!
   salaries_paid: Boolean!
   tickets: [RatioTicket!]!
@@ -1428,6 +1428,10 @@ input RatioTrainingSendEmailInput {
 
 type RatioTrainingSendEmailResult {
   draft_link: String!
+}
+
+input RatioTrainingsFilterInput {
+  eternal: Boolean
 }
 
 input SearchInput {
