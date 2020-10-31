@@ -26,8 +26,8 @@ fragment RatioTicketType_ForPicker on RatioTicketType {
   name
 }
 
-query RatioTicketTypes {
-  result: ratioTicketTypes {
+query RatioTicketTypes($input: RatioTicketTypesInput!) {
+  result: ratioTicketTypes(input: $input) {
     ...RatioTicketType_ForPicker
   }
 }

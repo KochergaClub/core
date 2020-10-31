@@ -1125,7 +1125,7 @@ type Query {
   ratioTrainingBySlug(slug: String!): RatioTraining!
   ratioTrainersAll: [RatioTrainer!]!
   ratioTrainingEmailPrototype(training_id: ID!, type: String!): String!
-  ratioTicketTypes: [RatioTicketType!]!
+  ratioTicketTypes(input: RatioTicketTypesInput!): [RatioTicketType!]!
   ratioOrders(before: String, after: String, first: Int, last: Int): RatioOrderConnection!
   mastermindDatingCohorts: [MastermindDatingCohort!]!
   mastermindDatingCohortById(id: ID!): MastermindDatingCohort!
@@ -1367,6 +1367,10 @@ type RatioTicketType {
   name: String!
   id: ID!
   training: RatioTraining!
+}
+
+input RatioTicketTypesInput {
+  id: ID!
 }
 
 type RatioTrainer {

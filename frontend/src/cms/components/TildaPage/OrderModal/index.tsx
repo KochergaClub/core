@@ -10,26 +10,39 @@ import { RatioOrder_CreatedFragment, RatioTicketTypesDocument } from '../queries
 import CheckoutOrderModal from './CheckoutOrderModal';
 import FormOrderModal from './FormOrderModal';
 
+export interface OrderParams {
+  ticketTypeId?: string;
+}
+
 interface Props {
+  ticketTypeId?: string;
   close: () => void;
 }
 
 const SpinnerContainer = styled.div`
-  min-height: 400px;
+  min-height: 300px;
+  text-align: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 `;
 
-const OrderModal: React.FC<Props> = ({ close }) => {
+const OrderModal: React.FC<Props> = ({ ticketTypeId, close }) => {
   const [order, setOrder] = useState<RatioOrder_CreatedFragment | undefined>();
 
-  const ticketTypesResults = useQuery(RatioTicketTypesDocument);
-
-  const ticketTypes = ticketTypesResults.data?.result;
+  const ticketTypesResults = useQuery(RatioTicketTypesDocument, {
+    variables: {
+      input: {
+        id: ticketTypeId,
+      },
+    },
+  });
 
   const onOrderCreated = useCallback((order: RatioOrder_CreatedFragment) => {
     setOrder(order);
   }, []);
 
-  if (ticketTypesResults.loading || !ticketTypes) {
+  if (ticketTypesResults.loading || !ticketTypesResults.data) {
     return (
       <Modal>
         <Modal.Header close={close}>Регистрация</Modal.Header>
@@ -40,13 +53,26 @@ const OrderModal: React.FC<Props> = ({ close }) => {
         </Modal.Body>
       </Modal>
     );
-  } else if (order) {
+  }
+
+  const ticketTypes = ticketTypesResults.data.result;
+  if (!ticketTypes.length) {
+    return (
+      <Modal>
+        <Modal.Header close={close}>Регистрация</Modal.Header>
+        <Modal.Body>
+          <SpinnerContainer>Нет билетов в продаже.</SpinnerContainer>
+        </Modal.Body>
+      </Modal>
+    );
+  }
+  if (order) {
     return <CheckoutOrderModal close={close} order={order} />;
   } else {
     return (
       <FormOrderModal
         close={close}
-        ticketTypes={ticketTypes}
+        ticketTypes={ticketTypesResults.data?.result}
         onOrderCreated={onOrderCreated}
       />
     );

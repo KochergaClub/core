@@ -1976,6 +1976,11 @@ export type QueryRatioTrainingEmailPrototypeArgs = {
 };
 
 
+export type QueryRatioTicketTypesArgs = {
+  input: RatioTicketTypesInput;
+};
+
+
 export type QueryRatioOrdersArgs = {
   before?: Maybe<Scalars['String']>;
   after?: Maybe<Scalars['String']>;
@@ -2249,6 +2254,10 @@ export type RatioTicketType = {
   name: Scalars['String'];
   id: Scalars['ID'];
   training: RatioTraining;
+};
+
+export type RatioTicketTypesInput = {
+  id: Scalars['ID'];
 };
 
 export type RatioTrainer = {

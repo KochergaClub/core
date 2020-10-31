@@ -56,11 +56,17 @@ class ratioTrainingEmailPrototype(helpers.BaseField):
 
 
 @c.class_field
-class ratioTicketTypes(helpers.BaseField):
-    def resolve(self, _, info):
-        return models.TicketType.objects.for_active_trainings()
+class ratioTicketTypes(helpers.BaseFieldWithInput):
+    def resolve(self, _, info, input):
+        qs = models.TicketType.objects.for_active_trainings()
+        if input.get('id'):
+            qs = qs.filter(uuid=input['id'])
+        return qs
 
     permissions = []
+    input = {
+        'id': 'ID',  # get one ticket type by id
+    }
     result = g.NNList(types.RatioTicketType)
 
 
