@@ -252,6 +252,14 @@ type ColumnsButtonsBlockValue {
   link: String!
 }
 
+input CreateRatioPromocodeInput {
+  ticket_type_id: ID!
+  code: String!
+  discount: Int!
+}
+
+union CreateRatioPromocodeResult = RatioPromocode | ValidationError | GenericError
+
 input CreateRatioTicketTypeInput {
   training_id: ID!
   price: Int!
@@ -942,6 +950,7 @@ type Mutation {
   ratioAddTicket(input: RatioAddTicketInput!): RatioTicket!
   ratioAddTraining(params: RatioAddTrainingInput!): RatioTraining!
   ratioDeleteTraining(input: RatioDeleteTrainingInput!): BasicResult!
+  createRatioPromocode(input: CreateRatioPromocodeInput!): CreateRatioPromocodeResult!
   mastermindDatingCreateCohort: MastermindDatingCohortMutationResult!
   mastermindDatingPopulateCohortFromEvent(cohort_id: ID!): MastermindDatingCohortMutationResult!
   mastermindDatingSendInviteEmails(cohort_id: ID!): MastermindDatingCohortMutationResult!
@@ -1335,6 +1344,22 @@ type RatioPresentationIndexPage implements WagtailPage {
   presentations: [PresentationPage!]!
 }
 
+type RatioPromocode {
+  id: ID!
+  code: String!
+  discount: Int!
+}
+
+type RatioPromocodeConnection {
+  pageInfo: PageInfo!
+  nodes: [RatioPromocode!]!
+  edges: [RatioPromocodeEdge!]!
+}
+
+type RatioPromocodeEdge {
+  node: RatioPromocode!
+}
+
 type RatioSectionIndexPage implements WagtailPage {
   title: String!
   id: ID!
@@ -1367,6 +1392,7 @@ type RatioTicketType {
   name: String!
   id: ID!
   training: RatioTraining!
+  promocodes(before: String, after: String, first: Int, last: Int): RatioPromocodeConnection!
 }
 
 input RatioTicketTypesInput {
