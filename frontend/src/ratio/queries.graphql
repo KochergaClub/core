@@ -26,15 +26,28 @@ fragment RatioTicket on RatioTicket {
   }
 }
 
+fragment RatioPromocode on RatioPromocode {
+  id
+  code
+}
+
+fragment RatioTicketTypePromocodes on RatioPromocodeConnection {
+  pageInfo {
+    ...PageInfo
+  }
+  edges {
+    node {
+      ...RatioPromocode
+    }
+  }
+}
+
 fragment RatioTicketType on RatioTicketType {
   id
   price
   name
-  promocodes(first: 10) {
-    nodes {
-      id
-      code
-    }
+  promocodes(first: 2) {
+    ...RatioTicketTypePromocodes
   }
 }
 

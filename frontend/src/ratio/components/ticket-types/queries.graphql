@@ -15,3 +15,18 @@ mutation DeleteRatioTicketType($input: DeleteRatioTicketTypeInput!) {
     ok
   }
 }
+
+query RatioPromocodesPage(
+  $before: String
+  $after: String
+  $first: Int
+  $last: Int
+  $ticket_type_id: ID!
+) {
+  ratioTicketType(input: { id: $ticket_type_id }) {
+    id
+    promocodes(before: $before, after: $after, first: $first, last: $last) {
+      ...RatioTicketTypePromocodes
+    }
+  }
+}

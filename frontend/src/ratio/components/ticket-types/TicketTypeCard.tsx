@@ -1,9 +1,12 @@
+import React from 'react';
+
 import Card from '~/components/Card';
 import DropdownMenu, { ModalAction } from '~/components/DropdownMenu';
 import { Row } from '~/frontkit';
 
 import { RatioTicketTypeFragment } from '../../queries.generated';
 import EditTicketTypeModal from './EditTicketTypeModal';
+import PromocodesCollection from './PromocodesCollection';
 
 interface Props {
   ticketType: RatioTicketTypeFragment;
@@ -24,7 +27,8 @@ const TicketTypeCard: React.FC<Props> = ({ ticketType }) => {
           </DropdownMenu>
         </Row>
       </header>
-      <div>{ticketType.name}</div>{' '}
+      <div>{ticketType.name}</div>
+      <PromocodesCollection ticketType={ticketType} />
     </Card>
   );
 };

@@ -66,6 +66,7 @@ interface Props<T, A extends AnyFormValues> {
 
 function PagedApolloCollection<T, A extends AnyFormValues>(props: Props<T, A>) {
   const DEFAULT_PAGE_SIZE = 20;
+  const pageSize = props.pageSize || DEFAULT_PAGE_SIZE;
 
   return (
     <div>
@@ -82,7 +83,7 @@ function PagedApolloCollection<T, A extends AnyFormValues>(props: Props<T, A>) {
           await props.fetchPage({
             after: props.connection.pageInfo.endCursor,
             before: null,
-            first: props.pageSize || DEFAULT_PAGE_SIZE,
+            first: pageSize,
             last: null,
           });
         }}
@@ -91,7 +92,7 @@ function PagedApolloCollection<T, A extends AnyFormValues>(props: Props<T, A>) {
             after: null,
             before: props.connection.pageInfo.startCursor,
             first: null,
-            last: props.pageSize || DEFAULT_PAGE_SIZE,
+            last: pageSize,
           });
         }}
       />

@@ -80,6 +80,18 @@ class ratioTicketTypes(helpers.BaseFieldWithInput):
 
 
 @c.class_field
+class ratioTicketType(helpers.BaseFieldWithInput):
+    def resolve(self, _, info, input):
+        return models.TicketType.objects.get(uuid=input['id'])
+
+    permissions = [user_perm('ratio.manage')]
+    input = {
+        'id': 'ID!',
+    }
+    result = g.NN(types.RatioTicketType)
+
+
+@c.class_field
 class ratioOrders(helpers.BaseField):
     def resolve(self, _, info, **pager):
         return models.Order.objects.relay_page(order='-created', **pager)

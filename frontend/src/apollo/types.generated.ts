@@ -1814,6 +1814,7 @@ export type Query = {
   ratioTrainersAll: Array<RatioTrainer>;
   ratioTrainingEmailPrototype: Scalars['String'];
   ratioTicketTypes: Array<RatioTicketType>;
+  ratioTicketType: RatioTicketType;
   ratioOrders: RatioOrderConnection;
   mastermindDatingCohorts: Array<MastermindDatingCohort>;
   mastermindDatingCohortById: MastermindDatingCohort;
@@ -1993,6 +1994,11 @@ export type QueryRatioTrainingEmailPrototypeArgs = {
 
 export type QueryRatioTicketTypesArgs = {
   input: RatioTicketTypesInput;
+};
+
+
+export type QueryRatioTicketTypeArgs = {
+  input: RatioTicketTypeInput;
 };
 
 
@@ -2297,6 +2303,10 @@ export type RatioTicketTypePromocodesArgs = {
   after?: Maybe<Scalars['String']>;
   first?: Maybe<Scalars['Int']>;
   last?: Maybe<Scalars['Int']>;
+};
+
+export type RatioTicketTypeInput = {
+  id: Scalars['ID'];
 };
 
 export type RatioTicketTypesInput = {
