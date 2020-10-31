@@ -80,6 +80,7 @@ const EditModal: React.FC<ModalProps> = ({ ticketType, close }) => {
             <BasicInputField
               title="Стоимость"
               name="price"
+              type="number"
               defaultValue={String(ticketType.price)}
               form={form}
               required

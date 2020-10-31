@@ -116,7 +116,7 @@ const FormOrderModal: React.FC<Props> = ({
               />
             </FieldContainer>
             <BasicInputField
-              title="E-mail участника"
+              title="Ваш E-mail"
               name="email"
               type="email"
               placeholder="ludwig@wittgenstein.com"
@@ -124,14 +124,14 @@ const FormOrderModal: React.FC<Props> = ({
               form={form}
             />
             <BasicInputField
-              title="Имя участника"
+              title="Ваше имя"
               name="first_name"
               placeholder="Бертран"
               required
               form={form}
             />
             <BasicInputField
-              title="Фамилия участника"
+              title="Ваша фамилия"
               name="last_name"
               placeholder="Рассел"
               required
