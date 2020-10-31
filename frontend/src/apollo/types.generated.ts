@@ -1095,9 +1095,10 @@ export type Mutation = {
   staffGrantGooglePermissionsToMember?: Maybe<Scalars['Boolean']>;
   staffFireMember?: Maybe<Scalars['Boolean']>;
   staffUnfireMember?: Maybe<Scalars['Boolean']>;
-  ratioAddTraining: RatioTraining;
-  ratioDeleteTraining: BasicResult;
-  ratioAddTicket: RatioTicket;
+  ratioTrainingSyncParticipantsToMailchimp: Scalars['Boolean'];
+  ratioTrainingSendEmail: RatioTrainingSendEmailResult;
+  ratioCreateOrder: RatioCreateOrderResult;
+  ratioConfirmOrder: RatioConfirmOrderResult;
   ratioPaymentAdd: RatioPaymentAddResult;
   ratioPaymentDelete: BasicResult;
   ratioPaymentFiscalize: Scalars['Boolean'];
@@ -1105,13 +1106,12 @@ export type Mutation = {
   ratioPaymentSetStatus: RatioPaymentSetStatusResult;
   ratioTrainingCopyScheduleFrom: Scalars['Boolean'];
   ratioTrainingAddDay: Scalars['Boolean'];
-  ratioTrainingSyncParticipantsToMailchimp: Scalars['Boolean'];
-  ratioTrainingSendEmail: RatioTrainingSendEmailResult;
-  ratioCreateOrder: RatioCreateOrderResult;
-  ratioConfirmOrder: RatioConfirmOrderResult;
   createRatioTicketType: RatioTicketType;
   updateRatioTicketType: RatioTicketType;
   deleteRatioTicketType: BasicResult;
+  ratioAddTicket: RatioTicket;
+  ratioAddTraining: RatioTraining;
+  ratioDeleteTraining: BasicResult;
   mastermindDatingCreateCohort: MastermindDatingCohortMutationResult;
   mastermindDatingPopulateCohortFromEvent: MastermindDatingCohortMutationResult;
   mastermindDatingSendInviteEmails: MastermindDatingCohortMutationResult;
@@ -1417,18 +1417,23 @@ export type MutationStaffUnfireMemberArgs = {
 };
 
 
-export type MutationRatioAddTrainingArgs = {
-  params: RatioAddTrainingInput;
+export type MutationRatioTrainingSyncParticipantsToMailchimpArgs = {
+  training_id: Scalars['ID'];
 };
 
 
-export type MutationRatioDeleteTrainingArgs = {
-  input: RatioDeleteTrainingInput;
+export type MutationRatioTrainingSendEmailArgs = {
+  input: RatioTrainingSendEmailInput;
 };
 
 
-export type MutationRatioAddTicketArgs = {
-  input: RatioAddTicketInput;
+export type MutationRatioCreateOrderArgs = {
+  input: RatioCreateOrderInput;
+};
+
+
+export type MutationRatioConfirmOrderArgs = {
+  input: RatioConfirmOrderInput;
 };
 
 
@@ -1467,26 +1472,6 @@ export type MutationRatioTrainingAddDayArgs = {
 };
 
 
-export type MutationRatioTrainingSyncParticipantsToMailchimpArgs = {
-  training_id: Scalars['ID'];
-};
-
-
-export type MutationRatioTrainingSendEmailArgs = {
-  input: RatioTrainingSendEmailInput;
-};
-
-
-export type MutationRatioCreateOrderArgs = {
-  input: RatioCreateOrderInput;
-};
-
-
-export type MutationRatioConfirmOrderArgs = {
-  input: RatioConfirmOrderInput;
-};
-
-
 export type MutationCreateRatioTicketTypeArgs = {
   input: CreateRatioTicketTypeInput;
 };
@@ -1499,6 +1484,21 @@ export type MutationUpdateRatioTicketTypeArgs = {
 
 export type MutationDeleteRatioTicketTypeArgs = {
   input: DeleteRatioTicketTypeInput;
+};
+
+
+export type MutationRatioAddTicketArgs = {
+  input: RatioAddTicketInput;
+};
+
+
+export type MutationRatioAddTrainingArgs = {
+  params: RatioAddTrainingInput;
+};
+
+
+export type MutationRatioDeleteTrainingArgs = {
+  input: RatioDeleteTrainingInput;
 };
 
 

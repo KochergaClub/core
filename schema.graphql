@@ -925,9 +925,10 @@ type Mutation {
   staffGrantGooglePermissionsToMember(id: ID!): Boolean
   staffFireMember(id: ID!): Boolean
   staffUnfireMember(id: ID!): Boolean
-  ratioAddTraining(params: RatioAddTrainingInput!): RatioTraining!
-  ratioDeleteTraining(input: RatioDeleteTrainingInput!): BasicResult!
-  ratioAddTicket(input: RatioAddTicketInput!): RatioTicket!
+  ratioTrainingSyncParticipantsToMailchimp(training_id: ID!): Boolean!
+  ratioTrainingSendEmail(input: RatioTrainingSendEmailInput!): RatioTrainingSendEmailResult!
+  ratioCreateOrder(input: RatioCreateOrderInput!): RatioCreateOrderResult!
+  ratioConfirmOrder(input: RatioConfirmOrderInput!): RatioConfirmOrderResult!
   ratioPaymentAdd(input: RatioPaymentAddInput!): RatioPaymentAddResult!
   ratioPaymentDelete(payment_id: ID!): BasicResult!
   ratioPaymentFiscalize(payment_id: ID!): Boolean!
@@ -935,13 +936,12 @@ type Mutation {
   ratioPaymentSetStatus(input: RatioPaymentSetStatusInput!): RatioPaymentSetStatusResult!
   ratioTrainingCopyScheduleFrom(params: RatioTrainingCopyScheduleFromInput!): Boolean!
   ratioTrainingAddDay(params: RatioTrainingAddDayInput!): Boolean!
-  ratioTrainingSyncParticipantsToMailchimp(training_id: ID!): Boolean!
-  ratioTrainingSendEmail(input: RatioTrainingSendEmailInput!): RatioTrainingSendEmailResult!
-  ratioCreateOrder(input: RatioCreateOrderInput!): RatioCreateOrderResult!
-  ratioConfirmOrder(input: RatioConfirmOrderInput!): RatioConfirmOrderResult!
   createRatioTicketType(input: CreateRatioTicketTypeInput!): RatioTicketType!
   updateRatioTicketType(input: UpdateRatioTicketTypeInput!): RatioTicketType!
   deleteRatioTicketType(input: DeleteRatioTicketTypeInput!): BasicResult!
+  ratioAddTicket(input: RatioAddTicketInput!): RatioTicket!
+  ratioAddTraining(params: RatioAddTrainingInput!): RatioTraining!
+  ratioDeleteTraining(input: RatioDeleteTrainingInput!): BasicResult!
   mastermindDatingCreateCohort: MastermindDatingCohortMutationResult!
   mastermindDatingPopulateCohortFromEvent(cohort_id: ID!): MastermindDatingCohortMutationResult!
   mastermindDatingSendInviteEmails(cohort_id: ID!): MastermindDatingCohortMutationResult!
