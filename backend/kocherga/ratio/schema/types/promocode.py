@@ -1,4 +1,5 @@
 from kocherga.graphql.django_utils import DjangoObjectType
+from kocherga.graphql import helpers
 
 from ... import models
 
@@ -12,3 +13,5 @@ RatioPromocode = DjangoObjectType(
         'discount',
     ],
 )
+
+RatioPromocodeConnection = helpers.ConnectionType(RatioPromocode)

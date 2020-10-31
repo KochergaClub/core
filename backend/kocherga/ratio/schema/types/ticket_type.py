@@ -4,7 +4,7 @@ from kocherga.graphql import g, helpers
 
 from ... import models
 from .training import RatioTraining
-from .promocode import RatioPromocode
+from .promocode import RatioPromocode, RatioPromocodeConnection
 
 fields = helpers.Collection()
 
@@ -18,6 +18,17 @@ class training(helpers.BaseField):
     result = g.NN(RatioTraining)
 
 
+@fields.class_field
+class promocodes(helpers.BaseField):
+    def resolve(self, obj, info, **pager):
+        return models.Promocode.objects.filter(ticket_type=obj).relay_page(**pager)
+
+    permissions = [user_perm('ratio.manage')]
+
+    args = helpers.connection_args()
+    result = g.NN(RatioPromocodeConnection)
+
+
 RatioTicketType = DjangoObjectType(
     'RatioTicketType',
     model=models.TicketType,
@@ -27,12 +38,6 @@ RatioTicketType = DjangoObjectType(
     ],
     extra_fields={
         'id': g.Field(g.NN(g.ID), resolve=lambda obj, info: obj.uuid),
-        'promocodes': related_field(
-            models.TicketType,
-            'promocodes',
-            item_type=RatioPromocode,
-            permissions=[user_perm('ratio.manage')],
-        ),
         **fields.as_dict(),
     },
 )

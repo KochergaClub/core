@@ -1,5 +1,7 @@
 from django.db import models
 
+from kocherga.django.managers import RelayQuerySet
+
 from .ticket_type import TicketType
 
 
@@ -15,6 +17,8 @@ class Promocode(models.Model):
     )
 
     ticket_type = models.ForeignKey(TicketType, on_delete=models.CASCADE, related_name='promocodes')
+
+    objects = RelayQuerySet.as_manager()
 
     class Meta:
         unique_together = (('code', 'ticket_type'),)
