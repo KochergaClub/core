@@ -1,7 +1,12 @@
+import logging
+
+logger = logging.getLogger(__name__)
+
 from kocherga.graphql import helpers
 from kocherga.graphql.permissions import user_perm
 import kocherga.django.schema.types
 import django.db.utils
+from django.db import transaction
 from django.core.exceptions import ValidationError
 
 from kocherga.django.errors import GenericError, BoxedError
@@ -22,12 +27,12 @@ class createRatioPromocode(helpers.UnionFieldMixin, helpers.BaseFieldWithInput):
             return GenericError('Тип билета не найден')
 
         try:
-            promocode = models.Promocode.objects.create(
-                ticket_type=ticket_type,
-                code=input['code'],
-                discount=input['discount'],
-            )
-            promocode.full_clean()
+            with transaction.atomic():
+                promocode = models.Promocode.objects.create(
+                    ticket_type=ticket_type,
+                    code=input['code'],
+                    discount=input['discount'],
+                )
         except ValidationError as e:
             return BoxedError(e)
         except django.db.utils.IntegrityError as e:

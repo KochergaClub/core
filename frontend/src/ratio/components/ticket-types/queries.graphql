@@ -16,6 +16,23 @@ mutation DeleteRatioTicketType($input: DeleteRatioTicketTypeInput!) {
   }
 }
 
+mutation CreateRatioPromocode($input: CreateRatioPromocodeInput!) {
+  result: createRatioPromocode(input: $input) {
+    ... on RatioPromocode {
+      ...RatioPromocode
+    }
+    ... on GenericError {
+      message
+    }
+    ... on ValidationError {
+      errors {
+        name
+        messages
+      }
+    }
+  }
+}
+
 query RatioPromocodesPage(
   $before: String
   $after: String

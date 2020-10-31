@@ -5,6 +5,7 @@ import DropdownMenu, { ModalAction } from '~/components/DropdownMenu';
 import { Row } from '~/frontkit';
 
 import { RatioTicketTypeFragment } from '../../queries.generated';
+import CreatePromocodeModal from './CreatePromocodeModal';
 import EditTicketTypeModal from './EditTicketTypeModal';
 import PromocodesCollection from './PromocodesCollection';
 
@@ -22,6 +23,11 @@ const TicketTypeCard: React.FC<Props> = ({ ticketType }) => {
             <ModalAction title="Редактировать">
               {({ close }) => (
                 <EditTicketTypeModal close={close} ticketType={ticketType} />
+              )}
+            </ModalAction>
+            <ModalAction title="Создать промокод">
+              {({ close }) => (
+                <CreatePromocodeModal close={close} ticketType={ticketType} />
               )}
             </ModalAction>
           </DropdownMenu>
