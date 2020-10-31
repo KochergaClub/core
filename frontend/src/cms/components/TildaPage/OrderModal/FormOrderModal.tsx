@@ -29,7 +29,7 @@ type FormData = {
   email: string;
   first_name: string;
   last_name: string;
-  city: string;
+  // city: string;
   terms: boolean;
 };
 
@@ -54,7 +54,7 @@ const FormOrderModal: React.FC<Props> = ({
               email: v.email,
               first_name: v.first_name,
               last_name: v.last_name,
-              city: v.city,
+              // city: v.city,
               // TODO - payer
             },
           },
@@ -137,6 +137,7 @@ const FormOrderModal: React.FC<Props> = ({
               required
               form={form}
             />
+            {/*
             <BasicInputField
               title="Из какого города вы планируете проходить курс?"
               name="city"
@@ -144,6 +145,7 @@ const FormOrderModal: React.FC<Props> = ({
               required
               form={form}
             />
+            */}
             <div>
               <Label>
                 <Row vCentered gutter={8}>

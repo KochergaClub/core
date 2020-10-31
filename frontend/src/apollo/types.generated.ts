@@ -2053,7 +2053,7 @@ export type RatioCreateOrderInput = {
   email: Scalars['String'];
   first_name: Scalars['String'];
   last_name: Scalars['String'];
-  city: Scalars['String'];
+  city?: Maybe<Scalars['String']>;
   payer?: Maybe<RatioCreateOrderPayerInput>;
 };
 

@@ -1194,7 +1194,7 @@ input RatioCreateOrderInput {
   email: String!
   first_name: String!
   last_name: String!
-  city: String!
+  city: String
   payer: RatioCreateOrderPayerInput
 }
 

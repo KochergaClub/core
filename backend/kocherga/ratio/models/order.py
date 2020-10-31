@@ -73,7 +73,7 @@ class Order(models.Model):
     email = models.EmailField(db_index=True)
     first_name = models.CharField('Имя', max_length=255)
     last_name = models.CharField('Фамилия', max_length=255)
-    city = models.CharField('Город', max_length=255)
+    city = models.CharField('Город', blank=True, max_length=255)
 
     payer_email = models.EmailField(blank=True, default='')
     payer_first_name = models.EmailField(blank=True, default='')
