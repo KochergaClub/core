@@ -10,7 +10,7 @@ import { AnyViewProps } from '~/components/collections/types';
 import { FormShape } from '~/components/forms/types';
 
 import {
-    RatioAddTrainingDocument, RatioTrainingFragment, RatioTrainingsDocument
+    RatioAddTrainingDocument, RatioTraining_SummaryFragment, RatioTrainingsDocument
 } from '../queries.generated';
 import TrainingCard from './trainings/TrainingCard';
 
@@ -46,14 +46,14 @@ type CreateTrainingParams = {
   telegram_link: string;
 };
 
-const isMuted = (training: RatioTrainingFragment) =>
+const isMuted = (training: RatioTraining_SummaryFragment) =>
   training.date ? isBefore(parseISO(training.date), new Date()) : false;
 
-const renderItem = (training: RatioTrainingFragment) => (
+const renderItem = (training: RatioTraining_SummaryFragment) => (
   <TrainingCard training={training} />
 );
 
-const View: React.FC<AnyViewProps<RatioTrainingFragment>> = (props) => (
+const View: React.FC<AnyViewProps<RatioTraining_SummaryFragment>> = (props) => (
   <CustomCardListView
     {...props}
     renderItem={renderItem}

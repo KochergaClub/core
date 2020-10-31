@@ -1,6 +1,5 @@
-import React, { useCallback, useState } from 'react';
+import React, { useCallback } from 'react';
 import { useForm } from 'react-hook-form';
-import styled from 'styled-components';
 
 import { useMutation } from '@apollo/client';
 
@@ -11,17 +10,12 @@ import { Button, Column, ControlsFooter, Modal } from '~/frontkit';
 import { RatioTicketTypeFragment } from '../../queries.generated';
 import { DeleteRatioTicketTypeDocument, UpdateRatioTicketTypeDocument } from './queries.generated';
 
-const StyledA = styled.a`
-  color: inherit;
-  text-decoration: inherit;
-`;
-
-interface ModalProps {
+interface Props {
   ticketType: RatioTicketTypeFragment;
   close: () => void;
 }
 
-const EditModal: React.FC<ModalProps> = ({ ticketType, close }) => {
+const EditTicketTypeModal: React.FC<Props> = ({ ticketType, close }) => {
   type FormData = {
     name: string;
     price: string;
@@ -107,30 +101,4 @@ const EditModal: React.FC<ModalProps> = ({ ticketType, close }) => {
   );
 };
 
-interface Props {
-  ticketType: RatioTicketTypeFragment;
-}
-
-const EditTicketTypeLink: React.FC<Props> = ({ ticketType, children }) => {
-  const [isOpen, setIsOpen] = useState(false);
-
-  const open = useCallback((e: React.SyntheticEvent) => {
-    e.preventDefault();
-    setIsOpen(true);
-  }, []);
-
-  const close = useCallback(() => {
-    setIsOpen(false);
-  }, []);
-
-  return (
-    <>
-      <StyledA href="#" onClick={open}>
-        {children}
-      </StyledA>
-      {isOpen ? <EditModal close={close} ticketType={ticketType} /> : null}
-    </>
-  );
-};
-
-export default EditTicketTypeLink;
+export default EditTicketTypeModal;

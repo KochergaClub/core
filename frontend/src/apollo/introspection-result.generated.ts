@@ -10,6 +10,11 @@
       "YandexKassaPayment",
       "GenericError"
     ],
+    "CreateRatioPromocodeResult": [
+      "RatioPromocode",
+      "ValidationError",
+      "GenericError"
+    ],
     "ExternalService": [
       "SlackExternalService",
       "WikiExternalService"

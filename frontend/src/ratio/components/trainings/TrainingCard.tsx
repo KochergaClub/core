@@ -4,13 +4,15 @@ import React from 'react';
 import { Badge, MutationButton } from '~/components';
 import { A, Label, Row } from '~/frontkit';
 
-import { RatioTrainingFragment } from '../../queries.generated';
+import { RatioTraining_SummaryFragment } from '../../queries.generated';
 import TicketTypeBadge from '../ticket-types/TicketTypeBadge';
 import { DeleteRatioTrainingDocument } from './queries.generated';
 
-const TrainingCard: React.FC<{ training: RatioTrainingFragment }> = ({
-  training,
-}) => {
+interface Props {
+  training: RatioTraining_SummaryFragment;
+}
+
+const TrainingCard: React.FC<Props> = ({ training }) => {
   return (
     <div>
       <Row spaced>

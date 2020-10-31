@@ -1,10 +1,10 @@
 import React from 'react';
 
 import { Badge } from '~/frontkit';
-import { RatioTicketTypeFragment } from '~/ratio/queries.generated';
+import { RatioTicketType_SummaryFragment } from '~/ratio/queries.generated';
 
 interface Props {
-  ticketType: RatioTicketTypeFragment;
+  ticketType: RatioTicketType_SummaryFragment;
 }
 
 const TicketTypeBadge: React.FC<Props> = ({ ticketType }) => {

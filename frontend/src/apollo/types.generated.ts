@@ -314,6 +314,14 @@ export type ColumnsButtonsBlockValueImageArgs = {
   spec: Scalars['String'];
 };
 
+export type CreateRatioPromocodeInput = {
+  ticket_type_id: Scalars['ID'];
+  code: Scalars['String'];
+  discount: Scalars['Int'];
+};
+
+export type CreateRatioPromocodeResult = RatioPromocode | ValidationError | GenericError;
+
 export type CreateRatioTicketTypeInput = {
   training_id: Scalars['ID'];
   price: Scalars['Int'];
@@ -1112,6 +1120,7 @@ export type Mutation = {
   ratioAddTicket: RatioTicket;
   ratioAddTraining: RatioTraining;
   ratioDeleteTraining: BasicResult;
+  createRatioPromocode: CreateRatioPromocodeResult;
   mastermindDatingCreateCohort: MastermindDatingCohortMutationResult;
   mastermindDatingPopulateCohortFromEvent: MastermindDatingCohortMutationResult;
   mastermindDatingSendInviteEmails: MastermindDatingCohortMutationResult;
@@ -1499,6 +1508,11 @@ export type MutationRatioAddTrainingArgs = {
 
 export type MutationRatioDeleteTrainingArgs = {
   input: RatioDeleteTrainingInput;
+};
+
+
+export type MutationCreateRatioPromocodeArgs = {
+  input: CreateRatioPromocodeInput;
 };
 
 
@@ -2219,6 +2233,25 @@ export type RatioPresentationIndexPage = WagtailPage & {
   presentations: Array<PresentationPage>;
 };
 
+export type RatioPromocode = {
+  __typename?: 'RatioPromocode';
+  id: Scalars['ID'];
+  code: Scalars['String'];
+  discount: Scalars['Int'];
+};
+
+export type RatioPromocodeConnection = {
+  __typename?: 'RatioPromocodeConnection';
+  pageInfo: PageInfo;
+  nodes: Array<RatioPromocode>;
+  edges: Array<RatioPromocodeEdge>;
+};
+
+export type RatioPromocodeEdge = {
+  __typename?: 'RatioPromocodeEdge';
+  node: RatioPromocode;
+};
+
 export type RatioSectionIndexPage = WagtailPage & {
   __typename?: 'RatioSectionIndexPage';
   title: Scalars['String'];
@@ -2255,6 +2288,15 @@ export type RatioTicketType = {
   name: Scalars['String'];
   id: Scalars['ID'];
   training: RatioTraining;
+  promocodes: RatioPromocodeConnection;
+};
+
+
+export type RatioTicketTypePromocodesArgs = {
+  before?: Maybe<Scalars['String']>;
+  after?: Maybe<Scalars['String']>;
+  first?: Maybe<Scalars['Int']>;
+  last?: Maybe<Scalars['Int']>;
 };
 
 export type RatioTicketTypesInput = {

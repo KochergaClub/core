@@ -30,6 +30,31 @@ fragment RatioTicketType on RatioTicketType {
   id
   price
   name
+  promocodes(first: 10) {
+    nodes {
+      id
+      code
+    }
+  }
+}
+
+fragment RatioTicketType_Summary on RatioTicketType {
+  id
+  price
+  name
+}
+
+fragment RatioTraining_Summary on RatioTraining {
+  id
+  slug
+  name
+  date
+  telegram_link
+  tickets_count
+  total_income
+  ticket_types {
+    ...RatioTicketType_Summary
+  }
 }
 
 fragment RatioTraining on RatioTraining {
@@ -99,7 +124,7 @@ query RatioTrainings(
     }
     edges {
       node {
-        ...RatioTraining
+        ...RatioTraining_Summary
       }
     }
   }
