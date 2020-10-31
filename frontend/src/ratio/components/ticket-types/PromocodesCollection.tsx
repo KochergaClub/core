@@ -1,19 +1,11 @@
 import { useLazyQuery } from '@apollo/client';
 
-import { PagedApolloCollection } from '~/components/collections';
-import { AnyViewProps } from '~/components/collections/types';
+import HeadlessConnection from '~/components/collections/HeadlessConnection';
+import SmallPager from '~/components/collections/SmallPager';
 import { Badge, Column } from '~/frontkit';
 
-import { RatioPromocodeFragment, RatioTicketTypeFragment } from '../../queries.generated';
+import { RatioTicketTypeFragment } from '../../queries.generated';
 import { RatioPromocodesPageDocument } from './queries.generated';
-
-const View: React.FC<AnyViewProps<RatioPromocodeFragment>> = (props) => (
-  <Column>
-    {props.items.map((item) => (
-      <Badge key={item.id}>{item.code}</Badge>
-    ))}
-  </Column>
-);
 
 interface Props {
   ticketType: RatioTicketTypeFragment;
@@ -37,39 +29,31 @@ const PromocodesCollection: React.FC<Props> = ({ ticketType }) => {
       },
     });
   };
+  const connection = queryResults.data
+    ? queryResults.data.ratioTicketType.promocodes
+    : ticketType.promocodes;
 
   return (
-    <PagedApolloCollection
-      names={{
-        plural: 'промокоды',
-        genitive: 'промокод',
-      }}
-      fetchPage={fetchPage}
-      connection={
-        queryResults.data
-          ? queryResults.data.ratioTicketType.promocodes
-          : ticketType.promocodes
-      }
-      view={View}
-    />
+    <HeadlessConnection connection={connection} fetchPage={fetchPage}>
+      {({ items, next, previous }) => (
+        <div>
+          <header>
+            <strong>Промокоды</strong>
+          </header>
+          <Column>
+            {items.map((item) => (
+              <Badge key={item.id}>{item.code}</Badge>
+            ))}
+          </Column>
+          <SmallPager
+            next={next}
+            previous={previous}
+            pageInfo={connection.pageInfo}
+          />
+        </div>
+      )}
+    </HeadlessConnection>
   );
 };
 
 export default PromocodesCollection;
-
-{
-  /* <HeadlessCollection
-    fetchPage={...}
-    connection={...}
-    >
-    {
-        ({ items }) => (
-            <div>
-                <CollectionHeader />
-                <Collection items={items} view={View} />
-                <Pager />
-            </div>
-        )
-    }
-</HeadlessCollection> */
-}

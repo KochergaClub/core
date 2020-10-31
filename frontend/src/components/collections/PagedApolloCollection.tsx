@@ -1,45 +1,14 @@
-import { AsyncButton } from '~/components';
-import { Collection } from '~/components/collections';
-import { AnyViewProps, EntityNames } from '~/components/collections/types';
 import { AnyFormValues, FormShape } from '~/components/forms/types';
-import { HR, Row } from '~/frontkit';
 
-interface PagerProps {
-  pageInfo: {
-    hasPreviousPage: boolean;
-    hasNextPage: boolean;
-  };
-  next: () => Promise<void>;
-  previous: () => Promise<void>;
-}
-
-function Pager(props: PagerProps) {
-  const hasNext = props.pageInfo.hasNextPage;
-  const hasPrevious = props.pageInfo.hasPreviousPage;
-
-  if (!hasNext && !hasPrevious) {
-    return null; // everything fits on a single page
-  }
-
-  return (
-    <div>
-      <HR />
-      <Row spaced>
-        <AsyncButton act={props.previous} disabled={!hasPrevious}>
-          &larr; Предыдущая страница
-        </AsyncButton>
-        <AsyncButton act={props.next} disabled={!hasNext}>
-          Cледующая страница &rarr;
-        </AsyncButton>
-      </Row>
-    </div>
-  );
-}
+import { Collection } from './';
+import HeadlessConnection from './HeadlessConnection';
+import Pager from './Pager';
+import { AnyViewProps, EntityNames } from './types';
 
 interface Props<T, A extends AnyFormValues> {
   connection: {
     pageInfo: {
-      // TODO - PageInfoGragment
+      // TODO - PageInfoFragment
       hasPreviousPage: boolean;
       hasNextPage: boolean;
       startCursor?: string | null;
@@ -65,38 +34,29 @@ interface Props<T, A extends AnyFormValues> {
 }
 
 function PagedApolloCollection<T, A extends AnyFormValues>(props: Props<T, A>) {
-  const DEFAULT_PAGE_SIZE = 20;
-  const pageSize = props.pageSize || DEFAULT_PAGE_SIZE;
-
   return (
-    <div>
-      <Collection
-        names={props.names}
-        items={props.connection.edges.map((edge) => edge.node)}
-        add={props.add}
-        refetch={props.fetchPage}
-        view={props.view}
-      />
-      <Pager
-        pageInfo={props.connection.pageInfo}
-        next={async () => {
-          await props.fetchPage({
-            after: props.connection.pageInfo.endCursor,
-            before: null,
-            first: pageSize,
-            last: null,
-          });
-        }}
-        previous={async () => {
-          await props.fetchPage({
-            after: null,
-            before: props.connection.pageInfo.startCursor,
-            first: null,
-            last: pageSize,
-          });
-        }}
-      />
-    </div>
+    <HeadlessConnection
+      connection={props.connection}
+      fetchPage={props.fetchPage}
+      pageSize={props.pageSize}
+    >
+      {({ items, next, previous }) => (
+        <div>
+          <Collection
+            names={props.names}
+            items={items}
+            add={props.add}
+            refetch={props.fetchPage}
+            view={props.view}
+          />
+          <Pager
+            pageInfo={props.connection.pageInfo}
+            next={next}
+            previous={previous}
+          />
+        </div>
+      )}
+    </HeadlessConnection>
   );
 }
 

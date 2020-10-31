@@ -7,3 +7,12 @@ export interface EntityNames {
   plural?: string;
   genitive?: string;
 }
+
+export interface PagerProps {
+  pageInfo: {
+    hasPreviousPage: boolean;
+    hasNextPage: boolean;
+  };
+  next: () => Promise<void>;
+  previous: () => Promise<void>;
+}
