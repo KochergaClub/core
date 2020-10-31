@@ -176,7 +176,8 @@ export const Button = (props: Props) => {
     ...sizeTheme,
   };
 
-  const { loading, ...frameProps } = { ...props, isLoading: props.loading };
+  const frameProps = { ...props, isLoading: props.loading };
+  delete frameProps.loading;
 
   return (
     <ThemeProvider theme={theme}>

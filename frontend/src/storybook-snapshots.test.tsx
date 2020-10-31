@@ -3,7 +3,7 @@
 // See details: https://github.com/styled-components/jest-styled-components#serializer
 import { addSerializer } from 'jest-specific-snapshot';
 import { styleSheetSerializer } from 'jest-styled-components';
-import { act, create } from 'react-test-renderer';
+import { act, create, ReactTestRenderer } from 'react-test-renderer';
 
 import initStoryshots, { Stories2SnapsConverter } from '@storybook/addon-storyshots';
 
@@ -34,6 +34,7 @@ const wait = () =>
 
 const converter = new Stories2SnapsConverter();
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 const runTest = async (story: any, context: any) => {
   const filename = converter.getSnapshotFileName(context);
 
@@ -42,15 +43,18 @@ const runTest = async (story: any, context: any) => {
   }
 
   const storyElement = story.render();
-  let tree: any;
+  let tree: ReactTestRenderer | undefined;
   act(() => {
     tree = create(storyElement);
   });
 
   await wait();
 
-  expect(tree!.toJSON()).toMatchSpecificSnapshot(filename);
-  tree!.unmount();
+  if (!tree) {
+    throw new Error('Expected tree to be populated');
+  }
+  expect(tree.toJSON()).toMatchSpecificSnapshot(filename);
+  tree.unmount();
 };
 
 initStoryshots({
