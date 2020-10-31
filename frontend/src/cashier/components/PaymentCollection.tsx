@@ -57,11 +57,11 @@ const PaymentCollection: React.FC = () => {
     },
   ];
 
-  interface CreatePaymentParams {
+  type CreatePaymentParams = {
     amount: number;
     comment: string;
     whom: string;
-  }
+  };
 
   const renderItem = useCallback(
     (payment: PaymentFragment) => <PaymentCard payment={payment} />,

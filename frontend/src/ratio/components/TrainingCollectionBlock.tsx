@@ -41,12 +41,12 @@ const trainingShape: FormShape = [
   },
 ];
 
-interface CreateTrainingParams {
+type CreateTrainingParams = {
   name: string;
   slug: string;
   date: string;
   telegram_link: string;
-}
+};
 
 const isMuted = (training: RatioTrainingFragment) =>
   isBefore(parseISO(training.date), new Date());

@@ -18,8 +18,7 @@ const PreviewWagtailPage: NextApolloPage<{ page: KnownWagtailPageFragment }> = <
 ) => {
   const typename = props.page.__typename as T;
 
-  // FIXME - for some reason Component is incorrectly typed, don't know why
-  const Component = getComponentByTypename(typename) as any;
+  const Component = getComponentByTypename(typename);
 
   if (!Component) {
     return <div>oops</div>; // FIXME - better error

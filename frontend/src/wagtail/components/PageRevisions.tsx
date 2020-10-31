@@ -7,7 +7,9 @@ import styled from 'styled-components';
 import { gql, TypedDocumentNode, useApolloClient, useQuery } from '@apollo/client';
 
 import { WagtailPageContext } from '~/cms/contexts';
-import { getComponentByTypename } from '~/cms/wagtail-utils';
+import {
+    getFragmentByTypename, KnownWagtailPageFragment, KnownWagtailPageTypename
+} from '~/cms/wagtail-utils';
 import { dedupeFragments } from '~/common/dedupeFragments';
 import { capitalize, formatDate, withFragments } from '~/common/utils';
 import { ApolloQueryResults, DropdownMenu } from '~/components';
@@ -48,7 +50,7 @@ type PageRevisionResult = {
       revision: {
         id: string;
         created_at: string;
-        as_page: unknown;
+        as_page: KnownWagtailPageFragment;
       };
     };
   };
@@ -60,13 +62,9 @@ type PageRevisionVariables = {
 };
 
 const buildWagtailPageRevisionDocument = (
-  typename: any
+  typename: KnownWagtailPageTypename
 ): TypedDocumentNode<PageRevisionResult, PageRevisionVariables> => {
-  const component = getComponentByTypename(typename);
-  if (!component) {
-    throw new Error('Internal logic error');
-  }
-  const fragmentDoc = component.fragment;
+  const fragmentDoc = getFragmentByTypename(typename);
   const fragmentName = (fragmentDoc.definitions[0] as FragmentDefinitionNode)
     .name.value;
 
@@ -103,6 +101,9 @@ const PageRevisions: React.FC = () => {
   const apolloClient = useApolloClient();
 
   const pickRevision = async (revision_id: string) => {
+    if (!page) {
+      throw new Error('WagtailPageContext is not set');
+    }
     const typename = page.__typename;
     const WagtailPageRevisionDocument = buildWagtailPageRevisionDocument(
       typename
@@ -131,7 +132,7 @@ const PageRevisions: React.FC = () => {
 
   const queryResults = useQuery(WagtailPageRevisionsDocument, {
     variables: {
-      page_id: page.id,
+      page_id: page ? page.id : 'invalid WagtailPageContext',
     },
   });
 

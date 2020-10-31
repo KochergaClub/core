@@ -1,9 +1,13 @@
 import { useEffect } from 'react';
 
 import { useWagtailPageReducer, WagtailPageContext } from '../../contexts';
-import { getComponentByTypename } from '../../wagtail-utils';
+import { getComponentByTypename, KnownWagtailPageFragment } from '../../wagtail-utils';
 
-const WagtailCmsPage: React.FC<{ page: any }> = ({ page }) => {
+interface Props {
+  page: KnownWagtailPageFragment;
+}
+
+const WagtailCmsPage: React.FC<Props> = ({ page }) => {
   // We need to have control over page because pages can be editable.
   // But this creates a problem: on navigation NextJS will replace the page prop and we need to handle it correctly.
   const [state, dispatch] = useWagtailPageReducer({
@@ -17,6 +21,9 @@ const WagtailCmsPage: React.FC<{ page: any }> = ({ page }) => {
     });
   }, [dispatch, page]);
 
+  if (!state.page) {
+    throw new Error('Internal error - page is missing from reducer state');
+  }
   const typename = state.page.__typename;
 
   const Component = getComponentByTypename(typename);
@@ -27,7 +34,7 @@ const WagtailCmsPage: React.FC<{ page: any }> = ({ page }) => {
 
   return (
     <WagtailPageContext.Provider value={{ state, dispatch }}>
-      <Component page={state.page} />
+      <Component page={state.page as any} />
     </WagtailPageContext.Provider>
   );
 };

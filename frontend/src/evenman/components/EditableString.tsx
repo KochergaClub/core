@@ -1,14 +1,13 @@
-import { useState, useCallback, useRef, RefObject } from 'react';
+import { RefObject, useCallback, useRef, useState } from 'react';
+import { FaEdit, FaSpinner } from 'react-icons/fa';
 
 import { Input } from '~/frontkit';
-
-import { FaEdit, FaSpinner } from 'react-icons/fa';
 
 import { IconLink } from './ui';
 
 export interface Props {
   value: string | undefined;
-  save: (value: string) => Promise<any>;
+  save: (value: string) => Promise<unknown>;
   renderPrefix?: () => React.ReactNode;
   renderValue: (ref: RefObject<HTMLElement>) => React.ReactNode;
 }
@@ -84,7 +83,7 @@ const EditableString: React.FC<Props> = ({
         ref={setInput}
         disabled={saving}
         defaultValue={value}
-        onKeyDown={e => keypress(e)}
+        onKeyDown={(e) => keypress(e)}
         style={{
           width,
           minWidth: 100,
@@ -107,7 +106,7 @@ const EditableString: React.FC<Props> = ({
     return (
       <IconLink
         href="#"
-        onClick={e => {
+        onClick={(e) => {
           e.preventDefault();
           startEditing();
         }}

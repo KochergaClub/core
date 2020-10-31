@@ -1,14 +1,11 @@
-import { A } from '~/frontkit';
-
-import { withApollo, withStaff, NextApolloPage } from '~/apollo';
-
+import { NextApolloPage, withApollo, withStaff } from '~/apollo';
 import { Page } from '~/components';
-
+import { A } from '~/frontkit';
 import PbxCallDetails from '~/zadarma/components/PbxCallDetails';
 
-interface Props {
+type Props = {
   pbx_call_id: string;
-}
+};
 
 const ZadarmaCallPage: NextApolloPage<Props> = ({ pbx_call_id }) => {
   const title = `Архивный звонок ${pbx_call_id}`;

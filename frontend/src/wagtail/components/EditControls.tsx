@@ -4,14 +4,16 @@ import { FaExternalLinkAlt } from 'react-icons/fa';
 import styled from 'styled-components';
 
 import { gql, TypedDocumentNode, useApolloClient } from '@apollo/client';
-import { A, Row } from '~/frontkit';
 
 import { WagtailPageContext } from '~/cms/contexts';
-import { getComponentByTypename } from '~/cms/wagtail-utils';
+import {
+    getFragmentByTypename, KnownWagtailPageFragment, KnownWagtailPageTypename
+} from '~/cms/wagtail-utils';
 import { dedupeFragments } from '~/common/dedupeFragments';
 import { useNotification } from '~/common/hooks';
 import { withFragments } from '~/common/utils';
 import { AsyncButton, AsyncButtonWithConfirm } from '~/components';
+import { A, Row } from '~/frontkit';
 
 import { useBlockStructureLoader } from '../hooks';
 import { wagtailAdminPageEditLink } from '../routes';
@@ -54,7 +56,7 @@ const useBlocksSerializer = () => {
 
 type SaveResult = { __typename: 'Mutation' } & {
   result?: {
-    page?: unknown;
+    page?: KnownWagtailPageFragment;
     validation_error?: WagtailStreamFieldValidationErrorFragment;
   };
 };
@@ -67,14 +69,11 @@ type SaveVariables = {
   };
 };
 
+// TODO - it'd be nice to have generic over typename, though it's not really useful here
 const buildSaveDocument = (
-  typename: any
+  typename: KnownWagtailPageTypename
 ): TypedDocumentNode<SaveResult, SaveVariables> => {
-  const component = getComponentByTypename(typename);
-  if (!component) {
-    throw new Error('Internal logic error');
-  }
-  const fragmentDoc = component.fragment;
+  const fragmentDoc = getFragmentByTypename(typename);
   const fragmentName = (fragmentDoc.definitions[0] as FragmentDefinitionNode)
     .name.value;
 
@@ -163,17 +162,29 @@ const EditControls: React.FC<Props> = ({ blocks }) => {
         type: 'Error',
       });
     } else {
-      setSavedPage(mutationResults.data?.result.page);
+      const page = mutationResults.data?.result.page;
+      if (page) {
+        setSavedPage(page);
+      } else {
+        notify({
+          text: 'No page in save results',
+          type: 'Error',
+        });
+      }
     }
   }, [apolloClient, blocks, page, notify, editDispatch, serializeBlocks]);
 
   const stopEditing = useCallback(async () => {
-    if (!pageDispatch) {
-      return; // shouldn't happen
+    if (!pageDispatch || !savedPage) {
+      return; // shouldn't happen if WagtailPageContext is configured properly
     }
     pageDispatch({ type: 'SET_PAGE', payload: savedPage });
     pageDispatch({ type: 'STOP_EDITING' });
   }, [savedPage, pageDispatch]);
+
+  if (!page) {
+    throw new Error('WagtailPageContext is not configured');
+  }
 
   return (
     <Container>

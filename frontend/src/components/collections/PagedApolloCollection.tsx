@@ -1,7 +1,7 @@
 import { AsyncButton } from '~/components';
 import { Collection } from '~/components/collections';
 import { AnyViewProps, EntityNames } from '~/components/collections/types';
-import { FormShape } from '~/components/forms/types';
+import { AnyFormValues, FormShape } from '~/components/forms/types';
 import { HR, Row } from '~/frontkit';
 
 interface PagerProps {
@@ -36,7 +36,7 @@ function Pager(props: PagerProps) {
   );
 }
 
-interface Props<T, A extends {}> {
+interface Props<T, A extends AnyFormValues> {
   connection: {
     pageInfo: {
       // TODO - PageInfoGragment
@@ -64,7 +64,7 @@ interface Props<T, A extends {}> {
   view?: React.ElementType<AnyViewProps<T>>;
 }
 
-function PagedApolloCollection<T, A extends {}>(props: Props<T, A>) {
+function PagedApolloCollection<T, A extends AnyFormValues>(props: Props<T, A>) {
   const DEFAULT_PAGE_SIZE = 20;
 
   return (

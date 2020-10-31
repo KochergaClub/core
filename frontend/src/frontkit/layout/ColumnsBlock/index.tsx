@@ -1,7 +1,7 @@
 import * as React from 'react';
 import styled from 'styled-components';
 
-import { DeviceName, deviceMediaQueries } from '../../sizes';
+import { deviceMediaQueries, DeviceName } from '../../sizes';
 
 interface Spacing {
   gap: number;
@@ -33,29 +33,28 @@ const defaultSpacingMap: SpacingMap = {
 
 const spacingMap2style = (spaces: SpacingMap) => {
   return ''.concat(
-    ...(Object.keys(spaces) as DeviceName[]).map(
-      device => {
-        const space = spaces[device]!;
+    ...(Object.keys(spaces) as DeviceName[]).map((device) => {
+      const space = spaces[device];
 
-        let deviceStyle = '';
-        if (space.direction === 'horizontal') {
-          deviceStyle += `
+      let deviceStyle = '';
+      if (space.direction === 'horizontal') {
+        deviceStyle += `
           > * + * {
             margin-left: ${space.gap}px;
           }
           `;
-        } else {
-          deviceStyle += `
+      } else {
+        deviceStyle += `
           flex-direction: column;
           > * + * {
             margin-top: ${space.gap}px;
           }
           `;
-        }
-
-        return deviceMediaQueries[device](deviceStyle);
       }
-    ));
+
+      return deviceMediaQueries[device](deviceStyle);
+    })
+  );
 };
 
 interface Props {
@@ -73,15 +72,20 @@ const ColumnsBlockWithoutDefaults = styled.div<Props>`
     flex-grow: 1;
   }
 
-  ${props => spacingMap2style(props.spaces)}
+  ${(props) => spacingMap2style(props.spaces)}
 `;
 
 type SpacingMapOverrides = {
   [k in DeviceName]?: Spacing;
 };
 
-export const ColumnsBlock: React.FC<{ spaces?: SpacingMapOverrides }> = ({ spaces, children }) => (
-  <ColumnsBlockWithoutDefaults spaces={{...defaultSpacingMap, ...(spaces || {}) }}>
+export const ColumnsBlock: React.FC<{ spaces?: SpacingMapOverrides }> = ({
+  spaces,
+  children,
+}) => (
+  <ColumnsBlockWithoutDefaults
+    spaces={{ ...defaultSpacingMap, ...(spaces || {}) }}
+  >
     {children}
   </ColumnsBlockWithoutDefaults>
 );

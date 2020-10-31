@@ -10,11 +10,11 @@ const Li = styled.li<{ selected?: boolean }>`
   line-height: 20px;
   text-transform: uppercase;
 
-  border-bottom: ${props =>
+  border-bottom: ${(props) =>
     props.selected ? `4px solid ${colors.grey[500]}` : 'none'};
 
   &:hover {
-    ${props =>
+    ${(props) =>
       props.selected ? '' : `border-bottom: 4px solid ${colors.grey[300]};`};
   }
 `;
@@ -25,16 +25,13 @@ interface ItemProps {
   children?: React.ReactNode;
 }
 
-const Item = (props: ItemProps) => {
-  const onClick = React.useCallback(
-    () => {
-      props.select();
-    },
-    [props.select]
-  );
+const Item: React.FC<ItemProps> = ({ select, selected, children }) => {
+  const onClick = React.useCallback(() => {
+    select();
+  }, [select]);
   return (
-    <Li selected={props.selected} onClick={onClick}>
-      {props.children}
+    <Li selected={selected} onClick={onClick}>
+      {children}
     </Li>
   );
 };

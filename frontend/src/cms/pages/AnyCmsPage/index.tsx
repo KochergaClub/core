@@ -10,13 +10,13 @@ import { Spinner } from '~/components';
 import TildaPage from '../../components/TildaPage';
 import { TildaPageQuery } from '../../queries.generated';
 import { loadTildaPage, tildaPageUrls } from '../../tilda-utils';
-import { loadWagtailPage, wagtailPageUrls } from '../../wagtail-utils';
+import { KnownWagtailPageFragment, loadWagtailPage, wagtailPageUrls } from '../../wagtail-utils';
 import PrivateWagtailCmsPage from './PrivateWagtailCmsPage';
 import WagtailCmsPage from './WagtailCmsPage';
 
 interface WagtailProps {
   kind: 'wagtail';
-  page: any;
+  page: KnownWagtailPageFragment;
 }
 
 interface PrivateWagtailProps {

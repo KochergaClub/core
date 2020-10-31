@@ -51,9 +51,16 @@ export const isKnownTypename = (
   return allPageComponents.hasOwnProperty(typename);
 };
 
+export const getFragmentByTypename = <T extends KnownWagtailPageTypename>(
+  typename: T
+): WagtailPageComponentsMap[T]['fragment'] => {
+  return allPageComponents[typename].fragment;
+};
+
+// FIXME - this signature is unhelpful, refactor everything
 export const getComponentByTypename = <T extends KnownWagtailPageTypename>(
   typename: T
-): WagtailPageComponentsMap[T] => {
+): React.FC<{ page: any }> => {
   return allPageComponents[typename];
 };
 
@@ -129,11 +136,10 @@ type GetPageVariables = {
 const buildGetPageDocument = <T extends KnownWagtailPageTypename>(
   typename: T
 ): TypedDocumentNode<GetPageResult<T>, GetPageVariables> => {
-  const component = getComponentByTypename(typename);
   // Specific wagtail pages should define `.fragment` property with FragmentDoc.
   // The fragment should be something like `fragment MyPage on MyPage`, usually in a queries.graphql file.
 
-  const fragmentDoc = component.fragment;
+  const fragmentDoc = getFragmentByTypename(typename);
   const fragmentName = (fragmentDoc.definitions[0] as FragmentDefinitionNode)
     .name.value;
   const objectName = (fragmentDoc.definitions[0] as FragmentDefinitionNode)
