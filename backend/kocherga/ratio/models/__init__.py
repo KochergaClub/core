@@ -9,6 +9,7 @@ from .notebook_page import NotebookIndexPage, NotebookPage
 from .presentation import PresentationIndexPage
 from .order import Order
 from .ticket_type import TicketType
+from .promocode import Promocode
 
 
 __all__ = [
@@ -17,8 +18,9 @@ __all__ = [
     'Trainer',
     'Ticket',
     'Payment',
-    'TicketType',
     'Order',
+    'TicketType',
+    'Promocode',
     'Activity',
     'SectionIndexPage',
     'SectionPage',

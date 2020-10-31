@@ -1,5 +1,5 @@
 from kocherga.graphql.helpers import Collection
-from . import emails, orders, payments, schedule, ticket_types, tickets, trainings
+from . import emails, orders, payments, schedule, ticket_types, tickets, trainings, promocodes
 
 mutations = Collection.merge(
     emails.mutations,
@@ -9,4 +9,5 @@ mutations = Collection.merge(
     ticket_types.mutations,
     tickets.mutations,
     trainings.mutations,
+    promocodes.mutations,
 )
