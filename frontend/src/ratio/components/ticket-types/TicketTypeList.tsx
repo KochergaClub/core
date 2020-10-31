@@ -12,7 +12,7 @@ interface Props {
 
 const TicketTypeList: React.FC<Props> = ({ ticketTypes }) => {
   return (
-    <Row>
+    <Row gutter={16}>
       <AnimatePresence initial={false}>
         {ticketTypes.map((ticketType) => (
           <motion.div

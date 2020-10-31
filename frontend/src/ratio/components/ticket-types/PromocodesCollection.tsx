@@ -1,11 +1,18 @@
+import styled from 'styled-components';
+
 import { useLazyQuery } from '@apollo/client';
 
 import HeadlessConnection from '~/components/collections/HeadlessConnection';
 import SmallPager from '~/components/collections/SmallPager';
-import { Badge, Column } from '~/frontkit';
+import { Badge, colors, Column } from '~/frontkit';
 
 import { RatioTicketTypeFragment } from '../../queries.generated';
 import { RatioPromocodesPageDocument } from './queries.generated';
+
+const Container = styled.div`
+  padding: 8px;
+  border: 1px solid ${colors.grey[200]};
+`;
 
 interface Props {
   ticketType: RatioTicketTypeFragment;
@@ -29,6 +36,11 @@ const PromocodesCollection: React.FC<Props> = ({ ticketType }) => {
       },
     });
   };
+
+  if (ticketType.promocodes.edges.length === 0) {
+    return null;
+  }
+
   const connection = queryResults.data
     ? queryResults.data.ratioTicketType.promocodes
     : ticketType.promocodes;
@@ -36,7 +48,7 @@ const PromocodesCollection: React.FC<Props> = ({ ticketType }) => {
   return (
     <HeadlessConnection connection={connection} fetchPage={fetchPage}>
       {({ items, next, previous }) => (
-        <div>
+        <Container>
           <header>
             <strong>Промокоды</strong>
           </header>
@@ -50,7 +62,7 @@ const PromocodesCollection: React.FC<Props> = ({ ticketType }) => {
             previous={previous}
             pageInfo={connection.pageInfo}
           />
-        </div>
+        </Container>
       )}
     </HeadlessConnection>
   );
