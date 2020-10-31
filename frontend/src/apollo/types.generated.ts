@@ -2294,6 +2294,7 @@ export type RatioTicketType = {
   name: Scalars['String'];
   id: Scalars['ID'];
   training: RatioTraining;
+  promocodes_count: Scalars['Int'];
   promocodes: RatioPromocodeConnection;
 };
 

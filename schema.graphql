@@ -1393,6 +1393,7 @@ type RatioTicketType {
   name: String!
   id: ID!
   training: RatioTraining!
+  promocodes_count: Int!
   promocodes(before: String, after: String, first: Int, last: Int): RatioPromocodeConnection!
 }
 

@@ -29,6 +29,7 @@ fragment RatioTicket on RatioTicket {
 fragment RatioPromocode on RatioPromocode {
   id
   code
+  discount
 }
 
 fragment RatioTicketTypePromocodes on RatioPromocodeConnection {
@@ -46,7 +47,8 @@ fragment RatioTicketType on RatioTicketType {
   id
   price
   name
-  promocodes(first: 2) {
+  promocodes_count
+  promocodes(first: 5) {
     ...RatioTicketTypePromocodes
   }
 }

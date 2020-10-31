@@ -1,10 +1,10 @@
-from kocherga.graphql.django_utils import DjangoObjectType, related_field
+from kocherga.graphql.django_utils import DjangoObjectType
 from kocherga.graphql.permissions import user_perm
 from kocherga.graphql import g, helpers
 
 from ... import models
 from .training import RatioTraining
-from .promocode import RatioPromocode, RatioPromocodeConnection
+from .promocode import RatioPromocodeConnection
 
 fields = helpers.Collection()
 
@@ -16,6 +16,16 @@ class training(helpers.BaseField):
 
     permissions = [user_perm('ratio.manage')]
     result = g.NN(RatioTraining)
+
+
+@fields.class_field
+class promocodes_count(helpers.BaseField):
+    def resolve(self, obj, info, **pager):
+        return obj.promocodes.count()
+
+    permissions = [user_perm('ratio.manage')]
+
+    result = int
 
 
 @fields.class_field

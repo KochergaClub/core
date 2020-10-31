@@ -4,7 +4,7 @@ import { useLazyQuery } from '@apollo/client';
 
 import HeadlessConnection from '~/components/collections/HeadlessConnection';
 import SmallPager from '~/components/collections/SmallPager';
-import { Badge, colors, Column } from '~/frontkit';
+import { Badge, colors, Column, Row } from '~/frontkit';
 
 import { RatioTicketTypeFragment } from '../../queries.generated';
 import { RatioPromocodesPageDocument } from './queries.generated';
@@ -50,11 +50,14 @@ const PromocodesCollection: React.FC<Props> = ({ ticketType }) => {
       {({ items, next, previous }) => (
         <Container>
           <header>
-            <strong>Промокоды</strong>
+            <strong>Промокоды ({ticketType.promocodes_count})</strong>
           </header>
           <Column>
             {items.map((item) => (
-              <Badge key={item.id}>{item.code}</Badge>
+              <Row vCentered key={item.id}>
+                <Badge>{item.code}</Badge>
+                <small>{item.discount} руб.</small>
+              </Row>
             ))}
           </Column>
           <SmallPager
