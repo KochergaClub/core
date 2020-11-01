@@ -265,6 +265,7 @@ input CreateRatioPromocodeInput {
   ticket_type_id: ID!
   code: String!
   discount: Int!
+  uses_max: Int
 }
 
 union CreateRatioPromocodeResult = RatioPromocode | ValidationError | GenericError
@@ -1362,6 +1363,8 @@ type RatioPromocode {
   id: ID!
   code: String!
   discount: Int!
+  uses_max: Int
+  uses_count: Int!
 }
 
 type RatioPromocodeConnection {

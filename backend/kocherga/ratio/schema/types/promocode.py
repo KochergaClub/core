@@ -11,6 +11,8 @@ RatioPromocode = DjangoObjectType(
         'id',
         'code',
         'discount',
+        'uses_max',
+        'uses_count',
     ],
 )
 

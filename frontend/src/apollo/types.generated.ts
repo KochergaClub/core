@@ -328,6 +328,7 @@ export type CreateRatioPromocodeInput = {
   ticket_type_id: Scalars['ID'];
   code: Scalars['String'];
   discount: Scalars['Int'];
+  uses_max?: Maybe<Scalars['Int']>;
 };
 
 export type CreateRatioPromocodeResult = RatioPromocode | ValidationError | GenericError;
@@ -2263,6 +2264,8 @@ export type RatioPromocode = {
   id: Scalars['ID'];
   code: Scalars['String'];
   discount: Scalars['Int'];
+  uses_max?: Maybe<Scalars['Int']>;
+  uses_count: Scalars['Int'];
 };
 
 export type RatioPromocodeConnection = {

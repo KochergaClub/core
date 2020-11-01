@@ -2,6 +2,8 @@ import logging
 
 logger = logging.getLogger(__name__)
 
+from typing import Optional
+
 from kocherga.graphql import helpers, g
 from kocherga.graphql.permissions import user_perm
 import kocherga.django.schema.types
@@ -32,6 +34,7 @@ class createRatioPromocode(helpers.UnionFieldMixin, helpers.BaseFieldWithInput):
                     ticket_type=ticket_type,
                     code=input['code'],
                     discount=input['discount'],
+                    uses_max=input.get('uses_max'),
                 )
         except ValidationError as e:
             return BoxedError(e)
@@ -53,6 +56,7 @@ class createRatioPromocode(helpers.UnionFieldMixin, helpers.BaseFieldWithInput):
         'ticket_type_id': 'ID!',
         'code': str,
         'discount': int,
+        'uses_max': Optional[int],
     }
 
 

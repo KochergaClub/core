@@ -30,6 +30,8 @@ fragment RatioPromocode on RatioPromocode {
   id
   code
   discount
+  uses_max
+  uses_count
 }
 
 fragment RatioTicketTypePromocodes on RatioPromocodeConnection {

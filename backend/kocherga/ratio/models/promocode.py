@@ -36,10 +36,14 @@ class Promocode(models.Model):
         ],
     )
     discount = models.IntegerField('Сумма скидки', validators=[MinValueValidator(1)])
-    single_use = models.BooleanField('Одноразовый', default=True)
-
-    last_used = models.DateTimeField(
-        'Последнее использование', null=True, editable=False
+    uses_max = models.IntegerField(
+        'Максимальное количество использований',
+        null=True,
+        blank=True,
+        validators=[MinValueValidator(1)],
+    )
+    uses_count = models.IntegerField(
+        'Количество использований', default=0, editable=False
     )
 
     ticket_type = models.ForeignKey(
@@ -52,4 +56,21 @@ class Promocode(models.Model):
         unique_together = (('code', 'ticket_type'),)
 
     def is_valid(self):
-        return not self.single_use or not self.last_used
+        if self.uses_max and self.uses_count >= self.uses_max:
+            return False
+        return True
+
+    def apply(self) -> int:
+        """Apply promocode and return the new price."""
+        if not self.is_valid():
+            raise Exception("Can't apply promocode - it's not valid")
+
+        result = self.ticket_type.price - self.discount
+        if result < 0:
+            result = 0
+
+        # TODO - there's a potential race condition here. But it's not very critical.
+        self.uses_count += 1
+        self.save()
+
+        return result

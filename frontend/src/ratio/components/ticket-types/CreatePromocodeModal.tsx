@@ -15,6 +15,7 @@ interface Props {
 const shape: FormShape = [
   { name: 'code', type: 'string' },
   { name: 'discount', type: 'number' },
+  { name: 'uses_max', type: 'number', optional: true },
 ];
 
 const CreatePromocodeModal: React.FC<Props> = ({ close, ticketType }) => {
@@ -27,6 +28,7 @@ const CreatePromocodeModal: React.FC<Props> = ({ close, ticketType }) => {
   type FormValues = {
     code: string;
     discount: number;
+    uses_max?: number;
   };
 
   const post = async (v: FormValues) => {
@@ -35,6 +37,7 @@ const CreatePromocodeModal: React.FC<Props> = ({ close, ticketType }) => {
         input: {
           code: v.code,
           discount: v.discount,
+          uses_max: v.uses_max,
           ticket_type_id: ticketType.id,
         },
       },

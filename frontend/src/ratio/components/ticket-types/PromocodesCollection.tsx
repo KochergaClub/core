@@ -57,6 +57,10 @@ const PromocodesCollection: React.FC<Props> = ({ ticketType }) => {
               <Row vCentered key={item.id}>
                 <Badge>{item.code}</Badge>
                 <small>{item.discount} руб.</small>
+                <small>
+                  Использован: {item.uses_count}
+                  {item.uses_max ? `/${item.uses_max}` : ''} раз
+                </small>
               </Row>
             ))}
           </Column>

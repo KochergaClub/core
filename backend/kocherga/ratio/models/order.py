@@ -48,14 +48,13 @@ class OrderManager(models.Manager):
                 )
             except Promocode.DoesNotExist:
                 raise ValidationError({'promocode': ['Промокод не найден']})
-            if not promocode_obj.is_valid():
-                raise ValidationError({'promocode': ['Промокод недействителен']})
 
         price = ticket_type.price
-        logger.info(price)
+
         if promocode_obj:
-            price -= promocode_obj.discount
-        logger.info(price)
+            if not promocode_obj.is_valid():
+                raise ValidationError({'promocode': ['Промокод недействителен']})
+            price = promocode_obj.apply()
 
         payment = KassaPayment.objects.create(
             amount=price,
