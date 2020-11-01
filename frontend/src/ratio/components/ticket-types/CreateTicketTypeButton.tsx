@@ -20,6 +20,12 @@ const CreateTicketTypeButton: React.FC<Props> = ({ training_id }) => {
   const fields: FormShape = [
     { name: 'price', title: 'Стоимость', type: 'number' },
     { name: 'name', title: 'Название', type: 'string' },
+    {
+      name: 'discount_by_email',
+      title: "Сумма одноразового промокода по e-mail'у",
+      type: 'number',
+      optional: true,
+    },
   ];
 
   type Values = {

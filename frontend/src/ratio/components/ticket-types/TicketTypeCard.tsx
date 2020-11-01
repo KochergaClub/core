@@ -34,6 +34,9 @@ const TicketTypeCard: React.FC<Props> = ({ ticketType }) => {
         </Row>
       </header>
       <div>{ticketType.name}</div>
+      {ticketType.discount_by_email ? (
+        <div>Скидка по e-mail&apos;у: {ticketType.discount_by_email} руб.</div>
+      ) : null}
       <PromocodesCollection ticketType={ticketType} />
     </Card>
   );

@@ -337,6 +337,7 @@ export type CreateRatioTicketTypeInput = {
   training_id: Scalars['ID'];
   price: Scalars['Int'];
   name: Scalars['String'];
+  discount_by_email?: Maybe<Scalars['Int']>;
 };
 
 export type DeleteRatioTicketTypeInput = {
@@ -2314,6 +2315,7 @@ export type RatioTicketType = {
   __typename?: 'RatioTicketType';
   price: Scalars['Int'];
   name: Scalars['String'];
+  discount_by_email?: Maybe<Scalars['Int']>;
   id: Scalars['ID'];
   training: RatioTraining;
   promocodes_count: Scalars['Int'];
@@ -2567,6 +2569,7 @@ export type UpdateRatioTicketTypeInput = {
   id: Scalars['ID'];
   price?: Maybe<Scalars['Int']>;
   name?: Maybe<Scalars['String']>;
+  discount_by_email?: Maybe<Scalars['Int']>;
 };
 
 export type UpdateYandexKassaPaymentInput = {

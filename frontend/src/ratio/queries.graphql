@@ -49,6 +49,7 @@ fragment RatioTicketType on RatioTicketType {
   id
   price
   name
+  discount_by_email
   promocodes_count
   promocodes(first: 5) {
     ...RatioTicketTypePromocodes

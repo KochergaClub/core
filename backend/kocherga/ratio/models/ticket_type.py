@@ -1,6 +1,7 @@
 import datetime
 from django.db import models
 from django.db.models import Q
+from django.core.validators import MinValueValidator, RegexValidator
 
 from kocherga.django.fields import ShortUUIDField
 
@@ -30,5 +31,12 @@ class TicketType(models.Model):
     # TODO - active until / dynamic scheduling
     price = models.IntegerField('Стоимость')
     name = models.CharField('Название', max_length=255)
+
+    discount_by_email = models.IntegerField(
+        "Размер одноразового  промокода по E-mail'у",
+        null=True,
+        blank=True,
+        validators=[MinValueValidator(1)],
+    )
 
     objects = TicketTypeQuerySet.as_manager()

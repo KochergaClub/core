@@ -19,6 +19,7 @@ const EditTicketTypeModal: React.FC<Props> = ({ ticketType, close }) => {
   type FormData = {
     name: string;
     price: string;
+    discount_by_email: string;
   };
 
   const form = useForm<FormData>();
@@ -48,6 +49,9 @@ const EditTicketTypeModal: React.FC<Props> = ({ ticketType, close }) => {
           id: ticketType.id,
           price: parseInt(data.price, 10),
           name: data.name,
+          discount_by_email: data.discount_by_email
+            ? parseInt(data.discount_by_email, 10)
+            : null,
         },
       },
     });
@@ -78,6 +82,13 @@ const EditTicketTypeModal: React.FC<Props> = ({ ticketType, close }) => {
               defaultValue={String(ticketType.price)}
               form={form}
               required
+            />
+            <BasicInputField
+              title="Сумма одноразового промокода по e-mail'у"
+              name="discount_by_email"
+              type="number"
+              defaultValue={String(ticketType.discount_by_email)}
+              form={form}
             />
           </Column>
         </Modal.Body>
