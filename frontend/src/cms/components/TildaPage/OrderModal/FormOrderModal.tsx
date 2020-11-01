@@ -90,6 +90,14 @@ const FormOrderModal: React.FC<Props> = ({
     [createOrderMutation, onOrderCreated, form]
   );
 
+  const ticketTypeToSelectOption = (
+    ticketType: RatioTicketType_ForPickerFragment
+  ) =>
+    ({
+      value: ticketType,
+      label: ticketType.name,
+    } as SelectOptionType);
+
   return (
     <Modal>
       <Modal.Header close={close}>Регистрация</Modal.Header>
@@ -97,20 +105,19 @@ const FormOrderModal: React.FC<Props> = ({
         <Modal.Body>
           <Column stretch gutter={16}>
             <FieldContainer
-              title="В каком потоке вы участвуете?"
+              title="Выберите вид билета"
               error={form.errors.ticket_type as FieldError | undefined}
             >
               <Controller
                 name="ticket_type"
                 as={Select}
                 placeholder="Выбрать..."
-                options={ticketTypes.map(
-                  (ticketType) =>
-                    ({
-                      value: ticketType,
-                      label: ticketType.name,
-                    } as SelectOptionType)
-                )}
+                options={ticketTypes.map(ticketTypeToSelectOption)}
+                defaultValue={
+                  ticketTypes.length === 1
+                    ? ticketTypeToSelectOption(ticketTypes[0])
+                    : null
+                }
                 control={form.control}
                 rules={{ required: true }}
               />
