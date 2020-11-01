@@ -110,14 +110,6 @@ class Training(models.Model):
                 activity.training_day = day
                 activity.save()
 
-    # deprecated
-    @property
-    def long_name(self) -> str:
-        return (
-            'Воркшоп по прикладной рациональности '
-            + f'{self.date.day}–{self.date.day + 1} {inflected_month(self.date)} {self.date.year}'
-        )
-
     def all_activities(self):
         for day in self.days.all():
             for activity in day.schedule.all():

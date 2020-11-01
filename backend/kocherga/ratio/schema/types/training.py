@@ -57,7 +57,6 @@ RatioTraining = django_utils.DjangoObjectType(
     related_fields=related_fields,
     method_fields=['tickets_count', 'total_income'],
     extra_fields={
-        'long_name': str,
         **fields.as_dict(),
     },
 )
