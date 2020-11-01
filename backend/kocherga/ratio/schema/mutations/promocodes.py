@@ -2,7 +2,7 @@ import logging
 
 logger = logging.getLogger(__name__)
 
-from kocherga.graphql import helpers
+from kocherga.graphql import helpers, g
 from kocherga.graphql.permissions import user_perm
 import kocherga.django.schema.types
 import django.db.utils
@@ -54,6 +54,38 @@ class createRatioPromocode(helpers.UnionFieldMixin, helpers.BaseFieldWithInput):
         'code': str,
         'discount': int,
     }
+
+
+@c.class_field
+class checkRatioPromocode(helpers.BaseFieldWithInput):
+    def resolve(self, _, info, input):
+        try:
+            promocode = models.Promocode.objects.get(
+                code=input['code'], ticket_type__uuid=input['ticket_type_id']
+            )
+        except models.Promocode.DoesNotExist:
+            return None
+
+        if not promocode.is_valid():
+            return None
+
+        return {
+            'discount': promocode.discount,
+        }
+
+    permissions = []
+    input = {
+        'ticket_type_id': 'ID!',
+        'code': str,
+    }
+    result = g.ObjectType(
+        'CheckRatioPromocodeResult',
+        g.fields(
+            {
+                'discount': int,
+            }
+        ),
+    )
 
 
 mutations = c.as_dict()

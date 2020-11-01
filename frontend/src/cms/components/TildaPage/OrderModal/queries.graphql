@@ -31,3 +31,9 @@ query RatioTicketTypes($input: RatioTicketTypesInput!) {
     ...RatioTicketType_ForPicker
   }
 }
+
+mutation CheckRatioPromocode($input: CheckRatioPromocodeInput!) {
+  result: checkRatioPromocode(input: $input) {
+    discount
+  }
+}

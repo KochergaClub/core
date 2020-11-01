@@ -3,7 +3,7 @@ import React, { useEffect } from 'react';
 import { Modal } from '~/frontkit';
 import { confirmOrderRoute } from '~/ratio/routes';
 
-import { RatioOrder_CreatedFragment } from '../queries.generated';
+import { RatioOrder_CreatedFragment } from './queries.generated';
 
 // inspired by https://medium.com/better-programming/loading-third-party-scripts-dynamically-in-reactjs-458c41a7013d
 const loadKassaCheckoutUI = (cb: () => void) => {

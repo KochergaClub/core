@@ -4,14 +4,16 @@ import Select from 'react-select';
 
 import { useMutation } from '@apollo/client';
 
+import { useCommonHotkeys, useFocusOnFirstModalRender } from '~/common/hooks';
 import {
     BasicInputField, ErrorMessage, FieldContainer, FieldErrorMessage
 } from '~/components/forms2';
 import { A, Button, Column, ControlsFooter, Label, Modal, Row } from '~/frontkit';
 
+import PromocodeField from './PromocodeField';
 import {
     RatioCreateOrderDocument, RatioOrder_CreatedFragment, RatioTicketType_ForPickerFragment
-} from '../queries.generated';
+} from './queries.generated';
 
 interface Props {
   close: () => void;
@@ -24,23 +26,41 @@ type SelectOptionType = {
   label: string;
 };
 
-type FormData = {
+export type FormData = {
   ticket_type: SelectOptionType;
   email: string;
   first_name: string;
   last_name: string;
   // city: string;
+  promocode: string;
   terms: boolean;
 };
+
+const ticketTypeToSelectOption = (
+  ticketType: RatioTicketType_ForPickerFragment
+) =>
+  ({
+    value: ticketType,
+    label: ticketType.name,
+  } as SelectOptionType);
 
 const FormOrderModal: React.FC<Props> = ({
   close,
   ticketTypes,
   onOrderCreated,
 }) => {
-  const form = useForm<FormData>();
+  const form = useForm<FormData>({
+    defaultValues: {
+      ticket_type:
+        ticketTypes.length === 1
+          ? ticketTypeToSelectOption(ticketTypes[0])
+          : undefined,
+      promocode: '',
+    },
+  });
   const watchTicketType = form.watch('ticket_type');
   const [submitError, setSubmitError] = useState('');
+  const [discount, setDiscount] = useState(0);
 
   const [createOrderMutation] = useMutation(RatioCreateOrderDocument);
 
@@ -90,19 +110,14 @@ const FormOrderModal: React.FC<Props> = ({
     [createOrderMutation, onOrderCreated, form]
   );
 
-  const ticketTypeToSelectOption = (
-    ticketType: RatioTicketType_ForPickerFragment
-  ) =>
-    ({
-      value: ticketType,
-      label: ticketType.name,
-    } as SelectOptionType);
+  const hotkeys = useCommonHotkeys({ onEscape: close });
+  const focus = useFocusOnFirstModalRender();
 
   return (
     <Modal>
       <Modal.Header close={close}>Регистрация</Modal.Header>
       <form onSubmit={form.handleSubmit(postForm)}>
-        <Modal.Body>
+        <Modal.Body {...hotkeys} ref={focus}>
           <Column stretch gutter={16}>
             <FieldContainer
               title="Выберите вид билета"
@@ -113,11 +128,6 @@ const FormOrderModal: React.FC<Props> = ({
                 as={Select}
                 placeholder="Выбрать..."
                 options={ticketTypes.map(ticketTypeToSelectOption)}
-                defaultValue={
-                  ticketTypes.length === 1
-                    ? ticketTypeToSelectOption(ticketTypes[0])
-                    : null
-                }
                 control={form.control}
                 rules={{ required: true }}
               />
@@ -144,6 +154,7 @@ const FormOrderModal: React.FC<Props> = ({
               required
               form={form}
             />
+            <PromocodeField form={form} setDiscount={setDiscount} />
             {/*
             <BasicInputField
               title="Из какого города вы планируете проходить курс?"
@@ -186,7 +197,9 @@ const FormOrderModal: React.FC<Props> = ({
                 disabled={form.formState.isSubmitting}
               >
                 Оплатить
-                {watchTicketType ? ` ${watchTicketType.value.price} руб.` : ''}
+                {watchTicketType
+                  ? ` ${watchTicketType.value.price - discount} руб.`
+                  : ''}
               </Button>
             </Row>
           </ControlsFooter>

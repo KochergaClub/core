@@ -183,6 +183,15 @@ type CashierPaymentEdge {
   node: CashierPayment!
 }
 
+input CheckRatioPromocodeInput {
+  ticket_type_id: ID!
+  code: String!
+}
+
+type CheckRatioPromocodeResult {
+  discount: Int!
+}
+
 input Cm2CreateCustomerInput {
   card_id: Int!
   first_name: String!
@@ -951,6 +960,7 @@ type Mutation {
   ratioAddTraining(params: RatioAddTrainingInput!): RatioTraining!
   ratioDeleteTraining(input: RatioDeleteTrainingInput!): BasicResult!
   createRatioPromocode(input: CreateRatioPromocodeInput!): CreateRatioPromocodeResult!
+  checkRatioPromocode(input: CheckRatioPromocodeInput!): CheckRatioPromocodeResult
   mastermindDatingCreateCohort: MastermindDatingCohortMutationResult!
   mastermindDatingPopulateCohortFromEvent(cohort_id: ID!): MastermindDatingCohortMutationResult!
   mastermindDatingSendInviteEmails(cohort_id: ID!): MastermindDatingCohortMutationResult!

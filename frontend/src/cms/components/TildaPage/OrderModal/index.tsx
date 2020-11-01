@@ -6,9 +6,9 @@ import { useQuery } from '@apollo/client';
 import { Spinner } from '~/components';
 import { Modal } from '~/frontkit';
 
-import { RatioOrder_CreatedFragment, RatioTicketTypesDocument } from '../queries.generated';
 import CheckoutOrderModal from './CheckoutOrderModal';
 import FormOrderModal from './FormOrderModal';
+import { RatioOrder_CreatedFragment, RatioTicketTypesDocument } from './queries.generated';
 
 export interface OrderParams {
   ticketTypeId?: string;

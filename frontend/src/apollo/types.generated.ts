@@ -222,6 +222,16 @@ export type CashierPaymentEdge = {
   node: CashierPayment;
 };
 
+export type CheckRatioPromocodeInput = {
+  ticket_type_id: Scalars['ID'];
+  code: Scalars['String'];
+};
+
+export type CheckRatioPromocodeResult = {
+  __typename?: 'CheckRatioPromocodeResult';
+  discount: Scalars['Int'];
+};
+
 export type Cm2CreateCustomerInput = {
   card_id: Scalars['Int'];
   first_name: Scalars['String'];
@@ -1121,6 +1131,7 @@ export type Mutation = {
   ratioAddTraining: RatioTraining;
   ratioDeleteTraining: BasicResult;
   createRatioPromocode: CreateRatioPromocodeResult;
+  checkRatioPromocode?: Maybe<CheckRatioPromocodeResult>;
   mastermindDatingCreateCohort: MastermindDatingCohortMutationResult;
   mastermindDatingPopulateCohortFromEvent: MastermindDatingCohortMutationResult;
   mastermindDatingSendInviteEmails: MastermindDatingCohortMutationResult;
@@ -1513,6 +1524,11 @@ export type MutationRatioDeleteTrainingArgs = {
 
 export type MutationCreateRatioPromocodeArgs = {
   input: CreateRatioPromocodeInput;
+};
+
+
+export type MutationCheckRatioPromocodeArgs = {
+  input: CheckRatioPromocodeInput;
 };
 
 

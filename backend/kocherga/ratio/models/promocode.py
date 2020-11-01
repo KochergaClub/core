@@ -30,7 +30,7 @@ class Promocode(models.Model):
         max_length=100,
         validators=[
             RegexValidator(
-                regex=r'^[a-zA-Z0-9]$',
+                regex=r'^[a-zA-Z0-9]+$',
                 message='Promocode must include only a-z or 0-9 characters',
             )
         ],
@@ -50,3 +50,6 @@ class Promocode(models.Model):
 
     class Meta:
         unique_together = (('code', 'ticket_type'),)
+
+    def is_valid(self):
+        return not self.single_use or not self.last_used
