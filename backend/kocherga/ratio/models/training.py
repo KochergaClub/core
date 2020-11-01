@@ -199,6 +199,7 @@ class Training(models.Model):
         promocode = Promocode.objects.generate_random(
             discount=self.discount_by_email,
             discount_percent=self.discount_percent_by_email,
+            for_email=email,
         )
         self.promocodes.add(promocode)
         self.save()

@@ -104,11 +104,11 @@ def r_generate_promocode_webhook(request):
     if not email:
         raise Exception("Email is not set")
 
-    ticket_type_id = request.data.get('ticket_type_id')
-    if not ticket_type_id:
-        raise Exception("ticket_type_id is not set")
+    training_slug = request.data.get('training')
+    if not training_slug:
+        raise Exception("training is not set")
 
-    ticket_type = kocherga.ratio.models.TicketType.objects.get(uuid=ticket_type_id)
-    ticket_type.send_unique_promocode(email)
+    training = kocherga.ratio.models.Training.objects.get(slug=training_slug)
+    training.send_unique_promocode(email)
 
     return HttpResponse('ok')

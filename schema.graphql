@@ -1373,6 +1373,7 @@ type RatioPromocode {
   discount_percent: Int!
   uses_max: Int
   uses_count: Int!
+  for_email: String!
 }
 
 type RatioPromocodeConnection {

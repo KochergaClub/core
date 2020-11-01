@@ -2284,6 +2284,7 @@ export type RatioPromocode = {
   discount_percent: Scalars['Int'];
   uses_max?: Maybe<Scalars['Int']>;
   uses_count: Scalars['Int'];
+  for_email: Scalars['String'];
 };
 
 export type RatioPromocodeConnection = {

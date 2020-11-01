@@ -23,7 +23,9 @@ class PromocodeManager(models.Manager):
 
         return obj
 
-    def generate_random(self, discount: int, discount_percent: int) -> Promocode:
+    def generate_random(
+        self, discount: int, discount_percent: int, for_email: str
+    ) -> Promocode:
         LENGTH = 8
         code = ''.join(
             [
@@ -36,6 +38,7 @@ class PromocodeManager(models.Manager):
             uses_max=1,
             discount=discount,
             discount_percent=discount_percent,
+            for_email=for_email,
         )
 
 
@@ -72,6 +75,8 @@ class Promocode(models.Model):
         'Количество использований', default=0, editable=False
     )
 
+    for_email = models.EmailField("Создан для E-mail'а", blank=True)
+
     objects = PromocodeManager()
 
     class Meta:
@@ -97,8 +102,11 @@ class Promocode(models.Model):
             raise Exception("Can't apply promocode - it's not valid")
 
         result = base_price
-        result -= int(result * self.discount_percent / 100)
+
+        # rounding down, 999 -> 799
+        result = int(result * (1 - self.discount_percent / 100))
         result -= self.discount
+
         if result < 0:
             result = 0
 

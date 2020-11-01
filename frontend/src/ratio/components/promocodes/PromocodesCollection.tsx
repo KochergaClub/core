@@ -35,6 +35,7 @@ const PromocodesCollection: React.FC<Props> = ({
                       ? 'good'
                       : 'default'
                   }
+                  hint={item.for_email ? `Для ${item.for_email}` : undefined}
                 >
                   {item.code}
                 </Badge>

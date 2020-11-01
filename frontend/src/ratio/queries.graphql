@@ -33,6 +33,7 @@ fragment RatioPromocode on RatioPromocode {
   discount_percent
   uses_max
   uses_count
+  for_email
 }
 
 fragment RatioPromocodeConnection on RatioPromocodeConnection {
