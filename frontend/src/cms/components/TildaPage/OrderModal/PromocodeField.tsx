@@ -66,7 +66,7 @@ const PromocodeField: React.FC<Props> = ({ form, setDiscount }) => {
           name="promocode"
           placeholder="Промокод"
           ref={form.register}
-          disabled={status.type === 'ok'}
+          readOnly={status.type === 'ok'} // prevent weird UI states when promocode is applied and then changed
           onKeyDown={(e) => {
             if (e.keyCode === 13) {
               check();

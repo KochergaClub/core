@@ -1,3 +1,8 @@
+import logging
+
+logger = logging.getLogger(__name__)
+
+from typing import Optional
 from django.db import models
 from django.core.exceptions import ValidationError
 from kocherga.django.fields import ShortUUIDField
@@ -5,6 +10,7 @@ from kocherga.django.managers import RelayQuerySetMixin
 
 from .ticket import Ticket
 from .payment import Payment
+from .promocode import Promocode
 from .ticket_type import TicketType
 from kocherga.yandex_kassa.models import Payment as KassaPayment
 
@@ -22,11 +28,6 @@ class OrderManager(models.Manager):
 
     def create_order(self, **kwargs):
         ticket_type = kwargs['ticket_type']
-        payment = KassaPayment.objects.create(
-            amount=ticket_type.price,
-            description=f'Участие в тренинге: {ticket_type.training.name}',
-        )
-
         # Check that there's no ticket for this email and training.
         # Note that this still allows for race conditions - it's still possible to create two orders for the same email
         # if these orders are not confirmed. In this case we'll raise TicketAlreadyExistsError later.
@@ -37,6 +38,29 @@ class OrderManager(models.Manager):
             > 0
         ):
             raise ValidationError({'email': ['Этот email уже зарегистрирован']})
+
+        promocode = kwargs.pop('promocode', '')
+        promocode_obj: Optional[Promocode] = None
+        if promocode != '':
+            try:
+                promocode_obj = Promocode.objects.get(
+                    code=promocode, ticket_type=ticket_type
+                )
+            except Promocode.DoesNotExist:
+                raise ValidationError({'promocode': ['Промокод не найден']})
+            if not promocode_obj.is_valid():
+                raise ValidationError({'promocode': ['Промокод недействителен']})
+
+        price = ticket_type.price
+        logger.info(price)
+        if promocode_obj:
+            price -= promocode_obj.discount
+        logger.info(price)
+
+        payment = KassaPayment.objects.create(
+            amount=price,
+            description=f'Участие в тренинге: {ticket_type.training.name}',
+        )
 
         order = Order(
             **kwargs,
@@ -90,6 +114,11 @@ class Order(models.Model):
     class TicketAlreadyExistsError(Exception):
         pass
 
+    # how much the order actually costs (not the same as ticket_type.price because of promocode)
+    @property
+    def price(self):
+        return self.payment.amount
+
     def confirm(self):
         self.payment.update()
 
@@ -107,14 +136,14 @@ class Order(models.Model):
             email=self.email,
             first_name=self.first_name,
             last_name=self.last_name,
-            payment_amount=self.ticket_type.price,
+            payment_amount=self.payment.amount,
         )
         ticket.full_clean()
         ticket.save()
 
         payment = Payment(
             ticket=ticket,
-            amount=self.payment.amount,
+            amount=self.price,
             payment_type='kassa',
             status='paid',
             fiscalization_status='todo',

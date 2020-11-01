@@ -74,6 +74,7 @@ const FormOrderModal: React.FC<Props> = ({
               email: v.email,
               first_name: v.first_name,
               last_name: v.last_name,
+              promocode: v.promocode,
               // city: v.city,
               // TODO - payer
             },

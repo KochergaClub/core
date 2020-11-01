@@ -30,6 +30,7 @@ class ratioCreateOrder(helpers.UnionFieldMixin, helpers.BaseFieldWithInput):
                 first_name=input['first_name'],
                 last_name=input['last_name'],
                 city=input.get('city', ''),
+                promocode=input.get('promocode', ''),
                 payer_email=input.get('payer', {}).get('email', ''),
                 payer_first_name=input.get('payer', {}).get('first_name', ''),
                 payer_last_name=input.get('payer', {}).get('last_name', ''),
@@ -64,6 +65,7 @@ class ratioCreateOrder(helpers.UnionFieldMixin, helpers.BaseFieldWithInput):
         'first_name': str,
         'last_name': str,
         'city': Optional[str],
+        'promocode': Optional[str],
         'payer': PayerInput,
     }
 

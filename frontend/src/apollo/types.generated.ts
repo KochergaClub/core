@@ -2096,6 +2096,7 @@ export type RatioCreateOrderInput = {
   first_name: Scalars['String'];
   last_name: Scalars['String'];
   city?: Maybe<Scalars['String']>;
+  promocode?: Maybe<Scalars['String']>;
   payer?: Maybe<RatioCreateOrderPayerInput>;
 };
 
