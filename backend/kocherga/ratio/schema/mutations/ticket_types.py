@@ -83,4 +83,23 @@ class deleteRatioTicketType(helpers.BaseFieldWithInput):
     result = g.NN(basic_types.BasicResult)
 
 
+@c.class_field
+class sendUniqueRatioPromocode(helpers.UnionFieldMixin, helpers.BaseFieldWithInput):
+    def resolve(self, _, info, input):
+        ticket_type = models.TicketType.objects.get(
+            uuid=input['ticket_type_id'],
+        )
+        ticket_type.send_unique_promocode(input['email'])
+        return {'ok': True}
+
+    permissions = []
+    input = {
+        'ticket_type_id': 'ID!',
+        'email': str,
+    }
+
+    # union with errors would be better, but this mutation is used in admin only anyway (for now)
+    result = g.NN(basic_types.BasicResult)
+
+
 mutations = c.as_dict()

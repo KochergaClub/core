@@ -47,3 +47,9 @@ query RatioPromocodesPage(
     }
   }
 }
+
+mutation SendUniqueRatioPromocode($input: SendUniqueRatioPromocodeInput!) {
+  result: sendUniqueRatioPromocode(input: $input) {
+    ok
+  }
+}

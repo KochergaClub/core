@@ -1,3 +1,7 @@
+from __future__ import annotations
+import string
+import random
+from string import ascii_uppercase, digits
 from django.db import models
 from django.core.validators import MinValueValidator, RegexValidator
 
@@ -20,6 +24,21 @@ class PromocodeManager(models.Manager):
         obj.save()
 
         return obj
+
+    def generate_random(self, ticket_type: TicketType) -> Promocode:
+        LENGTH = 8
+        code = ''.join(
+            [
+                random.choice(string.ascii_uppercase + string.digits)
+                for i in range(LENGTH)
+            ]
+        )
+        return self.create(
+            ticket_type=ticket_type,
+            code=code,
+            uses_max=1,
+            discount=ticket_type.discount_by_email,  # TODO - move to function args?
+        )
 
 
 class Promocode(models.Model):
@@ -54,6 +73,7 @@ class Promocode(models.Model):
 
     class Meta:
         unique_together = (('code', 'ticket_type'),)
+        ordering = ['-created']
 
     def is_valid(self):
         if self.uses_max and self.uses_count >= self.uses_max:

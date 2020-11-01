@@ -958,6 +958,7 @@ type Mutation {
   createRatioTicketType(input: CreateRatioTicketTypeInput!): RatioTicketType!
   updateRatioTicketType(input: UpdateRatioTicketTypeInput!): RatioTicketType!
   deleteRatioTicketType(input: DeleteRatioTicketTypeInput!): BasicResult!
+  sendUniqueRatioPromocode(input: SendUniqueRatioPromocodeInput!): BasicResult!
   ratioAddTicket(input: RatioAddTicketInput!): RatioTicket!
   ratioAddTraining(params: RatioAddTrainingInput!): RatioTraining!
   ratioDeleteTraining(input: RatioDeleteTrainingInput!): BasicResult!
@@ -1504,6 +1505,11 @@ type SectionHeaderBlock implements WagtailBlock {
 type SectionHeaderBlockValue {
   header: String!
   text: String!
+}
+
+input SendUniqueRatioPromocodeInput {
+  ticket_type_id: ID!
+  email: String!
 }
 
 type SlackAccount implements ExternalServiceAccount {

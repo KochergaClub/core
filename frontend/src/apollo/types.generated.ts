@@ -1129,6 +1129,7 @@ export type Mutation = {
   createRatioTicketType: RatioTicketType;
   updateRatioTicketType: RatioTicketType;
   deleteRatioTicketType: BasicResult;
+  sendUniqueRatioPromocode: BasicResult;
   ratioAddTicket: RatioTicket;
   ratioAddTraining: RatioTraining;
   ratioDeleteTraining: BasicResult;
@@ -1506,6 +1507,11 @@ export type MutationUpdateRatioTicketTypeArgs = {
 
 export type MutationDeleteRatioTicketTypeArgs = {
   input: DeleteRatioTicketTypeInput;
+};
+
+
+export type MutationSendUniqueRatioPromocodeArgs = {
+  input: SendUniqueRatioPromocodeInput;
 };
 
 
@@ -2428,6 +2434,11 @@ export type SectionHeaderBlockValue = {
   __typename?: 'SectionHeaderBlockValue';
   header: Scalars['String'];
   text: Scalars['String'];
+};
+
+export type SendUniqueRatioPromocodeInput = {
+  ticket_type_id: Scalars['ID'];
+  email: Scalars['String'];
 };
 
 export type SlackAccount = ExternalServiceAccount & {

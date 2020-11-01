@@ -1,7 +1,7 @@
 import datetime
 from django.db import models
 from django.db.models import Q
-from django.core.validators import MinValueValidator, RegexValidator
+from django.core.validators import MinValueValidator
 
 from kocherga.django.fields import ShortUUIDField
 
@@ -40,3 +40,14 @@ class TicketType(models.Model):
     )
 
     objects = TicketTypeQuerySet.as_manager()
+
+    def send_unique_promocode(self, email: str):
+        from .promocode import Promocode
+
+        if not self.discount_by_email:
+            raise Exception("discount_by_email is not configured")
+
+        promocode = Promocode.objects.generate_random(ticket_type=self)
+
+        # TODO - send email
+        return promocode
