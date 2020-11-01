@@ -16,24 +16,7 @@ mutation DeleteRatioTicketType($input: DeleteRatioTicketTypeInput!) {
   }
 }
 
-mutation CreateRatioPromocode($input: CreateRatioPromocodeInput!) {
-  result: createRatioPromocode(input: $input) {
-    ... on RatioPromocode {
-      ...RatioPromocode
-    }
-    ... on GenericError {
-      message
-    }
-    ... on ValidationError {
-      errors {
-        name
-        messages
-      }
-    }
-  }
-}
-
-query RatioPromocodesPage(
+query RatioTicketTypePromocodesPage(
   $before: String
   $after: String
   $first: Int
@@ -43,13 +26,7 @@ query RatioPromocodesPage(
   ratioTicketType(input: { id: $ticket_type_id }) {
     id
     promocodes(before: $before, after: $after, first: $first, last: $last) {
-      ...RatioTicketTypePromocodes
+      ...RatioPromocodeConnection
     }
-  }
-}
-
-mutation SendUniqueRatioPromocode($input: SendUniqueRatioPromocodeInput!) {
-  result: sendUniqueRatioPromocode(input: $input) {
-    ok
   }
 }

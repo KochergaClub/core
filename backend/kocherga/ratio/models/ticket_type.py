@@ -51,8 +51,7 @@ class TicketType(models.Model):
     objects = TicketTypeQuerySet.as_manager()
 
     def send_unique_promocode(self, email: str):
-        from .promocode import Promocode
-
+        # FIXME - copypasted from Training
         if not self.discount_by_email and not self.discount_percent_by_email:
             raise Exception("discounts are not configured")
 
@@ -69,4 +68,9 @@ class TicketType(models.Model):
 
     def check_promocode(self, code: str):
         # TODO - check if promocode is linked to training
-        return self.promocodes.get(code=code)
+        try:
+            # check if promocode is linked to ticket type
+            return self.promocodes.get(code=code)
+        except Promocode.DoesNotExist:
+            # check if promocode is linked to training
+            return self.training.promocodes.get(code=code)

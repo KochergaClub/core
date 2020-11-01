@@ -325,7 +325,8 @@ export type ColumnsButtonsBlockValueImageArgs = {
 };
 
 export type CreateRatioPromocodeInput = {
-  ticket_type_id: Scalars['ID'];
+  ticket_type_id?: Maybe<Scalars['ID']>;
+  training_id?: Maybe<Scalars['ID']>;
   code: Scalars['String'];
   discount: Scalars['Int'];
   uses_max?: Maybe<Scalars['Int']>;
@@ -1130,12 +1131,13 @@ export type Mutation = {
   createRatioTicketType: RatioTicketType;
   updateRatioTicketType: RatioTicketType;
   deleteRatioTicketType: BasicResult;
-  sendUniqueRatioPromocode: BasicResult;
   ratioAddTicket: RatioTicket;
   ratioAddTraining: RatioTraining;
+  updateRatioTraining: RatioTraining;
   ratioDeleteTraining: BasicResult;
   createRatioPromocode: CreateRatioPromocodeResult;
   checkRatioPromocode?: Maybe<CheckRatioPromocodeResult>;
+  sendUniqueRatioPromocode: SendUniqueRatioPromocodeResult;
   mastermindDatingCreateCohort: MastermindDatingCohortMutationResult;
   mastermindDatingPopulateCohortFromEvent: MastermindDatingCohortMutationResult;
   mastermindDatingSendInviteEmails: MastermindDatingCohortMutationResult;
@@ -1511,11 +1513,6 @@ export type MutationDeleteRatioTicketTypeArgs = {
 };
 
 
-export type MutationSendUniqueRatioPromocodeArgs = {
-  input: SendUniqueRatioPromocodeInput;
-};
-
-
 export type MutationRatioAddTicketArgs = {
   input: RatioAddTicketInput;
 };
@@ -1523,6 +1520,11 @@ export type MutationRatioAddTicketArgs = {
 
 export type MutationRatioAddTrainingArgs = {
   params: RatioAddTrainingInput;
+};
+
+
+export type MutationUpdateRatioTrainingArgs = {
+  input: UpdateRatioTrainingInput;
 };
 
 
@@ -1538,6 +1540,11 @@ export type MutationCreateRatioPromocodeArgs = {
 
 export type MutationCheckRatioPromocodeArgs = {
   input: CheckRatioPromocodeInput;
+};
+
+
+export type MutationSendUniqueRatioPromocodeArgs = {
+  input: SendUniqueRatioPromocodeInput;
 };
 
 
@@ -2074,6 +2081,8 @@ export type RatioAddTrainingInput = {
   slug: Scalars['String'];
   date?: Maybe<Scalars['String']>;
   telegram_link?: Maybe<Scalars['String']>;
+  discount_by_email?: Maybe<Scalars['Int']>;
+  discount_percent_by_email?: Maybe<Scalars['Int']>;
 };
 
 export type RatioBriefingBlock = WagtailBlock & {
@@ -2362,12 +2371,24 @@ export type RatioTraining = {
   date?: Maybe<Scalars['String']>;
   telegram_link: Scalars['String'];
   salaries_paid: Scalars['Boolean'];
+  discount_by_email: Scalars['Int'];
+  discount_percent_by_email: Scalars['Int'];
   tickets: Array<RatioTicket>;
   schedule: Array<RatioTrainingDay>;
   ticket_types: Array<RatioTicketType>;
   tickets_count: Scalars['Int'];
   total_income: Scalars['Int'];
   long_name: Scalars['String'];
+  promocodes_count: Scalars['Int'];
+  promocodes: RatioPromocodeConnection;
+};
+
+
+export type RatioTrainingPromocodesArgs = {
+  before?: Maybe<Scalars['String']>;
+  after?: Maybe<Scalars['String']>;
+  first?: Maybe<Scalars['Int']>;
+  last?: Maybe<Scalars['Int']>;
 };
 
 export type RatioTrainingAddDayInput = {
@@ -2440,9 +2461,12 @@ export type SectionHeaderBlockValue = {
 };
 
 export type SendUniqueRatioPromocodeInput = {
-  ticket_type_id: Scalars['ID'];
+  ticket_type_id?: Maybe<Scalars['ID']>;
+  training_id?: Maybe<Scalars['ID']>;
   email: Scalars['String'];
 };
+
+export type SendUniqueRatioPromocodeResult = BasicResult | GenericError;
 
 export type SlackAccount = ExternalServiceAccount & {
   __typename?: 'SlackAccount';
@@ -2583,6 +2607,15 @@ export type UpdateRatioTicketTypeInput = {
   id: Scalars['ID'];
   price?: Maybe<Scalars['Int']>;
   name?: Maybe<Scalars['String']>;
+  discount_by_email?: Maybe<Scalars['Int']>;
+  discount_percent_by_email?: Maybe<Scalars['Int']>;
+};
+
+export type UpdateRatioTrainingInput = {
+  id: Scalars['ID'];
+  name: Scalars['String'];
+  date?: Maybe<Scalars['String']>;
+  telegram_link?: Maybe<Scalars['String']>;
   discount_by_email?: Maybe<Scalars['Int']>;
   discount_percent_by_email?: Maybe<Scalars['Int']>;
 };

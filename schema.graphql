@@ -262,7 +262,8 @@ type ColumnsButtonsBlockValue {
 }
 
 input CreateRatioPromocodeInput {
-  ticket_type_id: ID!
+  ticket_type_id: ID
+  training_id: ID
   code: String!
   discount: Int!
   uses_max: Int
@@ -959,12 +960,13 @@ type Mutation {
   createRatioTicketType(input: CreateRatioTicketTypeInput!): RatioTicketType!
   updateRatioTicketType(input: UpdateRatioTicketTypeInput!): RatioTicketType!
   deleteRatioTicketType(input: DeleteRatioTicketTypeInput!): BasicResult!
-  sendUniqueRatioPromocode(input: SendUniqueRatioPromocodeInput!): BasicResult!
   ratioAddTicket(input: RatioAddTicketInput!): RatioTicket!
   ratioAddTraining(params: RatioAddTrainingInput!): RatioTraining!
+  updateRatioTraining(input: UpdateRatioTrainingInput!): RatioTraining!
   ratioDeleteTraining(input: RatioDeleteTrainingInput!): BasicResult!
   createRatioPromocode(input: CreateRatioPromocodeInput!): CreateRatioPromocodeResult!
   checkRatioPromocode(input: CheckRatioPromocodeInput!): CheckRatioPromocodeResult
+  sendUniqueRatioPromocode(input: SendUniqueRatioPromocodeInput!): SendUniqueRatioPromocodeResult!
   mastermindDatingCreateCohort: MastermindDatingCohortMutationResult!
   mastermindDatingPopulateCohortFromEvent(cohort_id: ID!): MastermindDatingCohortMutationResult!
   mastermindDatingSendInviteEmails(cohort_id: ID!): MastermindDatingCohortMutationResult!
@@ -1190,6 +1192,8 @@ input RatioAddTrainingInput {
   slug: String!
   date: String
   telegram_link: String
+  discount_by_email: Int
+  discount_percent_by_email: Int
 }
 
 type RatioBriefingBlock implements WagtailBlock {
@@ -1440,12 +1444,16 @@ type RatioTraining {
   date: String
   telegram_link: String!
   salaries_paid: Boolean!
+  discount_by_email: Int!
+  discount_percent_by_email: Int!
   tickets: [RatioTicket!]!
   schedule: [RatioTrainingDay!]!
   ticket_types: [RatioTicketType!]!
   tickets_count: Int!
   total_income: Int!
   long_name: String!
+  promocodes_count: Int!
+  promocodes(before: String, after: String, first: Int, last: Int): RatioPromocodeConnection!
 }
 
 input RatioTrainingAddDayInput {
@@ -1511,9 +1519,12 @@ type SectionHeaderBlockValue {
 }
 
 input SendUniqueRatioPromocodeInput {
-  ticket_type_id: ID!
+  ticket_type_id: ID
+  training_id: ID
   email: String!
 }
+
+union SendUniqueRatioPromocodeResult = BasicResult | GenericError
 
 type SlackAccount implements ExternalServiceAccount {
   service: SlackExternalService!
@@ -1628,6 +1639,15 @@ input UpdateRatioTicketTypeInput {
   id: ID!
   price: Int
   name: String
+  discount_by_email: Int
+  discount_percent_by_email: Int
+}
+
+input UpdateRatioTrainingInput {
+  id: ID!
+  name: String!
+  date: String
+  telegram_link: String
   discount_by_email: Int
   discount_percent_by_email: Int
 }

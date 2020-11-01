@@ -1,17 +1,23 @@
 import Head from 'next/head';
-import { FaComments, FaEdit, FaRegListAlt } from 'react-icons/fa';
+import React from 'react';
+import { FaComments, FaRegListAlt } from 'react-icons/fa';
 
 import { useQuery } from '@apollo/client';
 
-import { ApolloQueryResults, MutationButton, PaddedBlock, Page } from '~/components';
+import { ApolloQueryResults, DropdownMenu, MutationButton, PaddedBlock, Page } from '~/components';
+import { ModalAction } from '~/components/DropdownMenu';
 import { A, colors, Column, Label, Row } from '~/frontkit';
 
 import {
     RatioTrainingBySlugDocument, RatioTrainingSyncParticipantsToMailchimpDocument
 } from '../../queries.generated';
+import CreatePromocodeModal from '../promocodes/CreatePromocodeModal';
+import EmailDiscount from '../promocodes/EmailDiscount';
 import TrainingTicketTypesBlock from '../ticket-types/TicketTypesBlock';
 // import CreateEmailButton from '~/ratio/components/CreateEmailButton';
 import TrainingTicketsBlock from '../TrainingTicketsBlock';
+import EditTrainingModal from './EditTrainingModal';
+import TrainingPromocodesBlock from './TrainingPromocodesBlock';
 
 const LinkWithIcon = ({
   icon,
@@ -50,6 +56,29 @@ const AdminRatioTraining: React.FC<Props> = ({ slug }) => {
           <Page.Main>
             <PaddedBlock width="max">
               <Column>
+                <Row>
+                  <div>Управление:</div>
+                  <DropdownMenu>
+                    <ModalAction title="Редактировать">
+                      {({ close }) => (
+                        <EditTrainingModal close={close} training={training} />
+                      )}
+                    </ModalAction>
+                    <ModalAction title="Создать промокод">
+                      {({ close }) => (
+                        <CreatePromocodeModal
+                          close={close}
+                          trainingId={training.id}
+                        />
+                      )}
+                    </ModalAction>
+                    {/* <ModalAction title="Создать промокод">
+              {({ close }) => (
+                <CreatePromocodeModal close={close} ticketType={ticketType} />
+              )}
+            </ModalAction> */}
+                  </DropdownMenu>
+                </Row>
                 {training.date && (
                   <Row vCentered>
                     <Label>Когда:</Label>
@@ -75,6 +104,8 @@ const AdminRatioTraining: React.FC<Props> = ({ slug }) => {
               </Column>
             </PaddedBlock>
 
+            <EmailDiscount entity={training} entityType="training" />
+            <TrainingPromocodesBlock training={training} />
             <TrainingTicketTypesBlock training={training} />
             <TrainingTicketsBlock training={training} />
 

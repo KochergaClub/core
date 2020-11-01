@@ -32,6 +32,10 @@
       "PageSearchItem",
       "EventSearchItem"
     ],
+    "SendUniqueRatioPromocodeResult": [
+      "BasicResult",
+      "GenericError"
+    ],
     "SlideFragmentsBlockValues": [
       "SlideFragmentsBlock_RichTextBlock",
       "SlideFragmentsBlock_RawHtmlBlock"

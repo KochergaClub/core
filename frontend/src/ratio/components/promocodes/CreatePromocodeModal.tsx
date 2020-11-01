@@ -4,12 +4,12 @@ import { useNotification } from '~/common/hooks';
 import ModalForm from '~/components/forms/ModalForm';
 import { FormShape } from '~/components/forms/types';
 
-import { RatioTicketTypeFragment } from '../../queries.generated';
 import { CreateRatioPromocodeDocument } from './queries.generated';
 
 interface Props {
   close: () => void;
-  ticketType: RatioTicketTypeFragment;
+  ticketTypeId?: string;
+  trainingId?: string;
 }
 
 const shape: FormShape = [
@@ -18,7 +18,11 @@ const shape: FormShape = [
   { name: 'uses_max', type: 'number', optional: true },
 ];
 
-const CreatePromocodeModal: React.FC<Props> = ({ close, ticketType }) => {
+const CreatePromocodeModal: React.FC<Props> = ({
+  close,
+  ticketTypeId,
+  trainingId,
+}) => {
   const notify = useNotification();
   const [create] = useMutation(CreateRatioPromocodeDocument, {
     refetchQueries: ['RatioTrainingBySlug'],
@@ -38,7 +42,8 @@ const CreatePromocodeModal: React.FC<Props> = ({ close, ticketType }) => {
           code: v.code,
           discount: v.discount,
           uses_max: v.uses_max,
-          ticket_type_id: ticketType.id,
+          ticket_type_id: ticketTypeId,
+          training_id: trainingId,
         },
       },
     });
@@ -48,7 +53,7 @@ const CreatePromocodeModal: React.FC<Props> = ({ close, ticketType }) => {
     }
     switch (result.data.result.__typename) {
       case 'RatioPromocode':
-        return; // TODO - update TicketType
+        return;
       default:
         // TODO - display error
         notify({ text: 'Error', type: 'Error' });

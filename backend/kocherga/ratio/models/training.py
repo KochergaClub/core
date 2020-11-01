@@ -7,6 +7,7 @@ from django.db import models
 from django.conf import settings
 from django.core.mail import send_mail
 from django.template.loader import render_to_string
+from django.core.validators import MaxValueValidator, MinValueValidator
 
 from kocherga.dateutils import inflected_month
 from kocherga.email.tools import mjml2html
@@ -14,6 +15,8 @@ from kocherga.email.tools import mjml2html
 from kocherga.money.cashier.models import Payment
 
 from kocherga.django.managers import RelayQuerySet
+
+from .promocode import Promocode
 
 
 class Training(models.Model):
@@ -32,6 +35,19 @@ class Training(models.Model):
 
     post_survey_collected = models.BooleanField(default=False)
     salaries_paid = models.BooleanField(default=False)
+
+    discount_by_email = models.IntegerField(
+        "Сумма скидки одноразового промокода по E-mail'у",
+        default=0,
+        validators=[MinValueValidator(0)],
+    )
+    discount_percent_by_email = models.IntegerField(
+        "Процент скдики одноразового промокода по E-mail'у",
+        default=0,
+        validators=[MinValueValidator(0), MaxValueValidator(100)],
+    )
+
+    promocodes = models.ManyToManyField(Promocode, related_name='trainings')
 
     objects = RelayQuerySet.as_manager()
 
@@ -174,3 +190,19 @@ class Training(models.Model):
             message=html2text(html_message),
             recipient_list=[email],
         )
+
+    def send_unique_promocode(self, email: str):
+        # FIXME - copypasted from TicketType
+        if not self.discount_by_email and not self.discount_percent_by_email:
+            raise Exception("discounts are not configured")
+
+        promocode = Promocode.objects.generate_random(
+            discount=self.discount_by_email,
+            discount_percent=self.discount_percent_by_email,
+        )
+        self.promocodes.add(promocode)
+        self.save()
+
+        self.send_promocode_email(email, promocode)
+
+        return promocode

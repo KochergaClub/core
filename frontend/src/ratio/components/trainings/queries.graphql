@@ -3,3 +3,24 @@ mutation DeleteRatioTraining($slug: String!) {
     ok
   }
 }
+
+query RatioTrainingPromocodesPage(
+  $before: String
+  $after: String
+  $first: Int
+  $last: Int
+  $slug: String!
+) {
+  training: ratioTrainingBySlug(slug: $slug) {
+    id
+    promocodes(before: $before, after: $after, first: $first, last: $last) {
+      ...RatioPromocodeConnection
+    }
+  }
+}
+
+mutation UpdateRatioTraining($input: UpdateRatioTrainingInput!) {
+  result: updateRatioTraining(input: $input) {
+    ...RatioTraining
+  }
+}

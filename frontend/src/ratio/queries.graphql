@@ -35,7 +35,7 @@ fragment RatioPromocode on RatioPromocode {
   uses_count
 }
 
-fragment RatioTicketTypePromocodes on RatioPromocodeConnection {
+fragment RatioPromocodeConnection on RatioPromocodeConnection {
   pageInfo {
     ...PageInfo
   }
@@ -54,7 +54,7 @@ fragment RatioTicketType on RatioTicketType {
   discount_percent_by_email
   promocodes_count
   promocodes(first: 5) {
-    ...RatioTicketTypePromocodes
+    ...RatioPromocodeConnection
   }
 }
 
@@ -85,6 +85,12 @@ fragment RatioTraining on RatioTraining {
   telegram_link
   tickets_count
   total_income
+  discount_by_email
+  discount_percent_by_email
+  promocodes_count
+  promocodes(first: 5) {
+    ...RatioPromocodeConnection
+  }
   tickets {
     ...RatioTicket
   }

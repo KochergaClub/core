@@ -55,6 +55,7 @@ const TrainingCard: React.FC<Props> = ({ training }) => {
           <A href={training.telegram_link}>{training.telegram_link}</A>
         </Row>
       )}
+
       <Row vCentered>
         <Label>Виды билетов:</Label>
         {training.ticket_types.length ? (

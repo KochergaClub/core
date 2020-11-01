@@ -2,9 +2,9 @@ import logging
 
 logger = logging.getLogger(__name__)
 
-from typing import Optional
+from typing import Optional, Union
 
-from kocherga.graphql import helpers, g
+from kocherga.graphql import helpers, g, basic_types
 from kocherga.graphql.permissions import user_perm
 import kocherga.django.schema.types
 import django.db.utils
@@ -19,14 +19,41 @@ from .. import types
 c = helpers.Collection()
 
 
+def find_discountable_entity(
+    input,
+) -> Union[models.Training, models.TicketType, GenericError]:
+    if 'ticket_type_id' in input and 'training_id' in input:
+        return GenericError(
+            'Только один из параметров ticket_type_id и training_id должен быть выбран'
+        )
+
+    if input.get('ticket_type_id'):
+        ticket_type_id = input['ticket_type_id']
+        try:
+            entity = models.TicketType.objects.get(uuid=ticket_type_id)
+        except models.TicketType.DoesNotExist:
+            return GenericError('Тип билета не найден')
+    elif input.get('training_id'):
+        training_id = input['training_id']
+        try:
+            entity = models.Training.objects.get(pk=training_id)
+        except models.Training.DoesNotExist:
+            return GenericError('Тренинг не найден')
+    else:
+        return GenericError(
+            'Один из параметров ticket_type_id и training_id должен быть выбран'
+        )
+
+    return entity
+
+
 @c.class_field
 class createRatioPromocode(helpers.UnionFieldMixin, helpers.BaseFieldWithInput):
     def resolve(self, _, info, input):
-        ticket_type_id = input['ticket_type_id']
-        try:
-            ticket_type = models.TicketType.objects.get(uuid=ticket_type_id)
-        except models.TicketType.DoesNotExist:
-            return GenericError('Тип билета не найден')
+        maybe_entity = find_discountable_entity(input)
+        if isinstance(maybe_entity, GenericError):
+            return maybe_entity
+        entity = maybe_entity
 
         try:
             with transaction.atomic():
@@ -35,8 +62,8 @@ class createRatioPromocode(helpers.UnionFieldMixin, helpers.BaseFieldWithInput):
                     discount=input['discount'],
                     uses_max=input.get('uses_max'),
                 )
-                ticket_type.promocodes.add(promocode)
-                ticket_type.save()
+                entity.promocodes.add(promocode)
+                entity.save()
         except ValidationError as e:
             return BoxedError(e)
         except django.db.utils.IntegrityError as e:
@@ -54,7 +81,8 @@ class createRatioPromocode(helpers.UnionFieldMixin, helpers.BaseFieldWithInput):
 
     permissions = [user_perm('ratio.manage')]
     input = {
-        'ticket_type_id': 'ID!',
+        'ticket_type_id': 'ID',
+        'training_id': 'ID',
         'code': str,
         'discount': int,
         'uses_max': Optional[int],
@@ -66,9 +94,11 @@ class checkRatioPromocode(helpers.BaseFieldWithInput):
     def resolve(self, _, info, input):
         try:
             ticket_type = models.TicketType.objects.get(uuid=input['ticket_type_id'])
-            promocode = ticket_type.check_promocode(code=input['code'])
         except models.TicketType.DoesNotExist:
             return None
+
+        try:
+            promocode = ticket_type.check_promocode(code=input['code'])
         except models.Promocode.DoesNotExist:
             return None
 
@@ -92,6 +122,33 @@ class checkRatioPromocode(helpers.BaseFieldWithInput):
             }
         ),
     )
+
+
+@c.class_field
+class sendUniqueRatioPromocode(helpers.UnionFieldMixin, helpers.BaseFieldWithInput):
+    class Ok:
+        ok = True
+
+    def resolve(self, _, info, input):
+        maybe_entity = find_discountable_entity(input)
+        if isinstance(maybe_entity, GenericError):
+            return maybe_entity
+        entity = maybe_entity
+
+        entity.send_unique_promocode(input['email'])
+        return self.Ok()
+
+    permissions = []
+    input = {
+        'ticket_type_id': 'ID',
+        'training_id': 'ID',
+        'email': str,
+    }
+
+    result_types = {
+        Ok: basic_types.BasicResult,
+        GenericError: kocherga.django.schema.types.GenericError,
+    }
 
 
 mutations = c.as_dict()

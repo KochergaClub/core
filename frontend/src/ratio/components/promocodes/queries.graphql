@@ -1,0 +1,27 @@
+mutation CreateRatioPromocode($input: CreateRatioPromocodeInput!) {
+  result: createRatioPromocode(input: $input) {
+    ... on RatioPromocode {
+      ...RatioPromocode
+    }
+    ... on GenericError {
+      message
+    }
+    ... on ValidationError {
+      errors {
+        name
+        messages
+      }
+    }
+  }
+}
+
+mutation SendUniqueRatioPromocode($input: SendUniqueRatioPromocodeInput!) {
+  result: sendUniqueRatioPromocode(input: $input) {
+    ... on BasicResult {
+      ok
+    }
+    ... on GenericError {
+      message
+    }
+  }
+}

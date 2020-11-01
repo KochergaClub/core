@@ -24,6 +24,8 @@ class ratioAddTraining(helpers.BaseFieldWithInput):
             slug=params['slug'],
             date=date,
             telegram_link=params.get('telegram_link', ''),
+            discount_by_email=params.get('discount_by_email', 0),
+            discount_percent_by_email=params.get('discount_percent_by_email', 0),
         )
 
     permissions = [user_perm('ratio.manage')]
@@ -32,8 +34,44 @@ class ratioAddTraining(helpers.BaseFieldWithInput):
         'slug': str,
         'date': Optional[str],
         'telegram_link': Optional[str],
+        'discount_by_email': Optional[int],
+        'discount_percent_by_email': Optional[int],
     }
     input_argument_name = 'params'  # TODO
+
+    result = g.NN(types.RatioTraining)
+
+
+@c.class_field
+class updateRatioTraining(helpers.BaseFieldWithInput):
+    def resolve(self, _, info, input):
+        training = models.Training.objects.get(pk=input['id'])
+
+        for field in (
+            'name',
+            # 'slug',
+            'date',
+            'telegram_link',
+            'discount_by_email',
+            'discount_percent_by_email',
+        ):
+            if input.get(field) is not None:
+                setattr(training, field, input[field])
+
+        training.full_clean()
+        training.save()
+        return training
+
+    permissions = [user_perm('ratio.manage')]
+    input = {
+        'id': 'ID!',
+        'name': str,
+        # 'slug': str,
+        'date': Optional[str],
+        'telegram_link': Optional[str],
+        'discount_by_email': Optional[int],
+        'discount_percent_by_email': Optional[int],
+    }
 
     result = g.NN(types.RatioTraining)
 

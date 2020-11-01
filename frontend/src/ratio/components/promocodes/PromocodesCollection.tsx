@@ -1,56 +1,30 @@
-import styled from 'styled-components';
-
-import { useLazyQuery } from '@apollo/client';
-
 import HeadlessConnection from '~/components/collections/HeadlessConnection';
 import SmallPager from '~/components/collections/SmallPager';
-import { Badge, colors, Column, Row } from '~/frontkit';
-
-import { RatioTicketTypeFragment } from '../../queries.generated';
-import { RatioPromocodesPageDocument } from './queries.generated';
-
-const Container = styled.div`
-  padding: 8px;
-  border: 1px solid ${colors.grey[200]};
-`;
+import { Badge, Column, Row } from '~/frontkit';
+import { RatioPromocodeConnectionFragment } from '~/ratio/queries.generated';
 
 interface Props {
-  ticketType: RatioTicketTypeFragment;
-}
-
-const PromocodesCollection: React.FC<Props> = ({ ticketType }) => {
-  const [fetchPromocodes, queryResults] = useLazyQuery(
-    RatioPromocodesPageDocument
-  );
-
-  const fetchPage = async (args?: {
+  connection: RatioPromocodeConnectionFragment;
+  total: number;
+  fetchPage: (args?: {
     before?: string | null;
     after?: string | null;
     first?: number | null;
     last?: number | null;
-  }) => {
-    await fetchPromocodes({
-      variables: {
-        ...(args || {}),
-        ticket_type_id: ticketType.id,
-      },
-    });
-  };
+  }) => Promise<void>;
+}
 
-  if (ticketType.promocodes.edges.length === 0) {
-    return null;
-  }
-
-  const connection = queryResults.data
-    ? queryResults.data.ratioTicketType.promocodes
-    : ticketType.promocodes;
-
+const PromocodesCollection: React.FC<Props> = ({
+  connection,
+  total,
+  fetchPage,
+}) => {
   return (
     <HeadlessConnection connection={connection} fetchPage={fetchPage}>
       {({ items, next, previous }) => (
-        <Container>
+        <div>
           <header>
-            <strong>Промокоды ({ticketType.promocodes_count})</strong>
+            <strong>Промокоды ({total})</strong>
           </header>
           <Column>
             {items.map((item) => (
@@ -80,7 +54,7 @@ const PromocodesCollection: React.FC<Props> = ({ ticketType }) => {
             previous={previous}
             pageInfo={connection.pageInfo}
           />
-        </Container>
+        </div>
       )}
     </HeadlessConnection>
   );
