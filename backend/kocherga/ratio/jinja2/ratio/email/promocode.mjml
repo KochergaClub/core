@@ -1,0 +1,18 @@
+{% extends "email/simple-layout.mjml" %} {% block title %}{{ title | e }}{%
+endblock %} {% block body %}
+<mj-section>
+  <mj-column>
+    <mj-text>
+      Привет! <strong>{{code | safe}}</strong> — вот ваш личный промокод на
+      покупку {{ training_genitive }}.
+    </mj-text>
+    <mj-text> {{ training_description | safe }} </mj-text>
+    <mj-text>
+      Промокод действует один раз, время действия не ограничено.
+    </mj-text>
+    <mj-button href="{{ landing_link | safe }}">
+      Купить с промокодом
+    </mj-button>
+  </mj-column>
+</mj-section>
+{% endblock %}

@@ -49,5 +49,6 @@ class TicketType(models.Model):
 
         promocode = Promocode.objects.generate_random(ticket_type=self)
 
-        # TODO - send email
+        self.training.send_promocode_email(email, promocode)
+
         return promocode

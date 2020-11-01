@@ -2,9 +2,14 @@ import logging
 
 logger = logging.getLogger(__name__)
 
+from html2text import html2text
 from django.db import models
+from django.conf import settings
+from django.core.mail import send_mail
+from django.template.loader import render_to_string
 
 from kocherga.dateutils import inflected_month
+from kocherga.email.tools import mjml2html
 
 from kocherga.money.cashier.models import Payment
 
@@ -145,3 +150,26 @@ class Training(models.Model):
             )
         self.salaries_paid = True
         self.save()
+
+    def send_promocode_email(self, email: str, promocode):
+        # TODO - giant switch based on training type
+        html_message = mjml2html(
+            render_to_string(
+                'ratio/email/promocode.mjml',
+                {
+                    'title': 'Промокод на покупку шаблона «Смоделируй и начни»',
+                    'code': promocode.code,
+                    'training_genitive': 'шаблона «Смоделируй и начни»',
+                    'training_description': """Заботливо собранный Notion-шаблон с 50+ вопросами сделает мысли о проблеме или задаче чёткими и полезными. За четыре сессии по 25 минут вы зафиксируете подробное и конкретное описание проблемы и реализуете первый шаг решения. Шаблон наградит вас добрыми мемами, а тренер по рациональности проверит работу и даст советы, ссылки и поддерживающие комментарии.""",
+                    'landing_link': f'{settings.KOCHERGA_WEBSITE}/rationality/online',
+                },
+            )
+        )
+
+        send_mail(
+            subject='TODO',
+            from_email='Кочерга <workshop@kocherga-club.ru>',
+            html_message=html_message,
+            message=html2text(html_message),
+            recipient_list=[email],
+        )
