@@ -2187,6 +2187,7 @@ export type RatioOrder = {
   city: Scalars['String'];
   ticket_type: RatioTicketType;
   payment: YandexKassaPayment;
+  price: Scalars['Int'];
 };
 
 export type RatioOrderConnection = {

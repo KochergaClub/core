@@ -1295,6 +1295,7 @@ type RatioOrder {
   city: String!
   ticket_type: RatioTicketType!
   payment: YandexKassaPayment!
+  price: Int!
 }
 
 type RatioOrderConnection {

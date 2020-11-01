@@ -11,6 +11,7 @@ fragment RatioOrder on RatioOrder {
   first_name
   last_name
   city
+  price
   ticket_type {
     id
     price

@@ -30,6 +30,7 @@ RatioOrder = DjangoObjectType(
         },
         'ticket_type': field_with_permissions(g.NN(RatioTicketType), permissions),
         'payment': field_with_permissions(g.NN(YandexKassaPayment), permissions),
+        'price': field_with_permissions(g.NN(g.Int), permissions),
     },
 )
 

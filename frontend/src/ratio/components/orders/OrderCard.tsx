@@ -119,13 +119,19 @@ const OrderCard: React.FC<Props> = ({ order }) => {
       </Row>
       <RowWithIcon icon={FaTicketAlt} hint="Тип билета">
         <Row>
-          <TicketTypeBadge ticketType={order.ticket_type} />
           <Link
             {...adminTrainingRoute(order.ticket_type.training.slug)}
             passHref
           >
             <A>{order.ticket_type.name}</A>
           </Link>
+          <TicketTypeBadge ticketType={order.ticket_type} />
+          {order.price !== order.ticket_type.price ? (
+            <div>
+              {' '}
+              &rarr; <Badge>{order.price} руб.</Badge>
+            </div>
+          ) : null}
         </Row>
       </RowWithIcon>
       <RowWithIcon icon={MdEmail} hint="E-mail">
