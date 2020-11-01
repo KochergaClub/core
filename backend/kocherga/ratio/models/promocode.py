@@ -17,7 +17,9 @@ class PromocodeManager(models.Manager):
         return PromocodeQuerySet(self.model, using=self._db)
 
     def create(self, **kwargs):
-        obj = Promocode(**kwargs)
+        args = kwargs.copy()
+        args['code'] = args['code'].upper()
+        obj = Promocode(**args)
         obj.full_clean()
         obj.save()
 
@@ -50,8 +52,8 @@ class Promocode(models.Model):
         max_length=100,
         validators=[
             RegexValidator(
-                regex=r'^[a-zA-Z0-9]+$',
-                message='Promocode must include only a-z or 0-9 characters',
+                regex=r'^[A-Z0-9]+$',
+                message='Promocode must include only A-Z or 0-9 characters',
             )
         ],
         unique=True,

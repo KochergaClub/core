@@ -71,7 +71,7 @@ class TicketType(models.Model):
         # TODO - check if promocode is linked to training
         try:
             # check if promocode is linked to ticket type
-            return self.promocodes.get(code=code)
+            return self.promocodes.get(code=code.upper())
         except Promocode.DoesNotExist:
             # check if promocode is linked to training
-            return self.training.promocodes.get(code=code)
+            return self.training.promocodes.get(code=code.upper())
