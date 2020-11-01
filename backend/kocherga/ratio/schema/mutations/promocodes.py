@@ -31,11 +31,12 @@ class createRatioPromocode(helpers.UnionFieldMixin, helpers.BaseFieldWithInput):
         try:
             with transaction.atomic():
                 promocode = models.Promocode.objects.create(
-                    ticket_type=ticket_type,
                     code=input['code'],
                     discount=input['discount'],
                     uses_max=input.get('uses_max'),
                 )
+                ticket_type.promocodes.add(promocode)
+                ticket_type.save()
         except ValidationError as e:
             return BoxedError(e)
         except django.db.utils.IntegrityError as e:
@@ -64,9 +65,10 @@ class createRatioPromocode(helpers.UnionFieldMixin, helpers.BaseFieldWithInput):
 class checkRatioPromocode(helpers.BaseFieldWithInput):
     def resolve(self, _, info, input):
         try:
-            promocode = models.Promocode.objects.get(
-                code=input['code'], ticket_type__uuid=input['ticket_type_id']
-            )
+            ticket_type = models.TicketType.objects.get(uuid=input['ticket_type_id'])
+            promocode = ticket_type.check_promocode(code=input['code'])
+        except models.TicketType.DoesNotExist:
+            return None
         except models.Promocode.DoesNotExist:
             return None
 
@@ -74,7 +76,7 @@ class checkRatioPromocode(helpers.BaseFieldWithInput):
             return None
 
         return {
-            'discount': promocode.discount,
+            'discounted_price': promocode.check_apply(ticket_type.price),
         }
 
     permissions = []
@@ -86,7 +88,7 @@ class checkRatioPromocode(helpers.BaseFieldWithInput):
         'CheckRatioPromocodeResult',
         g.fields(
             {
-                'discount': int,
+                'discounted_price': int,
             }
         ),
     )

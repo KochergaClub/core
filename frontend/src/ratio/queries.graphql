@@ -30,6 +30,7 @@ fragment RatioPromocode on RatioPromocode {
   id
   code
   discount
+  discount_percent
   uses_max
   uses_count
 }
@@ -50,6 +51,7 @@ fragment RatioTicketType on RatioTicketType {
   price
   name
   discount_by_email
+  discount_percent_by_email
   promocodes_count
   promocodes(first: 5) {
     ...RatioTicketTypePromocodes

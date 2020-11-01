@@ -31,7 +31,9 @@ class promocodes_count(helpers.BaseField):
 @fields.class_field
 class promocodes(helpers.BaseField):
     def resolve(self, obj, info, **pager):
-        return models.Promocode.objects.filter(ticket_type=obj).relay_page(**pager)
+        return models.Promocode.objects.filter(
+            ticket_type_promocodes=obj.pk
+        ).relay_page(**pager)
 
     permissions = [user_perm('ratio.manage')]
 
@@ -46,6 +48,7 @@ RatioTicketType = DjangoObjectType(
         'price',
         'name',
         'discount_by_email',
+        'discount_percent_by_email',
     ],
     extra_fields={
         'id': g.Field(g.NN(g.ID), resolve=lambda obj, info: obj.uuid),

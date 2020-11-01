@@ -189,7 +189,7 @@ input CheckRatioPromocodeInput {
 }
 
 type CheckRatioPromocodeResult {
-  discount: Int!
+  discounted_price: Int!
 }
 
 input Cm2CreateCustomerInput {
@@ -275,6 +275,7 @@ input CreateRatioTicketTypeInput {
   price: Int!
   name: String!
   discount_by_email: Int
+  discount_percent_by_email: Int
 }
 
 input DeleteRatioTicketTypeInput {
@@ -1365,6 +1366,7 @@ type RatioPromocode {
   id: ID!
   code: String!
   discount: Int!
+  discount_percent: Int!
   uses_max: Int
   uses_count: Int!
 }
@@ -1409,7 +1411,8 @@ type RatioTicket {
 type RatioTicketType {
   price: Int!
   name: String!
-  discount_by_email: Int
+  discount_by_email: Int!
+  discount_percent_by_email: Int!
   id: ID!
   training: RatioTraining!
   promocodes_count: Int!
@@ -1626,6 +1629,7 @@ input UpdateRatioTicketTypeInput {
   price: Int
   name: String
   discount_by_email: Int
+  discount_percent_by_email: Int
 }
 
 input UpdateYandexKassaPaymentInput {

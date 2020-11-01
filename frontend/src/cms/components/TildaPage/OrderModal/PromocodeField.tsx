@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { UseFormMethods } from 'react-hook-form';
 import { FaCheck } from 'react-icons/fa';
 
@@ -13,7 +13,7 @@ import { CheckRatioPromocodeDocument } from './queries.generated';
 
 interface Props {
   form: UseFormMethods<FormData>;
-  setDiscount: (v: number) => void;
+  setDiscountedPrice: (v: number | undefined) => void;
 }
 
 type Status =
@@ -21,13 +21,18 @@ type Status =
       type: 'unchecked';
     }
   | { type: 'failed' }
-  | { type: 'ok'; discount: number };
+  | { type: 'ok'; discounted_price: number };
 
-const PromocodeField: React.FC<Props> = ({ form, setDiscount }) => {
+const PromocodeField: React.FC<Props> = ({ form, setDiscountedPrice }) => {
   const watchTicketType = form.watch('ticket_type');
   const watchCode = form.watch('promocode');
   const [checkMutation] = useMutation(CheckRatioPromocodeDocument);
   const [status, setStatus] = useState<Status>({ type: 'unchecked' });
+
+  useEffect(() => {
+    setStatus({ type: 'unchecked' });
+    setDiscountedPrice(undefined);
+  }, [watchTicketType, setDiscountedPrice]);
 
   const check = async () => {
     if (!watchTicketType || !watchTicketType) {
@@ -45,12 +50,12 @@ const PromocodeField: React.FC<Props> = ({ form, setDiscount }) => {
     });
 
     if (mutationResults.data?.result) {
-      const discount = mutationResults.data?.result.discount;
+      const { discounted_price } = mutationResults.data?.result;
       setStatus({
         type: 'ok',
-        discount,
+        discounted_price,
       });
-      setDiscount(discount);
+      setDiscountedPrice(discounted_price);
     } else {
       setStatus({
         type: 'failed',
@@ -88,7 +93,8 @@ const PromocodeField: React.FC<Props> = ({ form, setDiscount }) => {
           ) : (
             <Row vCentered>
               <FaCheck />
-              <span>{status.discount} руб.</span>
+              <s>{watchTicketType.value.price} руб.</s>
+              <strong>{status.discounted_price} руб.</strong>
             </Row>
           )}
         </div>

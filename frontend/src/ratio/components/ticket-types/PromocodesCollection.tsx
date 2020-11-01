@@ -55,8 +55,19 @@ const PromocodesCollection: React.FC<Props> = ({ ticketType }) => {
           <Column>
             {items.map((item) => (
               <Row vCentered key={item.id}>
-                <Badge>{item.code}</Badge>
-                <small>{item.discount} руб.</small>
+                <Badge
+                  type={
+                    item.uses_max && item.uses_count >= item.uses_max
+                      ? 'good'
+                      : 'default'
+                  }
+                >
+                  {item.code}
+                </Badge>
+                <small>{item.discount ? `${item.discount} руб.` : null}</small>
+                <small>
+                  {item.discount_percent ? `${item.discount_percent}%` : null}
+                </small>
                 <small>
                   Использован: {item.uses_count}
                   {item.uses_max ? `/${item.uses_max}` : ''} раз

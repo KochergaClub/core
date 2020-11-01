@@ -24,13 +24,21 @@ const CreateTicketTypeButton: React.FC<Props> = ({ training_id }) => {
       name: 'discount_by_email',
       title: "Сумма одноразового промокода по e-mail'у",
       type: 'number',
-      optional: true,
+      default: 0,
+    },
+    {
+      name: 'discount_percent_by_email',
+      title: "Процент скидки одноразового промокода по e-mail'у",
+      type: 'number',
+      default: 0,
     },
   ];
 
   type Values = {
     price: number;
     name: string;
+    discount_by_email: number;
+    discount_percent_by_email: number;
   };
 
   const cb = useCallback(
@@ -41,6 +49,8 @@ const CreateTicketTypeButton: React.FC<Props> = ({ training_id }) => {
             training_id,
             price: values.price,
             name: values.name,
+            discount_by_email: values.discount_by_email,
+            discount_percent_by_email: values.discount_percent_by_email,
           },
         },
       });

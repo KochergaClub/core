@@ -37,13 +37,18 @@ const DiscountRow: React.FC<Props> = ({ ticketType }) => {
     },
   ];
 
-  if (!ticketType.discount_by_email) {
+  if (!ticketType.discount_by_email && !ticketType.discount_percent_by_email) {
     return null;
   }
 
   return (
     <Row>
-      <div>Скидка по e-mail&apos;у: {ticketType.discount_by_email} руб.</div>
+      <div>
+        Скидка по e-mail&apos;у:{' '}
+        {ticketType.discount_by_email
+          ? `${ticketType.discount_by_email} руб.`
+          : `${ticketType.discount_percent_by_email} %`}
+      </div>
       <ModalFormButton
         shape={shape}
         small

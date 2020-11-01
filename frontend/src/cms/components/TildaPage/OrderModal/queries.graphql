@@ -34,6 +34,6 @@ query RatioTicketTypes($input: RatioTicketTypesInput!) {
 
 mutation CheckRatioPromocode($input: CheckRatioPromocodeInput!) {
   result: checkRatioPromocode(input: $input) {
-    discount
+    discounted_price
   }
 }

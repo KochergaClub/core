@@ -60,7 +60,9 @@ const FormOrderModal: React.FC<Props> = ({
   });
   const watchTicketType = form.watch('ticket_type');
   const [submitError, setSubmitError] = useState('');
-  const [discount, setDiscount] = useState(0);
+  const [discountedPrice, setDiscountedPrice] = useState<number | undefined>(
+    undefined
+  );
 
   const [createOrderMutation] = useMutation(RatioCreateOrderDocument);
 
@@ -155,7 +157,10 @@ const FormOrderModal: React.FC<Props> = ({
               required
               form={form}
             />
-            <PromocodeField form={form} setDiscount={setDiscount} />
+            <PromocodeField
+              form={form}
+              setDiscountedPrice={setDiscountedPrice}
+            />
             {/*
             <BasicInputField
               title="Из какого города вы планируете проходить курс?"
@@ -199,7 +204,11 @@ const FormOrderModal: React.FC<Props> = ({
               >
                 Оплатить
                 {watchTicketType
-                  ? ` ${watchTicketType.value.price - discount} руб.`
+                  ? ` ${
+                      discountedPrice === undefined
+                        ? watchTicketType.value.price
+                        : discountedPrice
+                    } руб.`
                   : ''}
               </Button>
             </Row>

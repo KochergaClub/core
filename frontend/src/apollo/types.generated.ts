@@ -229,7 +229,7 @@ export type CheckRatioPromocodeInput = {
 
 export type CheckRatioPromocodeResult = {
   __typename?: 'CheckRatioPromocodeResult';
-  discount: Scalars['Int'];
+  discounted_price: Scalars['Int'];
 };
 
 export type Cm2CreateCustomerInput = {
@@ -338,6 +338,7 @@ export type CreateRatioTicketTypeInput = {
   price: Scalars['Int'];
   name: Scalars['String'];
   discount_by_email?: Maybe<Scalars['Int']>;
+  discount_percent_by_email?: Maybe<Scalars['Int']>;
 };
 
 export type DeleteRatioTicketTypeInput = {
@@ -2271,6 +2272,7 @@ export type RatioPromocode = {
   id: Scalars['ID'];
   code: Scalars['String'];
   discount: Scalars['Int'];
+  discount_percent: Scalars['Int'];
   uses_max?: Maybe<Scalars['Int']>;
   uses_count: Scalars['Int'];
 };
@@ -2321,7 +2323,8 @@ export type RatioTicketType = {
   __typename?: 'RatioTicketType';
   price: Scalars['Int'];
   name: Scalars['String'];
-  discount_by_email?: Maybe<Scalars['Int']>;
+  discount_by_email: Scalars['Int'];
+  discount_percent_by_email: Scalars['Int'];
   id: Scalars['ID'];
   training: RatioTraining;
   promocodes_count: Scalars['Int'];
@@ -2581,6 +2584,7 @@ export type UpdateRatioTicketTypeInput = {
   price?: Maybe<Scalars['Int']>;
   name?: Maybe<Scalars['String']>;
   discount_by_email?: Maybe<Scalars['Int']>;
+  discount_percent_by_email?: Maybe<Scalars['Int']>;
 };
 
 export type UpdateYandexKassaPaymentInput = {

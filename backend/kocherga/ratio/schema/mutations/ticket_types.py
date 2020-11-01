@@ -24,6 +24,7 @@ class createRatioTicketType(helpers.BaseFieldWithInput):
             price=input['price'],
             name=input['name'],
             discount_by_email=input.get('discount_by_email'),
+            discount_percent_by_email=input.get('discount_by_percent_email'),
         )
         ticket_type.full_clean()
         return ticket_type
@@ -34,6 +35,7 @@ class createRatioTicketType(helpers.BaseFieldWithInput):
         'price': int,
         'name': str,
         'discount_by_email': Optional[int],
+        'discount_percent_by_email': Optional[int],
     }
     result = g.NN(types.RatioTicketType)
 
@@ -45,13 +47,14 @@ class updateRatioTicketType(helpers.BaseFieldWithInput):
 
         logger.info(repr(input))
 
-        for field in ('price', 'name'):
+        for field in (
+            'price',
+            'name',
+            'discount_by_email',
+            'discount_percent_by_email',
+        ):
             if input.get(field) is not None:
                 setattr(ticket_type, field, input[field])
-
-        # null value -> clean field
-        if 'discount_by_email' in input:
-            ticket_type.discount_by_email = input['discount_by_email']
 
         ticket_type.full_clean()
         ticket_type.save()
@@ -63,6 +66,7 @@ class updateRatioTicketType(helpers.BaseFieldWithInput):
         'price': Optional[int],
         'name': Optional[str],
         'discount_by_email': Optional[int],
+        'discount_percent_by_email': Optional[int],
     }
     result = g.NN(types.RatioTicketType)
 
