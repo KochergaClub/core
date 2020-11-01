@@ -17,6 +17,7 @@ urlpatterns = [
     path('cookies/pick-neither', views.supplies.r_pick_neither_cookie),
     path('hooks/vk_callback', views.hooks.r_vk_callback),
     path('hooks/tilda_webhook', views.hooks.r_tilda_webhook),
+    path('hooks/generate_promocode', views.hooks.r_generate_promocode_webhook),
     path('auth/google', views.auth.r_google),
     path('auth/check', views.auth.r_check),
     path('fb/token', views.fb.TokenView.as_view()),

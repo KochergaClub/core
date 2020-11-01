@@ -10,6 +10,7 @@ from rest_framework import permissions
 
 import kocherga.slack.client
 import kocherga.tilda.models
+import kocherga.ratio.models
 
 # Routes for external hooks.
 
@@ -86,3 +87,28 @@ def r_tilda_webhook(request):
         # TODO - register notification and export in background job, as recommended in http://help-ru.tilda.ws/api
         kocherga.tilda.models.TildaPage.objects.import_page(page_id)
     return HttpResponse("ok")
+
+
+@api_view(['POST'])
+@permission_classes((permissions.AllowAny,))
+def r_generate_promocode_webhook(request):
+    # Tilda sends test response when adding new webhooks
+    if request.data.get('test', '') == 'test':
+        return HttpResponse('test response')
+
+    email = (
+        request.data.get('EMAIL')
+        or request.data.get('email')
+        or request.data.get('Email')
+    )
+    if not email:
+        raise Exception("Email is not set")
+
+    ticket_type_id = request.data.get('ticket_type_id')
+    if not ticket_type_id:
+        raise Exception("ticket_type_id is not set")
+
+    ticket_type = kocherga.ratio.models.TicketType.objects.get(uuid=ticket_type_id)
+    ticket_type.send_unique_promocode(email)
+
+    return HttpResponse('ok')

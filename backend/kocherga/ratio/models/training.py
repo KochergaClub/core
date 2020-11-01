@@ -153,11 +153,12 @@ class Training(models.Model):
 
     def send_promocode_email(self, email: str, promocode):
         # TODO - giant switch based on training type
+        title = 'Промокод на покупку шаблона «Смоделируй и начни»'
         html_message = mjml2html(
             render_to_string(
                 'ratio/email/promocode.mjml',
                 {
-                    'title': 'Промокод на покупку шаблона «Смоделируй и начни»',
+                    'title': title,
                     'code': promocode.code,
                     'training_genitive': 'шаблона «Смоделируй и начни»',
                     'training_description': """Заботливо собранный Notion-шаблон с 50+ вопросами сделает мысли о проблеме или задаче чёткими и полезными. За четыре сессии по 25 минут вы зафиксируете подробное и конкретное описание проблемы и реализуете первый шаг решения. Шаблон наградит вас добрыми мемами, а тренер по рациональности проверит работу и даст советы, ссылки и поддерживающие комментарии.""",
@@ -167,7 +168,7 @@ class Training(models.Model):
         )
 
         send_mail(
-            subject='TODO',
+            subject=title,
             from_email='Кочерга <workshop@kocherga-club.ru>',
             html_message=html_message,
             message=html2text(html_message),
