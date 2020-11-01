@@ -65,6 +65,7 @@ class OrderManager(models.Manager):
         order = Order(
             **kwargs,
             payment=payment,
+            promocode=promocode_obj,
         )
         order.full_clean()
         order.save()
@@ -86,9 +87,6 @@ class Order(models.Model):
     )
     fulfilled = models.BooleanField(default=False)
 
-    # TODO:
-    # promocode = ...
-
     ticket_type = models.ForeignKey(
         TicketType,
         on_delete=models.PROTECT,
@@ -102,6 +100,14 @@ class Order(models.Model):
     payer_email = models.EmailField(blank=True, default='')
     payer_first_name = models.EmailField(blank=True, default='')
     payer_last_name = models.EmailField(blank=True, default='')
+
+    promocode = models.ForeignKey(
+        Promocode,
+        on_delete=models.PROTECT,
+        related_name='orders',
+        blank=True,
+        null=True,
+    )
 
     objects = OrderManager()
 

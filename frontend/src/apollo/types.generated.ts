@@ -2188,6 +2188,7 @@ export type RatioOrder = {
   ticket_type: RatioTicketType;
   payment: YandexKassaPayment;
   price: Scalars['Int'];
+  promocode?: Maybe<RatioPromocode>;
 };
 
 export type RatioOrderConnection = {

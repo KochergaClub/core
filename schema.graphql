@@ -1296,6 +1296,7 @@ type RatioOrder {
   ticket_type: RatioTicketType!
   payment: YandexKassaPayment!
   price: Int!
+  promocode: RatioPromocode
 }
 
 type RatioOrderConnection {

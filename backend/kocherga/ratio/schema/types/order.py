@@ -5,6 +5,7 @@ from kocherga.graphql.permissions import user_perm
 
 from ... import models
 from .ticket_type import RatioTicketType
+from .promocode import RatioPromocode
 from kocherga.yandex_kassa.schema.types import YandexKassaPayment
 
 
@@ -31,6 +32,7 @@ RatioOrder = DjangoObjectType(
         'ticket_type': field_with_permissions(g.NN(RatioTicketType), permissions),
         'payment': field_with_permissions(g.NN(YandexKassaPayment), permissions),
         'price': field_with_permissions(g.NN(g.Int), permissions),
+        'promocode': field_with_permissions(RatioPromocode, permissions),
     },
 )
 

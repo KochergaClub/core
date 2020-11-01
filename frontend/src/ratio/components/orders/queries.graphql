@@ -22,6 +22,11 @@ fragment RatioOrder on RatioOrder {
       name
     }
   }
+  promocode {
+    id
+    code
+    discount
+  }
   payment {
     ...PaymentForOrder
   }

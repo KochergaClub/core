@@ -129,7 +129,7 @@ const OrderCard: React.FC<Props> = ({ order }) => {
           {order.price !== order.ticket_type.price ? (
             <div>
               {' '}
-              &rarr; <Badge>{order.price} руб.</Badge>
+              &rarr; <Badge hint={order.promocode ? `Промокод ${order.promocode.code} на ${order.promocode.discount} руб.` : undefined}>{order.price} руб.</Badge>
             </div>
           ) : null}
         </Row>
