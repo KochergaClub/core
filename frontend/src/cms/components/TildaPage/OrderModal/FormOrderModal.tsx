@@ -1,6 +1,7 @@
 import React, { useCallback, useState } from 'react';
 import { Controller, FieldError, useForm } from 'react-hook-form';
 import Select from 'react-select';
+import styled from 'styled-components';
 
 import { useMutation } from '@apollo/client';
 
@@ -43,6 +44,13 @@ const ticketTypeToSelectOption = (
     value: ticketType,
     label: ticketType.name,
   } as SelectOptionType);
+
+const Container = styled.div`
+  box-sizing: border-box; // OrderModal is used with tilda which sets box-sizing: content-box;
+  input {
+    box-sizing: border-box;
+  }
+`;
 
 const FormOrderModal: React.FC<Props> = ({
   close,
@@ -121,47 +129,48 @@ const FormOrderModal: React.FC<Props> = ({
       <Modal.Header close={close}>Регистрация</Modal.Header>
       <form onSubmit={form.handleSubmit(postForm)}>
         <Modal.Body {...hotkeys} ref={focus}>
-          <Column stretch gutter={16}>
-            <FieldContainer
-              title="Выберите вид билета"
-              error={form.errors.ticket_type as FieldError | undefined}
-            >
-              <Controller
-                name="ticket_type"
-                as={Select}
-                placeholder="Выбрать..."
-                options={ticketTypes.map(ticketTypeToSelectOption)}
-                control={form.control}
-                rules={{ required: true }}
+          <Container>
+            <Column stretch gutter={16}>
+              <FieldContainer
+                title="Выберите вид билета"
+                error={form.errors.ticket_type as FieldError | undefined}
+              >
+                <Controller
+                  name="ticket_type"
+                  as={Select}
+                  placeholder="Выбрать..."
+                  options={ticketTypes.map(ticketTypeToSelectOption)}
+                  control={form.control}
+                  rules={{ required: true }}
+                />
+              </FieldContainer>
+              <BasicInputField
+                title="Ваш E-mail"
+                name="email"
+                type="email"
+                placeholder="ludwig@wittgenstein.com"
+                required
+                form={form}
               />
-            </FieldContainer>
-            <BasicInputField
-              title="Ваш E-mail"
-              name="email"
-              type="email"
-              placeholder="ludwig@wittgenstein.com"
-              required
-              form={form}
-            />
-            <BasicInputField
-              title="Ваше имя"
-              name="first_name"
-              placeholder="Бертран"
-              required
-              form={form}
-            />
-            <BasicInputField
-              title="Ваша фамилия"
-              name="last_name"
-              placeholder="Рассел"
-              required
-              form={form}
-            />
-            <PromocodeField
-              form={form}
-              setDiscountedPrice={setDiscountedPrice}
-            />
-            {/*
+              <BasicInputField
+                title="Ваше имя"
+                name="first_name"
+                placeholder="Бертран"
+                required
+                form={form}
+              />
+              <BasicInputField
+                title="Ваша фамилия"
+                name="last_name"
+                placeholder="Рассел"
+                required
+                form={form}
+              />
+              <PromocodeField
+                form={form}
+                setDiscountedPrice={setDiscountedPrice}
+              />
+              {/*
             <BasicInputField
               title="Из какого города вы планируете проходить курс?"
               name="city"
@@ -170,27 +179,28 @@ const FormOrderModal: React.FC<Props> = ({
               form={form}
             />
             */}
-            <div>
-              <Label>
-                <Row vCentered gutter={8}>
-                  <input
-                    type="checkbox"
-                    name="terms"
-                    defaultChecked={true}
-                    ref={form.register({ required: true })}
-                  />
-                  <div>
-                    Ознакомлен и согласен с условиями{' '}
-                    <A href="/oferta" target="_blank">
-                      договора об оказании информационных услуг (публичная
-                      оферта)
-                    </A>
-                  </div>
-                </Row>
-              </Label>
-              <FieldErrorMessage error={form.errors.terms} />
-            </div>
-          </Column>
+              <div>
+                <Label>
+                  <Row vCentered gutter={8}>
+                    <input
+                      type="checkbox"
+                      name="terms"
+                      defaultChecked={true}
+                      ref={form.register({ required: true })}
+                    />
+                    <div>
+                      Ознакомлен и согласен с условиями{' '}
+                      <A href="/oferta" target="_blank">
+                        договора об оказании информационных услуг (публичная
+                        оферта)
+                      </A>
+                    </div>
+                  </Row>
+                </Label>
+                <FieldErrorMessage error={form.errors.terms} />
+              </div>
+            </Column>
+          </Container>
         </Modal.Body>
         <Modal.Footer>
           <ControlsFooter>
