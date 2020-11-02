@@ -4,9 +4,9 @@ import { FaTrash } from 'react-icons/fa';
 import styled from 'styled-components';
 
 import { useMutation } from '@apollo/client';
-import { Button, ControlsFooter, Modal } from '@kocherga/frontkit';
 
 import { AsyncButton } from '~/components';
+import { Button, ControlsFooter, Modal } from '~/frontkit';
 
 import { rootRoute } from '../routes';
 import { EvenmanEvent_DetailsFragment, EvenmanEventDeleteDocument } from './queries.generated';
@@ -31,6 +31,8 @@ const EventDeleteModal: React.FC<Props> = ({ event, close }) => {
   const [deleted, setDeleted] = useState(false);
   const [deleteMutation] = useMutation(EvenmanEventDeleteDocument, {
     variables: { id: event.id },
+    refetchQueries: ['EvenmanEvents'],
+    awaitRefetchQueries: true,
   });
 
   const act = useCallback(async () => {
@@ -46,7 +48,7 @@ const EventDeleteModal: React.FC<Props> = ({ event, close }) => {
 
   return (
     <Modal>
-      <Modal.Header toggle={close}>Удалить событие</Modal.Header>
+      <Modal.Header close={close}>Удалить событие</Modal.Header>
       <Modal.Body>Вы уверены?</Modal.Body>
       <Modal.Footer>
         <ControlsFooter>

@@ -187,6 +187,12 @@ export type BlogPostPage = WagtailPage & {
   authors: Array<BlogPostAuthor>;
 };
 
+export type CancelYandexKassaPaymentInput = {
+  id: Scalars['ID'];
+};
+
+export type CancelYandexKassaPaymentResult = YandexKassaPayment | GenericError;
+
 export type CashierCreatePaymentInput = {
   amount: Scalars['Int'];
   whom: Scalars['ID'];
@@ -214,6 +220,16 @@ export type CashierPaymentConnection = {
 export type CashierPaymentEdge = {
   __typename?: 'CashierPaymentEdge';
   node: CashierPayment;
+};
+
+export type CheckRatioPromocodeInput = {
+  ticket_type_id: Scalars['ID'];
+  code: Scalars['String'];
+};
+
+export type CheckRatioPromocodeResult = {
+  __typename?: 'CheckRatioPromocodeResult';
+  discounted_price: Scalars['Int'];
 };
 
 export type Cm2CreateCustomerInput = {
@@ -306,6 +322,28 @@ export type ColumnsButtonsBlockValue = {
 
 export type ColumnsButtonsBlockValueImageArgs = {
   spec: Scalars['String'];
+};
+
+export type CreateRatioPromocodeInput = {
+  ticket_type_id?: Maybe<Scalars['ID']>;
+  training_id?: Maybe<Scalars['ID']>;
+  code: Scalars['String'];
+  discount: Scalars['Int'];
+  uses_max?: Maybe<Scalars['Int']>;
+};
+
+export type CreateRatioPromocodeResult = RatioPromocode | ValidationError | GenericError;
+
+export type CreateRatioTicketTypeInput = {
+  training_id: Scalars['ID'];
+  price: Scalars['Int'];
+  name: Scalars['String'];
+  discount_by_email?: Maybe<Scalars['Int']>;
+  discount_percent_by_email?: Maybe<Scalars['Int']>;
+};
+
+export type DeleteRatioTicketTypeInput = {
+  id: Scalars['ID'];
 };
 
 export type EmailMailchimpCategory = {
@@ -880,6 +918,11 @@ export type FrontSocialLinksBlock = WagtailBlock & {
   id: Scalars['ID'];
 };
 
+export type GenericError = {
+  __typename?: 'GenericError';
+  message: Scalars['String'];
+};
+
 export type GreyBlock = WagtailBlock & {
   __typename?: 'GreyBlock';
   id: Scalars['ID'];
@@ -1035,6 +1078,8 @@ export type Mutation = {
   cashierCreatePayment?: Maybe<Scalars['Boolean']>;
   cashierRedeemPayment?: Maybe<Scalars['Boolean']>;
   kkmRegisterCheck: KkmRegisterCheckResult;
+  updateYandexKassaPayment: UpdateYandexKassaPaymentResult;
+  cancelYandexKassaPayment: CancelYandexKassaPaymentResult;
   myEventsTicketUnregister: MyEventsTicket;
   myEventsTicketRegister: MyEventsTicket;
   myEventsTicketRegisterAnon: MyEventsTicket;
@@ -1072,8 +1117,10 @@ export type Mutation = {
   staffGrantGooglePermissionsToMember?: Maybe<Scalars['Boolean']>;
   staffFireMember?: Maybe<Scalars['Boolean']>;
   staffUnfireMember?: Maybe<Scalars['Boolean']>;
-  ratioAddTraining: RatioTraining;
-  ratioAddTicket: RatioTicket;
+  ratioTrainingSyncParticipantsToMailchimp: Scalars['Boolean'];
+  ratioTrainingSendEmail: RatioTrainingSendEmailResult;
+  ratioCreateOrder: RatioCreateOrderResult;
+  ratioConfirmOrder: RatioConfirmOrderResult;
   ratioPaymentAdd: RatioPaymentAddResult;
   ratioPaymentDelete: BasicResult;
   ratioPaymentFiscalize: Scalars['Boolean'];
@@ -1081,8 +1128,16 @@ export type Mutation = {
   ratioPaymentSetStatus: RatioPaymentSetStatusResult;
   ratioTrainingCopyScheduleFrom: Scalars['Boolean'];
   ratioTrainingAddDay: Scalars['Boolean'];
-  ratioTrainingSyncParticipantsToMailchimp: Scalars['Boolean'];
-  ratioTrainingSendEmail: RatioTrainingSendEmailResult;
+  createRatioTicketType: RatioTicketType;
+  updateRatioTicketType: RatioTicketType;
+  deleteRatioTicketType: BasicResult;
+  ratioAddTicket: RatioTicket;
+  ratioAddTraining: RatioTraining;
+  updateRatioTraining: RatioTraining;
+  ratioDeleteTraining: BasicResult;
+  createRatioPromocode: CreateRatioPromocodeResult;
+  checkRatioPromocode?: Maybe<CheckRatioPromocodeResult>;
+  sendUniqueRatioPromocode: SendUniqueRatioPromocodeResult;
   mastermindDatingCreateCohort: MastermindDatingCohortMutationResult;
   mastermindDatingPopulateCohortFromEvent: MastermindDatingCohortMutationResult;
   mastermindDatingSendInviteEmails: MastermindDatingCohortMutationResult;
@@ -1205,6 +1260,16 @@ export type MutationCashierRedeemPaymentArgs = {
 
 export type MutationKkmRegisterCheckArgs = {
   params: KkmRegisterCheckInput;
+};
+
+
+export type MutationUpdateYandexKassaPaymentArgs = {
+  input: UpdateYandexKassaPaymentInput;
+};
+
+
+export type MutationCancelYandexKassaPaymentArgs = {
+  input: CancelYandexKassaPaymentInput;
 };
 
 
@@ -1378,13 +1443,23 @@ export type MutationStaffUnfireMemberArgs = {
 };
 
 
-export type MutationRatioAddTrainingArgs = {
-  params: RatioAddTrainingInput;
+export type MutationRatioTrainingSyncParticipantsToMailchimpArgs = {
+  training_id: Scalars['ID'];
 };
 
 
-export type MutationRatioAddTicketArgs = {
-  input: RatioAddTicketInput;
+export type MutationRatioTrainingSendEmailArgs = {
+  input: RatioTrainingSendEmailInput;
+};
+
+
+export type MutationRatioCreateOrderArgs = {
+  input: RatioCreateOrderInput;
+};
+
+
+export type MutationRatioConfirmOrderArgs = {
+  input: RatioConfirmOrderInput;
 };
 
 
@@ -1423,13 +1498,53 @@ export type MutationRatioTrainingAddDayArgs = {
 };
 
 
-export type MutationRatioTrainingSyncParticipantsToMailchimpArgs = {
-  training_id: Scalars['ID'];
+export type MutationCreateRatioTicketTypeArgs = {
+  input: CreateRatioTicketTypeInput;
 };
 
 
-export type MutationRatioTrainingSendEmailArgs = {
-  input: RatioTrainingSendEmailInput;
+export type MutationUpdateRatioTicketTypeArgs = {
+  input: UpdateRatioTicketTypeInput;
+};
+
+
+export type MutationDeleteRatioTicketTypeArgs = {
+  input: DeleteRatioTicketTypeInput;
+};
+
+
+export type MutationRatioAddTicketArgs = {
+  input: RatioAddTicketInput;
+};
+
+
+export type MutationRatioAddTrainingArgs = {
+  params: RatioAddTrainingInput;
+};
+
+
+export type MutationUpdateRatioTrainingArgs = {
+  input: UpdateRatioTrainingInput;
+};
+
+
+export type MutationRatioDeleteTrainingArgs = {
+  input: RatioDeleteTrainingInput;
+};
+
+
+export type MutationCreateRatioPromocodeArgs = {
+  input: CreateRatioPromocodeInput;
+};
+
+
+export type MutationCheckRatioPromocodeArgs = {
+  input: CheckRatioPromocodeInput;
+};
+
+
+export type MutationSendUniqueRatioPromocodeArgs = {
+  input: SendUniqueRatioPromocodeInput;
 };
 
 
@@ -1690,7 +1805,9 @@ export type ProjectPageImageArgs = {
 
 export type Query = {
   __typename?: 'Query';
+  /** @deprecated Use wagtailPageOrPrivate instead */
   wagtailPage?: Maybe<WagtailPage>;
+  wagtailPageOrPrivate: WagtailPageOrPrivateResult;
   wagtailPages: Array<WagtailPage>;
   wagtailImage?: Maybe<WagtailImage>;
   wagtailImageSearch: WagtailImageSearchResult;
@@ -1728,6 +1845,9 @@ export type Query = {
   ratioTrainingBySlug: RatioTraining;
   ratioTrainersAll: Array<RatioTrainer>;
   ratioTrainingEmailPrototype: Scalars['String'];
+  ratioTicketTypes: Array<RatioTicketType>;
+  ratioTicketType: RatioTicketType;
+  ratioOrders: RatioOrderConnection;
   mastermindDatingCohorts: Array<MastermindDatingCohort>;
   mastermindDatingCohortById: MastermindDatingCohort;
   projects: Array<ProjectPage>;
@@ -1745,6 +1865,13 @@ export type Query = {
 
 
 export type QueryWagtailPageArgs = {
+  page_id?: Maybe<Scalars['ID']>;
+  path?: Maybe<Scalars['String']>;
+  preview_token?: Maybe<Scalars['String']>;
+};
+
+
+export type QueryWagtailPageOrPrivateArgs = {
   page_id?: Maybe<Scalars['ID']>;
   path?: Maybe<Scalars['String']>;
   preview_token?: Maybe<Scalars['String']>;
@@ -1882,6 +2009,7 @@ export type QueryRatioTrainingsArgs = {
   after?: Maybe<Scalars['String']>;
   first?: Maybe<Scalars['Int']>;
   last?: Maybe<Scalars['Int']>;
+  filter?: Maybe<RatioTrainingsFilterInput>;
 };
 
 
@@ -1893,6 +2021,24 @@ export type QueryRatioTrainingBySlugArgs = {
 export type QueryRatioTrainingEmailPrototypeArgs = {
   training_id: Scalars['ID'];
   type: Scalars['String'];
+};
+
+
+export type QueryRatioTicketTypesArgs = {
+  input: RatioTicketTypesInput;
+};
+
+
+export type QueryRatioTicketTypeArgs = {
+  input: RatioTicketTypeInput;
+};
+
+
+export type QueryRatioOrdersArgs = {
+  before?: Maybe<Scalars['String']>;
+  after?: Maybe<Scalars['String']>;
+  first?: Maybe<Scalars['Int']>;
+  last?: Maybe<Scalars['Int']>;
 };
 
 
@@ -1926,24 +2072,62 @@ export type RatioAddTicketInput = {
   first_name: Scalars['String'];
   last_name?: Maybe<Scalars['String']>;
   payment_amount: Scalars['Int'];
-  status?: Maybe<Scalars['String']>;
   ticket_type?: Maybe<Scalars['String']>;
-  fiscalization_status?: Maybe<Scalars['String']>;
-  payment_type?: Maybe<Scalars['String']>;
   comment?: Maybe<Scalars['String']>;
 };
 
 export type RatioAddTrainingInput = {
   name: Scalars['String'];
   slug: Scalars['String'];
-  date: Scalars['String'];
-  telegram_link: Scalars['String'];
+  date?: Maybe<Scalars['String']>;
+  telegram_link?: Maybe<Scalars['String']>;
+  discount_by_email?: Maybe<Scalars['Int']>;
+  discount_percent_by_email?: Maybe<Scalars['Int']>;
 };
 
 export type RatioBriefingBlock = WagtailBlock & {
   __typename?: 'RatioBriefingBlock';
   id: Scalars['ID'];
   value: Scalars['String'];
+};
+
+export type RatioConfirmOrderInput = {
+  order_id: Scalars['ID'];
+};
+
+export enum RatioConfirmOrderOutcome {
+  NotFound = 'NOT_FOUND',
+  NotPaid = 'NOT_PAID',
+  Ok = 'OK',
+  AlreadyFulfilled = 'ALREADY_FULFILLED',
+  TicketAlreadyExists = 'TICKET_ALREADY_EXISTS'
+}
+
+export type RatioConfirmOrderResult = {
+  __typename?: 'RatioConfirmOrderResult';
+  outcome: RatioConfirmOrderOutcome;
+};
+
+export type RatioCreateOrderInput = {
+  ticket_type_id: Scalars['ID'];
+  email: Scalars['String'];
+  first_name: Scalars['String'];
+  last_name: Scalars['String'];
+  city?: Maybe<Scalars['String']>;
+  promocode?: Maybe<Scalars['String']>;
+  payer?: Maybe<RatioCreateOrderPayerInput>;
+};
+
+export type RatioCreateOrderPayerInput = {
+  email: Scalars['String'];
+  first_name: Scalars['String'];
+  last_name: Scalars['String'];
+};
+
+export type RatioCreateOrderResult = RatioOrder | ValidationError | GenericError;
+
+export type RatioDeleteTrainingInput = {
+  slug: Scalars['String'];
 };
 
 export type RatioExerciseBlock = WagtailBlock & {
@@ -2009,6 +2193,34 @@ export type RatioNotebookSectionBlock = WagtailBlock & {
   value: RatioSectionPage;
 };
 
+export type RatioOrder = {
+  __typename?: 'RatioOrder';
+  fulfilled: Scalars['Boolean'];
+  id: Scalars['ID'];
+  confirmation_token: Scalars['String'];
+  created: Scalars['String'];
+  email: Scalars['String'];
+  first_name: Scalars['String'];
+  last_name: Scalars['String'];
+  city: Scalars['String'];
+  ticket_type: RatioTicketType;
+  payment: YandexKassaPayment;
+  price: Scalars['Int'];
+  promocode?: Maybe<RatioPromocode>;
+};
+
+export type RatioOrderConnection = {
+  __typename?: 'RatioOrderConnection';
+  pageInfo: PageInfo;
+  nodes: Array<RatioOrder>;
+  edges: Array<RatioOrderEdge>;
+};
+
+export type RatioOrderEdge = {
+  __typename?: 'RatioOrderEdge';
+  node: RatioOrder;
+};
+
 export type RatioParagraphBlock = WagtailBlock & {
   __typename?: 'RatioParagraphBlock';
   id: Scalars['ID'];
@@ -2064,6 +2276,29 @@ export type RatioPresentationIndexPage = WagtailPage & {
   presentations: Array<PresentationPage>;
 };
 
+export type RatioPromocode = {
+  __typename?: 'RatioPromocode';
+  id: Scalars['ID'];
+  code: Scalars['String'];
+  discount: Scalars['Int'];
+  discount_percent: Scalars['Int'];
+  uses_max?: Maybe<Scalars['Int']>;
+  uses_count: Scalars['Int'];
+  for_email: Scalars['String'];
+};
+
+export type RatioPromocodeConnection = {
+  __typename?: 'RatioPromocodeConnection';
+  pageInfo: PageInfo;
+  nodes: Array<RatioPromocode>;
+  edges: Array<RatioPromocodeEdge>;
+};
+
+export type RatioPromocodeEdge = {
+  __typename?: 'RatioPromocodeEdge';
+  node: RatioPromocode;
+};
+
 export type RatioSectionIndexPage = WagtailPage & {
   __typename?: 'RatioSectionIndexPage';
   title: Scalars['String'];
@@ -2088,12 +2323,38 @@ export type RatioTicket = {
   registration_date?: Maybe<Scalars['String']>;
   status: Scalars['String'];
   ticket_type: Scalars['String'];
-  payment_type: Scalars['String'];
   payment_amount: Scalars['Int'];
-  fiscalization_status: Scalars['String'];
   comment: Scalars['String'];
   payments: Array<RatioPayment>;
   training: RatioTraining;
+};
+
+export type RatioTicketType = {
+  __typename?: 'RatioTicketType';
+  price: Scalars['Int'];
+  name: Scalars['String'];
+  discount_by_email: Scalars['Int'];
+  discount_percent_by_email: Scalars['Int'];
+  id: Scalars['ID'];
+  training: RatioTraining;
+  promocodes_count: Scalars['Int'];
+  promocodes: RatioPromocodeConnection;
+};
+
+
+export type RatioTicketTypePromocodesArgs = {
+  before?: Maybe<Scalars['String']>;
+  after?: Maybe<Scalars['String']>;
+  first?: Maybe<Scalars['Int']>;
+  last?: Maybe<Scalars['Int']>;
+};
+
+export type RatioTicketTypeInput = {
+  id: Scalars['ID'];
+};
+
+export type RatioTicketTypesInput = {
+  id?: Maybe<Scalars['ID']>;
 };
 
 export type RatioTrainer = {
@@ -2108,14 +2369,29 @@ export type RatioTraining = {
   id: Scalars['ID'];
   name: Scalars['String'];
   slug: Scalars['String'];
-  date: Scalars['String'];
+  date?: Maybe<Scalars['String']>;
   telegram_link: Scalars['String'];
   salaries_paid: Scalars['Boolean'];
+  discount_by_email: Scalars['Int'];
+  discount_percent_by_email: Scalars['Int'];
+  promocode_email: Scalars['String'];
+  new_ticket_email: Scalars['String'];
+  notion_created_email: Scalars['String'];
   tickets: Array<RatioTicket>;
   schedule: Array<RatioTrainingDay>;
+  ticket_types: Array<RatioTicketType>;
   tickets_count: Scalars['Int'];
   total_income: Scalars['Int'];
-  long_name: Scalars['String'];
+  promocodes_count: Scalars['Int'];
+  promocodes: RatioPromocodeConnection;
+};
+
+
+export type RatioTrainingPromocodesArgs = {
+  before?: Maybe<Scalars['String']>;
+  after?: Maybe<Scalars['String']>;
+  first?: Maybe<Scalars['Int']>;
+  last?: Maybe<Scalars['Int']>;
 };
 
 export type RatioTrainingAddDayInput = {
@@ -2158,6 +2434,10 @@ export type RatioTrainingSendEmailResult = {
   draft_link: Scalars['String'];
 };
 
+export type RatioTrainingsFilterInput = {
+  eternal?: Maybe<Scalars['Boolean']>;
+};
+
 export type SearchInput = {
   query: Scalars['String'];
   limit?: Maybe<Scalars['Int']>;
@@ -2182,6 +2462,14 @@ export type SectionHeaderBlockValue = {
   header: Scalars['String'];
   text: Scalars['String'];
 };
+
+export type SendUniqueRatioPromocodeInput = {
+  ticket_type_id?: Maybe<Scalars['ID']>;
+  training_id?: Maybe<Scalars['ID']>;
+  email: Scalars['String'];
+};
+
+export type SendUniqueRatioPromocodeResult = BasicResult | GenericError;
 
 export type SlackAccount = ExternalServiceAccount & {
   __typename?: 'SlackAccount';
@@ -2318,6 +2606,43 @@ export type TimepadCategory = {
   name: Scalars['String'];
 };
 
+export type UpdateRatioTicketTypeInput = {
+  id: Scalars['ID'];
+  price?: Maybe<Scalars['Int']>;
+  name?: Maybe<Scalars['String']>;
+  discount_by_email?: Maybe<Scalars['Int']>;
+  discount_percent_by_email?: Maybe<Scalars['Int']>;
+};
+
+export type UpdateRatioTrainingInput = {
+  id: Scalars['ID'];
+  name: Scalars['String'];
+  date?: Maybe<Scalars['String']>;
+  telegram_link?: Maybe<Scalars['String']>;
+  discount_by_email?: Maybe<Scalars['Int']>;
+  discount_percent_by_email?: Maybe<Scalars['Int']>;
+  promocode_email?: Maybe<Scalars['String']>;
+  new_ticket_email?: Maybe<Scalars['String']>;
+  notion_created_email?: Maybe<Scalars['String']>;
+};
+
+export type UpdateYandexKassaPaymentInput = {
+  id: Scalars['ID'];
+};
+
+export type UpdateYandexKassaPaymentResult = YandexKassaPayment | GenericError;
+
+export type ValidationError = {
+  __typename?: 'ValidationError';
+  errors: Array<ValidationErrorItem>;
+};
+
+export type ValidationErrorItem = {
+  __typename?: 'ValidationErrorItem';
+  name: Scalars['String'];
+  messages: Array<Scalars['String']>;
+};
+
 export type VkGroup = {
   __typename?: 'VkGroup';
   name: Scalars['String'];
@@ -2441,6 +2766,11 @@ export type WagtailPage = {
   meta: WagtailPageMeta;
 };
 
+export type WagtailPageContainer = {
+  __typename?: 'WagtailPageContainer';
+  page?: Maybe<WagtailPage>;
+};
+
 export type WagtailPageMeta = {
   __typename?: 'WagtailPageMeta';
   slug: Scalars['String'];
@@ -2458,9 +2788,16 @@ export type WagtailPageMetaRevisionArgs = {
   id: Scalars['ID'];
 };
 
+export type WagtailPageOrPrivateResult = WagtailPageContainer | WagtailPagePrivate;
+
 export type WagtailPagePermissions = {
   __typename?: 'WagtailPagePermissions';
   can_edit: Scalars['Boolean'];
+};
+
+export type WagtailPagePrivate = {
+  __typename?: 'WagtailPagePrivate';
+  message: Scalars['String'];
 };
 
 export type WagtailPageRevision = {
@@ -2615,6 +2952,22 @@ export type WikiExternalService = ExternalService & {
   slug: Scalars['String'];
   accounts: Array<WikiAccount>;
 };
+
+export type YandexKassaPayment = {
+  __typename?: 'YandexKassaPayment';
+  id: Scalars['ID'];
+  kassa_id: Scalars['String'];
+  is_paid: Scalars['Boolean'];
+  status: YandexKassaPaymentStatus;
+  waiting_for_capture: Scalars['Boolean'];
+};
+
+export enum YandexKassaPaymentStatus {
+  Pending = 'pending',
+  WaitingForCapture = 'waiting_for_capture',
+  Succeeded = 'succeeded',
+  Canceled = 'canceled'
+}
 
 export type ZadarmaCall = {
   __typename?: 'ZadarmaCall';

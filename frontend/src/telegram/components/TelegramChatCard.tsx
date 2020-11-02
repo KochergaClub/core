@@ -1,7 +1,7 @@
 import Link from 'next/link';
 import styled from 'styled-components';
 
-import { A, colors, LabelDiv, Row } from '@kocherga/frontkit';
+import { A, colors, LabelDiv, Row } from '~/frontkit';
 
 import Card from '~/components/Card';
 import TelegramIcon from '~/components/icons/TelegramIcon';

@@ -1,7 +1,7 @@
 import { useCallback } from 'react';
 
 import { useMutation } from '@apollo/client';
-import { Column, Row } from '@kocherga/frontkit';
+import { Column, Row } from '~/frontkit';
 
 import { PaddedBlock } from '~/components';
 import ModalFormButton from '~/components/forms/ModalFormButton';
@@ -21,6 +21,18 @@ const CreateTicketButton = ({ training_id }: { training_id: string }) => {
     { name: 'first_name', title: 'Имя', type: 'string' },
     { name: 'last_name', title: 'Фамилия', type: 'string' },
     { name: 'payment_amount', title: 'Стоимость билета', type: 'number' },
+    {
+      name: 'ticket_type',
+      title: 'Вид билета',
+      type: 'choice',
+      options: [
+        ['normal', 'Обычный'],
+        ['stipend', 'Стипендия'],
+        ['staff', 'Стафф'],
+        ['free-repeat', 'Бесплатный повтор'],
+      ],
+      default: 'normal',
+    },
   ];
 
   type Values = {

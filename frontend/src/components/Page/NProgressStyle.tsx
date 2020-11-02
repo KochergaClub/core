@@ -1,6 +1,6 @@
 import { createGlobalStyle } from 'styled-components';
 
-import { colors } from '@kocherga/frontkit';
+import { colors } from '~/frontkit';
 
 export default createGlobalStyle`
 /* Make clicks pass-through */

@@ -1,6 +1,6 @@
 import { createGlobalStyle } from 'styled-components';
 
-import { colors } from '@kocherga/frontkit';
+import { colors } from '~/frontkit';
 
 export const CalendarStyle = createGlobalStyle`
 .rbc-btn {

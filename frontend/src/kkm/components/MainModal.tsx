@@ -1,6 +1,6 @@
-import { useState, useCallback } from 'react';
+import { useCallback, useState } from 'react';
 
-import { Button, Modal, ControlsFooter } from '@kocherga/frontkit';
+import { Button, ControlsFooter, Modal } from '~/frontkit';
 
 import { FormValues, SignMethodCalculation } from '../types';
 
@@ -20,7 +20,7 @@ export default function MainModal({ values, submit, close }: Props) {
 
   return (
     <Modal>
-      <Modal.Header toggle={close}>Напечатать чек</Modal.Header>
+      <Modal.Header close={close}>Напечатать чек</Modal.Header>
       <Modal.Body>
         <header>{values.title}</header>
         <div>{values.amount} руб.</div>

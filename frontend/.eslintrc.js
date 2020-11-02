@@ -35,4 +35,5 @@ module.exports = {
       version: 'detect',
     },
   },
+  ignorePatterns: ['**/*.generated.tsx', '**/*.generated.ts'],
 };

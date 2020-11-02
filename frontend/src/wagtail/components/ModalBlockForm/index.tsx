@@ -1,13 +1,13 @@
 import { useCallback, useEffect, useMemo, useState } from 'react';
 
 import { gql, TypedDocumentNode, useApolloClient } from '@apollo/client';
-import { Modal } from '@kocherga/frontkit';
 
 import { dedupeFragments } from '~/common/dedupeFragments';
 import { withFragments } from '~/common/utils';
 import { Spinner } from '~/components';
 import ModalForm from '~/components/forms/ModalForm';
 import { AnyFormValues, FormShape } from '~/components/forms/types';
+import { Modal } from '~/frontkit';
 
 import { allBlockComponents, KnownBlockFragment } from '../../blocks';
 import { useBlockStructureLoader } from '../../hooks';
@@ -193,7 +193,7 @@ const ModalBlockForm: React.FC<Props> = ({
   if (!shape) {
     // TODO - don't render anything until delay (how to do this? extract appear logic from Spinner and put it into a separate HOC?)
     return (
-      <Modal isOpen={true}>
+      <Modal>
         <Spinner size="div" />
       </Modal>
     );

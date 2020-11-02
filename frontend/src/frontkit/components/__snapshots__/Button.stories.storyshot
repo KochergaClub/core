@@ -1,0 +1,1210 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Storyshots Components/Button All 1`] = `
+.c2 {
+  position: relative;
+  z-index: 0;
+  overflow: hidden;
+  cursor: pointer;
+  font-size: 12px;
+  font-weight: 500;
+  line-height: 24px;
+  padding: 0 8px;
+  color: hsl(210,55%,20%);
+  border: 0;
+  background: hsl(210,80%,95%);
+  box-shadow: 0 1px 1px hsl(210,12%,33%);
+}
+
+.c2:hover {
+  background: hsl(210,55%,80%);
+}
+
+.c2:disabled {
+  color: hsl(210,12%,58%);
+  background: hsl(210,20%,97%);
+  box-shadow: inset 0 0px 2px hsl(210,12%,33%);
+}
+
+.c2:active {
+  -webkit-transform: scale(0.99);
+  -ms-transform: scale(0.99);
+  transform: scale(0.99);
+  box-shadow: none;
+}
+
+.c2:focus {
+  outline: solid 1px hsl(210,55%,55%);
+}
+
+.c3 {
+  position: relative;
+  z-index: 0;
+  overflow: hidden;
+  cursor: pointer;
+  font-size: 14px;
+  font-weight: 500;
+  line-height: 24px;
+  padding: 4px 16px;
+  color: hsl(210,55%,20%);
+  border: 0;
+  background: hsl(210,80%,95%);
+  box-shadow: 0 1px 2px hsl(210,12%,33%);
+}
+
+.c3:hover {
+  background: hsl(210,55%,80%);
+}
+
+.c3:disabled {
+  color: hsl(210,12%,58%);
+  background: hsl(210,20%,97%);
+  box-shadow: inset 0 0px 2px hsl(210,12%,33%);
+}
+
+.c3:active {
+  -webkit-transform: scale(0.99);
+  -ms-transform: scale(0.99);
+  transform: scale(0.99);
+  box-shadow: none;
+}
+
+.c3:focus {
+  outline: solid 1px hsl(210,55%,55%);
+}
+
+.c4 {
+  position: relative;
+  z-index: 0;
+  overflow: hidden;
+  cursor: pointer;
+  font-size: 20px;
+  font-weight: bold;
+  line-height: 24px;
+  padding: 20px 32px;
+  color: hsl(210,55%,20%);
+  border: 0;
+  background: hsl(210,80%,95%);
+  box-shadow: 0 2px 4px hsl(210,12%,33%);
+}
+
+.c4:hover {
+  background: hsl(210,55%,80%);
+}
+
+.c4:disabled {
+  color: hsl(210,12%,58%);
+  background: hsl(210,20%,97%);
+  box-shadow: inset 0 0px 2px hsl(210,12%,33%);
+}
+
+.c4:active {
+  -webkit-transform: scale(0.99);
+  -ms-transform: scale(0.99);
+  transform: scale(0.99);
+  box-shadow: none;
+}
+
+.c4:focus {
+  outline: solid 1px hsl(210,55%,55%);
+}
+
+.c5 {
+  position: relative;
+  z-index: 0;
+  overflow: hidden;
+  cursor: pointer;
+  font-size: 12px;
+  font-weight: 500;
+  line-height: 24px;
+  padding: 0 8px;
+  color: hsl(210,55%,20%);
+  border: 0;
+  background: transparent;
+}
+
+.c5:hover {
+  background: transparent;
+}
+
+.c5:disabled {
+  color: hsl(210,12%,58%);
+  background: hsl(210,20%,97%);
+  box-shadow: inset 0 0px 2px hsl(210,12%,33%);
+}
+
+.c5:active {
+  -webkit-transform: scale(0.99);
+  -ms-transform: scale(0.99);
+  transform: scale(0.99);
+  box-shadow: none;
+}
+
+.c5:focus {
+  outline: solid 1px hsl(210,55%,55%);
+}
+
+.c7 {
+  position: relative;
+  z-index: 0;
+  overflow: hidden;
+  cursor: pointer;
+  font-size: 14px;
+  font-weight: 500;
+  line-height: 24px;
+  padding: 4px 16px;
+  color: hsl(210,55%,20%);
+  border: 0;
+  background: transparent;
+}
+
+.c7:hover {
+  background: transparent;
+}
+
+.c7:disabled {
+  color: hsl(210,12%,58%);
+  background: hsl(210,20%,97%);
+  box-shadow: inset 0 0px 2px hsl(210,12%,33%);
+}
+
+.c7:active {
+  -webkit-transform: scale(0.99);
+  -ms-transform: scale(0.99);
+  transform: scale(0.99);
+  box-shadow: none;
+}
+
+.c7:focus {
+  outline: solid 1px hsl(210,55%,55%);
+}
+
+.c8 {
+  position: relative;
+  z-index: 0;
+  overflow: hidden;
+  cursor: pointer;
+  font-size: 20px;
+  font-weight: bold;
+  line-height: 24px;
+  padding: 20px 32px;
+  color: hsl(210,55%,20%);
+  border: 0;
+  background: transparent;
+}
+
+.c8:hover {
+  background: transparent;
+}
+
+.c8:disabled {
+  color: hsl(210,12%,58%);
+  background: hsl(210,20%,97%);
+  box-shadow: inset 0 0px 2px hsl(210,12%,33%);
+}
+
+.c8:active {
+  -webkit-transform: scale(0.99);
+  -ms-transform: scale(0.99);
+  transform: scale(0.99);
+  box-shadow: none;
+}
+
+.c8:focus {
+  outline: solid 1px hsl(210,55%,55%);
+}
+
+.c9 {
+  position: relative;
+  z-index: 0;
+  overflow: hidden;
+  cursor: pointer;
+  font-size: 12px;
+  font-weight: 500;
+  line-height: 24px;
+  padding: 0 8px;
+  color: white;
+  border: 0;
+  background: hsl(210,55%,55%);
+  box-shadow: 0 1px 1px hsl(210,12%,33%);
+}
+
+.c9:hover {
+  background: hsl(210,55%,35%);
+}
+
+.c9:disabled {
+  color: hsl(210,12%,58%);
+  background: hsl(210,20%,97%);
+  box-shadow: inset 0 0px 2px hsl(210,12%,33%);
+}
+
+.c9:active {
+  -webkit-transform: scale(0.99);
+  -ms-transform: scale(0.99);
+  transform: scale(0.99);
+  box-shadow: none;
+}
+
+.c9:focus {
+  outline: solid 1px hsl(210,55%,20%);
+}
+
+.c10 {
+  position: relative;
+  z-index: 0;
+  overflow: hidden;
+  cursor: pointer;
+  font-size: 14px;
+  font-weight: 500;
+  line-height: 24px;
+  padding: 4px 16px;
+  color: white;
+  border: 0;
+  background: hsl(210,55%,55%);
+  box-shadow: 0 1px 2px hsl(210,12%,33%);
+}
+
+.c10:hover {
+  background: hsl(210,55%,35%);
+}
+
+.c10:disabled {
+  color: hsl(210,12%,58%);
+  background: hsl(210,20%,97%);
+  box-shadow: inset 0 0px 2px hsl(210,12%,33%);
+}
+
+.c10:active {
+  -webkit-transform: scale(0.99);
+  -ms-transform: scale(0.99);
+  transform: scale(0.99);
+  box-shadow: none;
+}
+
+.c10:focus {
+  outline: solid 1px hsl(210,55%,20%);
+}
+
+.c11 {
+  position: relative;
+  z-index: 0;
+  overflow: hidden;
+  cursor: pointer;
+  font-size: 20px;
+  font-weight: bold;
+  line-height: 24px;
+  padding: 20px 32px;
+  color: white;
+  border: 0;
+  background: hsl(210,55%,55%);
+  box-shadow: 0 2px 4px hsl(210,12%,33%);
+}
+
+.c11:hover {
+  background: hsl(210,55%,35%);
+}
+
+.c11:disabled {
+  color: hsl(210,12%,58%);
+  background: hsl(210,20%,97%);
+  box-shadow: inset 0 0px 2px hsl(210,12%,33%);
+}
+
+.c11:active {
+  -webkit-transform: scale(0.99);
+  -ms-transform: scale(0.99);
+  transform: scale(0.99);
+  box-shadow: none;
+}
+
+.c11:focus {
+  outline: solid 1px hsl(210,55%,20%);
+}
+
+.c12 {
+  position: relative;
+  z-index: 0;
+  overflow: hidden;
+  cursor: pointer;
+  font-size: 12px;
+  font-weight: 500;
+  line-height: 24px;
+  padding: 0 8px;
+  color: white;
+  border: 0;
+  background: transparent;
+}
+
+.c12:hover {
+  background: transparent;
+}
+
+.c12:disabled {
+  color: hsl(210,12%,58%);
+  background: hsl(210,20%,97%);
+  box-shadow: inset 0 0px 2px hsl(210,12%,33%);
+}
+
+.c12:active {
+  -webkit-transform: scale(0.99);
+  -ms-transform: scale(0.99);
+  transform: scale(0.99);
+  box-shadow: none;
+}
+
+.c12:focus {
+  outline: solid 1px hsl(210,55%,20%);
+}
+
+.c13 {
+  position: relative;
+  z-index: 0;
+  overflow: hidden;
+  cursor: pointer;
+  font-size: 14px;
+  font-weight: 500;
+  line-height: 24px;
+  padding: 4px 16px;
+  color: white;
+  border: 0;
+  background: transparent;
+}
+
+.c13:hover {
+  background: transparent;
+}
+
+.c13:disabled {
+  color: hsl(210,12%,58%);
+  background: hsl(210,20%,97%);
+  box-shadow: inset 0 0px 2px hsl(210,12%,33%);
+}
+
+.c13:active {
+  -webkit-transform: scale(0.99);
+  -ms-transform: scale(0.99);
+  transform: scale(0.99);
+  box-shadow: none;
+}
+
+.c13:focus {
+  outline: solid 1px hsl(210,55%,20%);
+}
+
+.c14 {
+  position: relative;
+  z-index: 0;
+  overflow: hidden;
+  cursor: pointer;
+  font-size: 20px;
+  font-weight: bold;
+  line-height: 24px;
+  padding: 20px 32px;
+  color: white;
+  border: 0;
+  background: transparent;
+}
+
+.c14:hover {
+  background: transparent;
+}
+
+.c14:disabled {
+  color: hsl(210,12%,58%);
+  background: hsl(210,20%,97%);
+  box-shadow: inset 0 0px 2px hsl(210,12%,33%);
+}
+
+.c14:active {
+  -webkit-transform: scale(0.99);
+  -ms-transform: scale(0.99);
+  transform: scale(0.99);
+  box-shadow: none;
+}
+
+.c14:focus {
+  outline: solid 1px hsl(210,55%,20%);
+}
+
+.c15 {
+  position: relative;
+  z-index: 0;
+  overflow: hidden;
+  cursor: pointer;
+  font-size: 12px;
+  font-weight: 500;
+  line-height: 24px;
+  padding: 0 8px;
+  color: white;
+  border: 0;
+  background: hsl(0,60%,60%);
+  box-shadow: 0 1px 1px hsl(210,12%,33%);
+}
+
+.c15:hover {
+  background: hsl(0,100%,70%);
+}
+
+.c15:disabled {
+  color: hsl(210,12%,58%);
+  background: hsl(210,20%,97%);
+  box-shadow: inset 0 0px 2px hsl(210,12%,33%);
+}
+
+.c15:active {
+  -webkit-transform: scale(0.99);
+  -ms-transform: scale(0.99);
+  transform: scale(0.99);
+  box-shadow: none;
+}
+
+.c15:focus {
+  outline: solid 1px hsl(0,100%,74%);
+}
+
+.c16 {
+  position: relative;
+  z-index: 0;
+  overflow: hidden;
+  cursor: pointer;
+  font-size: 14px;
+  font-weight: 500;
+  line-height: 24px;
+  padding: 4px 16px;
+  color: white;
+  border: 0;
+  background: hsl(0,60%,60%);
+  box-shadow: 0 1px 2px hsl(210,12%,33%);
+}
+
+.c16:hover {
+  background: hsl(0,100%,70%);
+}
+
+.c16:disabled {
+  color: hsl(210,12%,58%);
+  background: hsl(210,20%,97%);
+  box-shadow: inset 0 0px 2px hsl(210,12%,33%);
+}
+
+.c16:active {
+  -webkit-transform: scale(0.99);
+  -ms-transform: scale(0.99);
+  transform: scale(0.99);
+  box-shadow: none;
+}
+
+.c16:focus {
+  outline: solid 1px hsl(0,100%,74%);
+}
+
+.c17 {
+  position: relative;
+  z-index: 0;
+  overflow: hidden;
+  cursor: pointer;
+  font-size: 20px;
+  font-weight: bold;
+  line-height: 24px;
+  padding: 20px 32px;
+  color: white;
+  border: 0;
+  background: hsl(0,60%,60%);
+  box-shadow: 0 2px 4px hsl(210,12%,33%);
+}
+
+.c17:hover {
+  background: hsl(0,100%,70%);
+}
+
+.c17:disabled {
+  color: hsl(210,12%,58%);
+  background: hsl(210,20%,97%);
+  box-shadow: inset 0 0px 2px hsl(210,12%,33%);
+}
+
+.c17:active {
+  -webkit-transform: scale(0.99);
+  -ms-transform: scale(0.99);
+  transform: scale(0.99);
+  box-shadow: none;
+}
+
+.c17:focus {
+  outline: solid 1px hsl(0,100%,74%);
+}
+
+.c18 {
+  position: relative;
+  z-index: 0;
+  overflow: hidden;
+  cursor: pointer;
+  font-size: 12px;
+  font-weight: 500;
+  line-height: 24px;
+  padding: 0 8px;
+  color: white;
+  border: 0;
+  background: transparent;
+}
+
+.c18:hover {
+  background: transparent;
+}
+
+.c18:disabled {
+  color: hsl(210,12%,58%);
+  background: hsl(210,20%,97%);
+  box-shadow: inset 0 0px 2px hsl(210,12%,33%);
+}
+
+.c18:active {
+  -webkit-transform: scale(0.99);
+  -ms-transform: scale(0.99);
+  transform: scale(0.99);
+  box-shadow: none;
+}
+
+.c18:focus {
+  outline: solid 1px hsl(0,100%,74%);
+}
+
+.c20 {
+  position: relative;
+  z-index: 0;
+  overflow: hidden;
+  cursor: pointer;
+  font-size: 14px;
+  font-weight: 500;
+  line-height: 24px;
+  padding: 4px 16px;
+  color: white;
+  border: 0;
+  background: transparent;
+}
+
+.c20:hover {
+  background: transparent;
+}
+
+.c20:disabled {
+  color: hsl(210,12%,58%);
+  background: hsl(210,20%,97%);
+  box-shadow: inset 0 0px 2px hsl(210,12%,33%);
+}
+
+.c20:active {
+  -webkit-transform: scale(0.99);
+  -ms-transform: scale(0.99);
+  transform: scale(0.99);
+  box-shadow: none;
+}
+
+.c20:focus {
+  outline: solid 1px hsl(0,100%,74%);
+}
+
+.c21 {
+  position: relative;
+  z-index: 0;
+  overflow: hidden;
+  cursor: pointer;
+  font-size: 20px;
+  font-weight: bold;
+  line-height: 24px;
+  padding: 20px 32px;
+  color: white;
+  border: 0;
+  background: transparent;
+}
+
+.c21:hover {
+  background: transparent;
+}
+
+.c21:disabled {
+  color: hsl(210,12%,58%);
+  background: hsl(210,20%,97%);
+  box-shadow: inset 0 0px 2px hsl(210,12%,33%);
+}
+
+.c21:active {
+  -webkit-transform: scale(0.99);
+  -ms-transform: scale(0.99);
+  transform: scale(0.99);
+  box-shadow: none;
+}
+
+.c21:focus {
+  outline: solid 1px hsl(0,100%,74%);
+}
+
+.c6 {
+  position: absolute;
+  top: 0;
+  left: -20px;
+  right: 0;
+  bottom: 0;
+  z-index: -1;
+  box-shadow: inset 0 1px 2px hsl(210,12%,33%);
+  background: linear-gradient( -45deg,hsl(210,55%,80%) 25%,hsl(210,80%,95%) 25%,hsl(210,80%,95%) 50%,hsl(210,55%,80%) 50%,hsl(210,55%,80%) 75%,hsl(210,80%,95%) 75%,hsl(210,80%,95%) ) 0 0 / 20px 20px;
+  -webkit-animation: move-bg 1s linear infinite;
+  animation: move-bg 1s linear infinite;
+}
+
+.c19 {
+  position: absolute;
+  top: 0;
+  left: -20px;
+  right: 0;
+  bottom: 0;
+  z-index: -1;
+  box-shadow: inset 0 1px 2px hsl(210,12%,33%);
+  background: linear-gradient( -45deg,hsl(0,100%,80%) 25%,hsl(0,100%,90%) 25%,hsl(0,100%,90%) 50%,hsl(0,100%,80%) 50%,hsl(0,100%,80%) 75%,hsl(0,100%,90%) 75%,hsl(0,100%,90%) ) 0 0 / 20px 20px;
+  -webkit-animation: move-bg 1s linear infinite;
+  animation: move-bg 1s linear infinite;
+}
+
+.c0 {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-flex-direction: row;
+  -ms-flex-direction: row;
+  flex-direction: row;
+  -webkit-align-items: flex-start;
+  -webkit-box-align: flex-start;
+  -ms-flex-align: flex-start;
+  align-items: flex-start;
+}
+
+.c0 > * + * {
+  margin-left: 4px;
+}
+
+.c1 {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-flex-direction: column;
+  -ms-flex-direction: column;
+  flex-direction: column;
+  -webkit-align-items: flex-start;
+  -webkit-box-align: flex-start;
+  -ms-flex-align: flex-start;
+  align-items: flex-start;
+}
+
+.c1 > * + * {
+  margin-top: 4px;
+}
+
+<div
+  className="c0"
+>
+  <div
+    className="c1"
+  >
+    <button
+      className="c2"
+      size="small"
+    >
+      Кнопка
+    </button>
+    <button
+      className="c3"
+    >
+      Кнопка
+    </button>
+    <button
+      className="c4"
+      size="big"
+    >
+      Кнопка
+    </button>
+    <button
+      className="c5"
+      size="small"
+    >
+      <div
+        className="c6"
+      />
+      Кнопка
+    </button>
+    <button
+      className="c7"
+    >
+      <div
+        className="c6"
+      />
+      Кнопка
+    </button>
+    <button
+      className="c8"
+      size="big"
+    >
+      <div
+        className="c6"
+      />
+      Кнопка
+    </button>
+    <button
+      className="c2"
+      disabled={true}
+      size="small"
+    >
+      Кнопка
+    </button>
+    <button
+      className="c3"
+      disabled={true}
+    >
+      Кнопка
+    </button>
+    <button
+      className="c4"
+      disabled={true}
+      size="big"
+    >
+      Кнопка
+    </button>
+  </div>
+  <div
+    className="c1"
+  >
+    <button
+      className="c9"
+      kind="primary"
+      size="small"
+    >
+      Кнопка
+    </button>
+    <button
+      className="c10"
+      kind="primary"
+    >
+      Кнопка
+    </button>
+    <button
+      className="c11"
+      kind="primary"
+      size="big"
+    >
+      Кнопка
+    </button>
+    <button
+      className="c12"
+      kind="primary"
+      size="small"
+    >
+      <div
+        className="c6"
+      />
+      Кнопка
+    </button>
+    <button
+      className="c13"
+      kind="primary"
+    >
+      <div
+        className="c6"
+      />
+      Кнопка
+    </button>
+    <button
+      className="c14"
+      kind="primary"
+      size="big"
+    >
+      <div
+        className="c6"
+      />
+      Кнопка
+    </button>
+    <button
+      className="c9"
+      disabled={true}
+      kind="primary"
+      size="small"
+    >
+      Кнопка
+    </button>
+    <button
+      className="c10"
+      disabled={true}
+      kind="primary"
+    >
+      Кнопка
+    </button>
+    <button
+      className="c11"
+      disabled={true}
+      kind="primary"
+      size="big"
+    >
+      Кнопка
+    </button>
+  </div>
+  <div
+    className="c1"
+  >
+    <button
+      className="c15"
+      kind="danger"
+      size="small"
+    >
+      Кнопка
+    </button>
+    <button
+      className="c16"
+      kind="danger"
+    >
+      Кнопка
+    </button>
+    <button
+      className="c17"
+      kind="danger"
+      size="big"
+    >
+      Кнопка
+    </button>
+    <button
+      className="c18"
+      kind="danger"
+      size="small"
+    >
+      <div
+        className="c19"
+      />
+      Кнопка
+    </button>
+    <button
+      className="c20"
+      kind="danger"
+    >
+      <div
+        className="c19"
+      />
+      Кнопка
+    </button>
+    <button
+      className="c21"
+      kind="danger"
+      size="big"
+    >
+      <div
+        className="c19"
+      />
+      Кнопка
+    </button>
+    <button
+      className="c15"
+      disabled={true}
+      kind="danger"
+      size="small"
+    >
+      Кнопка
+    </button>
+    <button
+      className="c16"
+      disabled={true}
+      kind="danger"
+    >
+      Кнопка
+    </button>
+    <button
+      className="c17"
+      disabled={true}
+      kind="danger"
+      size="big"
+    >
+      Кнопка
+    </button>
+  </div>
+</div>
+`;
+
+exports[`Storyshots Components/Button Basic 1`] = `
+.c0 {
+  position: relative;
+  z-index: 0;
+  overflow: hidden;
+  cursor: pointer;
+  font-size: 14px;
+  font-weight: 500;
+  line-height: 24px;
+  padding: 4px 16px;
+  color: hsl(210,55%,20%);
+  border: 0;
+  background: hsl(210,80%,95%);
+  box-shadow: 0 1px 2px hsl(210,12%,33%);
+}
+
+.c0:hover {
+  background: hsl(210,55%,80%);
+}
+
+.c0:disabled {
+  color: hsl(210,12%,58%);
+  background: hsl(210,20%,97%);
+  box-shadow: inset 0 0px 2px hsl(210,12%,33%);
+}
+
+.c0:active {
+  -webkit-transform: scale(0.99);
+  -ms-transform: scale(0.99);
+  transform: scale(0.99);
+  box-shadow: none;
+}
+
+.c0:focus {
+  outline: solid 1px hsl(210,55%,55%);
+}
+
+<button
+  className="c0"
+>
+  Текст на кнопке
+</button>
+`;
+
+exports[`Storyshots Components/Button Большая 1`] = `
+.c0 {
+  position: relative;
+  z-index: 0;
+  overflow: hidden;
+  cursor: pointer;
+  font-size: 20px;
+  font-weight: bold;
+  line-height: 24px;
+  padding: 20px 32px;
+  color: hsl(210,55%,20%);
+  border: 0;
+  background: hsl(210,80%,95%);
+  box-shadow: 0 2px 4px hsl(210,12%,33%);
+}
+
+.c0:hover {
+  background: hsl(210,55%,80%);
+}
+
+.c0:disabled {
+  color: hsl(210,12%,58%);
+  background: hsl(210,20%,97%);
+  box-shadow: inset 0 0px 2px hsl(210,12%,33%);
+}
+
+.c0:active {
+  -webkit-transform: scale(0.99);
+  -ms-transform: scale(0.99);
+  transform: scale(0.99);
+  box-shadow: none;
+}
+
+.c0:focus {
+  outline: solid 1px hsl(210,55%,55%);
+}
+
+<button
+  className="c0"
+  size="big"
+>
+  Большая кнопка
+</button>
+`;
+
+exports[`Storyshots Components/Button Во время выполнения действия 1`] = `
+.c0 {
+  position: relative;
+  z-index: 0;
+  overflow: hidden;
+  cursor: pointer;
+  font-size: 14px;
+  font-weight: 500;
+  line-height: 24px;
+  padding: 4px 16px;
+  color: hsl(210,55%,20%);
+  border: 0;
+  background: transparent;
+}
+
+.c0:hover {
+  background: transparent;
+}
+
+.c0:disabled {
+  color: hsl(210,12%,58%);
+  background: hsl(210,20%,97%);
+  box-shadow: inset 0 0px 2px hsl(210,12%,33%);
+}
+
+.c0:active {
+  -webkit-transform: scale(0.99);
+  -ms-transform: scale(0.99);
+  transform: scale(0.99);
+  box-shadow: none;
+}
+
+.c0:focus {
+  outline: solid 1px hsl(210,55%,55%);
+}
+
+.c1 {
+  position: absolute;
+  top: 0;
+  left: -20px;
+  right: 0;
+  bottom: 0;
+  z-index: -1;
+  box-shadow: inset 0 1px 2px hsl(210,12%,33%);
+  background: linear-gradient( -45deg,hsl(210,55%,80%) 25%,hsl(210,80%,95%) 25%,hsl(210,80%,95%) 50%,hsl(210,55%,80%) 50%,hsl(210,55%,80%) 75%,hsl(210,80%,95%) 75%,hsl(210,80%,95%) ) 0 0 / 20px 20px;
+  -webkit-animation: move-bg 1s linear infinite;
+  animation: move-bg 1s linear infinite;
+}
+
+<button
+  className="c0"
+>
+  <div
+    className="c1"
+  />
+  Загружается...
+</button>
+`;
+
+exports[`Storyshots Components/Button Главная 1`] = `
+.c0 {
+  position: relative;
+  z-index: 0;
+  overflow: hidden;
+  cursor: pointer;
+  font-size: 14px;
+  font-weight: 500;
+  line-height: 24px;
+  padding: 4px 16px;
+  color: white;
+  border: 0;
+  background: hsl(210,55%,55%);
+  box-shadow: 0 1px 2px hsl(210,12%,33%);
+}
+
+.c0:hover {
+  background: hsl(210,55%,35%);
+}
+
+.c0:disabled {
+  color: hsl(210,12%,58%);
+  background: hsl(210,20%,97%);
+  box-shadow: inset 0 0px 2px hsl(210,12%,33%);
+}
+
+.c0:active {
+  -webkit-transform: scale(0.99);
+  -ms-transform: scale(0.99);
+  transform: scale(0.99);
+  box-shadow: none;
+}
+
+.c0:focus {
+  outline: solid 1px hsl(210,55%,20%);
+}
+
+<button
+  className="c0"
+  kind="primary"
+>
+  Привет
+</button>
+`;
+
+exports[`Storyshots Components/Button Маленькая 1`] = `
+.c0 {
+  position: relative;
+  z-index: 0;
+  overflow: hidden;
+  cursor: pointer;
+  font-size: 12px;
+  font-weight: 500;
+  line-height: 24px;
+  padding: 0 8px;
+  color: hsl(210,55%,20%);
+  border: 0;
+  background: hsl(210,80%,95%);
+  box-shadow: 0 1px 1px hsl(210,12%,33%);
+}
+
+.c0:hover {
+  background: hsl(210,55%,80%);
+}
+
+.c0:disabled {
+  color: hsl(210,12%,58%);
+  background: hsl(210,20%,97%);
+  box-shadow: inset 0 0px 2px hsl(210,12%,33%);
+}
+
+.c0:active {
+  -webkit-transform: scale(0.99);
+  -ms-transform: scale(0.99);
+  transform: scale(0.99);
+  box-shadow: none;
+}
+
+.c0:focus {
+  outline: solid 1px hsl(210,55%,55%);
+}
+
+<button
+  className="c0"
+>
+  Привет
+</button>
+`;
+
+exports[`Storyshots Components/Button Неактивная 1`] = `
+.c0 {
+  position: relative;
+  z-index: 0;
+  overflow: hidden;
+  cursor: pointer;
+  font-size: 14px;
+  font-weight: 500;
+  line-height: 24px;
+  padding: 4px 16px;
+  color: hsl(210,55%,20%);
+  border: 0;
+  background: hsl(210,80%,95%);
+  box-shadow: 0 1px 2px hsl(210,12%,33%);
+}
+
+.c0:hover {
+  background: hsl(210,55%,80%);
+}
+
+.c0:disabled {
+  color: hsl(210,12%,58%);
+  background: hsl(210,20%,97%);
+  box-shadow: inset 0 0px 2px hsl(210,12%,33%);
+}
+
+.c0:active {
+  -webkit-transform: scale(0.99);
+  -ms-transform: scale(0.99);
+  transform: scale(0.99);
+  box-shadow: none;
+}
+
+.c0:focus {
+  outline: solid 1px hsl(210,55%,55%);
+}
+
+<button
+  className="c0"
+  disabled={true}
+>
+  Нельзя нажать
+</button>
+`;

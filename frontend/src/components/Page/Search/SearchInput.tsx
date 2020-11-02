@@ -2,7 +2,7 @@ import { useEffect, useRef } from 'react';
 import { FaSearch } from 'react-icons/fa';
 import styled, { css } from 'styled-components';
 
-import { colors } from '@kocherga/frontkit';
+import { colors } from '~/frontkit';
 
 const Container = styled.div`
   position: relative;

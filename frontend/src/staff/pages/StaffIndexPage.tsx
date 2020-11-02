@@ -1,7 +1,7 @@
 import Link from 'next/link';
 
 import { useQuery } from '@apollo/client';
-import { A, Column } from '@kocherga/frontkit';
+import { A, Column } from '~/frontkit';
 
 import { NextApolloPage, withApollo, withStaff } from '~/apollo';
 import { ApolloQueryResults, Page } from '~/components';

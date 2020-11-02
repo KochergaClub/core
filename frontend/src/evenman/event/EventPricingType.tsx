@@ -1,5 +1,5 @@
 import { useMutation } from '@apollo/client';
-import { colors, Column, Row } from '@kocherga/frontkit';
+import { colors, Column, Row } from '~/frontkit';
 
 import { EvenmanEvent_DetailsFragment, EvenmanUpdateDocument } from './queries.generated';
 

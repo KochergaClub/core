@@ -1,6 +1,6 @@
 import { RefObject } from 'react';
 
-import { A } from '@kocherga/frontkit';
+import { A } from '~/frontkit';
 
 import BinaryIndicator from './BinaryIndicator';
 import EditableString from './EditableString';

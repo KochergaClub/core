@@ -3,7 +3,7 @@ import { MdClose } from 'react-icons/md';
 import styled from 'styled-components';
 
 import { gql, useQuery } from '@apollo/client';
-import { colors, deviceMediaQueries, fonts } from '@kocherga/frontkit';
+import { colors, deviceMediaQueries, fonts } from '~/frontkit';
 
 import { SpecialOfferDocument } from './SpecialOffer.generated';
 

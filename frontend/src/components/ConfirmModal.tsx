@@ -1,6 +1,6 @@
-import React, { useState, useCallback } from 'react';
+import React, { useCallback, useState } from 'react';
 
-import { Button, Modal, ControlsFooter } from '@kocherga/frontkit';
+import { Button, ControlsFooter, Modal } from '~/frontkit';
 
 interface Props {
   yes: string;
@@ -20,7 +20,7 @@ const ConfirmModal: React.FC<Props> = ({ yes, no, act, close, children }) => {
 
   return (
     <Modal>
-      <Modal.Header toggle={close}>Подтвердите</Modal.Header>
+      <Modal.Header close={close}>Подтвердите</Modal.Header>
       <Modal.Body>{children}</Modal.Body>
       <Modal.Footer>
         <ControlsFooter>

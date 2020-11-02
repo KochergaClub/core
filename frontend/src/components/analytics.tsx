@@ -5,8 +5,8 @@ const VK_RETARGETING_ID = process.env.NEXT_PUBLIC_VK_RETARGETING_ID;
 
 declare global {
   interface Window {
-    gtag: any;
-    ym: any;
+    gtag: (...args: unknown[]) => unknown;
+    ym: (...args: unknown[]) => unknown;
   }
 }
 

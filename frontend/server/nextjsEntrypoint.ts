@@ -14,12 +14,5 @@ export default (nextApp: Server) => async (
     res.header('Access-Control-Allow-Origin', '*');
   }
 
-  if (parsedUrl.query.ssr === '1') {
-    return nextApp.getRequestHandler()(
-      req,
-      res,
-      parse('/ssr' + parsedUrl.pathname, true)
-    );
-  }
   return nextApp.getRequestHandler()(req, res, parsedUrl);
 };

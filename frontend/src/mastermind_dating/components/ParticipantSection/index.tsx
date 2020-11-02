@@ -3,7 +3,7 @@ import { useState } from 'react';
 import Toggle from 'react-toggle';
 
 import { useMutation } from '@apollo/client';
-import { Column, Row } from '@kocherga/frontkit';
+import { Column, Row } from '~/frontkit';
 
 import { staticUrl } from '~/common/utils';
 import { AsyncButton } from '~/components';

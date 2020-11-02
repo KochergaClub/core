@@ -1,0 +1,180 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Storyshots Общее/Текст RichText 1`] = `
+.c1 {
+  margin: 32px 0;
+  height: 1px;
+  border: 0;
+  border-top: 1px solid hsl(210,12%,92%);
+}
+
+.c0 {
+  word-wrap: break-word;
+}
+
+.c0 a {
+  color: hsl(210,80%,50%);
+  -webkit-text-decoration: none;
+  text-decoration: none;
+}
+
+.c0 a:hover {
+  -webkit-text-decoration: underline;
+  text-decoration: underline;
+}
+
+.c0 hr {
+  margin: 32px 0;
+  height: 1px;
+  border: 0;
+  border-top: 1px solid hsl(210,12%,92%);
+}
+
+.c0 img {
+  max-width: 100%;
+  height: auto;
+}
+
+.c0 .responsive-object {
+  position: relative;
+}
+
+.c0 .responsive-object iframe,
+.c0 .responsive-object object,
+.c0 .responsive-object embed {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+}
+
+<div
+  className="c0"
+>
+  <p>
+    Внутри RichText автоматически работают кастомные стили
+     
+    <a
+      href="http://example.com"
+    >
+      для ссылок
+    </a>
+    .
+  </p>
+  <hr
+    className="c1"
+  />
+  <p>
+    И для горизонтальных линий.
+  </p>
+</div>
+`;
+
+exports[`Storyshots Общее/Текст Горизонтальная черта 1`] = `
+Array [
+  <div>
+    Текст над чертой (в div).
+  </div>,
+  .c0 {
+  margin: 32px 0;
+  height: 1px;
+  border: 0;
+  border-top: 1px solid hsl(210,12%,92%);
+}
+
+<hr
+    className="c0"
+  />,
+  <div>
+    Текст под чертой (в div).
+  </div>,
+  <p>
+    Теперь тест отступа вокруг черты для параграфов. Этот текст в параграфе над чертой.
+  </p>,
+  .c0 {
+  margin: 32px 0;
+  height: 1px;
+  border: 0;
+  border-top: 1px solid hsl(210,12%,92%);
+}
+
+<hr
+    className="c0"
+  />,
+  <p>
+    А это текст в параграфе под чертой.
+  </p>,
+]
+`;
+
+exports[`Storyshots Общее/Текст Параграфы 1`] = `
+<section>
+  <p>
+    Рационалисты, как известно, любят мету. Мета-уровень (от греческого "после" или "за пределами") — это уровень осмысления, выходящий за рамки объектного.
+  </p>
+  <p>
+    Например, если разговор о моральных поступках можно считать объектным уровнем обсуждения, на котором речь идёт о конкретных действиях (зачастую в рамках конкретной морально-этической системы), то мета-обсуждением был бы диалог о различных моральных взглядах и выборе между ними. Другими словами, мы выходим за пределы конкретной системы и получаем возможность рассматривать её во всей полноте, а также сравнивать с другими системами, оценивать их плюсы и минусы.
+  </p>
+  <p>
+    Можно выйти на уровень ещё выше и разбирать саму концепцию моральной системы и то, насколько наше текущее понимание этой концепции основывается на здравых предпосылках (существует целый раздел философии, занимающийся такими вопросами: мета-этика).
+  </p>
+</section>
+`;
+
+exports[`Storyshots Общее/Текст Список 1`] = `
+<section>
+  <p>
+    Текст до списка.
+  </p>
+  <ul>
+    <li>
+      Элемент 1
+    </li>
+    <li>
+      Элемент 2
+    </li>
+    <li>
+      Элемент 3
+    </li>
+  </ul>
+  <p>
+    Текст после списка.
+  </p>
+</section>
+`;
+
+exports[`Storyshots Общее/Текст Ссылка 1`] = `
+Array [
+  .c0 {
+  color: hsl(210,80%,50%);
+  -webkit-text-decoration: none;
+  text-decoration: none;
+}
+
+.c0:hover {
+  -webkit-text-decoration: underline;
+  text-decoration: underline;
+}
+
+<div>
+    Ссылки выглядят так: 
+    <a
+      className="c0"
+      href="https://kocherga.club"
+    >
+      Кочерга
+    </a>
+    .
+  </div>,
+  <div>
+    При этом не стилизируются по умолчанию (
+    <a
+      href="https://kocherga.club"
+    >
+      пример
+    </a>
+    ).
+  </div>,
+]
+`;

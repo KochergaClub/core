@@ -1,7 +1,8 @@
+import { NextComponentType } from 'next';
+
 import { ApolloClient } from '@apollo/client';
 import { NormalizedCacheObject } from '@apollo/client/cache';
 
-import { NextComponentType } from 'next';
 import { NextPageContext } from '~/common/types';
 
 export type KochergaApolloClient = ApolloClient<NormalizedCacheObject>;
@@ -11,8 +12,7 @@ export type NextApolloPageContext = NextPageContext & {
   apolloClient: KochergaApolloClient;
 };
 
-export type NextApolloPage<P extends {} = {}, IP = P> = NextComponentType<
-  NextApolloPageContext,
-  IP,
-  P
->;
+export type NextApolloPage<
+  P = Record<string, unknown>,
+  IP = P
+> = NextComponentType<NextApolloPageContext, IP, P>;

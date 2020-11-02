@@ -1,7 +1,7 @@
 import styled from 'styled-components';
 import { parseISO } from 'date-fns';
 
-import { colors, Column } from '@kocherga/frontkit';
+import { colors, Column } from '~/frontkit';
 
 import { staticUrl } from '~/common/utils';
 

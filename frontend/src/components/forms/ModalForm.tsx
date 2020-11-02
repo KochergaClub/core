@@ -1,9 +1,8 @@
 import { Form, Formik, FormikHelpers } from 'formik';
 import { useCallback, useMemo, useState } from 'react';
 
-import { Button, Column, ControlsFooter, Modal } from '@kocherga/frontkit';
-
 import { useCommonHotkeys, useFocusOnFirstModalRender } from '~/common/hooks';
+import { Button, Column, ControlsFooter, Modal } from '~/frontkit';
 
 import AnyFieldWidget from './AnyFieldWidget';
 import ErrorLabel from './BasicFieldWidget/ErrorLabel'; // TODO - move ErrorLabel to one level up
@@ -204,8 +203,8 @@ function ModalForm<Values extends AnyFormValues>({
   });
 
   return (
-    <Modal isOpen={true}>
-      <Modal.Header toggle={close}>{modalTitle}</Modal.Header>
+    <Modal>
+      <Modal.Header close={close}>{modalTitle}</Modal.Header>
       <Formik
         initialValues={preparedInitialValues}
         onSubmit={submit}

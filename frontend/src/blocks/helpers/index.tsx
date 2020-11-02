@@ -1,6 +1,6 @@
 import styled from 'styled-components';
 
-import { colors } from '@kocherga/frontkit';
+import { colors } from '~/frontkit';
 
 export const Container = styled.div<{ grey?: boolean }>`
   background-color: ${props => (props.grey ? colors.grey[100] : 'inherit')};

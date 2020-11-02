@@ -1,7 +1,7 @@
 import styled from 'styled-components';
 
 import { gql } from '@apollo/client';
-import { colors, fonts } from '@kocherga/frontkit';
+import { colors, fonts } from '~/frontkit';
 
 import SocialIcons from '~/components/Page/PageMenu/SocialIcons';
 

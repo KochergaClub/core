@@ -2,7 +2,7 @@ import { formatDistanceToNow, parseISO } from 'date-fns';
 import { ru } from 'date-fns/locale';
 
 import { useMutation } from '@apollo/client';
-import { Column, Row } from '@kocherga/frontkit';
+import { Column, Row } from '~/frontkit';
 
 import { formatDate } from '~/common/utils';
 

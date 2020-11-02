@@ -1,5 +1,5 @@
 import { useCallback, useState } from 'react';
-import { A } from '@kocherga/frontkit';
+import { A } from '~/frontkit';
 
 import { usePermissions } from '~/common/hooks';
 

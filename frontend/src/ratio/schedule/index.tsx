@@ -2,7 +2,7 @@ import { useCallback, useState } from 'react';
 import styled from 'styled-components';
 
 import { useMutation } from '@apollo/client';
-import { A, Column, Row } from '@kocherga/frontkit';
+import { A, Column, Row } from '~/frontkit';
 
 import { staticUrl } from '~/common/utils';
 

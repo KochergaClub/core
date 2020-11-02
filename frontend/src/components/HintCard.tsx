@@ -1,6 +1,6 @@
 import styled from 'styled-components';
 
-import { colors, fonts } from '@kocherga/frontkit';
+import { colors, fonts } from '~/frontkit';
 
 const HintCard = styled.div`
   border: 1px solid ${colors.grey[300]};

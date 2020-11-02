@@ -1,14 +1,13 @@
 import { useCallback, useState } from 'react';
 import styled from 'styled-components';
 
-import { Button, Column, ControlsFooter, Input, Label, Modal } from '@kocherga/frontkit';
-
 import { useCommonHotkeys, useFocusOnFirstModalRender, useNotification } from '~/common/hooks';
+import { Button, Column, ControlsFooter, Input, Label, Modal } from '~/frontkit';
 
 import { Defaults } from './types';
 
 interface Props {
-  toggle: () => void;
+  close: () => void;
   save: (params: {
     url: string;
     title: string;
@@ -22,7 +21,7 @@ const WideInput = styled(Input)`
 `;
 
 // TODO - formik
-const UploadFromUrlModal: React.FC<Props> = ({ toggle, save, defaults }) => {
+const UploadFromUrlModal: React.FC<Props> = ({ close, save, defaults }) => {
   const [acting, setActing] = useState(false);
 
   const [url, setUrl] = useState('');
@@ -54,11 +53,11 @@ const UploadFromUrlModal: React.FC<Props> = ({ toggle, save, defaults }) => {
   }, [save, notify, url, title, basename]);
 
   const focus = useFocusOnFirstModalRender();
-  const hotkeys = useCommonHotkeys({ onEnter: submit, onEscape: toggle });
+  const hotkeys = useCommonHotkeys({ onEnter: submit, onEscape: close });
 
   return (
     <Modal>
-      <Modal.Header toggle={toggle}>Ссылка на страницу</Modal.Header>
+      <Modal.Header close={close}>Ссылка на страницу</Modal.Header>
       <Modal.Body {...hotkeys}>
         <Column stretch>
           <div>

@@ -4,12 +4,22 @@ from django.dispatch import receiver
 from django.core.mail import send_mail
 from django.db.models.signals import post_save
 from django.template.loader import render_to_string
+from django.core.exceptions import ValidationError
 
 import markdown
 from html2text import html2text
 import hashlib
 
 from .training import Training
+
+
+class TicketManager(models.Manager):
+    def create(self, **kwargs):
+        ticket = Ticket(**kwargs)
+        ticket.full_clean()
+        ticket.save()
+
+        return ticket
 
 
 class Ticket(models.Model):
@@ -47,45 +57,15 @@ class Ticket(models.Model):
             ('staff', 'Стафф'),
             ('replacement', 'Замена (заменяет другого участника)'),
             ('carry-over', 'Перенос (с прошлого мероприятия)'),
-        ),
-    )
-
-    # deprecated, moved to Payment
-    payment_type = models.CharField(
-        'Вид оплаты',
-        max_length=40,
-        blank=True,
-        default='website',
-        choices=(
-            ('none', '-'),
-            ('timepad', 'Timepad'),
-            ('website', 'Сайт'),
-            ('crowdfunding', 'Краудфандинг'),
-            ('cash', 'Нал'),
-            ('invoice', 'Счёт'),
-            ('transfer', 'Перевод'),
+            ('free-repeat', 'Бесплатный повтор'),
         ),
     )
 
     payment_amount = models.IntegerField('Размер оплаты')
 
-    # deprecated, should be calculated based on payment_amount - sum(payments.amount)
-    paid = models.BooleanField('Оплачено', default=False)
-
-    # deprecated, moved to Payment
-    fiscalization_status = models.CharField(
-        'Статус фискального чека',
-        max_length=40,
-        blank=True,
-        choices=(
-            ('todo', 'todo'),
-            ('not_needed', 'not_needed'),
-            ('in_progress', 'in_progress'),
-            ('fiscalized', 'fiscalized'),
-        ),
-    )
-
     comment = models.TextField(blank=True)
+
+    notion_link = models.URLField(blank=True)
 
     class Meta:
         verbose_name = 'Участник'
@@ -102,9 +82,6 @@ class Ticket(models.Model):
         SALT = settings.KOCHERGA_MAILCHIMP_UID_SALT.encode()
         return hashlib.sha1(SALT + self.email.lower().encode()).hexdigest()[:10]
 
-    def fiscalize(self):
-        raise Exception("Use Payment.fiscalize() instead")
-
 
 @receiver(post_save, sender=Ticket)
 def first_email(sender, instance, created, **kwargs):
@@ -112,16 +89,4 @@ def first_email(sender, instance, created, **kwargs):
         return
 
     # TODO - notify consumer for async
-    html_message = markdown.markdown(
-        render_to_string(
-            'ratio/email/new_ticket.md',
-            {"ticket": instance, "training": instance.training},
-        )
-    )
-    send_mail(
-        subject='Регистрация на событие',
-        from_email='Кочерга <workshop@kocherga-club.ru>',
-        html_message=html_message,
-        message=html2text(html_message),
-        recipient_list=[instance.email],
-    )
+    instance.training.send_new_ticket_email(instance)

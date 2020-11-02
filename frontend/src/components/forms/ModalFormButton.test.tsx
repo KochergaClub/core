@@ -13,8 +13,10 @@ it('renders without crashing', async () => {
       optional: true,
     },
   ];
-  let posted: any;
-  const post = async (v: any) => {
+
+  type FormValues = { foo: string };
+  let posted: FormValues | undefined;
+  const post = async (v: FormValues) => {
     posted = v;
   };
   const { getByText, queryByText } = render(

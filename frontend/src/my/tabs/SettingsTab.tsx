@@ -1,4 +1,4 @@
-import { HR } from '@kocherga/frontkit';
+import { HR } from '~/frontkit';
 import SetNames from '../components/SetNames';
 import SetPassword from '../components/SetPassword';
 import PrivacySettings from '../components/PrivacySettings';

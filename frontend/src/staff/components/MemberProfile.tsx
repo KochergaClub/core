@@ -2,7 +2,7 @@ import { useCallback } from 'react';
 import styled from 'styled-components';
 
 import { useMutation, useQuery } from '@apollo/client';
-import { A, Column, Row } from '@kocherga/frontkit';
+import { A, Column, Row } from '~/frontkit';
 
 import { usePermissions } from '~/common/hooks';
 import { ApolloQueryResults, AsyncButton, AsyncButtonWithConfirm } from '~/components';

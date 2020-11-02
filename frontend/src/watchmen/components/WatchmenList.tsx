@@ -4,7 +4,7 @@ import { FaEdit } from 'react-icons/fa';
 import styled from 'styled-components';
 
 import { useMutation, useQuery } from '@apollo/client';
-import { A, Button, Label, Row } from '@kocherga/frontkit';
+import { A, Button, Label, Row } from '~/frontkit';
 
 import { usePermissions } from '~/common/hooks';
 import { ApolloQueryResults, AsyncButton } from '~/components';

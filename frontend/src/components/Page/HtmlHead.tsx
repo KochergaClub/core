@@ -27,7 +27,9 @@ const HtmlHead: React.FC<Props> = ({
 
   return (
     <Head>
-      <title>{title}</title>
+      {/* Note key="title" trick, this allows overriding title in nested components; see https://nextjs.org/docs/api-reference/next/head for details.
+      For some reason overriding title works even without setting the correct `key`, but we don't want to rely on accidental undocumented features. */}
+      <title key="title">{title}</title>
       <meta property="og:title" content={og ? og.title || title : title} />
       <meta
         property="og:image"

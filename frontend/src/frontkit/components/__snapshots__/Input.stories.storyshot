@@ -1,0 +1,196 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Storyshots Components/Input Basic 1`] = `
+.c0 {
+  padding: 0 6px;
+  height: 32px;
+  border: 2px solid hsl(210,55%,80%);
+  line-height: 1;
+  font-size: 16px;
+}
+
+.c0:focus {
+  border: solid 2px hsl(210,55%,55%);
+  outline: none;
+  background-color: hsl(210,80%,95%);
+}
+
+.c0::-webkit-input-placeholder {
+  color: hsl(210,12%,70%);
+}
+
+.c0::-moz-placeholder {
+  color: hsl(210,12%,70%);
+}
+
+.c0:-ms-input-placeholder {
+  color: hsl(210,12%,70%);
+}
+
+.c0::placeholder {
+  color: hsl(210,12%,70%);
+}
+
+<input
+  className="c0"
+  placeholder="Введите текст"
+  type="text"
+/>
+`;
+
+exports[`Storyshots Components/Input Большое текстовое поле 1`] = `
+.c0 {
+  padding: 0 10px;
+  height: 48px;
+  border: 2px solid hsl(210,55%,80%);
+  line-height: 1;
+  font-size: 24px;
+}
+
+.c0:focus {
+  border: solid 2px hsl(210,55%,55%);
+  outline: none;
+  background-color: hsl(210,80%,95%);
+}
+
+.c0::-webkit-input-placeholder {
+  color: hsl(210,12%,70%);
+}
+
+.c0::-moz-placeholder {
+  color: hsl(210,12%,70%);
+}
+
+.c0:-ms-input-placeholder {
+  color: hsl(210,12%,70%);
+}
+
+.c0::placeholder {
+  color: hsl(210,12%,70%);
+}
+
+<input
+  className="c0"
+  placeholder="Введите важный текст"
+  scale="big"
+  type="text"
+/>
+`;
+
+exports[`Storyshots Components/Input Несколько полей 1`] = `
+.c1 {
+  padding: 0 6px;
+  height: 32px;
+  border: 2px solid hsl(210,55%,80%);
+  line-height: 1;
+  font-size: 16px;
+}
+
+.c1:focus {
+  border: solid 2px hsl(210,55%,55%);
+  outline: none;
+  background-color: hsl(210,80%,95%);
+}
+
+.c1::-webkit-input-placeholder {
+  color: hsl(210,12%,70%);
+}
+
+.c1::-moz-placeholder {
+  color: hsl(210,12%,70%);
+}
+
+.c1:-ms-input-placeholder {
+  color: hsl(210,12%,70%);
+}
+
+.c1::placeholder {
+  color: hsl(210,12%,70%);
+}
+
+.c0 {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-flex-direction: column;
+  -ms-flex-direction: column;
+  flex-direction: column;
+  -webkit-align-items: flex-start;
+  -webkit-box-align: flex-start;
+  -ms-flex-align: flex-start;
+  align-items: flex-start;
+}
+
+.c0 > * + * {
+  margin-top: 4px;
+}
+
+<div
+  className="c0"
+>
+  <input
+    className="c1"
+    placeholder="Поле 1"
+    type="text"
+  />
+  <input
+    className="c1"
+    placeholder="Поле 2"
+    type="text"
+  />
+</div>
+`;
+
+exports[`Storyshots Components/Input Текстовое поле с меткой 1`] = `
+.c1 {
+  padding: 0 6px;
+  height: 32px;
+  border: 2px solid hsl(210,55%,80%);
+  line-height: 1;
+  font-size: 16px;
+}
+
+.c1:focus {
+  border: solid 2px hsl(210,55%,55%);
+  outline: none;
+  background-color: hsl(210,80%,95%);
+}
+
+.c1::-webkit-input-placeholder {
+  color: hsl(210,12%,70%);
+}
+
+.c1::-moz-placeholder {
+  color: hsl(210,12%,70%);
+}
+
+.c1:-ms-input-placeholder {
+  color: hsl(210,12%,70%);
+}
+
+.c1::placeholder {
+  color: hsl(210,12%,70%);
+}
+
+.c0 {
+  display: block;
+  font-size: 14px;
+  font-weight: 500;
+  line-height: 1.2;
+  color: hsl(210,12%,43%);
+}
+
+<div>
+  <label
+    className="c0"
+  >
+    Метка:
+  </label>
+  <input
+    className="c1"
+    placeholder="Введите текст"
+    type="text"
+  />
+</div>
+`;

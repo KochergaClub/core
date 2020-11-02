@@ -1,6 +1,6 @@
 import { useCallback, useState } from 'react';
 
-import { Button, ControlsFooter, Modal } from '@kocherga/frontkit';
+import { Button, ControlsFooter, Modal } from '~/frontkit';
 
 interface Props {
   act: () => Promise<void>;
@@ -48,8 +48,8 @@ const AsyncButtonWithConfirm = ({
         {children}
       </Button>
       {confirming && (
-        <Modal isOpen={confirming}>
-          <Modal.Header toggle={closeConfirm}>
+        <Modal>
+          <Modal.Header close={closeConfirm}>
             {headerText ?? 'Точно?'}
           </Modal.Header>
           <Modal.Body>{confirmText}</Modal.Body>

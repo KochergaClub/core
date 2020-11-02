@@ -1,27 +1,17 @@
-import { useEffect } from 'react';
+import { addDays, isEqual, startOfDay } from 'date-fns';
 import styled from 'styled-components';
 
-import { addDays, isEqual, startOfDay } from 'date-fns';
-
-import useResizeAware from 'react-resize-aware';
-
-import { colors } from '@kocherga/frontkit';
 import { formatDate } from '~/common/utils';
+import { colors } from '~/frontkit';
 
 const borderColor = colors.grey[200];
 
-const weekDates = (firstDay: Date) => [
-  firstDay,
-  addDays(firstDay, 1),
-  addDays(firstDay, 2),
-  addDays(firstDay, 3),
-  addDays(firstDay, 4),
-  addDays(firstDay, 5),
-  addDays(firstDay, 6),
-];
+const weekDates = (firstDay: Date) =>
+  Array.from(Array(7).keys()).map((delta) => addDays(firstDay, delta));
 
 const Container = styled.div`
   position: relative;
+  height: 100%;
   display: grid;
   grid-template-columns: repeat(7, 1fr);
 
@@ -33,6 +23,9 @@ const Container = styled.div`
 const Cell = styled.div<{ today: boolean }>`
   overflow: hidden;
   border-bottom: 1px solid ${borderColor};
+  display: flex;
+  flex-direction: column;
+  height: 100%;
 
   .CalendarCell--OnHover {
     visibility: hidden;
@@ -45,15 +38,19 @@ const Cell = styled.div<{ today: boolean }>`
 
   & > header {
     text-align: right;
-    background-color: ${props =>
+    background-color: ${(props) =>
       props.today ? colors.grey[700] : colors.grey[400]};
-    font-weight: ${props => (props.today ? 'bold' : 'normal')};
+    font-weight: ${(props) => (props.today ? 'bold' : 'normal')};
     padding: 2px 4px;
     color: white;
     font-size: 0.8em;
   }
 
   & > div {
+    flex: 1;
+    display: flex;
+    justify-content: stretch;
+    align-items: stretch;
     overflow: hidden;
     white-space: nowrap;
   }
@@ -63,24 +60,11 @@ interface Props {
   firstDay: Date;
   renderCell: (date: Date) => React.ReactNode;
   renderHeader?: (date: Date) => React.ReactNode;
-  setHeight: (date: Date, height: number) => void;
 }
 
-const Week: React.FC<Props> = ({
-  firstDay,
-  renderCell,
-  renderHeader,
-  setHeight,
-}) => {
-  const [resizeListener, sizes] = useResizeAware();
-
-  useEffect(() => {
-    setHeight(firstDay, sizes.height);
-  }, [firstDay, sizes.height, setHeight]);
-
+const Week: React.FC<Props> = ({ firstDay, renderCell, renderHeader }) => {
   return (
     <Container>
-      {resizeListener}
       {weekDates(firstDay).map((day, i) => {
         const today = isEqual(day, startOfDay(new Date()));
 

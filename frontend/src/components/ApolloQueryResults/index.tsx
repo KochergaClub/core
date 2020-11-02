@@ -1,7 +1,6 @@
 import { ApolloError } from '@apollo/client';
 
 import Spinner, { Size } from '../Spinner';
-
 import ErrorCard from './ErrorCard';
 
 interface Props<D> {
@@ -10,10 +9,7 @@ interface Props<D> {
   error?: ApolloError;
   data?: NonNullable<D>;
   size?: Size;
-  children: ({
-    data,
-    loading,
-  }: {
+  children: (params: {
     data: NonNullable<D>;
     loading: boolean;
   }) => React.ReactElement | null;

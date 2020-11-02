@@ -1,7 +1,7 @@
 import { GetStaticProps } from 'next';
 import dynamic from 'next/dynamic';
 
-import { A } from '@kocherga/frontkit';
+import { A } from '~/frontkit';
 
 import { NextApolloPage, withApollo } from '~/apollo';
 import { apolloClientForStaticProps } from '~/apollo/client';

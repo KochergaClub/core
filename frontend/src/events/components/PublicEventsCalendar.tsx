@@ -10,7 +10,7 @@ import ruLocale from '@fullcalendar/core/locales/ru';
 import dayGridPlugin from '@fullcalendar/daygrid';
 import listPlugin from '@fullcalendar/list';
 import FullCalendar from '@fullcalendar/react';
-import { A, colors, deviceMediaQueries } from '@kocherga/frontkit';
+import { A, colors, deviceMediaQueries } from '~/frontkit';
 
 import { formatDate } from '~/common/utils';
 import { AlertCard, ApolloQueryResults, PaddedBlock } from '~/components';

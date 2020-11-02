@@ -1,4 +1,4 @@
-import { Label } from '@kocherga/frontkit';
+import { Label } from '~/frontkit';
 
 import AnyFieldWidget from './AnyFieldWidget';
 import { AnyFormValues, ShapeFormField } from './types';

@@ -1,6 +1,6 @@
 import styled from 'styled-components';
 
-import { Column } from '@kocherga/frontkit';
+import { Column } from '~/frontkit';
 
 import EventPrototypeAdd from './EventPrototypeAdd';
 import EventPrototypeList from './EventPrototypeList';

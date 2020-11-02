@@ -1,6 +1,6 @@
 import styled from 'styled-components';
 
-import { colors } from '@kocherga/frontkit';
+import { colors } from '~/frontkit';
 
 export const Table = styled.table`
   border-collapse: collapse;

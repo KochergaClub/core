@@ -1,11 +1,8 @@
+import { AnimatePresence, motion } from 'framer-motion';
 import React, { forwardRef } from 'react';
-import { CSSTransition } from 'react-transition-group';
 import styled from 'styled-components';
 
-const animationTimeout = 250;
-const animationClass = 'transition';
-
-const FloatingListDiv = styled.div`
+const FloatingListDiv = styled(motion.div)`
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.4);
   user-select: none;
   border-radius: 4px;
@@ -15,24 +12,6 @@ const FloatingListDiv = styled.div`
   overflow: hidden; // necessary to avoid broken corners when items are hovered
   background-color: white;
   cursor: pointer;
-
-  &.${animationClass}-enter {
-    opacity: 0;
-  }
-
-  &.${animationClass}-enter-active {
-    opacity: 1;
-    transition: opacity ${animationTimeout}ms ease-in-out;
-  }
-
-  &.${animationClass}-exit {
-    opacity: 1;
-  }
-
-  &.${animationClass}-exit-active {
-    opacity: 0;
-    transition: opacity ${animationTimeout}ms ease-in-out;
-  }
 `;
 
 interface Props {
@@ -46,18 +25,21 @@ const FloatingList: React.ForwardRefRenderFunction<
   HTMLDivElement,
   React.PropsWithChildren<Props>
 > = ({ children, expanded, style, attributes }, ref) => (
-  <CSSTransition
-    appear={true}
-    mountOnEnter={true}
-    unmountOnExit={true}
-    in={expanded}
-    timeout={animationTimeout}
-    classNames={animationClass}
-  >
-    <FloatingListDiv ref={ref} style={style} {...attributes}>
-      {children}
-    </FloatingListDiv>
-  </CSSTransition>
+  <AnimatePresence>
+    {expanded && (
+      <FloatingListDiv
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        exit={{ opacity: 0 }}
+        transition={{ duration: 0.25 }}
+        ref={ref}
+        style={style}
+        {...attributes}
+      >
+        {children}
+      </FloatingListDiv>
+    )}
+  </AnimatePresence>
 );
 
 export default forwardRef(FloatingList);

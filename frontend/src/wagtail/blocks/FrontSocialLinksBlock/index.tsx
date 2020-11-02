@@ -1,5 +1,5 @@
 import { gql } from '@apollo/client';
-import { Row } from '@kocherga/frontkit';
+import { Row } from '~/frontkit';
 
 import { PaddedBlock } from '~/components';
 import FbIcon from '~/components/icons/FbIcon';

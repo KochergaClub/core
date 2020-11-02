@@ -1,7 +1,14 @@
 query WagtailPageType($path: String, $preview_token: String) {
-  wagtailPage(path: $path, preview_token: $preview_token) {
-    __typename
-    id
+  result: wagtailPageOrPrivate(path: $path, preview_token: $preview_token) {
+    ... on WagtailPageContainer {
+      page {
+        __typename
+        id
+      }
+    }
+    ... on WagtailPagePrivate {
+      message
+    }
   }
 }
 

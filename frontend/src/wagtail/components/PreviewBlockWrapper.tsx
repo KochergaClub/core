@@ -2,9 +2,8 @@ import { useCallback, useState } from 'react';
 import { GoGear } from 'react-icons/go';
 import styled from 'styled-components';
 
-import { Button, colors, ControlsFooter, Modal, Row } from '@kocherga/frontkit';
-
 import { useCommonHotkeys, useFocusOnFirstModalRender } from '~/common/hooks';
+import { Button, colors, ControlsFooter, Modal, Row } from '~/frontkit';
 
 import { AnyBlockFragment } from '../types';
 import ControlledBlockContainer from './ControlledBlockContainer';
@@ -36,7 +35,7 @@ const Dump: React.FC<DumpProps> = ({ block, close }) => {
 
   return (
     <Modal>
-      <Modal.Header toggle={close}>
+      <Modal.Header close={close}>
         {__typename} <small>{id}</small>
       </Modal.Header>
       <Modal.Body {...hotkeys} ref={focus}>

@@ -1,4 +1,4 @@
-import { A, Column } from '@kocherga/frontkit';
+import { A, Column } from '~/frontkit';
 
 import { HintCard } from '~/components';
 import Registration from './Registration';

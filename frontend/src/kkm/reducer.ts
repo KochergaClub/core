@@ -42,22 +42,13 @@ interface CancelConfirmationAction {
   type: 'CANCEL_CONFIRMATION';
 }
 
-interface SetOutcomeAction {
-  type: 'SET_OUTCOME';
-  payload: {
-    result: object;
-    error: object;
-  };
-}
-
 export type Action =
   | SetEmailAction
   | SetTitleAction
   | SetAmountAction
   | SetMethodAction
   | StartConfirmationAction
-  | CancelConfirmationAction
-  | SetOutcomeAction;
+  | CancelConfirmationAction;
 
 export const isChequeValid = (state: State) => {
   return state.cheque.title && state.cheque.email && state.cheque.amount;
@@ -108,12 +99,6 @@ export const reducer = (state: State, action: Action): State => {
     case 'CANCEL_CONFIRMATION':
       return {
         ...state,
-        modalOpen: false,
-      };
-    case 'SET_OUTCOME':
-      return {
-        ...state,
-        outcome: action.payload,
         modalOpen: false,
       };
   }

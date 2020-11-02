@@ -1,6 +1,6 @@
 import { subWeeks, addWeeks, format } from 'date-fns';
 
-import { A, Row } from '@kocherga/frontkit';
+import { A, Row } from '~/frontkit';
 
 import Link from 'next/link';
 

@@ -1,6 +1,6 @@
 import styled from 'styled-components';
 
-import { colors } from '@kocherga/frontkit';
+import { colors } from '~/frontkit';
 
 const borderColor = colors.grey[200];
 

@@ -1,0 +1,49 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Storyshots Layout/ResponsivePadding Basic 1`] = `
+@media (max-width:639px) {
+  .c0 {
+    padding: 0 10px;
+  }
+}
+
+@media (min-width:640px) and (max-width:959px) {
+  .c0 {
+    padding: 0 20px;
+  }
+}
+
+@media (min-width:960px) and (max-width:1199px) {
+  .c0 {
+    padding: 0 40px;
+  }
+}
+
+@media (min-width:1200px) {
+  .c0 {
+    padding: 0 80px;
+  }
+}
+
+<div
+  style={
+    Object {
+      "border": "1px solid black",
+    }
+  }
+>
+  <div
+    className="c0"
+  >
+    <div
+      style={
+        Object {
+          "backgroundColor": "#ddd",
+        }
+      }
+    >
+      Содержимое
+    </div>
+  </div>
+</div>
+`;

@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import styled from 'styled-components';
-import { Column } from '@kocherga/frontkit';
+import { Column } from '~/frontkit';
 
 import { useOpenViduSession } from './hooks';
 import OvVideo from './OvVideo';

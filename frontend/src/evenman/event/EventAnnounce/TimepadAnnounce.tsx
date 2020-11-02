@@ -1,7 +1,7 @@
 import Toggle from 'react-toggle';
 
 import { useMutation } from '@apollo/client';
-import { Row } from '@kocherga/frontkit';
+import { Row } from '~/frontkit';
 
 import { EventAnnounceTarget } from '~/apollo/types.generated';
 import { AsyncButton } from '~/components';

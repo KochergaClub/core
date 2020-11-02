@@ -1,6 +1,6 @@
 import Toggle from 'react-toggle';
 
-import { A, Row } from '@kocherga/frontkit';
+import { A, Row } from '~/frontkit';
 
 import { EvenmanEvent_DetailsFragment } from '../queries.generated';
 import { useUpdateMutation } from '../hooks';

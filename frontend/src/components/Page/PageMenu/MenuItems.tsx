@@ -1,9 +1,9 @@
+import { AnimatePresence, motion } from 'framer-motion';
 import Link from 'next/link';
 import { useCallback, useState } from 'react';
 
-import { colors } from '@kocherga/frontkit';
-
 import { usePermissions } from '~/common/hooks';
+import { colors } from '~/frontkit';
 
 import { MenuKind } from '../types';
 import { ExpandableItem, Item, kind2color, kind2items, SingleItem, styled } from './constants';
@@ -103,9 +103,10 @@ const MenuItemExpandableContainer = styled.li`
   position: relative;
 `;
 
-const MenuItemDropdown = styled.ul`
+const MenuItemDropdown = styled(motion.ul)`
   position: absolute;
   z-index: 2000;
+  overflow: hidden;
 
   padding: 5px 0;
   list-style-type: none;
@@ -125,16 +126,6 @@ const MenuItemExpandable: React.FC<{ item: ExpandableItem }> = ({ item }) => {
 
   const hideDropdown = useCallback(() => setRevealed(false), []);
 
-  const renderDropdown = () => {
-    return (
-      <MenuItemDropdown>
-        {item.items.map((item, i) => (
-          <MenuSingleItem key={i} item={item} />
-        ))}
-      </MenuItemDropdown>
-    );
-  };
-
   const preventClick = useCallback((e: React.SyntheticEvent) => {
     e.preventDefault();
   }, []);
@@ -147,7 +138,20 @@ const MenuItemExpandable: React.FC<{ item: ExpandableItem }> = ({ item }) => {
       <a href="#" onClick={preventClick}>
         {item.title} ▼
       </a>
-      {revealed && renderDropdown()}
+      <AnimatePresence>
+        {revealed && (
+          <MenuItemDropdown
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.15 }}
+          >
+            {item.items.map((item, i) => (
+              <MenuSingleItem key={i} item={item} />
+            ))}
+          </MenuItemDropdown>
+        )}
+      </AnimatePresence>
     </MenuItemExpandableContainer>
   );
 };

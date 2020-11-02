@@ -1,6 +1,8 @@
 import React from 'react';
 
-type PageType = any; // FIXME
+import { KnownWagtailPageFragment } from './wagtail-utils';
+
+type PageType = KnownWagtailPageFragment;
 
 interface EditAction {
   type: 'EDIT';
@@ -33,7 +35,7 @@ interface PageShape {
 const reducer = (state: PageShape, action: Action): PageShape => {
   switch (action.type) {
     case 'EDIT':
-      if (state.preview || !state.page.id) {
+      if (state.preview || !state.page?.id) {
         throw new Error(
           "Can't edit preview pages, check the flag in component before dispatching"
         );

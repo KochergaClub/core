@@ -2,10 +2,10 @@ import { utcToZonedTime } from 'date-fns-tz';
 import { useCallback, useContext, useState } from 'react';
 
 import { useMutation } from '@apollo/client';
-import { Button, ControlsFooter, Modal } from '@kocherga/frontkit';
 
 import { useCommonHotkeys } from '~/common/hooks';
 import { formatDate, timezone } from '~/common/utils';
+import { Button, ControlsFooter, Modal } from '~/frontkit';
 
 import { TeamCalendarCreateEventDocument } from '../queries.generated';
 import { CalendarUIContext, closeUI } from '../reducers/calendarUI';
@@ -74,7 +74,7 @@ const NewEventModal: React.FC = () => {
 
   return (
     <Modal>
-      <Modal.Header toggle={closeCb}>
+      <Modal.Header close={closeCb}>
         Создать событие {formatDate(zonedStart, 'd MMMM HH:mm')}–
         {formatDate(zonedEnd, 'HH:mm')}
       </Modal.Header>

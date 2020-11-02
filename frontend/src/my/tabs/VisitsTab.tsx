@@ -1,6 +1,6 @@
 import { utcToZonedTime } from 'date-fns-tz';
 
-import { Column } from '@kocherga/frontkit';
+import { Column } from '~/frontkit';
 
 import { timezone, formatDate } from '~/common/utils';
 

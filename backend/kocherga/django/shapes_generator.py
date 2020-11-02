@@ -60,8 +60,6 @@ def build_shape(serializer_class):
 
     shape = []
 
-    read_only_fields = getattr(serializer_class.Meta, 'read_only_fields', [])
-
     for (field_name, field) in serializer_class().fields.items():
         if field.source == '*':
             continue  # skip for now, probably SerializerMethodField or something
@@ -111,7 +109,7 @@ def build_shape(serializer_class):
             if not frontend_field:
                 continue  # skip for now
 
-        if field_name in read_only_fields:
+        if field.read_only:
             frontend_field['readonly'] = True
         shape.append(frontend_field)
 
@@ -121,8 +119,6 @@ def build_shape(serializer_class):
 def generate_shapes_to_fh(fh):
     serializers = [
         kocherga.events.serializers.FeedbackSerializer,
-        kocherga.events.serializers.PublicEventSerializer,
-        kocherga.ratio.serializers.TrainingSerializer,
     ]
 
     print("import { FormShape } from '~/components/forms/types';", file=fh)

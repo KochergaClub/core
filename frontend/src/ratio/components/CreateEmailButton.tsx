@@ -1,9 +1,9 @@
 import { useCallback, useState } from 'react';
 
 import { useApolloClient, useMutation } from '@apollo/client';
-import { Button, Column, Input, Modal, Row } from '@kocherga/frontkit';
 
 import { AsyncButton, ButtonWithModal } from '~/components';
+import { Button, Column, Input, Modal, Row } from '~/frontkit';
 
 import {
     RatioTrainingEmailPrototypeDocument, RatioTrainingSendEmailDocument
@@ -107,7 +107,7 @@ const EmailModal = (props: ModalProps) => {
 
   return (
     <Modal>
-      <Modal.Header toggle={props.close}>Создать рассылку</Modal.Header>
+      <Modal.Header close={props.close}>Создать рассылку</Modal.Header>
       <Modal.Body>
         <Column>
           <PrototypePickerList
@@ -118,12 +118,12 @@ const EmailModal = (props: ModalProps) => {
           <Input
             type="text"
             value={title}
-            onChange={e => setTitle(e.currentTarget.value)}
+            onChange={(e) => setTitle(e.currentTarget.value)}
             disabled={creating}
           />
           <textarea
             value={content}
-            onChange={e => setContent(e.currentTarget.value)}
+            onChange={(e) => setContent(e.currentTarget.value)}
             disabled={creating}
           />
         </Column>

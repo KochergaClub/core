@@ -1,5 +1,5 @@
 import { gql } from '@apollo/client';
-import { RichText } from '@kocherga/frontkit';
+import { RichText } from '~/frontkit';
 
 import { PaddedBlock } from '~/components';
 import { BlockComponent } from '~/wagtail/types';

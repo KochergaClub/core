@@ -13,14 +13,18 @@ from kocherga.graphql.views import kocherga_graphql_view
 
 urlpatterns = (
     [
-        path('api/graphql', kocherga_graphql_view, name='graphql',),
+        path(
+            'api/graphql',
+            kocherga_graphql_view,
+            name='graphql',
+        ),
         path('api/', include('kocherga.api.urls')),
         path('api/tochka/', include('kocherga.money.tochka.urls')),
         path('api/', include('kocherga.events.urls')),
         path('api/', include('kocherga.templater.urls')),
         path('api/', include('kocherga.email.urls')),
         path('api/', include('kocherga.fb.urls')),
-        path('api/', include('kocherga.money.kassa.urls')),
+        path('api/', include('kocherga.yandex_kassa.urls')),
         path('api/', include('kocherga.wagtail.urls')),
         path('api/prometheus/', include('django_prometheus.urls')),
         path('admin/', admin.site.urls),

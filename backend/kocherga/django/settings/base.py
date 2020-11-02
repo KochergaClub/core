@@ -48,6 +48,7 @@ INSTALLED_APPS = [
     'wagtailorderable',
     'condensedinlinepanel',
     'ariadne.contrib.django',
+    'kocherga.django',
     'kocherga.wagtail',
     'kocherga.auth',
     'kocherga.zadarma',
@@ -60,7 +61,7 @@ INSTALLED_APPS = [
     'kocherga.money.ofd',
     'kocherga.money.tochka',
     'kocherga.money.cashier',
-    'kocherga.money.kassa',
+    'kocherga.yandex_kassa',
     'kocherga.analytics',
     'kocherga.analytics.timeclub24',  # legacy/broken
     'kocherga.gitlab',

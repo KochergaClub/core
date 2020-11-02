@@ -1,0 +1,63 @@
+fragment PaymentForOrder on YandexKassaPayment {
+  id
+  status
+}
+
+fragment RatioOrder on RatioOrder {
+  id
+  created
+  fulfilled
+  email
+  first_name
+  last_name
+  city
+  price
+  ticket_type {
+    id
+    price
+    name
+    training {
+      id
+      slug
+      name
+    }
+  }
+  promocode {
+    id
+    code
+    discount
+  }
+  payment {
+    ...PaymentForOrder
+  }
+}
+
+query RatioOrders($before: String, $after: String, $first: Int, $last: Int) {
+  orders: ratioOrders(
+    before: $before
+    after: $after
+    first: $first
+    last: $last
+  ) {
+    pageInfo {
+      ...PageInfo
+    }
+    edges {
+      node {
+        ...RatioOrder
+      }
+    }
+  }
+}
+
+mutation UpdateYandexKassaPayment($id: ID!) {
+  result: updateYandexKassaPayment(input: { id: $id }) {
+    ...PaymentForOrder
+  }
+}
+
+mutation CancelYandexKassaPayment($id: ID!) {
+  result: cancelYandexKassaPayment(input: { id: $id }) {
+    ...PaymentForOrder
+  }
+}

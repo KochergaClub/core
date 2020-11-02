@@ -2,7 +2,7 @@ import autosize from 'autosize';
 import { useCallback, useEffect, useRef } from 'react';
 import Select from 'react-select';
 
-import { Column, Input, Label } from '@kocherga/frontkit';
+import { Column, Input, Label } from '~/frontkit';
 
 import { useFocusOnFirstModalRender } from '../../common/hooks';
 

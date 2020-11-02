@@ -1,6 +1,6 @@
 // import styled from 'styled-components';
 
-// import { A } from '@kocherga/frontkit';
+// import { A } from '~/frontkit';
 
 import { CommonProps } from './types';
 

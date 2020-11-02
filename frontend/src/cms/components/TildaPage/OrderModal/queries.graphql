@@ -1,0 +1,39 @@
+fragment RatioOrder_Created on RatioOrder {
+  id
+  confirmation_token
+}
+
+mutation RatioCreateOrder($input: RatioCreateOrderInput!) {
+  result: ratioCreateOrder(input: $input) {
+    ... on RatioOrder {
+      ...RatioOrder_Created
+    }
+    ... on GenericError {
+      message
+    }
+    ... on ValidationError {
+      errors {
+        name
+        messages
+      }
+    }
+  }
+}
+
+fragment RatioTicketType_ForPicker on RatioTicketType {
+  id
+  price
+  name
+}
+
+query RatioTicketTypes($input: RatioTicketTypesInput!) {
+  result: ratioTicketTypes(input: $input) {
+    ...RatioTicketType_ForPicker
+  }
+}
+
+mutation CheckRatioPromocode($input: CheckRatioPromocodeInput!) {
+  result: checkRatioPromocode(input: $input) {
+    discounted_price
+  }
+}

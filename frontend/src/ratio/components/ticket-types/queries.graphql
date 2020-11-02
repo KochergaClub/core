@@ -1,0 +1,32 @@
+mutation CreateRatioTicketType($input: CreateRatioTicketTypeInput!) {
+  createRatioTicketType(input: $input) {
+    ...RatioTicketType
+  }
+}
+
+mutation UpdateRatioTicketType($input: UpdateRatioTicketTypeInput!) {
+  updateRatioTicketType(input: $input) {
+    ...RatioTicketType
+  }
+}
+
+mutation DeleteRatioTicketType($input: DeleteRatioTicketTypeInput!) {
+  deleteRatioTicketType(input: $input) {
+    ok
+  }
+}
+
+query RatioTicketTypePromocodesPage(
+  $before: String
+  $after: String
+  $first: Int
+  $last: Int
+  $ticket_type_id: ID!
+) {
+  ratioTicketType(input: { id: $ticket_type_id }) {
+    id
+    promocodes(before: $before, after: $after, first: $first, last: $last) {
+      ...RatioPromocodeConnection
+    }
+  }
+}

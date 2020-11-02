@@ -4,7 +4,7 @@ import { parseISO } from 'date-fns';
 import { utcToZonedTime } from 'date-fns-tz';
 import { timezone, formatDate } from '~/common/utils';
 
-import { A } from '@kocherga/frontkit';
+import { A } from '~/frontkit';
 
 import { CommonZadarmaPbxCallFragment } from '../queries.generated';
 

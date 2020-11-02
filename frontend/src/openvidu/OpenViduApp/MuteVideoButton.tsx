@@ -1,4 +1,4 @@
-import { Button, Row } from '@kocherga/frontkit';
+import { Button, Row } from '~/frontkit';
 import { MdVideocam, MdVideocamOff } from 'react-icons/md';
 
 interface Props {

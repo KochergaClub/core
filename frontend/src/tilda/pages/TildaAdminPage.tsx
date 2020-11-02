@@ -1,5 +1,5 @@
 import { useMutation, useQuery } from '@apollo/client';
-import { Column, Row } from '@kocherga/frontkit';
+import { Column, Row } from '~/frontkit';
 
 import { withApollo, withStaff } from '~/apollo';
 import { NextApolloPage } from '~/apollo/types';

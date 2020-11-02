@@ -1,7 +1,7 @@
 import { addWeeks, getUnixTime, startOfToday } from 'date-fns';
 
 import { useQuery } from '@apollo/client';
-import { Column } from '@kocherga/frontkit';
+import { Column } from '~/frontkit';
 
 import { ApolloQueryResults } from '~/components';
 

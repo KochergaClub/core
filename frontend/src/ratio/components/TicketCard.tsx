@@ -1,5 +1,5 @@
 import { useMutation } from '@apollo/client';
-import { A, Column, Label, Row } from '@kocherga/frontkit';
+import { A, Column, Label, Row } from '~/frontkit';
 
 import { Badge } from '~/components';
 import Card from '~/components/Card';

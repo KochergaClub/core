@@ -2,14 +2,11 @@
   <mj-head>
     <mj-title>{% block title %}{% endblock %}</mj-title>
     <mj-attributes>
-      <mj-text font-size="14px" />
+      <mj-text font-size="14px" line-height="1.4" />
       <mj-button background-color="#4d8ccb" />
       <mj-body background-color="white" />
       <mj-divider border-color="#666666" border-width="2px" />
     </mj-attributes>
   </mj-head>
-  <mj-body>
-    {% block body %}
-    {% endblock %}
-  </mj-body>
+  <mj-body> {% block body %} {% endblock %} </mj-body>
 </mjml>

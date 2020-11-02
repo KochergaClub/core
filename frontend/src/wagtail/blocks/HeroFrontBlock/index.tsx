@@ -1,7 +1,7 @@
 import styled from 'styled-components';
 
 import { gql } from '@apollo/client';
-import { colors, deviceMediaQueries, fonts } from '@kocherga/frontkit';
+import { colors, deviceMediaQueries, fonts } from '~/frontkit';
 
 import { staticUrl } from '~/common/utils';
 

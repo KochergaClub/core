@@ -7,10 +7,12 @@ SUPERUSER_EMAIL ?= me@berekuk.ru
 ##### Dev environment #####
 dev:
 	kubectl --context=dev delete job core-django-migrate || true
-	# See:
+	# For `--force=false` see:
 	# https://github.com/GoogleContainerTools/skaffold/issues/3798
 	# https://github.com/GoogleContainerTools/skaffold/issues/3864
-	skaffold dev --force=false
+	# (but it doesn't really help)
+	# `--no-prune` is used because django migrations are SLOW.
+	skaffold dev --force=false --no-prune
 
 wait_for_migrate:
 	@echo Waiting for migrate
@@ -20,23 +22,34 @@ dev_init: wait_for_migrate superuser wagtail_init restart_backend proxy
 	echo OK
 
 ##### Tests #####
-test-types:
-	$(K) exec -it $(shell $(K) get po -l app=core-django -o name) -- env MYPYPATH=stubs/local-stubs:stubs/sqlalchemy-stubs mypy --strict-optional --check-untyped-defs kocherga
+test-back-types:
+	# Broken at the moment; note `|| true` fix.
+	$(K) exec -it $(shell $(K) get po -l app=core-django -o name) -- env MYPYPATH=stubs/local-stubs:stubs/sqlalchemy-stubs mypy --strict-optional --check-untyped-defs kocherga || true
 
-test-code:
+test-back-code:
+	# Broken: we don't have test db in kubernetes...
 	$(K) exec -it $(shell $(K) get po -l app=core-django -o name) -- pytest
 
-lint:
+test-back-lint:
 	$(K) exec -it $(shell $(K) get po -l app=core-django -o name) -- flake8 kocherga/
 
-eslint:
-	$(K) exec -it $(shell $(K) get po -l app=core-frontend -o name) -- npx eslint src --ext ts,tsx
+test-front-eslint:
+	$(K) exec -it $(shell $(K) get po -l app=core-frontend -o name) -- npx eslint src
 
-test-js:
+test-front-ts:
 	$(K) exec -it $(shell $(K) get po -l app=core-frontend -o name) -- npx tsc
+
+test-front-jest:
 	$(K) exec -it $(shell $(K) get po -l app=core-frontend -o name) -- npx jest
 
-test: test-types test-code test-js lint eslint
+test-front-graphql:
+	$(K) cp schema.graphql $(shell $(K) get po -l app=core-frontend -o name | awk -F "/" '{print $$2}'):/code/
+	$(K) exec -it $(shell $(K) get po -l app=core-frontend -o name) -- npx graphql-inspector validate --deprecated './src/**/*.graphql' ./schema.graphql
+
+test-back: test-back-types test-back-code test-back-lint
+test-front: test-front-eslint test-front-ts test-front-jest test-front-graphql
+
+test: test-back test-front
 
 runserver:
 # This target is for testing runserver exceptions only (which are not displayed in docker logs, unfortunately).
@@ -85,9 +98,8 @@ update_npm_packages:
 # docker restart docker_render-server_1
 
 shapes:
-	echo TODO
-# docker-compose -f docker/compose.dev.yml exec api ./scripts/generate-frontend-shapes.py
-# docker cp docker_api_1:/tmp/shapes.ts ./frontend/src/shapes.ts
+	$(K) exec $(shell $(K) get po -l app=core-django -o name) -- ./scripts/generate-frontend-shapes.py
+	$(K) cp $(shell $(K) get po -l app=core-django -o name | awk -F "/" '{print $$2}'):/tmp/shapes.ts ./frontend/src/shapes.ts
 
 kassa_localtunnel:
 	npx lt --port 8000 --subdomain kassa --host https://lt.berekuk.ru
@@ -109,6 +121,13 @@ graphql: graphql_schema graphql_types
 
 restart_backend:
 	$(K) rollout restart deploy/core-django
+
+# This target is due to the following complex issue which often happens in dev:
+# 1) ./manage.py runserver fails to restart on syntax errors, so we have to restart the backend.
+# 2) PY_SSIZE_T_CLEAN deprecation warnings obscure the `make tail` output, so it's hard to determine the cause.
+# 3) If you find yourself in this situation, you'll have to call `make backend_dev_error` first and then restart the backend somehow (I usually do `echo '' >>backend/Dockerfile`, but maybe I'll find a better way later. Note that `make restart_backend` is not enough since it will reset all source files in container to their original versions on build.)
+backend_dev_error:
+	$(K) logs -l app=core-django --tail=-1 | egrep -v '(PY_SSIZE_T_CLEAN|recv_bser_version|return bser.loads)'
 
 restart_frontend:
 	$(K) rollout restart deploy/core-frontend

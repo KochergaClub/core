@@ -1,0 +1,68 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Storyshots Components/RowNav Basic 1`] = `
+.c1 {
+  font-weight: bold;
+  font-size: 14px;
+  line-height: 20px;
+  text-transform: uppercase;
+  border-bottom: none;
+}
+
+.c1:hover {
+  border-bottom: 4px solid hsl(210,12%,80%);
+}
+
+.c2 {
+  font-weight: bold;
+  font-size: 14px;
+  line-height: 20px;
+  text-transform: uppercase;
+  border-bottom: 4px solid hsl(210,12%,58%);
+}
+
+.c0 {
+  list-style-type: none;
+  padding: 0;
+  margin: 0;
+  position: relative;
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-flex-direction: row;
+  -ms-flex-direction: row;
+  flex-direction: row;
+}
+
+.c0 > li {
+  padding: 8px 10px;
+  cursor: pointer;
+}
+
+<nav>
+  <ul
+    className="c0"
+  >
+    <li
+      className="c1"
+      onClick={[Function]}
+    >
+      Item 1
+    </li>
+    <li
+      className="c2"
+      onClick={[Function]}
+      selected={true}
+    >
+      Item 2
+    </li>
+    <li
+      className="c1"
+      onClick={[Function]}
+    >
+      Item 3
+    </li>
+  </ul>
+</nav>
+`;

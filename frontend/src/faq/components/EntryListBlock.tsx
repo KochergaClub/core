@@ -1,6 +1,6 @@
 import styled from 'styled-components';
 
-import { RichText } from '@kocherga/frontkit';
+import { RichText } from '~/frontkit';
 
 import { PaddedBlock } from '~/components';
 

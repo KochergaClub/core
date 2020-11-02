@@ -1,6 +1,6 @@
 import React, { useState, useCallback } from 'react';
 
-import { Button } from '@kocherga/frontkit';
+import { Button } from '~/frontkit';
 
 interface Props {
   title: string;

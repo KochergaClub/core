@@ -6,7 +6,8 @@
   "private": true,
   "license": "AGPL-3.0-only",
   "scripts": {
-    "postinstall": "patch-package"
+    "postinstall": "patch-package",
+    "storybook": "start-storybook -p 6006"
   },
   "dependencies": {
     "@apollo/client": "^3.2.0",
@@ -22,13 +23,16 @@
     "@graphql-codegen/typescript-operations": "^1.17.8",
     "@graphql-codegen/typescript-react-apollo": "^2.0.6",
     "@graphql-codegen/typescript-resolvers": "^1.17.9",
-    "@kocherga/frontkit": "^1.8.5",
     "@next/bundle-analyzer": "^9.5.3",
     "@popperjs/core": "^2.5.1",
     "@sentry/browser": "^5.24.2",
     "@sentry/node": "^5.24.2",
     "@sentry/react": "^5.24.2",
     "@sentry/webpack-plugin": "^1.13.0",
+    "@storybook/addon-essentials": "^6.0.27",
+    "@storybook/addon-storyshots": "^6.0.27",
+    "@storybook/react": "^6.0.27",
+    "@tippyjs/react": "^4.2.0",
     "@types/autosize": "^3.0.6",
     "@types/body-parser": "^1.17.0",
     "@types/cookie": "^0.4.0",
@@ -43,7 +47,6 @@
     "@types/react-dom": "^16.8.3",
     "@types/react-select": "^3.0.20",
     "@types/react-toggle": "^4.0.2",
-    "@types/react-transition-group": "^4.4.0",
     "@types/styled-components": "^5.1.3",
     "@typescript-eslint/eslint-plugin": "^4.2.0",
     "@typescript-eslint/parser": "^4.2.0",
@@ -63,6 +66,7 @@
     "eslint-plugin-react-hooks": "^4.1.2",
     "express": "^4.13.3",
     "formik": "^2.1.5",
+    "framer-motion": "^2.9.4",
     "graphql": "^15.3.0",
     "http-proxy": "^1.17.0",
     "install": "^0.13.0",
@@ -70,7 +74,7 @@
     "localtunnel": "^2.0.0",
     "lodash": "^4.17.20",
     "mjml": "^4.7.0",
-    "next": "^9.5.3",
+    "next": "^10.0.0",
     "next-plugin-graphql": "0.0.2",
     "nodemon": "^2.0.2",
     "npm-why": "^1.1.6",
@@ -84,6 +88,7 @@
     "react-dom": "^16.13.1",
     "react-dropzone": "^11.2.0",
     "react-flip-move": "^3.0.4",
+    "react-hook-form": "^6.9.5",
     "react-icons": "^3.11.0",
     "react-markdown": "^4.0.8",
     "react-mathjax2": "0.0.2",
@@ -93,7 +98,6 @@
     "react-select": "^3.1.0",
     "react-spring": "^8.0.27",
     "react-toggle": "^4.1.1",
-    "react-transition-group": "^4.4.1",
     "remark": "^12.0.1",
     "remark-breaks": "^1.0.2",
     "remark-cli": "^8.0.1",
@@ -114,7 +118,12 @@
     "yargs": "^16.0.3"
   },
   "devDependencies": {
+    "@graphql-inspector/cli": "^2.3.0",
     "@testing-library/jest-dom": "^5.11.4",
-    "@testing-library/react": "^11.0.4"
+    "@testing-library/react": "^11.0.4",
+    "@types/react-test-renderer": "^16.9.3",
+    "core-js": "^3.6.5",
+    "jest-styled-components": "^7.0.3",
+    "react-test-renderer": "^17.0.1"
   }
 }

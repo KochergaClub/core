@@ -3,7 +3,7 @@ import { FaCheck, FaHeart } from 'react-icons/fa';
 import styled from 'styled-components';
 
 import { useMutation } from '@apollo/client';
-import { A, Button, Column, Input, Label, Row } from '@kocherga/frontkit';
+import { A, Button, Column, Input, Label, Row } from '~/frontkit';
 
 import { HintCard } from '~/components';
 import { trackEvent } from '~/components/analytics';

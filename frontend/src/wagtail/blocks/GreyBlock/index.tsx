@@ -1,7 +1,7 @@
 import styled from 'styled-components';
 
 import { gql } from '@apollo/client';
-import { colors, fonts, RichText } from '@kocherga/frontkit';
+import { colors, fonts, RichText } from '~/frontkit';
 
 import { BlockComponent } from '../../types';
 import { GreyBlockFragment as Props } from './index.generated';

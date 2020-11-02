@@ -2,7 +2,7 @@ import { useContext } from 'react';
 import { FaTrashAlt } from 'react-icons/fa';
 import styled from 'styled-components';
 
-import { Button, colors, fonts, Row } from '@kocherga/frontkit';
+import { Button, colors, fonts, Row } from '~/frontkit';
 
 import { AnyBlockFragment } from '../../types';
 import { EditBlocksContext } from '../EditWagtailBlocks';

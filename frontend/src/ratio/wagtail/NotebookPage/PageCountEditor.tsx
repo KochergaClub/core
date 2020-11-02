@@ -2,7 +2,7 @@ import React, { useContext } from 'react';
 
 import styled from 'styled-components';
 
-import { Button } from '@kocherga/frontkit';
+import { Button } from '~/frontkit';
 
 import PrintContext from './PrintContext';
 

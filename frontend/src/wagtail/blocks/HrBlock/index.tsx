@@ -1,5 +1,5 @@
 import { gql } from '@apollo/client';
-import { HR } from '@kocherga/frontkit';
+import { HR } from '~/frontkit';
 
 import { PaddedBlock } from '~/components';
 

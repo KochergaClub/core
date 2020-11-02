@@ -62,18 +62,17 @@ class authRemoveUserFromGroup(helpers.BaseField):
 class authLogin(helpers.BaseFieldWithInput):
     permissions = []
 
-    # # Either `token` or `email`+`password` must be set.
-    # # (GraphQL doesn't support union inputs yet;
+    # Either `token` or `email`+`password` must be set.
+    # (GraphQL doesn't support union inputs yet;
     # see https://github.com/graphql/graphql-spec/blob/master/rfcs/InputUnion.md for details.)
-    # input AuthLoginCredentialsInput {
-    #   email: String
-    #   password: String
-    #   token: String
-    # }
     credentials_input = g.InputObjectType(
         'AuthLoginCredentialsInput',
         g.input_fields(
-            {'email': Optional[str], 'password': Optional[str], 'token': Optional[str]}
+            {
+                'email': Optional[str],
+                'password': Optional[str],
+                'token': Optional[str],
+            }
         ),
     )
 

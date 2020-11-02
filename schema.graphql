@@ -151,6 +151,12 @@ type BlogPostPage implements WagtailPage {
   authors: [BlogPostAuthor!]!
 }
 
+input CancelYandexKassaPaymentInput {
+  id: ID!
+}
+
+union CancelYandexKassaPaymentResult = YandexKassaPayment | GenericError
+
 input CashierCreatePaymentInput {
   amount: Int!
   whom: ID!
@@ -175,6 +181,15 @@ type CashierPaymentConnection {
 
 type CashierPaymentEdge {
   node: CashierPayment!
+}
+
+input CheckRatioPromocodeInput {
+  ticket_type_id: ID!
+  code: String!
+}
+
+type CheckRatioPromocodeResult {
+  discounted_price: Int!
 }
 
 input Cm2CreateCustomerInput {
@@ -244,6 +259,28 @@ type ColumnsButtonsBlockValue {
   image(spec: String!): WagtailImageRendition!
   caption: String!
   link: String!
+}
+
+input CreateRatioPromocodeInput {
+  ticket_type_id: ID
+  training_id: ID
+  code: String!
+  discount: Int!
+  uses_max: Int
+}
+
+union CreateRatioPromocodeResult = RatioPromocode | ValidationError | GenericError
+
+input CreateRatioTicketTypeInput {
+  training_id: ID!
+  price: Int!
+  name: String!
+  discount_by_email: Int
+  discount_percent_by_email: Int
+}
+
+input DeleteRatioTicketTypeInput {
+  id: ID!
 }
 
 type EmailMailchimpCategory {
@@ -731,6 +768,10 @@ type FrontSocialLinksBlock implements WagtailBlock {
   id: ID!
 }
 
+type GenericError {
+  message: String!
+}
+
 type GreyBlock implements WagtailBlock {
   id: ID!
   value: GreyBlockValue!
@@ -866,6 +907,8 @@ type Mutation {
   cashierCreatePayment(params: CashierCreatePaymentInput!): Boolean
   cashierRedeemPayment(id: ID!): Boolean
   kkmRegisterCheck(params: KkmRegisterCheckInput!): KkmRegisterCheckResult!
+  updateYandexKassaPayment(input: UpdateYandexKassaPaymentInput!): UpdateYandexKassaPaymentResult!
+  cancelYandexKassaPayment(input: CancelYandexKassaPaymentInput!): CancelYandexKassaPaymentResult!
   myEventsTicketUnregister(event_id: ID!): MyEventsTicket!
   myEventsTicketRegister(event_id: ID!): MyEventsTicket!
   myEventsTicketRegisterAnon(input: MyEventsTicketRegisterAnonInput!): MyEventsTicket!
@@ -903,8 +946,10 @@ type Mutation {
   staffGrantGooglePermissionsToMember(id: ID!): Boolean
   staffFireMember(id: ID!): Boolean
   staffUnfireMember(id: ID!): Boolean
-  ratioAddTraining(params: RatioAddTrainingInput!): RatioTraining!
-  ratioAddTicket(input: RatioAddTicketInput!): RatioTicket!
+  ratioTrainingSyncParticipantsToMailchimp(training_id: ID!): Boolean!
+  ratioTrainingSendEmail(input: RatioTrainingSendEmailInput!): RatioTrainingSendEmailResult!
+  ratioCreateOrder(input: RatioCreateOrderInput!): RatioCreateOrderResult!
+  ratioConfirmOrder(input: RatioConfirmOrderInput!): RatioConfirmOrderResult!
   ratioPaymentAdd(input: RatioPaymentAddInput!): RatioPaymentAddResult!
   ratioPaymentDelete(payment_id: ID!): BasicResult!
   ratioPaymentFiscalize(payment_id: ID!): Boolean!
@@ -912,8 +957,16 @@ type Mutation {
   ratioPaymentSetStatus(input: RatioPaymentSetStatusInput!): RatioPaymentSetStatusResult!
   ratioTrainingCopyScheduleFrom(params: RatioTrainingCopyScheduleFromInput!): Boolean!
   ratioTrainingAddDay(params: RatioTrainingAddDayInput!): Boolean!
-  ratioTrainingSyncParticipantsToMailchimp(training_id: ID!): Boolean!
-  ratioTrainingSendEmail(input: RatioTrainingSendEmailInput!): RatioTrainingSendEmailResult!
+  createRatioTicketType(input: CreateRatioTicketTypeInput!): RatioTicketType!
+  updateRatioTicketType(input: UpdateRatioTicketTypeInput!): RatioTicketType!
+  deleteRatioTicketType(input: DeleteRatioTicketTypeInput!): BasicResult!
+  ratioAddTicket(input: RatioAddTicketInput!): RatioTicket!
+  ratioAddTraining(params: RatioAddTrainingInput!): RatioTraining!
+  updateRatioTraining(input: UpdateRatioTrainingInput!): RatioTraining!
+  ratioDeleteTraining(input: RatioDeleteTrainingInput!): BasicResult!
+  createRatioPromocode(input: CreateRatioPromocodeInput!): CreateRatioPromocodeResult!
+  checkRatioPromocode(input: CheckRatioPromocodeInput!): CheckRatioPromocodeResult
+  sendUniqueRatioPromocode(input: SendUniqueRatioPromocodeInput!): SendUniqueRatioPromocodeResult!
   mastermindDatingCreateCohort: MastermindDatingCohortMutationResult!
   mastermindDatingPopulateCohortFromEvent(cohort_id: ID!): MastermindDatingCohortMutationResult!
   mastermindDatingSendInviteEmails(cohort_id: ID!): MastermindDatingCohortMutationResult!
@@ -1058,7 +1111,8 @@ type ProjectPage implements WagtailPage {
 }
 
 type Query {
-  wagtailPage(page_id: ID, path: String, preview_token: String): WagtailPage
+  wagtailPage(page_id: ID, path: String, preview_token: String): WagtailPage @deprecated(reason: "Use wagtailPageOrPrivate instead")
+  wagtailPageOrPrivate(page_id: ID, path: String, preview_token: String): WagtailPageOrPrivateResult!
   wagtailPages: [WagtailPage!]!
   wagtailImage(input: WagtailImageInput!): WagtailImage
   wagtailImageSearch(input: WagtailImageSearchInput!): WagtailImageSearchResult!
@@ -1092,10 +1146,13 @@ type Query {
   eventsPublicGoogleCalendar: EventsGoogleCalendar
   staffMembersAll: [StaffMember!]!
   staffMember(id: ID!): StaffMember!
-  ratioTrainings(before: String, after: String, first: Int, last: Int): RatioTrainingConnection!
+  ratioTrainings(before: String, after: String, first: Int, last: Int, filter: RatioTrainingsFilterInput): RatioTrainingConnection!
   ratioTrainingBySlug(slug: String!): RatioTraining!
   ratioTrainersAll: [RatioTrainer!]!
   ratioTrainingEmailPrototype(training_id: ID!, type: String!): String!
+  ratioTicketTypes(input: RatioTicketTypesInput!): [RatioTicketType!]!
+  ratioTicketType(input: RatioTicketTypeInput!): RatioTicketType!
+  ratioOrders(before: String, after: String, first: Int, last: Int): RatioOrderConnection!
   mastermindDatingCohorts: [MastermindDatingCohort!]!
   mastermindDatingCohortById(id: ID!): MastermindDatingCohort!
   projects: [ProjectPage!]!
@@ -1126,23 +1183,60 @@ input RatioAddTicketInput {
   first_name: String!
   last_name: String
   payment_amount: Int!
-  status: String
   ticket_type: String
-  fiscalization_status: String
-  payment_type: String
   comment: String
 }
 
 input RatioAddTrainingInput {
   name: String!
   slug: String!
-  date: String!
-  telegram_link: String!
+  date: String
+  telegram_link: String
+  discount_by_email: Int
+  discount_percent_by_email: Int
 }
 
 type RatioBriefingBlock implements WagtailBlock {
   id: ID!
   value: String!
+}
+
+input RatioConfirmOrderInput {
+  order_id: ID!
+}
+
+enum RatioConfirmOrderOutcome {
+  NOT_FOUND
+  NOT_PAID
+  OK
+  ALREADY_FULFILLED
+  TICKET_ALREADY_EXISTS
+}
+
+type RatioConfirmOrderResult {
+  outcome: RatioConfirmOrderOutcome!
+}
+
+input RatioCreateOrderInput {
+  ticket_type_id: ID!
+  email: String!
+  first_name: String!
+  last_name: String!
+  city: String
+  promocode: String
+  payer: RatioCreateOrderPayerInput
+}
+
+input RatioCreateOrderPayerInput {
+  email: String!
+  first_name: String!
+  last_name: String!
+}
+
+union RatioCreateOrderResult = RatioOrder | ValidationError | GenericError
+
+input RatioDeleteTrainingInput {
+  slug: String!
 }
 
 type RatioExerciseBlock implements WagtailBlock {
@@ -1198,6 +1292,31 @@ type RatioNotebookSectionBlock implements WagtailBlock {
   value: RatioSectionPage!
 }
 
+type RatioOrder {
+  fulfilled: Boolean!
+  id: ID!
+  confirmation_token: String!
+  created: String!
+  email: String!
+  first_name: String!
+  last_name: String!
+  city: String!
+  ticket_type: RatioTicketType!
+  payment: YandexKassaPayment!
+  price: Int!
+  promocode: RatioPromocode
+}
+
+type RatioOrderConnection {
+  pageInfo: PageInfo!
+  nodes: [RatioOrder!]!
+  edges: [RatioOrderEdge!]!
+}
+
+type RatioOrderEdge {
+  node: RatioOrder!
+}
+
 type RatioParagraphBlock implements WagtailBlock {
   id: ID!
   value: String!
@@ -1247,6 +1366,26 @@ type RatioPresentationIndexPage implements WagtailPage {
   presentations: [PresentationPage!]!
 }
 
+type RatioPromocode {
+  id: ID!
+  code: String!
+  discount: Int!
+  discount_percent: Int!
+  uses_max: Int
+  uses_count: Int!
+  for_email: String!
+}
+
+type RatioPromocodeConnection {
+  pageInfo: PageInfo!
+  nodes: [RatioPromocode!]!
+  edges: [RatioPromocodeEdge!]!
+}
+
+type RatioPromocodeEdge {
+  node: RatioPromocode!
+}
+
 type RatioSectionIndexPage implements WagtailPage {
   title: String!
   id: ID!
@@ -1268,12 +1407,29 @@ type RatioTicket {
   registration_date: String
   status: String!
   ticket_type: String!
-  payment_type: String!
   payment_amount: Int!
-  fiscalization_status: String!
   comment: String!
   payments: [RatioPayment!]!
   training: RatioTraining!
+}
+
+type RatioTicketType {
+  price: Int!
+  name: String!
+  discount_by_email: Int!
+  discount_percent_by_email: Int!
+  id: ID!
+  training: RatioTraining!
+  promocodes_count: Int!
+  promocodes(before: String, after: String, first: Int, last: Int): RatioPromocodeConnection!
+}
+
+input RatioTicketTypeInput {
+  id: ID!
+}
+
+input RatioTicketTypesInput {
+  id: ID
 }
 
 type RatioTrainer {
@@ -1286,14 +1442,21 @@ type RatioTraining {
   id: ID!
   name: String!
   slug: String!
-  date: String!
+  date: String
   telegram_link: String!
   salaries_paid: Boolean!
+  discount_by_email: Int!
+  discount_percent_by_email: Int!
+  promocode_email: String!
+  new_ticket_email: String!
+  notion_created_email: String!
   tickets: [RatioTicket!]!
   schedule: [RatioTrainingDay!]!
+  ticket_types: [RatioTicketType!]!
   tickets_count: Int!
   total_income: Int!
-  long_name: String!
+  promocodes_count: Int!
+  promocodes(before: String, after: String, first: Int, last: Int): RatioPromocodeConnection!
 }
 
 input RatioTrainingAddDayInput {
@@ -1332,6 +1495,10 @@ type RatioTrainingSendEmailResult {
   draft_link: String!
 }
 
+input RatioTrainingsFilterInput {
+  eternal: Boolean
+}
+
 input SearchInput {
   query: String!
   limit: Int
@@ -1353,6 +1520,14 @@ type SectionHeaderBlockValue {
   header: String!
   text: String!
 }
+
+input SendUniqueRatioPromocodeInput {
+  ticket_type_id: ID
+  training_id: ID
+  email: String!
+}
+
+union SendUniqueRatioPromocodeResult = BasicResult | GenericError
 
 type SlackAccount implements ExternalServiceAccount {
   service: SlackExternalService!
@@ -1463,6 +1638,41 @@ type TimepadCategory {
   name: String!
 }
 
+input UpdateRatioTicketTypeInput {
+  id: ID!
+  price: Int
+  name: String
+  discount_by_email: Int
+  discount_percent_by_email: Int
+}
+
+input UpdateRatioTrainingInput {
+  id: ID!
+  name: String!
+  date: String
+  telegram_link: String
+  discount_by_email: Int
+  discount_percent_by_email: Int
+  promocode_email: String
+  new_ticket_email: String
+  notion_created_email: String
+}
+
+input UpdateYandexKassaPaymentInput {
+  id: ID!
+}
+
+union UpdateYandexKassaPaymentResult = YandexKassaPayment | GenericError
+
+type ValidationError {
+  errors: [ValidationErrorItem!]!
+}
+
+type ValidationErrorItem {
+  name: String!
+  messages: [String!]!
+}
+
 type VkGroup {
   name: String!
 }
@@ -1569,6 +1779,10 @@ interface WagtailPage {
   meta: WagtailPageMeta!
 }
 
+type WagtailPageContainer {
+  page: WagtailPage
+}
+
 type WagtailPageMeta {
   slug: String!
   description: String!
@@ -1579,8 +1793,14 @@ type WagtailPageMeta {
   revision(id: ID!): WagtailPageRevision!
 }
 
+union WagtailPageOrPrivateResult = WagtailPageContainer | WagtailPagePrivate
+
 type WagtailPagePermissions {
   can_edit: Boolean!
+}
+
+type WagtailPagePrivate {
+  message: String!
 }
 
 type WagtailPageRevision {
@@ -1717,6 +1937,21 @@ type WikiAccount implements ExternalServiceAccount {
 type WikiExternalService implements ExternalService {
   slug: String!
   accounts: [WikiAccount!]!
+}
+
+type YandexKassaPayment {
+  id: ID!
+  kassa_id: String!
+  is_paid: Boolean!
+  status: YandexKassaPaymentStatus!
+  waiting_for_capture: Boolean!
+}
+
+enum YandexKassaPaymentStatus {
+  pending
+  waiting_for_capture
+  succeeded
+  canceled
 }
 
 type ZadarmaCall {

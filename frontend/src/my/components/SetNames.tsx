@@ -3,7 +3,7 @@ import { FaCheck } from 'react-icons/fa';
 import styled from 'styled-components';
 
 import { useMutation } from '@apollo/client';
-import { Button, colors, Column, Input, Label, Row } from '@kocherga/frontkit';
+import { Button, colors, Column, Input, Label, Row } from '~/frontkit';
 
 import { useCommonHotkeys } from '~/common/hooks';
 import { HintCard } from '~/components';

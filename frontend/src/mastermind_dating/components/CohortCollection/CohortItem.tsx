@@ -1,6 +1,6 @@
 import Link from 'next/link';
 
-import { A } from '@kocherga/frontkit';
+import { A } from '~/frontkit';
 
 import { MastermindDatingCohortSummaryFragment as CohortFragment } from '../../queries.generated';
 

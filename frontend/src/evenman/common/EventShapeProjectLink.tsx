@@ -2,7 +2,7 @@ import Select from 'react-select';
 import { ActionTypes } from 'react-select/src/types';
 
 import { useQuery } from '@apollo/client';
-import { Label } from '@kocherga/frontkit';
+import { Label } from '~/frontkit';
 
 import { ApolloQueryResults } from '~/components';
 

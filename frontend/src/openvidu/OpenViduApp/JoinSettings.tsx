@@ -3,7 +3,7 @@ import { useCallback, useEffect, useRef, useState } from 'react';
 import Select from 'react-select';
 import styled from 'styled-components';
 
-import { Column, Label, Row } from '@kocherga/frontkit';
+import { Column, Label, Row } from '~/frontkit';
 
 import { AsyncButton, PaddedBlock, Spinner } from '~/components';
 

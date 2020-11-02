@@ -1,0 +1,76 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Storyshots Components/Burger Basic 1`] = `
+.c0 {
+  width: 28px;
+  height: 20px;
+  -webkit-transform: rotate(0deg);
+  -ms-transform: rotate(0deg);
+  transform: rotate(0deg);
+  -webkit-transition: 0.5s ease-in-out;
+  transition: 0.5s ease-in-out;
+  cursor: pointer;
+}
+
+.c0 > span {
+  display: block;
+  position: absolute;
+  width: 100%;
+  opacity: 1;
+  left: 0;
+  -webkit-transform: rotate(0deg);
+  -ms-transform: rotate(0deg);
+  transform: rotate(0deg);
+  -webkit-transition: 0.25s ease-in-out;
+  transition: 0.25s ease-in-out;
+  height: 3px;
+  background-color: black;
+}
+
+.c0 > span:nth-child(1) {
+  top: 0;
+}
+
+.c0 > span:nth-child(2),
+.c0 > span:nth-child(3) {
+  top: 8px;
+}
+
+.c0 > span:nth-child(4) {
+  top: 16px;
+}
+
+.c0.opened > span:nth-child(1) {
+  top: 8px;
+  width: 0%;
+  left: 50%;
+}
+
+.c0.opened > span:nth-child(2) {
+  -webkit-transform: rotate(45deg);
+  -ms-transform: rotate(45deg);
+  transform: rotate(45deg);
+}
+
+.c0.opened > span:nth-child(3) {
+  -webkit-transform: rotate(-45deg);
+  -ms-transform: rotate(-45deg);
+  transform: rotate(-45deg);
+}
+
+.c0.opened > span:nth-child(4) {
+  top: 8px;
+  width: 0%;
+  left: 50%;
+}
+
+<div
+  className="c0"
+  color="black"
+>
+  <span />
+  <span />
+  <span />
+  <span />
+</div>
+`;

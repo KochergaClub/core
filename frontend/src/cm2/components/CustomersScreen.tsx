@@ -1,11 +1,11 @@
 import { useCallback } from 'react';
 
 import { useMutation, useQuery } from '@apollo/client';
-import { Label, Row } from '@kocherga/frontkit';
 
 import { ApolloQueryResults } from '~/components';
 import { CustomCardListView, PagedApolloCollection } from '~/components/collections';
 import { FormShape } from '~/components/forms/types';
+import { Label, Row } from '~/frontkit';
 
 import {
     Cm2CreateCustomerDocument, Cm2CustomersDocument, CustomerFragment
@@ -43,11 +43,11 @@ const CustomersScreen: React.FC = () => {
     []
   );
 
-  interface FormData {
+  type FormData = {
     card_id: number;
     first_name: string;
     last_name: string;
-  }
+  };
 
   const addShape: FormShape = [
     {

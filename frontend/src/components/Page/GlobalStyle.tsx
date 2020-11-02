@@ -1,7 +1,7 @@
 import Head from 'next/head';
 import { createGlobalStyle } from 'styled-components';
 
-import { GlobalStyle as FrontkitGlobalStyle } from '@kocherga/frontkit';
+import { GlobalStyle as FrontkitGlobalStyle } from '~/frontkit';
 
 import { staticUrl } from '~/common/utils';
 

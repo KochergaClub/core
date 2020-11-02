@@ -33,7 +33,7 @@ const UploadFromUrlAction: React.FC<Props> = ({ setImageId, defaults }) => {
   return (
     <ModalAction title="По ссылке">
       {({ close }) => (
-        <UploadFromUrlModal toggle={close} save={submit} defaults={defaults} />
+        <UploadFromUrlModal close={close} save={submit} defaults={defaults} />
       )}
     </ModalAction>
   );

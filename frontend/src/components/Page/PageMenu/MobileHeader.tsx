@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { Burger } from '@kocherga/frontkit';
+import { Burger } from '~/frontkit';
 
 import { kind2color, styled } from './constants';
 

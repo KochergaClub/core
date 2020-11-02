@@ -1,6 +1,6 @@
 import styled from 'styled-components';
 
-import { fonts, deviceMediaQueries } from '@kocherga/frontkit';
+import { fonts, deviceMediaQueries } from '~/frontkit';
 
 const HeroHeader = styled.h1`
   margin: 0;

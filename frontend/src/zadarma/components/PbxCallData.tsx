@@ -2,7 +2,7 @@ import { useCallback } from 'react';
 import styled from 'styled-components';
 
 import { useMutation } from '@apollo/client';
-import { Label } from '@kocherga/frontkit';
+import { Label } from '~/frontkit';
 
 import { useExpandable, usePermissions } from '~/common/hooks';
 import WatchmanPicker from '~/watchmen/components/WatchmanPicker';

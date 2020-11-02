@@ -2,11 +2,11 @@ import { utcToZonedTime } from 'date-fns-tz';
 import { useCallback, useContext, useState } from 'react';
 
 import { useMutation, useQuery } from '@apollo/client';
-import { Button, Modal, Row } from '@kocherga/frontkit';
 
 import { useCommonHotkeys } from '~/common/hooks';
 import { formatDate, timezone } from '~/common/utils';
 import { ApolloQueryResults } from '~/components';
+import { Button, Modal, Row } from '~/frontkit';
 
 import {
     TeamCalendarDeleteEventDocument, TeamCalendarEventDocument, TeamCalendarEventFragment,
@@ -92,7 +92,7 @@ const EditEventModalLoaded: React.FC<LoadedProps> = ({ event }) => {
 
   return (
     <Modal>
-      <Modal.Header toggle={closeCb}>
+      <Modal.Header close={closeCb}>
         Редактировать событие {formatDate(zonedStart, 'd MMMM HH:mm')}–
         {formatDate(zonedEnd, 'HH:mm')}
       </Modal.Header>

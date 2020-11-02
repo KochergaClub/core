@@ -26,6 +26,58 @@ fragment RatioTicket on RatioTicket {
   }
 }
 
+fragment RatioPromocode on RatioPromocode {
+  id
+  code
+  discount
+  discount_percent
+  uses_max
+  uses_count
+  for_email
+}
+
+fragment RatioPromocodeConnection on RatioPromocodeConnection {
+  pageInfo {
+    ...PageInfo
+  }
+  edges {
+    node {
+      ...RatioPromocode
+    }
+  }
+}
+
+fragment RatioTicketType on RatioTicketType {
+  id
+  price
+  name
+  discount_by_email
+  discount_percent_by_email
+  promocodes_count
+  promocodes(first: 5) {
+    ...RatioPromocodeConnection
+  }
+}
+
+fragment RatioTicketType_Summary on RatioTicketType {
+  id
+  price
+  name
+}
+
+fragment RatioTraining_Summary on RatioTraining {
+  id
+  slug
+  name
+  date
+  telegram_link
+  tickets_count
+  total_income
+  ticket_types {
+    ...RatioTicketType_Summary
+  }
+}
+
 fragment RatioTraining on RatioTraining {
   id
   slug
@@ -34,8 +86,20 @@ fragment RatioTraining on RatioTraining {
   telegram_link
   tickets_count
   total_income
+  discount_by_email
+  discount_percent_by_email
+  promocode_email
+  new_ticket_email
+  notion_created_email
+  promocodes_count
+  promocodes(first: 5) {
+    ...RatioPromocodeConnection
+  }
   tickets {
     ...RatioTicket
+  }
+  ticket_types {
+    ...RatioTicketType
   }
 }
 
@@ -71,19 +135,26 @@ fragment TrainingWithSchedule on RatioTraining {
   }
 }
 
-query RatioTrainings($before: String, $after: String, $first: Int, $last: Int) {
+query RatioTrainings(
+  $before: String
+  $after: String
+  $first: Int
+  $last: Int
+  $eternal: Boolean
+) {
   trainings: ratioTrainings(
     before: $before
     after: $after
     first: $first
     last: $last
+    filter: { eternal: $eternal }
   ) {
     pageInfo {
       ...PageInfo
     }
     edges {
       node {
-        ...RatioTraining
+        ...RatioTraining_Summary
       }
     }
   }
@@ -100,6 +171,7 @@ query RatioTrainingsForPicker(
     after: $after
     first: $first
     last: $last
+    filter: { eternal: false }
   ) {
     pageInfo {
       ...PageInfo

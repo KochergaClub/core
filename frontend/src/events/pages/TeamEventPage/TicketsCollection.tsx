@@ -1,5 +1,5 @@
 import { useQuery } from '@apollo/client';
-import { Row } from '@kocherga/frontkit';
+import { Row } from '~/frontkit';
 
 import { ApolloQueryResults, Badge } from '~/components';
 import Card, { CardList } from '~/components/Card';

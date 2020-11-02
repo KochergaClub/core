@@ -6,6 +6,15 @@
       }
       const result: PossibleTypesResultData = {
   "possibleTypes": {
+    "CancelYandexKassaPaymentResult": [
+      "YandexKassaPayment",
+      "GenericError"
+    ],
+    "CreateRatioPromocodeResult": [
+      "RatioPromocode",
+      "ValidationError",
+      "GenericError"
+    ],
     "ExternalService": [
       "SlackExternalService",
       "WikiExternalService"
@@ -14,13 +23,26 @@
       "SlackAccount",
       "WikiAccount"
     ],
+    "RatioCreateOrderResult": [
+      "RatioOrder",
+      "ValidationError",
+      "GenericError"
+    ],
     "SearchItem": [
       "PageSearchItem",
       "EventSearchItem"
     ],
+    "SendUniqueRatioPromocodeResult": [
+      "BasicResult",
+      "GenericError"
+    ],
     "SlideFragmentsBlockValues": [
       "SlideFragmentsBlock_RichTextBlock",
       "SlideFragmentsBlock_RawHtmlBlock"
+    ],
+    "UpdateYandexKassaPaymentResult": [
+      "YandexKassaPayment",
+      "GenericError"
     ],
     "WagtailBlock": [
       "BasicCardBlock",
@@ -82,6 +104,10 @@
       "RatioPresentationIndexPage",
       "RatioSectionIndexPage",
       "RatioSectionPage"
+    ],
+    "WagtailPageOrPrivateResult": [
+      "WagtailPageContainer",
+      "WagtailPagePrivate"
     ]
   }
 };

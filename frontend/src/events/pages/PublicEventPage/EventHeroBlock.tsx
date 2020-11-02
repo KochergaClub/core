@@ -8,7 +8,7 @@ import {
   parseISO,
 } from 'date-fns';
 
-import { Button, Label, fonts, deviceMediaQueries } from '@kocherga/frontkit';
+import { Button, Label, fonts, deviceMediaQueries } from '~/frontkit';
 
 import { trackEvent } from '~/components/analytics';
 

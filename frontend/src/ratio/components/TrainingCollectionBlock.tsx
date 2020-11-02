@@ -6,56 +6,73 @@ import { useMutation, useQuery } from '@apollo/client';
 import { usePermissions } from '~/common/hooks';
 import { ApolloQueryResults, PaddedBlock } from '~/components';
 import { CustomCardListView, PagedApolloCollection } from '~/components/collections';
+import { AnyViewProps } from '~/components/collections/types';
 import { FormShape } from '~/components/forms/types';
 
 import {
-    RatioAddTrainingDocument, RatioTrainingFragment, RatioTrainingsDocument
+    RatioAddTrainingDocument, RatioTraining_SummaryFragment, RatioTrainingsDocument
 } from '../queries.generated';
-import TrainingCard from './TrainingCard';
+import TrainingCard from './trainings/TrainingCard';
 
 const trainingShape: FormShape = [
   {
     name: 'name',
-    optional: false,
     title: 'Название',
     type: 'string',
   },
   {
     name: 'slug',
-    optional: false,
     title: 'slug',
     type: 'string',
   },
   {
     name: 'date',
-    optional: false,
+    optional: true,
     title: 'Дата начала',
     type: 'date',
   },
   {
     name: 'telegram_link',
-    optional: false,
+    optional: true,
     title: 'Ссылка на Telegram-чат',
     type: 'string',
   },
 ];
 
-interface CreateTrainingParams {
+type CreateTrainingParams = {
   name: string;
   slug: string;
-  date: string;
+  date?: string;
   telegram_link: string;
+};
+
+const isMuted = (training: RatioTraining_SummaryFragment) =>
+  training.date ? isBefore(parseISO(training.date), new Date()) : false;
+
+const renderItem = (training: RatioTraining_SummaryFragment) => (
+  <TrainingCard training={training} />
+);
+
+const View: React.FC<AnyViewProps<RatioTraining_SummaryFragment>> = (props) => (
+  <CustomCardListView
+    {...props}
+    renderItem={renderItem}
+    isMuted={isMuted}
+    item2key={(training) => training.id}
+  />
+);
+
+interface Props {
+  eternal: boolean;
 }
 
-const isMuted = (training: RatioTrainingFragment) =>
-  isBefore(parseISO(training.date), new Date());
-
-const TrainingCollectionBlock: React.FC = () => {
+const TrainingCollectionBlock: React.FC<Props> = ({ eternal }) => {
   const [canCreate] = usePermissions(['ratio.manage']);
 
   const queryResults = useQuery(RatioTrainingsDocument, {
     variables: {
       first: 20,
+      eternal,
     },
   });
   const [addTrainingMutation] = useMutation(RatioAddTrainingDocument, {
@@ -63,16 +80,15 @@ const TrainingCollectionBlock: React.FC = () => {
     awaitRefetchQueries: true,
   });
 
-  const renderItem = useCallback(
-    (training: RatioTrainingFragment) => <TrainingCard training={training} />,
-    []
-  );
-
   const add = useCallback(
     async (values: CreateTrainingParams) => {
+      const params = { ...values };
+      if (!params.date) {
+        delete params.date; // don't pass empty date
+      }
       await addTrainingMutation({
         variables: {
-          params: values,
+          params,
         },
       });
     },
@@ -91,13 +107,7 @@ const TrainingCollectionBlock: React.FC = () => {
               genitive: 'тренинг',
             }}
             add={canCreate ? { cb: add, shape: trainingShape } : undefined}
-            view={props => (
-              <CustomCardListView
-                {...props}
-                renderItem={renderItem}
-                isMuted={isMuted}
-              />
-            )}
+            view={View}
           />
         )}
       </ApolloQueryResults>

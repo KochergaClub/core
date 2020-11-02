@@ -1,7 +1,7 @@
 import { useCallback, useState } from 'react';
 
 import { useMutation } from '@apollo/client';
-import { Button } from '@kocherga/frontkit';
+import { Button } from '~/frontkit';
 
 import { LogoutDocument } from '../queries.generated';
 

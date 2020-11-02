@@ -1,6 +1,6 @@
 import styled from 'styled-components';
 
-import { A, colors } from '@kocherga/frontkit';
+import { A, colors } from '~/frontkit';
 
 const Container = styled.section`
   border-bottom: 1px solid ${colors.grey[200]};

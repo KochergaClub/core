@@ -2,7 +2,7 @@ import { useCallback, useState } from 'react';
 import styled from 'styled-components';
 
 import { useMutation } from '@apollo/client';
-import { Button, colors, Column, Input, Label } from '@kocherga/frontkit';
+import { Button, colors, Column, Input, Label } from '~/frontkit';
 
 import { useCommonHotkeys } from '~/common/hooks';
 import { HintCard } from '~/components';

@@ -1,4 +1,4 @@
-import { A, HR, Row } from '@kocherga/frontkit';
+import { A, HR, Row } from '~/frontkit';
 
 import { PaddedBlock } from '~/components';
 

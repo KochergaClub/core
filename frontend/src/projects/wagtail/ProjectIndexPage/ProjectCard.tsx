@@ -1,7 +1,7 @@
 import Link from 'next/link';
 import styled from 'styled-components';
 
-import { Label } from '@kocherga/frontkit';
+import { Label } from '~/frontkit';
 
 import { projectRoute } from '~/projects/routes';
 

@@ -1,6 +1,6 @@
 import { useState, useCallback } from 'react';
 
-import { Button } from '@kocherga/frontkit';
+import { Button } from '~/frontkit';
 
 import NewPrototypeModal from './NewPrototypeModal';
 

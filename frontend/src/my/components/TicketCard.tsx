@@ -8,7 +8,7 @@ import { FiVideo } from 'react-icons/fi';
 import styled from 'styled-components';
 
 import { useMutation } from '@apollo/client';
-import { A, Button, colors, Column, fonts, Label, Row } from '@kocherga/frontkit';
+import { A, Button, colors, Column, fonts, Label, Row } from '~/frontkit';
 
 import { formatDate, timezone } from '~/common/utils';
 import { CopyToClipboardIcon, DropdownMenu } from '~/components';

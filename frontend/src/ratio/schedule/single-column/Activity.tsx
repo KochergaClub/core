@@ -1,6 +1,6 @@
 import styled from 'styled-components';
 
-import { HR } from '@kocherga/frontkit';
+import { HR } from '~/frontkit';
 
 import { ActivityFragment } from '../../queries.generated';
 

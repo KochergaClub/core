@@ -3,7 +3,7 @@ import { useState } from 'react';
 import FlipMove from 'react-flip-move';
 import styled from 'styled-components';
 
-import { Button, colors, Column, fonts, Label, Row } from '@kocherga/frontkit';
+import { Button, colors, Column, fonts, Label, Row } from '~/frontkit';
 
 import AnyFieldWidget from './AnyFieldWidget';
 import { AnyFormValues, ListFormField } from './types';

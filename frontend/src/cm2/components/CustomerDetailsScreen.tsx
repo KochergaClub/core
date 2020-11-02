@@ -1,7 +1,7 @@
 import { FaSpinner } from 'react-icons/fa';
 
 import { useQuery } from '@apollo/client';
-import { Label, Row } from '@kocherga/frontkit';
+import { Label, Row } from '~/frontkit';
 
 import { ApolloQueryResults, PaddedBlock } from '~/components';
 

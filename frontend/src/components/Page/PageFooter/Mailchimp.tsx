@@ -1,6 +1,6 @@
 import styled from 'styled-components';
 
-import { Button, Row } from '@kocherga/frontkit';
+import { Button, Row } from '~/frontkit';
 
 const Input = styled.input`
   padding: 12px 16px;

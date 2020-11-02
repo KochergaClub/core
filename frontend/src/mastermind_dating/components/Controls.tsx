@@ -2,7 +2,7 @@ import Link from 'next/link';
 import { useCallback } from 'react';
 
 import { useMutation } from '@apollo/client';
-import { A, Column, Row } from '@kocherga/frontkit';
+import { A, Column, Row } from '~/frontkit';
 
 import { AsyncButton, AsyncButtonWithConfirm } from '~/components';
 
