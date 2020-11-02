@@ -24,7 +24,7 @@ class createRatioTicketType(helpers.BaseFieldWithInput):
             price=input['price'],
             name=input['name'],
             discount_by_email=input.get('discount_by_email', 0),
-            discount_percent_by_email=input.get('discount_by_percent_email', 0),
+            discount_percent_by_email=input.get('discount_percent_by_email', 0),
         )
         ticket_type.full_clean()
         return ticket_type
