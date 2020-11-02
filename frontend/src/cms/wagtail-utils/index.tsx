@@ -88,6 +88,7 @@ const loadTypename = async (
   const { data, errors } = await props.apolloClient.query({
     query: WagtailPageTypeDocument,
     variables: props.locator,
+    fetchPolicy: 'network-only',
   });
 
   if (errors) {
