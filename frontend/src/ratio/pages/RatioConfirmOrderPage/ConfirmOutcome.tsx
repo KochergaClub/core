@@ -50,7 +50,7 @@ const AskUs: React.FC<{ capitalize?: boolean }> = ({ capitalize }) => (
 );
 
 interface Props {
-  outcome: RatioConfirmOrderOutcome;
+  outcome: RatioConfirmOrderOutcome | 'graphql-error';
 }
 
 const ConfirmOutcome: React.FC<Props> = ({ outcome }) => {
@@ -86,7 +86,8 @@ const ConfirmOutcome: React.FC<Props> = ({ outcome }) => {
           color={colors.good[500]}
         >
           <p>
-            Мы отправили вам на почту письмо с подтверждением и подробностями.
+            Спасибо! Мы отправили вам на почту письмо с подтверждением и
+            подробностями.
           </p>
         </BigOutcome>
       );
@@ -124,6 +125,7 @@ const ConfirmOutcome: React.FC<Props> = ({ outcome }) => {
           </p>
         </BigOutcome>
       );
+    case 'graphql-error':
     default:
       return (
         <BigOutcome

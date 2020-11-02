@@ -49,6 +49,25 @@ class Training(models.Model):
 
     promocodes = models.ManyToManyField(Promocode, related_name='trainings')
 
+    # promocode_email = models.CharField(
+    #     max_length=40,
+    #     choices=(('notion-template', 'notion-template'),),
+    #     blank=True,
+    # )
+    # new_ticket_email = models.CharField(
+    #     max_length=40,
+    #     choices=(
+    #         ('training', 'training'),
+    #         ('wait-for-notion', 'wait-for-notion'),
+    #     ),
+    #     default='training',
+    # )
+    # notion_created_email = models.CharField(
+    #     max_length=40,
+    #     choices=(('notion-template', 'notion-template'),),
+    #     blank=True,
+    # )
+
     objects = RelayQuerySet.as_manager()
 
     class Meta:

@@ -4,12 +4,22 @@ from django.dispatch import receiver
 from django.core.mail import send_mail
 from django.db.models.signals import post_save
 from django.template.loader import render_to_string
+from django.core.exceptions import ValidationError
 
 import markdown
 from html2text import html2text
 import hashlib
 
 from .training import Training
+
+
+class TicketManager(models.Manager):
+    def create(self, **kwargs):
+        ticket = Ticket(**kwargs)
+        ticket.full_clean()
+        ticket.save()
+
+        return ticket
 
 
 class Ticket(models.Model):
@@ -55,6 +65,8 @@ class Ticket(models.Model):
 
     comment = models.TextField(blank=True)
 
+    notion_link = models.URLField(blank=True)
+
     class Meta:
         verbose_name = 'Участник'
         verbose_name_plural = 'Участники'
@@ -69,9 +81,6 @@ class Ticket(models.Model):
     def uid(self):
         SALT = settings.KOCHERGA_MAILCHIMP_UID_SALT.encode()
         return hashlib.sha1(SALT + self.email.lower().encode()).hexdigest()[:10]
-
-    def fiscalize(self):
-        raise Exception("Use Payment.fiscalize() instead")
 
 
 @receiver(post_save, sender=Ticket)

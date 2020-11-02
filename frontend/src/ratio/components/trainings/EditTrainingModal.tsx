@@ -3,8 +3,8 @@ import { useForm } from 'react-hook-form';
 
 import { useMutation } from '@apollo/client';
 
-import { BasicInputField } from '~/components/forms2';
-import { Button, Column, ControlsFooter, Modal } from '~/frontkit';
+import { BasicInputField, FieldContainer } from '~/components/forms2';
+import { Button, Column, ControlsFooter, Input, Modal, Row } from '~/frontkit';
 
 import { RatioTrainingFragment } from '../../queries.generated';
 import { UpdateRatioTrainingDocument } from './queries.generated';

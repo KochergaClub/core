@@ -1452,7 +1452,6 @@ type RatioTraining {
   ticket_types: [RatioTicketType!]!
   tickets_count: Int!
   total_income: Int!
-  long_name: String!
   promocodes_count: Int!
   promocodes(before: String, after: String, first: Int, last: Int): RatioPromocodeConnection!
 }

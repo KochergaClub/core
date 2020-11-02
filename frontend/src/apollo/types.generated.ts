@@ -2379,7 +2379,6 @@ export type RatioTraining = {
   ticket_types: Array<RatioTicketType>;
   tickets_count: Scalars['Int'];
   total_income: Scalars['Int'];
-  long_name: Scalars['String'];
   promocodes_count: Scalars['Int'];
   promocodes: RatioPromocodeConnection;
 };
