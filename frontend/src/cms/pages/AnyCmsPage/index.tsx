@@ -127,6 +127,7 @@ export const getStaticProps: GetStaticProps<Props> = async (context) => {
     if (e instanceof APIError && e.status === 404) {
       return {
         notFound: true,
+        revalidate: 1,
       };
     }
     throw e;
