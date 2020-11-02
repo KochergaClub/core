@@ -1,4 +1,4 @@
-from kocherga.graphql import g, helpers
+from kocherga.graphql import helpers
 import kocherga.django.schema.types
 from kocherga.django.errors import GenericError
 from kocherga.graphql.permissions import staffonly

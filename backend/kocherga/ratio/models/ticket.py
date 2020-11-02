@@ -1,13 +1,8 @@
 from django.db import models
 from django.conf import settings
 from django.dispatch import receiver
-from django.core.mail import send_mail
 from django.db.models.signals import post_save
-from django.template.loader import render_to_string
-from django.core.exceptions import ValidationError
 
-import markdown
-from html2text import html2text
 import hashlib
 
 from .training import Training

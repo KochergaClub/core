@@ -9,7 +9,8 @@ from .promocode import RatioPromocode
 from kocherga.yandex_kassa.schema.types import YandexKassaPayment
 
 
-# most RatioOrder fields are hidden behind permissions, but `id` and `confirmation_token` are not, since RatioOrder is created as ratioCreateOrder mutation result
+# Most RatioOrder fields are hidden behind permissions, but `id` and `confirmation_token` are not, since RatioOrder is
+# created as ratioCreateOrder mutation result.
 permissions = [user_perm('ratio.manage')]
 
 

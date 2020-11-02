@@ -112,6 +112,7 @@ WagtailPagePrivateType = g.ObjectType(
     ),
 )
 
+
 # wagtailPageOrPrivate(...) {
 #     ... on WagtailPageContainer {
 #         ...
