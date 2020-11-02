@@ -54,6 +54,9 @@ class updateRatioTraining(helpers.BaseFieldWithInput):
             'telegram_link',
             'discount_by_email',
             'discount_percent_by_email',
+            'promocode_email',
+            'new_ticket_email',
+            'notion_created_email',
         ):
             if input.get(field) is not None:
                 setattr(training, field, input[field])
@@ -71,6 +74,9 @@ class updateRatioTraining(helpers.BaseFieldWithInput):
         'telegram_link': Optional[str],
         'discount_by_email': Optional[int],
         'discount_percent_by_email': Optional[int],
+        'promocode_email': Optional[str],
+        'new_ticket_email': Optional[str],
+        'notion_created_email': Optional[str],
     }
 
     result = g.NN(types.RatioTraining)

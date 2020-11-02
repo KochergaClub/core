@@ -72,12 +72,19 @@ const AdminRatioTraining: React.FC<Props> = ({ slug }) => {
                         />
                       )}
                     </ModalAction>
-                    {/* <ModalAction title="Создать промокод">
-              {({ close }) => (
-                <CreatePromocodeModal close={close} ticketType={ticketType} />
-              )}
-            </ModalAction> */}
                   </DropdownMenu>
+                </Row>
+                <Row vCentered>
+                  <Label>Шаблон письма с промокодом:</Label>
+                  <div>{training.promocode_email || '(пусто)'}</div>
+                </Row>
+                <Row vCentered>
+                  <Label>Шаблон письма при регистрации:</Label>
+                  <div>{training.new_ticket_email || '(пусто)'}</div>
+                </Row>
+                <Row vCentered>
+                  <Label>Шаблон письма при заполнении notion-ссылки:</Label>
+                  <div>{training.notion_created_email || '(пусто)'}</div>
                 </Row>
                 {training.date && (
                   <Row vCentered>
@@ -104,7 +111,9 @@ const AdminRatioTraining: React.FC<Props> = ({ slug }) => {
               </Column>
             </PaddedBlock>
 
-            <EmailDiscount entity={training} entityType="training" />
+            <PaddedBlock width="max">
+              <EmailDiscount entity={training} entityType="training" />
+            </PaddedBlock>
             <TrainingPromocodesBlock training={training} />
             <TrainingTicketTypesBlock training={training} />
             <TrainingTicketsBlock training={training} />

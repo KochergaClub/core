@@ -88,6 +88,9 @@ fragment RatioTraining on RatioTraining {
   total_income
   discount_by_email
   discount_percent_by_email
+  promocode_email
+  new_ticket_email
+  notion_created_email
   promocodes_count
   promocodes(first: 5) {
     ...RatioPromocodeConnection

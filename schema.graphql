@@ -1447,6 +1447,9 @@ type RatioTraining {
   salaries_paid: Boolean!
   discount_by_email: Int!
   discount_percent_by_email: Int!
+  promocode_email: String!
+  new_ticket_email: String!
+  notion_created_email: String!
   tickets: [RatioTicket!]!
   schedule: [RatioTrainingDay!]!
   ticket_types: [RatioTicketType!]!
@@ -1650,6 +1653,9 @@ input UpdateRatioTrainingInput {
   telegram_link: String
   discount_by_email: Int
   discount_percent_by_email: Int
+  promocode_email: String
+  new_ticket_email: String
+  notion_created_email: String
 }
 
 input UpdateYandexKassaPaymentInput {

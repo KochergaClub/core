@@ -2,14 +2,13 @@ import logging
 
 logger = logging.getLogger(__name__)
 
+import re
 from html2text import html2text
 from django.db import models
-from django.conf import settings
 from django.core.mail import send_mail
 from django.template.loader import render_to_string
 from django.core.validators import MaxValueValidator, MinValueValidator
 
-from kocherga.dateutils import inflected_month
 from kocherga.email.tools import mjml2html
 
 from kocherga.money.cashier.models import Payment
@@ -17,6 +16,18 @@ from kocherga.money.cashier.models import Payment
 from kocherga.django.managers import RelayQuerySet
 
 from .promocode import Promocode
+
+
+# Extra precaution.
+# Training.FOO_email fields are limited by `choices` and can't be freely edited, but we really don't want to open
+# arbitrary files if something goes wrong.
+def check_safe_path(path: str):
+    if not re.match(r'[a-z\-_]+$', path):
+        raise Exception(f"{path} is not safe")
+
+
+def extract_email_title(html: str):
+    return re.search(r"<title>\s*(.*?)\s*</title>", html).group(1)
 
 
 class Training(models.Model):
@@ -49,24 +60,28 @@ class Training(models.Model):
 
     promocodes = models.ManyToManyField(Promocode, related_name='trainings')
 
-    # promocode_email = models.CharField(
-    #     max_length=40,
-    #     choices=(('notion-template', 'notion-template'),),
-    #     blank=True,
-    # )
-    # new_ticket_email = models.CharField(
-    #     max_length=40,
-    #     choices=(
-    #         ('training', 'training'),
-    #         ('wait-for-notion', 'wait-for-notion'),
-    #     ),
-    #     default='training',
-    # )
-    # notion_created_email = models.CharField(
-    #     max_length=40,
-    #     choices=(('notion-template', 'notion-template'),),
-    #     blank=True,
-    # )
+    promocode_email = models.CharField(
+        max_length=40,
+        choices=[
+            ('notion-template', 'notion-template'),
+        ],
+        blank=True,
+    )
+    new_ticket_email = models.CharField(
+        max_length=40,
+        choices=[
+            ('training', 'training'),
+            ('wait-for-notion', 'wait-for-notion'),
+        ],
+        default='training',
+    )
+    notion_created_email = models.CharField(
+        max_length=40,
+        choices=[
+            ('notion-template', 'notion-template'),
+        ],
+        blank=True,
+    )
 
     objects = RelayQuerySet.as_manager()
 
@@ -178,21 +193,20 @@ class Training(models.Model):
         self.salaries_paid = True
         self.save()
 
-    def send_promocode_email(self, email: str, promocode):
-        # TODO - giant switch based on training type
-        title = 'Промокод на покупку шаблона «Смоделируй и начни»'
+    def send_promocode_email(self, email: str, promocode: Promocode):
+        template_name = self.promocode_email
+        folder = 'promocode'
+        if not template_name:
+            raise Exception("email template is not configured")
+        check_safe_path(template_name)
+
         html_message = mjml2html(
             render_to_string(
-                'ratio/email/promocode.mjml',
-                {
-                    'title': title,
-                    'code': promocode.code,
-                    'training_genitive': 'шаблона «Смоделируй и начни»',
-                    'training_description': """Заботливо собранный Notion-шаблон с 50+ вопросами сделает мысли о проблеме или задаче чёткими и полезными. За четыре сессии по 25 минут вы зафиксируете подробное и конкретное описание проблемы и реализуете первый шаг решения. Шаблон наградит вас добрыми мемами, а тренер по рациональности проверит работу и даст советы, ссылки и поддерживающие комментарии.""",
-                    'landing_link': f'{settings.KOCHERGA_WEBSITE}/rationality/online',
-                },
+                f'ratio/email/{folder}/{template_name}.mjml',
+                {'code': promocode.code},
             )
         )
+        title = extract_email_title(html_message)
 
         send_mail(
             subject=title,
@@ -200,6 +214,29 @@ class Training(models.Model):
             html_message=html_message,
             message=html2text(html_message),
             recipient_list=[email],
+        )
+
+    def send_new_ticket_email(self, ticket):
+        template_name = self.new_ticket_email
+        folder = 'new_ticket'
+        if not template_name:
+            raise Exception("email template is not configured")
+        check_safe_path(template_name)
+
+        html_message = mjml2html(
+            render_to_string(
+                f'ratio/email/{folder}/{template_name}.mjml',
+                {"ticket": ticket, "training": self},
+            )
+        )
+        title = extract_email_title(html_message)
+
+        send_mail(
+            subject=title,
+            from_email='Кочерга <workshop@kocherga-club.ru>',
+            html_message=html_message,
+            message=html2text(html_message),
+            recipient_list=[ticket.email],
         )
 
     def send_unique_promocode(self, email: str):

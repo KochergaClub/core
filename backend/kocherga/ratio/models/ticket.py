@@ -89,16 +89,4 @@ def first_email(sender, instance, created, **kwargs):
         return
 
     # TODO - notify consumer for async
-    html_message = markdown.markdown(
-        render_to_string(
-            'ratio/email/new_ticket.md',
-            {"ticket": instance, "training": instance.training},
-        )
-    )
-    send_mail(
-        subject='Регистрация на событие',
-        from_email='Кочерга <workshop@kocherga-club.ru>',
-        html_message=html_message,
-        message=html2text(html_message),
-        recipient_list=[instance.email],
-    )
+    instance.training.send_new_ticket_email(instance)

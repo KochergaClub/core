@@ -2374,6 +2374,9 @@ export type RatioTraining = {
   salaries_paid: Scalars['Boolean'];
   discount_by_email: Scalars['Int'];
   discount_percent_by_email: Scalars['Int'];
+  promocode_email: Scalars['String'];
+  new_ticket_email: Scalars['String'];
+  notion_created_email: Scalars['String'];
   tickets: Array<RatioTicket>;
   schedule: Array<RatioTrainingDay>;
   ticket_types: Array<RatioTicketType>;
@@ -2618,6 +2621,9 @@ export type UpdateRatioTrainingInput = {
   telegram_link?: Maybe<Scalars['String']>;
   discount_by_email?: Maybe<Scalars['Int']>;
   discount_percent_by_email?: Maybe<Scalars['Int']>;
+  promocode_email?: Maybe<Scalars['String']>;
+  new_ticket_email?: Maybe<Scalars['String']>;
+  notion_created_email?: Maybe<Scalars['String']>;
 };
 
 export type UpdateYandexKassaPaymentInput = {
