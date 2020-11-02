@@ -58,7 +58,6 @@ def ticket(training):
         training=training,
         email='somebody@example.com',
         payment_amount=15000,
-        paid=True,
     )
     result.save()
     return result

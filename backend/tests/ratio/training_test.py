@@ -25,13 +25,11 @@ def test_trainer_income(training_with_schedule, trainer):
         training=t,
         email='somebody@example.com',
         payment_amount=15000,
-        paid=True,
     )
     models.Ticket.objects.create(
         training=t,
         email='somebody2@example.com',
         payment_amount=20000,
-        paid=True,
     )
     assert t.trainer_salary(trainer) == 15837.50
 
