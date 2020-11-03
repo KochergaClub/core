@@ -25,6 +25,9 @@ const PrivateWagtailCmsPage: React.FC = () => {
 
   useEffect(() => {
     (async () => {
+      // This effect can fire earlier than "reenable fetching on client-side" effect from withApollo HOC, so the following line is necessary:
+      apolloClient.disableNetworkFetches = false;
+
       const maybePage = await loadWagtailPage({
         locator: { path },
         apolloClient,
