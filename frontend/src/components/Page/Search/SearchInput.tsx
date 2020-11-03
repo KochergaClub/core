@@ -11,7 +11,7 @@ const Container = styled.div`
 const placeholderStyles = css`
   text-transform: uppercase;
   letter-spacing: 1.3px;
-  font-size: 13px;
+  font-size: 12px;
 `;
 
 const Placeholder = styled.div`

@@ -30,7 +30,7 @@ const MenuItemsList = styled.ul`
     color: white;
     text-transform: uppercase;
     letter-spacing: 1.5px;
-    font-size: 13px;
+    font-size: 12px;
     display: block;
   }
 
@@ -107,6 +107,8 @@ const MenuItemDropdown = styled(motion.ul)`
   position: absolute;
   z-index: 2000;
   overflow: hidden;
+  min-width: 180px;
+  max-width: 300px;
 
   padding: 5px 0;
   list-style-type: none;

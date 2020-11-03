@@ -45,8 +45,14 @@ const publicMenuItems: Item[] = [
     items: [
       { link: '/rationality', title: 'Рациональность', mode: 'wagtail' },
       {
+        link: '/rationality/start',
+        title: 'Шаблон Смоделируй и начни',
+        mode: 'wagtail',
+        highlight: true,
+      },
+      {
         link: '/rationality/online',
-        title: 'Онлайн-курс',
+        title: 'Онлайн-курс Рациональность в деле',
         mode: 'wagtail',
         highlight: true,
       },
