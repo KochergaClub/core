@@ -2,10 +2,9 @@ import { parseISO } from 'date-fns';
 import Link from 'next/link';
 import styled, { css } from 'styled-components';
 
-import { Button, colors, Column } from '~/frontkit';
-
 import HumanizedDateTime from '~/components/HumanizedDateTime';
 import { publicEventRoute } from '~/events/routes';
+import { Button, colors, Column } from '~/frontkit';
 
 import { Event_SummaryFragment } from '../../queries.generated';
 
@@ -72,11 +71,11 @@ interface Props {
 }
 
 const EventCard: React.FC<Props> = ({ event }) => {
-  const route = publicEventRoute(event.id);
+  const url = publicEventRoute(event.id);
 
   return (
     <Column stretch gutter={16}>
-      <Link {...publicEventRoute(event.id)} passHref>
+      <Link href={url} passHref>
         <BackgroundLink>
           <Background image={event.image} image_2x={event.image_2x}>
             <Header>{event.title}</Header>
@@ -88,7 +87,7 @@ const EventCard: React.FC<Props> = ({ event }) => {
       </TimeWrapper>
       <Padded>{event.summary}</Padded>
       <Padded>
-        <form action={route.as + '#register'}>
+        <form action={url + '#register'}>
           <Button>Зарегистрироваться</Button>
         </form>
       </Padded>

@@ -1,7 +1,5 @@
 import { Label } from '~/frontkit';
 
-import { cmsRoute } from '~/cms/routes';
-
 import { PageSearchItemFragment } from '../queries.generated';
 import ResultContainer from './ResultContainer';
 
@@ -38,7 +36,7 @@ const PageResultInternals: React.FC<{
 const PageResult: React.FC<{
   item: PageSearchItemFragment;
 }> = ({ item }) => (
-  <ResultContainer route={cmsRoute(item.page.meta.url)}>
+  <ResultContainer url={item.page.meta.url}>
     <PageResultInternals item={item} />
   </ResultContainer>
 );

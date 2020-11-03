@@ -62,7 +62,7 @@ const NewEventModal: React.FC<Props> = (props) => {
     props.close();
 
     const route = eventRoute(result.data.result.event.id);
-    Router.push(route.href, route.as);
+    Router.push(route);
   }, [notify, createMutation, title, props, isValid, time]);
 
   const hotkeys = useCommonHotkeys({

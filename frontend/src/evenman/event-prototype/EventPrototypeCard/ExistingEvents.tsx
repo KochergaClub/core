@@ -1,15 +1,13 @@
-import styled from 'styled-components';
+import { isBefore, parseISO } from 'date-fns';
 import Link from 'next/link';
-
-import { parseISO, isBefore } from 'date-fns';
-
-import { A } from '~/frontkit';
+import styled from 'styled-components';
 
 import { formatDate } from '~/common/utils';
-import { MutedSpan } from '../../components/ui';
+import { A } from '~/frontkit';
 
-import { EventsPrototypeFragment } from '../queries.generated';
+import { MutedSpan } from '../../components/ui';
 import { eventRoute } from '../../routes';
+import { EventsPrototypeFragment } from '../queries.generated';
 
 const EventsTable = styled.table`
   width: 100%;
@@ -48,14 +46,14 @@ const ExistingEvents: React.FC<Props> = ({ prototype }) => {
               <th>Название</th>
               <th>Посетителей</th>
             </tr>
-            {instances.map(e => (
+            {instances.map((e) => (
               <EventsTableRow
                 key={e.id}
                 past={isBefore(parseISO(e.start), new Date())}
               >
                 <td>{formatDate(parseISO(e.start), 'd MMMM')} </td>
                 <td>
-                  <Link {...eventRoute(e.id)} passHref>
+                  <Link href={eventRoute(e.id)} passHref>
                     <A>{e.title}</A>
                   </Link>
                 </td>

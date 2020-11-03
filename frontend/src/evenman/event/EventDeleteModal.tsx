@@ -37,9 +37,8 @@ const EventDeleteModal: React.FC<Props> = ({ event, close }) => {
 
   const act = useCallback(async () => {
     await deleteMutation();
-    const route = rootRoute();
     setDeleted(true);
-    Router.push(route.href, route.as);
+    Router.push(rootRoute());
   }, [deleteMutation]);
 
   if (deleted) {

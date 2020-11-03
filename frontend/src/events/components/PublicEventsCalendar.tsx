@@ -67,7 +67,9 @@ const Container = styled.div`
 `;
 
 const PublicEventsCalendar = () => {
-  const googleCalendarQueryResults = useQuery(EventsPublicGoogleCalendarDocument);
+  const googleCalendarQueryResults = useQuery(
+    EventsPublicGoogleCalendarDocument
+  );
 
   const apolloClient = useApolloClient();
 
@@ -106,13 +108,13 @@ const PublicEventsCalendar = () => {
   );
 
   const navigate = useCallback(({ event }: EventClickArg) => {
-    const route = publicEventRoute(event.extendedProps.event_id); // don't try to use .id here!
+    const url = publicEventRoute(event.extendedProps.event_id); // don't try to use .id here!
     if (window.location !== window.parent.location) {
       // we're in iframe
-      window.open(route.as, '_parent');
+      window.open(url, '_parent');
       return;
     }
-    Router.push(route.href, route.as).then(() => window.scrollTo(0, 0));
+    Router.push(url).then(() => window.scrollTo(0, 0));
   }, []);
 
   const [calendarView, setCalendarView] = useState('dayGridTwoWeeks');

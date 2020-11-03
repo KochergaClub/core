@@ -31,9 +31,10 @@ interface CheckoutProps {
 const CheckoutOrderModal: React.FC<CheckoutProps> = ({ close, order }) => {
   useEffect(() => {
     loadKassaCheckoutUI(() => {
-      const return_url = `${process.env.NEXT_PUBLIC_KOCHERGA_WEBSITE}${
-        confirmOrderRoute(order.id).as
-      }`;
+      const return_url = `${
+        process.env.NEXT_PUBLIC_KOCHERGA_WEBSITE
+      }${confirmOrderRoute(order.id)}`;
+
       const checkout = new (window as any).YandexCheckout({
         confirmation_token: order.confirmation_token, // Токен, который перед проведением оплаты нужно получить от Яндекс.Кассы
         return_url,

@@ -137,21 +137,21 @@ const UserButtons: React.FC<Props> = (
             <Link href="/my" as="/my">
               <Email>{user.email}</Email>
             </Link>
-            <NextLinkAction href="/my" as="/my">
+            <NextLinkAction href="/my">
               <Row vCentered>
                 <FaUser color={colors.grey[500]} />
                 <span>Личный кабинет</span>
               </Row>
             </NextLinkAction>
             {user.is_staff ? (
-              <NextLinkAction href="/team" as="/team">
+              <NextLinkAction href="/team">
                 <Row vCentered>
                   <FaUserTie color={colors.grey[500]} />
                   <span>Интранет</span>
                 </Row>
               </NextLinkAction>
             ) : null}
-            <NextLinkAction href="/my/settings" as="/my/settings">
+            <NextLinkAction href="/my/settings">
               <Row vCentered>
                 <GoGear color={colors.grey[500]} />
                 <span>Настройки</span>

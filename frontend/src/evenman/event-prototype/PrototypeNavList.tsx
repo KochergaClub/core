@@ -3,10 +3,9 @@ import Router from 'next/router';
 import { Row } from '~/frontkit';
 
 import { NavList, NavListItem } from '../components/NavList';
-import { NumberBadge, MutedSpan } from '../components/ui';
-
-import { EventsPrototype_SummaryFragment } from './queries.generated';
+import { MutedSpan, NumberBadge } from '../components/ui';
 import { prototypeRoute } from '../routes';
+import { EventsPrototype_SummaryFragment } from './queries.generated';
 
 interface Props {
   items: EventsPrototype_SummaryFragment[];
@@ -46,13 +45,12 @@ const PrototypeItem: React.FC<{
 const PrototypeNavList: React.FC<Props> = ({ items, title, selectedId }) => {
   return (
     <NavList title={title}>
-      {items.map(item => (
+      {items.map((item) => (
         <NavListItem
           key={item.id}
           selected={item.id === selectedId}
           select={() => {
-            const route = prototypeRoute(item.id);
-            Router.push(route.href, route.as);
+            Router.push(prototypeRoute(item.id));
           }}
         >
           <PrototypeItem prototype={item} />

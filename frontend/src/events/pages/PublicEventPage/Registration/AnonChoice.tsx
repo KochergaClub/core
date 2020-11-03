@@ -1,11 +1,10 @@
 import { useCallback, useState } from 'react';
-import { A, Button, Row, Column } from '~/frontkit';
 
 import AuthForm from '~/auth/components/AuthForm';
 import { checkYourEmailRoute } from '~/auth/routes';
+import { A, Button, Column, Row } from '~/frontkit';
 
 import { CommonProps } from '../types';
-
 import AnonRegistration from './AnonRegistration';
 
 const BackLink: React.FC<{ reset: () => void }> = ({ reset }) => {
@@ -24,7 +23,7 @@ const BackLink: React.FC<{ reset: () => void }> = ({ reset }) => {
   );
 };
 
-const AnonChoice: React.FC<CommonProps> = props => {
+const AnonChoice: React.FC<CommonProps> = (props) => {
   const [mode, setMode] = useState<'sign-in' | 'create-account' | undefined>();
 
   const reset = useCallback(() => setMode(undefined), []);
@@ -38,7 +37,7 @@ const AnonChoice: React.FC<CommonProps> = props => {
             // no action needed because <Registration /> uses useUser() hook and will automatically render AuthenticationRegistration instead
             onLogin={() => null}
             onMagicLinkSent={() => {
-              window.location.href = checkYourEmailRoute().as;
+              window.location.href = checkYourEmailRoute();
             }}
           />
           <BackLink reset={reset} />

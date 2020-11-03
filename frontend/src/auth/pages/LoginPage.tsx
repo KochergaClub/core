@@ -19,9 +19,9 @@ const LoginPage: NextApolloPage<Props> = (props) => {
       <CenteredLayout>
         <AuthForm
           onLogin={() => (window.location.href = props.next)}
-          onMagicLinkSent={() =>
-            (window.location.href = checkYourEmailRoute().as)
-          }
+          onMagicLinkSent={() => {
+            window.location.href = checkYourEmailRoute();
+          }}
           next={props.next}
         />
         <HintCard>

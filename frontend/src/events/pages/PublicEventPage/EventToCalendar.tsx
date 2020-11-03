@@ -1,10 +1,11 @@
-import { format, parseISO, addMinutes } from 'date-fns';
-import { A, Column } from '~/frontkit';
-import { PaddedBlock } from '~/components';
+import { addMinutes, format, parseISO } from 'date-fns';
+
 import { buildQueryString } from '~/common/utils';
-import { CommonProps } from './types';
+import { PaddedBlock } from '~/components';
+import { A, Column } from '~/frontkit';
 
 import { publicEventRoute } from '../../routes';
+import { CommonProps } from './types';
 
 const GOOGLE_DATE_FORMAT = "yyyyMMdd'T'HHmmss'Z'";
 
@@ -18,9 +19,9 @@ const toIcsDate = toGoogleDate; // google and ics date formats are identical
 const EventToCalendar: React.FC<CommonProps> = ({ event }) => {
   // https://stackoverflow.com/questions/10488831/link-to-add-to-google-calendar/21653600#21653600
   const buildLink = () => {
-    const details = `Подробности: ${process.env.NEXT_PUBLIC_KOCHERGA_WEBSITE}${
-      publicEventRoute(event.id).as
-    }`;
+    const details = `Подробности: ${
+      process.env.NEXT_PUBLIC_KOCHERGA_WEBSITE
+    }${publicEventRoute(event.id)}`;
     const dates =
       toGoogleDate(parseISO(event.start)) +
       '/' +

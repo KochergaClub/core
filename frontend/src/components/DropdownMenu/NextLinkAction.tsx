@@ -1,16 +1,15 @@
 import Link from 'next/link';
 
-import { LinkActionA } from './LinkAction';
 import ActionContainer from './ActionContainer';
+import { LinkActionA } from './LinkAction';
 
 interface Props {
   href: string;
-  as: string;
 }
 
-const NextLinkAction: React.FC<Props> = ({ children, href, as }) => {
+const NextLinkAction: React.FC<Props> = ({ children, href }) => {
   return (
-    <Link href={href} as={as} passHref>
+    <Link href={href} passHref>
       <LinkActionA>
         <ActionContainer>{children}</ActionContainer>
       </LinkActionA>

@@ -1,10 +1,9 @@
 import Link from 'next/link';
 import styled from 'styled-components';
 
-import { A, colors, LabelDiv, Row } from '~/frontkit';
-
 import Card from '~/components/Card';
 import TelegramIcon from '~/components/icons/TelegramIcon';
+import { A, colors, LabelDiv, Row } from '~/frontkit';
 import { projectRoute } from '~/projects/routes';
 
 import { TelegramChatFragment } from '../queries.generated';
@@ -56,7 +55,7 @@ const TelegramChatCard: React.FC<Props> = ({ chat, hideProjectLink }) => {
           {chat.project && !hideProjectLink ? (
             <small>
               Чат проекта{' '}
-              <Link {...projectRoute(chat.project.meta.slug)} passHref>
+              <Link href={projectRoute(chat.project.meta.slug)} passHref>
                 <A>{chat.project.title}</A>
               </Link>
             </small>

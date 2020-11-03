@@ -18,8 +18,7 @@ interface Props {
 
 const CalendarCell: React.FC<Props> = ({ events, selected_id }) => {
   const selectCb = useCallback((id: string) => {
-    const route = eventRoute(id);
-    Router.push(route.href, route.as);
+    Router.push(eventRoute(id));
   }, []);
 
   return (

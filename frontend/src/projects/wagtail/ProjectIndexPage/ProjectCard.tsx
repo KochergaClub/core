@@ -2,7 +2,6 @@ import Link from 'next/link';
 import styled from 'styled-components';
 
 import { Label } from '~/frontkit';
-
 import { projectRoute } from '~/projects/routes';
 
 import { ProjectPage_SummaryFragment } from './fragments.generated';
@@ -54,10 +53,10 @@ const ActivitySummary = styled(Label)`
 `;
 
 const ProjectCard = (props: ProjectPage_SummaryFragment) => {
-  const route = projectRoute(props.meta.slug);
+  const url = projectRoute(props.meta.slug);
 
   return (
-    <Link {...route} passHref>
+    <Link href={url} passHref>
       <ProjectA>
         <Card>
           <Image src={props.image.url} />

@@ -1,11 +1,8 @@
-import DropdownMenu, {
-  NextLinkAction,
-  ModalAction,
-} from '~/components/DropdownMenu';
+import DropdownMenu, { ModalAction, NextLinkAction } from '~/components/DropdownMenu';
 
+import { prototypeRoute } from '../routes';
 import EventDeleteModal from './EventDeleteModal';
 import LinkToPrototypeModal from './LinkToPrototypeModal';
-import { prototypeRoute } from '../routes';
 import { EvenmanEvent_DetailsFragment } from './queries.generated';
 
 interface Props {
@@ -16,7 +13,7 @@ const EventDropdownMenu: React.FC<Props> = ({ event }) => {
   return (
     <DropdownMenu title="Действия">
       {event.prototype && (
-        <NextLinkAction {...prototypeRoute(event.prototype.id)}>
+        <NextLinkAction href={prototypeRoute(event.prototype.id)}>
           Открыть прототип
         </NextLinkAction>
       )}
