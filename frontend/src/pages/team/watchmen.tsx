@@ -1,3 +1,4 @@
 import buildRedirectPage from '~/components/RedirectPage';
+import { watchmenShiftsRoute } from '~/watchmen/routes';
 
-export default buildRedirectPage('/team/space/staff/shifts');
+export default buildRedirectPage(watchmenShiftsRoute());

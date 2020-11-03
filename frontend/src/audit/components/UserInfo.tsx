@@ -1,8 +1,8 @@
 import Link from 'next/link';
 
-import { A, Row } from '~/frontkit';
-
 import { Badge } from '~/components';
+import { A, Row } from '~/frontkit';
+import { staffMemberRoute } from '~/staff/routes';
 
 import { MaybeStaffUserFragment } from '../queries.generated';
 
@@ -10,11 +10,7 @@ const UserInfo: React.FC<{ user: MaybeStaffUserFragment }> = ({ user }) => {
   if (user.staff_member) {
     return (
       <div>
-        <Link
-          href="/team/staff/[id]"
-          as={`/team/staff/${user.staff_member.id}`}
-          passHref
-        >
+        <Link href={staffMemberRoute(user.staff_member.id)} passHref>
           <A>{user.staff_member.full_name}</A>
         </Link>
       </div>

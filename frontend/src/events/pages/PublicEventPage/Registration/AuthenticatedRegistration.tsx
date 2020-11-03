@@ -3,11 +3,11 @@ import { useCallback } from 'react';
 import { FaHeart, FaUser } from 'react-icons/fa';
 
 import { useMutation } from '@apollo/client';
-import { A, colors, Column, Label, Row } from '~/frontkit';
 
 import { useUser } from '~/common/hooks';
 import { AsyncButton } from '~/components';
 import { trackEvent } from '~/components/analytics';
+import { A, colors, Column, Label, Row } from '~/frontkit';
 import TicketCard from '~/my/components/TicketCard';
 
 import { MyEventsTicketRegisterDocument } from '../queries.generated';
@@ -29,8 +29,8 @@ const Registered: React.FC<CommonProps> = ({ event }) => {
         }}
       />
       <Column centered>
-        <Link href="/my">
-          <A href="/my">Смотреть все регистрации в личном кабинете</A>
+        <Link href="/my" passHref>
+          <A>Смотреть все регистрации в личном кабинете</A>
         </Link>
       </Column>
     </Column>
@@ -73,8 +73,8 @@ export default function Registration({ event }: CommonProps) {
       <Column centered gutter={0}>
         <Row vCentered>
           <FaUser color={colors.grey[500]} />
-          <Link href="/my">
-            <A href="/my">{user.email}</A>
+          <Link href="/my" passHref>
+            <A>{user.email}</A>
           </Link>
         </Row>
         {isRegistered ? (

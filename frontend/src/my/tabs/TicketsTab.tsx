@@ -1,15 +1,15 @@
 import Link from 'next/link';
 
-import { A, Column, HR, Row } from '~/frontkit';
-
 import { HintCard } from '~/components';
+import { publicEventsRootRoute } from '~/events/routes';
+import { A, Column, HR, Row } from '~/frontkit';
 
 import TicketsList from '../components/TicketsList';
 import { MyTicketsPageFragment } from '../queries.generated';
 
 const OtherEvents = () => (
   <Row centered>
-    <Link href="/events" passHref>
+    <Link href={publicEventsRootRoute()} passHref>
       <A>Посмотреть календарь всех событий</A>
     </Link>
   </Row>

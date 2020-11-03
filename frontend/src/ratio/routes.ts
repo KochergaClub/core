@@ -3,3 +3,6 @@ export const confirmOrderRoute = (id: string) =>
 
 export const adminTrainingRoute = (slug: string) =>
   `/team/ratio/training/${slug}`;
+
+export const adminTrainingScheduleRoute = (slug: string) =>
+  `/team/ratio/training/${slug}/schedule`;

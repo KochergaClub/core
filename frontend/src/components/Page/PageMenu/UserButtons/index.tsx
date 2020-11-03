@@ -134,7 +134,7 @@ const UserButtons: React.FC<Props> = (
       }) =>
         user.is_authenticated ? (
           <DropdownMenu render={() => <FaUserCircle size="24" color="white" />}>
-            <Link href="/my" as="/my">
+            <Link href="/my">
               <Email>{user.email}</Email>
             </Link>
             <NextLinkAction href="/my">

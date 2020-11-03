@@ -19,7 +19,7 @@ const TildaPageCard: React.FC<{
     <Card>
       <Row spaced>
         <Row vCentered gutter={16}>
-          <Link href="/[...slug]" as={'/' + page.path} passHref>
+          <Link href={'/' + page.path} passHref>
             <A>{page.title}</A>
           </Link>
           <small>{page.path}</small>

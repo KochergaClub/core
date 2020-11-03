@@ -7,6 +7,7 @@ import { useQuery } from '@apollo/client';
 import { ApolloQueryResults, DropdownMenu, MutationButton, PaddedBlock, Page } from '~/components';
 import { ModalAction } from '~/components/DropdownMenu';
 import { A, colors, Column, Label, Row } from '~/frontkit';
+import { adminTrainingScheduleRoute } from '~/ratio/routes';
 
 import {
     RatioTrainingBySlugDocument, RatioTrainingSyncParticipantsToMailchimpDocument
@@ -95,7 +96,7 @@ const AdminRatioTraining: React.FC<Props> = ({ slug }) => {
 
                 {training.date && (
                   <LinkWithIcon
-                    href={`/team/ratio/training/${training.slug}/schedule`}
+                    href={adminTrainingScheduleRoute(training.slug)}
                     text="Расписание"
                     icon={FaRegListAlt}
                   />

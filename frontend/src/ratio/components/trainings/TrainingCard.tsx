@@ -3,6 +3,7 @@ import React from 'react';
 
 import { Badge, MutationButton } from '~/components';
 import { A, Label, Row } from '~/frontkit';
+import { adminTrainingRoute } from '~/ratio/routes';
 
 import { RatioTraining_SummaryFragment } from '../../queries.generated';
 import TicketTypeBadge from '../ticket-types/TicketTypeBadge';
@@ -16,11 +17,7 @@ const TrainingCard: React.FC<Props> = ({ training }) => {
   return (
     <div>
       <Row spaced>
-        <Link
-          href="/team/ratio/training/[slug]"
-          as={`/team/ratio/training/${training.slug}`}
-          passHref
-        >
+        <Link href={adminTrainingRoute(training.slug)} passHref>
           <A>{training.name}</A>
         </Link>
         {training.tickets_count === 0 && training.ticket_types.length === 0 && (

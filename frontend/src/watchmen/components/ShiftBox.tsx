@@ -2,9 +2,10 @@ import { useContext } from 'react';
 import styled from 'styled-components';
 
 import { useMutation } from '@apollo/client';
-import { colors } from '~/frontkit';
 
 import { useExpandable } from '~/common/hooks';
+import { colors } from '~/frontkit';
+import { staffMemberRoute } from '~/staff/routes';
 
 import { nightColor } from '../constants';
 import { EditingContext } from '../contexts';
@@ -15,7 +16,7 @@ import WatchmanPicker from './WatchmanPicker';
 
 const Container = styled.div<{ editing: boolean }>`
   position: relative;
-  cursor: ${props => (props.editing ? 'pointer' : 'auto')};
+  cursor: ${(props) => (props.editing ? 'pointer' : 'auto')};
 `;
 
 const Box = styled.div`
@@ -58,7 +59,7 @@ const InnerShiftBox = ({
   let content = <>{shift.watchman.member.short_name}</>;
   if (!editing) {
     content = (
-      <WatchmanLink href={`/team/staff/${shift.watchman.member.id}`}>
+      <WatchmanLink href={staffMemberRoute(shift.watchman.member.id)}>
         {content}
       </WatchmanLink>
     );

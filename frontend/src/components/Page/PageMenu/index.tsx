@@ -50,7 +50,7 @@ const Logo = ({ kind }: Props) => {
   }
 
   return (
-    <Link href="/" as="/" passHref>
+    <Link href="/" passHref>
       <a>
         <LogoImage />
       </a>

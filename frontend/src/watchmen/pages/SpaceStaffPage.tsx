@@ -1,13 +1,12 @@
 import Link from 'next/link';
 
+import { NextApolloPage, withApollo, withStaff } from '~/apollo';
+import { Page } from '~/components';
 import { A } from '~/frontkit';
 
-import { withApollo, withStaff, NextApolloPage } from '~/apollo';
-
-import { Page } from '~/components';
-
-import WatchmenList from '../components/WatchmenList';
 import GradesList from '../components/GradesList';
+import WatchmenList from '../components/WatchmenList';
+import { watchmenShiftsRoute } from '../routes';
 
 const SpaceStaffPage: NextApolloPage = () => {
   return (
@@ -17,7 +16,7 @@ const SpaceStaffPage: NextApolloPage = () => {
         <WatchmenList />
         <GradesList />
         <h2>Расписание смен</h2>
-        <Link href="/team/space/staff/shifts" passHref>
+        <Link href={watchmenShiftsRoute()} passHref>
           <A>Смотреть</A>
         </Link>
       </Page.Main>

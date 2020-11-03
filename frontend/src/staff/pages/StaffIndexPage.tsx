@@ -1,12 +1,13 @@
 import Link from 'next/link';
 
 import { useQuery } from '@apollo/client';
-import { A, Column } from '~/frontkit';
 
 import { NextApolloPage, withApollo, withStaff } from '~/apollo';
 import { ApolloQueryResults, Page } from '~/components';
+import { A, Column } from '~/frontkit';
 
 import { StaffMemberForListFragment, StaffMembersDocument } from '../queries.generated';
+import { staffMemberRoute } from '../routes';
 
 const MemberList = ({
   title,
@@ -17,13 +18,8 @@ const MemberList = ({
 }) => (
   <Column centered>
     <h2>{title}</h2>
-    {members.map(member => (
-      <Link
-        href="/team/staff/[id]"
-        as={`/team/staff/${member.id}`}
-        key={member.id}
-        passHref
-      >
+    {members.map((member) => (
+      <Link href={staffMemberRoute(member.id)} key={member.id} passHref>
         <A>{member.full_name}</A>
       </Link>
     ))}
@@ -43,25 +39,25 @@ const StaffIndexPage: NextApolloPage = () => {
               <MemberList
                 title="Менеджеры"
                 members={members.filter(
-                  m => m.is_current && ['FOUNDER', 'MANAGER'].includes(m.role)
+                  (m) => m.is_current && ['FOUNDER', 'MANAGER'].includes(m.role)
                 )}
               />
               <MemberList
                 title="Рацио"
                 members={members.filter(
-                  m => m.is_current && ['TRAINER'].includes(m.role)
+                  (m) => m.is_current && ['TRAINER'].includes(m.role)
                 )}
               />
               <MemberList
                 title="Админы"
                 members={members.filter(
-                  m => m.is_current && ['WATCHMAN'].includes(m.role)
+                  (m) => m.is_current && ['WATCHMAN'].includes(m.role)
                 )}
               />
               <MemberList
                 title="Прочие"
                 members={members.filter(
-                  m =>
+                  (m) =>
                     m.is_current &&
                     !['WATCHMAN', 'FOUNDER', 'MANAGER', 'TRAINER'].includes(
                       m.role
@@ -70,7 +66,7 @@ const StaffIndexPage: NextApolloPage = () => {
               />
               <MemberList
                 title="Бывшие сотрудники"
-                members={members.filter(m => !m.is_current)}
+                members={members.filter((m) => !m.is_current)}
               />
             </Column>
           )}

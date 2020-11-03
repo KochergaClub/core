@@ -1,12 +1,15 @@
 import Link from 'next/link';
+
 import { A } from '~/frontkit';
+
+import { cmOrderDetailsRoute } from '../routes';
 
 interface Props {
   order: { id: string };
 }
 
 const OrderLink: React.FC<Props> = ({ order }) => (
-  <Link href="/team/cm/orders/[id]" as={`/team/cm/orders/${order.id}`} passHref>
+  <Link href={cmOrderDetailsRoute(order.id)} passHref>
     <A>{order.id}</A>
   </Link>
 );

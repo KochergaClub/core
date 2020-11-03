@@ -1,17 +1,15 @@
+import { ErrorMessage, Field, FieldProps, Form, Formik } from 'formik';
+import Link from 'next/link';
+import { useRouter } from 'next/router';
+import { ParsedUrlQuery } from 'querystring';
 import { useCallback } from 'react';
 import styled from 'styled-components';
 
-import { useRouter } from 'next/router';
-import { ParsedUrlQuery } from 'querystring';
-import Link from 'next/link';
-
-import { Formik, Field, FieldProps, Form, ErrorMessage } from 'formik';
-
-import { A, Column, Label, Input, Row, colors } from '~/frontkit';
+import { A, colors, Column, Input, Label, Row } from '~/frontkit';
 
 import { TemplateFragment } from '../queries.generated';
-import { FormState, state2link, jsonToQueryString } from '../utils';
-
+import { imageTemplaterRootRoute } from '../routes';
+import { FormState, jsonToQueryString, state2link } from '../utils';
 import Preview from './Preview';
 
 const template2initialValues = (
@@ -19,7 +17,7 @@ const template2initialValues = (
   query: ParsedUrlQuery
 ) => {
   const result: { [k: string]: string } = {};
-  template.schema.fields.forEach(field => {
+  template.schema.fields.forEach((field) => {
     let value = field.default;
     const queryValue = query[field.name];
     if (queryValue) {
@@ -73,7 +71,7 @@ const ErrorLabel = styled.div`
 const Fields = ({ template }: { template: TemplateFragment }) => {
   return (
     <div>
-      {template.schema.fields.map(field => (
+      {template.schema.fields.map((field) => (
         <div key={field.name}>
           <Label>{field.name}</Label>
           <CenteredRow gutter={16}>
@@ -112,7 +110,7 @@ const ViewingTemplateScreen: React.FC<Props> = ({ template }) => {
 
   return (
     <div>
-      <Link href="/team/image-templater" passHref>
+      <Link href={imageTemplaterRootRoute()} passHref>
         <A>&larr; все шаблоны</A>
       </Link>
       <h2>{template.name}</h2>

@@ -1,10 +1,10 @@
 import Link from 'next/link';
 
+import Card from '~/components/Card';
 import { A } from '~/frontkit';
 
-import Card from '~/components/Card';
-
 import { TemplateFragment } from '../queries.generated';
+import { imageTemplateDetailsRoute } from '../routes';
 
 interface Props {
   template: TemplateFragment;
@@ -13,11 +13,7 @@ interface Props {
 const TemplateCard: React.FC<Props> = ({ template }) => {
   return (
     <Card>
-      <Link
-        href="/team/image-templater/[slug]"
-        as={`/team/image-templater/${template.name}`}
-        passHref
-      >
+      <Link href={imageTemplateDetailsRoute(template.name)} passHref>
         <A>{template.name}</A>
       </Link>
     </Card>

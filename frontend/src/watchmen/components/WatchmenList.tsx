@@ -4,11 +4,12 @@ import { FaEdit } from 'react-icons/fa';
 import styled from 'styled-components';
 
 import { useMutation, useQuery } from '@apollo/client';
-import { A, Button, Label, Row } from '~/frontkit';
 
 import { usePermissions } from '~/common/hooks';
 import { ApolloQueryResults, AsyncButton } from '~/components';
 import Card, { CardList } from '~/components/Card';
+import { A, Button, Label, Row } from '~/frontkit';
+import { staffMemberRoute } from '~/staff/routes';
 
 import {
     GradeFragment, WatchmanFragment, WatchmenSetWatchmanGradeDocument,
@@ -31,10 +32,13 @@ const WatchmanPriorityButton: React.FC<{
   watchman: WatchmanFragment;
   priority: number;
 }> = ({ watchman, priority, children }) => {
-  const [setPriorityMutation] = useMutation(WatchmenSetWatchmanPriorityDocument, {
-    refetchQueries: ['WatchmenWatchmenList'],
-    awaitRefetchQueries: true,
-  });
+  const [setPriorityMutation] = useMutation(
+    WatchmenSetWatchmanPriorityDocument,
+    {
+      refetchQueries: ['WatchmenWatchmenList'],
+      awaitRefetchQueries: true,
+    }
+  );
 
   const cb = useCallback(async () => {
     await setPriorityMutation({
@@ -94,11 +98,7 @@ const WatchmanItem = ({ watchman }: { watchman: WatchmanFragment }) => {
   return (
     <Card>
       <strong>
-        <Link
-          href="/team/staff/[id]"
-          as={`/team/staff/${watchman.member.id}`}
-          passHref
-        >
+        <Link href={staffMemberRoute(watchman.member.id)} passHref>
           <A>{watchman.member.short_name}</A>
         </Link>
       </strong>
@@ -156,7 +156,7 @@ const WatchmenSublist: React.FC<{
     <section>
       <h3>{title}</h3>
       <CardList>
-        {watchmen.map(watchman => (
+        {watchmen.map((watchman) => (
           <WatchmanItem watchman={watchman} key={watchman.id} />
         ))}
       </CardList>
@@ -167,9 +167,9 @@ const WatchmenSublist: React.FC<{
 const WatchmenListResults: React.FC<{ watchmen: WatchmanFragment[] }> = ({
   watchmen,
 }) => {
-  const firstPriorityWatchmen = watchmen.filter(w => w.priority === 1);
-  const secondPriorityWatchmen = watchmen.filter(w => w.priority === 2);
-  const thirdPriorityWatchmen = watchmen.filter(w => w.priority === 3);
+  const firstPriorityWatchmen = watchmen.filter((w) => w.priority === 1);
+  const secondPriorityWatchmen = watchmen.filter((w) => w.priority === 2);
+  const thirdPriorityWatchmen = watchmen.filter((w) => w.priority === 3);
 
   return (
     <div>

@@ -1,10 +1,10 @@
+import { format, parseISO } from 'date-fns';
 import Link from 'next/link';
 
 import { A } from '~/frontkit';
+import { mastermindDatingCohortDetailsRoute } from '~/mastermind_dating/routes';
 
 import { MastermindDatingCohortSummaryFragment as CohortFragment } from '../../queries.generated';
-
-import { format, parseISO } from 'date-fns';
 
 const CohortItem = ({ cohort }: { cohort: CohortFragment }) => {
   let title = String(cohort.id);
@@ -14,11 +14,7 @@ const CohortItem = ({ cohort }: { cohort: CohortFragment }) => {
   }
   return (
     <div>
-      <Link
-        href="/team/mastermind_dating/cohort/[id]"
-        as={`/team/mastermind_dating/cohort/${cohort.id}`}
-        passHref
-      >
+      <Link href={mastermindDatingCohortDetailsRoute(cohort.id)} passHref>
         <A>{title}</A>
       </Link>
     </div>

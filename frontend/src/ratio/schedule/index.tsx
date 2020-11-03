@@ -2,13 +2,14 @@ import { useCallback, useState } from 'react';
 import styled from 'styled-components';
 
 import { useMutation } from '@apollo/client';
-import { A, Column, Row } from '~/frontkit';
 
 import { staticUrl } from '~/common/utils';
+import { A, Column, Row } from '~/frontkit';
 
 import {
     RatioTrainingCopyScheduleFromDocument, TrainingForPickerFragment, TrainingWithScheduleFragment
 } from '../queries.generated';
+import { adminTrainingRoute } from '../routes';
 import CopyScheduleFromPicker from './CopyScheduleFromPicker';
 import CreateDayButton from './CreateDayButton';
 import MultiColumnSchedule from './MultiColumnSchedule';
@@ -47,10 +48,13 @@ interface Props {
 
 const SchedulePage: React.FC<Props> = ({ training }) => {
   const { schedule } = training;
-  const [copyScheduleFromMutation] = useMutation(RatioTrainingCopyScheduleFromDocument, {
-    refetchQueries: ['RatioTrainingWithSchedule'],
-    awaitRefetchQueries: true,
-  });
+  const [copyScheduleFromMutation] = useMutation(
+    RatioTrainingCopyScheduleFromDocument,
+    {
+      refetchQueries: ['RatioTrainingWithSchedule'],
+      awaitRefetchQueries: true,
+    }
+  );
 
   const [multiColumn, setMultiColumn] = useState(true);
 
@@ -76,9 +80,7 @@ const SchedulePage: React.FC<Props> = ({ training }) => {
         <Row spaced>
           <HeaderTexts>
             <h1>
-              <A href={`/team/ratio/training/${training.slug}`}>
-                {training.name}
-              </A>
+              <A href={adminTrainingRoute(training.slug)}>{training.name}</A>
             </h1>
             <h2>Расписание занятий</h2>
           </HeaderTexts>
@@ -89,7 +91,7 @@ const SchedulePage: React.FC<Props> = ({ training }) => {
                 <input
                   type="checkbox"
                   checked={multiColumn}
-                  onChange={e => setMultiColumn(e.currentTarget.checked)}
+                  onChange={(e) => setMultiColumn(e.currentTarget.checked)}
                 />
                 несколько колонок
               </Row>

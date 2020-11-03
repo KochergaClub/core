@@ -8,12 +8,13 @@ import { FiVideo } from 'react-icons/fi';
 import styled from 'styled-components';
 
 import { useMutation } from '@apollo/client';
-import { A, Button, colors, Column, fonts, Label, Row } from '~/frontkit';
 
 import { formatDate, timezone } from '~/common/utils';
 import { CopyToClipboardIcon, DropdownMenu } from '~/components';
 import Card from '~/components/Card';
 import { Action } from '~/components/DropdownMenu';
+import { publicEventRoute } from '~/events/routes';
+import { A, Button, colors, Column, fonts, Label, Row } from '~/frontkit';
 
 import { MyTicketDeleteDocument, MyTicketFragment } from '../queries.generated';
 
@@ -70,11 +71,7 @@ const TicketCard: React.FC<Props> = ({ ticket, later }) => {
         <Column stretch gutter={16} style={{ flex: 1 }}>
           <Column stretch gutter={16}>
             <Row spaced gutter={8}>
-              <Link
-                href="/events/[id]"
-                as={`/events/${ticket.event.id}`}
-                passHref
-              >
+              <Link href={publicEventRoute(ticket.event.id)} passHref>
                 <EventLink>{ticket.event.title}</EventLink>
               </Link>
             </Row>

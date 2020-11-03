@@ -1,8 +1,9 @@
-import { subWeeks, addWeeks, format } from 'date-fns';
+import { addWeeks, format, subWeeks } from 'date-fns';
+import Link from 'next/link';
 
 import { A, Row } from '~/frontkit';
 
-import Link from 'next/link';
+import { watchmenShiftsRoute } from '../routes';
 
 interface Props {
   from_date: Date;
@@ -14,7 +15,7 @@ const PagerLink: React.FC<{ query: { [key: string]: string } }> = ({
 }) => (
   <Link
     href={{
-      pathname: '/team/space/staff/shifts',
+      pathname: watchmenShiftsRoute(),
       query,
     }}
     scroll={false}

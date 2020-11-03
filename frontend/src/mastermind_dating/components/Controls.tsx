@@ -2,14 +2,15 @@ import Link from 'next/link';
 import { useCallback } from 'react';
 
 import { useMutation } from '@apollo/client';
-import { A, Column, Row } from '~/frontkit';
 
 import { AsyncButton, AsyncButtonWithConfirm } from '~/components';
+import { A, Column, Row } from '~/frontkit';
 
 import {
     MastermindDatingCohortDetailsFragment as Cohort, MastermindDatingDeleteCohortDocument,
     MastermindDatingRunSolverDocument
 } from '../queries.generated';
+import { mastermindDatingRootRoute } from '../routes';
 import CohortEventLink from './CohortEventLink';
 
 interface Props {
@@ -23,20 +24,23 @@ const Controls: React.FC<Props> = ({ cohort }) => {
     },
   });
 
-  const [deleteCohortMutation] = useMutation(MastermindDatingDeleteCohortDocument, {
-    variables: {
-      cohort_id: cohort.id,
-    },
-  });
+  const [deleteCohortMutation] = useMutation(
+    MastermindDatingDeleteCohortDocument,
+    {
+      variables: {
+        cohort_id: cohort.id,
+      },
+    }
+  );
 
   const deleteCohort = useCallback(async () => {
     await deleteCohortMutation();
-    window.location.href = '/team/mastermind_dating';
+    window.location.href = mastermindDatingRootRoute();
   }, [deleteCohortMutation]);
 
   return (
     <Column>
-      <Link href="/team/mastermind_dating" passHref>
+      <Link href={mastermindDatingRootRoute()} passHref>
         <A>&larr; к списку когорт</A>
       </Link>
       <div style={{ alignSelf: 'stretch' }}>
