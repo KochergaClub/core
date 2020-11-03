@@ -31,7 +31,7 @@ const RatioConfirmOrderPage: NextApolloPage = () => {
     <Page title="Подтверждение заказа">
       <Page.Title>Подтверждение заказа</Page.Title>
       <Page.Main>
-        {confirmResults.loading ? (
+        {!confirmResults.called || confirmResults.loading ? (
           <Spinner size="block" />
         ) : confirmResults.data ? (
           <ConfirmOutcome outcome={confirmResults.data.result.outcome} />
