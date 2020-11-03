@@ -1,4 +1,4 @@
-import '~/css/react-datepicker.css';
+import 'react-datepicker/dist/react-datepicker.css';
 
 import { format } from 'date-fns';
 import { ru } from 'date-fns/locale';

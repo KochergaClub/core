@@ -1,3 +1,5 @@
+import 'react-datepicker/dist/react-datepicker.css';
+
 import { addHours, getHours, getMinutes, parseISO, setHours, setMinutes } from 'date-fns';
 import Router from 'next/router';
 import { useCallback, useState } from 'react';

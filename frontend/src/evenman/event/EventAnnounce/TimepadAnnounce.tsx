@@ -1,10 +1,12 @@
+import 'react-toggle/style.css';
+
 import Toggle from 'react-toggle';
 
 import { useMutation } from '@apollo/client';
-import { Row } from '~/frontkit';
 
 import { EventAnnounceTarget } from '~/apollo/types.generated';
 import { AsyncButton } from '~/components';
+import { Row } from '~/frontkit';
 
 import TimepadCategoryPicker from '../../common/TimepadCategoryPicker';
 import { useUpdateMutation } from '../hooks';

@@ -1,3 +1,5 @@
+import 'react-toggle/style.css';
+
 import { useCallback, useEffect, useState } from 'react';
 import Toggle from 'react-toggle';
 

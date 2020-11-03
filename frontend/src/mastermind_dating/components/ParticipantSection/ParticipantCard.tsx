@@ -1,11 +1,13 @@
+import 'react-toggle/style.css';
+
 import { useCallback } from 'react';
 import Toggle from 'react-toggle';
 import styled from 'styled-components';
 
 import { useMutation } from '@apollo/client';
-import { colors, Column, fonts, Row } from '~/frontkit';
 
 import { AsyncButton } from '~/components';
+import { colors, Column, fonts, Row } from '~/frontkit';
 
 import {
     MastermindDatingActivateVotingDocument, MastermindDatingParticipantFragment as Participant,
@@ -65,12 +67,12 @@ const VoteForm: React.FC<Props> = ({ participant }) => {
   return <AsyncButton act={mutation}>Активировать голосование</AsyncButton>;
 };
 
-const ParticipantCard: React.FC<Props> = props => {
+const ParticipantCard: React.FC<Props> = (props) => {
   const { participant } = props;
 
-  const [
-    setPresenceStatusMutation,
-  ] = useMutation(MastermindDatingSetPresenceStatusDocument);
+  const [setPresenceStatusMutation] = useMutation(
+    MastermindDatingSetPresenceStatusDocument
+  );
 
   const onPresenceChange = useCallback(
     async (e: React.ChangeEvent<HTMLInputElement>) => {

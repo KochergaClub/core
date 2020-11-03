@@ -1,9 +1,7 @@
-import Head from 'next/head';
 import { useRouter } from 'next/router';
 import { ParsedUrlQuery } from 'querystring';
 
 import { NextApolloPage, withApollo, withStaff } from '~/apollo';
-import { staticUrl } from '~/common/utils';
 import { Page } from '~/components';
 import { WithNavSidebar } from '~/frontkit';
 
@@ -76,13 +74,6 @@ const App: NextApolloPage<Props> = () => {
 
   return (
     <Page title="Event Manager" menu="team" chrome="fullscreen">
-      <Head>
-        <link rel="stylesheet" href={staticUrl('react-toggle/style.css')} />
-        <link
-          rel="stylesheet"
-          href={staticUrl('react-datepicker/react-datepicker.min.css')}
-        />
-      </Head>
       <GlobalStyle />
       <WithNavSidebar
         tabs={tabs}

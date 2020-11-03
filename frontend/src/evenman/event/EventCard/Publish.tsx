@@ -1,9 +1,11 @@
+import 'react-toggle/style.css';
+
 import Toggle from 'react-toggle';
 
 import { A, Row } from '~/frontkit';
 
-import { EvenmanEvent_DetailsFragment } from '../queries.generated';
 import { useUpdateMutation } from '../hooks';
+import { EvenmanEvent_DetailsFragment } from '../queries.generated';
 
 interface Props {
   event: EvenmanEvent_DetailsFragment;

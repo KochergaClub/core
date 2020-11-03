@@ -1,12 +1,12 @@
-import Head from 'next/head';
+import 'react-toggle/style.css';
+
 import { useState } from 'react';
 import Toggle from 'react-toggle';
 
 import { useMutation } from '@apollo/client';
-import { Column, Row } from '~/frontkit';
 
-import { staticUrl } from '~/common/utils';
 import { AsyncButton } from '~/components';
+import { Column, Row } from '~/frontkit';
 
 import {
     MastermindDatingCohortDetailsFragment as Cohort,
@@ -20,27 +20,31 @@ interface Props {
 }
 
 const ParticipantSection: React.FC<Props> = ({ cohort }) => {
-  const [
-    populateFromEvent,
-  ] = useMutation(MastermindDatingPopulateCohortFromEventDocument, {
-    variables: {
-      cohort_id: cohort.id,
-    },
-  });
+  const [populateFromEvent] = useMutation(
+    MastermindDatingPopulateCohortFromEventDocument,
+    {
+      variables: {
+        cohort_id: cohort.id,
+      },
+    }
+  );
 
-  const [sendInviteEmails] = useMutation(MastermindDatingSendInviteEmailsDocument, {
-    variables: {
-      cohort_id: cohort.id,
-    },
-  });
+  const [sendInviteEmails] = useMutation(
+    MastermindDatingSendInviteEmailsDocument,
+    {
+      variables: {
+        cohort_id: cohort.id,
+      },
+    }
+  );
 
-  const uninvitedCount = cohort.participants.filter(p => !p.invite_email_sent)
+  const uninvitedCount = cohort.participants.filter((p) => !p.invite_email_sent)
     .length;
 
   const [hideUnregistered, setHideUnregistered] = useState(false);
 
   const shownParticipants = hideUnregistered
-    ? cohort.participants.filter(p => p.name)
+    ? cohort.participants.filter((p) => p.name)
     : cohort.participants;
 
   return (
@@ -62,9 +66,6 @@ const ParticipantSection: React.FC<Props> = ({ cohort }) => {
           ) : null}
         </Row>
         <Row gutter={4}>
-          <Head>
-            <link rel="stylesheet" href={staticUrl('react-toggle/style.css')} />
-          </Head>
           <Toggle
             checked={hideUnregistered}
             onChange={(e: React.ChangeEvent<HTMLInputElement>) =>

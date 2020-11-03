@@ -18,7 +18,8 @@ const rawConfig = {
     // NOTE: uncomment for webpack 5
     // config.resolve.alias['path'] = false;
 
-    // based on code from next-transpile-modules
+    // Necessary for https://github.com/fullcalendar/fullcalendar/issues/5393;
+    // based on code from next-transpile-modules.
     const nextCssLoaders = config.module.rules.find(
       (rule) => typeof rule.oneOf === 'object'
     );
