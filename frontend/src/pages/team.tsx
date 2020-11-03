@@ -1,3 +1,3 @@
-import RedirectPage from '~/components/RedirectPage';
+import buildRedirectPage from '~/components/RedirectPage';
 
-export default RedirectPage('/team/staff');
+export default buildRedirectPage('/team/staff');

@@ -65,21 +65,14 @@ const ItemLink: React.FC<{ item: SingleItem }> = ({ item }) => {
   ) : (
     <>{item.title}</>
   );
-  if (item.mode === 'next') {
-    return (
-      <Link href={item.link}>
-        <a>{content}</a>
-      </Link>
-    );
+  if (item.mode === 'external') {
+    return <a href={item.link}>{content}</a>;
   }
-  if (item.mode === 'wagtail') {
-    return (
-      <Link href="/[...slug]" as={item.link}>
-        <a>{content}</a>
-      </Link>
-    );
-  }
-  return <a href={item.link}>{content}</a>;
+  return (
+    <Link href={item.link}>
+      <a>{content}</a>
+    </Link>
+  );
 };
 
 const MenuSingleItem: React.FC<{ item: SingleItem }> = ({ item }) => {

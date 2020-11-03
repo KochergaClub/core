@@ -1,3 +1,3 @@
-import RedirectPage from '~/components/RedirectPage';
+import buildRedirectPage from '~/components/RedirectPage';
 
-export default RedirectPage('/team/space/staff/shifts');
+export default buildRedirectPage('/team/space/staff/shifts');

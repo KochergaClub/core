@@ -13,7 +13,7 @@ export const kind2color = {
 export interface SingleItem {
   title: string;
   link: string;
-  mode?: 'next' | 'wagtail';
+  mode?: 'external';
   permissions?: string[];
   highlight?: boolean;
 }
@@ -35,51 +35,52 @@ const publicMenuItems: Item[] = [
   {
     title: 'Сообщество',
     items: [
-      { link: '/events', title: 'Расписание мероприятий', mode: 'next' },
-      { link: '/projects', title: 'Проекты', mode: 'wagtail' },
-      { link: '/community/chats', title: 'Чаты', mode: 'next' },
+      { link: '/events', title: 'Расписание мероприятий' },
+      { link: '/projects', title: 'Проекты' },
+      { link: '/community/chats', title: 'Чаты' },
     ],
   },
   {
     title: 'Обучение',
     items: [
-      { link: '/rationality', title: 'Рациональность', mode: 'wagtail' },
+      { link: '/rationality', title: 'Рациональность' },
       {
         link: '/rationality/start',
         title: 'Шаблон Смоделируй и начни',
-        mode: 'wagtail',
         highlight: true,
       },
       {
         link: '/rationality/online',
         title: 'Онлайн-курс Рациональность в деле',
-        mode: 'wagtail',
         highlight: true,
       },
-      { link: '/rationality/corporate', title: 'Для бизнеса', mode: 'wagtail' },
-      { link: '/workshop/country', title: 'Выездной воркшоп', mode: 'wagtail' },
+      { link: '/rationality/corporate', title: 'Для бизнеса' },
+      { link: '/workshop/country', title: 'Выездной воркшоп' },
       {
         link: '/rationality/integration',
         title: 'Интеграция',
-        mode: 'wagtail',
       },
-      { link: '/rationality/dojo', title: 'Додзё', mode: 'wagtail' },
-      { link: '/3week', title: 'Трёхнедельный курс', mode: 'wagtail' },
+      { link: '/rationality/dojo', title: 'Додзё' },
+      { link: '/3week', title: 'Трёхнедельный курс' },
     ],
   },
   {
     title: 'Материалы',
     items: [
-      { link: '/blog', title: 'Блог', mode: 'wagtail' },
-      { link: 'https://www.youtube.com/c/КочергаКлуб', title: 'YouTube' },
-      { link: 'https://lesswrong.ru', title: 'LessWrong.ru' },
+      { link: '/blog', title: 'Блог' },
+      {
+        link: 'https://www.youtube.com/c/КочергаКлуб',
+        title: 'YouTube',
+        mode: 'external',
+      },
+      { link: 'https://lesswrong.ru', title: 'LessWrong.ru', mode: 'external' },
     ],
   },
   {
     title: 'Мета',
     items: [
-      { link: '/faq', title: 'F.A.Q.', mode: 'wagtail' },
-      { link: '/patreon', title: 'Помочь', mode: 'wagtail' },
+      { link: '/faq', title: 'F.A.Q.' },
+      { link: '/patreon', title: 'Помочь' },
       { link: '/#contacts', title: 'Контакты' },
     ],
   },
@@ -89,53 +90,61 @@ const teamMenuItems: Item[] = [
   {
     title: 'Пространство',
     items: [
-      { link: '/team/space/staff/shifts', title: 'Смены', mode: 'next' },
-      { link: '/team/space/staff', title: 'Админы', mode: 'next' },
-      { link: '/team/zadarma', title: 'Звонки', mode: 'next' },
-      { link: '/team/cashier', title: 'Касса', mode: 'next' },
+      { link: '/team/space/staff/shifts', title: 'Смены' },
+      { link: '/team/space/staff', title: 'Админы' },
+      { link: '/team/zadarma', title: 'Звонки' },
+      { link: '/team/cashier', title: 'Касса' },
     ],
   },
   {
     title: 'События',
     items: [
-      { link: '/team/events', title: 'Календарь', mode: 'next' },
-      { link: '/team/ratio', title: 'Тренинги', mode: 'next' },
-      { link: '/team/mastermind_dating', title: 'Мастермайнд', mode: 'next' },
-      { link: '/team/evenman', title: 'Evenman', mode: 'next' },
+      { link: '/team/events', title: 'Календарь' },
+      { link: '/team/ratio', title: 'Тренинги' },
+      { link: '/team/mastermind_dating', title: 'Мастермайнд' },
+      { link: '/team/evenman', title: 'Evenman' },
     ],
   },
   {
     title: 'Прочее',
     items: [
-      { link: '/team/analytics', title: 'Аналитика', mode: 'next' },
+      { link: '/team/analytics', title: 'Аналитика' },
       {
         link: '/team/audit',
         title: 'Аудит',
-        mode: 'next',
         permissions: ['kocherga_auth.audit'],
       },
       {
         link: '/team/image-templater',
         title: 'Генератор картинок',
-        mode: 'next',
       },
       {
         link: '/team/email',
         title: 'Каналы подписок',
-        mode: 'next',
       },
-      { link: '/admin/', title: 'Django-админка' },
-      { link: '/wagtail/', title: 'Wagtail-админка' },
+      { link: '/admin/', title: 'Django-админка', mode: 'external' },
+      { link: '/wagtail/', title: 'Wagtail-админка', mode: 'external' },
     ],
   },
   {
     title: 'Внешние сервисы',
     items: [
-      { link: 'https://wiki.team.kocherga.club', title: 'Вики' },
-      { link: 'https://kocherga.slack.com', title: 'Slack' },
-      { link: 'https://kocherga.cafe-manager.ru', title: 'Кафе-менеджер' },
-      { link: 'https://tracker.yandex.ru', title: 'Трекер' },
-      { link: 'https://metabase.team.kocherga.club', title: 'Metabase' },
+      {
+        link: 'https://www.notion.so/kocherga/c916db10771646059b15a659af29034f',
+        title: 'Notion',
+        mode: 'external',
+      },
+      {
+        link: 'https://wiki.team.kocherga.club',
+        title: 'Старая вики',
+        mode: 'external',
+      },
+      { link: 'https://kocherga.slack.com', title: 'Slack', mode: 'external' },
+      {
+        link: 'https://metabase.team.kocherga.club',
+        title: 'Metabase',
+        mode: 'external',
+      },
     ],
   },
 ];
@@ -144,17 +153,14 @@ const myMenuItems: Item[] = [
   {
     title: 'События',
     link: '/my',
-    mode: 'next',
   },
   {
     title: 'Посещения',
     link: '/my/visits',
-    mode: 'next',
   },
   {
     title: 'Настройки',
     link: '/my/settings',
-    mode: 'next',
   },
 ];
 
