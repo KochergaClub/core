@@ -20,6 +20,7 @@ metadata:
     release: {{ .Release.Name }}
 spec:
   replicas: 1
+  progressDeadlineSeconds: 1200
   selector:
     matchLabels: 
       app: {{ .Release.Name }}-frontend
