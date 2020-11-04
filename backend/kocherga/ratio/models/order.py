@@ -130,7 +130,9 @@ class Order(models.Model):
             raise self.NotPaidError("Payment is not paid and not waiting for capture")
         if self.fulfilled:
             raise self.AlreadyFulfilledError("Already fulfilled")
-        if Ticket.objects.filter(email=self.email).count():
+        if Ticket.objects.filter(
+            email=self.email, training=self.ticket_type.training
+        ).count():
             raise self.TicketAlreadyExistsError("Ticket already exists")
 
         # TODO - use form/serializer instead
