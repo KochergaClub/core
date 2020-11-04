@@ -48,6 +48,7 @@ const publicMenuItems: Item[] = [
         link: '/rationality/start',
         title: 'Шаблон Смоделируй и начни',
         highlight: true,
+        mode: 'external',
       },
       {
         link: '/rationality/online',
