@@ -66,7 +66,7 @@ class Ticket(models.Model):
         verbose_name = 'Участник'
         verbose_name_plural = 'Участники'
         unique_together = [['training', 'email']]
-        ordering = ['registration_date']
+        ordering = ['-registration_date']
 
     def __str__(self):
         return f'{self.training} - {self.email}'
