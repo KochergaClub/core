@@ -17,7 +17,7 @@ const tabs = [
   { title: 'Билеты', name: 'tickets' },
 ];
 
-const AdminRatioIndexPage: NextApolloPage = () => {
+const AdminRatioPage: NextApolloPage = () => {
   const router = useRouter();
 
   const isSingleTraining = () =>
@@ -104,4 +104,4 @@ const AdminRatioIndexPage: NextApolloPage = () => {
   );
 };
 
-export default withApollo(withStaff(AdminRatioIndexPage));
+export default withApollo(withStaff(AdminRatioPage));

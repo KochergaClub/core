@@ -13,6 +13,7 @@ import { adminTrainingRoute } from '~/ratio/routes';
 
 import { RatioPaymentAddDocument, RatioTicketFragment } from '../../queries.generated';
 import PaymentItem from '../PaymentItem';
+import { RatioTicketWithTrainingFragment } from './queries.generated';
 
 const CanceledBadge = () => <Badge>ОТКАЗ</Badge>;
 
@@ -85,7 +86,12 @@ const RemainingPayments: React.FC<Props> = ({ ticket }) => {
 const TicketCard: React.FC<Props> = ({ ticket }) => {
   return (
     <Card>
-      <Row gutter={32}>
+      <Column>
+        <Row>
+          <small>
+            <HumanizedDateTime date={parseISO(ticket.created)} />
+          </small>
+        </Row>
         <Column>
           {ticket.training ? (
             <Row>
@@ -103,7 +109,6 @@ const TicketCard: React.FC<Props> = ({ ticket }) => {
             </div>
           </Row>
           <div>{ticket.payment_amount} руб.</div>
-          <HumanizedDateTime date={parseISO(ticket.created)} />
           {ticket.status === 'canceled' && <CanceledBadge />}
         </Column>
         <Column>
@@ -116,7 +121,7 @@ const TicketCard: React.FC<Props> = ({ ticket }) => {
           ))}
           <RemainingPayments ticket={ticket} />
         </Column>
-      </Row>
+      </Column>
     </Card>
   );
 };

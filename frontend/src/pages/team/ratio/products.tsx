@@ -1,1 +1,1 @@
-export { default } from '~/ratio/pages/AdminRatioIndexPage';
+export { default } from '~/ratio/pages/AdminRatioPage';
