@@ -1,10 +1,13 @@
-import { useMutation } from '@apollo/client';
-import { A, Column, Label, Row } from '~/frontkit';
+import { parseISO } from 'date-fns';
+import React from 'react';
 
-import { Badge } from '~/components';
+import { useMutation } from '@apollo/client';
+
+import { Badge, HumanizedDateTime } from '~/components';
 import Card from '~/components/Card';
 import ApolloModalFormButton from '~/components/forms/ApolloModalFormButton';
 import { FormShape } from '~/components/forms/types';
+import { A, Column, Label, Row } from '~/frontkit';
 
 import { RatioPaymentAddDocument, RatioTicketFragment } from '../queries.generated';
 import PaymentItem from './PaymentItem';
@@ -91,7 +94,7 @@ const TicketCard: React.FC<Props> = ({ ticket }) => {
             </div>
           </Row>
           <div>{ticket.payment_amount} руб.</div>
-          <div>{ticket.registration_date}</div>
+          <HumanizedDateTime date={parseISO(ticket.created)} />
           {ticket.status === 'canceled' && <CanceledBadge />}
         </Column>
         <Column>

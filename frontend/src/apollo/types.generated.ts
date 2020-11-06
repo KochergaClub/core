@@ -2321,6 +2321,7 @@ export type RatioTicket = {
   first_name: Scalars['String'];
   last_name?: Maybe<Scalars['String']>;
   registration_date?: Maybe<Scalars['String']>;
+  created: Scalars['String'];
   status: Scalars['String'];
   ticket_type: Scalars['String'];
   payment_amount: Scalars['Int'];

@@ -20,7 +20,7 @@ fragment RatioTicket on RatioTicket {
   payment_amount
   status
   ticket_type
-  registration_date
+  created
   payments {
     ...RatioPayment
   }

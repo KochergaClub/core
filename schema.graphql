@@ -1405,6 +1405,7 @@ type RatioTicket {
   first_name: String!
   last_name: String
   registration_date: String
+  created: String!
   status: String!
   ticket_type: String!
   payment_amount: Int!

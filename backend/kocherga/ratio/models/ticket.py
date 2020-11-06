@@ -29,9 +29,11 @@ class Ticket(models.Model):
     first_name = models.CharField('Имя', max_length=255)
     last_name = models.CharField('Фамилия', max_length=255, null=True, blank=True)
 
+    # deprecated
     registration_date = models.DateField(
         'Дата регистрации', auto_now_add=True, null=True
     )
+    created = models.DateTimeField('Дата создания', auto_now_add=True)
 
     status = models.CharField(
         'Статус',
@@ -66,7 +68,7 @@ class Ticket(models.Model):
         verbose_name = 'Участник'
         verbose_name_plural = 'Участники'
         unique_together = [['training', 'email']]
-        ordering = ['-registration_date']
+        ordering = ['-created']
 
     def __str__(self):
         return f'{self.training} - {self.email}'
