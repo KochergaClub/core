@@ -2081,7 +2081,7 @@ export type RatioAddTicketInput = {
   first_name: Scalars['String'];
   last_name?: Maybe<Scalars['String']>;
   payment_amount: Scalars['Int'];
-  ticket_type?: Maybe<Scalars['String']>;
+  ticket_class?: Maybe<Scalars['String']>;
   comment?: Maybe<Scalars['String']>;
 };
 
@@ -2332,7 +2332,7 @@ export type RatioTicket = {
   registration_date?: Maybe<Scalars['String']>;
   created: Scalars['String'];
   status: Scalars['String'];
-  ticket_type: Scalars['String'];
+  ticket_class: Scalars['String'];
   payment_amount: Scalars['Int'];
   comment: Scalars['String'];
   payments: Array<RatioPayment>;

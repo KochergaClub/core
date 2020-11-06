@@ -53,7 +53,7 @@ class Ticket(models.Model):
             ('canceled', 'Отказ'),  # отказ, перенос, замена, неявка
         ),
     )
-    ticket_type = models.CharField(
+    ticket_class = models.CharField(
         'Тип билета',
         max_length=40,
         default='normal',

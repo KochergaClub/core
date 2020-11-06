@@ -22,7 +22,7 @@ const CreateTicketButton = ({ training_id }: { training_id: string }) => {
     { name: 'last_name', title: 'Фамилия', type: 'string' },
     { name: 'payment_amount', title: 'Стоимость билета', type: 'number' },
     {
-      name: 'ticket_type',
+      name: 'ticket_class',
       title: 'Вид билета',
       type: 'choice',
       options: [
@@ -52,7 +52,7 @@ const CreateTicketButton = ({ training_id }: { training_id: string }) => {
             payment_amount: values.payment_amount,
             first_name: values.first_name,
             last_name: values.last_name,
-            ticket_type: 'normal',
+            ticket_class: 'normal',
           },
         },
       });

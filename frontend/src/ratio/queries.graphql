@@ -19,7 +19,7 @@ fragment RatioTicket on RatioTicket {
   last_name
   payment_amount
   status
-  ticket_type
+  ticket_class
   created
   payments {
     ...RatioPayment

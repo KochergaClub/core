@@ -29,7 +29,7 @@ class ratioAddTicket(helpers.BaseFieldWithInput):
         'first_name': str,
         'last_name': Optional[str],
         'payment_amount': int,
-        'ticket_type': Optional[str],
+        'ticket_class': Optional[str],
         'comment': Optional[str],
     }
 

@@ -27,7 +27,7 @@ RatioTicket = DjangoObjectType(
         'registration_date',
         'created',
         'status',
-        'ticket_type',
+        'ticket_class',
         'payment_amount',
         'comment',
     ],
