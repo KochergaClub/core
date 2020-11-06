@@ -83,6 +83,33 @@ const RemainingPayments: React.FC<Props> = ({ ticket }) => {
   }
 };
 
+const TicketTrainingAndType: React.FC<Props> = ({ ticket }) => {
+  const training = 'training' in ticket ? ticket.training : undefined;
+  const { ticket_type } = ticket;
+
+  const ticketTypeElement = (
+    <div>
+      {
+        ticket_type ? ticket_type.name : <em>[Неизвестный тип билета]</em> // possible for old tickets on training page
+      }
+    </div>
+  );
+
+  if (training) {
+    return (
+      <Row>
+        <Link href={adminTrainingRoute(training.slug)} passHref>
+          <A>{training.name}</A>
+        </Link>
+        <div>&rarr;</div>
+        {ticketTypeElement}
+      </Row>
+    );
+  } else {
+    return ticketTypeElement;
+  }
+};
+
 const TicketCard: React.FC<Props> = ({ ticket }) => {
   return (
     <Card>
@@ -97,13 +124,6 @@ const TicketCard: React.FC<Props> = ({ ticket }) => {
           </Link>
         </Row>
         <Column>
-          {'training' in ticket ? (
-            <Row>
-              <Link href={adminTrainingRoute(ticket.training.slug)} passHref>
-                <A>{ticket.training.name}</A>
-              </Link>
-            </Row>
-          ) : null}
           <Row gutter={10}>
             <strong>
               {ticket.first_name} {ticket.last_name}
@@ -112,6 +132,7 @@ const TicketCard: React.FC<Props> = ({ ticket }) => {
               <A href={`mailto:${ticket.email}`}>{ticket.email}</A>
             </div>
           </Row>
+          <TicketTrainingAndType ticket={ticket} />
           <div>{ticket.payment_amount} руб.</div>
           {ticket.status === 'canceled' && <CanceledBadge />}
         </Column>

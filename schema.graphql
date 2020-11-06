@@ -1414,6 +1414,7 @@ type RatioTicket {
   comment: String!
   payments: [RatioPayment!]!
   training: RatioTraining!
+  ticket_type: RatioTicketType
 }
 
 type RatioTicketConnection {

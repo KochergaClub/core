@@ -2343,6 +2343,7 @@ export type RatioTicket = {
   comment: Scalars['String'];
   payments: Array<RatioPayment>;
   training: RatioTraining;
+  ticket_type?: Maybe<RatioTicketType>;
 };
 
 export type RatioTicketConnection = {

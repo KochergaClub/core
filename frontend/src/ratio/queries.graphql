@@ -24,6 +24,10 @@ fragment RatioTicket on RatioTicket {
   payments {
     ...RatioPayment
   }
+  ticket_type {
+    id
+    name
+  }
 }
 
 fragment RatioPromocode on RatioPromocode {

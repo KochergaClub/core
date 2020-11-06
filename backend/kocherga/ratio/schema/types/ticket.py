@@ -6,8 +6,12 @@ from ... import models
 
 def extra_fields():
     from .training import RatioTraining
+    from .ticket_type import RatioTicketType
 
-    return {'training': g.NN(RatioTraining)}
+    return {
+        'training': g.NN(RatioTraining),
+        'ticket_type': RatioTicketType,
+    }
 
 
 def related_fields():

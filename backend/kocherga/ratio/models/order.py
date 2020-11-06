@@ -142,6 +142,7 @@ class Order(models.Model):
             first_name=self.first_name,
             last_name=self.last_name,
             payment_amount=self.payment.amount,
+            ticket_type=self.ticket_type,
         )
         ticket.full_clean()
         ticket.save()

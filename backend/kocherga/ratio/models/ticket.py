@@ -4,6 +4,7 @@ from django.db import models
 from django.conf import settings
 from django.dispatch import receiver
 from django.db.models.signals import post_save
+from django.core.exceptions import ValidationError
 
 from kocherga.django.managers import RelayQuerySetMixin
 
@@ -27,6 +28,7 @@ class TicketManager(models.Manager):
 
 
 class Ticket(models.Model):
+    # TODO - deprecate, replace with ticket_type.training
     training = models.ForeignKey(
         Training,
         verbose_name='Тренинг',
@@ -66,6 +68,12 @@ class Ticket(models.Model):
             ('free-repeat', 'Бесплатный повтор'),
         ),
     )
+    ticket_type = models.ForeignKey(
+        'ratio.TicketType',
+        null=True,
+        blank=True,
+        on_delete=models.PROTECT,
+    )
 
     payment_amount = models.IntegerField('Размер оплаты')
 
@@ -83,6 +91,12 @@ class Ticket(models.Model):
 
     def __str__(self):
         return f'{self.training} - {self.email}'
+
+    def clean(self):
+        if self.ticket_type and self.ticket_type.training.pk != self.training.pk:
+            raise ValidationError(
+                {'ticket_type': ['Тип билета должен соответствовать тренингу']}
+            )
 
     # UID is used for sharing anonymised data with third-party,
     # e.g. with academy crowd when we collect data from rationality tests.
