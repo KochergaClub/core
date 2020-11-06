@@ -7,6 +7,7 @@ import { WithNavSidebar } from '~/frontkit';
 
 import OrderCollectionBlock from '../components/orders/OrderCollectionBlock';
 import TicketCollectionBlock from '../components/tickets/TicketCollectionBlock';
+import TicketView from '../components/tickets/TicketView';
 import TrainingCollectionBlock from '../components/TrainingCollectionBlock';
 import AdminRatioTraining from '../components/trainings/AdminRatioTraining';
 
@@ -23,6 +24,8 @@ const AdminRatioPage: NextApolloPage = () => {
   const isSingleTraining = () =>
     router.pathname === '/team/ratio/training/[slug]';
 
+  const isSingleTicket = () => router.pathname === '/team/ratio/ticket/[id]';
+
   const renderTab = (name: string) => {
     switch (name) {
       case 'trainings':
@@ -36,7 +39,11 @@ const AdminRatioPage: NextApolloPage = () => {
       case 'orders':
         return <OrderCollectionBlock />;
       case 'tickets':
-        return <TicketCollectionBlock />;
+        if (isSingleTicket()) {
+          return <TicketView id={router.query.id as string} />;
+        } else {
+          return <TicketCollectionBlock />;
+        }
       default:
         return <div>Unknown route {name}</div>;
     }
@@ -53,6 +60,8 @@ const AdminRatioPage: NextApolloPage = () => {
     } else if (route === '/team/ratio/orders') {
       return 'orders';
     } else if (route === '/team/ratio/tickets') {
+      return 'tickets';
+    } else if (isSingleTicket()) {
       return 'tickets';
     } else {
       return '';
@@ -81,7 +90,7 @@ const AdminRatioPage: NextApolloPage = () => {
     } else if (selected === 'trainings') {
       return isSingleTraining() ? 'Загружается...' : 'Рацио-тренинги';
     } else if (selected === 'tickets') {
-      return 'Билеты на рацио-тренинги';
+      return isSingleTicket() ? 'Загружается...' : 'Билеты на рацио-тренинги';
     } else {
       return 'Not found';
     }

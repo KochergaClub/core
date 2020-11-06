@@ -9,7 +9,7 @@ import Card from '~/components/Card';
 import ApolloModalFormButton from '~/components/forms/ApolloModalFormButton';
 import { FormShape } from '~/components/forms/types';
 import { A, Column, Label, Row } from '~/frontkit';
-import { adminTrainingRoute } from '~/ratio/routes';
+import { adminTicketRoute, adminTrainingRoute } from '~/ratio/routes';
 
 import { RatioPaymentAddDocument, RatioTicketFragment } from '../../queries.generated';
 import PaymentItem from '../PaymentItem';
@@ -88,12 +88,16 @@ const TicketCard: React.FC<Props> = ({ ticket }) => {
     <Card>
       <Column>
         <Row>
-          <small>
-            <HumanizedDateTime date={parseISO(ticket.created)} />
-          </small>
+          <Link href={adminTicketRoute(ticket.id)} passHref>
+            <A>
+              <small>
+                <HumanizedDateTime date={parseISO(ticket.created)} />
+              </small>
+            </A>
+          </Link>
         </Row>
         <Column>
-          {ticket.training ? (
+          {'training' in ticket ? (
             <Row>
               <Link href={adminTrainingRoute(ticket.training.slug)} passHref>
                 <A>{ticket.training.name}</A>

@@ -1154,6 +1154,7 @@ type Query {
   ratioTicketType(input: RatioTicketTypeInput!): RatioTicketType!
   ratioOrders(before: String, after: String, first: Int, last: Int): RatioOrderConnection!
   ratioTickets(before: String, after: String, first: Int, last: Int): RatioTicketConnection!
+  ratioTicket(id: ID!): RatioTicket!
   mastermindDatingCohorts: [MastermindDatingCohort!]!
   mastermindDatingCohortById(id: ID!): MastermindDatingCohort!
   projects: [ProjectPage!]!

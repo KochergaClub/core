@@ -10,6 +10,9 @@ from . import types
 c = helpers.Collection()
 
 
+PERMISSIONS = [user_perm('ratio.manage')]
+
+
 @c.class_field
 class ratioTrainings(helpers.BaseField):
     def resolve(self, _, info, filter=None, **pager):
@@ -19,12 +22,13 @@ class ratioTrainings(helpers.BaseField):
                 qs = qs.filter(date__isnull=filter['eternal'])
         return qs.relay_page(**pager)
 
-    permissions = [user_perm('ratio.manage')]
+    permissions = PERMISSIONS
 
     FilterInput = g.InputObjectType(
         'RatioTrainingsFilterInput', g.input_fields({'eternal': Optional[bool]})
     )
     args = {**helpers.connection_args(), 'filter': FilterInput}
+
     result = g.NN(types.RatioTrainingConnection)
 
 
@@ -33,7 +37,7 @@ class ratioTrainingBySlug(helpers.BaseField):
     def resolve(self, _, info, slug):
         return models.Training.objects.get(slug=slug)
 
-    permissions = [user_perm('ratio.manage')]
+    permissions = PERMISSIONS
     args = {'slug': str}
     result = g.NN(types.RatioTraining)
 
@@ -43,7 +47,7 @@ class ratioTrainersAll(helpers.BaseField):
     def resolve(self, _, info):
         return models.Trainer.objects.all()
 
-    permissions = [user_perm('ratio.manage')]
+    permissions = PERMISSIONS
     result = g.NNList(types.RatioTrainer)
 
 
@@ -58,7 +62,7 @@ class ratioTrainingEmailPrototype(helpers.BaseField):
         else:
             raise Exception(f"Unknown email type {type}")
 
-    permissions = [user_perm('ratio.manage')]
+    permissions = PERMISSIONS
     args = {'training_id': 'ID!', 'type': str}
 
     result = str
@@ -72,6 +76,7 @@ class ratioTicketTypes(helpers.BaseFieldWithInput):
             qs = qs.filter(uuid=input['id'])
         return qs
 
+    # this query is public, it's used in order form
     permissions = []
     input = {
         'id': 'ID',  # get one ticket type by id
@@ -84,7 +89,7 @@ class ratioTicketType(helpers.BaseFieldWithInput):
     def resolve(self, _, info, input):
         return models.TicketType.objects.get(uuid=input['id'])
 
-    permissions = [user_perm('ratio.manage')]
+    permissions = PERMISSIONS
     input = {
         'id': 'ID!',
     }
@@ -96,21 +101,30 @@ class ratioOrders(helpers.BaseField):
     def resolve(self, _, info, **pager):
         return models.Order.objects.relay_page(order='-created', **pager)
 
-    permissions = [user_perm('ratio.manage')]
+    permissions = PERMISSIONS
     args = helpers.connection_args()
     result = g.NN(types.RatioOrderConnection)
 
 
 @c.class_field
 class ratioTickets(helpers.BaseField):
-    def resolve(self, _, info, filter=None, **pager):
+    def resolve(self, _, info, **pager):
         qs = models.Ticket.objects.all()
         return qs.relay_page(**pager)
 
-    permissions = [user_perm('ratio.manage')]
-
+    permissions = PERMISSIONS
     args = helpers.connection_args()
     result = g.NN(types.RatioTicketConnection)
+
+
+@c.class_field
+class ratioTicket(helpers.BaseField):
+    def resolve(self, _, info, id):
+        return models.Ticket.objects.get(pk=id)
+
+    permissions = PERMISSIONS
+    args = {'id': 'ID!'}
+    result = g.NN(types.RatioTicket)
 
 
 queries = c.as_dict()

@@ -24,3 +24,9 @@ query RatioTickets($before: String, $after: String, $first: Int, $last: Int) {
     }
   }
 }
+
+query RatioTicketById($id: ID!) {
+  ticket: ratioTicket(id: $id) {
+    ...RatioTicketWithTraining
+  }
+}

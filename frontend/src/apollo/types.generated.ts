@@ -1849,6 +1849,7 @@ export type Query = {
   ratioTicketType: RatioTicketType;
   ratioOrders: RatioOrderConnection;
   ratioTickets: RatioTicketConnection;
+  ratioTicket: RatioTicket;
   mastermindDatingCohorts: Array<MastermindDatingCohort>;
   mastermindDatingCohortById: MastermindDatingCohort;
   projects: Array<ProjectPage>;
@@ -2048,6 +2049,11 @@ export type QueryRatioTicketsArgs = {
   after?: Maybe<Scalars['String']>;
   first?: Maybe<Scalars['Int']>;
   last?: Maybe<Scalars['Int']>;
+};
+
+
+export type QueryRatioTicketArgs = {
+  id: Scalars['ID'];
 };
 
 
