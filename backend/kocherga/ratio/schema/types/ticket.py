@@ -1,5 +1,5 @@
 from kocherga.graphql.django_utils import DjangoObjectType
-from kocherga.graphql import g
+from kocherga.graphql import g, helpers
 
 from ... import models
 
@@ -34,3 +34,5 @@ RatioTicket = DjangoObjectType(
     related_fields=related_fields,
     extra_fields=extra_fields,  # delay import
 )
+
+RatioTicketConnection = helpers.ConnectionType(RatioTicket)

@@ -1153,6 +1153,7 @@ type Query {
   ratioTicketTypes(input: RatioTicketTypesInput!): [RatioTicketType!]!
   ratioTicketType(input: RatioTicketTypeInput!): RatioTicketType!
   ratioOrders(before: String, after: String, first: Int, last: Int): RatioOrderConnection!
+  ratioTickets(before: String, after: String, first: Int, last: Int): RatioTicketConnection!
   mastermindDatingCohorts: [MastermindDatingCohort!]!
   mastermindDatingCohortById(id: ID!): MastermindDatingCohort!
   projects: [ProjectPage!]!
@@ -1412,6 +1413,16 @@ type RatioTicket {
   comment: String!
   payments: [RatioPayment!]!
   training: RatioTraining!
+}
+
+type RatioTicketConnection {
+  pageInfo: PageInfo!
+  nodes: [RatioTicket!]!
+  edges: [RatioTicketEdge!]!
+}
+
+type RatioTicketEdge {
+  node: RatioTicket!
 }
 
 type RatioTicketType {

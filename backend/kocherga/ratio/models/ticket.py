@@ -1,14 +1,23 @@
+import hashlib
+
 from django.db import models
 from django.conf import settings
 from django.dispatch import receiver
 from django.db.models.signals import post_save
 
-import hashlib
+from kocherga.django.managers import RelayQuerySetMixin
 
 from .training import Training
 
 
+class TicketQuerySet(models.QuerySet, RelayQuerySetMixin):
+    pass
+
+
 class TicketManager(models.Manager):
+    def get_queryset(self):
+        return TicketQuerySet(self.model, using=self._db)
+
     def create(self, **kwargs):
         ticket = Ticket(**kwargs)
         ticket.full_clean()
@@ -63,6 +72,8 @@ class Ticket(models.Model):
     comment = models.TextField(blank=True)
 
     notion_link = models.URLField(blank=True)
+
+    objects = TicketManager()
 
     class Meta:
         verbose_name = 'Участник'

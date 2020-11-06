@@ -101,4 +101,16 @@ class ratioOrders(helpers.BaseField):
     result = g.NN(types.RatioOrderConnection)
 
 
+@c.class_field
+class ratioTickets(helpers.BaseField):
+    def resolve(self, _, info, filter=None, **pager):
+        qs = models.Ticket.objects.all()
+        return qs.relay_page(**pager)
+
+    permissions = [user_perm('ratio.manage')]
+
+    args = helpers.connection_args()
+    result = g.NN(types.RatioTicketConnection)
+
+
 queries = c.as_dict()

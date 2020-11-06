@@ -1,14 +1,14 @@
 import { useCallback } from 'react';
 
 import { useMutation } from '@apollo/client';
-import { Column, Row } from '~/frontkit';
 
 import { PaddedBlock } from '~/components';
 import ModalFormButton from '~/components/forms/ModalFormButton';
 import { FormShape } from '~/components/forms/types';
+import { Column, Row } from '~/frontkit';
 
 import { RatioAddTicketDocument, RatioTrainingFragment } from '../queries.generated';
-import TicketList from './TicketList';
+import TicketList from './tickets/TicketList';
 
 const CreateTicketButton = ({ training_id }: { training_id: string }) => {
   const [addTicketMutation] = useMutation(RatioAddTicketDocument, {

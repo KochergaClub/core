@@ -1848,6 +1848,7 @@ export type Query = {
   ratioTicketTypes: Array<RatioTicketType>;
   ratioTicketType: RatioTicketType;
   ratioOrders: RatioOrderConnection;
+  ratioTickets: RatioTicketConnection;
   mastermindDatingCohorts: Array<MastermindDatingCohort>;
   mastermindDatingCohortById: MastermindDatingCohort;
   projects: Array<ProjectPage>;
@@ -2035,6 +2036,14 @@ export type QueryRatioTicketTypeArgs = {
 
 
 export type QueryRatioOrdersArgs = {
+  before?: Maybe<Scalars['String']>;
+  after?: Maybe<Scalars['String']>;
+  first?: Maybe<Scalars['Int']>;
+  last?: Maybe<Scalars['Int']>;
+};
+
+
+export type QueryRatioTicketsArgs = {
   before?: Maybe<Scalars['String']>;
   after?: Maybe<Scalars['String']>;
   first?: Maybe<Scalars['Int']>;
@@ -2328,6 +2337,18 @@ export type RatioTicket = {
   comment: Scalars['String'];
   payments: Array<RatioPayment>;
   training: RatioTraining;
+};
+
+export type RatioTicketConnection = {
+  __typename?: 'RatioTicketConnection';
+  pageInfo: PageInfo;
+  nodes: Array<RatioTicket>;
+  edges: Array<RatioTicketEdge>;
+};
+
+export type RatioTicketEdge = {
+  __typename?: 'RatioTicketEdge';
+  node: RatioTicket;
 };
 
 export type RatioTicketType = {

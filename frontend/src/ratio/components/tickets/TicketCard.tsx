@@ -1,4 +1,5 @@
 import { parseISO } from 'date-fns';
+import Link from 'next/link';
 import React from 'react';
 
 import { useMutation } from '@apollo/client';
@@ -8,9 +9,10 @@ import Card from '~/components/Card';
 import ApolloModalFormButton from '~/components/forms/ApolloModalFormButton';
 import { FormShape } from '~/components/forms/types';
 import { A, Column, Label, Row } from '~/frontkit';
+import { adminTrainingRoute } from '~/ratio/routes';
 
-import { RatioPaymentAddDocument, RatioTicketFragment } from '../queries.generated';
-import PaymentItem from './PaymentItem';
+import { RatioPaymentAddDocument, RatioTicketFragment } from '../../queries.generated';
+import PaymentItem from '../PaymentItem';
 
 const CanceledBadge = () => <Badge>ОТКАЗ</Badge>;
 
@@ -61,7 +63,7 @@ const CreatePaymentButton = ({ ticket_id }: { ticket_id: string }) => {
 };
 
 interface Props {
-  ticket: RatioTicketFragment;
+  ticket: RatioTicketFragment | RatioTicketWithTrainingFragment;
 }
 
 const RemainingPayments: React.FC<Props> = ({ ticket }) => {
@@ -85,6 +87,13 @@ const TicketCard: React.FC<Props> = ({ ticket }) => {
     <Card>
       <Row gutter={32}>
         <Column>
+          {ticket.training ? (
+            <Row>
+              <Link href={adminTrainingRoute(ticket.training.slug)} passHref>
+                <A>{ticket.training.name}</A>
+              </Link>
+            </Row>
+          ) : null}
           <Row gutter={10}>
             <strong>
               {ticket.first_name} {ticket.last_name}

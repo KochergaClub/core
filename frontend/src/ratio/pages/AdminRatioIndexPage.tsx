@@ -1,10 +1,12 @@
 import { useRouter } from 'next/router';
+import React from 'react';
 
 import { NextApolloPage, withApollo, withStaff } from '~/apollo';
 import { Page } from '~/components';
 import { WithNavSidebar } from '~/frontkit';
 
 import OrderCollectionBlock from '../components/orders/OrderCollectionBlock';
+import TicketCollectionBlock from '../components/tickets/TicketCollectionBlock';
 import TrainingCollectionBlock from '../components/TrainingCollectionBlock';
 import AdminRatioTraining from '../components/trainings/AdminRatioTraining';
 
@@ -12,6 +14,7 @@ const tabs = [
   { title: 'Тренинги', name: 'trainings' },
   { title: 'Продукты', name: 'products' },
   { title: 'Заказы', name: 'orders' },
+  { title: 'Билеты', name: 'tickets' },
 ];
 
 const AdminRatioIndexPage: NextApolloPage = () => {
@@ -32,6 +35,8 @@ const AdminRatioIndexPage: NextApolloPage = () => {
         return <TrainingCollectionBlock eternal={true} />;
       case 'orders':
         return <OrderCollectionBlock />;
+      case 'tickets':
+        return <TicketCollectionBlock />;
       default:
         return <div>Unknown route {name}</div>;
     }
@@ -47,6 +52,8 @@ const AdminRatioIndexPage: NextApolloPage = () => {
       return 'products';
     } else if (route === '/team/ratio/orders') {
       return 'orders';
+    } else if (route === '/team/ratio/tickets') {
+      return 'tickets';
     } else {
       return '';
     }
@@ -58,6 +65,7 @@ const AdminRatioIndexPage: NextApolloPage = () => {
       trainings: '/team/ratio',
       orders: '/team/ratio/orders',
       products: '/team/ratio/products',
+      tickets: '/team/ratio/tickets',
     };
     const path = name2path[name];
     if (path) {
@@ -69,9 +77,11 @@ const AdminRatioIndexPage: NextApolloPage = () => {
     if (selected === 'orders') {
       return 'Заказы на рацио-тренинги';
     } else if (selected === 'products') {
-      return 'Заказы на рацио-продукты';
+      return 'Рацио-продукты';
     } else if (selected === 'trainings') {
       return isSingleTraining() ? 'Загружается...' : 'Рацио-тренинги';
+    } else if (selected === 'tickets') {
+      return 'Билеты на рацио-тренинги';
     } else {
       return 'Not found';
     }
