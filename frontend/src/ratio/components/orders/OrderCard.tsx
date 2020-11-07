@@ -86,8 +86,10 @@ const OrderCard: React.FC<Props> = ({ order }) => {
             href={adminTrainingRoute(order.ticket_type.training.slug)}
             passHref
           >
-            <A>{order.ticket_type.name}</A>
+            <A>{order.ticket_type.training.name}</A>
           </Link>
+          <div>&rarr;</div>
+          <div>{order.ticket_type.name}</div>
           <TicketTypeBadge ticketType={order.ticket_type} />
           {order.price !== order.ticket_type.price ? (
             <div>
