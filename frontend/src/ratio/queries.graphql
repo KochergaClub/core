@@ -21,6 +21,7 @@ fragment RatioTicket on RatioTicket {
   status
   ticket_class
   notion_link
+  need_notion_link
   created
   payments {
     ...RatioPayment
@@ -223,8 +224,8 @@ mutation RatioAddTicket($params: RatioAddTicketInput!) {
   }
 }
 
-mutation RatioPaymentAdd($params: RatioPaymentAddInput!) {
-  ratioPaymentAdd(input: $params) {
+mutation RatioPaymentAdd($input: RatioPaymentAddInput!) {
+  ratioPaymentAdd(input: $input) {
     payment {
       ...RatioPayment
     }
@@ -257,8 +258,8 @@ mutation RatioPaymentFiscalizedManually($payment_id: ID!) {
   }
 }
 
-mutation RatioTrainingAddDay($params: RatioTrainingAddDayInput!) {
-  ratioTrainingAddDay(params: $params)
+mutation RatioTrainingAddDay($input: RatioTrainingAddDayInput!) {
+  ratioTrainingAddDay(params: $input)
 }
 
 mutation RatioTrainingCopyScheduleFrom(

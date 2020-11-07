@@ -115,6 +115,8 @@ class ratioTickets(helpers.BaseField):
                 qs = qs.with_missing_payments()
             if filter.get('with_unfiscalized_checks', False):
                 qs = qs.with_unfiscalized_checks()
+            if filter.get('without_notion_links', False):
+                qs = qs.without_notion_links()
         return qs.relay_page(**pager)
 
     permissions = PERMISSIONS
@@ -124,6 +126,7 @@ class ratioTickets(helpers.BaseField):
             {
                 'with_missing_payments': Optional[bool],
                 'with_unfiscalized_checks': Optional[bool],
+                'without_notion_links': Optional[bool],
             }
         ),
     )

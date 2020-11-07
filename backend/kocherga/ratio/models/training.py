@@ -239,6 +239,29 @@ class Training(models.Model):
             recipient_list=[ticket.email],
         )
 
+    def send_notion_created_email(self, ticket):
+        template_name = self.notion_created_email
+        folder = 'notion_created'
+        if not template_name:
+            raise Exception("email template is not configured")
+        check_safe_path(template_name)
+
+        html_message = mjml2html(
+            render_to_string(
+                f'ratio/email/{folder}/{template_name}.mjml',
+                {"ticket": ticket, "link": ticket.notion_link},
+            )
+        )
+        title = extract_email_title(html_message)
+
+        send_mail(
+            subject=title,
+            from_email='Кочерга <workshop@kocherga-club.ru>',
+            html_message=html_message,
+            message=html2text(html_message),
+            recipient_list=[ticket.email],
+        )
+
     def send_unique_promocode(self, email: str):
         # FIXME - copypasted from TicketType
         if not self.discount_by_email and not self.discount_percent_by_email:

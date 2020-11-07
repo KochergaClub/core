@@ -54,14 +54,14 @@ export type RatioTicketByIdQuery = (
   ) }
 );
 
-export type UpdateRatioTicketMutationVariables = Types.Exact<{
-  input: Types.UpdateRatioTicketInput;
+export type SetRatioTicketNotionLinkMutationVariables = Types.Exact<{
+  input: Types.SetRatioTicketNotionLinkInput;
 }>;
 
 
-export type UpdateRatioTicketMutation = (
+export type SetRatioTicketNotionLinkMutation = (
   { __typename: 'Mutation' }
-  & { updateRatioTicket: (
+  & { setRatioTicketNotionLink: (
     { __typename: 'RatioTicket' }
     & RatioTicketFragment
   ) }
@@ -72,4 +72,4 @@ export const RatioTicketsDocument: DocumentNode<RatioTicketsQuery, RatioTicketsQ
 
 export const RatioTicketByIdDocument: DocumentNode<RatioTicketByIdQuery, RatioTicketByIdQueryVariables> = dedupeFragments({ "kind": "Document", "definitions": [{ "kind": "OperationDefinition", "operation": "query", "name": { "kind": "Name", "value": "RatioTicketById" }, "variableDefinitions": [{ "kind": "VariableDefinition", "variable": { "kind": "Variable", "name": { "kind": "Name", "value": "id" } }, "type": { "kind": "NonNullType", "type": { "kind": "NamedType", "name": { "kind": "Name", "value": "ID" } } }, "directives": [] }], "directives": [], "selectionSet": { "kind": "SelectionSet", "selections": [{ "kind": "Field", "alias": { "kind": "Name", "value": "ticket" }, "name": { "kind": "Name", "value": "ratioTicket" }, "arguments": [{ "kind": "Argument", "name": { "kind": "Name", "value": "id" }, "value": { "kind": "Variable", "name": { "kind": "Name", "value": "id" } } }], "directives": [], "selectionSet": { "kind": "SelectionSet", "selections": [{ "kind": "FragmentSpread", "name": { "kind": "Name", "value": "RatioTicketWithTraining" }, "directives": [] }] } }] } }, ...RatioTicketWithTrainingFragmentDoc.definitions] });
 
-export const UpdateRatioTicketDocument: DocumentNode<UpdateRatioTicketMutation, UpdateRatioTicketMutationVariables> = dedupeFragments({ "kind": "Document", "definitions": [{ "kind": "OperationDefinition", "operation": "mutation", "name": { "kind": "Name", "value": "UpdateRatioTicket" }, "variableDefinitions": [{ "kind": "VariableDefinition", "variable": { "kind": "Variable", "name": { "kind": "Name", "value": "input" } }, "type": { "kind": "NonNullType", "type": { "kind": "NamedType", "name": { "kind": "Name", "value": "UpdateRatioTicketInput" } } }, "directives": [] }], "directives": [], "selectionSet": { "kind": "SelectionSet", "selections": [{ "kind": "Field", "name": { "kind": "Name", "value": "updateRatioTicket" }, "arguments": [{ "kind": "Argument", "name": { "kind": "Name", "value": "input" }, "value": { "kind": "Variable", "name": { "kind": "Name", "value": "input" } } }], "directives": [], "selectionSet": { "kind": "SelectionSet", "selections": [{ "kind": "FragmentSpread", "name": { "kind": "Name", "value": "RatioTicket" }, "directives": [] }] } }] } }, ...RatioTicketFragmentDoc.definitions] });
+export const SetRatioTicketNotionLinkDocument: DocumentNode<SetRatioTicketNotionLinkMutation, SetRatioTicketNotionLinkMutationVariables> = dedupeFragments({ "kind": "Document", "definitions": [{ "kind": "OperationDefinition", "operation": "mutation", "name": { "kind": "Name", "value": "SetRatioTicketNotionLink" }, "variableDefinitions": [{ "kind": "VariableDefinition", "variable": { "kind": "Variable", "name": { "kind": "Name", "value": "input" } }, "type": { "kind": "NonNullType", "type": { "kind": "NamedType", "name": { "kind": "Name", "value": "SetRatioTicketNotionLinkInput" } } }, "directives": [] }], "directives": [], "selectionSet": { "kind": "SelectionSet", "selections": [{ "kind": "Field", "name": { "kind": "Name", "value": "setRatioTicketNotionLink" }, "arguments": [{ "kind": "Argument", "name": { "kind": "Name", "value": "input" }, "value": { "kind": "Variable", "name": { "kind": "Name", "value": "input" } } }], "directives": [], "selectionSet": { "kind": "SelectionSet", "selections": [{ "kind": "FragmentSpread", "name": { "kind": "Name", "value": "RatioTicket" }, "directives": [] }] } }] } }, ...RatioTicketFragmentDoc.definitions] });

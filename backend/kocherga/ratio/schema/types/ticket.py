@@ -11,6 +11,10 @@ def extra_fields():
     return {
         'training': g.NN(RatioTraining),
         'ticket_type': RatioTicketType,
+        'need_notion_link': g.Field(
+            g.NN(g.Boolean),
+            resolve=lambda obj, info: bool(obj.training.notion_created_email),
+        ),
     }
 
 

@@ -38,8 +38,8 @@ query RatioTicketById($id: ID!) {
   }
 }
 
-mutation UpdateRatioTicket($input: UpdateRatioTicketInput!) {
-  updateRatioTicket(input: $input) {
+mutation SetRatioTicketNotionLink($input: SetRatioTicketNotionLinkInput!) {
+  setRatioTicketNotionLink(input: $input) {
     ...RatioTicket
   }
 }

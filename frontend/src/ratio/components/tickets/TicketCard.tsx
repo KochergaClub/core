@@ -17,7 +17,9 @@ import { adminTicketRoute, adminTrainingRoute } from '~/ratio/routes';
 import { RatioPaymentAddDocument, RatioTicketFragment } from '../../queries.generated';
 import PaymentItem from '../PaymentItem';
 import RowWithIcon from '../RowWithIcon';
-import { RatioTicketWithTrainingFragment, UpdateRatioTicketDocument } from './queries.generated';
+import {
+    RatioTicketWithTrainingFragment, SetRatioTicketNotionLinkDocument
+} from './queries.generated';
 
 const CanceledBadge = () => <Badge>ОТКАЗ</Badge>;
 
@@ -92,33 +94,38 @@ const RemainingPayments: React.FC<Props> = ({ ticket }) => {
 };
 
 const NotionLinkRow: React.FC<Props> = ({ ticket }) => {
-  const [updateMutation] = useMutation(UpdateRatioTicketDocument);
+  const [updateMutation] = useMutation(SetRatioTicketNotionLinkDocument);
+
+  if (!ticket.need_notion_link && !ticket.notion_link) {
+    return null;
+  }
 
   return (
     <RowWithIcon icon={NotionIcon} hint="Notion">
       <Row>
         <A href={ticket.notion_link}>{ticket.notion_link}</A>
-        <ApolloModalFormButton
-          mutation={updateMutation}
-          inputArgumentName="input"
-          small
-          shape={[
-            {
-              name: 'id',
-              type: 'string',
-              readonly: true,
-              default: ticket.id,
-            },
-            {
-              name: 'notion_link',
-              type: 'string',
-              default: ticket.notion_link,
-            },
-          ]}
-          modalTitle="Добавить Notion-ссылку"
-          modalButtonName="Добавить"
-          buttonName="Добавить Notion-ссылку"
-        />
+        {ticket.notion_link ? null : (
+          <ApolloModalFormButton
+            mutation={updateMutation}
+            small
+            shape={[
+              {
+                name: 'id',
+                type: 'string',
+                readonly: true,
+                default: ticket.id,
+              },
+              {
+                name: 'notion_link',
+                type: 'string',
+                default: ticket.notion_link,
+              },
+            ]}
+            modalTitle="Добавить Notion-ссылку"
+            modalButtonName="Добавить"
+            buttonName="Добавить Notion-ссылку"
+          />
+        )}
       </Row>
     </RowWithIcon>
   );

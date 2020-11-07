@@ -1133,6 +1133,7 @@ export type Mutation = {
   deleteRatioTicketType: BasicResult;
   ratioAddTicket: RatioTicket;
   updateRatioTicket: RatioTicket;
+  setRatioTicketNotionLink: RatioTicket;
   ratioAddTraining: RatioTraining;
   updateRatioTraining: RatioTraining;
   ratioDeleteTraining: BasicResult;
@@ -1521,6 +1522,11 @@ export type MutationRatioAddTicketArgs = {
 
 export type MutationUpdateRatioTicketArgs = {
   input: UpdateRatioTicketInput;
+};
+
+
+export type MutationSetRatioTicketNotionLinkArgs = {
+  input: SetRatioTicketNotionLinkInput;
 };
 
 
@@ -2352,6 +2358,7 @@ export type RatioTicket = {
   payments: Array<RatioPayment>;
   training: RatioTraining;
   ticket_type?: Maybe<RatioTicketType>;
+  need_notion_link: Scalars['Boolean'];
 };
 
 export type RatioTicketConnection = {
@@ -2513,6 +2520,11 @@ export type SendUniqueRatioPromocodeInput = {
 
 export type SendUniqueRatioPromocodeResult = BasicResult | GenericError;
 
+export type SetRatioTicketNotionLinkInput = {
+  id: Scalars['ID'];
+  notion_link: Scalars['String'];
+};
+
 export type SlackAccount = ExternalServiceAccount & {
   __typename?: 'SlackAccount';
   service: SlackExternalService;
@@ -2650,9 +2662,9 @@ export type TimepadCategory = {
 
 export type UpdateRatioTicketInput = {
   id: Scalars['ID'];
-  first_name: Scalars['String'];
-  last_name: Scalars['String'];
-  notion_link: Scalars['String'];
+  first_name?: Maybe<Scalars['String']>;
+  last_name?: Maybe<Scalars['String']>;
+  notion_link?: Maybe<Scalars['String']>;
 };
 
 export type UpdateRatioTicketTypeInput = {

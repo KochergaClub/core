@@ -962,6 +962,7 @@ type Mutation {
   deleteRatioTicketType(input: DeleteRatioTicketTypeInput!): BasicResult!
   ratioAddTicket(input: RatioAddTicketInput!): RatioTicket!
   updateRatioTicket(input: UpdateRatioTicketInput!): RatioTicket!
+  setRatioTicketNotionLink(input: SetRatioTicketNotionLinkInput!): RatioTicket!
   ratioAddTraining(params: RatioAddTrainingInput!): RatioTraining!
   updateRatioTraining(input: UpdateRatioTrainingInput!): RatioTraining!
   ratioDeleteTraining(input: RatioDeleteTrainingInput!): BasicResult!
@@ -1417,6 +1418,7 @@ type RatioTicket {
   payments: [RatioPayment!]!
   training: RatioTraining!
   ticket_type: RatioTicketType
+  need_notion_link: Boolean!
 }
 
 type RatioTicketConnection {
@@ -1550,6 +1552,11 @@ input SendUniqueRatioPromocodeInput {
 
 union SendUniqueRatioPromocodeResult = BasicResult | GenericError
 
+input SetRatioTicketNotionLinkInput {
+  id: ID!
+  notion_link: String!
+}
+
 type SlackAccount implements ExternalServiceAccount {
   service: SlackExternalService!
   email: String!
@@ -1661,9 +1668,9 @@ type TimepadCategory {
 
 input UpdateRatioTicketInput {
   id: ID!
-  first_name: String!
-  last_name: String!
-  notion_link: String!
+  first_name: String
+  last_name: String
+  notion_link: String
 }
 
 input UpdateRatioTicketTypeInput {

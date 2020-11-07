@@ -1,0 +1,17 @@
+{% extends "email/simple-layout.mjml" %} {% block title %}
+Ссылка на шаблон «Смоделируй и начни»
+{% endblock %} {% block body %}
+<mj-section>
+  <mj-column>
+    <mj-text>
+      Привет! <a href="{{ link | safe }}">{{ link | safe }}</a> — вот ссылка на ваш личный шаблон «Смоделируй и начни». Теперь у вас есть всё, чтобы начать. Желаем приятной и продуктивной работы!
+    </mj-text>
+    <mj-text>
+Если что-то пошло не так, или если вам просто хочется что-то спросить — напишите нам: <a href="https://t.me/tmrpl">t.me/tmrpl</a> или <a href="mailto:tanya@kocherga-club.ru">tanya@kocherga-club.ru</a>.
+    </mj-text>
+    <mj-text>
+До встречи!
+    </mj-text>
+  </mj-column>
+</mj-section>
+{% endblock %}

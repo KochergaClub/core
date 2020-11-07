@@ -12,21 +12,20 @@ interface Props<FormResult extends AnyFormValues> {
   modalButtonName: string;
   modalTitle: string;
   small?: boolean;
-  inputArgumentName?: 'input' | 'params';
   mutation: (options: {
-    variables: { params: FormResult } | { input: FormResult };
+    variables: { input: FormResult };
   }) => Promise<FetchResult<unknown>>;
 }
 
 export default function ApolloModalFormButton<
   FormResult extends AnyFormValues
->({ mutation, inputArgumentName, ...otherProps }: Props<FormResult>) {
+>({ mutation, ...otherProps }: Props<FormResult>) {
   const cb = useCallback(
     async (values: FormResult) => {
       try {
         await mutation({
           variables: {
-            [inputArgumentName || 'params']: values, // TODO - change default to `input`
+            input: values,
           },
         });
         return;
@@ -52,7 +51,7 @@ export default function ApolloModalFormButton<
         };
       }
     },
-    [mutation, inputArgumentName]
+    [mutation]
   );
 
   return <ModalFormButton post={cb} {...otherProps} />;
