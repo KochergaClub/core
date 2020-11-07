@@ -2404,6 +2404,7 @@ export type RatioTicketTypesInput = {
 export type RatioTicketsFilterInput = {
   with_missing_payments?: Maybe<Scalars['Boolean']>;
   with_unfiscalized_checks?: Maybe<Scalars['Boolean']>;
+  without_notion_link?: Maybe<Scalars['Boolean']>;
 };
 
 export type RatioTrainer = {

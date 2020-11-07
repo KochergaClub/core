@@ -1,5 +1,5 @@
 import { AnimatePresence, motion } from 'framer-motion';
-import React, { useCallback, useState } from 'react';
+import React, { useState } from 'react';
 import { MdRefresh } from 'react-icons/md';
 
 import { useQuery } from '@apollo/client';
@@ -7,37 +7,20 @@ import { useQuery } from '@apollo/client';
 import { ApolloQueryResults, PaddedBlock } from '~/components';
 import HeadlessConnection from '~/components/collections/HeadlessConnection';
 import Pager from '~/components/collections/Pager';
-import { AsyncButton, Column, RadioButtonGroup, Row } from '~/frontkit';
+import { AsyncButton, Column, Row } from '~/frontkit';
 
-import { RatioTicketsDocument, RatioTicketsQueryVariables } from './queries.generated';
+import { RatioTicketsDocument } from './queries.generated';
 import TicketCard from './TicketCard';
-
-type Filter = 'all' | 'unfiscalized' | 'missing-payments';
-
-const filterToVariables: {
-  [k in Filter]: RatioTicketsQueryVariables['filter'];
-} = {
-  all: {},
-  unfiscalized: {
-    with_unfiscalized_checks: true,
-  },
-  'missing-payments': {
-    with_missing_payments: true,
-  },
-};
+import TicketListFilter, { FilterName, filterNameToInput } from './TicketListFilter';
 
 const TicketCollectionBlock: React.FC = () => {
-  const [filter, setFilter] = useState<Filter>('all');
+  const [filter, setFilter] = useState<FilterName>('all');
   const queryResults = useQuery(RatioTicketsDocument, {
     variables: {
       first: 20,
-      filter: filterToVariables[filter],
+      filter: filterNameToInput[filter],
     },
   });
-
-  const asyncSetFilter = useCallback(async (f: Filter) => {
-    setFilter(f);
-  }, []);
 
   return (
     <PaddedBlock width="wide">
@@ -53,15 +36,7 @@ const TicketCollectionBlock: React.FC = () => {
             </AsyncButton>
           </Row>
         </h2>
-        <RadioButtonGroup selected={filter} select={asyncSetFilter}>
-          <RadioButtonGroup.Button name="all">Все</RadioButtonGroup.Button>
-          <RadioButtonGroup.Button name="unfiscalized">
-            С непробитыми чеками
-          </RadioButtonGroup.Button>
-          <RadioButtonGroup.Button name="missing-payments">
-            С недостающими платежами
-          </RadioButtonGroup.Button>
-        </RadioButtonGroup>
+        <TicketListFilter filter={filter} setFilter={setFilter} />
         <ApolloQueryResults {...queryResults} size="block">
           {({ data: { tickets } }) => (
             <HeadlessConnection
@@ -73,6 +48,7 @@ const TicketCollectionBlock: React.FC = () => {
                   <Column gutter={16} stretch>
                     <AnimatePresence initial={false}>
                       {items.map((ticket) => (
+                        // FIXME - use TicketList for consistency
                         <motion.div
                           initial={{ opacity: 0, scale: 0.5 }}
                           animate={{ opacity: 1, scale: 1 }}

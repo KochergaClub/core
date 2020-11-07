@@ -1453,6 +1453,7 @@ input RatioTicketTypesInput {
 input RatioTicketsFilterInput {
   with_missing_payments: Boolean
   with_unfiscalized_checks: Boolean
+  without_notion_link: Boolean
 }
 
 type RatioTrainer {

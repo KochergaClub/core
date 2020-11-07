@@ -20,8 +20,8 @@ class TicketQuerySet(models.QuerySet, RelayQuerySetMixin):
     def with_unfiscalized_checks(self):
         return self.filter(payments__fiscalization_status__in=['todo', 'in_progress'])
 
-    def without_notion_links(self):
-        return self.exclude(notion_link='')
+    def without_notion_link(self):
+        return self.filter(notion_link='').exclude(training__notion_created_email='')
 
 
 class TicketManager(models.Manager):
