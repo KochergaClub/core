@@ -4,9 +4,8 @@ import { FaCashRegister, FaCheck, FaTimes } from 'react-icons/fa';
 import { useMutation } from '@apollo/client';
 
 import { usePermissions } from '~/common/hooks';
-import { Badge } from '~/components';
 import DropdownMenu, { Action } from '~/components/DropdownMenu';
-import { colors, Row } from '~/frontkit';
+import { Badge, colors, Row } from '~/frontkit';
 
 import {
     RatioPaymentDeleteDocument, RatioPaymentFiscalizedManuallyDocument,

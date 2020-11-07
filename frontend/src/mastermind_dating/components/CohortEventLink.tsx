@@ -4,9 +4,9 @@ import { ValueType } from 'react-select';
 import Async from 'react-select/async';
 
 import { useApolloClient, useMutation } from '@apollo/client';
-import { A, Label, Row } from '~/frontkit';
 
-import { AsyncButton, ConfirmModal } from '~/components';
+import { ConfirmModal } from '~/components';
+import { A, AsyncButton, Label, Row } from '~/frontkit';
 
 import {
     MastermindDatingCohortDetailsFragment as Cohort, MastermindDatingEventFragment as Event,

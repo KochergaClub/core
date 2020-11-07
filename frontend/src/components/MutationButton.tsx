@@ -3,7 +3,8 @@ import { useCallback } from 'react';
 import { useMutation } from '@apollo/client';
 import { TypedDocumentNode } from '@graphql-typed-document-node/core';
 
-import AsyncButton from './AsyncButton';
+import { AsyncButton } from '~/frontkit';
+
 import AsyncButtonWithConfirm from './AsyncButtonWithConfirm';
 
 interface Props<V extends Record<string, unknown>> {

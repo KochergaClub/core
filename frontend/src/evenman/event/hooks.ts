@@ -1,6 +1,6 @@
 import { useMutation } from '@apollo/client';
 
-import { useNotification } from '~/common/hooks';
+import { useNotification } from '~/frontkit';
 
 import { EvenmanUpdateDocument, EvenmanUpdateMutationVariables } from './queries.generated';
 

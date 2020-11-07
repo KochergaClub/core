@@ -1,8 +1,8 @@
 import Link from 'next/link';
 import React from 'react';
 
-import { Badge, MutationButton } from '~/components';
-import { A, Label, Row } from '~/frontkit';
+import { MutationButton } from '~/components';
+import { A, Badge, Label, Row } from '~/frontkit';
 import { adminTrainingRoute } from '~/ratio/routes';
 
 import { RatioTraining_SummaryFragment } from '../../queries.generated';

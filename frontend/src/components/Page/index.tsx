@@ -3,6 +3,7 @@ import styled from 'styled-components';
 import {
     FacebookPixelScript, GoogleAnalyticsScript, VkRetargetingScript, YandexMetrikaScript
 } from '~/components/analytics';
+import { WithToaster } from '~/frontkit';
 
 import ErrorBoundary from './ErrorBoundary';
 import GlobalStyle from './GlobalStyle';
@@ -14,7 +15,6 @@ import PageMenu from './PageMenu';
 import PageTitle from './PageTitle';
 import { MenuKind, OpenGraph } from './types';
 import VkMessagesWidget from './VkMessagesWidget';
-import WithToaster from './WithToaster';
 
 interface Props {
   title: string;

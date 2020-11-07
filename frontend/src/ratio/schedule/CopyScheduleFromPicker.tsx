@@ -1,7 +1,7 @@
 import { useQuery } from '@apollo/client';
-import { Column } from '~/frontkit';
 
-import { ApolloQueryResults, AsyncButton } from '~/components';
+import { ApolloQueryResults } from '~/components';
+import { AsyncButton, Column } from '~/frontkit';
 
 import { RatioTrainingsForPickerDocument, TrainingForPickerFragment } from '../queries.generated';
 
@@ -26,13 +26,13 @@ export default function CopyScheduleFromPicker(props: Props) {
             trainings: { edges: trainingEdges },
           },
         }) => {
-          const trainings = trainingEdges.map(edge => edge.node);
+          const trainings = trainingEdges.map((edge) => edge.node);
 
           return (
             <Column>
               {trainings
-                .filter(training => training.slug !== props.excludeSlug)
-                .map(srcTraining => (
+                .filter((training) => training.slug !== props.excludeSlug)
+                .map((srcTraining) => (
                   <AsyncButton
                     key={srcTraining.slug}
                     act={() => props.pick(srcTraining)}

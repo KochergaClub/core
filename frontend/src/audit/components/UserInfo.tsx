@@ -1,7 +1,6 @@
 import Link from 'next/link';
 
-import { Badge } from '~/components';
-import { A, Row } from '~/frontkit';
+import { A, Badge, Row } from '~/frontkit';
 import { staffMemberRoute } from '~/staff/routes';
 
 import { MaybeStaffUserFragment } from '../queries.generated';

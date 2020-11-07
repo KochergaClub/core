@@ -2,8 +2,7 @@ import { getHours, getMinutes, setHours, setMinutes } from 'date-fns';
 import { useCallback, useState } from 'react';
 
 import { useCommonHotkeys, useFocusOnFirstModalRender } from '~/common/hooks';
-import { AsyncButton } from '~/components';
-import { Button, Column, ControlsFooter, Input, Label, Modal } from '~/frontkit';
+import { AsyncButton, Button, Column, ControlsFooter, Input, Label, Modal } from '~/frontkit';
 
 import { EventsPrototypeFragment } from '../queries.generated';
 import TimePicker from '../TimePicker';

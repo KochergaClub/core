@@ -1,7 +1,6 @@
 import { useMutation } from '@apollo/client';
-import { colors, Column, Label, Row } from '~/frontkit';
 
-import { AsyncButton } from '~/components';
+import { AsyncButton, colors, Column, Label, Row } from '~/frontkit';
 
 import EditableLink from '../components/EditableLink';
 import EditableString from '../components/EditableString';

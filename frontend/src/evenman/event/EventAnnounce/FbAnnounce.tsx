@@ -1,7 +1,7 @@
 import { A } from '~/frontkit';
 
 // import { EventAnnounceTarget } from '~/apollo/types.generated';
-// import { AsyncButton } from '~/components';
+// import { AsyncButton } from '~/frontkit';
 import FbGroupPicker from '../../common/FbGroupPicker';
 import { EvenmanEvent_DetailsFragment } from '../queries.generated';
 

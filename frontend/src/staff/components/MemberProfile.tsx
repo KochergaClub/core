@@ -2,10 +2,10 @@ import { useCallback } from 'react';
 import styled from 'styled-components';
 
 import { useMutation, useQuery } from '@apollo/client';
-import { A, Column, Row } from '~/frontkit';
 
 import { usePermissions } from '~/common/hooks';
-import { ApolloQueryResults, AsyncButton, AsyncButtonWithConfirm } from '~/components';
+import { ApolloQueryResults, AsyncButtonWithConfirm } from '~/components';
+import { A, AsyncButton, Column, Row } from '~/frontkit';
 
 import {
     StaffFireMemberDocument, StaffGrantGooglePermissionsToMemberDocument, StaffMemberDocument,
@@ -66,11 +66,15 @@ const ManagerControls: React.FC<Props> = ({ member }) => {
     awaitRefetchQueries: true,
   };
 
-  const [
-    grantGooglePermissionsMutation,
-  ] = useMutation(StaffGrantGooglePermissionsToMemberDocument, refetchConfig);
+  const [grantGooglePermissionsMutation] = useMutation(
+    StaffGrantGooglePermissionsToMemberDocument,
+    refetchConfig
+  );
   const [fireMutation] = useMutation(StaffFireMemberDocument, refetchConfig);
-  const [unfireMutation] = useMutation(StaffUnfireMemberDocument, refetchConfig);
+  const [unfireMutation] = useMutation(
+    StaffUnfireMemberDocument,
+    refetchConfig
+  );
 
   const grantGooglePermissions = useCallback(async () => {
     await grantGooglePermissionsMutation({ variables: { id: member.id } });

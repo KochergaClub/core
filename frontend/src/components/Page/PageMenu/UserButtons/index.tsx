@@ -8,11 +8,10 @@ import { useLazyQuery, useMutation } from '@apollo/client';
 
 import { CurrentUserDocument } from '~/auth/queries.generated';
 import { WagtailPageContext } from '~/cms/contexts';
-import { useNotification } from '~/common/hooks';
 import { ApolloQueryResults, DropdownMenu } from '~/components';
 import { Action, NextLinkAction } from '~/components/DropdownMenu';
 import { BasicSpinner } from '~/components/Spinner';
-import { colors, fonts, Row } from '~/frontkit';
+import { colors, fonts, Row, useNotification } from '~/frontkit';
 import { LogoutDocument } from '~/my/queries.generated';
 
 import { MenuKind } from '../../types';

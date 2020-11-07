@@ -3,9 +3,8 @@ import { useCallback, useEffect, useRef, useState } from 'react';
 import Select from 'react-select';
 import styled from 'styled-components';
 
-import { Column, Label, Row } from '~/frontkit';
-
-import { AsyncButton, PaddedBlock, Spinner } from '~/components';
+import { PaddedBlock, Spinner } from '~/components';
+import { AsyncButton, Column, Label, Row } from '~/frontkit';
 
 import MuteAudioButton from './MuteAudioButton';
 import MuteVideoButton from './MuteVideoButton';

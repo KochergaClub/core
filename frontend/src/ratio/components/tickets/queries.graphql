@@ -7,12 +7,19 @@ fragment RatioTicketWithTraining on RatioTicket {
   }
 }
 
-query RatioTickets($before: String, $after: String, $first: Int, $last: Int) {
+query RatioTickets(
+  $before: String
+  $after: String
+  $first: Int
+  $last: Int
+  $filter: RatioTicketsFilterInput
+) {
   tickets: ratioTickets(
     before: $before
     after: $after
     first: $first
     last: $last
+    filter: $filter
   ) {
     pageInfo {
       ...PageInfo

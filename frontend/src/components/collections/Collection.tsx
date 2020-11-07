@@ -3,9 +3,8 @@ import { MdRefresh } from 'react-icons/md';
 
 import { capitalize } from '~/common/utils';
 import { AnyFormValues, FormShape } from '~/components/forms/types';
-import { Column, Row } from '~/frontkit';
+import { AsyncButton, Column, Row } from '~/frontkit';
 
-import { AsyncButton } from '../';
 import CreateItemButton from './CreateItemButton';
 import DumpJSONView from './DumpJSONView';
 import { AnyViewProps, EntityNames } from './types';

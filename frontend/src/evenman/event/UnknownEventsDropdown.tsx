@@ -3,9 +3,9 @@ import { FaGlobeAfrica, FaLock } from 'react-icons/fa';
 import styled from 'styled-components';
 
 import { useMutation, useQuery } from '@apollo/client';
-import { Button, Column, Row } from '~/frontkit';
 
-import { AsyncButton, DropdownMenu } from '~/components';
+import { DropdownMenu } from '~/components';
+import { AsyncButton, Button, Column, Row } from '~/frontkit';
 
 import {
     EvenmanSetEventTypeDocument, EvenmanUnknownEventFragment, EvenmanUnknownEventsDocument

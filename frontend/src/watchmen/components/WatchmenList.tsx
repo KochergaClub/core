@@ -6,9 +6,9 @@ import styled from 'styled-components';
 import { useMutation, useQuery } from '@apollo/client';
 
 import { usePermissions } from '~/common/hooks';
-import { ApolloQueryResults, AsyncButton } from '~/components';
+import { ApolloQueryResults } from '~/components';
 import Card, { CardList } from '~/components/Card';
-import { A, Button, Label, Row } from '~/frontkit';
+import { A, AsyncButton, Button, Label, Row } from '~/frontkit';
 import { staffMemberRoute } from '~/staff/routes';
 
 import {

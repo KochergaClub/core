@@ -1,7 +1,7 @@
-import React, { useCallback, useReducer, useContext } from 'react';
+import React, { useCallback, useContext, useReducer } from 'react';
 import styled from 'styled-components';
 
-import { colors } from '~/frontkit';
+import * as colors from '../colors';
 
 type NotificationType = 'Error';
 
@@ -30,7 +30,7 @@ type Action = NotifyAction | DismissAction;
 
 export const ToasterContext = React.createContext<React.Dispatch<Action>>(
   () => {
-    console.log('mock dispatch');
+    // mock dispatch
   }
 );
 
@@ -45,7 +45,7 @@ const reducer = (state: State, action: Action): State => {
         },
       ];
     case 'DISMISS':
-      return state.filter(t => t.id !== action.payload);
+      return state.filter((t) => t.id !== action.payload);
     default:
       return state;
   }
@@ -98,7 +98,7 @@ const ToastList = ({ toasts }: { toasts: Notification[] }) => {
   );
 };
 
-const WithToaster: React.FC = ({ children }) => {
+export const WithToaster: React.FC = ({ children }) => {
   const [state, dispatch] = useReducer(reducer, []);
 
   return (
@@ -111,4 +111,11 @@ const WithToaster: React.FC = ({ children }) => {
   );
 };
 
-export default WithToaster;
+export const useNotification = () => {
+  const dispatch = useContext(ToasterContext);
+  return (payload: { text: string; type: NotificationType }) =>
+    dispatch({
+      type: 'NOTIFY',
+      payload,
+    });
+};

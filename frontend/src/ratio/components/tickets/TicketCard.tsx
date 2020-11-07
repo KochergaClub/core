@@ -6,11 +6,11 @@ import { MdEmail } from 'react-icons/md';
 
 import { useMutation } from '@apollo/client';
 
-import { Badge, HumanizedDateTime } from '~/components';
+import { HumanizedDateTime } from '~/components';
 import Card from '~/components/Card';
 import ApolloModalFormButton from '~/components/forms/ApolloModalFormButton';
 import { FormShape } from '~/components/forms/types';
-import { A, Column, Label, Row } from '~/frontkit';
+import { A, Badge, Column, Row } from '~/frontkit';
 import { adminTicketRoute, adminTrainingRoute } from '~/ratio/routes';
 
 import { RatioPaymentAddDocument, RatioTicketFragment } from '../../queries.generated';

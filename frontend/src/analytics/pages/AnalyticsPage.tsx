@@ -1,8 +1,8 @@
 import { useMutation, useQuery } from '@apollo/client';
-import { A } from '~/frontkit';
 
 import { NextApolloPage, withApollo, withStaff } from '~/apollo';
-import { ApolloQueryResults, AsyncButton, Page } from '~/components';
+import { ApolloQueryResults, Page } from '~/components';
+import { A, AsyncButton } from '~/frontkit';
 
 import {
     AnalyticsBovStatFragment, AnalyticsBovStatsDocument, AnalyticsUpdateFbRatioAudienceDocument

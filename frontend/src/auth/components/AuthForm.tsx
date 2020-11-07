@@ -2,9 +2,9 @@ import { useCallback, useEffect, useRef, useState } from 'react';
 import styled from 'styled-components';
 
 import { useMutation } from '@apollo/client';
-import { Button, Column, Input } from '~/frontkit';
 
-import { useCommonHotkeys, useNotification } from '~/common/hooks';
+import { useCommonHotkeys } from '~/common/hooks';
+import { Button, Column, Input, useNotification } from '~/frontkit';
 
 import { LoginDocument, SendMagicLinkDocument } from '../queries.generated';
 import AuthContainer from './AuthContainer';

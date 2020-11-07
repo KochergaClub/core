@@ -5,9 +5,8 @@ import { FaHeart, FaUser } from 'react-icons/fa';
 import { useMutation } from '@apollo/client';
 
 import { useUser } from '~/common/hooks';
-import { AsyncButton } from '~/components';
 import { trackEvent } from '~/components/analytics';
-import { A, colors, Column, Label, Row } from '~/frontkit';
+import { A, AsyncButton, colors, Column, Label, Row } from '~/frontkit';
 import TicketCard from '~/my/components/TicketCard';
 
 import { MyEventsTicketRegisterDocument } from '../queries.generated';

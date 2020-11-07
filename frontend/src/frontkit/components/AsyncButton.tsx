@@ -1,9 +1,9 @@
 import { useCallback, useState } from 'react';
 
-import { useNotification } from '~/common/hooks';
-import { Button } from '~/frontkit';
+import { Button } from '../components/Button';
+import { useNotification } from '../global/WithToaster';
 
-interface Props {
+export interface Props {
   act: () => Promise<unknown>;
   small?: boolean; // deprecated
   size?: Parameters<typeof Button>[0]['size'];
@@ -12,7 +12,14 @@ interface Props {
   children?: React.ReactNode;
 }
 
-const AsyncButton = ({ act, children, small, size, kind, disabled }: Props) => {
+export const AsyncButton: React.FC<Props> = ({
+  act,
+  children,
+  small,
+  size,
+  kind,
+  disabled,
+}: Props) => {
   const notify = useNotification();
   const [acting, setActing] = useState(false);
 
@@ -40,5 +47,3 @@ const AsyncButton = ({ act, children, small, size, kind, disabled }: Props) => {
     </Button>
   );
 };
-
-export default AsyncButton;

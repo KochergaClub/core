@@ -1,8 +1,7 @@
 import autosize from 'autosize';
 import React, { useCallback, useRef } from 'react';
 
-import { AsyncButton } from '~/components';
-import { Column, ControlsFooter, Modal } from '~/frontkit';
+import { AsyncButton, Column, ControlsFooter, Modal } from '~/frontkit';
 
 interface Props {
   close: () => void;

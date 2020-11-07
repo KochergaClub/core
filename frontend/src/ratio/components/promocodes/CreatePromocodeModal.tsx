@@ -1,8 +1,8 @@
 import { useMutation } from '@apollo/client';
 
-import { useNotification } from '~/common/hooks';
 import ModalForm from '~/components/forms/ModalForm';
 import { FormShape } from '~/components/forms/types';
+import { useNotification } from '~/frontkit';
 
 import { CreateRatioPromocodeDocument } from './queries.generated';
 

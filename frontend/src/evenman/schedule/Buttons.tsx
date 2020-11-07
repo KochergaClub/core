@@ -2,9 +2,8 @@ import { useCallback, useState } from 'react';
 import styled from 'styled-components';
 
 import { useMutation } from '@apollo/client';
-import { A, Button, Column } from '~/frontkit';
 
-import { AsyncButton } from '~/components';
+import { A, AsyncButton, Button, Column } from '~/frontkit';
 
 import DigestEmailModal from './DigestEmailModal';
 import {
@@ -17,7 +16,9 @@ const WideAsyncButton = styled(AsyncButton)`
 `;
 
 const EmailDigestButton: React.FC = ({ children }) => {
-  const [mutation, { loading: acting }] = useMutation(EvenmanDigestToMailchimpDocument);
+  const [mutation, { loading: acting }] = useMutation(
+    EvenmanDigestToMailchimpDocument
+  );
 
   const [showModal, setShowModal] = useState(false);
 
@@ -54,7 +55,9 @@ interface Props {
 const Buttons: React.FC<Props> = ({ digest }) => {
   const [postToVk] = useMutation(EvenmanDigestToVkDocument);
   const [postToTelegram] = useMutation(EvenmanDigestToTelegramDocument);
-  const [updateVkWikiSchedule] = useMutation(EvenmanVkWikiScheduleUpdateDocument);
+  const [updateVkWikiSchedule] = useMutation(
+    EvenmanVkWikiScheduleUpdateDocument
+  );
 
   return (
     <div>

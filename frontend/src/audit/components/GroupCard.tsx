@@ -1,11 +1,10 @@
 import { useCallback } from 'react';
 
 import { useMutation } from '@apollo/client';
-import { Column, Row } from '~/frontkit';
 
-import { AsyncButton, Badge } from '~/components';
 import Card from '~/components/Card';
 import DropdownMenu, { LinkAction, ModalAction } from '~/components/DropdownMenu';
+import { AsyncButton, Badge, Column, Row } from '~/frontkit';
 
 import {
     AuthGroupsDocument, AuthGroupsQuery, AuthRemoveUserFromGroupDocument, MaybeStaffUserFragment
@@ -62,7 +61,7 @@ const GroupCard: React.FC<Props> = ({ group }) => {
         {group.users.map((user) => (
           <Row key={user.id}>
             <UserInfo user={user} />
-            <AsyncButton small act={async () => removeUserCb(user)}>
+            <AsyncButton size="small" act={async () => removeUserCb(user)}>
               удалить
             </AsyncButton>
           </Row>

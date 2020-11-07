@@ -1,7 +1,6 @@
 import { useMutation } from '@apollo/client';
-import { A, Label } from '~/frontkit';
 
-import { AsyncButton } from '~/components';
+import { A, AsyncButton, Label } from '~/frontkit';
 
 import {
     MastermindDatingCohortDetailsFragment as Cohort, MastermindDatingCreateGroupDocument,
@@ -23,7 +22,7 @@ const GroupInfo = ({ group }: { group: Group }) => {
           <>
             <Label>Участники:</Label>
             <ul>
-              {group.participants.map(participant => (
+              {group.participants.map((participant) => (
                 <li key={participant.id}>{participant.name}</li>
               ))}
             </ul>
@@ -37,16 +36,19 @@ const GroupInfo = ({ group }: { group: Group }) => {
 };
 
 const GroupSection: React.FC<Props> = ({ cohort }) => {
-  const [createGroupMutation] = useMutation(MastermindDatingCreateGroupDocument, {
-    variables: {
-      cohort_id: cohort.id,
-    },
-  });
+  const [createGroupMutation] = useMutation(
+    MastermindDatingCreateGroupDocument,
+    {
+      variables: {
+        cohort_id: cohort.id,
+      },
+    }
+  );
 
   return (
     <section>
       <h1>Группы</h1>
-      {cohort.groups.map(group => (
+      {cohort.groups.map((group) => (
         <GroupInfo key={group.id} group={group} />
       ))}
 

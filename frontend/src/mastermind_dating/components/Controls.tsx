@@ -3,8 +3,8 @@ import { useCallback } from 'react';
 
 import { useMutation } from '@apollo/client';
 
-import { AsyncButton, AsyncButtonWithConfirm } from '~/components';
-import { A, Column, Row } from '~/frontkit';
+import { AsyncButtonWithConfirm } from '~/components';
+import { A, AsyncButton, Column, Row } from '~/frontkit';
 
 import {
     MastermindDatingCohortDetailsFragment as Cohort, MastermindDatingDeleteCohortDocument,

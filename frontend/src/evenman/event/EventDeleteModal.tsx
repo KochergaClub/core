@@ -5,8 +5,7 @@ import styled from 'styled-components';
 
 import { useMutation } from '@apollo/client';
 
-import { AsyncButton } from '~/components';
-import { Button, ControlsFooter, Modal } from '~/frontkit';
+import { AsyncButton, Button, ControlsFooter, Modal } from '~/frontkit';
 
 import { rootRoute } from '../routes';
 import { EvenmanEvent_DetailsFragment, EvenmanEventDeleteDocument } from './queries.generated';

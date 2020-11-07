@@ -5,8 +5,8 @@ import Toggle from 'react-toggle';
 
 import { useLazyQuery } from '@apollo/client';
 
-import { AsyncButton, Spinner } from '~/components';
-import { Button, Column, ControlsFooter, Modal, Row } from '~/frontkit';
+import { Spinner } from '~/components';
+import { AsyncButton, Button, Column, ControlsFooter, Modal, Row } from '~/frontkit';
 
 import { EvenmanPrototypeDocument } from '../event-prototype/queries.generated';
 import { useUpdateMutation } from './hooks';

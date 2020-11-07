@@ -3,8 +3,8 @@ import { useCallback, useState } from 'react';
 import { useQuery } from '@apollo/client';
 
 import { useCommonHotkeys, useFocusOnFirstModalRender } from '~/common/hooks';
-import { ApolloQueryResults, AsyncButton } from '~/components';
-import { Column, Modal, Row } from '~/frontkit';
+import { ApolloQueryResults } from '~/components';
+import { AsyncButton, Column, Modal, Row } from '~/frontkit';
 
 import { GradeFragment, WatchmanFragment, WatchmenGradesListDocument } from '../queries.generated';
 

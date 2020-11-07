@@ -1,7 +1,7 @@
 import { useQuery } from '@apollo/client';
 
-import { ApolloQueryResults, AsyncButton } from '~/components';
-import { Column, Modal } from '~/frontkit';
+import { ApolloQueryResults } from '~/components';
+import { AsyncButton, Column, Modal } from '~/frontkit';
 
 import { StaffMemberForPickerFragment, StaffMembersForPickerDocument } from '../queries.generated';
 

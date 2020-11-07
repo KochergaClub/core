@@ -1,5 +1,4 @@
-import { AsyncButton } from '~/components';
-import { HR, Row } from '~/frontkit';
+import { AsyncButton, HR, Row } from '~/frontkit';
 
 import { PagerProps } from './types';
 

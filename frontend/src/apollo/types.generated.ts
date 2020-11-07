@@ -2049,6 +2049,7 @@ export type QueryRatioTicketsArgs = {
   after?: Maybe<Scalars['String']>;
   first?: Maybe<Scalars['Int']>;
   last?: Maybe<Scalars['Int']>;
+  filter?: Maybe<RatioTicketsFilterInput>;
 };
 
 
@@ -2384,6 +2385,11 @@ export type RatioTicketTypeInput = {
 
 export type RatioTicketTypesInput = {
   id?: Maybe<Scalars['ID']>;
+};
+
+export type RatioTicketsFilterInput = {
+  with_missing_payments?: Maybe<Scalars['Boolean']>;
+  with_unfiscalized_checks?: Maybe<Scalars['Boolean']>;
 };
 
 export type RatioTrainer = {

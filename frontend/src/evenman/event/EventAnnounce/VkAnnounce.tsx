@@ -1,7 +1,7 @@
 import { useMutation } from '@apollo/client';
 
 import { EventAnnounceTarget } from '~/apollo/types.generated';
-import { AsyncButton } from '~/components';
+import { AsyncButton } from '~/frontkit';
 
 import VkGroupPicker from '../../common/VkGroupPicker';
 import { EvenmanAnnounceDocument, EvenmanEvent_DetailsFragment } from '../queries.generated';

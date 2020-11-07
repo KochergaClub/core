@@ -2,8 +2,8 @@ import { useCallback, useState } from 'react';
 
 import { useApolloClient, useMutation } from '@apollo/client';
 
-import { AsyncButton, ButtonWithModal } from '~/components';
-import { Button, Column, Input, Modal, Row } from '~/frontkit';
+import { ButtonWithModal } from '~/components';
+import { AsyncButton, Button, Column, Input, Modal, Row } from '~/frontkit';
 
 import {
     RatioTrainingEmailPrototypeDocument, RatioTrainingSendEmailDocument

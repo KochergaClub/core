@@ -5,8 +5,7 @@ import Toggle from 'react-toggle';
 
 import { useMutation } from '@apollo/client';
 
-import { AsyncButton } from '~/components';
-import { Column, Row } from '~/frontkit';
+import { AsyncButton, Column, Row } from '~/frontkit';
 
 import {
     MastermindDatingCohortDetailsFragment as Cohort,

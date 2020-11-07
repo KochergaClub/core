@@ -5,9 +5,7 @@ import Markdown from 'react-markdown';
 import breaks from 'remark-breaks';
 import styled from 'styled-components';
 
-import { Button, ControlsFooter } from '~/frontkit';
-
-import { AsyncButton } from '~/components';
+import { AsyncButton, Button, ControlsFooter } from '~/frontkit';
 
 import { Header, IconLink, UserText } from './ui';
 

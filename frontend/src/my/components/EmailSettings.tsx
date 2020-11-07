@@ -1,9 +1,8 @@
 import { useCallback } from 'react';
 
 import { useMutation } from '@apollo/client';
-import { Column, Row } from '~/frontkit';
 
-import { AsyncButton, Badge } from '~/components';
+import { AsyncButton, Badge, Column, Row } from '~/frontkit';
 
 import {
     EmailSubscriptionFragment, EmailSubscriptionInterestFragment, MyEmailResubscribeDocument,
@@ -21,10 +20,13 @@ const InterestCheckbox: React.FC<InterestProps> = ({ interest }) => {
     refetchQueries: ['MySettingsPage'],
     awaitRefetchQueries: true,
   });
-  const [unsubscribeMutation] = useMutation(MyEmailUnsubscribeFromInterestDocument, {
-    refetchQueries: ['MySettingsPage'],
-    awaitRefetchQueries: true,
-  });
+  const [unsubscribeMutation] = useMutation(
+    MyEmailUnsubscribeFromInterestDocument,
+    {
+      refetchQueries: ['MySettingsPage'],
+      awaitRefetchQueries: true,
+    }
+  );
 
   const act = useCallback(async () => {
     const mutation = interest.subscribed
@@ -59,7 +61,7 @@ interface InterestListProps {
 const InterestList: React.FC<InterestListProps> = ({ interests }) => {
   return (
     <Column>
-      {interests.map(interest => (
+      {interests.map((interest) => (
         <InterestCheckbox key={interest.id} interest={interest} />
       ))}
     </Column>

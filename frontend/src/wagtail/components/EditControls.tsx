@@ -10,10 +10,9 @@ import {
     getFragmentByTypename, KnownWagtailPageFragment, KnownWagtailPageTypename
 } from '~/cms/wagtail-utils';
 import { dedupeFragments } from '~/common/dedupeFragments';
-import { useNotification } from '~/common/hooks';
 import { withFragments } from '~/common/utils';
-import { AsyncButton, AsyncButtonWithConfirm } from '~/components';
-import { A, Row } from '~/frontkit';
+import { AsyncButtonWithConfirm } from '~/components';
+import { A, AsyncButton, Row, useNotification } from '~/frontkit';
 
 import { useBlockStructureLoader } from '../hooks';
 import { wagtailAdminPageEditLink } from '../routes';

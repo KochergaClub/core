@@ -1153,7 +1153,7 @@ type Query {
   ratioTicketTypes(input: RatioTicketTypesInput!): [RatioTicketType!]!
   ratioTicketType(input: RatioTicketTypeInput!): RatioTicketType!
   ratioOrders(before: String, after: String, first: Int, last: Int): RatioOrderConnection!
-  ratioTickets(before: String, after: String, first: Int, last: Int): RatioTicketConnection!
+  ratioTickets(before: String, after: String, first: Int, last: Int, filter: RatioTicketsFilterInput): RatioTicketConnection!
   ratioTicket(id: ID!): RatioTicket!
   mastermindDatingCohorts: [MastermindDatingCohort!]!
   mastermindDatingCohortById(id: ID!): MastermindDatingCohort!
@@ -1444,6 +1444,11 @@ input RatioTicketTypeInput {
 
 input RatioTicketTypesInput {
   id: ID
+}
+
+input RatioTicketsFilterInput {
+  with_missing_payments: Boolean
+  with_unfiscalized_checks: Boolean
 }
 
 type RatioTrainer {

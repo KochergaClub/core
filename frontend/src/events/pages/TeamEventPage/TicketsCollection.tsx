@@ -1,8 +1,8 @@
 import { useQuery } from '@apollo/client';
-import { Row } from '~/frontkit';
 
-import { ApolloQueryResults, Badge } from '~/components';
+import { ApolloQueryResults } from '~/components';
 import Card, { CardList } from '~/components/Card';
+import { Badge, Row } from '~/frontkit';
 
 import { GetEventTicketsDocument } from './queries.generated';
 
@@ -24,7 +24,7 @@ const TicketsCollection: React.FC<Props> = ({ event_id }) => {
           <section>
             <h2>Билеты ({event.tickets.length})</h2>
             <CardList>
-              {event.tickets.map(ticket => (
+              {event.tickets.map((ticket) => (
                 <Card key={ticket.id}>
                   <Row>
                     <div>{ticket.user.email}</div>

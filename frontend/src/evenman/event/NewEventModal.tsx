@@ -7,8 +7,8 @@ import DatePicker from 'react-datepicker';
 
 import { useMutation } from '@apollo/client';
 
-import { useCommonHotkeys, useFocusOnFirstModalRender, useNotification } from '~/common/hooks';
-import { Button, Column, ControlsFooter, Input, Label, Modal } from '~/frontkit';
+import { useCommonHotkeys, useFocusOnFirstModalRender } from '~/common/hooks';
+import { Button, Column, ControlsFooter, Input, Label, Modal, useNotification } from '~/frontkit';
 
 import { eventRoute } from '../routes';
 import { EvenmanEventCreateDocument } from './queries.generated';

@@ -4,8 +4,7 @@ import React, { useCallback, useMemo, useState } from 'react';
 import { useMutation } from '@apollo/client';
 
 import { useCommonHotkeys, useFocusOnFirstModalRender } from '~/common/hooks';
-import { AsyncButton } from '~/components';
-import { Column, ControlsFooter, Input, Label, Modal } from '~/frontkit';
+import { AsyncButton, Column, ControlsFooter, Input, Label, Modal } from '~/frontkit';
 
 import { EvenmanPrototypeCreateDocument } from './queries.generated';
 import TimePicker from './TimePicker';

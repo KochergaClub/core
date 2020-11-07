@@ -3,9 +3,8 @@ import { useForm } from 'react-hook-form';
 
 import { useMutation } from '@apollo/client';
 
-import { AsyncButton } from '~/components';
 import { BasicInputField } from '~/components/forms2';
-import { Button, Column, ControlsFooter, Modal } from '~/frontkit';
+import { AsyncButton, Button, Column, ControlsFooter, Modal } from '~/frontkit';
 
 import { RatioTicketTypeFragment } from '../../queries.generated';
 import { DeleteRatioTicketTypeDocument, UpdateRatioTicketTypeDocument } from './queries.generated';

@@ -2,10 +2,10 @@ import { parseISO } from 'date-fns';
 import { useCallback } from 'react';
 
 import { useMutation, useQuery } from '@apollo/client';
-import { Column, Label } from '~/frontkit';
 
 import { formatDate } from '~/common/utils';
-import { ApolloQueryResults, AsyncButton } from '~/components';
+import { ApolloQueryResults } from '~/components';
+import { AsyncButton, Column, Label } from '~/frontkit';
 
 import { Cm2CloseOrderDocument, Cm2OrderDocument } from '../queries.generated';
 import CustomerLink from './CustomerLink';

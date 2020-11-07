@@ -12,12 +12,21 @@ from .training import Training
 
 
 class TicketQuerySet(models.QuerySet, RelayQuerySetMixin):
-    pass
+    def with_missing_payments(self):
+        return self.annotate(payments_sum=models.Sum('payments__amount')).exclude(
+            payments_sum=models.F('payment_amount')
+        )
+
+    def with_unfiscalized_checks(self):
+        return self.filter(payments__fiscalization_status__in=['todo', 'in_progress'])
 
 
 class TicketManager(models.Manager):
     def get_queryset(self):
         return TicketQuerySet(self.model, using=self._db)
+
+    def with_missing_payments(self):
+        return self.get_queryset().with_missing_payments()
 
     def create(self, **kwargs):
         ticket = Ticket(**kwargs)

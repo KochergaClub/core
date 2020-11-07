@@ -108,12 +108,26 @@ class ratioOrders(helpers.BaseField):
 
 @c.class_field
 class ratioTickets(helpers.BaseField):
-    def resolve(self, _, info, **pager):
+    def resolve(self, _, info, filter=None, **pager):
         qs = models.Ticket.objects.all()
+        if filter:
+            if filter.get('with_missing_payments', False):
+                qs = qs.with_missing_payments()
+            if filter.get('with_unfiscalized_checks', False):
+                qs = qs.with_unfiscalized_checks()
         return qs.relay_page(**pager)
 
     permissions = PERMISSIONS
-    args = helpers.connection_args()
+    FilterInput = g.InputObjectType(
+        'RatioTicketsFilterInput',
+        g.input_fields(
+            {
+                'with_missing_payments': Optional[bool],
+                'with_unfiscalized_checks': Optional[bool],
+            }
+        ),
+    )
+    args = {**helpers.connection_args(), 'filter': FilterInput}
     result = g.NN(types.RatioTicketConnection)
 
 

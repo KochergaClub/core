@@ -5,9 +5,8 @@ import styled from 'styled-components';
 
 import { useMutation } from '@apollo/client';
 
-import { AsyncButton } from '~/components';
 import { ErrorMessage, FieldContainer } from '~/components/forms2';
-import { colors, deviceMediaQueries, Input, Row } from '~/frontkit';
+import { AsyncButton, colors, deviceMediaQueries, Input, Row } from '~/frontkit';
 
 import { FormData } from './FormOrderModal';
 import { CheckRatioPromocodeDocument } from './queries.generated';
