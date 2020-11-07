@@ -81,7 +81,7 @@ interface Props {
 
 const TrainingTicketsBlock: React.FC<Props> = ({ training }) => {
   return (
-    <PaddedBlock width="max">
+    <PaddedBlock width="wide">
       <h2>
         <Row>
           <div>Участники: {training.tickets.length}</div>

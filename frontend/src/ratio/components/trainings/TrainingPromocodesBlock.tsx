@@ -40,7 +40,7 @@ const TrainingPromocodesBlock: React.FC<Props> = ({ training }) => {
     : training.promocodes;
 
   return (
-    <PaddedBlock width="max">
+    <PaddedBlock width="wide">
       <PromocodesCollection
         connection={connection}
         fetchPage={fetchPage}

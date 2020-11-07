@@ -28,7 +28,7 @@ const TicketView: React.FC<Props> = ({ id }) => {
             </Head>
             <Page.Title>{title}</Page.Title>
             <Page.Main>
-              <PaddedBlock width="max">
+              <PaddedBlock width="wide">
                 <TicketCard ticket={ticket} />
               </PaddedBlock>
             </Page.Main>

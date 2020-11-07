@@ -2,11 +2,11 @@ import { useCallback } from 'react';
 import { FaCashRegister, FaCheck, FaTimes } from 'react-icons/fa';
 
 import { useMutation } from '@apollo/client';
-import { colors, Row } from '~/frontkit';
 
 import { usePermissions } from '~/common/hooks';
 import { Badge } from '~/components';
 import DropdownMenu, { Action } from '~/components/DropdownMenu';
+import { colors, Row } from '~/frontkit';
 
 import {
     RatioPaymentDeleteDocument, RatioPaymentFiscalizedManuallyDocument,
@@ -22,7 +22,7 @@ const CanceledBadge = () => <Badge type="accent">ОТКАЗ</Badge>;
 const FiscalizeAction: React.FC<Props> = ({ payment }) => {
   const [isKkmUser] = usePermissions(['cashier.kkm_user']);
   const [fiscalizeMutation] = useMutation(RatioPaymentFiscalizeDocument, {
-    refetchQueries: ['RatioTrainingBySlug'],
+    refetchQueries: ['RatioTrainingBySlug', 'RatioTickets', 'RatioTicketById'],
     awaitRefetchQueries: true,
   });
 
@@ -52,7 +52,7 @@ const DeleteAction: React.FC<Props> = ({ payment }) => {
     variables: {
       payment_id: payment.id,
     },
-    refetchQueries: ['RatioTrainingBySlug'],
+    refetchQueries: ['RatioTrainingBySlug', 'RatioTickets', 'RatioTicketById'],
     awaitRefetchQueries: true,
   });
 

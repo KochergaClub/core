@@ -96,7 +96,7 @@ const TrainingCollectionBlock: React.FC<Props> = ({ eternal }) => {
   );
 
   return (
-    <PaddedBlock width="max">
+    <PaddedBlock width="wide">
       <ApolloQueryResults {...queryResults} size="block">
         {({ data: { trainings } }) => (
           <PagedApolloCollection

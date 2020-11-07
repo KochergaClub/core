@@ -1,6 +1,8 @@
 import { parseISO } from 'date-fns';
 import Link from 'next/link';
 import React from 'react';
+import { FaRegMoneyBillAlt, FaTicketAlt, FaUserAlt } from 'react-icons/fa';
+import { MdEmail } from 'react-icons/md';
 
 import { useMutation } from '@apollo/client';
 
@@ -13,13 +15,14 @@ import { adminTicketRoute, adminTrainingRoute } from '~/ratio/routes';
 
 import { RatioPaymentAddDocument, RatioTicketFragment } from '../../queries.generated';
 import PaymentItem from '../PaymentItem';
+import RowWithIcon from '../RowWithIcon';
 import { RatioTicketWithTrainingFragment } from './queries.generated';
 
 const CanceledBadge = () => <Badge>ОТКАЗ</Badge>;
 
 const CreatePaymentButton = ({ ticket_id }: { ticket_id: string }) => {
   const [addMutation] = useMutation(RatioPaymentAddDocument, {
-    refetchQueries: ['RatioTrainingBySlug'],
+    refetchQueries: ['RatioTrainingBySlug', 'RatioTickets', 'RatioTicketById'],
     awaitRefetchQueries: true,
   });
 
@@ -68,14 +71,18 @@ interface Props {
 }
 
 const RemainingPayments: React.FC<Props> = ({ ticket }) => {
-  const remaining =
-    ticket.payment_amount -
-    ticket.payments.map((p) => p.amount).reduce((x, y) => x + y, 0);
+  const paymentsTotal = ticket.payments
+    .map((p) => p.amount)
+    .reduce((x, y) => x + y, 0);
 
-  if (remaining === 0) {
+  const remainingPayments = ticket.payment_amount - paymentsTotal;
+
+  if (remainingPayments === 0) {
     return null; // all payments created
-  } else if (remaining > 0) {
-    return <Badge>Не хватает платежей на сумму: {remaining} руб.</Badge>;
+  } else if (remainingPayments > 0) {
+    return (
+      <Badge>Не хватает платежей на сумму: {remainingPayments} руб.</Badge>
+    );
   } else {
     return (
       <Badge type="accent">Сумма платежей превышает стоимость билета!</Badge>
@@ -113,7 +120,7 @@ const TicketTrainingAndType: React.FC<Props> = ({ ticket }) => {
 const TicketCard: React.FC<Props> = ({ ticket }) => {
   return (
     <Card>
-      <Column>
+      <Column gutter={12}>
         <Row>
           <Link href={adminTicketRoute(ticket.id)} passHref>
             <A>
@@ -123,28 +130,30 @@ const TicketCard: React.FC<Props> = ({ ticket }) => {
             </A>
           </Link>
         </Row>
-        <Column>
-          <Row gutter={10}>
-            <strong>
-              {ticket.first_name} {ticket.last_name}
-            </strong>
-            <div>
-              <A href={`mailto:${ticket.email}`}>{ticket.email}</A>
-            </div>
-          </Row>
+        <RowWithIcon icon={FaTicketAlt} hint="Тип билета">
           <TicketTrainingAndType ticket={ticket} />
-          <div>{ticket.payment_amount} руб.</div>
-          {ticket.status === 'canceled' && <CanceledBadge />}
-        </Column>
+        </RowWithIcon>
+        <RowWithIcon icon={MdEmail} hint="E-mail">
+          <A href={'mailto:' + ticket.email}>{ticket.email}</A>
+        </RowWithIcon>
+        <RowWithIcon icon={FaUserAlt} hint="Имя, фамилия">
+          {ticket.first_name} {ticket.last_name}
+        </RowWithIcon>
+        <RowWithIcon icon={FaRegMoneyBillAlt} hint="Стоимость">
+          <Row>
+            <div>{ticket.payment_amount} руб.</div>
+            <RemainingPayments ticket={ticket} />
+          </Row>
+        </RowWithIcon>
+        {ticket.status === 'canceled' && <CanceledBadge />}
         <Column>
           <Row vCentered>
-            <Label>Платежи</Label>
+            <strong>Платежи</strong>
             <CreatePaymentButton ticket_id={ticket.id} />
           </Row>
           {ticket.payments.map((payment) => (
             <PaymentItem payment={payment} key={payment.id} />
           ))}
-          <RemainingPayments ticket={ticket} />
         </Column>
       </Column>
     </Card>
