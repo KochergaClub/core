@@ -8,7 +8,7 @@ interface Props {
 }
 
 const TicketTypeBadge: React.FC<Props> = ({ ticketType }) => {
-  return <Badge>{ticketType.price} руб.</Badge>;
+  return <Badge hint={ticketType.name}>{ticketType.price} руб.</Badge>;
 };
 
 export default TicketTypeBadge;

@@ -44,7 +44,7 @@ const TrainingCard: React.FC<Props> = ({ training }) => {
       </Row>
       <Row vCentered>
         <Label>Суммарный доход:</Label>
-        <div>{training.total_income}</div>
+        <div>{training.total_income} руб.</div>
       </Row>
       {training.telegram_link && (
         <Row vCentered>

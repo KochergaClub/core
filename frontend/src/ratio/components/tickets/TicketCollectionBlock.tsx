@@ -47,7 +47,7 @@ const TicketCollectionBlock: React.FC = () => {
             fetchPage={queryResults.refetch}
           >
             {({ items, next, previous }) => (
-              <Column stretch>
+              <Column stretch gutter={16}>
                 <h2>
                   <Row gutter={8}>
                     <div>Билеты</div>
