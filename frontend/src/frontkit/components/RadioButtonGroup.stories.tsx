@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 
 import { Story } from '@storybook/react';
 
@@ -14,7 +14,7 @@ const sleep = (ms: number) => {
 };
 
 export const Basic: Story = () => {
-  const [btn, setBtn] = React.useState('first');
+  const [btn, setBtn] = useState('first');
   const select = async (v: string) => {
     await sleep(500);
     setBtn(v);

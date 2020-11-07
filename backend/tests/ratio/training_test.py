@@ -23,11 +23,13 @@ def test_trainer_income(training_with_schedule, trainer):
 
     models.Ticket.objects.create(
         training=t,
+        first_name='foo',
         email='somebody@example.com',
         payment_amount=15000,
     )
     models.Ticket.objects.create(
         training=t,
+        first_name='foo',
         email='somebody2@example.com',
         payment_amount=20000,
     )
