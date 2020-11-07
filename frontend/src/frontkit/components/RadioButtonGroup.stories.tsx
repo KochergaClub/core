@@ -13,7 +13,7 @@ const sleep = (ms: number) => {
   return new Promise((resolve) => setTimeout(resolve, ms));
 };
 
-export const Basic: Story = () => {
+const BasicWrapper: React.FC = () => {
   const [btn, setBtn] = useState('first');
   const select = async (v: string) => {
     await sleep(500);
@@ -28,3 +28,5 @@ export const Basic: Story = () => {
     </RadioButtonGroup>
   );
 };
+
+export const Basic: Story = () => <BasicWrapper />;
