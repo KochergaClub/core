@@ -34,6 +34,7 @@ RatioTicket = DjangoObjectType(
         'ticket_class',
         'payment_amount',
         'comment',
+        'notion_link',
     ],
     related_fields=related_fields,
     extra_fields=extra_fields,  # delay import

@@ -20,6 +20,7 @@ fragment RatioTicket on RatioTicket {
   payment_amount
   status
   ticket_class
+  notion_link
   created
   payments {
     ...RatioPayment

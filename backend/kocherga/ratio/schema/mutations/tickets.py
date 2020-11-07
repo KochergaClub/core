@@ -36,4 +36,32 @@ class ratioAddTicket(helpers.BaseFieldWithInput):
     result = g.NN(types.RatioTicket)
 
 
+@c.class_field
+class updateRatioTicket(helpers.BaseFieldWithInput):
+    def resolve(self, _, info, input):
+        ticket = models.Ticket.objects.get(pk=input['id'])
+
+        for field in (
+            'first_name',
+            'last_name',
+            'notion_link',
+        ):
+            if input.get(field) is not None:
+                setattr(ticket, field, input[field])
+
+        ticket.full_clean()
+        ticket.save()
+        return ticket
+
+    permissions = [user_perm('ratio.manage')]
+    input = {
+        'id': 'ID!',
+        'first_name': Optional[str],
+        'last_name': Optional[str],
+        'notion_link': Optional[str],
+    }
+
+    result = g.NN(types.RatioTicket)
+
+
 mutations = c.as_dict()

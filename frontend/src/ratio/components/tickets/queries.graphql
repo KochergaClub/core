@@ -37,3 +37,9 @@ query RatioTicketById($id: ID!) {
     ...RatioTicketWithTraining
   }
 }
+
+mutation UpdateRatioTicket($input: UpdateRatioTicketInput!) {
+  updateRatioTicket(input: $input) {
+    ...RatioTicket
+  }
+}

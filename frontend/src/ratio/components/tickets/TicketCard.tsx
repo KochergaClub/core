@@ -10,13 +10,14 @@ import { HumanizedDateTime } from '~/components';
 import Card from '~/components/Card';
 import ApolloModalFormButton from '~/components/forms/ApolloModalFormButton';
 import { FormShape } from '~/components/forms/types';
+import NotionIcon from '~/components/icons/NotionIcon';
 import { A, Badge, Column, Row } from '~/frontkit';
 import { adminTicketRoute, adminTrainingRoute } from '~/ratio/routes';
 
 import { RatioPaymentAddDocument, RatioTicketFragment } from '../../queries.generated';
 import PaymentItem from '../PaymentItem';
 import RowWithIcon from '../RowWithIcon';
-import { RatioTicketWithTrainingFragment } from './queries.generated';
+import { RatioTicketWithTrainingFragment, UpdateRatioTicketDocument } from './queries.generated';
 
 const CanceledBadge = () => <Badge>ОТКАЗ</Badge>;
 
@@ -90,6 +91,39 @@ const RemainingPayments: React.FC<Props> = ({ ticket }) => {
   }
 };
 
+const NotionLinkRow: React.FC<Props> = ({ ticket }) => {
+  const [updateMutation] = useMutation(UpdateRatioTicketDocument);
+
+  return (
+    <RowWithIcon icon={NotionIcon} hint="Notion">
+      <Row>
+        <A href={ticket.notion_link}>{ticket.notion_link}</A>
+        <ApolloModalFormButton
+          mutation={updateMutation}
+          inputArgumentName="input"
+          small
+          shape={[
+            {
+              name: 'id',
+              type: 'string',
+              readonly: true,
+              default: ticket.id,
+            },
+            {
+              name: 'notion_link',
+              type: 'string',
+              default: ticket.notion_link,
+            },
+          ]}
+          modalTitle="Добавить Notion-ссылку"
+          modalButtonName="Добавить"
+          buttonName="Добавить Notion-ссылку"
+        />
+      </Row>
+    </RowWithIcon>
+  );
+};
+
 const TicketTrainingAndType: React.FC<Props> = ({ ticket }) => {
   const training = 'training' in ticket ? ticket.training : undefined;
   const { ticket_type } = ticket;
@@ -145,6 +179,7 @@ const TicketCard: React.FC<Props> = ({ ticket }) => {
             <RemainingPayments ticket={ticket} />
           </Row>
         </RowWithIcon>
+        <NotionLinkRow ticket={ticket} />
         {ticket.status === 'canceled' && <CanceledBadge />}
         <Column>
           <Row vCentered>

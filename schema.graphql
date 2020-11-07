@@ -961,6 +961,7 @@ type Mutation {
   updateRatioTicketType(input: UpdateRatioTicketTypeInput!): RatioTicketType!
   deleteRatioTicketType(input: DeleteRatioTicketTypeInput!): BasicResult!
   ratioAddTicket(input: RatioAddTicketInput!): RatioTicket!
+  updateRatioTicket(input: UpdateRatioTicketInput!): RatioTicket!
   ratioAddTraining(params: RatioAddTrainingInput!): RatioTraining!
   updateRatioTraining(input: UpdateRatioTrainingInput!): RatioTraining!
   ratioDeleteTraining(input: RatioDeleteTrainingInput!): BasicResult!
@@ -1412,6 +1413,7 @@ type RatioTicket {
   ticket_class: String!
   payment_amount: Int!
   comment: String!
+  notion_link: String!
   payments: [RatioPayment!]!
   training: RatioTraining!
   ticket_type: RatioTicketType
@@ -1655,6 +1657,13 @@ type TimepadCategory {
   id: ID!
   code: String!
   name: String!
+}
+
+input UpdateRatioTicketInput {
+  id: ID!
+  first_name: String!
+  last_name: String!
+  notion_link: String!
 }
 
 input UpdateRatioTicketTypeInput {

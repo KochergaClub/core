@@ -1132,6 +1132,7 @@ export type Mutation = {
   updateRatioTicketType: RatioTicketType;
   deleteRatioTicketType: BasicResult;
   ratioAddTicket: RatioTicket;
+  updateRatioTicket: RatioTicket;
   ratioAddTraining: RatioTraining;
   updateRatioTraining: RatioTraining;
   ratioDeleteTraining: BasicResult;
@@ -1515,6 +1516,11 @@ export type MutationDeleteRatioTicketTypeArgs = {
 
 export type MutationRatioAddTicketArgs = {
   input: RatioAddTicketInput;
+};
+
+
+export type MutationUpdateRatioTicketArgs = {
+  input: UpdateRatioTicketInput;
 };
 
 
@@ -2342,6 +2348,7 @@ export type RatioTicket = {
   ticket_class: Scalars['String'];
   payment_amount: Scalars['Int'];
   comment: Scalars['String'];
+  notion_link: Scalars['String'];
   payments: Array<RatioPayment>;
   training: RatioTraining;
   ticket_type?: Maybe<RatioTicketType>;
@@ -2639,6 +2646,13 @@ export type TimepadCategory = {
   id: Scalars['ID'];
   code: Scalars['String'];
   name: Scalars['String'];
+};
+
+export type UpdateRatioTicketInput = {
+  id: Scalars['ID'];
+  first_name: Scalars['String'];
+  last_name: Scalars['String'];
+  notion_link: Scalars['String'];
 };
 
 export type UpdateRatioTicketTypeInput = {
