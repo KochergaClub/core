@@ -10,6 +10,7 @@ import {
     AuthGroupsDocument, AuthGroupsQuery, AuthRemoveUserFromGroupDocument, MaybeStaffUserFragment
 } from '../queries.generated';
 import AddMemberToGroupModal from './AddMemberToGroupModal';
+import AddUserToGroupModal from './AddUserToGroupModal';
 import UserInfo from './UserInfo';
 
 interface Props {
@@ -49,6 +50,11 @@ const GroupCard: React.FC<Props> = ({ group }) => {
             <ModalAction title="Добавить сотрудника">
               {({ close }) => (
                 <AddMemberToGroupModal close={close} group={group} />
+              )}
+            </ModalAction>
+            <ModalAction title="Добавить пользователя">
+              {({ close }) => (
+                <AddUserToGroupModal close={close} group={group} />
               )}
             </ModalAction>
           </DropdownMenu>

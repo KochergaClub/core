@@ -1,0 +1,12 @@
+fragment UserForPicker on AuthUser {
+  id
+  email
+}
+
+query SearchUsersForPicker($input: SearchUsersInput!) {
+  searchUsers(input: $input) {
+    results {
+      ...UserForPicker
+    }
+  }
+}

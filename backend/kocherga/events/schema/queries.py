@@ -16,7 +16,9 @@ class events(helpers.BaseField):
     def resolve(self, obj, info, search=None, filter=None, **pager):
         qs = models.Event.objects.list_events()
         if search:
-            qs = qs.filter(title__icontains=search)
+            qs = qs.filter(
+                title__icontains=search
+            )  # TODO - use wagtail/elastic search instead
         if filter:
             if 'event_type' in filter:
                 qs = qs.filter(event_type=filter['event_type'])

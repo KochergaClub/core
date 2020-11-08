@@ -10,6 +10,7 @@ from django.contrib.auth.models import (
     PermissionsMixin,
     BaseUserManager,
 )
+import wagtail.search.index
 
 
 class UserManager(BaseUserManager):
@@ -37,7 +38,7 @@ class UserManager(BaseUserManager):
         return self._create_user(email, password, **extra_fields)
 
 
-class User(AbstractBaseUser, PermissionsMixin):
+class User(wagtail.search.index.Indexed, AbstractBaseUser, PermissionsMixin):
     email = models.EmailField(unique=True)
 
     is_active = models.BooleanField(default=True)
@@ -55,6 +56,12 @@ class User(AbstractBaseUser, PermissionsMixin):
         verbose_name = 'Пользователь'
         verbose_name_plural = 'Пользователи'
         permissions = (('audit', 'Может проверять права доступа'),)
+
+    search_fields = [
+        wagtail.search.index.SearchField('email', partial_match=True, boost=10),
+        wagtail.search.index.SearchField('first_name'),
+        wagtail.search.index.SearchField('last_name'),
+    ]
 
     def get_full_name(self):
         return f"{self.first_name} {self.last_name}"

@@ -904,9 +904,9 @@ type Mutation {
   watchmenUpdateShift(params: WatchmenUpdateShiftInput!): WatchmenShift!
   watchmenSetWatchmanPriority(params: WatchmenSetWatchmanPriorityInput!): Boolean!
   watchmenSetWatchmanGrade(params: WatchmenSetWatchmanGradeInput!): Boolean!
+  kkmRegisterCheck(params: KkmRegisterCheckInput!): KkmRegisterCheckResult!
   cashierCreatePayment(params: CashierCreatePaymentInput!): Boolean
   cashierRedeemPayment(id: ID!): Boolean
-  kkmRegisterCheck(params: KkmRegisterCheckInput!): KkmRegisterCheckResult!
   updateYandexKassaPayment(input: UpdateYandexKassaPaymentInput!): UpdateYandexKassaPaymentResult!
   cancelYandexKassaPayment(input: CancelYandexKassaPaymentInput!): CancelYandexKassaPaymentResult!
   myEventsTicketUnregister(event_id: ID!): MyEventsTicket!
@@ -1123,6 +1123,7 @@ type Query {
   search(input: SearchInput!): SearchResult!
   authGroupsAll: [AuthGroup!]!
   authPermissionsAll: [AuthPermission!]!
+  searchUsers(input: SearchUsersInput!): SearchUsersResult!
   zadarmaPbxCalls(before: String, after: String, first: Int, last: Int): ZadarmaPbxCallConnection!
   zadarmaPbxCall(pbx_call_id: ID!): ZadarmaPbxCall!
   importers: [Importer!]!
@@ -1532,6 +1533,16 @@ union SearchItem = PageSearchItem | EventSearchItem
 
 type SearchResult {
   results: [SearchItem!]!
+  more: Boolean!
+}
+
+input SearchUsersInput {
+  query: String!
+  limit: Int
+}
+
+type SearchUsersResult {
+  results: [AuthUser!]!
   more: Boolean!
 }
 

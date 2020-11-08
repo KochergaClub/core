@@ -1075,9 +1075,9 @@ export type Mutation = {
   watchmenUpdateShift: WatchmenShift;
   watchmenSetWatchmanPriority: Scalars['Boolean'];
   watchmenSetWatchmanGrade: Scalars['Boolean'];
+  kkmRegisterCheck: KkmRegisterCheckResult;
   cashierCreatePayment?: Maybe<Scalars['Boolean']>;
   cashierRedeemPayment?: Maybe<Scalars['Boolean']>;
-  kkmRegisterCheck: KkmRegisterCheckResult;
   updateYandexKassaPayment: UpdateYandexKassaPaymentResult;
   cancelYandexKassaPayment: CancelYandexKassaPaymentResult;
   myEventsTicketUnregister: MyEventsTicket;
@@ -1250,6 +1250,11 @@ export type MutationWatchmenSetWatchmanGradeArgs = {
 };
 
 
+export type MutationKkmRegisterCheckArgs = {
+  params: KkmRegisterCheckInput;
+};
+
+
 export type MutationCashierCreatePaymentArgs = {
   params: CashierCreatePaymentInput;
 };
@@ -1257,11 +1262,6 @@ export type MutationCashierCreatePaymentArgs = {
 
 export type MutationCashierRedeemPaymentArgs = {
   id: Scalars['ID'];
-};
-
-
-export type MutationKkmRegisterCheckArgs = {
-  params: KkmRegisterCheckInput;
 };
 
 
@@ -1828,6 +1828,7 @@ export type Query = {
   search: SearchResult;
   authGroupsAll: Array<AuthGroup>;
   authPermissionsAll: Array<AuthPermission>;
+  searchUsers: SearchUsersResult;
   zadarmaPbxCalls: ZadarmaPbxCallConnection;
   zadarmaPbxCall: ZadarmaPbxCall;
   importers: Array<Importer>;
@@ -1914,6 +1915,11 @@ export type QueryWagtailRenderBlockArgs = {
 
 export type QuerySearchArgs = {
   input: SearchInput;
+};
+
+
+export type QuerySearchUsersArgs = {
+  input: SearchUsersInput;
 };
 
 
@@ -2498,6 +2504,17 @@ export type SearchItem = PageSearchItem | EventSearchItem;
 export type SearchResult = {
   __typename?: 'SearchResult';
   results: Array<SearchItem>;
+  more: Scalars['Boolean'];
+};
+
+export type SearchUsersInput = {
+  query: Scalars['String'];
+  limit?: Maybe<Scalars['Int']>;
+};
+
+export type SearchUsersResult = {
+  __typename?: 'SearchUsersResult';
+  results: Array<AuthUser>;
   more: Scalars['Boolean'];
 };
 
