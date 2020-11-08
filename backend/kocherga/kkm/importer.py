@@ -6,7 +6,7 @@ from datetime import datetime, timedelta, date
 
 import kocherga.importer.base
 from kocherga.dateutils import TZ
-from .api import ofd
+from .ofd import ofd
 
 
 def import_date(d: date) -> None:

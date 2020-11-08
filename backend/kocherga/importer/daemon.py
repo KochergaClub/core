@@ -22,7 +22,6 @@ IMPORTER_MODULES = [
     # "gitlab.models",
     # "cm",
     "money.cashier",
-    "money.ofd",
     "money.tochka",
     "zadarma",
     "timepad",
@@ -30,6 +29,7 @@ IMPORTER_MODULES = [
     "email",
     "zoom",
     "telegram",
+    "kkm",
 ]
 
 

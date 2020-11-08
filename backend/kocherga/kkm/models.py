@@ -19,18 +19,16 @@ class CheckType(enum.Enum):
 
 
 class OfdDocument(models.Model):
-    class Meta:
-        db_table = "ofd_documents"
-
-    #        managed = False
-
+    # not autoincremented, id is imported from OFD
     id = models.IntegerField(primary_key=True)
+
     timestamp = models.IntegerField()
     cash = models.DecimalField(max_digits=10, decimal_places=2)
     electronic = models.DecimalField(max_digits=10, decimal_places=2)
     total = models.DecimalField(max_digits=10, decimal_places=2)
     check_type = models.CharField(
-        max_length=40, choices=[(t.name, t.name) for t in CheckType],
+        max_length=40,
+        choices=[(t.name, t.name) for t in CheckType],
     )
     shift_id = models.IntegerField()  # TODO - foreign key
     request_id = models.IntegerField()  # cheque number in current shift
@@ -70,6 +68,7 @@ class OfdDocument(models.Model):
         )
 
 
+# unused
 def cash_income_by_date(start_d, end_d):
     docs = (
         OfdDocument.objects.filter(

@@ -58,7 +58,7 @@ INSTALLED_APPS = [
     'kocherga.cm2',
     'kocherga.supplies',
     'kocherga.watchmen',
-    'kocherga.money.ofd',
+    'kocherga.kkm',
     'kocherga.money.tochka',
     'kocherga.money.cashier',
     'kocherga.yandex_kassa',
