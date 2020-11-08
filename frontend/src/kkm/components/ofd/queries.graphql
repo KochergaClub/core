@@ -1,0 +1,6 @@
+query OfdFiscalDrives {
+  ofdFiscalDrives {
+    id
+    fiscal_drive_number
+  }
+}

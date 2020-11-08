@@ -6,24 +6,30 @@ from datetime import datetime, timedelta, date
 
 import kocherga.importer.base
 from kocherga.dateutils import TZ
-from .ofd import ofd
+from . import models
 
 
 def import_date(d: date) -> None:
-    documents = ofd.documents(d)
+    for fiscal_drive in models.OfdFiscalDrive.objects.all():
+        documents = fiscal_drive.import_documents(d)
 
-    for document in documents:
-        document.save()
+        for document in documents:
+            document.save()
 
     # TODO - import shifts
 
 
 class Importer(kocherga.importer.base.IncrementalImporter):
     def get_initial_dt(self):
+        models.OfdFiscalDrive.objects.import_all()
         # take the first shift's date
-        d = ofd.shift_opened(1).date()
+        first_dts = [
+            fiscal_drive.load_first_shift_opened()
+            for fiscal_drive in models.OfdFiscalDrive.objects.all()
+        ]
+        d = min(first_dts)
 
-        # scroll back a few more days just in case
+        # scroll back a few more days, just in case
         d -= timedelta(days=2)
 
         return datetime.combine(d, datetime.min.time(), tzinfo=TZ)

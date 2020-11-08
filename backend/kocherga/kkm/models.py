@@ -1,14 +1,14 @@
-from datetime import datetime, timedelta
-from collections import defaultdict
-import decimal
+from __future__ import annotations
+from datetime import datetime, date, timedelta
+from typing import Any, Dict, List
 
 import enum
 
 from django.db import models
 
-from typing import Any, Dict
-
 from kocherga.dateutils import TZ
+
+from . import ofd
 
 
 class CheckType(enum.Enum):
@@ -25,8 +25,50 @@ class Permissions(models.Model):
         default_permissions = ()
 
         permissions = [
-            ('kkmserver', 'Access to kkmserver calls'),
+            ('kkmserver', 'Can access kkmserver'),
+            ('ofd', 'Can access imported OFD data'),
         ]
+
+
+class OfdFiscalDriveManager(models.Manager):
+    def import_all(self):
+        result = ofd.api_call("v2/KKT")
+        kkt_dict = result.get('KKT', [])
+        for (fn, kkt_info) in kkt_dict.items():
+            OfdFiscalDrive.objects.get_or_create(fiscal_drive_number=fn)
+
+
+class OfdFiscalDrive(models.Model):
+    fiscal_drive_number = models.CharField(max_length=20, unique=True, db_index=True)
+
+    objects = OfdFiscalDriveManager()
+
+    def __str__(self):
+        return self.fiscal_drive_number
+
+    def import_documents(self, d: date) -> List[OfdDocument]:
+        items = ofd.api_call(
+            "v1/documents",
+            {
+                "fiscalDriveNumber": self.fiscal_drive_number,
+                "date": d.strftime("%Y-%m-%d"),
+            },
+        ).get("items", [])
+
+        return [OfdDocument.from_json(item, fiscal_drive=self) for item in items]
+
+    def load_first_shift_opened(self) -> datetime:
+        items = ofd.api_call(
+            "v1/documentsShift",
+            {
+                "fiscalDriveNumber": self.fiscal_drive_number,
+                "shiftNumber": "1",
+                "docType": ["open_shift"],
+            },
+        ).get("items", [])
+
+        assert len(items) == 1
+        return datetime.strptime(items[0]["dateTime"], "%Y-%m-%d %H:%M:%S")
 
 
 class OfdDocument(models.Model):
@@ -48,8 +90,15 @@ class OfdDocument(models.Model):
     fiscal_sign = models.BigIntegerField()
     midday_ts = models.IntegerField()  # used for analytics only
 
+    fiscal_drive = models.ForeignKey(
+        OfdFiscalDrive,
+        on_delete=models.PROTECT,
+        null=True,  # TODO - make non-null after first deployment
+        related_name='documents',
+    )
+
     @classmethod
-    def from_json(cls, item: Dict[str, Any]) -> "OfdDocument":
+    def from_json(cls, item: Dict[str, Any], fiscal_drive: OfdFiscalDrive) -> OfdDocument:
         ts = int(item["dateTime"])
 
         dt = datetime.fromtimestamp(ts, tz=TZ)
@@ -76,25 +125,5 @@ class OfdDocument(models.Model):
             operator_inn=item.get("operator_inn", None),
             fiscal_sign=item["fiscalSign"],
             midday_ts=midday_ts,
+            fiscal_drive=fiscal_drive,
         )
-
-
-# unused
-def cash_income_by_date(start_d, end_d):
-    docs = (
-        OfdDocument.objects.filter(
-            midday_ts__gte=datetime.combine(start_d, datetime.min.time()).timestamp()
-        )
-        .filter(midday_ts__lte=datetime.combine(end_d, datetime.max.time()).timestamp())
-        .all()
-    )
-
-    date2income = defaultdict(decimal.Decimal)
-    for doc in docs:
-        d = datetime.fromtimestamp(doc.midday_ts).date()
-        if doc.check_type == 'income':
-            date2income[d] += doc.cash
-        elif doc.check_type == 'refund_income':
-            date2income[d] -= doc.cash
-
-    return [{'date': d, 'income': date2income[d]} for d in sorted(date2income.keys())]

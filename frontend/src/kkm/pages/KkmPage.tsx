@@ -1,8 +1,10 @@
-import { withApollo, withStaff, NextApolloPage } from '~/apollo';
+import React from 'react';
 
-import { Page, PaddedBlock } from '~/components';
+import { NextApolloPage, withApollo, withStaff } from '~/apollo';
+import { PaddedBlock, Page } from '~/components';
 
 import MainForm from '../components/MainForm';
+import OfdFiscalDriveCollection from '../components/ofd/OfdFiscalDriveCollection';
 
 const KkmPage: NextApolloPage = () => {
   return (
@@ -12,6 +14,7 @@ const KkmPage: NextApolloPage = () => {
         <PaddedBlock>
           <MainForm />
         </PaddedBlock>
+        <OfdFiscalDriveCollection />
       </Page.Main>
     </Page>
   );

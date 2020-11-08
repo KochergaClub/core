@@ -1745,6 +1745,12 @@ export type NowInfo = {
   customers: Array<NowCustomer>;
 };
 
+export type OfdFiscalDrive = {
+  __typename?: 'OfdFiscalDrive';
+  id: Scalars['ID'];
+  fiscal_drive_number: Scalars['String'];
+};
+
 export type OpenviduGenerateRoomTokenResult = {
   __typename?: 'OpenviduGenerateRoomTokenResult';
   token: Scalars['String'];
@@ -1840,6 +1846,7 @@ export type Query = {
   watchmenWatchmenAll: Array<WatchmenWatchman>;
   watchmenGradesAll: Array<WatchmenGrade>;
   watchmenShifts: Array<WatchmenShift>;
+  ofdFiscalDrives: Array<OfdFiscalDrive>;
   cashierPayments: CashierPaymentConnection;
   analyticsBovStats: Array<AnalyticsBovStat>;
   events: EventConnection;

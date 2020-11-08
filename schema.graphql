@@ -1064,6 +1064,11 @@ type NowInfo {
   customers: [NowCustomer!]!
 }
 
+type OfdFiscalDrive {
+  id: ID!
+  fiscal_drive_number: String!
+}
+
 type OpenviduGenerateRoomTokenResult {
   token: String!
 }
@@ -1135,6 +1140,7 @@ type Query {
   watchmenWatchmenAll(currentStaff: Boolean, currentRole: Boolean): [WatchmenWatchman!]!
   watchmenGradesAll: [WatchmenGrade!]!
   watchmenShifts(from_date: String!, to_date: String!): [WatchmenShift!]!
+  ofdFiscalDrives: [OfdFiscalDrive!]!
   cashierPayments(before: String, after: String, first: Int, last: Int): CashierPaymentConnection!
   analyticsBovStats: [AnalyticsBovStat!]!
   events(before: String, after: String, first: Int, last: Int, search: String, filter: EventsFilterInput): EventConnection!

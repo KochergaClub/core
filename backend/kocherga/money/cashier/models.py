@@ -45,9 +45,8 @@ class Payment(models.Model):
         permissions = (
             ('create', 'Может выписывать новые чеки'),
             ('redeem', 'Может обналичивать существующие чеки'),
-            ('kkm_user', 'Может использовать кассовый аппарат'),
         )
-        ordering = ('-created_dt',)
+        ordering = ['-created_dt']
 
     def __str__(self):
         result = f'{self.amount} -> {self.whom}'
