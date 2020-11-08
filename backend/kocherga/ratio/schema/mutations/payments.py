@@ -56,7 +56,7 @@ class ratioPaymentFiscalize(helpers.BaseField):
         payment.fiscalize()
         return True
 
-    permissions = [user_perm('ratio.manage'), user_perm('cashier.kkm_user')]
+    permissions = [user_perm('ratio.manage'), user_perm('kkm.kkmserver')]
     args = {'payment_id': 'ID!'}
     result = bool
 

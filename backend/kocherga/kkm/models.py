@@ -18,6 +18,17 @@ class CheckType(enum.Enum):
     refund_expense = 4
 
 
+# via: https://stackoverflow.com/a/37988537
+class Permissions(models.Model):
+    class Meta:
+        managed = False
+        default_permissions = ()
+
+        permissions = [
+            ('kkmserver', 'Access to kkmserver calls'),
+        ]
+
+
 class OfdDocument(models.Model):
     # not autoincremented, id is imported from OFD
     id = models.IntegerField(primary_key=True)

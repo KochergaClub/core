@@ -23,7 +23,7 @@ class kkmRegisterCheck(helpers.BaseFieldWithInput):
             )
         )
 
-    permissions = [user_perm('cashier.kkm_user')]
+    permissions = [user_perm('kkm.kkmserver')]
     input = {
         'email': str,
         'title': str,
