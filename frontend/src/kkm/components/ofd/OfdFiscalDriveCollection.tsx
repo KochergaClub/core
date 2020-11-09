@@ -7,9 +7,7 @@ import Card, { CardList } from '~/components/Card';
 
 import { OfdFiscalDrivesDocument } from './queries.generated';
 
-interface Props {}
-
-const OfdFiscalDriveCollection: React.FC<Props> = () => {
+const OfdFiscalDriveCollection: React.FC = () => {
   const queryResults = useQuery(OfdFiscalDrivesDocument);
   return (
     <PaddedBlock>

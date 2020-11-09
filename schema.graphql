@@ -1043,6 +1043,24 @@ type NowInfo {
   customers: [NowCustomer!]!
 }
 
+type OfdDocument {
+  id: ID!
+  cash: Float!
+  electronic: Float!
+  check_type: String!
+  created: String!
+}
+
+type OfdDocumentConnection {
+  pageInfo: PageInfo!
+  nodes: [OfdDocument!]!
+  edges: [OfdDocumentEdge!]!
+}
+
+type OfdDocumentEdge {
+  node: OfdDocument!
+}
+
 type OfdFiscalDrive {
   id: ID!
   fiscal_drive_number: String!
@@ -1122,6 +1140,7 @@ type Query {
   watchmenGradesAll: [WatchmenGrade!]!
   watchmenShifts(from_date: String!, to_date: String!): [WatchmenShift!]!
   ofdFiscalDrives: [OfdFiscalDrive!]!
+  ofdDocuments(before: String, after: String, first: Int, last: Int): OfdDocumentConnection!
   cashierPayments(before: String, after: String, first: Int, last: Int): CashierPaymentConnection!
   analyticsBovStats: [AnalyticsBovStat!]!
   events(before: String, after: String, first: Int, last: Int, search: String, filter: EventsFilterInput): EventConnection!

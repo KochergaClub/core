@@ -4,3 +4,23 @@ query OfdFiscalDrives {
     fiscal_drive_number
   }
 }
+
+fragment OfdDocument on OfdDocument {
+  id
+  created
+  cash
+  electronic
+}
+
+query OfdDocuments($before: String, $after: String, $first: Int, $last: Int) {
+  ofdDocuments(before: $before, after: $after, first: $first, last: $last) {
+    pageInfo {
+      ...PageInfo
+    }
+    edges {
+      node {
+        ...OfdDocument
+      }
+    }
+  }
+}

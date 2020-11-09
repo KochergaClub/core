@@ -18,4 +18,15 @@ class ofdFiscalDrives(helpers.BaseField):
     result = g.NNList(types.OfdFiscalDrive)
 
 
+@c.class_field
+class ofdDocuments(helpers.BaseField):
+    def resolve(self, _, info, **pager):
+        return models.OfdDocument.objects.relay_page(**pager)
+
+    permissions = [user_perm('kkm.ofd')]
+
+    args = helpers.connection_args()
+    result = g.NN(types.OfdDocumentConnection)
+
+
 queries = c.as_dict()

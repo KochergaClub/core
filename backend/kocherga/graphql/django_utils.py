@@ -27,6 +27,13 @@ def model_field(model: Type[models.Model], field_name: str):
             type_ = g.ID
         else:
             type_ = g.Int
+    elif isinstance(db_field, models.DecimalField):
+        type_ = g.Float
+
+        def resolve_decimal(obj, info):
+            return float(getattr(obj, info.field_name))
+
+        resolve = resolve_decimal
     elif isinstance(db_field, models.DurationField):
         type_ = g.Int
 

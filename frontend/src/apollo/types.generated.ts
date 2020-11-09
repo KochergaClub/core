@@ -1726,6 +1726,27 @@ export type NowInfo = {
   customers: Array<NowCustomer>;
 };
 
+export type OfdDocument = {
+  __typename?: 'OfdDocument';
+  id: Scalars['ID'];
+  cash: Scalars['Float'];
+  electronic: Scalars['Float'];
+  check_type: Scalars['String'];
+  created: Scalars['String'];
+};
+
+export type OfdDocumentConnection = {
+  __typename?: 'OfdDocumentConnection';
+  pageInfo: PageInfo;
+  nodes: Array<OfdDocument>;
+  edges: Array<OfdDocumentEdge>;
+};
+
+export type OfdDocumentEdge = {
+  __typename?: 'OfdDocumentEdge';
+  node: OfdDocument;
+};
+
 export type OfdFiscalDrive = {
   __typename?: 'OfdFiscalDrive';
   id: Scalars['ID'];
@@ -1830,6 +1851,7 @@ export type Query = {
   watchmenGradesAll: Array<WatchmenGrade>;
   watchmenShifts: Array<WatchmenShift>;
   ofdFiscalDrives: Array<OfdFiscalDrive>;
+  ofdDocuments: OfdDocumentConnection;
   cashierPayments: CashierPaymentConnection;
   analyticsBovStats: Array<AnalyticsBovStat>;
   events: EventConnection;
@@ -1963,6 +1985,14 @@ export type QueryWatchmenWatchmenAllArgs = {
 export type QueryWatchmenShiftsArgs = {
   from_date: Scalars['String'];
   to_date: Scalars['String'];
+};
+
+
+export type QueryOfdDocumentsArgs = {
+  before?: Maybe<Scalars['String']>;
+  after?: Maybe<Scalars['String']>;
+  first?: Maybe<Scalars['Int']>;
+  last?: Maybe<Scalars['Int']>;
 };
 
 

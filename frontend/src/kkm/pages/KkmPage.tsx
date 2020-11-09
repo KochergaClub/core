@@ -6,11 +6,13 @@ import { PaddedBlock, Page } from '~/components';
 import { WithNavSidebar } from '~/frontkit';
 
 import MainForm from '../components/MainForm';
+import OfdDocumentCollection from '../components/ofd/OfdDocumentCollection';
 import OfdFiscalDriveCollection from '../components/ofd/OfdFiscalDriveCollection';
 
 const tabs = [
   { title: 'Пробить чек', name: 'custom-check' },
   { title: 'Фискальные накопители', name: 'fiscal-drives' },
+  { title: 'Чеки', name: 'documents' },
 ];
 
 const KkmPage: NextApolloPage = () => {
@@ -26,6 +28,8 @@ const KkmPage: NextApolloPage = () => {
         );
       case 'fiscal-drives':
         return <OfdFiscalDriveCollection />;
+      case 'documents':
+        return <OfdDocumentCollection />;
       default:
         return <div>Unknown route {name}</div>;
     }
@@ -36,6 +40,8 @@ const KkmPage: NextApolloPage = () => {
       return 'custom-check';
     } else if (route === '/team/kkm/fiscal-drives') {
       return 'fiscal-drives';
+    } else if (route === '/team/kkm/documents') {
+      return 'documents';
     } else {
       return '';
     }
@@ -46,6 +52,7 @@ const KkmPage: NextApolloPage = () => {
     const name2path: Record<string, string> = {
       'custom-check': '/team/kkm',
       'fiscal-drives': '/team/kkm/fiscal-drives',
+      documents: '/team/kkm/documents',
     };
     const path = name2path[name];
     if (path) {

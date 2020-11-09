@@ -20,11 +20,12 @@ const IconContainer = styled.div`
   justify-content: center;
 `;
 
-const RowWithIcon: React.FC<{ icon: React.ElementType; hint: string }> = ({
-  icon,
-  hint,
-  children,
-}) => {
+interface Props {
+  icon: React.ElementType;
+  hint: string;
+}
+
+const RowWithIcon: React.FC<Props> = ({ icon, hint, children }) => {
   const Icon = icon;
   // Note that icon needs to be wrapped until https://github.com/react-icons/react-icons/issues/336 is fixed.
   return (

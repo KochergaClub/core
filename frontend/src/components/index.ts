@@ -14,5 +14,6 @@ export { default as MutationButton } from './MutationButton';
 export { default as PaddedBlock } from './PaddedBlock';
 export { default as Page } from './Page';
 export { default as ParentLinkInHeader } from './ParentLinkInHeader';
+export { default as RowWithIcon } from './RowWithIcon';
 export { default as Spinner } from './Spinner';
 export { default as WideInput } from './WideInput';

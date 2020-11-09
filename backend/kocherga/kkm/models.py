@@ -7,6 +7,7 @@ import enum
 from django.db import models
 
 from kocherga.dateutils import TZ
+from kocherga.django.managers import RelayQuerySetMixin
 
 from . import ofd
 
@@ -71,6 +72,18 @@ class OfdFiscalDrive(models.Model):
         return datetime.strptime(items[0]["dateTime"], "%Y-%m-%d %H:%M:%S")
 
 
+class OfdDocumentQuerySet(models.QuerySet, RelayQuerySetMixin):
+    pass
+
+
+class OfdDocumentManager(models.Manager):
+    def get_queryset(self):
+        return OfdDocumentQuerySet(self.model, using=self._db)
+
+    def relay_page(self, *args, **kwargs):
+        return self.get_queryset().relay_page(*args, **kwargs)
+
+
 class OfdDocument(models.Model):
     # not autoincremented, id is imported from OFD
     id = models.IntegerField(primary_key=True)
@@ -97,8 +110,15 @@ class OfdDocument(models.Model):
         related_name='documents',
     )
 
+    objects = OfdDocumentManager()
+
+    class Meta:
+        ordering = ['-timestamp']
+
     @classmethod
-    def from_json(cls, item: Dict[str, Any], fiscal_drive: OfdFiscalDrive) -> OfdDocument:
+    def from_json(
+        cls, item: Dict[str, Any], fiscal_drive: OfdFiscalDrive
+    ) -> OfdDocument:
         ts = int(item["dateTime"])
 
         dt = datetime.fromtimestamp(ts, tz=TZ)
