@@ -15,7 +15,7 @@ slide_features = [
     'image',
 ]
 
-title_block = blocks.CharBlock(label='Заголовок', classname='title')
+title_block = blocks.CharBlock(label='Заголовок', form_classname='title')
 rich_text_block = blocks.RichTextBlock(
     label='Текст с разметкой', features=slide_features
 )
