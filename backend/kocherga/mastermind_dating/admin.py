@@ -5,7 +5,8 @@ from . import models
 
 @admin.register(models.Cohort)
 class CohortAdmin(admin.ModelAdmin):
-    autocomplete_fields = ('event',)
+    pass
+    # autocomplete_fields = ('event',)
 
 
 @admin.register(models.Group)

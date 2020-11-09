@@ -1,19 +1,20 @@
 from django.contrib import admin
-from reversion_compare.admin import CompareVersionAdmin
+# from reversion_compare.admin import CompareVersionAdmin
 
-from .models import Event, Tag, EventPrototype, WeeklyDigest
+from .models import Tag, EventPrototype, WeeklyDigest
+# from .models import Event
 
 
 class TagInline(admin.TabularInline):
     model = Tag
 
 
-@admin.register(Event)
-class EventAdmin(CompareVersionAdmin):
-    search_fields = ('title',)
-    inlines = [
-        TagInline,
-    ]
+# @admin.register(Event)
+# class EventAdmin(CompareVersionAdmin):
+#     search_fields = ('title',)
+#     inlines = [
+#         TagInline,
+#     ]
 
 
 admin.site.register(EventPrototype)
