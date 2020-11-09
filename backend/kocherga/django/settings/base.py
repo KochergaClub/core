@@ -29,7 +29,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'channels',
     'reversion',
-    'reversion_compare',
+    # 'reversion_compare', # not ready for django 3.1 yet
     'wagtail.contrib.forms',
     'wagtail.contrib.redirects',
     'wagtail.contrib.modeladmin',
