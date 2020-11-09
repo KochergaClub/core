@@ -179,7 +179,6 @@ class OfdDocument(models.Model):
     fiscal_drive = models.ForeignKey(
         OfdFiscalDrive,
         on_delete=models.PROTECT,
-        null=True,  # TODO - make non-null after first deployment
         related_name='documents',
     )
 
