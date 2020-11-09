@@ -15,3 +15,4 @@ export { default as FloatingList } from './FloatingList';
 export { default as WideInput } from './WideInput';
 export { default as MutationButton } from './MutationButton';
 export { default as HumanizedDateTime } from './HumanizedDateTime';
+export { default as RowWithIcon } from './RowWithIcon';

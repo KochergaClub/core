@@ -11,7 +11,7 @@ import { HumanizedDateTime, MutationButton } from '~/components';
 import { A, Badge, colors, Column, Row } from '~/frontkit';
 import { adminTrainingRoute } from '~/ratio/routes';
 
-import RowWithIcon from '../RowWithIcon';
+import RowWithIcon from '../../../components/RowWithIcon';
 import TicketTypeBadge from '../ticket-types/TicketTypeBadge';
 import {
     CancelYandexKassaPaymentDocument, PaymentForOrderFragment, RatioOrderFragment,

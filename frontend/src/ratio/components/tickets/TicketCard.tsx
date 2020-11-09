@@ -14,9 +14,9 @@ import NotionIcon from '~/components/icons/NotionIcon';
 import { A, Badge, Column, Row } from '~/frontkit';
 import { adminTicketRoute, adminTrainingRoute } from '~/ratio/routes';
 
+import RowWithIcon from '../../../components/RowWithIcon';
 import { RatioPaymentAddDocument, RatioTicketFragment } from '../../queries.generated';
 import PaymentItem from '../PaymentItem';
-import RowWithIcon from '../RowWithIcon';
 import {
     RatioTicketWithTrainingFragment, SetRatioTicketNotionLinkDocument
 } from './queries.generated';
