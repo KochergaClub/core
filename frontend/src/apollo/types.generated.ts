@@ -966,6 +966,7 @@ export type ImageTemplateSizes = {
 export type Importer = {
   __typename?: 'Importer';
   name: Scalars['ID'];
+  last_dt?: Maybe<Scalars['String']>;
 };
 
 export type KkmRegisterCheckInput = {
@@ -1732,6 +1733,7 @@ export type OfdDocument = {
   cash: Scalars['Float'];
   electronic: Scalars['Float'];
   check_type: Scalars['String'];
+  items: Array<OfdDocumentItem>;
   created: Scalars['String'];
 };
 
@@ -1745,6 +1747,17 @@ export type OfdDocumentConnection = {
 export type OfdDocumentEdge = {
   __typename?: 'OfdDocumentEdge';
   node: OfdDocument;
+};
+
+export type OfdDocumentItem = {
+  __typename?: 'OfdDocumentItem';
+  id: Scalars['ID'];
+  name: Scalars['String'];
+  quantity: Scalars['Float'];
+  price: Scalars['Float'];
+  sum: Scalars['Float'];
+  product_type: Scalars['Int'];
+  payment_type: Scalars['Int'];
 };
 
 export type OfdFiscalDrive = {
@@ -1842,6 +1855,7 @@ export type Query = {
   zadarmaPbxCalls: ZadarmaPbxCallConnection;
   zadarmaPbxCall: ZadarmaPbxCall;
   importers: Array<Importer>;
+  importer: Importer;
   now: NowInfo;
   cm2Customers: Cm2CustomerConnection;
   cm2Orders: Cm2OrderConnection;
@@ -1945,6 +1959,11 @@ export type QueryZadarmaPbxCallsArgs = {
 
 export type QueryZadarmaPbxCallArgs = {
   pbx_call_id: Scalars['ID'];
+};
+
+
+export type QueryImporterArgs = {
+  module_name: Scalars['String'];
 };
 
 

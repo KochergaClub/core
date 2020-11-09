@@ -1,15 +1,18 @@
 from __future__ import annotations
-from datetime import datetime, date, timedelta
-from typing import Any, Dict, List
 
 import enum
+import logging
+from datetime import date, datetime, timedelta
+from decimal import Decimal
+from typing import Any, Dict
 
 from django.db import models
-
 from kocherga.dateutils import TZ
 from kocherga.django.managers import RelayQuerySetMixin
 
 from . import ofd
+
+logger = logging.getLogger(__name__)
 
 
 class CheckType(enum.Enum):
@@ -42,12 +45,12 @@ class OfdFiscalDriveManager(models.Manager):
 class OfdFiscalDrive(models.Model):
     fiscal_drive_number = models.CharField(max_length=20, unique=True, db_index=True)
 
-    objects = OfdFiscalDriveManager()
+    objects: OfdFiscalDriveManager = OfdFiscalDriveManager()
 
     def __str__(self):
         return self.fiscal_drive_number
 
-    def import_documents(self, d: date) -> List[OfdDocument]:
+    def import_documents(self, d: date, force_update: bool = False):
         items = ofd.api_call(
             "v1/documents",
             {
@@ -56,7 +59,10 @@ class OfdFiscalDrive(models.Model):
             },
         ).get("items", [])
 
-        return [OfdDocument.from_json(item, fiscal_drive=self) for item in items]
+        for data in items:
+            OfdDocument.objects.create_from_json(
+                data, fiscal_drive=self, force_update=force_update
+            )
 
     def load_first_shift_opened(self) -> datetime:
         items = ofd.api_call(
@@ -82,6 +88,73 @@ class OfdDocumentManager(models.Manager):
 
     def relay_page(self, *args, **kwargs):
         return self.get_queryset().relay_page(*args, **kwargs)
+
+    def create_from_json(
+        self,
+        data: Dict[str, Any],
+        fiscal_drive: OfdFiscalDrive,
+        force_update: bool = False,
+    ):
+        ts = int(data["dateTime"])
+
+        dt = datetime.fromtimestamp(ts, tz=TZ)
+        if dt.hour < 4:
+            dt -= timedelta(days=1)
+        midday_ts = int(dt.replace(hour=12, minute=0, second=0).timestamp())
+
+        cash = Decimal(data["cashTotalSum"]) / 100
+        electronic = Decimal(data["ecashTotalSum"]) / 100
+        assert (
+            cash + electronic == Decimal(data["totalSum"]) / 100
+        )  # if this check doesn't pass, something is seriously wrong
+
+        (document, created) = self.update_or_create(
+            id=data["fiscalDocumentNumber"],
+            defaults=dict(
+                timestamp=ts,
+                cash=cash,
+                electronic=electronic,
+                total=cash + electronic,
+                check_type=CheckType(data["operationType"]).name,
+                shift_id=int(data["shiftNumber"]),
+                request_id=int(data["requestNumber"]),
+                operator=data["operator"],
+                operator_inn=data.get("operator_inn", None),
+                fiscal_sign=data["fiscalSign"],
+                midday_ts=midday_ts,
+                fiscal_drive=fiscal_drive,
+                imported_json=data,
+            ),
+        )
+        logger.info(f"{'Created' if created else 'Updated'} document {document.id}")
+        if created or force_update:
+            new_item_ids = []
+            for item_data in data["items"]:
+                (item, _) = OfdDocumentItem.objects.update_or_create(
+                    document=document,
+                    name=item_data["name"],
+                    quantity=item_data["quantity"],
+                    price=Decimal(item_data["price"]) / 100,
+                    defaults=dict(
+                        sum=Decimal(item_data["sum"]) / 100,
+                        product_type=item_data["productType"],
+                        payment_type=item_data["paymentType"],
+                    ),
+                )
+                logger.info(
+                    f"{'Created' if created else 'Updated'} item {item.id} for document {document.id}"
+                )
+                new_item_ids.append(item.pk)
+
+            # this should never happen since documents are immutable, but items don't have IDs, so it's possible that
+            # this code will be helpful somehow.
+            # Hopefully it doesn't have bugs which would break DB even more...
+            for old_item in document.items.all():
+                if old_item.pk not in new_item_ids:
+                    logger.info(
+                        f"Deleted item {old_item.id} for document {document.id} because it wasn't found in the latest data"
+                    )
+                    old_item.delete()
 
 
 class OfdDocument(models.Model):
@@ -110,40 +183,23 @@ class OfdDocument(models.Model):
         related_name='documents',
     )
 
+    imported_json = models.JSONField(blank=True, null=True)
+
     objects = OfdDocumentManager()
 
     class Meta:
         ordering = ['-timestamp']
 
-    @classmethod
-    def from_json(
-        cls, item: Dict[str, Any], fiscal_drive: OfdFiscalDrive
-    ) -> OfdDocument:
-        ts = int(item["dateTime"])
 
-        dt = datetime.fromtimestamp(ts, tz=TZ)
-        if dt.hour < 4:
-            dt -= timedelta(days=1)
-        midday_ts = int(dt.replace(hour=12, minute=0, second=0).timestamp())
+class OfdDocumentItem(models.Model):
+    document = models.ForeignKey(
+        OfdDocument, on_delete=models.CASCADE, related_name="items"
+    )
+    name = models.CharField(max_length=255)
+    quantity = models.FloatField()
+    price = models.DecimalField(max_digits=10, decimal_places=2)
+    sum = models.DecimalField(max_digits=10, decimal_places=2)
 
-        cash = item["cashTotalSum"] / 100
-        electronic = item["ecashTotalSum"] / 100
-        assert (
-            item["cashTotalSum"] + item["ecashTotalSum"] == item["totalSum"]
-        )  # if this check doesn't pass, something is seriously wrong
-
-        return OfdDocument(
-            id=item["fiscalDocumentNumber"],
-            timestamp=ts,
-            cash=cash,
-            electronic=electronic,
-            total=cash + electronic,
-            check_type=CheckType(item["operationType"]).name,
-            shift_id=int(item["shiftNumber"]),
-            request_id=int(item["requestNumber"]),
-            operator=item["operator"],
-            operator_inn=item.get("operator_inn", None),
-            fiscal_sign=item["fiscalSign"],
-            midday_ts=midday_ts,
-            fiscal_drive=fiscal_drive,
-        )
+    # TODO - choices
+    product_type = models.IntegerField()
+    payment_type = models.IntegerField()

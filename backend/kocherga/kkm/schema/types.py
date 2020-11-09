@@ -1,5 +1,7 @@
 import datetime
-from kocherga.graphql import g, helpers, django_utils
+
+from kocherga.graphql import django_utils, g, helpers
+
 from .. import models
 
 OfdFiscalDrive = django_utils.DjangoObjectType(
@@ -26,6 +28,23 @@ OfdDocument = django_utils.DjangoObjectType(
             resolve=lambda obj, info: datetime.datetime.fromtimestamp(obj.timestamp),
         ),
     },
+    related_fields=lambda: {
+        'items': OfdDocumentItem,
+    },
 )
 
 OfdDocumentConnection = helpers.ConnectionType(OfdDocument)
+
+OfdDocumentItem = django_utils.DjangoObjectType(
+    'OfdDocumentItem',
+    model=models.OfdDocumentItem,
+    db_fields=[
+        'id',
+        'name',
+        'quantity',
+        'price',
+        'sum',
+        'product_type',
+        'payment_type',
+    ],
+)

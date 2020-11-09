@@ -2,7 +2,6 @@ from kocherga.graphql import g, helpers
 from kocherga.graphql.permissions import user_perm
 
 from .. import models
-
 from . import types
 
 c = helpers.Collection()

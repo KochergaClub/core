@@ -1,8 +1,12 @@
+import { parseISO } from 'date-fns';
+import React from 'react';
+
 import { useQuery } from '@apollo/client';
 
 import { NextApolloPage, withApollo, withStaff } from '~/apollo';
-import { ApolloQueryResults, PaddedBlock, Page } from '~/components';
+import { ApolloQueryResults, HumanizedDateTime, PaddedBlock, Page } from '~/components';
 import Card, { CardList } from '~/components/Card';
+import { Row } from '~/frontkit';
 
 import { ImportersDocument } from '../queries.generated';
 
@@ -16,8 +20,17 @@ const ImportersPage: NextApolloPage = () => {
         {({ data: { importers } }) => (
           <PaddedBlock>
             <CardList>
-              {importers.map(importer => (
-                <Card key={importer.name}>{importer.name}</Card>
+              {importers.map((importer) => (
+                <Card key={importer.name}>
+                  <Row spaced>
+                    <div>{importer.name}</div>
+                    {importer.last_dt ? (
+                      <HumanizedDateTime date={parseISO(importer.last_dt)} />
+                    ) : (
+                      <div>Нет запусков</div>
+                    )}
+                  </Row>
+                </Card>
               ))}
             </CardList>
           </PaddedBlock>

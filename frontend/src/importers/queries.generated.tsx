@@ -9,9 +9,9 @@ export type ImportersQuery = (
   { __typename: 'Query' }
   & { importers: Array<(
     { __typename: 'Importer' }
-    & Pick<Types.Importer, 'name'>
+    & Pick<Types.Importer, 'name' | 'last_dt'>
   )> }
 );
 
 
-export const ImportersDocument: DocumentNode<ImportersQuery, ImportersQueryVariables> = dedupeFragments({ "kind": "Document", "definitions": [{ "kind": "OperationDefinition", "operation": "query", "name": { "kind": "Name", "value": "Importers" }, "variableDefinitions": [], "directives": [], "selectionSet": { "kind": "SelectionSet", "selections": [{ "kind": "Field", "name": { "kind": "Name", "value": "importers" }, "arguments": [], "directives": [], "selectionSet": { "kind": "SelectionSet", "selections": [{ "kind": "Field", "name": { "kind": "Name", "value": "name" }, "arguments": [], "directives": [] }] } }] } }] });
+export const ImportersDocument: DocumentNode<ImportersQuery, ImportersQueryVariables> = dedupeFragments({ "kind": "Document", "definitions": [{ "kind": "OperationDefinition", "operation": "query", "name": { "kind": "Name", "value": "Importers" }, "variableDefinitions": [], "directives": [], "selectionSet": { "kind": "SelectionSet", "selections": [{ "kind": "Field", "name": { "kind": "Name", "value": "importers" }, "arguments": [], "directives": [], "selectionSet": { "kind": "SelectionSet", "selections": [{ "kind": "Field", "name": { "kind": "Name", "value": "name" }, "arguments": [], "directives": [] }, { "kind": "Field", "name": { "kind": "Name", "value": "last_dt" }, "arguments": [], "directives": [] }] } }] } }] });

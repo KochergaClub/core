@@ -1,5 +1,6 @@
 query Importers {
   importers {
     name
+    last_dt
   }
 }

@@ -2,19 +2,17 @@ import logging
 
 logger = logging.getLogger(__name__)
 
-from datetime import datetime, timedelta, date
+from datetime import date, datetime, timedelta
 
 import kocherga.importer.base
 from kocherga.dateutils import TZ
+
 from . import models
 
 
 def import_date(d: date) -> None:
     for fiscal_drive in models.OfdFiscalDrive.objects.all():
-        documents = fiscal_drive.import_documents(d)
-
-        for document in documents:
-            document.save()
+        fiscal_drive.import_documents(d)
 
     # TODO - import shifts
 

@@ -10,6 +10,10 @@ fragment OfdDocument on OfdDocument {
   created
   cash
   electronic
+  items {
+    id
+    name
+  }
 }
 
 query OfdDocuments($before: String, $after: String, $first: Int, $last: Int) {
@@ -22,5 +26,8 @@ query OfdDocuments($before: String, $after: String, $first: Int, $last: Int) {
         ...OfdDocument
       }
     }
+  }
+  importer(module_name: "kkm") {
+    last_dt
   }
 }

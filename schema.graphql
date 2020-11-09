@@ -804,6 +804,7 @@ type ImageTemplateSizes {
 
 type Importer {
   name: ID!
+  last_dt: String
 }
 
 input KkmRegisterCheckInput {
@@ -1048,6 +1049,7 @@ type OfdDocument {
   cash: Float!
   electronic: Float!
   check_type: String!
+  items: [OfdDocumentItem!]!
   created: String!
 }
 
@@ -1059,6 +1061,16 @@ type OfdDocumentConnection {
 
 type OfdDocumentEdge {
   node: OfdDocument!
+}
+
+type OfdDocumentItem {
+  id: ID!
+  name: String!
+  quantity: Float!
+  price: Float!
+  sum: Float!
+  product_type: Int!
+  payment_type: Int!
 }
 
 type OfdFiscalDrive {
@@ -1131,6 +1143,7 @@ type Query {
   zadarmaPbxCalls(before: String, after: String, first: Int, last: Int): ZadarmaPbxCallConnection!
   zadarmaPbxCall(pbx_call_id: ID!): ZadarmaPbxCall!
   importers: [Importer!]!
+  importer(module_name: String!): Importer!
   now: NowInfo!
   cm2Customers(search: String, before: String, after: String, first: Int, last: Int): Cm2CustomerConnection!
   cm2Orders(status: String, before: String, after: String, first: Int, last: Int): Cm2OrderConnection!

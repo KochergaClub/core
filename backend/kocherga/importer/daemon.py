@@ -2,20 +2,18 @@ import logging
 
 logger = logging.getLogger(__name__)
 
-from apscheduler.schedulers.blocking import BlockingScheduler
-from apscheduler.executors.pool import ThreadPoolExecutor
-from apscheduler.jobstores.redis import RedisJobStore
-
-from datetime import datetime, timedelta
+import importlib
 import time
+from datetime import datetime, timedelta
 from typing import Any
 
-import importlib
-
+from apscheduler.executors.pool import ThreadPoolExecutor
+from apscheduler.jobstores.redis import RedisJobStore
+from apscheduler.schedulers.blocking import BlockingScheduler
 from django.conf import settings
 from kocherga.redis import get_redis_connect_args
 
-from .prometheus import importers_gauge, success_counter, failure_counter
+from .prometheus import failure_counter, importers_gauge, success_counter
 
 IMPORTER_MODULES = [
     # "analytics.timeclub24.models",
