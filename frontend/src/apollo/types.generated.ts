@@ -1061,6 +1061,7 @@ export type Mutation = {
   watchmenSetWatchmanPriority: Scalars['Boolean'];
   watchmenSetWatchmanGrade: Scalars['Boolean'];
   kkmRegisterCheck: KkmRegisterCheckResult;
+  kkmCloseShift: BasicResult;
   cashierCreatePayment?: Maybe<Scalars['Boolean']>;
   cashierRedeemPayment?: Maybe<Scalars['Boolean']>;
   updateYandexKassaPayment: UpdateYandexKassaPaymentResult;

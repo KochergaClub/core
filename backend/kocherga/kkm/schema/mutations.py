@@ -1,5 +1,6 @@
 from typing import Optional
-from kocherga.graphql import helpers
+
+from kocherga.graphql import basic_types, g, helpers
 from kocherga.graphql.permissions import user_perm
 
 from .. import kkmserver
@@ -37,6 +38,17 @@ class kkmRegisterCheck(helpers.BaseFieldWithInput):
         'url': Optional[str],
         'error': Optional[str],
     }
+
+
+@c.class_field
+class kkmCloseShift(helpers.BaseField):
+    def resolve(self, _, info):
+        return kkmserver.execute(kkmserver.getCloseShiftRequest())
+        return {'ok': True}
+
+    permissions = [user_perm('kkm.kkmserver')]
+
+    result = g.NN(basic_types.BasicResult)
 
 
 mutations = c.as_dict()

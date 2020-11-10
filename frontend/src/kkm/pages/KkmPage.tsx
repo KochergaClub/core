@@ -5,14 +5,15 @@ import { NextApolloPage, withApollo, withStaff } from '~/apollo';
 import { PaddedBlock, Page } from '~/components';
 import { WithNavSidebar } from '~/frontkit';
 
-import MainForm from '../components/MainForm';
+import KkmCheckForm from '../components/KkmCheckForm';
+import KkmDashboard from '../components/KkmDashboard';
 import OfdDocumentCollection from '../components/ofd/OfdDocumentCollection';
 import OfdFiscalDriveCollection from '../components/ofd/OfdFiscalDriveCollection';
 
 const tabs = [
-  { title: 'Пробить чек', name: 'custom-check' },
-  { title: 'Фискальные накопители', name: 'fiscal-drives' },
-  { title: 'Чеки', name: 'documents' },
+  { title: 'Дашборд', name: 'dashboard' },
+  { title: 'Пробить чек', name: 'check' },
+  { title: 'Данные ОФД', name: 'ofd' },
 ];
 
 const KkmPage: NextApolloPage = () => {
@@ -20,16 +21,21 @@ const KkmPage: NextApolloPage = () => {
 
   const renderTab = (name: string) => {
     switch (name) {
-      case 'custom-check':
+      case 'dashboard':
+        return <KkmDashboard />;
+      case 'check':
         return (
           <PaddedBlock>
-            <MainForm />
+            <KkmCheckForm />
           </PaddedBlock>
         );
-      case 'fiscal-drives':
-        return <OfdFiscalDriveCollection />;
-      case 'documents':
-        return <OfdDocumentCollection />;
+      case 'ofd':
+        return (
+          <div>
+            <OfdDocumentCollection />
+            <OfdFiscalDriveCollection />
+          </div>
+        );
       default:
         return <div>Unknown route {name}</div>;
     }
@@ -37,11 +43,11 @@ const KkmPage: NextApolloPage = () => {
   const detectTab = () => {
     const route = router.pathname;
     if (route === '/team/kkm') {
-      return 'custom-check';
-    } else if (route === '/team/kkm/fiscal-drives') {
-      return 'fiscal-drives';
-    } else if (route === '/team/kkm/documents') {
-      return 'documents';
+      return 'dashboard';
+    } else if (route === '/team/kkm/check') {
+      return 'check';
+    } else if (route === '/team/kkm/ofd') {
+      return 'ofd';
     } else {
       return '';
     }
@@ -50,9 +56,9 @@ const KkmPage: NextApolloPage = () => {
 
   const selectTab = (name: string) => {
     const name2path: Record<string, string> = {
-      'custom-check': '/team/kkm',
-      'fiscal-drives': '/team/kkm/fiscal-drives',
-      documents: '/team/kkm/documents',
+      dashboard: '/team/kkm',
+      check: '/team/kkm/check',
+      ofd: '/team/kkm/ofd',
     };
     const path = name2path[name];
     if (path) {
@@ -66,7 +72,7 @@ const KkmPage: NextApolloPage = () => {
         tabs={tabs}
         header={{
           title: 'Касса и чеки',
-          tabName: 'custom-check',
+          tabName: 'dashboard',
           href: '/team/kkm',
         }}
         selected={selected}

@@ -128,6 +128,11 @@ const teamMenuItems: Item[] = [
         link: '/team/email',
         title: 'Каналы подписок',
       },
+      {
+        link: '/team/kkm',
+        title: 'Касса и чеки',
+        permissions: ['kkm.kkmserver'],
+      },
       { link: '/admin/', title: 'Django-админка', mode: 'external' },
       { link: '/wagtail/', title: 'Wagtail-админка', mode: 'external' },
     ],

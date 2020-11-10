@@ -3,11 +3,12 @@ import { useCallback, useState } from 'react';
 import styled from 'styled-components';
 
 import { useMutation } from '@apollo/client';
+
 import { A, Button, Column, Input, Label } from '~/frontkit';
 
-import MainModal from '../components/MainModal';
-import { KkmRegisterCheckDocument } from '../queries.generated';
-import { FormValues, SignMethodCalculation } from '../types';
+import { KkmRegisterCheckDocument } from '../../queries.generated';
+import { FormValues, SignMethodCalculation } from '../../types';
+import MainModal from './MainModal';
 import Suggestions from './Suggestions';
 
 const FormSection = styled.section`
@@ -107,7 +108,7 @@ const MainForm: React.FC = () => {
                   'Участие в воркшопе по прикладной рациональности',
                 ]}
                 current={values.title}
-                setValue={value => setFieldValue('title', value)}
+                setValue={(value) => setFieldValue('title', value)}
               />
             </FormSection>
             <FormSection>
@@ -120,7 +121,7 @@ const MainForm: React.FC = () => {
               <Suggestions
                 values={[3000, 12000, 30000, 36000]}
                 current={values.amount}
-                setValue={value => setFieldValue('amount', value)}
+                setValue={(value) => setFieldValue('amount', value)}
               />
             </FormSection>
             <FormSection>
@@ -133,7 +134,7 @@ const MainForm: React.FC = () => {
               <Suggestions
                 values={[1, 2, 3, 4, 5, 6, 7]}
                 current={values.method as number}
-                setValue={value => setFieldValue('method', value)}
+                setValue={(value) => setFieldValue('method', value)}
               />
             </FormSection>
             <FormSection>

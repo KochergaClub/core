@@ -1,0 +1,5 @@
+query KkmDashboard {
+  importer(module_name: "kkm") {
+    last_dt
+  }
+}

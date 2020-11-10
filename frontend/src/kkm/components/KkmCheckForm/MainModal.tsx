@@ -2,7 +2,7 @@ import { useCallback, useState } from 'react';
 
 import { Button, ControlsFooter, Modal } from '~/frontkit';
 
-import { FormValues, SignMethodCalculation } from '../types';
+import { FormValues, SignMethodCalculation } from '../../types';
 
 interface Props {
   values: FormValues;

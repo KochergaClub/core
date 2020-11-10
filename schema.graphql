@@ -890,6 +890,7 @@ type Mutation {
   watchmenSetWatchmanPriority(params: WatchmenSetWatchmanPriorityInput!): Boolean!
   watchmenSetWatchmanGrade(params: WatchmenSetWatchmanGradeInput!): Boolean!
   kkmRegisterCheck(params: KkmRegisterCheckInput!): KkmRegisterCheckResult!
+  kkmCloseShift: BasicResult!
   cashierCreatePayment(params: CashierCreatePaymentInput!): Boolean
   cashierRedeemPayment(id: ID!): Boolean
   updateYandexKassaPayment(input: UpdateYandexKassaPaymentInput!): UpdateYandexKassaPaymentResult!
