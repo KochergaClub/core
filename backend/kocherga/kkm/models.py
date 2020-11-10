@@ -34,6 +34,10 @@ class Permissions(models.Model):
         ]
 
 
+def parse_ofd_datetime(date_string: str):
+    return datetime.strptime(date_string, "%Y-%m-%d %H:%M:%S").replace(tzinfo=TZ)
+
+
 class OfdFiscalDriveManager(models.Manager):
     def import_all(self):
         result = ofd.api_call("v2/KKT")
@@ -45,7 +49,7 @@ class OfdFiscalDriveManager(models.Manager):
 class OfdFiscalDrive(models.Model):
     fiscal_drive_number = models.CharField(max_length=20, unique=True, db_index=True)
 
-    objects: OfdFiscalDriveManager = OfdFiscalDriveManager()
+    objects = OfdFiscalDriveManager()
 
     def __str__(self):
         return self.fiscal_drive_number
@@ -64,6 +68,21 @@ class OfdFiscalDrive(models.Model):
                 data, fiscal_drive=self, force_update=force_update
             )
 
+    def import_shifts(self, from_date: date, to_date: date):
+        logger.info(f"Importing shifts from {from_date} to {to_date}")
+        shifts_dict = ofd.api_call(
+            "v2/KKTShift",
+            {
+                "fiscalDriveNumber": self.fiscal_drive_number,
+                "startDate": from_date.strftime("%Y-%m-%d"),
+                "endDate": to_date.strftime("%Y-%m-%d"),
+            },
+        ).get("shifts", {})
+
+        for (shift_id, data) in shifts_dict.items():
+            OfdShift.objects.create_from_json(int(shift_id), data, fiscal_drive=self)
+        logger.info(f"Updated {len(shifts_dict)} shifts")
+
     def load_first_shift_opened(self) -> datetime:
         items = ofd.api_call(
             "v1/documentsShift",
@@ -75,7 +94,7 @@ class OfdFiscalDrive(models.Model):
         ).get("items", [])
 
         assert len(items) == 1
-        return datetime.strptime(items[0]["dateTime"], "%Y-%m-%d %H:%M:%S")
+        return parse_ofd_datetime(items[0]["dateTime"])
 
 
 class OfdDocumentQuerySet(models.QuerySet, RelayQuerySetMixin):
@@ -110,6 +129,7 @@ class OfdDocumentManager(models.Manager):
 
         (document, created) = self.update_or_create(
             id=data["fiscalDocumentNumber"],
+            fiscal_drive=fiscal_drive,
             defaults=dict(
                 timestamp=ts,
                 cash=cash,
@@ -122,7 +142,6 @@ class OfdDocumentManager(models.Manager):
                 operator_inn=data.get("operator_inn", None),
                 fiscal_sign=data["fiscalSign"],
                 midday_ts=midday_ts,
-                fiscal_drive=fiscal_drive,
                 imported_json=data,
             ),
         )
@@ -202,3 +221,66 @@ class OfdDocumentItem(models.Model):
     # TODO - choices
     product_type = models.IntegerField()
     payment_type = models.IntegerField()
+
+
+class OfdShiftQuerySet(models.QuerySet, RelayQuerySetMixin):
+    pass
+
+
+class OfdShiftManager(models.Manager):
+    def get_queryset(self):
+        return OfdShiftQuerySet(self.model, using=self._db)
+
+    def relay_page(self, *args, **kwargs):
+        return self.get_queryset().relay_page(*args, **kwargs)
+
+    def create_from_json(
+        self,
+        shift_id: int,
+        data: Dict[str, Any],
+        fiscal_drive: OfdFiscalDrive,
+    ):
+        cash = Decimal(data["cashTotalSum"]) / 100
+        electronic = Decimal(data["ecashTotalSum"]) / 100
+        assert (
+            cash + electronic == Decimal(data["totalSum"]) / 100
+        )  # if this check doesn't pass, something is seriously wrong
+
+        open_dt = parse_ofd_datetime(data["openDateTime"])
+        close_dt = None
+        if data.get("closeDateTime"):
+            close_dt = parse_ofd_datetime(data["closeDateTime"])
+
+        (shift, created) = self.update_or_create(
+            fiscal_drive=fiscal_drive,
+            shift_id=shift_id,
+            defaults=dict(
+                cash=cash,
+                electronic=electronic,
+                open_dt=open_dt,
+                close_dt=close_dt,
+                imported_json=data,
+            ),
+        )
+
+
+class OfdShift(models.Model):
+    fiscal_drive = models.ForeignKey(
+        OfdFiscalDrive,
+        on_delete=models.PROTECT,
+        related_name='shifts',
+    )
+    shift_id = models.IntegerField()
+
+    electronic = models.DecimalField(max_digits=10, decimal_places=2)
+    cash = models.DecimalField(max_digits=10, decimal_places=2)
+    close_dt = models.DateTimeField(blank=True, null=True)
+    open_dt = models.DateTimeField()
+
+    imported_json = models.JSONField()
+
+    objects = OfdShiftManager()
+
+    class Meta:
+        unique_together = [('fiscal_drive', 'shift_id')]
+        ordering = ['-open_dt']

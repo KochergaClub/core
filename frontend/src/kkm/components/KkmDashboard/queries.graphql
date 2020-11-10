@@ -1,4 +1,9 @@
 query KkmDashboard {
+  ofdShifts(first: 20, filter: { open_only: true }) {
+    nodes {
+      ...OfdShift
+    }
+  }
   importer(module_name: "kkm") {
     last_dt
   }

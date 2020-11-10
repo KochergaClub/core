@@ -6,8 +6,10 @@ import { MdCheckCircle, MdError } from 'react-icons/md';
 import { useQuery } from '@apollo/client';
 
 import { ApolloQueryResults, PaddedBlock } from '~/components';
-import { colors, Row } from '~/frontkit';
+import { CardList } from '~/components/Card';
+import { colors, Column, Row } from '~/frontkit';
 
+import OfdShiftCard from '../ofd/OfdShiftCard';
 import { KkmDashboardDocument, KkmDashboardQuery } from './queries.generated';
 
 const LastImport: React.FC<{ data: KkmDashboardQuery }> = ({
@@ -46,6 +48,18 @@ const KkmDashboard: React.FC = () => {
         {({ data }) => (
           <div>
             <LastImport data={data} />
+            <h2>Открытые смены</h2>
+            <Column stretch gutter={8}>
+              <small>
+                Данные о сменах импортируются из ОФД и могут быть не
+                актуальными.
+              </small>
+              <CardList>
+                {data.ofdShifts.nodes.map((shift) => (
+                  <OfdShiftCard shift={shift} key={shift.id} />
+                ))}
+              </CardList>
+            </Column>
           </div>
         )}
       </ApolloQueryResults>

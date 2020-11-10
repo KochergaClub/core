@@ -1079,6 +1079,29 @@ type OfdFiscalDrive {
   fiscal_drive_number: String!
 }
 
+type OfdShift {
+  id: ID!
+  shift_id: Int!
+  cash: Float!
+  electronic: Float!
+  close_dt: String
+  open_dt: String!
+}
+
+type OfdShiftConnection {
+  pageInfo: PageInfo!
+  nodes: [OfdShift!]!
+  edges: [OfdShiftEdge!]!
+}
+
+type OfdShiftEdge {
+  node: OfdShift!
+}
+
+input OfdShiftsFilterInput {
+  open_only: Boolean
+}
+
 type OpenviduGenerateRoomTokenResult {
   token: String!
 }
@@ -1155,6 +1178,7 @@ type Query {
   watchmenShifts(from_date: String!, to_date: String!): [WatchmenShift!]!
   ofdFiscalDrives: [OfdFiscalDrive!]!
   ofdDocuments(before: String, after: String, first: Int, last: Int): OfdDocumentConnection!
+  ofdShifts(before: String, after: String, first: Int, last: Int, filter: OfdShiftsFilterInput): OfdShiftConnection!
   cashierPayments(before: String, after: String, first: Int, last: Int): CashierPaymentConnection!
   analyticsBovStats: [AnalyticsBovStat!]!
   events(before: String, after: String, first: Int, last: Int, search: String, filter: EventsFilterInput): EventConnection!

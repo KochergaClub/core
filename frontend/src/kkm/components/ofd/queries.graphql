@@ -31,3 +31,25 @@ query OfdDocuments($before: String, $after: String, $first: Int, $last: Int) {
     last_dt
   }
 }
+
+fragment OfdShift on OfdShift {
+  id
+  shift_id
+  open_dt
+  close_dt
+  cash
+  electronic
+}
+
+query OfdShifts($before: String, $after: String, $first: Int, $last: Int) {
+  ofdShifts(before: $before, after: $after, first: $first, last: $last) {
+    pageInfo {
+      ...PageInfo
+    }
+    edges {
+      node {
+        ...OfdShift
+      }
+    }
+  }
+}

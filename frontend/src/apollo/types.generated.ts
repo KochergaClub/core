@@ -1767,6 +1767,32 @@ export type OfdFiscalDrive = {
   fiscal_drive_number: Scalars['String'];
 };
 
+export type OfdShift = {
+  __typename?: 'OfdShift';
+  id: Scalars['ID'];
+  shift_id: Scalars['Int'];
+  cash: Scalars['Float'];
+  electronic: Scalars['Float'];
+  close_dt?: Maybe<Scalars['String']>;
+  open_dt: Scalars['String'];
+};
+
+export type OfdShiftConnection = {
+  __typename?: 'OfdShiftConnection';
+  pageInfo: PageInfo;
+  nodes: Array<OfdShift>;
+  edges: Array<OfdShiftEdge>;
+};
+
+export type OfdShiftEdge = {
+  __typename?: 'OfdShiftEdge';
+  node: OfdShift;
+};
+
+export type OfdShiftsFilterInput = {
+  open_only?: Maybe<Scalars['Boolean']>;
+};
+
 export type OpenviduGenerateRoomTokenResult = {
   __typename?: 'OpenviduGenerateRoomTokenResult';
   token: Scalars['String'];
@@ -1867,6 +1893,7 @@ export type Query = {
   watchmenShifts: Array<WatchmenShift>;
   ofdFiscalDrives: Array<OfdFiscalDrive>;
   ofdDocuments: OfdDocumentConnection;
+  ofdShifts: OfdShiftConnection;
   cashierPayments: CashierPaymentConnection;
   analyticsBovStats: Array<AnalyticsBovStat>;
   events: EventConnection;
@@ -2013,6 +2040,15 @@ export type QueryOfdDocumentsArgs = {
   after?: Maybe<Scalars['String']>;
   first?: Maybe<Scalars['Int']>;
   last?: Maybe<Scalars['Int']>;
+};
+
+
+export type QueryOfdShiftsArgs = {
+  before?: Maybe<Scalars['String']>;
+  after?: Maybe<Scalars['String']>;
+  first?: Maybe<Scalars['Int']>;
+  last?: Maybe<Scalars['Int']>;
+  filter?: Maybe<OfdShiftsFilterInput>;
 };
 
 

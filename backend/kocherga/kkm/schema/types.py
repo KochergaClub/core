@@ -48,3 +48,18 @@ OfdDocumentItem = django_utils.DjangoObjectType(
         'payment_type',
     ],
 )
+
+OfdShift = django_utils.DjangoObjectType(
+    'OfdShift',
+    model=models.OfdShift,
+    db_fields=[
+        'id',
+        'shift_id',
+        'cash',
+        'electronic',
+        'close_dt',
+        'open_dt',
+    ],
+)
+
+OfdShiftConnection = helpers.ConnectionType(OfdShift)

@@ -9,6 +9,7 @@ import KkmCheckForm from '../components/KkmCheckForm';
 import KkmDashboard from '../components/KkmDashboard';
 import OfdDocumentCollection from '../components/ofd/OfdDocumentCollection';
 import OfdFiscalDriveCollection from '../components/ofd/OfdFiscalDriveCollection';
+import OfdShiftCollection from '../components/ofd/OfdShiftCollection';
 
 const tabs = [
   { title: 'Дашборд', name: 'dashboard' },
@@ -33,6 +34,7 @@ const KkmPage: NextApolloPage = () => {
         return (
           <div>
             <OfdDocumentCollection />
+            <OfdShiftCollection />
             <OfdFiscalDriveCollection />
           </div>
         );
