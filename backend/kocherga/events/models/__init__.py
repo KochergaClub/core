@@ -1,11 +1,12 @@
+from .announcement import FbAnnouncement, TimepadAnnouncement, VkAnnouncement
 from .event import Event, Tag
-from .prototype import EventPrototype, EventPrototypeTag
-from .weekly_digest import WeeklyDigest
-from .ticket import Ticket
-from .announcement import VkAnnouncement, FbAnnouncement, TimepadAnnouncement
+from .feedback import Feedback
 from .google_calendar import GoogleCalendar
 from .google_event import GoogleEvent
-from .feedback import Feedback
+from .permissions import Permissions
+from .prototype import EventPrototype, EventPrototypeTag
+from .ticket import Ticket
+from .weekly_digest import WeeklyDigest
 
 __all__ = [
     'Event',
@@ -20,4 +21,5 @@ __all__ = [
     'GoogleCalendar',
     'GoogleEvent',
     'Feedback',
+    'Permissions',
 ]
