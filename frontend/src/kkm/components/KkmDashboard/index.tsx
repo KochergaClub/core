@@ -5,12 +5,14 @@ import { MdCheckCircle, MdError } from 'react-icons/md';
 
 import { useQuery } from '@apollo/client';
 
-import { ApolloQueryResults, PaddedBlock } from '~/components';
+import { ApolloQueryResults, MutationButton, PaddedBlock } from '~/components';
 import { CardList } from '~/components/Card';
 import { colors, Column, Row } from '~/frontkit';
 
 import OfdShiftCard from '../ofd/OfdShiftCard';
-import { KkmDashboardDocument, KkmDashboardQuery } from './queries.generated';
+import {
+    CloseKkmShiftDocument, KkmDashboardDocument, KkmDashboardQuery
+} from './queries.generated';
 
 const LastImport: React.FC<{ data: KkmDashboardQuery }> = ({
   data: { importer },
@@ -40,6 +42,18 @@ const LastImport: React.FC<{ data: KkmDashboardQuery }> = ({
   );
 };
 
+const CloseShiftButton: React.FC = () => {
+  return (
+    <MutationButton
+      mutation={CloseKkmShiftDocument}
+      variables={{}}
+      confirmText="Вы точно хотите закрыть смену вручную?"
+    >
+      Закрыть смену
+    </MutationButton>
+  );
+};
+
 const KkmDashboard: React.FC = () => {
   const queryResults = useQuery(KkmDashboardDocument);
   return (
@@ -59,6 +73,7 @@ const KkmDashboard: React.FC = () => {
                   <OfdShiftCard shift={shift} key={shift.id} />
                 ))}
               </CardList>
+              <CloseShiftButton />
             </Column>
           </div>
         )}

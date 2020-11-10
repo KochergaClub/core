@@ -18,6 +18,7 @@ OfdDocument = django_utils.DjangoObjectType(
     model=models.OfdDocument,
     db_fields=[
         'id',
+        'document_id',
         'cash',
         'electronic',
         'check_type',

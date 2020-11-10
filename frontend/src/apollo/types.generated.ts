@@ -1061,7 +1061,7 @@ export type Mutation = {
   watchmenSetWatchmanPriority: Scalars['Boolean'];
   watchmenSetWatchmanGrade: Scalars['Boolean'];
   kkmRegisterCheck: KkmRegisterCheckResult;
-  kkmCloseShift: BasicResult;
+  closeKkmShift: BasicResult;
   cashierCreatePayment?: Maybe<Scalars['Boolean']>;
   cashierRedeemPayment?: Maybe<Scalars['Boolean']>;
   updateYandexKassaPayment: UpdateYandexKassaPaymentResult;
@@ -1731,6 +1731,7 @@ export type NowInfo = {
 export type OfdDocument = {
   __typename?: 'OfdDocument';
   id: Scalars['ID'];
+  document_id: Scalars['Int'];
   cash: Scalars['Float'];
   electronic: Scalars['Float'];
   check_type: Scalars['String'];

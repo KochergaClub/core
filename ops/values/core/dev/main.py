@@ -1,9 +1,8 @@
-from .base import *
-from .secrets import *
-
+import logging
 import os
 
-import logging
+from .base import *
+from .secrets import *
 
 logging.basicConfig(level=logging.INFO)
 
@@ -80,7 +79,8 @@ BASE_URL = KOCHERGA_WEBSITE
 
 TILDA_PUBLIC_KEY = "egq8lznrfxn6ok7bjvte"
 
-KKM_SERVER = None
+# KKM_SERVER = None
+KKM_SERVER = "https://kkm.kocherga.club"
 KKM_SERVER_CERT = None
 
 if os.environ.get("STATIC_S3_BUCKET"):

@@ -41,7 +41,7 @@ class kkmRegisterCheck(helpers.BaseFieldWithInput):
 
 
 @c.class_field
-class kkmCloseShift(helpers.BaseField):
+class closeKkmShift(helpers.BaseField):
     def resolve(self, _, info):
         return kkmserver.execute(kkmserver.getCloseShiftRequest())
         return {'ok': True}

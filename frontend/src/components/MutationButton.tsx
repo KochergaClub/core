@@ -9,7 +9,7 @@ import AsyncButtonWithConfirm from './AsyncButtonWithConfirm';
 
 interface Props<V extends Record<string, unknown>> {
   mutation: TypedDocumentNode<unknown, V>;
-  variables: V;
+  variables?: V;
   size?: Parameters<typeof AsyncButton>[0]['size'];
   kind?: Parameters<typeof AsyncButton>[0]['kind'];
   confirmText?: string;

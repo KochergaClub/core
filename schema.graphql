@@ -890,7 +890,7 @@ type Mutation {
   watchmenSetWatchmanPriority(params: WatchmenSetWatchmanPriorityInput!): Boolean!
   watchmenSetWatchmanGrade(params: WatchmenSetWatchmanGradeInput!): Boolean!
   kkmRegisterCheck(params: KkmRegisterCheckInput!): KkmRegisterCheckResult!
-  kkmCloseShift: BasicResult!
+  closeKkmShift: BasicResult!
   cashierCreatePayment(params: CashierCreatePaymentInput!): Boolean
   cashierRedeemPayment(id: ID!): Boolean
   updateYandexKassaPayment(input: UpdateYandexKassaPaymentInput!): UpdateYandexKassaPaymentResult!
@@ -1047,6 +1047,7 @@ type NowInfo {
 
 type OfdDocument {
   id: ID!
+  document_id: Int!
   cash: Float!
   electronic: Float!
   check_type: String!

@@ -128,7 +128,7 @@ class OfdDocumentManager(models.Manager):
         )  # if this check doesn't pass, something is seriously wrong
 
         (document, created) = self.update_or_create(
-            id=data["fiscalDocumentNumber"],
+            document_id=data["fiscalDocumentNumber"],
             fiscal_drive=fiscal_drive,
             defaults=dict(
                 timestamp=ts,
@@ -177,8 +177,7 @@ class OfdDocumentManager(models.Manager):
 
 
 class OfdDocument(models.Model):
-    # not autoincremented, id is imported from OFD
-    id = models.IntegerField(primary_key=True)
+    id = models.AutoField(primary_key=True)
 
     timestamp = models.IntegerField()
     cash = models.DecimalField(max_digits=10, decimal_places=2)
@@ -195,6 +194,7 @@ class OfdDocument(models.Model):
     fiscal_sign = models.BigIntegerField()
     midday_ts = models.IntegerField()  # used for analytics only
 
+    document_id = models.IntegerField()
     fiscal_drive = models.ForeignKey(
         OfdFiscalDrive,
         on_delete=models.PROTECT,
@@ -206,6 +206,7 @@ class OfdDocument(models.Model):
     objects = OfdDocumentManager()
 
     class Meta:
+        unique_together = [('document_id', 'fiscal_drive')]
         ordering = ['-timestamp']
 
 
@@ -251,6 +252,7 @@ class OfdShiftManager(models.Manager):
         if data.get("closeDateTime"):
             close_dt = parse_ofd_datetime(data["closeDateTime"])
 
+        logger.info(f"Updating shift {shift_id}")
         (shift, created) = self.update_or_create(
             fiscal_drive=fiscal_drive,
             shift_id=shift_id,
