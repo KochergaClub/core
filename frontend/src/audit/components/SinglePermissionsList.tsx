@@ -1,13 +1,13 @@
 import { useQuery } from '@apollo/client';
-import { Column, Label, Row } from '~/frontkit';
 
 import { ApolloQueryResults } from '~/components';
+import { Column, Label, Row } from '~/frontkit';
 
-import { AuthPermissionsDocument } from '../queries.generated';
+import { AuthPermissionsWithUsersDocument } from '../queries.generated';
 import UserInfo from './UserInfo';
 
 const SinglePermissionsList: React.FC = () => {
-  const queryResults = useQuery(AuthPermissionsDocument);
+  const queryResults = useQuery(AuthPermissionsWithUsersDocument);
 
   return (
     <ApolloQueryResults {...queryResults}>

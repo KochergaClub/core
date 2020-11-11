@@ -12,7 +12,9 @@ import {
     MaybeStaffUserFragment
 } from '../queries.generated';
 import AddMemberToGroupModal from './AddMemberToGroupModal';
+import { AddPermissionToGroupModal } from './AddPermissionToGroupModal';
 import AddUserToGroupModal from './AddUserToGroupModal';
+import { RemovePermissionFromGroupModal } from './RemovePermissionFromGroupModal';
 import UserInfo from './UserInfo';
 
 interface Props {
@@ -59,6 +61,16 @@ const GroupCard: React.FC<Props> = ({ group }) => {
                 <AddUserToGroupModal close={close} group={group} />
               )}
             </ModalAction>
+            <ModalAction title="Добавить разрешение">
+              {({ close }) => (
+                <AddPermissionToGroupModal close={close} group={group} />
+              )}
+            </ModalAction>
+            <ModalAction title="Убрать разрешение">
+              {({ close }) => (
+                <RemovePermissionFromGroupModal close={close} group={group} />
+              )}
+            </ModalAction>
           </DropdownMenu>
           <MutationButton
             mutation={DeleteAuthGroupDocument}
@@ -73,7 +85,7 @@ const GroupCard: React.FC<Props> = ({ group }) => {
         </Row>
         <Row wrap={true}>
           {group.permissions.map((permission) => (
-            <Badge key={permission.id} hint={permission.as_string}>
+            <Badge key={permission.id} hint={permission.perm}>
               {permission.name}
             </Badge>
           ))}

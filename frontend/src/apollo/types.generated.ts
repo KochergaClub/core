@@ -67,7 +67,7 @@ export type AuthPermission = {
   __typename?: 'AuthPermission';
   id: Scalars['ID'];
   name: Scalars['String'];
-  as_string: Scalars['String'];
+  perm: Scalars['String'];
   users: Array<AuthUser>;
 };
 
@@ -1063,6 +1063,8 @@ export type Mutation = {
   authRemoveUserFromGroup: Scalars['Boolean'];
   createAuthGroup: AuthGroup;
   deleteAuthGroup: BasicResult;
+  addPermissionToAuthGroup: AuthGroup;
+  removePermissionFromAuthGroup: AuthGroup;
   authLogin: AuthLoginResult;
   authSetPassword: AuthSetPasswordResult;
   authLogout: AuthLogoutResult;
@@ -1194,6 +1196,18 @@ export type MutationCreateAuthGroupArgs = {
 
 export type MutationDeleteAuthGroupArgs = {
   id: Scalars['ID'];
+};
+
+
+export type MutationAddPermissionToAuthGroupArgs = {
+  group_id: Scalars['ID'];
+  perm: Scalars['String'];
+};
+
+
+export type MutationRemovePermissionFromAuthGroupArgs = {
+  group_id: Scalars['ID'];
+  perm: Scalars['String'];
 };
 
 

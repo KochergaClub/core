@@ -2,26 +2,23 @@ import logging
 
 logger = logging.getLogger(__name__)
 
+import urllib.parse
 from datetime import datetime
 from typing import Optional
-import urllib.parse
-
-from django.db import models
-from django.conf import settings
-from django.utils import timezone
-from django.core.mail import send_mail
-from django.template.loader import render_to_string
-import reversion
 
 import channels.layers
-from asgiref.sync import async_to_sync
-
+import kocherga.auth.utils
 import kocherga.dateutils
-from kocherga.email.tools import mjml2html
+import reversion
+from asgiref.sync import async_to_sync
+from django.conf import settings
+from django.core.mail import send_mail
+from django.db import models
+from django.template.loader import render_to_string
+from django.utils import timezone
 from kocherga.dateutils import TZ
 from kocherga.django.managers import RelayQuerySetMixin
-
-import kocherga.auth.view_utils
+from kocherga.email.tools import mjml2html
 
 
 # FIXME - copy-pasted from kocherga.events.signals, extract into common module
@@ -61,7 +58,10 @@ class TicketManager(models.Manager):
         return ticket
 
     def unregister(self, user, event) -> 'Ticket':
-        ticket = self.get(user=user, event=event,)
+        ticket = self.get(
+            user=user,
+            event=event,
+        )
         ticket.status = 'inactive'
         ticket.save()
         return ticket
@@ -86,7 +86,9 @@ class TicketManager(models.Manager):
 @reversion.register()
 class Ticket(models.Model):
     event = models.ForeignKey(
-        'Event', on_delete=models.PROTECT, related_name='tickets',
+        'Event',
+        on_delete=models.PROTECT,
+        related_name='tickets',
     )
 
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.PROTECT)
@@ -95,7 +97,12 @@ class Ticket(models.Model):
     updated = models.DateTimeField(auto_now=True, null=True)
 
     status = models.CharField(
-        max_length=20, choices=(('ok', 'ОК'), ('inactive', 'Отказ'),), default='ok',
+        max_length=20,
+        choices=(
+            ('ok', 'ОК'),
+            ('inactive', 'Отказ'),
+        ),
+        default='ok',
     )
 
     subscribed_to_newsletter = models.BooleanField(default=False)
@@ -118,7 +125,7 @@ class Ticket(models.Model):
         if signed_in:
             lk_link = f'{settings.KOCHERGA_WEBSITE}/my'
         else:
-            magic_token = kocherga.auth.view_utils.get_magic_token(self.user.email)
+            magic_token = kocherga.auth.utils.get_magic_token(self.user.email)
             params_str = urllib.parse.urlencode({'token': magic_token, 'next': '/my'})
             lk_link = f'{settings.KOCHERGA_WEBSITE}/login/magic-link' + '?' + params_str
 

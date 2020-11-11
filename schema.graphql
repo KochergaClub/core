@@ -50,7 +50,7 @@ type AuthLogoutResult {
 type AuthPermission {
   id: ID!
   name: String!
-  as_string: String!
+  perm: String!
   users: [AuthUser!]!
 }
 
@@ -892,6 +892,8 @@ type Mutation {
   authRemoveUserFromGroup(group_id: ID!, user_id: ID!): Boolean!
   createAuthGroup(name: String!): AuthGroup!
   deleteAuthGroup(id: ID!): BasicResult!
+  addPermissionToAuthGroup(group_id: ID!, perm: String!): AuthGroup!
+  removePermissionFromAuthGroup(group_id: ID!, perm: String!): AuthGroup!
   authLogin(input: AuthLoginInput!): AuthLoginResult!
   authSetPassword(input: AuthSetPasswordInput!): AuthSetPasswordResult!
   authLogout: AuthLogoutResult!

@@ -15,7 +15,7 @@ from kocherga.email.tools import mjml2html
 from kocherga.graphql import g, helpers
 from kocherga.graphql.permissions import authenticated
 
-from ...view_utils import get_magic_token
+from ...utils import get_magic_token
 from .. import types
 
 c = helpers.Collection()

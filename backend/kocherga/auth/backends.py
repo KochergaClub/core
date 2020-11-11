@@ -3,10 +3,10 @@ import logging
 logger = logging.getLogger(__name__)
 
 import django.core.signing
-from django.core.exceptions import ValidationError
 from django.contrib.auth import get_user_model
+from django.core.exceptions import ValidationError
 
-from .view_utils import check_magic_token
+from .utils import check_magic_token
 
 UserModel = get_user_model()
 

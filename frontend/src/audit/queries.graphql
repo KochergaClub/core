@@ -7,18 +7,26 @@ fragment MaybeStaffUser on AuthUser {
   }
 }
 
+fragment AuthPermission on AuthPermission {
+  id
+  name
+  perm
+}
+
+fragment AuthGroup_ForCard on AuthGroup {
+  id
+  name
+  permissions {
+    ...AuthPermission
+  }
+  users {
+    ...MaybeStaffUser
+  }
+}
+
 query AuthGroups {
   groups: authGroupsAll {
-    id
-    name
-    permissions {
-      id
-      name
-      as_string
-    }
-    users {
-      ...MaybeStaffUser
-    }
+    ...AuthGroup_ForCard
   }
 }
 
@@ -30,7 +38,7 @@ mutation AuthRemoveUserFromGroup($user_id: ID!, $group_id: ID!) {
   authRemoveUserFromGroup(user_id: $user_id, group_id: $group_id)
 }
 
-query AuthPermissions {
+query AuthPermissionsWithUsers {
   permissions: authPermissionsAll {
     id
     name
@@ -49,5 +57,31 @@ mutation CreateAuthGroup($name: String!) {
 mutation DeleteAuthGroup($id: ID!) {
   deleteAuthGroup(id: $id) {
     ok
+  }
+}
+
+mutation AddPermissionToAuthGroup($group_id: ID!, $perm: String!) {
+  addPermissionToAuthGroup(group_id: $group_id, perm: $perm) {
+    id
+    permissions {
+      ...AuthPermission
+    }
+  }
+}
+
+mutation RemovePermissionFromAuthGroup($group_id: ID!, $perm: String!) {
+  removePermissionFromAuthGroup(group_id: $group_id, perm: $perm) {
+    id
+    permissions {
+      ...AuthPermission
+    }
+  }
+}
+
+query AuthPermissionsForPicker {
+  permissions: authPermissionsAll {
+    id
+    name
+    perm
   }
 }
