@@ -1,4 +1,5 @@
 import { useMutation } from '@apollo/client';
+
 import { colors, Column, Row } from '~/frontkit';
 
 import { EvenmanEvent_DetailsFragment, EvenmanUpdateDocument } from './queries.generated';
@@ -27,7 +28,9 @@ const EventRealm: React.FC<Props> = ({ event }) => {
             checked={event.pricing_type === item.value}
             onChange={() =>
               updateMutation({
-                variables: { id: event.id, pricing_type: item.value },
+                variables: {
+                  input: { event_id: event.id, pricing_type: item.value },
+                },
               })
             }
           />

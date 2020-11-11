@@ -1,12 +1,22 @@
 import { useMutation } from '@apollo/client';
 
+import { EventUpdateInput } from '~/apollo/types.generated';
 import { useNotification } from '~/frontkit';
 
-import { EvenmanUpdateDocument, EvenmanUpdateMutationVariables } from './queries.generated';
+import { EvenmanUpdateDocument } from './queries.generated';
 
-export const useUpdateMutation = (event_id: string) => {
+interface UpdateParams {
+  refetchQueries?: string[];
+}
+
+export const useUpdateMutation = (
+  event_id: string,
+  params: UpdateParams = {}
+) => {
   const notify = useNotification();
   const [mutation] = useMutation(EvenmanUpdateDocument, {
+    refetchQueries: params.refetchQueries,
+    awaitRefetchQueries: true,
     onError(error) {
       notify({
         text: error.message,
@@ -15,11 +25,13 @@ export const useUpdateMutation = (event_id: string) => {
     },
   });
 
-  return async (variables: Omit<EvenmanUpdateMutationVariables, 'id'>) => {
+  return async (variables: Omit<EventUpdateInput, 'event_id'>) => {
     const result = await mutation({
       variables: {
-        id: event_id,
-        ...variables,
+        input: {
+          event_id,
+          ...variables,
+        },
       },
     });
     if (result && result.errors) {

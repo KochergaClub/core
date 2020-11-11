@@ -1,7 +1,7 @@
 import { useRouter } from 'next/router';
-import { ParsedUrlQuery } from 'querystring';
 
-import { NextApolloPage, withApollo, withStaff } from '~/apollo';
+import { NextApolloPage, withApollo } from '~/apollo';
+import { requireAuth } from '~/auth/utils';
 import { Page } from '~/components';
 import { WithNavSidebar } from '~/frontkit';
 
@@ -9,11 +9,6 @@ import EventPrototypeScreen from './event-prototype/EventPrototypeScreen';
 import EventScreen from './event/EventScreen';
 import GlobalStyle from './GlobalStyle';
 import ScheduleScreen from './schedule/ScheduleScreen';
-
-interface Props {
-  route: string;
-  query: ParsedUrlQuery;
-}
 
 const tabs = [
   { title: 'Расписание', name: 'Schedule' },
@@ -24,7 +19,7 @@ const tabs = [
   },
 ];
 
-const App: NextApolloPage<Props> = () => {
+const App: NextApolloPage = () => {
   const router = useRouter();
 
   const renderTab = (name: string) => {
@@ -73,7 +68,7 @@ const App: NextApolloPage<Props> = () => {
   };
 
   return (
-    <Page title="Event Manager" menu="team" chrome="fullscreen">
+    <Page title="Event Manager" chrome="fullscreen">
       <GlobalStyle />
       <WithNavSidebar
         tabs={tabs}
@@ -90,4 +85,12 @@ const App: NextApolloPage<Props> = () => {
   );
 };
 
-export default withApollo(withStaff(App));
+App.getInitialProps = async (ctx) => {
+  const { apolloClient } = ctx;
+
+  await requireAuth(apolloClient, { permissions: ['events.manage'] });
+
+  return {};
+};
+
+export default withApollo(App);

@@ -122,26 +122,6 @@ query EvenmanEvent($id: ID!) {
   }
 }
 
-mutation EvenmanSetEventType($id: ID!, $event_type: String!) {
-  result: eventSetEventType(input: { event_id: $id, event_type: $event_type }) {
-    ok
-    event {
-      id
-      event_type
-    }
-  }
-}
-
-mutation EvenmanSetZoomLink($id: ID!, $link: String!) {
-  result: eventSetZoomLink(input: { event_id: $id, zoom_link: $link }) {
-    ok
-    event {
-      id
-      zoom_link
-    }
-  }
-}
-
 mutation EvenmanGenerateZoomLink($id: ID!) {
   result: eventGenerateZoomLink(input: { event_id: $id }) {
     ok
@@ -152,42 +132,8 @@ mutation EvenmanGenerateZoomLink($id: ID!) {
   }
 }
 
-mutation EvenmanUpdate(
-  $id: ID!
-  $published: Boolean
-  $visitors: String
-  $title: String
-  $description: String
-  $summary: String
-  $event_type: String
-  $registration_type: String
-  $pricing_type: String
-  $realm: String
-  $location: String
-  $prototype_id: ID
-  $project_slug: String
-  $timing_description_override: String
-  $image_id: ID
-) {
-  result: eventUpdate(
-    input: {
-      event_id: $id
-      published: $published
-      visitors: $visitors
-      title: $title
-      description: $description
-      summary: $summary
-      event_type: $event_type
-      registration_type: $registration_type
-      pricing_type: $pricing_type
-      realm: $realm
-      location: $location
-      prototype_id: $prototype_id
-      project_slug: $project_slug
-      timing_description_override: $timing_description_override
-      image_id: $image_id
-    }
-  ) {
+mutation EvenmanUpdate($input: EventUpdateInput!) {
+  result: eventUpdate(input: $input) {
     ok
     event {
       ...EvenmanEvent_Details

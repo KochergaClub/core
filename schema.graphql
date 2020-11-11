@@ -503,31 +503,6 @@ input EventSetAnnounceUrlInput {
   url: String!
 }
 
-input EventSetEventTypeInput {
-  event_id: ID!
-  event_type: String!
-}
-
-input EventSetImageFromUrlInput {
-  event_id: ID!
-  url: String!
-}
-
-input EventSetPricingTypeInput {
-  event_id: ID!
-  pricing_type: String!
-}
-
-input EventSetRealmInput {
-  event_id: ID!
-  realm: String!
-}
-
-input EventSetZoomLinkInput {
-  event_id: ID!
-  zoom_link: String!
-}
-
 input EventTimepadAnnouncementUpdateInput {
   event_id: ID!
   prepaid_tickets: Boolean
@@ -920,14 +895,9 @@ type Mutation {
   eventCreate(input: EventCreateInput!): EventCreateResult!
   eventUpdate(input: EventUpdateInput!): EventUpdateResult!
   eventDelete(input: EventDeleteInput!): BasicResult!
-  eventSetEventType(input: EventSetEventTypeInput!): EventUpdateResult!
-  eventSetRealm(input: EventSetRealmInput!): EventUpdateResult!
-  eventSetPricingType(input: EventSetPricingTypeInput!): EventUpdateResult!
-  eventSetZoomLink(input: EventSetZoomLinkInput!): EventUpdateResult!
   eventGenerateZoomLink(input: EventGenerateZoomLinkInput!): EventUpdateResult!
   eventAddTag(input: EventAddTagInput!): EventUpdateResult!
   eventDeleteTag(input: EventDeleteTagInput!): EventUpdateResult!
-  eventSetImageFromUrl(input: EventSetImageFromUrlInput!): EventUpdateResult!
   eventMove(input: EventMoveInput!): EventUpdateResult!
   eventGenerateOpenViduToken(input: EventGenerateOpenViduTokenInput!): EventGenerateOpenViduTokenResult!
   eventPrototypeCreate(input: EventPrototypeCreateInput!): EventPrototypeUpdateResult!

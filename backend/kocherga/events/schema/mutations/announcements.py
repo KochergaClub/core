@@ -6,9 +6,8 @@ from typing import Optional
 
 import kocherga.wagtail.models
 from kocherga.graphql import g, helpers
-from kocherga.graphql.permissions import staffonly
 
-from ... import models
+from ... import models, permissions
 from .events import EventUpdateResult
 
 c = helpers.Collection()
@@ -43,7 +42,7 @@ class eventTimepadAnnouncementUpdate(helpers.BaseFieldWithInput):
             'event': event,
         }
 
-    permissions = [staffonly]
+    permissions = [permissions.manage_events]
     input = {
         'event_id': 'ID!',
         'prepaid_tickets': Optional[bool],
@@ -73,7 +72,7 @@ class eventVkAnnouncementUpdate(helpers.BaseFieldWithInput):
             'event': event,
         }
 
-    permissions = [staffonly]
+    permissions = [permissions.manage_events]
     input = {
         'event_id': 'ID!',
         'group': Optional[str],
@@ -104,7 +103,7 @@ class eventVkAnnouncementSetImage(helpers.BaseFieldWithInput):
             'event': event,
         }
 
-    permissions = [staffonly]
+    permissions = [permissions.manage_events]
     input = {
         'event_id': 'ID!',
         'image_id': 'ID!',
@@ -136,7 +135,7 @@ class eventAnnounce(helpers.BaseFieldWithInput):
             'event': event,
         }
 
-    permissions = [staffonly]
+    permissions = [permissions.manage_events]
     input = {
         'event_id': 'ID!',
         'target': g.NN(EventAnnounceTarget),
@@ -174,7 +173,7 @@ class eventSetAnnounceUrl(helpers.BaseFieldWithInput):
             'event': event,
         }
 
-    permissions = [staffonly]
+    permissions = [permissions.manage_events]
     input = {
         'event_id': 'ID!',
         'target': g.NN(EventAnnounceTarget),

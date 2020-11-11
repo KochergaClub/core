@@ -3,9 +3,8 @@ from typing import Optional
 
 import kocherga.events.models.announcement.timepad
 from kocherga.graphql import g, helpers
-from kocherga.graphql.permissions import staffonly
 
-from .. import models
+from .. import models, permissions
 from . import types
 
 c = helpers.Collection()
@@ -24,7 +23,7 @@ class events(helpers.BaseField):
                 qs = qs.filter(event_type=filter['event_type'])
         return qs.relay_page(order='start', **pager)
 
-    permissions = [staffonly]
+    permissions = [permissions.manage_events]
     FilterInput = g.InputObjectType(
         'EventsFilterInput', g.input_fields({'event_type': Optional[str]})
     )
@@ -43,7 +42,7 @@ class event(helpers.BaseField):
             return None
         return event
 
-    permissions = [staffonly]
+    permissions = [permissions.manage_events]
     args = {'event_id': 'ID!'}
     result = types.Event
 
@@ -53,7 +52,7 @@ class eventsPrototype(helpers.BaseField):
     def resolve(self, obj, info, id):
         return models.EventPrototype.objects.get(pk=id)
 
-    permissions = [staffonly]
+    permissions = [permissions.manage_events]
     args = {'id': 'ID!'}
 
     result = g.NN(types.EventsPrototype)
@@ -64,7 +63,7 @@ class eventsPrototypes(helpers.BaseField):
     def resolve(self, obj, info):
         return models.EventPrototype.objects.order_by('weekday').all()
 
-    permissions = [staffonly]
+    permissions = [permissions.manage_events]
     result = g.NNList(types.EventsPrototype)
 
 
@@ -108,7 +107,7 @@ class vkGroups(helpers.BaseField):
         all_groups = models.VkAnnouncement.objects.all_groups()
         return [{'name': name} for name in all_groups]
 
-    permissions = [staffonly]
+    permissions = [permissions.manage_events]
     result = g.NNList(types.VkGroup)
 
 
@@ -118,7 +117,7 @@ class timepadCategories(helpers.BaseField):
         categories = kocherga.events.models.announcement.timepad.timepad_categories()
         return categories
 
-    permissions = [staffonly]
+    permissions = [permissions.manage_events]
     result = g.NNList(types.TimepadCategory)
 
 
@@ -130,7 +129,7 @@ class eventsWeeklyDigestCurrent(helpers.BaseField):
 
         return digest
 
-    permissions = [staffonly]
+    permissions = [permissions.manage_events]
     result = g.NN(types.EventsWeeklyDigest)
 
 

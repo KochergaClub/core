@@ -3,10 +3,10 @@ import logging
 logger = logging.getLogger(__name__)
 
 import channels.layers
-
 from kocherga.graphql import g, helpers
-from kocherga.graphql.permissions import staffonly, check_permissions
+from kocherga.graphql.permissions import check_permissions
 
+from .. import permissions
 
 EventNotification = g.ObjectType(
     'EventNotification', g.fields({'type': str, 'id': 'ID!'})
@@ -17,7 +17,7 @@ c = helpers.Collection()
 
 @c.field
 def events(_):
-    @check_permissions([staffonly])
+    @check_permissions([permissions.manage_events])
     async def subscribe(obj, info):
         channel_layer = channels.layers.get_channel_layer()
         channel_name = await channel_layer.new_channel()
@@ -30,7 +30,7 @@ def events(_):
             logger.debug('Event update: ' + str(msg))
             yield msg
 
-    @check_permissions([staffonly])
+    @check_permissions([permissions.manage_events])
     def resolve(msg, info):
         logger.debug(info.context)
 

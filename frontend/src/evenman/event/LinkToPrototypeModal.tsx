@@ -5,13 +5,14 @@ import Toggle from 'react-toggle';
 
 import { useLazyQuery } from '@apollo/client';
 
+import { EventUpdateInput } from '~/apollo/types.generated';
 import { Spinner } from '~/components';
 import { AsyncButton, Button, Column, ControlsFooter, Modal, Row } from '~/frontkit';
 
 import { EvenmanPrototypeDocument } from '../event-prototype/queries.generated';
 import { useUpdateMutation } from './hooks';
 import PrototypePicker from './PrototypePicker';
-import { EvenmanEvent_DetailsFragment, EvenmanUpdateMutationVariables } from './queries.generated';
+import { EvenmanEvent_DetailsFragment } from './queries.generated';
 
 const WrappedToggle: React.FC<{
   title: string;
@@ -37,7 +38,7 @@ interface Props {
   event: EvenmanEvent_DetailsFragment;
 }
 
-type AllUpdateArgs = Omit<EvenmanUpdateMutationVariables, 'id'>;
+type AllUpdateArgs = Omit<EventUpdateInput, 'event_id'>;
 
 type UpdatableArgs = Pick<
   AllUpdateArgs,

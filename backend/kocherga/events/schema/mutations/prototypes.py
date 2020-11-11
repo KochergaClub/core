@@ -2,18 +2,16 @@ import logging
 
 logger = logging.getLogger(__name__)
 
+from datetime import datetime
 from typing import Optional
 
-from datetime import datetime
+import kocherga.projects.models
 import kocherga.wagtail.models
-
+from kocherga.dateutils import TZ
 from kocherga.graphql import g, helpers
-from kocherga.graphql.permissions import staffonly
 from kocherga.graphql.basic_types import BasicResult
 
-from kocherga.dateutils import TZ
-import kocherga.projects.models
-from ... import models
+from ... import models, permissions
 from ..types import EventsPrototype
 
 c = helpers.Collection()
@@ -75,7 +73,7 @@ class eventPrototypeCreate(helpers.BaseFieldWithInput):
             'prototype': prototype,
         }
 
-    permissions = [staffonly]
+    permissions = [permissions.manage_events]
     input = {
         'title': str,
         'summary': Optional[str],
@@ -111,7 +109,7 @@ class eventPrototypeUpdate(helpers.BaseFieldWithInput):
             'prototype': prototype,
         }
 
-    permissions = [staffonly]
+    permissions = [permissions.manage_events]
     # TODO - fix copy-paste, slightly different from eventPrototypeCreate input
     input = {
         'id': 'ID!',
@@ -143,7 +141,7 @@ class eventPrototypeCancelDate(helpers.BaseFieldWithInput):
 
         return {'ok': True}
 
-    permissions = [staffonly]
+    permissions = [permissions.manage_events]
     input = {
         'id': 'ID!',
         'date': str,
@@ -163,7 +161,7 @@ class eventPrototypeNewEvent(helpers.BaseFieldWithInput):
 
         return {'ok': True}
 
-    permissions = [staffonly]
+    permissions = [permissions.manage_events]
     input = {
         'id': 'ID!',
         'ts': int,
@@ -183,7 +181,7 @@ class eventPrototypeAddTag(helpers.BaseFieldWithInput):
             'prototype': prototype,
         }
 
-    permissions = [staffonly]
+    permissions = [permissions.manage_events]
     input = {
         'id': 'ID!',
         'tag': str,
@@ -203,7 +201,7 @@ class eventPrototypeDeleteTag(helpers.BaseFieldWithInput):
             'prototype': prototype,
         }
 
-    permissions = [staffonly]
+    permissions = [permissions.manage_events]
     input = {
         'id': 'ID!',
         'tag': str,
@@ -229,7 +227,7 @@ class eventPrototypeSetImage(helpers.BaseFieldWithInput):
             'prototype': prototype,
         }
 
-    permissions = [staffonly]
+    permissions = [permissions.manage_events]
     input = {
         'id': 'ID!',
         'image_id': 'ID!',

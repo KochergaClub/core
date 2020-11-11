@@ -6,10 +6,8 @@ from typing import Optional
 
 from kocherga.graphql import g, helpers
 from kocherga.graphql.basic_types import BasicResult
-from kocherga.graphql.permissions import staffonly
 
-from ... import models
-
+from ... import models, permissions
 from ..types import EventsWeeklyDigest
 
 c = helpers.Collection()
@@ -23,7 +21,6 @@ UpdateResult = g.NN(
 )
 
 
-# eventsWeeklyDigestPostVk: EventsWeeklyDigestUpdateResult! @staffonly
 @c.class_field
 class eventsWeeklyDigestPostVk(helpers.BaseField):
     def resolve(self, _, info):
@@ -31,11 +28,10 @@ class eventsWeeklyDigestPostVk(helpers.BaseField):
         digest.post_vk('')
         return {'ok': True, 'digest': digest}
 
-    permissions = [staffonly]
+    permissions = [permissions.manage_events]
     result = UpdateResult
 
 
-# eventsWeeklyDigestPostTelegram: EventsWeeklyDigestUpdateResult! @staffonly
 @c.class_field
 class eventsWeeklyDigestPostTelegram(helpers.BaseField):
     def resolve(self, _, info):
@@ -43,7 +39,7 @@ class eventsWeeklyDigestPostTelegram(helpers.BaseField):
         digest.post_telegram()
         return {'ok': True, 'digest': digest}
 
-    permissions = [staffonly]
+    permissions = [permissions.manage_events]
     result = UpdateResult
 
 
@@ -55,7 +51,7 @@ class eventsWeeklyDigestPostMailchimp(helpers.BaseFieldWithInput):
         digest.post_mailchimp_draft(text)
         return {'ok': True, 'digest': digest}
 
-    permissions = [staffonly]
+    permissions = [permissions.manage_events]
     input = {'text': Optional[str]}
 
     result = UpdateResult
@@ -67,7 +63,7 @@ class vkWikiScheduleUpdate(helpers.BaseField):
         models.VkAnnouncement.objects.update_wiki_schedule()
         return {'ok': True}
 
-    permissions = [staffonly]
+    permissions = [permissions.manage_events]
     result = BasicResult
 
 

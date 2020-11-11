@@ -598,31 +598,6 @@ export type EventSetAnnounceUrlInput = {
   url: Scalars['String'];
 };
 
-export type EventSetEventTypeInput = {
-  event_id: Scalars['ID'];
-  event_type: Scalars['String'];
-};
-
-export type EventSetImageFromUrlInput = {
-  event_id: Scalars['ID'];
-  url: Scalars['String'];
-};
-
-export type EventSetPricingTypeInput = {
-  event_id: Scalars['ID'];
-  pricing_type: Scalars['String'];
-};
-
-export type EventSetRealmInput = {
-  event_id: Scalars['ID'];
-  realm: Scalars['String'];
-};
-
-export type EventSetZoomLinkInput = {
-  event_id: Scalars['ID'];
-  zoom_link: Scalars['String'];
-};
-
 export type EventTimepadAnnouncementUpdateInput = {
   event_id: Scalars['ID'];
   prepaid_tickets?: Maybe<Scalars['Boolean']>;
@@ -1091,14 +1066,9 @@ export type Mutation = {
   eventCreate: EventCreateResult;
   eventUpdate: EventUpdateResult;
   eventDelete: BasicResult;
-  eventSetEventType: EventUpdateResult;
-  eventSetRealm: EventUpdateResult;
-  eventSetPricingType: EventUpdateResult;
-  eventSetZoomLink: EventUpdateResult;
   eventGenerateZoomLink: EventUpdateResult;
   eventAddTag: EventUpdateResult;
   eventDeleteTag: EventUpdateResult;
-  eventSetImageFromUrl: EventUpdateResult;
   eventMove: EventUpdateResult;
   eventGenerateOpenViduToken: EventGenerateOpenViduTokenResult;
   eventPrototypeCreate: EventPrototypeUpdateResult;
@@ -1332,26 +1302,6 @@ export type MutationEventDeleteArgs = {
 };
 
 
-export type MutationEventSetEventTypeArgs = {
-  input: EventSetEventTypeInput;
-};
-
-
-export type MutationEventSetRealmArgs = {
-  input: EventSetRealmInput;
-};
-
-
-export type MutationEventSetPricingTypeArgs = {
-  input: EventSetPricingTypeInput;
-};
-
-
-export type MutationEventSetZoomLinkArgs = {
-  input: EventSetZoomLinkInput;
-};
-
-
 export type MutationEventGenerateZoomLinkArgs = {
   input: EventGenerateZoomLinkInput;
 };
@@ -1364,11 +1314,6 @@ export type MutationEventAddTagArgs = {
 
 export type MutationEventDeleteTagArgs = {
   input: EventDeleteTagInput;
-};
-
-
-export type MutationEventSetImageFromUrlArgs = {
-  input: EventSetImageFromUrlInput;
 };
 
 

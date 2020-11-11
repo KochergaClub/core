@@ -1,17 +1,15 @@
-from typing import Optional
 from datetime import datetime
+from typing import Optional
 
 from kocherga.dateutils import TZ
-from kocherga.graphql import g, django_utils
-from kocherga.graphql.permissions import staffonly, check_permissions
+from kocherga.graphql import django_utils, g
+from kocherga.graphql.permissions import check_permissions
+from kocherga.projects.schema.types import ProjectPage
 from kocherga.wagtail import graphql_utils as wagtail_utils
 
-from kocherga.projects.schema.types import ProjectPage
-
-from ... import models
-
+from ... import models, permissions
+from .announcements import TimepadCategory, VkGroup
 from .event import Event
-from .announcements import VkGroup, TimepadCategory
 
 EventsPrototype = g.ObjectType(
     'EventsPrototype',
@@ -47,7 +45,6 @@ EventsPrototype = g.ObjectType(
 )
 
 
-# suggested_dates(until_ts: Int, limit: Int!): [String!]!
 def suggested_dates_field():
     def resolve(obj, info, limit, until_ts=None):
         if until_ts:
@@ -61,14 +58,15 @@ def suggested_dates_field():
     )
 
 
-# instances(limit: Int): [Event!]! @staffonly
 def instances_field():
-    @check_permissions([staffonly])
+    @check_permissions([permissions.manage_events])
     def resolve(obj, info, limit=None):
         return obj.instances(limit=limit)
 
     return g.Field(
-        g.NNList(Event), args=g.arguments({'limit': Optional[int]}), resolve=resolve,
+        g.NNList(Event),
+        args=g.arguments({'limit': Optional[int]}),
+        resolve=resolve,
     )
 
 

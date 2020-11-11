@@ -1,10 +1,10 @@
 from kocherga.graphql import django_utils, g, helpers
-from kocherga.graphql.permissions import check_permissions, staffonly
+from kocherga.graphql.permissions import check_permissions
 from kocherga.projects.schema.types import ProjectPage
 from kocherga.wagtail import graphql_utils as wagtail_utils
 from kocherga.zoom.schema import types as zoom_types
 
-from ... import markup, models
+from ... import markup, models, permissions
 
 EventsMarkupFormat = g.EnumType(
     'EventsMarkupFormat', {'SOURCE': 'SOURCE', 'PLAIN': 'PLAIN'}
@@ -29,14 +29,14 @@ def build_event_fields():
         return obj.public_tag_names()
 
     def tags_field():
-        @check_permissions([staffonly])
+        @check_permissions([permissions.manage_events])
         def resolve(obj, info):
             return obj.tag_names()
 
         return g.Field(g.NNList(g.String), resolve=resolve)
 
     def room_field():
-        @check_permissions([staffonly])
+        @check_permissions([permissions.manage_events])
         def resolve(obj, info):
             return obj.get_room()
 
@@ -78,8 +78,8 @@ def build_event_fields():
         result = EventsGoogleEvent
 
     from .feedback import EventsFeedback
-    from .ticket import EventsTicket
     from .prototype import EventsPrototype
+    from .ticket import EventsTicket
 
     return g.fields(
         {
@@ -112,30 +112,44 @@ def build_event_fields():
             'tags': tags_field(),
             'public_google_event': public_google_event_field().as_field(),
             'zoom_meeting': helpers.field_with_permissions(
-                zoom_types.ZoomMeeting, [staffonly]
+                zoom_types.ZoomMeeting, [permissions.manage_events]
             ),
-            'prototype': helpers.field_with_permissions(EventsPrototype, [staffonly]),
-            'visitors': helpers.field_with_permissions(g.String, [staffonly]),
-            'creator': helpers.field_with_permissions(g.String, [staffonly]),
-            'created': helpers.field_with_permissions(g.NN(g.String), [staffonly]),
-            'updated': helpers.field_with_permissions(g.NN(g.String), [staffonly]),
-            'location': helpers.field_with_permissions(g.NN(g.String), [staffonly]),
+            'prototype': helpers.field_with_permissions(
+                EventsPrototype, [permissions.manage_events]
+            ),
+            'visitors': helpers.field_with_permissions(
+                g.String, [permissions.manage_events]
+            ),
+            'creator': helpers.field_with_permissions(
+                g.String, [permissions.manage_events]
+            ),
+            'created': helpers.field_with_permissions(
+                g.NN(g.String), [permissions.manage_events]
+            ),
+            'updated': helpers.field_with_permissions(
+                g.NN(g.String), [permissions.manage_events]
+            ),
+            'location': helpers.field_with_permissions(
+                g.NN(g.String), [permissions.manage_events]
+            ),
             'room': room_field(),
-            'zoom_link': helpers.field_with_permissions(g.NN(g.String), [staffonly]),
+            'zoom_link': helpers.field_with_permissions(
+                g.NN(g.String), [permissions.manage_events]
+            ),
             'timing_description_override': helpers.field_with_permissions(
-                g.NN(g.String), [staffonly]
+                g.NN(g.String), [permissions.manage_events]
             ),
             'tickets': django_utils.related_field(
                 models.Event,
                 'tickets',
                 item_type=EventsTicket,
-                permissions=[staffonly],
+                permissions=[permissions.manage_events],
             ),
             'feedbacks': django_utils.related_field(
                 models.Event,
                 'feedbacks',
                 item_type=EventsFeedback,
-                permissions=[staffonly],
+                permissions=[permissions.manage_events],
             ),
         }
     )

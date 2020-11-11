@@ -6,8 +6,7 @@ import EditableLink from '../components/EditableLink';
 import EditableString from '../components/EditableString';
 import { useUpdateMutation } from './hooks';
 import {
-    EvenmanEvent_DetailsFragment, EvenmanGenerateZoomLinkDocument, EvenmanSetZoomLinkDocument,
-    EvenmanUpdateDocument
+    EvenmanEvent_DetailsFragment, EvenmanGenerateZoomLinkDocument, EvenmanUpdateDocument
 } from './queries.generated';
 import ZoomAnalytics from './ZoomAnalytics';
 
@@ -17,8 +16,6 @@ interface Props {
 
 const RealmDetails: React.FC<Props> = ({ event }) => {
   const update = useUpdateMutation(event.id);
-
-  const [setZoomLinkMutation] = useMutation(EvenmanSetZoomLinkDocument);
 
   const [generateZoomLinkMutation] = useMutation(
     EvenmanGenerateZoomLinkDocument,
@@ -45,11 +42,7 @@ const RealmDetails: React.FC<Props> = ({ event }) => {
           <EditableLink
             value={event.zoom_link}
             title="Zoom"
-            save={(v) =>
-              setZoomLinkMutation({
-                variables: { id: event.id, link: v },
-              })
-            }
+            save={(v) => update({ zoom_link: v })}
           />
           {event.zoom_link ? null : (
             <AsyncButton act={generateZoomLinkMutation} small>
@@ -83,7 +76,9 @@ const EventRealm: React.FC<Props> = ({ event }) => {
               checked={event.realm === item.value}
               onChange={() =>
                 updateMutation({
-                  variables: { id: event.id, realm: item.value },
+                  variables: {
+                    input: { event_id: event.id, realm: item.value },
+                  },
                 })
               }
             />

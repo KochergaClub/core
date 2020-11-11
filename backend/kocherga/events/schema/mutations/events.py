@@ -1,16 +1,14 @@
-from io import BytesIO
 from typing import Optional
 
 import dateutil.parser
 import graphql
 import kocherga.projects.models
 import kocherga.wagtail.models
-import requests
 from kocherga.graphql import g, helpers
 from kocherga.graphql.basic_types import BasicResult
-from kocherga.graphql.permissions import authenticated, staffonly
+from kocherga.graphql.permissions import authenticated
 
-from ... import models
+from ... import models, permissions
 from ..types import Event
 
 c = helpers.Collection()
@@ -51,7 +49,7 @@ class eventCreate(helpers.BaseFieldWithInput):
             'event': event,
         }
 
-    permissions = [staffonly]
+    permissions = [permissions.manage_events]
     input = {
         'start': str,
         'end': str,
@@ -130,7 +128,7 @@ class eventUpdate(helpers.BaseFieldWithInput):
             'event': event,
         }
 
-    permissions = [staffonly]
+    permissions = [permissions.manage_events]
     input = graphql.build_ast_schema(
         graphql.parse(
             """
@@ -172,98 +170,9 @@ class eventDelete(helpers.BaseFieldWithInput):
 
         return {'ok': True}
 
-    permissions = [staffonly]
+    permissions = [permissions.manage_events]
     input = {'event_id': 'ID!'}
     result = g.NN(BasicResult)
-
-
-@c.class_field
-class eventSetEventType(helpers.BaseFieldWithInput):
-    def resolve(self, _, info, input):
-        event_id = input['event_id']
-        event_type = input['event_type']
-
-        event = models.Event.objects.get(uuid=event_id)
-
-        event.event_type = event_type
-        event.full_clean()
-        event.save()
-        models.Event.objects.notify_update()
-
-        return {
-            'ok': True,
-            'event': event,
-        }
-
-    permissions = [staffonly]
-    input = {'event_id': 'ID!', 'event_type': str}
-    result = g.NN(EventUpdateResult)
-
-
-@c.class_field
-class eventSetRealm(helpers.BaseFieldWithInput):
-    def resolve(self, _, info, input):
-        event_id = input['event_id']
-        realm = input['realm']
-
-        event = models.Event.objects.get(uuid=event_id)
-
-        event.realm = realm
-        event.full_clean()
-        event.save()
-        models.Event.objects.notify_update()
-
-        return {
-            'ok': True,
-            'event': event,
-        }
-
-    permissions = [staffonly]
-    input = {'event_id': 'ID!', 'realm': str}
-    result = g.NN(EventUpdateResult)
-
-
-@c.class_field
-class eventSetPricingType(helpers.BaseFieldWithInput):
-    def resolve(self, _, info, input):
-        event_id = input['event_id']
-        pricing_type = input['pricing_type']
-
-        event = models.Event.objects.get(uuid=event_id)
-
-        event.pricing_type = pricing_type
-        event.full_clean()
-        event.save()
-        models.Event.objects.notify_update()
-
-        return {
-            'ok': True,
-            'event': event,
-        }
-
-    permissions = [staffonly]
-    input = {'event_id': 'ID!', 'pricing_type': str}
-    result = g.NN(EventUpdateResult)
-
-
-@c.class_field
-class eventSetZoomLink(helpers.BaseFieldWithInput):
-    def resolve(self, _, info, input):
-        event_id = input['event_id']
-        zoom_link = input['zoom_link']
-
-        event = models.Event.objects.get(uuid=event_id)
-        event.set_zoom_link(zoom_link)
-        models.Event.objects.notify_update()
-
-        return {
-            'ok': True,
-            'event': event,
-        }
-
-    permissions = [staffonly]
-    input = {'event_id': 'ID!', 'zoom_link': str}
-    result = g.NN(EventUpdateResult)
 
 
 @c.class_field
@@ -280,7 +189,7 @@ class eventGenerateZoomLink(helpers.BaseFieldWithInput):
             'event': event,
         }
 
-    permissions = [staffonly]
+    permissions = [permissions.manage_events]
     input = {'event_id': 'ID!'}
     result = g.NN(EventUpdateResult)
 
@@ -298,7 +207,7 @@ class eventAddTag(helpers.BaseFieldWithInput):
             'event': event,
         }
 
-    permissions = [staffonly]
+    permissions = [permissions.manage_events]
     input = {'event_id': 'ID!', 'tag': str}
     result = g.NN(EventUpdateResult)
 
@@ -316,37 +225,11 @@ class eventDeleteTag(helpers.BaseFieldWithInput):
             'event': event,
         }
 
-    permissions = [staffonly]
+    permissions = [permissions.manage_events]
     input = {'event_id': 'ID!', 'tag': str}
     result = g.NN(EventUpdateResult)
 
 
-# deprecated! use wagtailUploadImageFromUrl + eventUpdate instead
-@c.class_field
-class eventSetImageFromUrl(helpers.BaseFieldWithInput):
-    def resolve(self, _, info, input):
-        event = models.Event.objects.get(uuid=input['event_id'])
-
-        url = input['url']
-
-        r = requests.get(url)
-        r.raise_for_status()
-
-        fh = BytesIO(r.content)
-        event.add_image(fh)
-        models.Event.objects.notify_update()
-
-        return {
-            'ok': True,
-            'event': event,
-        }
-
-    permissions = [staffonly]
-    input = {'event_id': 'ID!', 'url': str}
-    result = g.NN(EventUpdateResult)
-
-
-# eventMove(input: EventMoveInput!): EventUpdateResult! @staffonly
 @c.class_field
 class eventMove(helpers.BaseFieldWithInput):
     def resolve(self, _, info, input):
@@ -361,7 +244,7 @@ class eventMove(helpers.BaseFieldWithInput):
             'event': event,
         }
 
-    permissions = [staffonly]
+    permissions = [permissions.manage_events]
     input = {
         'event_id': 'ID!',
         'start': str,
@@ -370,9 +253,6 @@ class eventMove(helpers.BaseFieldWithInput):
     result = g.NN(EventUpdateResult)
 
 
-# eventGenerateOpenViduToken(
-#   input: EventGenerateOpenViduTokenInput
-# ): EventGenerateOpenViduTokenResult @auth(authenticated: true)
 @c.class_field
 class eventGenerateOpenViduToken(helpers.BaseFieldWithInput):
     def resolve(self, _, info, input):

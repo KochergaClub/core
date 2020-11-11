@@ -3,12 +3,11 @@ import logging
 logger = logging.getLogger(__name__)
 
 from typing import Optional
+
 from kocherga.graphql import g, helpers
 from kocherga.graphql.basic_types import BasicResult
-from kocherga.graphql.permissions import staffonly
 
-from ... import models
-
+from ... import models, permissions
 from ..types import EventsFeedback
 
 c = helpers.Collection()
@@ -30,7 +29,7 @@ class eventsFeedbackCreate(helpers.BaseFieldWithInput):
             'feedback': feedback,
         }
 
-    permissions = [staffonly]
+    permissions = [permissions.manage_events]
     input = {
         'event_id': 'ID!',
         'overall_score': Optional[int],
@@ -61,7 +60,7 @@ class eventsFeedbackDelete(helpers.BaseFieldWithInput):
 
         return {'ok': True}
 
-    permissions = [staffonly]
+    permissions = [permissions.manage_events]
     input = {
         'id': 'ID!',
     }

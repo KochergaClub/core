@@ -2,14 +2,13 @@ import React, { useCallback } from 'react';
 import { FaGlobeAfrica, FaLock } from 'react-icons/fa';
 import styled from 'styled-components';
 
-import { useMutation, useQuery } from '@apollo/client';
+import { useQuery } from '@apollo/client';
 
 import { DropdownMenu } from '~/components';
 import { AsyncButton, Button, Column, Row } from '~/frontkit';
 
-import {
-    EvenmanSetEventTypeDocument, EvenmanUnknownEventFragment, EvenmanUnknownEventsDocument
-} from './queries.generated';
+import { useUpdateMutation } from './hooks';
+import { EvenmanUnknownEventFragment, EvenmanUnknownEventsDocument } from './queries.generated';
 
 const ListContainer = styled.div`
   background: white;
@@ -22,28 +21,21 @@ const ControlButton = styled(AsyncButton).attrs({ size: 'small' })`
 `;
 
 const ListItem = ({ event }: { event: EvenmanUnknownEventFragment }) => {
-  const [setEventType] = useMutation(EvenmanSetEventTypeDocument, {
+  const update = useUpdateMutation(event.id, {
     refetchQueries: ['EvenmanUnknownEvents'],
-    awaitRefetchQueries: true,
   });
 
   const setPublic = useCallback(async () => {
-    await setEventType({
-      variables: {
-        id: event.id,
-        event_type: 'public',
-      },
+    await update({
+      event_type: 'public',
     });
-  }, [event.id, setEventType]);
+  }, [update]);
 
   const setPrivate = useCallback(async () => {
-    await setEventType({
-      variables: {
-        id: event.id,
-        event_type: 'private',
-      },
+    await update({
+      event_type: 'private',
     });
-  }, [event.id, setEventType]);
+  }, [update]);
 
   return (
     <Row stretch spaced>
