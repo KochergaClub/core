@@ -3,14 +3,11 @@ import logging
 logger = logging.getLogger(__name__)
 
 from asgiref.sync import async_to_sync
-
-from django.utils import timezone
-from django.core.exceptions import ObjectDoesNotExist
-
 from channels.generic.websocket import SyncConsumer, WebsocketConsumer
+from django.core.exceptions import ObjectDoesNotExist
+from django.utils import timezone
+from kocherga.dateutils import dts, humanize_date
 from reversion.models import Version
-
-from kocherga.dateutils import humanize_date, dts
 
 from .models import Event, GoogleCalendar
 
@@ -100,7 +97,7 @@ class GoogleExportConsumer(SyncConsumer):
 
     def export_event(self, message):
         event_pk = message['event_pk']
-        event = Event.objects.get(pk=event_pk)
+        event = Event.all_objects.get(pk=event_pk)
 
         for google_calendar in GoogleCalendar.objects.all():
             # TODO - try/catch?

@@ -1,15 +1,13 @@
 from datetime import datetime
 
+import kocherga.events.models
+from kocherga.events.schema import types as event_types
 from kocherga.graphql import g
+from kocherga.wagtail.blocks import registry as blocks_registry
 from kocherga.wagtail.graphql_utils import WagtailPageType, block_to_types
 from kocherga.wagtail.schema.types import WagtailBlock, WagtailImageRendition
-from kocherga.events.schema import types as event_types
-
-import kocherga.events.models
-from kocherga.wagtail.blocks import registry as blocks_registry
 
 from .. import models
-
 
 FreeFormPage = WagtailPageType(
     model=models.FreeFormPage,
@@ -17,7 +15,10 @@ FreeFormPage = WagtailPageType(
     extra_fields={'body': g.NNList(WagtailBlock)},
 )
 
-FolderPage = WagtailPageType(model=models.FolderPage, db_fields=['title'],)
+FolderPage = WagtailPageType(
+    model=models.FolderPage,
+    db_fields=['title'],
+)
 
 
 def create_PhotoRibbonBlock():
@@ -42,7 +43,7 @@ def create_PhotoRibbonBlock():
 
 def create_EventsListBlock():
     def resolve_value(obj, info):
-        qs = kocherga.events.models.Event.objects.public_events(
+        qs = kocherga.events.models.Event.objects.public_only().filter_by_period(
             from_date=datetime.today()
         )
         return qs[:20]

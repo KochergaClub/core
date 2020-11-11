@@ -4,13 +4,11 @@ logger = logging.getLogger(__name__)
 
 from typing import Optional
 
+import kocherga.wagtail.models
 from kocherga.graphql import g, helpers
 from kocherga.graphql.permissions import staffonly
 
-import kocherga.wagtail.models
-
 from ... import models
-
 from .events import EventUpdateResult
 
 c = helpers.Collection()
@@ -27,7 +25,6 @@ class eventTimepadAnnouncementUpdate(helpers.BaseFieldWithInput):
         event_id = input['event_id']
 
         event = models.Event.objects.get(uuid=event_id)
-        assert not event.deleted
 
         announcement = event.timepad_announcement
 
@@ -61,7 +58,6 @@ class eventVkAnnouncementUpdate(helpers.BaseFieldWithInput):
         event_id = input['event_id']
 
         event = models.Event.objects.get(uuid=event_id)
-        assert not event.deleted
 
         announcement = event.vk_announcement
 
@@ -121,7 +117,6 @@ class eventAnnounce(helpers.BaseFieldWithInput):
     def resolve(self, _, info, input):
         event = models.Event.objects.get(uuid=input['event_id'])
 
-        assert not event.deleted
         assert event.event_type == 'public'
 
         target = input['target']
@@ -154,7 +149,6 @@ class eventSetAnnounceUrl(helpers.BaseFieldWithInput):
     def resolve(self, _, info, input):
         event = models.Event.objects.get(uuid=input['event_id'])
 
-        assert not event.deleted
         assert event.event_type == 'public'
 
         url = input['url']

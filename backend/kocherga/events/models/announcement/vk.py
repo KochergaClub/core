@@ -2,35 +2,33 @@ import logging
 
 logger = logging.getLogger(__name__)
 
-from datetime import datetime, timedelta
 import json
 import re
 import urllib.parse
+from datetime import datetime, timedelta
 
-from django.db import models
-from django.conf import settings
-from django.utils import timezone
-from annoying.fields import AutoOneToOneField
-
-import reversion
-
-from kocherga.error import PublicError
-from kocherga.dateutils import TZ
 import kocherga.dateutils
-
-import kocherga.vk.api
-from kocherga.vk.helpers import group2id, upload_wall_image
-
 import kocherga.events.markup
+import kocherga.vk.api
+import reversion
+from annoying.fields import AutoOneToOneField
+from django.conf import settings
+from django.db import models
+from django.utils import timezone
+from kocherga.dateutils import TZ
+from kocherga.error import PublicError
+from kocherga.vk.helpers import group2id, upload_wall_image
+from kocherga.wagtail.utils import create_image_from_fh
 
 from ..event import Event
-from kocherga.wagtail.utils import create_image_from_fh
 
 
 class Manager(models.Manager):
     def repost_to_daily(self) -> int:
         # TODO - select VkAnnouncements instead, but don't forget to filter out only good events
-        events = Event.objects.public_events(date=datetime.today().date())
+        events = Event.objects.public_only().filter_by_date(
+            date=datetime.today().date()
+        )
         if len(events) == 0:
             logger.info('No events today')
 
@@ -65,7 +63,7 @@ class Manager(models.Manager):
         return groups
 
     def upcoming_events(self):
-        return Event.objects.public_events().filter(
+        return Event.objects.public_only().filter(
             start__gte=datetime.now(TZ) - timedelta(hours=2)
         )
 

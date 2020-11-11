@@ -1,14 +1,15 @@
-from datetime import datetime, timedelta, date
+from datetime import date, datetime, timedelta
 
 from kocherga.dateutils import TZ
-from kocherga.events.models import Event
 from kocherga.events import serializers
+from kocherga.events.models import Event
 
 
 class TestEventConstructor:
     def test_minimal(self):
         event = Event(
-            start=datetime.now(TZ), end=datetime.now(TZ) + timedelta(hours=1),
+            start=datetime.now(TZ),
+            end=datetime.now(TZ) + timedelta(hours=1),
         )
         assert isinstance(event, Event)
 
@@ -20,7 +21,9 @@ def test_get_room(event):
 def test_default_event_type():
     dt = datetime.now(TZ)
     event = Event.objects.create(
-        start=dt, end=dt + timedelta(hours=1), title='test event',
+        start=dt,
+        end=dt + timedelta(hours=1),
+        title='test event',
     )
     assert event.event_type == "unknown"
 
@@ -87,13 +90,19 @@ class TestTags:
 
 class TestManager:
     def test_public_events_empty(self):
-        public_events = Event.objects.public_events(date=date(2019, 1, 12))
+        public_events = Event.objects.public_only().filter_by_date(
+            date=date(2019, 1, 12)
+        )
         assert public_events.count() == 0
 
     def test_public_events_only_public(self, event):
-        public_events = Event.objects.public_events(date=event.start.date())
+        public_events = Event.objects.public_only().filter_by_date(
+            date=event.start.date()
+        )
         assert public_events.count() == 0
 
     def test_public_events_single(self, public_event):
-        public_events = Event.objects.public_events(date=public_event.start.date())
+        public_events = Event.objects.public_only().filter_by_date(
+            date=public_event.start.date()
+        )
         assert public_events.count() == 1

@@ -5,12 +5,11 @@ logger = logging.getLogger(__name__)
 import datetime
 import re
 
+import kocherga.events.helpers
+import kocherga.room
 from kocherga.dateutils import TZ, dts
 from kocherga.error import PublicError
-
-import kocherga.room
 from kocherga.events.models import Event
-import kocherga.events.helpers
 
 # types:
 # room (unicode, lowercase)
@@ -49,7 +48,7 @@ class Booking:
 
 
 def day_bookings(date):
-    events = Event.objects.list_events(date=date)
+    events = Event.objects.filter_by_date(date=date)
 
     bookings = [Booking.from_event(event) for event in events]
 
@@ -89,7 +88,7 @@ def check_availability(start_dt, end_dt, room):
 
 def bookings_by_email(email):
     events = (
-        Event.objects.list_events()
+        Event.objects.all()
         .filter(title__startswith="Бронь ")
         .filter(title__endswith=" " + email)
     )

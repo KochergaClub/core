@@ -4,16 +4,15 @@ logger = logging.getLogger(__name__)
 
 from datetime import datetime
 
+import kocherga.events.markup
+import kocherga.room
 from django.db import models
+from kocherga.dateutils import TZ, dts
+from kocherga.events.google import api as google_api
 from wagtail.admin.edit_handlers import FieldPanel
 
-from kocherga.dateutils import dts, TZ
-import kocherga.room
-
-from kocherga.events.google import api as google_api
-import kocherga.events.markup
-from .google_event import GoogleEvent
 from .event import Event
+from .google_event import GoogleEvent
 
 
 def event_to_google_dict(event):
@@ -73,7 +72,7 @@ class GoogleCalendar(models.Model):
 
     def should_export(self, event) -> bool:
         if self.public_only:
-            # This condition is adapted from Event.objects.public_events.
+            # This condition is adapted from EventQuerySet.public_only()
             return (
                 event.event_type == 'public'
                 and event.published
@@ -82,7 +81,7 @@ class GoogleCalendar(models.Model):
         return True
 
     def export_all_events(self):
-        for event in Event.objects.all():
+        for event in Event.all_objects.all():
             self.export_event(event)
 
     def export_event(self, event):
@@ -106,7 +105,8 @@ class GoogleCalendar(models.Model):
                 # Removing is not enough - we could accidentally export an event we want to hide completely.
                 # (I haven't checked but `cancelled` events are probably still visible in some way.)
                 google_api().events().delete(
-                    calendarId=self.calendar_id, eventId=google_event.google_id,
+                    calendarId=self.calendar_id,
+                    eventId=google_event.google_id,
                 ).execute()
                 google_event.delete()
 

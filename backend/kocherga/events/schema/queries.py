@@ -1,12 +1,12 @@
 from datetime import datetime
 from typing import Optional
 
+import kocherga.events.models.announcement.timepad
 from kocherga.graphql import g, helpers
 from kocherga.graphql.permissions import staffonly
 
 from .. import models
 from . import types
-import kocherga.events.models.announcement.timepad
 
 c = helpers.Collection()
 
@@ -14,7 +14,7 @@ c = helpers.Collection()
 @c.class_field
 class events(helpers.BaseField):
     def resolve(self, obj, info, search=None, filter=None, **pager):
-        qs = models.Event.objects.list_events()
+        qs = models.Event.objects.all()
         if search:
             qs = qs.filter(
                 title__icontains=search
@@ -38,7 +38,7 @@ class events(helpers.BaseField):
 class event(helpers.BaseField):
     def resolve(self, obj, info, event_id):
         try:
-            event = models.Event.objects.list_events().get(uuid=event_id)
+            event = models.Event.objects.get(uuid=event_id)
         except models.Event.DoesNotExist:
             return None
         return event
@@ -71,11 +71,11 @@ class eventsPrototypes(helpers.BaseField):
 @c.class_field
 class publicEvents(helpers.BaseField):
     def resolve(self, obj, info, from_date=None, project_id=None, **pager):
-        qs = models.Event.objects.public_events(
-            from_date=datetime.strptime(from_date, '%Y-%m-%d').date()
-            if from_date
-            else None
-        )
+        qs = models.Event.objects.public_only()
+        if from_date:
+            qs = qs.filter_by_period(
+                from_date=datetime.strptime(from_date, '%Y-%m-%d').date()
+            )
 
         if project_id is not None:
             qs = qs.filter(project_id=project_id)
@@ -92,7 +92,7 @@ class publicEvents(helpers.BaseField):
 class publicEvent(helpers.BaseField):
     def resolve(self, obj, info, event_id):
         try:
-            event = models.Event.objects.public_events().get(uuid=event_id)
+            event = models.Event.objects.public_only().get(uuid=event_id)
         except models.Event.DoesNotExist:
             return None
         return event

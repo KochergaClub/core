@@ -2,15 +2,13 @@ import logging
 
 logger = logging.getLogger(__name__)
 
-from typing import Dict, Any
 from datetime import datetime, timedelta
+from typing import Any, Dict
 
 from django.conf import settings
 from django.utils import timezone
-
 from kocherga.dateutils import TZ
 from kocherga.events.models import Event
-
 from kocherga.ludwig.bot import bot
 
 
@@ -59,7 +57,7 @@ def event_color(event):
 
 
 def list_events():
-    events = Event.objects.list_events(date=datetime.now(TZ).date())
+    events = Event.objects.all().filter_by_date(date=datetime.now(TZ).date())
 
     word_form = plural_form(len(events), ("событие", "события", "событий"))
     intro_text = f"Сегодня *{len(events)}* {word_form}"
@@ -183,7 +181,7 @@ def visitors_attachment(event):
 
 
 def list_event_visitors():
-    events = Event.objects.list_events(date=datetime.now().date())
+    events = Event.objects.all().filter_by_date(date=datetime.now().date())
 
     attachments = []
     for event in events:
@@ -255,9 +253,7 @@ def event_visitors_question(event):
 # @bot.schedule("interval", minutes=5)
 def ask_for_event_visitors():
     logger.debug("ask_for_event_visitors")
-    events = Event.objects.filter(
-        deleted=False, start__gt=datetime.now(TZ) - timedelta(days=1)
-    ).all()
+    events = Event.objects.filter(start__gt=datetime.now(TZ) - timedelta(days=1)).all()
     logger.debug(f"Total events: {len(events)}")
 
     events = [
@@ -309,7 +305,11 @@ def submit_event_visitors_dialog(payload, event_uuid, original_message_path):
     attachment = question['attachments'][0]
     attachment['text'] = f"<@{payload['user']['id']}>: {attachment['text']}"
 
-    response = bot.sc.api_call('chat.update', ts=original_message_id, **question,)
+    response = bot.sc.api_call(
+        'chat.update',
+        ts=original_message_id,
+        **question,
+    )
     if not response["ok"]:
         logger.warning(response)
         raise Exception("Couldn't update question message")

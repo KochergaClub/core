@@ -1,35 +1,30 @@
 from __future__ import annotations
+
 import logging
 
 logger = logging.getLogger(__name__)
 
 import base64
-import uuid
-import re
-from typing import Optional, Any
-
-import dateutil.parser
 import datetime
+import re
+import uuid
+from typing import Any, Optional
 
-from asgiref.sync import async_to_sync
 import channels.layers
-
-from django.db import models, transaction
-from django.conf import settings
-from django.utils import timezone
-import wagtail.search.index
-
-from kocherga.dateutils import TZ, inflected_weekday, inflected_month
-from kocherga.django.managers import RelayQuerySetMixin
-
+import dateutil.parser
+import kocherga.events.markup
+import kocherga.openvidu.api
 import kocherga.room
 import kocherga.zoom.models
-import kocherga.openvidu.api
-
-import kocherga.events.markup
-from kocherga.wagtail.utils import create_image_from_fh
-
+import wagtail.search.index
+from asgiref.sync import async_to_sync
+from django.conf import settings
+from django.db import models, transaction
+from django.utils import timezone
+from kocherga.dateutils import TZ, inflected_month, inflected_weekday
+from kocherga.django.managers import RelayQuerySetMixin
 from kocherga.timepad.models import Event as TimepadEvent
+from kocherga.wagtail.utils import create_image_from_fh
 
 
 def parse_iso8601(s):
@@ -41,10 +36,44 @@ def ts_now():
 
 
 class EventQuerySet(RelayQuerySetMixin, models.QuerySet):
-    pass
+    def without_deleted(self):
+        return self.filter(deleted=False)
+
+    def filter_by_period(self, from_date: datetime.date, to_date: datetime.date):
+        qs = self
+        if from_date:
+            qs = qs.filter(
+                start__gte=datetime.datetime.combine(
+                    from_date, datetime.time.min, tzinfo=TZ
+                )
+            )
+
+        if to_date:
+            qs = qs.filter(
+                start__lte=datetime.datetime.combine(
+                    to_date, datetime.time.max, tzinfo=TZ
+                )
+            )
+
+        return qs
+
+    def filter_by_date(self, date: datetime.date):
+        return self.filter_by_period(from_date=date, to_date=date)
+
+    def filter_by_tag(self, tag: str):
+        return self.filter(tags__name=tag)
+
+    def public_only(self):
+        return (
+            self
+            # public events can contain raw description initially, so we rely on `published` flag
+            .filter(event_type='public', published=True)
+            # earlier events are not cleaned up yet
+            .filter(start__gte=datetime.datetime(2018, 6, 1, tzinfo=TZ))
+        )
 
 
-class EventManager(models.Manager):
+class AllEventManager(models.Manager):
     def get_queryset(self):
         return EventQuerySet(self.model, using=self._db)
 
@@ -56,55 +85,13 @@ class EventManager(models.Manager):
 
         transaction.on_commit(send_update)
 
-    def list_events(
-        self,
-        date: datetime.date = None,
-        from_date: datetime.date = None,
-        to_date: datetime.date = None,
-        order_by=None,
-    ):
-        order_args = None
-        if order_by == "updated":
-            order_args = 'updated'
-        else:
-            order_args = 'start'
+    def public_only(self):
+        return self.get_queryset().public_only()
 
-        query = self.get_queryset().filter(deleted=False).order_by(order_args)
 
-        if date:
-            from_date = to_date = date
-
-        if from_date:
-            query = query.filter(
-                start__gte=datetime.datetime.combine(
-                    from_date, datetime.time.min, tzinfo=TZ
-                )
-            )
-
-        if to_date:
-            query = query.filter(
-                start__lte=datetime.datetime.combine(
-                    to_date, datetime.time.max, tzinfo=TZ
-                )
-            )
-
-        return query
-
-    def public_events(self, date=None, from_date=None, to_date=None, tag=None):
-        query = self.list_events(date=date, from_date=from_date, to_date=to_date)
-
-        query = (
-            query
-            # public events can contain raw description initially, so we rely on `published` flag
-            .filter(event_type='public', published=True)
-            # earlier events are not cleaned up yet
-            .filter(start__gte=datetime.datetime(2018, 6, 1, tzinfo=TZ))
-        )
-
-        if tag:
-            query = query.filter(tags__name=tag)
-
-        return query
+class EventManager(AllEventManager):
+    def get_queryset(self):
+        return super().get_queryset().without_deleted()
 
 
 def generate_uuid():
@@ -206,11 +193,13 @@ class Event(wagtail.search.index.Indexed, models.Model):
     ]
 
     objects = EventManager()
+    all_objects = AllEventManager()  # for rare cases when we need deleted events
 
     class Meta:
         db_table = "events"
         verbose_name = 'Событие'
         verbose_name_plural = 'События'
+        ordering = ['start']
 
     def __str__(self):
         return f'{timezone.localtime(self.start)} - {self.title}'

@@ -2,31 +2,25 @@ import logging
 
 logger = logging.getLogger(__name__)
 
-from io import BytesIO
 from datetime import datetime
-
-import requests
-
-from django.utils import feedgenerator
-
-from django.http import HttpResponse, FileResponse
-from django.views.generic import View
-from django.views.decorators.http import require_safe
-from django.conf import settings
-
-from rest_framework.views import APIView
-from rest_framework import status, generics, viewsets, filters, pagination
-from rest_framework.response import Response
-from rest_framework.decorators import api_view, permission_classes
-from rest_framework.permissions import IsAdminUser, AllowAny
-
-from kocherga.error import PublicError
+from io import BytesIO
 
 import kocherga.events.helpers
-from kocherga.events.models import Event
-from kocherga.events import serializers
-
+import requests
+from django.conf import settings
+from django.http import FileResponse, HttpResponse
+from django.utils import feedgenerator
+from django.views.decorators.http import require_safe
+from django.views.generic import View
 from kocherga.api.common import ok
+from kocherga.error import PublicError
+from kocherga.events import serializers
+from kocherga.events.models import Event
+from rest_framework import filters, generics, pagination, status, viewsets
+from rest_framework.decorators import api_view, permission_classes
+from rest_framework.permissions import AllowAny, IsAdminUser
+from rest_framework.response import Response
+from rest_framework.views import APIView
 
 
 class RootView(generics.ListCreateAPIView):
@@ -43,13 +37,19 @@ class RootView(generics.ListCreateAPIView):
                 d = datetime.strptime(d, "%Y-%m-%d").date()
             return d
 
+        qs = Event.objects.all()
+
+        date = arg2date("date")
+        if date:
+            qs = qs.filter_by_date(date)
+
+        from_date = arg2date("from_date")
+        to_date = arg2date("to_date")
+        if from_date or to_date:
+            qs = qs.filter_by_period(from_date=from_date, to_date=to_date)
+
         qs = (
-            Event.objects.list_events(
-                date=arg2date("date"),
-                from_date=arg2date("from_date"),
-                to_date=arg2date("to_date"),
-            )
-            .prefetch_related('tags')
+            qs.prefetch_related('tags')
             .prefetch_related('project')
             .prefetch_related('prototype')
             .select_related('vk_announcement')
@@ -95,9 +95,7 @@ class PagedRootView(RootView):
 class ObjectView(generics.RetrieveUpdateDestroyAPIView):
     permission_classes = (IsAdminUser,)
     serializer_class = serializers.EventSerializer
-    queryset = (
-        Event.objects.all()
-    )  # not list_events() - allows retrieving deleted objects
+    queryset = Event.all_objects.all()  # allows retrieving deleted objects
     lookup_url_kwarg = 'event_id'
     lookup_field = 'uuid'
 
@@ -192,50 +190,64 @@ class PublicEventsViewSet(viewsets.ReadOnlyModelViewSet):
                 d = datetime.strptime(d, "%Y-%m-%d").date()
             return d
 
-        events = (
-            Event.objects.public_events(
-                date=arg2date('date'),
-                from_date=arg2date('from_date'),
-                to_date=arg2date('to_date'),
-                tag=self.request.query_params.get('tag'),
-            )
-            .prefetch_related('tags')
+        qs = Event.objects.public_only()
+        date = arg2date('date')
+        if date:
+            qs = qs.filter_by_date(date)
+
+        from_date = arg2date("from_date")
+        to_date = arg2date("to_date")
+        if from_date or to_date:
+            qs = qs.filter_by_period(from_date=from_date, to_date=to_date)
+
+        tag = self.request.query_params.get('tag')
+        if tag:
+            qs = qs.filter_by_tag(tag)
+        qs = (
+            qs.prefetch_related('tags')
             .prefetch_related('vk_announcement')
             .prefetch_related('fb_announcement')
             .prefetch_related('timepad_announcement')
         )
 
         # TODO - pager or limit queryset (but I can't do this right now because DetailView would break)
-        return events
+        return qs
 
 
 @api_view()
 @permission_classes((AllowAny,))
 def r_list_public_today(request):
-    events = (
-        Event.objects.public_events(
-            date=datetime.today().date(), tag=request.query_params.get('tag'),
-        )
-        .prefetch_related('tags')
+    qs = Event.objects.public_only()
+
+    date = datetime.today().date()
+    qs = qs.filter_by_date(date)
+
+    tag = request.query_params.get('tag')
+    if tag:
+        qs = qs.filter_by_tag(tag)
+
+    qs = (
+        qs.prefetch_related('tags')
         .prefetch_related('vk_announcement')
         .prefetch_related('fb_announcement')
         .prefetch_related('timepad_announcement')
     )
 
     return Response(
-        [serializers.PublicEventSerializer(event).data for event in events[:1000]]
+        [serializers.PublicEventSerializer(event).data for event in qs[:1000]]
     )
 
 
 @require_safe
 def r_list_public_atom(request):
-    events = (
-        Event.objects.public_events(
-            from_date=datetime.now().date(), tag=request.GET.get('tag'),
-        )
-        .prefetch_related('tags')
-        .prefetch_related('vk_announcement')
+    qs = Event.objects.public_only().filter_by_period(
+        from_date=datetime.now().date(),
     )
+    tag = request.GET.get('tag')
+    if tag:
+        qs = qs.filter_by_tag(tag)
+
+    qs = qs.prefetch_related('tags').prefetch_related('vk_announcement')
 
     fg = feedgenerator.Atom1Feed(
         title='Публичные мероприятия Кочерги',
@@ -244,7 +256,7 @@ def r_list_public_atom(request):
         author_name='Кочерга',
     )
 
-    for event in reversed(events.all()):
+    for event in reversed(qs):
         # fe.id(f'{settings.KOCHERGA_API_ROOT}/public_event/{event.uuid}')
         fg.add_item(
             title=event.title,
@@ -260,14 +272,14 @@ class EventFeedbackView(APIView):
     permission_classes = (IsAdminUser,)
 
     def get(self, request, event_id):
-        event = Event.objects.list_events().get(uuid=event_id)
+        event = Event.objects.get(uuid=event_id)
         feedbacks = event.feedbacks.all()
         return Response(serializers.FeedbackSerializer(feedbacks, many=True).data)
 
 
 class SitemapView(View):
     def get(self, request):
-        events = Event.objects.public_events()
+        events = Event.objects.public_only()
         return HttpResponse(
             ''.join(
                 [

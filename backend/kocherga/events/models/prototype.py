@@ -2,18 +2,16 @@ import logging
 
 logger = logging.getLogger(__name__)
 
+from datetime import datetime, timedelta
 from typing import List
 
-from datetime import datetime, timedelta
-
-from django.db import models
 import reversion
-
+from django.db import models
 from kocherga.dateutils import TZ
-
-from .event import Event
 from kocherga.wagtail.utils import create_image_from_fh
+
 from .announcement.timepad import timepad_category_by_code
+from .event import Event
 
 
 @reversion.register()
@@ -80,9 +78,7 @@ class EventPrototype(models.Model):
     # This is a legacy method, we should replace it with all_events() from Event's FK.
     # But that method for now doesn't allow limiting, doesn't filter out deleted events and doesn't apply `order_by`.
     def instances(self, limit=None):
-        query = Event.objects.filter(
-            prototype_id=self.prototype_id, deleted=False
-        ).order_by('-start')
+        query = Event.objects.filter(prototype_id=self.prototype_id).order_by('-start')
         if limit:
             query = query[:limit]
         events = query.all()
@@ -185,7 +181,9 @@ class EventPrototype(models.Model):
 
     def add_image(self, fh):
         self.image = create_image_from_fh(
-            fh, title=self.title, basename=f'prototype-{self.pk}',
+            fh,
+            title=self.title,
+            basename=f'prototype-{self.pk}',
         )
         self.save()
 

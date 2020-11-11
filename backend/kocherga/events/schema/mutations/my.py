@@ -1,11 +1,10 @@
 from typing import Optional
+
+from django.contrib.auth import get_user_model
 from kocherga.graphql import g, helpers
 from kocherga.graphql.permissions import authenticated
 
-from django.contrib.auth import get_user_model
-
 from ... import models
-
 from ..types import MyEventsTicket
 
 c = helpers.Collection()
@@ -19,7 +18,7 @@ class myEventsTicketUnregister(helpers.BaseField):
     result = g.NN(MyEventsTicket)
 
     def resolve(self, _, info, event_id):
-        event = models.Event.objects.public_events().get(uuid=event_id)
+        event = models.Event.objects.public_only().get(uuid=event_id)
         ticket = models.Ticket.objects.unregister(user=info.context.user, event=event)
         return ticket
 
@@ -32,7 +31,7 @@ class myEventsTicketRegister(helpers.BaseField):
     result = g.NN(MyEventsTicket)
 
     def resolve(self, _, info, event_id):
-        event = models.Event.objects.public_events().get(uuid=event_id)
+        event = models.Event.objects.public_only().get(uuid=event_id)
         ticket = models.Ticket.objects.register(
             user=info.context.user, event=event, signed_in=True
         )
@@ -55,7 +54,7 @@ class myEventsTicketRegisterAnon(helpers.BaseFieldWithInput):
         except KchUser.DoesNotExist:
             user = KchUser.objects.create_user(email)
 
-        event = models.Event.objects.public_events().get(uuid=event_id)
+        event = models.Event.objects.public_only().get(uuid=event_id)
         ticket = models.Ticket.objects.register(
             user=user,
             event=event,

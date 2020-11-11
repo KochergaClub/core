@@ -1,16 +1,14 @@
 from io import BytesIO
-import dateutil.parser
 from typing import Optional
 
-import requests
+import dateutil.parser
 import graphql
-
+import kocherga.projects.models
+import kocherga.wagtail.models
+import requests
 from kocherga.graphql import g, helpers
 from kocherga.graphql.basic_types import BasicResult
-from kocherga.graphql.permissions import staffonly, authenticated
-import kocherga.wagtail.models
-
-import kocherga.projects.models
+from kocherga.graphql.permissions import authenticated, staffonly
 
 from ... import models
 from ..types import Event
@@ -71,7 +69,6 @@ class eventUpdate(helpers.BaseFieldWithInput):
         event_id = input['event_id']
 
         event = models.Event.objects.get(uuid=event_id)
-        assert not event.deleted
 
         for field in (
             'published',
@@ -170,7 +167,6 @@ class eventDelete(helpers.BaseFieldWithInput):
         event_id = input['event_id']
 
         event = models.Event.objects.get(uuid=event_id)
-        assert not event.deleted
         event.delete()
         models.Event.objects.notify_update()
 
@@ -188,7 +184,6 @@ class eventSetEventType(helpers.BaseFieldWithInput):
         event_type = input['event_type']
 
         event = models.Event.objects.get(uuid=event_id)
-        assert not event.deleted
 
         event.event_type = event_type
         event.full_clean()
@@ -212,7 +207,6 @@ class eventSetRealm(helpers.BaseFieldWithInput):
         realm = input['realm']
 
         event = models.Event.objects.get(uuid=event_id)
-        assert not event.deleted
 
         event.realm = realm
         event.full_clean()
@@ -236,7 +230,6 @@ class eventSetPricingType(helpers.BaseFieldWithInput):
         pricing_type = input['pricing_type']
 
         event = models.Event.objects.get(uuid=event_id)
-        assert not event.deleted
 
         event.pricing_type = pricing_type
         event.full_clean()

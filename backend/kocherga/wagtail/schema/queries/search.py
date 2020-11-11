@@ -1,12 +1,10 @@
 from datetime import datetime, timedelta
 from typing import Optional
 
-from wagtail.search.backends import get_search_backend
-
-from kocherga.graphql import g, helpers
-
 from kocherga.dateutils import TZ
+from kocherga.graphql import g, helpers
 from kocherga.wagtail.utils import get_page_queryset_for_request
+from wagtail.search.backends import get_search_backend
 
 from .. import types
 
@@ -66,7 +64,7 @@ class search(helpers.BaseFieldWithInput):
 
         events = get_search_backend().search(
             query,
-            kocherga.events.models.Event.objects.public_events(
+            kocherga.events.models.Event.objects.public_only().filter_by_period(
                 from_date=datetime.now(tz=TZ) - timedelta(days=2)
             ),
         )[:2]

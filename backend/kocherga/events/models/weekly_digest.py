@@ -2,30 +2,27 @@ import logging
 
 logger = logging.getLogger(__name__)
 
+import asyncio
+import base64
+from datetime import datetime, timedelta
+from io import BytesIO
 from typing import Optional
 
-import base64
-from io import BytesIO
-from datetime import datetime, timedelta
-
-import markdown
-import asyncio
-
-from django.template.loader import render_to_string
-from django.db import models
-from django.conf import settings
-from django.utils import timezone
-
-from kocherga.dateutils import TZ
 import kocherga.dateutils
+import kocherga.mailchimp
+import kocherga.telegram.utils
+import kocherga.templater.models
 import kocherga.vk.api
 import kocherga.vk.helpers
-import kocherga.telegram.utils
-import kocherga.mailchimp
-import kocherga.templater.models
+import markdown
+from django.conf import settings
+from django.db import models
+from django.template.loader import render_to_string
+from django.utils import timezone
+from kocherga.dateutils import TZ
 from kocherga.email.tools import get_utmify, mjml2html
-
 from kocherga.wagtail.utils import create_image_from_fh
+
 from .event import Event
 
 MAILCHIMP_IMAGE_FOLDER_NAME = 'Расписание на неделю'
@@ -76,7 +73,7 @@ class WeeklyDigest(models.Model):
         return self.start + timedelta(days=6)
 
     def events(self):
-        query = Event.objects.public_events(
+        query = Event.objects.public_only().filter_by_period(
             from_date=self.start,
             to_date=self.end,
         )
