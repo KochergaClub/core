@@ -50,6 +50,7 @@ type AuthLogoutResult {
 type AuthPermission {
   id: ID!
   name: String!
+  as_string: String!
   users: [AuthUser!]!
 }
 

@@ -67,6 +67,7 @@ export type AuthPermission = {
   __typename?: 'AuthPermission';
   id: Scalars['ID'];
   name: Scalars['String'];
+  as_string: Scalars['String'];
   users: Array<AuthUser>;
 };
 

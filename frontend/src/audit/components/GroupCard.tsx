@@ -73,7 +73,9 @@ const GroupCard: React.FC<Props> = ({ group }) => {
         </Row>
         <Row wrap={true}>
           {group.permissions.map((permission) => (
-            <Badge key={permission.id}>{permission.name}</Badge>
+            <Badge key={permission.id} hint={permission.as_string}>
+              {permission.name}
+            </Badge>
           ))}
         </Row>
         {group.users.map((user) => (
