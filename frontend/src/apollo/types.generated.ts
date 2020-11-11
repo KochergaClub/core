@@ -38,6 +38,8 @@ export type AuthGroup = {
   name: Scalars['String'];
   permissions: Array<AuthPermission>;
   users: Array<AuthUser>;
+  wagtailCollectionPermissions: Array<WagtailCollectionPermission>;
+  wagtailPagePermissions: Array<WagtailPagePermission>;
 };
 
 export type AuthLoginCredentialsInput = {
@@ -2743,6 +2745,19 @@ export type WagtailCharBlockStructure = WagtailBlockStructure & {
   required: Scalars['Boolean'];
 };
 
+export type WagtailCollection = {
+  __typename?: 'WagtailCollection';
+  id: Scalars['ID'];
+  name: Scalars['String'];
+};
+
+export type WagtailCollectionPermission = {
+  __typename?: 'WagtailCollectionPermission';
+  id: Scalars['ID'];
+  permission: AuthPermission;
+  collection: WagtailCollection;
+};
+
 export type WagtailEditPageBodyBlocksInput = {
   page_id: Scalars['ID'];
   publish: Scalars['Boolean'];
@@ -2848,6 +2863,8 @@ export type WagtailPageMetaRevisionArgs = {
 
 export type WagtailPageOrPrivateResult = WagtailPageContainer | WagtailPagePrivate;
 
+export type WagtailPagePermission = WagtailRootPagePermission | WagtailSpecificPagePermission;
+
 export type WagtailPagePermissions = {
   __typename?: 'WagtailPagePermissions';
   can_edit: Scalars['Boolean'];
@@ -2881,6 +2898,19 @@ export type WagtailRichTextBlockStructure = WagtailBlockStructure & {
   label: Scalars['String'];
   group?: Maybe<Scalars['String']>;
   required: Scalars['Boolean'];
+};
+
+export type WagtailRootPagePermission = {
+  __typename?: 'WagtailRootPagePermission';
+  id: Scalars['ID'];
+  permission_type: Scalars['String'];
+};
+
+export type WagtailSpecificPagePermission = {
+  __typename?: 'WagtailSpecificPagePermission';
+  id: Scalars['ID'];
+  permission_type: Scalars['String'];
+  page: WagtailPage;
 };
 
 export type WagtailStaticBlockStructure = WagtailBlockStructure & {

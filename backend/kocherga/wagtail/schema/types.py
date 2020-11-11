@@ -4,12 +4,10 @@ logger = logging.getLogger(__name__)
 
 from typing import Optional
 
-from django.forms.utils import ErrorList
-
+import kocherga.wagtail.blocks
 import wagtail.core.blocks
 import wagtail.images.blocks
-import kocherga.wagtail.blocks
-
+from django.forms.utils import ErrorList
 from kocherga.graphql import g
 
 
@@ -75,7 +73,8 @@ def build_WagtailPageMeta():
                 ),
                 # 'live_revision_id': 'ID',  # can be null if page is not published yet
                 'revisions': g.Field(
-                    g.NNList(WagtailPageRevision), resolve=resolve_revisions,
+                    g.NNList(WagtailPageRevision),
+                    resolve=resolve_revisions,
                 ),
                 'revision': g.Field(
                     g.NN(WagtailPageRevision),
@@ -175,6 +174,17 @@ WagtailBlock = g.InterfaceType(
 # WagtailGeo
 WagtailGeo = g.ObjectType('WagtailGeo', g.fields({'lat': str, 'lng': str}))
 
+# used in audit methods for permissions listing
+WagtailCollection = g.ObjectType(
+    'WagtailCollection',
+    g.fields(
+        {
+            'id': 'ID!',
+            'name': str,
+        }
+    ),
+)
+
 
 # block validation errors
 
@@ -220,7 +230,8 @@ def build_ListBlockValidationError():
             {
                 'error_message': valdiation_error_message_field,
                 'errors': g.Field(
-                    g.NN(g.List(WagtailBlockValidationError)), resolve=resolve_errors,
+                    g.NN(g.List(WagtailBlockValidationError)),
+                    resolve=resolve_errors,
                 ),
             }
         ),

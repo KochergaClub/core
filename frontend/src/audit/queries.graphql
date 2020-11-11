@@ -19,6 +19,27 @@ fragment AuthGroup_ForCard on AuthGroup {
   permissions {
     ...AuthPermission
   }
+  wagtailPagePermissions {
+    ... on WagtailSpecificPagePermission {
+      permission_type
+      page {
+        id
+      }
+    }
+    ... on WagtailRootPagePermission {
+      permission_type
+    }
+  }
+  wagtailCollectionPermissions {
+    id
+    collection {
+      id
+      name
+    }
+    permission {
+      ...AuthPermission
+    }
+  }
   users {
     ...MaybeStaffUser
   }

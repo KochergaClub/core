@@ -1,13 +1,13 @@
-from typing import List, Dict, Union, Tuple, Any, Type, Callable
-import types
 import inspect
-
-import graphql
-from kocherga.graphql import g
-from kocherga.graphql.permissions import check_permissions
+import types
+from typing import Any, Callable, Dict, List, Tuple, Type, Union
 
 from django.db import models
 from django.db.models.fields.reverse_related import ForeignObjectRel
+from kocherga.graphql import g
+from kocherga.graphql.permissions import check_permissions
+
+import graphql
 
 
 def model_field(model: Type[models.Model], field_name: str):
@@ -73,6 +73,10 @@ def related_field(
 
     @check_permissions(permissions)
     def resolve(obj, info):
+        # FIXME - note that db_field.related_name can be different from field_name.
+        # E.g., if `related_name` is not set on `foo = ForeignKey(...)`, then the field_name should be `foo`,
+        # while db_field.related_name will be `foo_set`.
+        # (But I tried the naive solution here and it didn't work, so please investigate first before changing this code.)
         return list(getattr(obj, field_name).all())
 
     return g.Field(g.NNList(item_type), resolve=resolve)

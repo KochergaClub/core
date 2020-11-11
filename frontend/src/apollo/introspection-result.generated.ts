@@ -108,6 +108,10 @@
     "WagtailPageOrPrivateResult": [
       "WagtailPageContainer",
       "WagtailPagePrivate"
+    ],
+    "WagtailPagePermission": [
+      "WagtailRootPagePermission",
+      "WagtailSpecificPagePermission"
     ]
   }
 };

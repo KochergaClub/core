@@ -24,6 +24,8 @@ type AuthGroup {
   name: String!
   permissions: [AuthPermission!]!
   users: [AuthUser!]!
+  wagtailCollectionPermissions: [WagtailCollectionPermission!]!
+  wagtailPagePermissions: [WagtailPagePermission!]!
 }
 
 input AuthLoginCredentialsInput {
@@ -1739,6 +1741,17 @@ type WagtailCharBlockStructure implements WagtailBlockStructure {
   required: Boolean!
 }
 
+type WagtailCollection {
+  id: ID!
+  name: String!
+}
+
+type WagtailCollectionPermission {
+  id: ID!
+  permission: AuthPermission!
+  collection: WagtailCollection!
+}
+
 input WagtailEditPageBodyBlocksInput {
   page_id: ID!
   publish: Boolean!
@@ -1823,6 +1836,8 @@ type WagtailPageMeta {
 
 union WagtailPageOrPrivateResult = WagtailPageContainer | WagtailPagePrivate
 
+union WagtailPagePermission = WagtailRootPagePermission | WagtailSpecificPagePermission
+
 type WagtailPagePermissions {
   can_edit: Boolean!
 }
@@ -1851,6 +1866,17 @@ type WagtailRichTextBlockStructure implements WagtailBlockStructure {
   label: String!
   group: String
   required: Boolean!
+}
+
+type WagtailRootPagePermission {
+  id: ID!
+  permission_type: String!
+}
+
+type WagtailSpecificPagePermission {
+  id: ID!
+  permission_type: String!
+  page: WagtailPage!
 }
 
 type WagtailStaticBlockStructure implements WagtailBlockStructure {

@@ -8,8 +8,8 @@ import DropdownMenu, { LinkAction, ModalAction } from '~/components/DropdownMenu
 import { AsyncButton, Badge, Column, Row } from '~/frontkit';
 
 import {
-    AuthGroupsDocument, AuthGroupsQuery, AuthRemoveUserFromGroupDocument, DeleteAuthGroupDocument,
-    MaybeStaffUserFragment
+    AuthGroup_ForCardFragment, AuthGroupsDocument, AuthRemoveUserFromGroupDocument,
+    DeleteAuthGroupDocument, MaybeStaffUserFragment
 } from '../queries.generated';
 import AddMemberToGroupModal from './AddMemberToGroupModal';
 import { AddPermissionToGroupModal } from './AddPermissionToGroupModal';
@@ -17,8 +17,29 @@ import AddUserToGroupModal from './AddUserToGroupModal';
 import { RemovePermissionFromGroupModal } from './RemovePermissionFromGroupModal';
 import UserInfo from './UserInfo';
 
+interface PagePermissionBadgeProps {
+  permission: AuthGroup_ForCardFragment['wagtailPagePermissions'][0];
+}
+
+const PagePermissionBadge: React.FC<PagePermissionBadgeProps> = ({
+  permission,
+}) => {
+  switch (permission.__typename) {
+    case 'WagtailSpecificPagePermission':
+      return (
+        <Badge>
+          {permission.permission_type} for {permission.page.id}
+        </Badge>
+      );
+    case 'WagtailRootPagePermission':
+      return <Badge>{permission.permission_type}</Badge>;
+    default:
+      return <Badge type="accent">Неизвестный вид доступа</Badge>;
+  }
+};
+
 interface Props {
-  group: AuthGroupsQuery['groups'][0];
+  group: AuthGroup_ForCardFragment;
 }
 
 const GroupCard: React.FC<Props> = ({ group }) => {
@@ -83,21 +104,49 @@ const GroupCard: React.FC<Props> = ({ group }) => {
             Удалить
           </MutationButton>
         </Row>
-        <Row wrap={true}>
+        <small>Общие разрешения:</small>
+        <Row wrap>
           {group.permissions.map((permission) => (
             <Badge key={permission.id} hint={permission.perm}>
               {permission.name}
             </Badge>
           ))}
         </Row>
-        {group.users.map((user) => (
-          <Row key={user.id}>
-            <UserInfo user={user} />
-            <AsyncButton size="small" act={async () => removeUserCb(user)}>
-              удалить
-            </AsyncButton>
-          </Row>
-        ))}
+        {group.wagtailPagePermissions.length ? (
+          <>
+            <small>Разрешения для страниц:</small>
+            <Row wrap>
+              {group.wagtailPagePermissions.map((permission, i) => (
+                <PagePermissionBadge key={i} permission={permission} />
+              ))}
+            </Row>
+          </>
+        ) : null}
+        {group.wagtailPagePermissions.length ? (
+          <>
+            <small>Разрешения для коллекций:</small>
+            <Row wrap>
+              {group.wagtailCollectionPermissions.map((permission, i) => (
+                <Badge key={permission.id} hint={permission.permission.perm}>
+                  {permission.collection.name} / {permission.permission.name}
+                </Badge>
+              ))}
+            </Row>
+          </>
+        ) : null}
+        {group.users.length ? (
+          <>
+            <small>Пользователи:</small>
+            {group.users.map((user) => (
+              <Row key={user.id}>
+                <UserInfo user={user} />
+                <AsyncButton size="small" act={async () => removeUserCb(user)}>
+                  удалить
+                </AsyncButton>
+              </Row>
+            ))}
+          </>
+        ) : null}
       </Column>
     </Card>
   );
