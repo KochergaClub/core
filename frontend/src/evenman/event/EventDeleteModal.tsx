@@ -7,7 +7,7 @@ import { useMutation } from '@apollo/client';
 
 import { AsyncButton, Button, ControlsFooter, Modal } from '~/frontkit';
 
-import { rootRoute } from '../routes';
+import { evenmanRootRoute } from '../routes';
 import { EvenmanEvent_DetailsFragment, EvenmanEventDeleteDocument } from './queries.generated';
 
 interface Props {
@@ -37,7 +37,7 @@ const EventDeleteModal: React.FC<Props> = ({ event, close }) => {
   const act = useCallback(async () => {
     await deleteMutation();
     setDeleted(true);
-    Router.push(rootRoute());
+    Router.push(evenmanRootRoute());
   }, [deleteMutation]);
 
   if (deleted) {

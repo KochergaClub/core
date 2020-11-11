@@ -6,7 +6,7 @@ import { formatDate } from '~/common/utils';
 import { A } from '~/frontkit';
 
 import { MutedSpan } from '../../components/ui';
-import { eventRoute } from '../../routes';
+import { evenmanEventRoute } from '../../routes';
 import { EventsPrototypeFragment } from '../queries.generated';
 
 const EventsTable = styled.table`
@@ -53,7 +53,7 @@ const ExistingEvents: React.FC<Props> = ({ prototype }) => {
               >
                 <td>{formatDate(parseISO(e.start), 'd MMMM')} </td>
                 <td>
-                  <Link href={eventRoute(e.id)} passHref>
+                  <Link href={evenmanEventRoute(e.id)} passHref>
                     <A>{e.title}</A>
                   </Link>
                 </td>

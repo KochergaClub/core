@@ -1,10 +1,12 @@
 import { useQuery } from '@apollo/client';
-import { A, Column } from '~/frontkit';
 
 import { NextApolloPage, withApollo, withStaff } from '~/apollo';
 import { ApolloQueryResults, PaddedBlock, Page } from '~/components';
+import { evenmanEventRoute } from '~/evenman/routes';
 import EventInfo from '~/events/components/EventInfo';
 import { TeamEventDetailsDocument } from '~/events/queries.generated';
+import { publicEventRoute } from '~/events/routes';
+import { A, Column } from '~/frontkit';
 
 import FeedbackCollection from './FeedbackCollection';
 import TicketsCollection from './TicketsCollection';
@@ -39,11 +41,9 @@ const TeamEventPage: NextApolloPage<Props> = ({ event_id }) => {
                 <PaddedBlock width="max">
                   <EventInfo event={event} />
                   <Column>
-                    <A href={`/team/evenman/event/${event.id}`}>
-                      Открыть в evenman
-                    </A>
+                    <A href={evenmanEventRoute(event.id)}>Открыть в evenman</A>
                     {event.event_type === 'public' && (
-                      <A href={`/events/${event.id}`}>Открыть на сайте</A>
+                      <A href={publicEventRoute(event.id)}>Открыть на сайте</A>
                     )}
                   </Column>
                 </PaddedBlock>

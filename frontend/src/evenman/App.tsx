@@ -8,6 +8,7 @@ import { WithNavSidebar } from '~/frontkit';
 import EventPrototypeScreen from './event-prototype/EventPrototypeScreen';
 import EventScreen from './event/EventScreen';
 import GlobalStyle from './GlobalStyle';
+import { PREFIX } from './routes';
 import ScheduleScreen from './schedule/ScheduleScreen';
 
 const tabs = [
@@ -39,15 +40,15 @@ const App: NextApolloPage = () => {
 
   const detectTab = () => {
     const route = router.pathname;
-    if (route === '/team/evenman') {
+    if (route === PREFIX) {
       return 'Event';
-    } else if (route === '/team/evenman/schedule') {
+    } else if (route === `${PREFIX}/schedule`) {
       return 'Schedule';
-    } else if (route === '/team/evenman/event/[id]') {
+    } else if (route === `${PREFIX}/event/[id]`) {
       return 'Event';
-    } else if (route === '/team/evenman/event-prototypes') {
+    } else if (route === `${PREFIX}/event-prototypes`) {
       return 'EventPrototype';
-    } else if (route === '/team/evenman/event-prototypes/[id]') {
+    } else if (route === `${PREFIX}/event-prototypes/[id]`) {
       return 'EventPrototype';
     } else {
       return '';
@@ -57,9 +58,9 @@ const App: NextApolloPage = () => {
 
   const selectTab = (name: string) => {
     const name2path: Record<string, string> = {
-      Schedule: '/team/evenman/schedule',
-      Event: '/team/evenman',
-      EventPrototype: '/team/evenman/event-prototypes',
+      Schedule: `${PREFIX}/schedule`,
+      Event: PREFIX,
+      EventPrototype: `${PREFIX}/event-prototypes`,
     };
     const path = name2path[name];
     if (path) {
@@ -75,7 +76,7 @@ const App: NextApolloPage = () => {
         header={{
           title: 'Event Manager',
           tabName: 'Event',
-          href: '/team/evenman',
+          href: PREFIX,
         }}
         selected={selected}
         selectTab={selectTab}

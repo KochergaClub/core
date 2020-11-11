@@ -2,7 +2,7 @@ import Router from 'next/router';
 import { useCallback } from 'react';
 import styled from 'styled-components';
 
-import { eventRoute } from '../../routes';
+import { evenmanEventRoute } from '../../routes';
 import EventCalendarItem from '../EventCalendarItem';
 import { EventsEvent_SummaryFragment } from '../queries.generated';
 
@@ -18,7 +18,7 @@ interface Props {
 
 const CalendarCell: React.FC<Props> = ({ events, selected_id }) => {
   const selectCb = useCallback((id: string) => {
-    Router.push(eventRoute(id));
+    Router.push(evenmanEventRoute(id));
   }, []);
 
   return (

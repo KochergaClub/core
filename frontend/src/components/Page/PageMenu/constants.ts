@@ -38,6 +38,11 @@ const publicMenuItems: Item[] = [
       { link: '/events', title: 'Расписание мероприятий' },
       { link: '/projects', title: 'Проекты' },
       { link: '/community/chats', title: 'Чаты' },
+      {
+        link: '/events/manage',
+        title: 'Управление мероприятиями',
+        permissions: ['events.manage'],
+      },
     ],
   },
   {
@@ -103,7 +108,7 @@ const teamMenuItems: Item[] = [
       { link: '/team/events', title: 'Календарь' },
       { link: '/team/ratio', title: 'Тренинги' },
       { link: '/team/mastermind_dating', title: 'Мастермайнд' },
-      { link: '/team/evenman', title: 'Evenman' },
+      { link: '/events/manage', title: 'Evenman' },
     ],
   },
   {

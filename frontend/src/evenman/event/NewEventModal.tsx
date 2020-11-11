@@ -10,7 +10,7 @@ import { useMutation } from '@apollo/client';
 import { useCommonHotkeys, useFocusOnFirstModalRender } from '~/common/hooks';
 import { Button, Column, ControlsFooter, Input, Label, Modal, useNotification } from '~/frontkit';
 
-import { eventRoute } from '../routes';
+import { evenmanEventRoute } from '../routes';
 import { EvenmanEventCreateDocument } from './queries.generated';
 
 interface Props {
@@ -61,7 +61,7 @@ const NewEventModal: React.FC<Props> = (props) => {
     }
     props.close();
 
-    const route = eventRoute(result.data.result.event.id);
+    const route = evenmanEventRoute(result.data.result.event.id);
     Router.push(route);
   }, [notify, createMutation, title, props, isValid, time]);
 

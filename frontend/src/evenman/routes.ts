@@ -1,6 +1,8 @@
-export const rootRoute = () => '/team/evenman';
+export const PREFIX = '/events/manage';
 
-export const eventRoute = (id: string) => `/team/evenman/event/${id}`;
+export const evenmanRootRoute = () => PREFIX;
+
+export const evenmanEventRoute = (id: string) => `${PREFIX}/event/${id}`;
 
 export const prototypeRoute = (id: string) =>
-  `/team/evenman/event-prototypes/${id}`;
+  `${PREFIX}/event-prototypes/${id}`;
