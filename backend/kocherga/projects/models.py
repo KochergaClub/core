@@ -6,9 +6,7 @@ from datetime import datetime
 
 from django.db import models
 from kocherga.dateutils import TZ
-from kocherga.events.serializers import PublicEventSerializer
 from kocherga.wagtail.models import KochergaPage
-from rest_framework.serializers import Field
 from wagtail.admin.edit_handlers import FieldPanel
 from wagtail.core.fields import RichTextField
 from wagtail.images.edit_handlers import ImageChooserPanel

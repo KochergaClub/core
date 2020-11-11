@@ -39,7 +39,9 @@ class EventQuerySet(RelayQuerySetMixin, models.QuerySet):
     def without_deleted(self):
         return self.filter(deleted=False)
 
-    def filter_by_period(self, from_date: datetime.date, to_date: datetime.date):
+    def filter_by_period(
+        self, from_date: datetime.date = None, to_date: datetime.date = None
+    ):
         qs = self
         if from_date:
             qs = qs.filter(

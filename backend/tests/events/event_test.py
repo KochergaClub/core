@@ -28,13 +28,6 @@ def test_default_event_type():
     assert event.event_type == "unknown"
 
 
-def test_serialize(event):
-    data = serializers.EventSerializer(event).data
-    assert type(data['start']) == str
-    assert data['posted_vk'] == ''
-    assert data['tags'] == []
-
-
 class TestGetEvent:
     def test_get(self, db, event):
         e = Event.objects.get(pk=event.pk)

@@ -3,6 +3,7 @@ from rest_framework import serializers
 from .. import models
 
 
+# Used in shapes_generator for now, until we figure out how to build forms based on graphql mutations directly.
 class FeedbackSerializer(serializers.ModelSerializer):
     class Meta:
         model = models.Feedback

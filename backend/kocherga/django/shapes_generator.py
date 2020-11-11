@@ -1,13 +1,11 @@
 import json
 
-from django.db.models import fields
-from django.core.exceptions import FieldDoesNotExist
+import kocherga.events.serializers
 import rest_framework.serializers
-
 from kocherga.events.models.feedback import ScoreField
 
-import kocherga.events.serializers
-import kocherga.ratio.serializers
+from django.core.exceptions import FieldDoesNotExist
+from django.db.models import fields
 
 
 def convert_field(field):
@@ -141,7 +139,9 @@ def generate_shapes_to_fh(fh):
         shapes[app_label][model_name] = shape
 
     print(
-        json.dumps(shapes, indent=2, ensure_ascii=False), end='', file=fh,
+        json.dumps(shapes, indent=2, ensure_ascii=False),
+        end='',
+        file=fh,
     )
     print(';', file=fh)
     print('export default shapes;', file=fh)
