@@ -889,6 +889,8 @@ type Mutation {
   wagtailUploadImageFromUrl(input: WagtailUploadImageFromUrlInput!): WagtailUploadImageFromUrlResult!
   authAddUserToGroup(group_id: ID!, user_id: ID!): Boolean!
   authRemoveUserFromGroup(group_id: ID!, user_id: ID!): Boolean!
+  createAuthGroup(name: String!): AuthGroup!
+  deleteAuthGroup(id: ID!): BasicResult!
   authLogin(input: AuthLoginInput!): AuthLoginResult!
   authSetPassword(input: AuthSetPasswordInput!): AuthSetPasswordResult!
   authLogout: AuthLogoutResult!

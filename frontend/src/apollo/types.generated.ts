@@ -1060,6 +1060,8 @@ export type Mutation = {
   wagtailUploadImageFromUrl: WagtailUploadImageFromUrlResult;
   authAddUserToGroup: Scalars['Boolean'];
   authRemoveUserFromGroup: Scalars['Boolean'];
+  createAuthGroup: AuthGroup;
+  deleteAuthGroup: BasicResult;
   authLogin: AuthLoginResult;
   authSetPassword: AuthSetPasswordResult;
   authLogout: AuthLogoutResult;
@@ -1181,6 +1183,16 @@ export type MutationAuthAddUserToGroupArgs = {
 export type MutationAuthRemoveUserFromGroupArgs = {
   group_id: Scalars['ID'];
   user_id: Scalars['ID'];
+};
+
+
+export type MutationCreateAuthGroupArgs = {
+  name: Scalars['String'];
+};
+
+
+export type MutationDeleteAuthGroupArgs = {
+  id: Scalars['ID'];
 };
 
 

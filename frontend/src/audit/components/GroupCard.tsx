@@ -1,13 +1,15 @@
-import { useCallback } from 'react';
+import React, { useCallback } from 'react';
 
 import { useMutation } from '@apollo/client';
 
+import { MutationButton } from '~/components';
 import Card from '~/components/Card';
 import DropdownMenu, { LinkAction, ModalAction } from '~/components/DropdownMenu';
 import { AsyncButton, Badge, Column, Row } from '~/frontkit';
 
 import {
-    AuthGroupsDocument, AuthGroupsQuery, AuthRemoveUserFromGroupDocument, MaybeStaffUserFragment
+    AuthGroupsDocument, AuthGroupsQuery, AuthRemoveUserFromGroupDocument, DeleteAuthGroupDocument,
+    MaybeStaffUserFragment
 } from '../queries.generated';
 import AddMemberToGroupModal from './AddMemberToGroupModal';
 import AddUserToGroupModal from './AddUserToGroupModal';
@@ -58,6 +60,16 @@ const GroupCard: React.FC<Props> = ({ group }) => {
               )}
             </ModalAction>
           </DropdownMenu>
+          <MutationButton
+            mutation={DeleteAuthGroupDocument}
+            variables={{ id: group.id }}
+            kind="danger"
+            size="small"
+            refetchQueries={['AuthGroups']}
+            confirmText="Группа будет удалена, и все участники группы потеряют права доступа, привязанные к группе."
+          >
+            Удалить
+          </MutationButton>
         </Row>
         <Row wrap={true}>
           {group.permissions.map((permission) => (

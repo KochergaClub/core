@@ -4,7 +4,9 @@ import { Button, ControlsFooter, Modal } from '~/frontkit';
 
 interface Props {
   act: () => Promise<void>;
-  small?: boolean;
+  size?: Parameters<typeof Button>[0]['size'];
+  kind?: Parameters<typeof Button>[0]['kind'];
+  small?: boolean; // deprecated
   children?: React.ReactNode;
   confirmText: string;
   cancelText?: string;
@@ -15,6 +17,8 @@ const AsyncButtonWithConfirm = ({
   act,
   children,
   small,
+  size,
+  kind,
   confirmText,
   cancelText,
   headerText,
@@ -44,6 +48,8 @@ const AsyncButtonWithConfirm = ({
         disabled={confirming}
         onClick={askConfirm}
         small={small}
+        size={size}
+        kind={kind}
       >
         {children}
       </Button>

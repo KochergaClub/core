@@ -38,3 +38,15 @@ query AuthPermissions {
     }
   }
 }
+
+mutation CreateAuthGroup($name: String!) {
+  createAuthGroup(name: $name) {
+    id
+  }
+}
+
+mutation DeleteAuthGroup($id: ID!) {
+  deleteAuthGroup(id: $id) {
+    ok
+  }
+}

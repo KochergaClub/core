@@ -40,7 +40,8 @@ function MutationButton<V extends Record<string, unknown>>({
     return (
       <AsyncButtonWithConfirm
         act={act}
-        small={size === 'small'}
+        size={size}
+        kind={kind}
         confirmText={confirmText}
       >
         {children}

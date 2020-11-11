@@ -2,60 +2,23 @@ import logging
 
 logger = logging.getLogger(__name__)
 
+import urllib.parse
 from typing import Optional
 
-from kocherga.graphql import g, helpers
-from kocherga.graphql.permissions import user_perm, authenticated
-
-import urllib.parse
-
 import django.core.exceptions
-from django.core.validators import validate_email
-from django.contrib.auth import (
-    models as auth_models,
-    get_user_model,
-    login,
-    logout,
-    authenticate,
-)
+from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.password_validation import validate_password
 from django.core.mail import send_mail
+from django.core.validators import validate_email
 from django.template.loader import render_to_string
-
 from kocherga.email.tools import mjml2html
+from kocherga.graphql import g, helpers
+from kocherga.graphql.permissions import authenticated
 
-from ..view_utils import get_magic_token
-
-from . import types
-
+from ...view_utils import get_magic_token
+from .. import types
 
 c = helpers.Collection()
-
-
-@c.class_field
-class authAddUserToGroup(helpers.BaseField):
-    permissions = [user_perm('auth.audit')]
-    args = {'group_id': 'ID!', 'user_id': 'ID!'}
-    result = bool
-
-    def resolve(self, _, info, group_id, user_id):
-        group = auth_models.Group.objects.get(pk=group_id)
-        user = get_user_model().objects.get(pk=user_id)
-        group.user_set.add(user)
-        return True
-
-
-@c.class_field
-class authRemoveUserFromGroup(helpers.BaseField):
-    permissions = [user_perm('auth.audit')]
-    args = {'group_id': 'ID!', 'user_id': 'ID!'}
-    result = bool
-
-    def resolve(self, _, info, group_id, user_id):
-        group = auth_models.Group.objects.get(pk=group_id)
-        user = get_user_model().objects.get(pk=user_id)
-        group.user_set.remove(user)
-        return True
 
 
 @c.class_field
