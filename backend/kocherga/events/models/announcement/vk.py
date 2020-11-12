@@ -18,7 +18,6 @@ from django.utils import timezone
 from kocherga.dateutils import TZ
 from kocherga.error import PublicError
 from kocherga.vk.helpers import group2id, upload_wall_image
-from kocherga.wagtail.utils import create_image_from_fh
 
 from ..event import Event
 
@@ -235,14 +234,6 @@ class VkAnnouncement(models.Model):
     def post_id(self):
         match = re.match(r'.*_(\d+)', self.link)
         return match.group(1)
-
-    def add_image(self, fh):
-        self.image = create_image_from_fh(
-            fh,
-            title=f'{self.event.title} - VK',
-            basename=f'vk-announcement-image-{self.id}',
-        )
-        self.save()
 
     def announce(self):
         group_id = self.group_id()

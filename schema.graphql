@@ -1103,6 +1103,7 @@ type Query {
   wagtailBlockStructure(input: WagtailBlockStructureInput!): WagtailBlockStructure!
   wagtailRenderBlock(input: WagtailRenderBlockInput!): WagtailRenderBlockResult!
   search(input: SearchInput!): SearchResult!
+  wagtailCollectionsForImageUpload: [WagtailCollection!]!
   authGroupsAll: [AuthGroup!]!
   authPermissionsAll: [AuthPermission!]!
   searchUsers(input: SearchUsersInput!): SearchUsersResult!

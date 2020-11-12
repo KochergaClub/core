@@ -6,7 +6,7 @@ import { ModalAction } from '~/components/DropdownMenu';
 
 import { WagtailUploadImageFromUrlDocument } from './queries.generated';
 import { Defaults, SetImageIdProps } from './types';
-import UploadFromUrlModal from './UploadFromUrlModal';
+import { UploadFromUrlModal } from './UploadFromUrlModal';
 
 type Props = SetImageIdProps & {
   defaults: Defaults;

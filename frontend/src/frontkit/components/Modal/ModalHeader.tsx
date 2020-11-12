@@ -36,7 +36,7 @@ const ModalHeader = (props: Props) => {
     <ModalHeaderEl>
       {props.children}
       {props.close && (
-        <HeaderButton onClick={() => props.close()}>
+        <HeaderButton type="button" onClick={() => props.close()}>
           <MdClose />
         </HeaderButton>
       )}

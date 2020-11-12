@@ -24,7 +24,6 @@ from django.utils import timezone
 from kocherga.dateutils import TZ, inflected_month, inflected_weekday
 from kocherga.django.managers import RelayQuerySetMixin
 from kocherga.timepad.models import Event as TimepadEvent
-from kocherga.wagtail.utils import create_image_from_fh
 
 
 def parse_iso8601(s):
@@ -227,15 +226,6 @@ class Event(wagtail.search.index.Indexed, models.Model):
             return self.summary
         summary = self.description.split("\n\n")[0]
         return kocherga.events.markup.Markup(summary).as_plain()
-
-    # deprecated, upload and linking to wagtail image is handled by frontend
-    def add_image(self, fh):
-        self.image = create_image_from_fh(
-            fh,
-            title=self.title,
-            basename=f'event-image-{self.uuid}',
-        )
-        self.save()
 
     @property
     def timing_description(self):

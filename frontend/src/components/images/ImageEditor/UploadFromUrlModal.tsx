@@ -1,9 +1,14 @@
-import { useCallback, useState } from 'react';
-import styled from 'styled-components';
+import React, { useCallback, useState } from 'react';
+import { Controller, FieldError, useForm } from 'react-hook-form';
+import Select from 'react-select';
+
+import { useQuery } from '@apollo/client';
 
 import { useCommonHotkeys, useFocusOnFirstModalRender } from '~/common/hooks';
-import { Button, Column, ControlsFooter, Input, Label, Modal, useNotification } from '~/frontkit';
+import { BasicInputField, ErrorMessage, FieldContainer } from '~/components/forms2';
+import { Button, Column, ControlsFooter, Modal, Row } from '~/frontkit';
 
+import { WagtailCollectionsForImageUploadDocument } from './queries.generated';
 import { Defaults } from './types';
 
 interface Props {
@@ -16,84 +21,120 @@ interface Props {
   defaults: Defaults;
 }
 
-const WideInput = styled(Input)`
-  width: 100%;
-`;
+type FormData = {
+  title: string;
+  basename: string;
+  url: string;
+  collection_id: string;
+};
 
-// TODO - formik
-const UploadFromUrlModal: React.FC<Props> = ({ close, save, defaults }) => {
-  const [acting, setActing] = useState(false);
+export const UploadFromUrlModal: React.FC<Props> = ({
+  close,
+  save,
+  defaults,
+}) => {
+  const form = useForm<FormData>({
+    defaultValues: {
+      url: '',
+      title: defaults.title,
+      basename: defaults.basename,
+    },
+  });
 
-  const [url, setUrl] = useState('');
-  const [title, setTitle] = useState(defaults.title);
-  const [basename, setBasename] = useState(defaults.basename);
-  const updateUrl = (e: React.FormEvent<HTMLInputElement>) => {
-    setUrl(e.currentTarget.value);
-  };
-  const updateTitle = (e: React.FormEvent<HTMLInputElement>) => {
-    setTitle(e.currentTarget.value);
-  };
-  const updateBasename = (e: React.FormEvent<HTMLInputElement>) => {
-    setBasename(e.currentTarget.value);
-  };
+  const collectionsQueryResults = useQuery(
+    WagtailCollectionsForImageUploadDocument
+  );
 
-  const notify = useNotification();
+  const [submitError, setSubmitError] = useState('');
 
-  const submit = useCallback(async () => {
-    if (!url || !title || !basename) {
-      return;
-    }
-    setActing(true);
-    try {
-      await save({ url, title, basename });
-    } catch (e) {
-      notify({ text: String(e), type: 'Error' });
-    }
-    setActing(false);
-  }, [save, notify, url, title, basename]);
+  const submit = useCallback(
+    async ({ url, title, basename }: FormData) => {
+      try {
+        await save({ url, title, basename }); // TODO - pass collection_id
+        close();
+      } catch (e) {
+        setSubmitError(String(e));
+      }
+    },
+    [save, close]
+  );
 
   const focus = useFocusOnFirstModalRender();
-  const hotkeys = useCommonHotkeys({ onEnter: submit, onEscape: close });
+  const hotkeys = useCommonHotkeys({
+    onEnter: form.handleSubmit(submit),
+    onEscape: close,
+  });
 
   return (
     <Modal>
-      <Modal.Header close={close}>Ссылка на страницу</Modal.Header>
-      <Modal.Body {...hotkeys}>
-        <Column stretch>
-          <div>
-            <Label>Прямая ссылка на картинку:</Label>
-            <WideInput
-              type="text"
-              value={url}
-              onChange={updateUrl}
-              ref={focus}
-              scale="big"
+      <form onSubmit={form.handleSubmit(submit)}>
+        <Modal.Header close={close}>Ссылка на страницу</Modal.Header>
+        <Modal.Body {...hotkeys} ref={focus}>
+          <Column stretch gutter={16}>
+            <BasicInputField
+              title="Прямая ссылка на картинку"
+              name="url"
+              type="url"
+              required
+              form={form}
             />
-          </div>
-          <div>
-            <Label>Заголовок:</Label>
-            <WideInput type="text" value={title} onChange={updateTitle} />
-          </div>
-          <div>
-            <Label>Название файла:</Label>
-            <WideInput type="text" value={basename} onChange={updateBasename} />
-          </div>
-        </Column>
-      </Modal.Body>
-      <Modal.Footer>
-        <ControlsFooter>
-          <Button
-            disabled={acting || !url.startsWith('http')}
-            loading={acting}
-            onClick={submit}
-            kind="primary"
-          >
-            Сохранить
-          </Button>
-        </ControlsFooter>
-      </Modal.Footer>
+            <BasicInputField
+              title="Заголовок"
+              name="title"
+              required
+              form={form}
+            />
+            <BasicInputField
+              title="Название файла"
+              name="basename"
+              required
+              form={form}
+            />
+            <FieldContainer
+              title="Коллекция"
+              error={form.errors.collection_id as FieldError | undefined}
+            >
+              <Controller
+                name="collection_id"
+                as={Select}
+                placeholder="Выбрать..."
+                menuPortalTarget={document.body}
+                styles={{
+                  menuPortal: (base: any) => ({
+                    ...base,
+                    zIndex: 1500,
+                  }),
+                }}
+                options={
+                  collectionsQueryResults.data
+                    ? collectionsQueryResults.data.result.map((c) => ({
+                        label: c.name,
+                        value: c.id,
+                      }))
+                    : []
+                }
+                control={form.control}
+                rules={{ required: true }}
+              />
+            </FieldContainer>
+          </Column>
+        </Modal.Body>
+        <Modal.Footer>
+          <ControlsFooter>
+            <Row vCentered gutter={16}>
+              {submitError && <ErrorMessage>{submitError}</ErrorMessage>}
+              <Button
+                type="submit"
+                kind="primary"
+                loading={form.formState.isSubmitting}
+                disabled={form.formState.isSubmitting}
+              >
+                Сохранить
+              </Button>
+            </Row>
+          </ControlsFooter>
+        </Modal.Footer>
+      </form>
     </Modal>
   );
 };
-
-export default UploadFromUrlModal;

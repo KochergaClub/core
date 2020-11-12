@@ -1806,6 +1806,7 @@ export type Query = {
   wagtailBlockStructure: WagtailBlockStructure;
   wagtailRenderBlock: WagtailRenderBlockResult;
   search: SearchResult;
+  wagtailCollectionsForImageUpload: Array<WagtailCollection>;
   authGroupsAll: Array<AuthGroup>;
   authPermissionsAll: Array<AuthPermission>;
   searchUsers: SearchUsersResult;

@@ -1,9 +1,9 @@
-import requests
 from io import BytesIO
 
+import requests
 import wagtail.images.permissions
+from kocherga.graphql import g, helpers
 
-from kocherga.graphql import helpers, g
 from ..utils import create_image_from_fh
 from . import types
 
@@ -26,7 +26,9 @@ class wagtailUploadImageFromUrl(helpers.BaseFieldWithInput):
         fh = BytesIO(r.content)
 
         image = create_image_from_fh(
-            fh, title=input["title"], basename=input["basename"],
+            fh,
+            title=input["title"],
+            basename=input["basename"],
         )
         return {
             'image': image,

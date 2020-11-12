@@ -8,7 +8,6 @@ from typing import List
 import reversion
 from django.db import models
 from kocherga.dateutils import TZ
-from kocherga.wagtail.utils import create_image_from_fh
 
 from .announcement.timepad import timepad_category_by_code
 from .event import Event
@@ -178,14 +177,6 @@ class EventPrototype(models.Model):
 
     def cancel_date(self, d):
         self.set_canceled_dates(self.canceled_dates_list + [d])
-
-    def add_image(self, fh):
-        self.image = create_image_from_fh(
-            fh,
-            title=self.title,
-            basename=f'prototype-{self.pk}',
-        )
-        self.save()
 
     def tag_names(self):
         return [tag.name for tag in self.tags.all()]

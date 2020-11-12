@@ -1,9 +1,10 @@
 import imghdr
 
-from django.db.models import Q
 from django.core.files.images import ImageFile
+from django.db.models import Q
 
 from wagtail.core.models import PageViewRestriction, Site
+
 from .models import CustomImage, KochergaPage
 
 

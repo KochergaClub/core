@@ -5,3 +5,10 @@ mutation WagtailUploadImageFromUrl($input: WagtailUploadImageFromUrlInput!) {
     }
   }
 }
+
+query WagtailCollectionsForImageUpload {
+  result: wagtailCollectionsForImageUpload {
+    id
+    name
+  }
+}

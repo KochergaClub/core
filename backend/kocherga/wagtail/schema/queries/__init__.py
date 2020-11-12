@@ -1,6 +1,7 @@
 from kocherga.graphql.helpers import Collection
-from . import pages, images, blocks, search
+
+from . import blocks, collections, images, pages, search
 
 queries = Collection.merge(
-    pages.queries, images.queries, blocks.queries, search.queries
+    pages.queries, images.queries, blocks.queries, search.queries, collections.queries
 )
