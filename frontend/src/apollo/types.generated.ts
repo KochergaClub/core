@@ -29,6 +29,7 @@ export type AuthCurrentUser = {
   first_name?: Maybe<Scalars['String']>;
   last_name?: Maybe<Scalars['String']>;
   is_staff?: Maybe<Scalars['Boolean']>;
+  is_superuser: Scalars['Boolean'];
   permissions: Array<Scalars['String']>;
 };
 
@@ -1035,6 +1036,7 @@ export type MastermindDatingParticipantMutationResult = {
 
 export type Mutation = {
   __typename?: 'Mutation';
+  updateSettings: Settings;
   wagtailUploadImageFromUrl: WagtailUploadImageFromUrlResult;
   authAddUserToGroup: Scalars['Boolean'];
   authRemoveUserFromGroup: Scalars['Boolean'];
@@ -1141,6 +1143,11 @@ export type Mutation = {
   tildaImportAll?: Maybe<BasicResult>;
   tildaImport?: Maybe<BasicResult>;
   openviduGenerateRoomToken: OpenviduGenerateRoomTokenResult;
+};
+
+
+export type MutationUpdateSettingsArgs = {
+  input: UpdateSettingsInput;
 };
 
 
@@ -1797,6 +1804,7 @@ export type ProjectPageImageArgs = {
 
 export type Query = {
   __typename?: 'Query';
+  settings: Settings;
   /** @deprecated Use wagtailPageOrPrivate instead */
   wagtailPage?: Maybe<WagtailPage>;
   wagtailPageOrPrivate: WagtailPageOrPrivateResult;
@@ -2525,6 +2533,12 @@ export type SetRatioTicketNotionLinkInput = {
   notion_link: Scalars['String'];
 };
 
+export type Settings = {
+  __typename?: 'Settings';
+  default_events_images_collection?: Maybe<WagtailCollection>;
+  default_events_vk_images_collection?: Maybe<WagtailCollection>;
+};
+
 export type SlackAccount = ExternalServiceAccount & {
   __typename?: 'SlackAccount';
   service: SlackExternalService;
@@ -2685,6 +2699,11 @@ export type UpdateRatioTrainingInput = {
   promocode_email?: Maybe<Scalars['String']>;
   new_ticket_email?: Maybe<Scalars['String']>;
   notion_created_email?: Maybe<Scalars['String']>;
+};
+
+export type UpdateSettingsInput = {
+  default_events_images_collection_id?: Maybe<Scalars['ID']>;
+  default_events_vk_images_collection_id?: Maybe<Scalars['ID']>;
 };
 
 export type UpdateYandexKassaPaymentInput = {

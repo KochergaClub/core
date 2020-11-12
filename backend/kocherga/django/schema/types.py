@@ -1,4 +1,6 @@
 from kocherga.graphql import g
+from kocherga.graphql.helpers import field_with_permissions
+from kocherga.wagtail.schema import types as wagtail_types
 
 
 def build_ValidationError():
@@ -41,3 +43,22 @@ GenericError = g.ObjectType(
         }
     ),
 )
+
+
+def settings_fields():
+    # TODO - do we actually need such strict permissions? Maybe these settings should simply be public.
+    from kocherga.events.permissions import manage_events
+
+    return g.fields(
+        {
+            'default_events_images_collection': field_with_permissions(
+                wagtail_types.WagtailCollection, permissions=[manage_events]
+            ),
+            'default_events_vk_images_collection': field_with_permissions(
+                wagtail_types.WagtailCollection, permissions=[manage_events]
+            ),
+        }
+    )
+
+
+Settings = g.ObjectType('Settings', fields=settings_fields)

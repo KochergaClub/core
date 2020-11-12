@@ -1,0 +1,12 @@
+query GlobalSettings {
+  settings {
+    default_events_images_collection {
+      id
+      name
+    }
+    default_events_vk_images_collection {
+      id
+      name
+    }
+  }
+}

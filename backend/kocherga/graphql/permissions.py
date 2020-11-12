@@ -1,6 +1,15 @@
 from functools import wraps
 
 
+def superuseronly(obj, info):
+    """Checks that user is superuser."""
+
+    if not info.context.user.is_superuser:
+        raise Exception("Forbidden: need to be superuser")
+
+    return True
+
+
 def staffonly(obj, info):
     """Checks that user belongs to staff."""
 

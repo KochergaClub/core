@@ -7,6 +7,7 @@ import { CurrentUserDocument } from './queries.generated';
 interface Params {
   is_authenticated?: boolean;
   is_staff?: boolean;
+  is_superuser?: boolean;
   permissions?: string[];
 }
 
@@ -31,6 +32,10 @@ export const requireAuth = async (
 
   if (params.is_staff && !currentUser.is_staff) {
     throw new APIError('Need to be staff', 403);
+  }
+
+  if (params.is_superuser && !currentUser.is_superuser) {
+    throw new APIError('Need to be superuser', 403);
   }
 
   if (params.permissions) {

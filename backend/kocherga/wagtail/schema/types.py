@@ -174,7 +174,9 @@ WagtailBlock = g.InterfaceType(
 # WagtailGeo
 WagtailGeo = g.ObjectType('WagtailGeo', g.fields({'lat': str, 'lng': str}))
 
-# used in audit methods for permissions listing
+# Used in audit methods for permissions listing.
+# Alsow used for images uploading, so not very private.
+# Don't add `images` field or something without thinking through the consequences!
 WagtailCollection = g.ObjectType(
     'WagtailCollection',
     g.fields(

@@ -16,6 +16,7 @@ type AuthCurrentUser {
   first_name: String
   last_name: String
   is_staff: Boolean
+  is_superuser: Boolean!
   permissions: [String!]!
 }
 
@@ -864,6 +865,7 @@ type MastermindDatingParticipantMutationResult {
 }
 
 type Mutation {
+  updateSettings(input: UpdateSettingsInput!): Settings!
   wagtailUploadImageFromUrl(input: WagtailUploadImageFromUrlInput!): WagtailUploadImageFromUrlResult!
   authAddUserToGroup(group_id: ID!, user_id: ID!): Boolean!
   authRemoveUserFromGroup(group_id: ID!, user_id: ID!): Boolean!
@@ -1095,6 +1097,7 @@ type ProjectPage implements WagtailPage {
 }
 
 type Query {
+  settings: Settings!
   wagtailPage(page_id: ID, path: String, preview_token: String): WagtailPage @deprecated(reason: "Use wagtailPageOrPrivate instead")
   wagtailPageOrPrivate(page_id: ID, path: String, preview_token: String): WagtailPageOrPrivateResult!
   wagtailPages: [WagtailPage!]!
@@ -1553,6 +1556,11 @@ input SetRatioTicketNotionLinkInput {
   notion_link: String!
 }
 
+type Settings {
+  default_events_images_collection: WagtailCollection
+  default_events_vk_images_collection: WagtailCollection
+}
+
 type SlackAccount implements ExternalServiceAccount {
   service: SlackExternalService!
   email: String!
@@ -1687,6 +1695,11 @@ input UpdateRatioTrainingInput {
   promocode_email: String
   new_ticket_email: String
   notion_created_email: String
+}
+
+input UpdateSettingsInput {
+  default_events_images_collection_id: ID
+  default_events_vk_images_collection_id: ID
 }
 
 input UpdateYandexKassaPaymentInput {

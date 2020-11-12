@@ -2,14 +2,6 @@ from typing import Optional
 
 from kocherga.graphql import g
 
-# type AuthCurrentUser {
-#   email: String
-#   first_name: String
-#   last_name: String
-#   is_staff: Boolean
-#   permissions: [String!]!
-# }
-
 
 def resolve_permissions(obj, info):
     return info.context.user.get_all_permissions()
@@ -32,6 +24,7 @@ AuthCurrentUser = g.ObjectType(
             'first_name': Optional[str],
             'last_name': Optional[str],
             'is_staff': Optional[bool],
+            'is_superuser': bool,
             'permissions': g.Field(g.NNList(g.String), resolve=resolve_permissions),
         }
     ),
