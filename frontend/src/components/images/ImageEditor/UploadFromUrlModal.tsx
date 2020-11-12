@@ -4,14 +4,12 @@ import Select from 'react-select';
 
 import { useQuery } from '@apollo/client';
 
-import { useCommonHotkeys, useFocusOnFirstModalRender } from '~/common/hooks';
-import { ApolloQueryResults } from '~/components';
-import { BasicInputField, ErrorMessage, FieldContainer } from '~/components/forms2';
-import { Button, Column, ControlsFooter, Modal, Row } from '~/frontkit';
+import { ApolloQueryResults, CommonModal } from '~/components';
+import { BasicInputField, FieldContainer } from '~/components/forms2';
+import { Column } from '~/frontkit';
 
 import {
-    WagtailCollection_ForImageUploadFragment, WagtailCollectionsForImageUploadDocument,
-    WagtailUploadImageFromUrlMutationVariables
+    WagtailCollectionsForImageUploadDocument, WagtailUploadImageFromUrlMutationVariables
 } from './queries.generated';
 import { Defaults } from './types';
 
@@ -40,27 +38,20 @@ const collectionToSelectOption = (c: { id: string; name: string }) => ({
   label: c.name,
 });
 
-type InnerProps = Props & {
-  collections: WagtailCollection_ForImageUploadFragment[];
-};
-
-const UploadFromUrlModalInner: React.FC<InnerProps> = ({
+export const UploadFromUrlModal: React.FC<Props> = ({
   close,
   save,
   defaults,
-  collections,
 }) => {
-  const defaultCollection = defaults.collectionId
-    ? collections.find((c) => c.id === defaults.collectionId)
-    : undefined;
+  const collectionsQueryResults = useQuery(
+    WagtailCollectionsForImageUploadDocument
+  );
+
   const form = useForm<FormData>({
     defaultValues: {
       url: '',
       title: defaults.title,
       basename: defaults.basename,
-      collection: defaultCollection
-        ? collectionToSelectOption(defaultCollection)
-        : undefined,
     },
   });
 
@@ -78,16 +69,16 @@ const UploadFromUrlModalInner: React.FC<InnerProps> = ({
     [save, close]
   );
 
-  const focus = useFocusOnFirstModalRender();
-  const hotkeys = useCommonHotkeys({
-    onEnter: form.handleSubmit(submit),
-    onEscape: close,
-  });
-
   return (
-    <form onSubmit={form.handleSubmit(submit)}>
-      <Modal.Header close={close}>Загрузка картинки по ссылке</Modal.Header>
-      <Modal.Body {...hotkeys} ref={focus}>
+    <CommonModal
+      submit={form.handleSubmit(submit)}
+      title="Загрузка картинки по ссылке"
+      close={close}
+      buttonText="Сохранить"
+      submitError={submitError}
+      loading={form.formState.isSubmitting}
+    >
+      <form onSubmit={form.handleSubmit(submit)}>
         <Column stretch gutter={16}>
           <BasicInputField
             title="Прямая ссылка на картинку"
@@ -108,59 +99,41 @@ const UploadFromUrlModalInner: React.FC<InnerProps> = ({
             required
             form={form}
           />
-          <FieldContainer
-            title="Коллекция"
-            error={form.errors.collection as FieldError | undefined}
-          >
-            <Controller
-              name="collection"
-              as={Select}
-              placeholder="Выбрать..."
-              menuPortalTarget={document.body}
-              styles={{
-                menuPortal: (base: any) => ({
-                  ...base,
-                  zIndex: 1500,
-                }),
-              }}
-              options={collections.map(collectionToSelectOption)}
-              control={form.control}
-              rules={{ required: true }}
-            />
-          </FieldContainer>
+          <ApolloQueryResults {...collectionsQueryResults}>
+            {({ data: { result: collections } }) => {
+              const defaultCollection = defaults.collectionId
+                ? collections.find((c) => c.id === defaults.collectionId)
+                : undefined;
+              const defaultValue = defaultCollection
+                ? collectionToSelectOption(defaultCollection)
+                : undefined;
+              return (
+                <FieldContainer
+                  title="Коллекция"
+                  error={form.errors.collection as FieldError | undefined}
+                >
+                  <Controller
+                    name="collection"
+                    as={Select}
+                    placeholder="Выбрать..."
+                    menuPortalTarget={document.body}
+                    styles={{
+                      menuPortal: (base: any) => ({
+                        ...base,
+                        zIndex: 1500,
+                      }),
+                    }}
+                    options={collections.map(collectionToSelectOption)}
+                    defaultValue={defaultValue}
+                    control={form.control}
+                    rules={{ required: true }}
+                  />
+                </FieldContainer>
+              );
+            }}
+          </ApolloQueryResults>
         </Column>
-      </Modal.Body>
-      <Modal.Footer>
-        <ControlsFooter>
-          <Row vCentered gutter={16}>
-            {submitError && <ErrorMessage>{submitError}</ErrorMessage>}
-            <Button
-              type="submit"
-              kind="primary"
-              loading={form.formState.isSubmitting}
-              disabled={form.formState.isSubmitting}
-            >
-              Сохранить
-            </Button>
-          </Row>
-        </ControlsFooter>
-      </Modal.Footer>
-    </form>
-  );
-};
-
-export const UploadFromUrlModal: React.FC<Props> = (props) => {
-  const collectionsQueryResults = useQuery(
-    WagtailCollectionsForImageUploadDocument
-  );
-
-  return (
-    <Modal>
-      <ApolloQueryResults {...collectionsQueryResults}>
-        {({ data: { result } }) => (
-          <UploadFromUrlModalInner {...props} collections={result} />
-        )}
-      </ApolloQueryResults>
-    </Modal>
+      </form>
+    </CommonModal>
   );
 };
