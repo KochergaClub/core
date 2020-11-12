@@ -86,7 +86,7 @@ const UploadFromUrlModalInner: React.FC<InnerProps> = ({
 
   return (
     <form onSubmit={form.handleSubmit(submit)}>
-      <Modal.Header close={close}>Ссылка на страницу</Modal.Header>
+      <Modal.Header close={close}>Загрузка картинки по ссылке</Modal.Header>
       <Modal.Body {...hotkeys} ref={focus}>
         <Column stretch gutter={16}>
           <BasicInputField

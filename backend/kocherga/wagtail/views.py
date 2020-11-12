@@ -1,16 +1,20 @@
-from rest_framework.views import APIView
-from rest_framework.permissions import IsAdminUser
-from rest_framework.response import Response
+import logging
 
-from kocherga.wagtail.models import CustomImage
+logger = logging.getLogger(__name__)
 
 from kocherga.error import PublicError
+from kocherga.wagtail.models import CustomImage
+from rest_framework.permissions import IsAuthenticated
+from rest_framework.response import Response
+from rest_framework.views import APIView
+
+import wagtail.core.models
 
 from .utils import create_image_from_fh
 
 
 class ImageView(APIView):
-    permission_classes = (IsAdminUser,)
+    permission_classes = (IsAuthenticated,)
 
     def post(self, request):
         files = request.FILES
@@ -27,6 +31,19 @@ class ImageView(APIView):
         last_image = CustomImage.objects.last()
         basename = str(last_image.pk + 1 if last_image else 1)
 
-        image = create_image_from_fh(fh, title, basename)
+        if 'collection_id' not in request.data:
+            raise PublicError("collection_id required")
+        collection = wagtail.core.models.Collection.objects.get(
+            pk=request.data['collection_id']
+        )
+
+        logger.info("Creating image object from file")
+        image = create_image_from_fh(
+            fh,
+            title=title,
+            basename=basename,
+            user=request.user,
+            collection=collection,
+        )
 
         return Response({'ok': True, 'id': image.pk})

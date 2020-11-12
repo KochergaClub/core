@@ -2,11 +2,10 @@ import logging
 
 logger = logging.getLogger(__name__)
 
-from django.conf import settings
-import django.template.loader
-
 import re
 
+import django.template.loader
+from django.conf import settings
 from kocherga.chrome import get_browser
 
 from .config import name2schema
@@ -57,7 +56,7 @@ class Template:
 
         return self.template.render(props)
 
-    async def generate_png(self, props):
+    async def generate_png(self, props) -> bytes:
         html = self.generate_html(props)
 
         async with get_browser() as browser:

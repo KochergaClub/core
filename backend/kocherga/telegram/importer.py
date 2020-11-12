@@ -1,13 +1,14 @@
-from io import BytesIO
 import logging
+from io import BytesIO
 
 from kocherga.wagtail.utils import create_image_from_fh
 
 logger = logging.getLogger(__name__)
 
 import kocherga.importer.base
+from kocherga.django.models import Settings
 
-from . import models, api
+from . import api, models
 
 
 class Importer(kocherga.importer.base.FullImporter):
@@ -28,6 +29,8 @@ class Importer(kocherga.importer.base.FullImporter):
                         BytesIO(photo_bytes),
                         title=f'Telegram chat photo for {obj.username}',
                         basename=f'telegram-chat-photo-{photo_file_id}',
+                        user=None,
+                        collection=Settings.load().telegram_images_collection,
                     )
                 else:
                     logger.info(

@@ -1,11 +1,15 @@
 import imghdr
+from typing import Optional
 
+from django.contrib.auth import get_user_model
 from django.core.files.images import ImageFile
 from django.db.models import Q
 
-from wagtail.core.models import PageViewRestriction, Site
+from wagtail.core.models import Collection, PageViewRestriction, Site
 
 from .models import CustomImage, KochergaPage
+
+User = get_user_model()
 
 
 # Copy-pasted from old REST API
@@ -19,8 +23,36 @@ def filter_queryset_by_page_permissions(request, queryset):
     return queryset.filter(q)
 
 
-def create_image_from_fh(fh, title, basename) -> CustomImage:
-    image = CustomImage(title=title)
+def check_add_image_permissions_for_collection(
+    user: User,
+    collection: Collection,
+):
+    import wagtail.images.permissions
+
+    allowed_collections = wagtail.images.permissions.permission_policy.collections_user_has_permission_for(
+        user, 'add'
+    )
+    if collection.pk not in [c.pk for c in allowed_collections]:
+        raise Exception("Access denied")
+
+
+def create_image_from_fh(
+    fh,
+    title,
+    basename,
+    # user parameter is required and should be set explicitly to None if you don't need a permission check
+    user: Optional[User],
+    collection: Collection,
+    check_permission: bool = True,  # permission could be checked earlier, e.g. in wagtailUploadImageFromUrl mutation
+) -> CustomImage:
+    if user and check_permission:
+        check_add_image_permissions_for_collection(user, collection)
+
+    image = CustomImage(
+        title=title,
+        collection=collection,
+        uploaded_by_user=user,
+    )
     image_type = imghdr.what(fh)
     if image_type == 'png':
         ext = 'png'
@@ -32,6 +64,7 @@ def create_image_from_fh(fh, title, basename) -> CustomImage:
         raise Exception(f"Unknown image type {image_type}")
 
     image.file.save(basename + '.' + ext, ImageFile(fh))
+    image.full_clean()
     image.save()
     return image
 

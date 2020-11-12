@@ -7,23 +7,27 @@ from . import types
 
 c = helpers.Collection()
 
+# TODO - derive from models.Settings?
+COLLECTION_FIELDS = [
+    'default_events_images_collection',
+    'default_events_vk_images_collection',
+    'weekly_digest_images_collection',
+    'telegram_images_collection',
+]
+
 
 @c.class_field
 class updateSettings(helpers.BaseFieldWithInput):
     def resolve(self, _, info, input):
         settings = models.Settings.load()
-        images_collection_id = input.get('default_events_images_collection_id')
-        if images_collection_id:
-            # note that we're in superuser-only field, so we don't need to check collection permissions
-            collection = wagtail_models.Collection.objects.get(pk=images_collection_id)
-            settings.default_events_images_collection = collection
 
-        vk_images_collection_id = input.get('default_events_images_vk_collection_id')
-        if vk_images_collection_id:
-            collection = wagtail_models.Collection.objects.get(
-                pk=vk_images_collection_id
-            )
-            settings.default_events_vk_images_collection = collection
+        for field in COLLECTION_FIELDS:
+            collection_id = input.get(field)
+            assert models.Settings._meta.get_field(field)
+            if collection_id:
+                # note that we're in superuser-only field, so we don't need to check collection permissions
+                collection = wagtail_models.Collection.objects.get(pk=collection_id)
+                setattr(settings, field, collection)
 
         settings.full_clean()
         settings.save()
@@ -33,8 +37,13 @@ class updateSettings(helpers.BaseFieldWithInput):
     permissions = [superuseronly]
 
     input = {
-        'default_events_images_collection_id': 'ID',
-        'default_events_vk_images_collection_id': 'ID',
+        f: 'ID'
+        for f in [
+            'default_events_images_collection',
+            'default_events_vk_images_collection',
+            'weekly_digest_images_collection',
+            'telegram_images_collection',
+        ]
     }
     result = g.NN(types.Settings)
 

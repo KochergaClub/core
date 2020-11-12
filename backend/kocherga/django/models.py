@@ -1,4 +1,4 @@
-from wagtail.core.models import Collection
+from wagtail.core.models import Collection, get_root_collection_id
 
 from django.db import models
 
@@ -27,15 +27,26 @@ class Settings(SingletonModel):
 
     default_events_images_collection = models.ForeignKey(
         Collection,
-        blank=True,
-        null=True,
+        default=get_root_collection_id,
         on_delete=models.PROTECT,
         related_name='+',
     )
     default_events_vk_images_collection = models.ForeignKey(
         Collection,
-        blank=True,
-        null=True,
+        default=get_root_collection_id,
+        on_delete=models.PROTECT,
+        related_name='+',
+    )
+
+    weekly_digest_images_collection = models.ForeignKey(
+        Collection,
+        default=get_root_collection_id,
+        on_delete=models.PROTECT,
+        related_name='+',
+    )
+    telegram_images_collection = models.ForeignKey(
+        Collection,
+        default=get_root_collection_id,
         on_delete=models.PROTECT,
         related_name='+',
     )

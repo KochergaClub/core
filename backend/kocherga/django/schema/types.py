@@ -47,16 +47,20 @@ GenericError = g.ObjectType(
 
 def settings_fields():
     # TODO - do we actually need such strict permissions? Maybe these settings should simply be public.
+    # TODO - manage_events permission for telegram_images & other fields seems wrong and arbitrary.
     from kocherga.events.permissions import manage_events
 
     return g.fields(
         {
-            'default_events_images_collection': field_with_permissions(
-                wagtail_types.WagtailCollection, permissions=[manage_events]
-            ),
-            'default_events_vk_images_collection': field_with_permissions(
-                wagtail_types.WagtailCollection, permissions=[manage_events]
-            ),
+            f: field_with_permissions(
+                g.NN(wagtail_types.WagtailCollection), permissions=[manage_events]
+            )
+            for f in [
+                'default_events_images_collection',
+                'default_events_vk_images_collection',
+                'weekly_digest_images_collection',
+                'telegram_images_collection',
+            ]
         }
     )
 

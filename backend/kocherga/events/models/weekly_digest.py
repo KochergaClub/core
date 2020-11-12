@@ -9,6 +9,7 @@ from io import BytesIO
 from typing import Optional
 
 import kocherga.dateutils
+import kocherga.django.models
 import kocherga.mailchimp
 import kocherga.telegram.utils
 import kocherga.templater.models
@@ -148,6 +149,8 @@ class WeeklyDigest(models.Model):
             BytesIO(image_bytes),
             title=f'WeeklyDigest cover - {start_date:%Y-%m-%d}',
             basename=f'weekly-digest-{start_date:%Y-%m-%d}.png',
+            user=None,
+            collection=kocherga.django.models.Settings.load().weekly_digest_images_collection,
         )
         self.save()
 

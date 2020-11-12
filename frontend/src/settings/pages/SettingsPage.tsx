@@ -7,13 +7,9 @@ import { requireAuth } from '~/auth/utils';
 import { ApolloQueryResults, PaddedBlock, Page } from '~/components';
 import { A, Column } from '~/frontkit';
 
-import { GlobalSettingsDocument } from '../queries.generated';
-
-// TODO: fragment
-type CollectionFragment = {
-  id: string;
-  name: string;
-};
+import {
+    GlobalSettingsDocument, WagtailCollection_ForSettingsFragment as CollectionFragment
+} from '../queries.generated';
 
 const CollectionLink: React.FC<{ collection: CollectionFragment }> = ({
   collection,
@@ -42,7 +38,7 @@ const SettingsPage: NextApolloPage = () => {
   const queryResults = useQuery(GlobalSettingsDocument);
 
   return (
-    <Page title="Глобальные настройки">
+    <Page title="Глобальные настройки" menu="team">
       <Page.Title>Глобальные настройки</Page.Title>
       <Page.Main>
         <PaddedBlock>
@@ -66,6 +62,21 @@ const SettingsPage: NextApolloPage = () => {
                   </h2>
                   <MaybeCollectionLink
                     collection={settings.default_events_vk_images_collection}
+                  />
+                </section>
+                <section>
+                  <h2>
+                    Коллекция для сгенерированных картинок еженедельных
+                    дайджестов событий
+                  </h2>
+                  <MaybeCollectionLink
+                    collection={settings.weekly_digest_images_collection}
+                  />
+                </section>
+                <section>
+                  <h2>Коллекция для скачанных картинок Телеграм-чатов</h2>
+                  <MaybeCollectionLink
+                    collection={settings.telegram_images_collection}
                   />
                 </section>
               </Column>

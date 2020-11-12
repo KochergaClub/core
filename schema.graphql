@@ -1557,8 +1557,10 @@ input SetRatioTicketNotionLinkInput {
 }
 
 type Settings {
-  default_events_images_collection: WagtailCollection
-  default_events_vk_images_collection: WagtailCollection
+  default_events_images_collection: WagtailCollection!
+  default_events_vk_images_collection: WagtailCollection!
+  weekly_digest_images_collection: WagtailCollection!
+  telegram_images_collection: WagtailCollection!
 }
 
 type SlackAccount implements ExternalServiceAccount {
@@ -1698,8 +1700,10 @@ input UpdateRatioTrainingInput {
 }
 
 input UpdateSettingsInput {
-  default_events_images_collection_id: ID
-  default_events_vk_images_collection_id: ID
+  default_events_images_collection: ID
+  default_events_vk_images_collection: ID
+  weekly_digest_images_collection: ID
+  telegram_images_collection: ID
 }
 
 input UpdateYandexKassaPaymentInput {

@@ -1,12 +1,21 @@
+fragment WagtailCollection_ForSettings on WagtailCollection {
+  id
+  name
+}
+
 query GlobalSettings {
   settings {
     default_events_images_collection {
-      id
-      name
+      ...WagtailCollection_ForSettings
     }
     default_events_vk_images_collection {
-      id
-      name
+      ...WagtailCollection_ForSettings
+    }
+    weekly_digest_images_collection {
+      ...WagtailCollection_ForSettings
+    }
+    telegram_images_collection {
+      ...WagtailCollection_ForSettings
     }
   }
 }

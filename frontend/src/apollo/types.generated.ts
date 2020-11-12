@@ -2535,8 +2535,10 @@ export type SetRatioTicketNotionLinkInput = {
 
 export type Settings = {
   __typename?: 'Settings';
-  default_events_images_collection?: Maybe<WagtailCollection>;
-  default_events_vk_images_collection?: Maybe<WagtailCollection>;
+  default_events_images_collection: WagtailCollection;
+  default_events_vk_images_collection: WagtailCollection;
+  weekly_digest_images_collection: WagtailCollection;
+  telegram_images_collection: WagtailCollection;
 };
 
 export type SlackAccount = ExternalServiceAccount & {
@@ -2702,8 +2704,10 @@ export type UpdateRatioTrainingInput = {
 };
 
 export type UpdateSettingsInput = {
-  default_events_images_collection_id?: Maybe<Scalars['ID']>;
-  default_events_vk_images_collection_id?: Maybe<Scalars['ID']>;
+  default_events_images_collection?: Maybe<Scalars['ID']>;
+  default_events_vk_images_collection?: Maybe<Scalars['ID']>;
+  weekly_digest_images_collection?: Maybe<Scalars['ID']>;
+  telegram_images_collection?: Maybe<Scalars['ID']>;
 };
 
 export type UpdateYandexKassaPaymentInput = {

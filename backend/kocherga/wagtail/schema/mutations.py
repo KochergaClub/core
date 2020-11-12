@@ -1,10 +1,11 @@
 from io import BytesIO
 
 import requests
+import wagtail.core.models
 import wagtail.images.permissions
 from kocherga.graphql import g, helpers
 
-from ..utils import create_image_from_fh
+from ..utils import check_add_image_permissions_for_collection, create_image_from_fh
 from . import types
 
 c = helpers.Collection()
@@ -13,11 +14,10 @@ c = helpers.Collection()
 @c.class_field
 class wagtailUploadImageFromUrl(helpers.BaseFieldWithInput):
     def resolve(self, _, info, input):
-        # TODO - move to permissions
-        if not wagtail.images.permissions.permission_policy.user_has_permission(
-            info.context.user, 'add'
-        ):
-            raise Exception("Permission denied")
+        collection = wagtail.core.models.Collection.objects.get(
+            pk=input['collection_id']
+        )
+        check_add_image_permissions_for_collection(info.context.user, collection)
 
         url = input["url"]
         r = requests.get(url)
@@ -29,6 +29,9 @@ class wagtailUploadImageFromUrl(helpers.BaseFieldWithInput):
             fh,
             title=input["title"],
             basename=input["basename"],
+            user=info.context.user,
+            collection=collection,
+            check_permission=False,
         )
         return {
             'image': image,
@@ -40,7 +43,7 @@ class wagtailUploadImageFromUrl(helpers.BaseFieldWithInput):
         'title': str,
         'basename': str,
         'collection_id': str,
-        # TODO - collection, tags
+        # TODO - tags
     }
     result = {
         'image': g.NN(types.WagtailImage),

@@ -326,13 +326,13 @@ export type EvenmanGlobalSettingsQuery = (
   { __typename: 'Query' }
   & { settings: (
     { __typename: 'Settings' }
-    & { default_events_images_collection?: Types.Maybe<(
+    & { default_events_images_collection: (
       { __typename: 'WagtailCollection' }
       & Pick<Types.WagtailCollection, 'id'>
-    )>, default_events_vk_images_collection?: Types.Maybe<(
+    ), default_events_vk_images_collection: (
       { __typename: 'WagtailCollection' }
       & Pick<Types.WagtailCollection, 'id'>
-    )> }
+    ) }
   ) }
 );
 

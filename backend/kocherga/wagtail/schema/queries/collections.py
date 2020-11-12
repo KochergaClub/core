@@ -10,9 +10,9 @@ c = helpers.Collection()
 @c.class_field
 class wagtailCollectionsForImageUpload(helpers.BaseField):
     def resolve(self, _, info, filter=None):
-        return CollectionPermissionPolicy(
-            Image
-        ).collections_user_has_any_permission_for(info.context.user, ['add'])
+        return CollectionPermissionPolicy(Image).collections_user_has_permission_for(
+            info.context.user, 'add'
+        )
 
     permissions = []
 
