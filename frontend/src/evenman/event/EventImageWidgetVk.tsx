@@ -1,10 +1,12 @@
-import { useCallback, useState } from 'react';
+import React, { useCallback, useState } from 'react';
 
 import { useMutation } from '@apollo/client';
+
+import { ApolloQueryResults } from '~/components';
+import ImageEditor from '~/components/images/ImageEditor';
 import { Button, Column, Row } from '~/frontkit';
 
-import ImageEditor from '~/components/images/ImageEditor';
-
+import { useEvenmanSettingsQuery } from './hooks';
 import {
     EvenmanEvent_DetailsFragment, EvenmanVkAnnouncementSetImageDocument
 } from './queries.generated';
@@ -15,6 +17,7 @@ interface Props {
 }
 
 const EventImageWidgetVk: React.FC<Props> = ({ event }) => {
+  const settingsQueryResults = useEvenmanSettingsQuery();
   const [modalIsOpen, setModalIsOpen] = useState(false);
 
   const toggleModal = useCallback(() => {
@@ -48,14 +51,19 @@ const EventImageWidgetVk: React.FC<Props> = ({ event }) => {
       {modalIsOpen && (
         <VkImageModal event={event} close={toggleModal} onSave={onSave} />
       )}
-      <ImageEditor
-        onChange={onSave}
-        image={event.announcements.vk.image?.original_image || undefined}
-        defaults={{
-          title: `[VK] ${event.title}`,
-          basename: `event-vk-image-${event.id}`,
-        }}
-      />
+      <ApolloQueryResults {...settingsQueryResults}>
+        {({ data: { settings } }) => (
+          <ImageEditor
+            onChange={onSave}
+            image={event.announcements.vk.image?.original_image || undefined}
+            defaults={{
+              title: `[VK] ${event.title}`,
+              basename: `event-vk-image-${event.id}`,
+              collectionId: settings.default_events_vk_images_collection?.id,
+            }}
+          />
+        )}
+      </ApolloQueryResults>
     </Column>
   );
 };

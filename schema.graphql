@@ -1941,6 +1941,7 @@ input WagtailUploadImageFromUrlInput {
   url: String!
   title: String!
   basename: String!
+  collection_id: String!
 }
 
 type WagtailUploadImageFromUrlResult {

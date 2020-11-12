@@ -1,8 +1,9 @@
+import React from 'react';
+
 import { Column } from '~/frontkit';
 
-import ImageEditor from '~/components/images/ImageEditor';
-
 import { useUpdateMutation } from './hooks';
+import { ImageEditorWithCollectionFromSettings } from './ImageEditorWithCollectionFromSettings';
 import { EvenmanEvent_DetailsFragment } from './queries.generated';
 
 interface Props {
@@ -15,10 +16,16 @@ const EventImageWidgetDefault: React.FC<Props> = ({ event }) => {
   return (
     <Column centered gutter={0}>
       <header>Основная картинка:</header>
-      <ImageEditor
+      <ImageEditorWithCollectionFromSettings
         onChange={(image_id) => update({ image_id })}
         image={event.image?.original_image || undefined}
-        defaults={{ title: event.title, basename: `event-image-${event.id}` }}
+        defaults={{
+          title: event.title,
+          basename: `event-image-${event.id}`,
+        }}
+        settingsToCollectionId={(settings) =>
+          settings.default_events_images_collection?.id
+        }
       />
     </Column>
   );

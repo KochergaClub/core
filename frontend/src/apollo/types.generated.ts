@@ -2989,6 +2989,7 @@ export type WagtailUploadImageFromUrlInput = {
   url: Scalars['String'];
   title: Scalars['String'];
   basename: Scalars['String'];
+  collection_id: Scalars['String'];
 };
 
 export type WagtailUploadImageFromUrlResult = {

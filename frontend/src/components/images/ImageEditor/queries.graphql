@@ -6,9 +6,13 @@ mutation WagtailUploadImageFromUrl($input: WagtailUploadImageFromUrlInput!) {
   }
 }
 
+fragment WagtailCollection_ForImageUpload on WagtailCollection {
+  id
+  name
+}
+
 query WagtailCollectionsForImageUpload {
   result: wagtailCollectionsForImageUpload {
-    id
-    name
+    ...WagtailCollection_ForImageUpload
   }
 }

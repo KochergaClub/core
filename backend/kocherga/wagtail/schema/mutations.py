@@ -39,6 +39,7 @@ class wagtailUploadImageFromUrl(helpers.BaseFieldWithInput):
         'url': str,
         'title': str,
         'basename': str,
+        'collection_id': str,
         # TODO - collection, tags
     }
     result = {

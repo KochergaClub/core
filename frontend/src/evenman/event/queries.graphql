@@ -235,3 +235,14 @@ query EvenmanPrototypesForPicker {
     title
   }
 }
+
+query EvenmanGlobalSettings {
+  settings {
+    default_events_images_collection {
+      id
+    }
+    default_events_vk_images_collection {
+      id
+    }
+  }
+}

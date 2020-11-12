@@ -4,7 +4,9 @@ import { useMutation } from '@apollo/client';
 
 import { ModalAction } from '~/components/DropdownMenu';
 
-import { WagtailUploadImageFromUrlDocument } from './queries.generated';
+import {
+    WagtailUploadImageFromUrlDocument, WagtailUploadImageFromUrlMutationVariables
+} from './queries.generated';
 import { Defaults, SetImageIdProps } from './types';
 import { UploadFromUrlModal } from './UploadFromUrlModal';
 
@@ -16,10 +18,10 @@ const UploadFromUrlAction: React.FC<Props> = ({ setImageId, defaults }) => {
   const [uploadMutation] = useMutation(WagtailUploadImageFromUrlDocument);
 
   const submit = useCallback(
-    async (params: { url: string; title: string; basename: string }) => {
+    async (input: WagtailUploadImageFromUrlMutationVariables['input']) => {
       const result = await uploadMutation({
         variables: {
-          input: params,
+          input,
         },
       });
       if (!result.data) {

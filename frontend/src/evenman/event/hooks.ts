@@ -1,9 +1,9 @@
-import { useMutation } from '@apollo/client';
+import { useMutation, useQuery } from '@apollo/client';
 
 import { EventUpdateInput } from '~/apollo/types.generated';
 import { useNotification } from '~/frontkit';
 
-import { EvenmanUpdateDocument } from './queries.generated';
+import { EvenmanGlobalSettingsDocument, EvenmanUpdateDocument } from './queries.generated';
 
 interface UpdateParams {
   refetchQueries?: string[];
@@ -43,3 +43,8 @@ export const useUpdateMutation = (
     return result;
   };
 };
+
+export const useEvenmanSettingsQuery = () =>
+  useQuery(EvenmanGlobalSettingsDocument, {
+    fetchPolicy: 'cache-first',
+  });

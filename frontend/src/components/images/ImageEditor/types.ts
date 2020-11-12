@@ -1,6 +1,7 @@
 export interface Defaults {
   title?: string;
   basename?: string;
+  collectionId?: string;
 }
 
 // common type for Control actions

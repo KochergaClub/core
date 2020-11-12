@@ -81,7 +81,7 @@ const useHover = (): [(node: HTMLDivElement) => void, boolean] => {
   return [callbackRef, value];
 };
 
-interface Props {
+export type Props = {
   image?: ImageFragment;
   defaults?: Defaults; // some contexts might provide default title and basename (e.g. event images)
   onChange: (id: string) => Promise<unknown>;
