@@ -6,6 +6,7 @@ import { useAPI, useCommonHotkeys, useFocusOnFirstModalRender } from '~/common/h
 import { Button, Column, ControlsFooter, Input, Label, Modal } from '~/frontkit';
 import { state2link } from '~/image-templater/utils';
 
+import { useEvenmanSettingsQuery } from './hooks';
 import { EvenmanEvent_DetailsFragment } from './queries.generated';
 
 const WideInput = styled(Input)`
@@ -18,10 +19,10 @@ interface Props {
   onSave: (image_id: string) => Promise<unknown>;
 }
 
-//test
 const VkImageModal: React.FC<Props> = ({ event, close, onSave }) => {
   const api = useAPI();
 
+  const settingsQueryResults = useEvenmanSettingsQuery();
   const [saving, setSaving] = useState(false);
 
   const [title, setTitle] = useState(event.title);
@@ -57,6 +58,10 @@ const VkImageModal: React.FC<Props> = ({ event, close, onSave }) => {
     if (!response.ok) {
       throw new Error("can't fetch image");
     }
+    if (!settingsQueryResults.data) {
+      throw new Error("failed to load settings, can't detect collection");
+    }
+
     const blob = await response.blob();
 
     const imageTitle = `[VK] ${config.date} ${event.title}`;
@@ -64,6 +69,11 @@ const VkImageModal: React.FC<Props> = ({ event, close, onSave }) => {
     const formData = new FormData();
     formData.append('file', blob);
     formData.append('title', imageTitle);
+    formData.append('basename', `vk-image-${event.id}`);
+    formData.append(
+      'collection_id',
+      settingsQueryResults.data.settings.default_events_vk_images_collection.id
+    );
 
     const result = await api.call('wagtail/upload_image', 'POST', formData, {
       stringifyPayload: false,
@@ -72,7 +82,16 @@ const VkImageModal: React.FC<Props> = ({ event, close, onSave }) => {
     await onSave(image_id);
 
     close();
-  }, [api, buildLink, onSave, close, event.title, config.date]);
+  }, [
+    api,
+    buildLink,
+    onSave,
+    close,
+    event.title,
+    event.id,
+    config.date,
+    settingsQueryResults.data,
+  ]);
 
   const updateTitle = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
     setTitle(e.currentTarget.value);
@@ -127,7 +146,7 @@ const VkImageModal: React.FC<Props> = ({ event, close, onSave }) => {
             onClick={save}
             kind="primary"
             loading={saving}
-            disabled={saving}
+            disabled={saving || !settingsQueryResults.data}
           >
             Сохранить
           </Button>

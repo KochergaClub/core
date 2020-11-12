@@ -26,10 +26,7 @@ class ImageView(APIView):
             raise PublicError("No filename")
 
         title = request.data['title']
-
-        # TODO - take basename from request
-        last_image = CustomImage.objects.last()
-        basename = str(last_image.pk + 1 if last_image else 1)
+        basename = request.data['basename']
 
         if 'collection_id' not in request.data:
             raise PublicError("collection_id required")

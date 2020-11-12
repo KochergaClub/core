@@ -1,14 +1,13 @@
-import { useCallback, useRef, useState } from 'react';
+import React, { useCallback, useRef, useState } from 'react';
 import { useDropzone } from 'react-dropzone';
 import styled from 'styled-components';
-
-import { useAPI } from '~/common/hooks';
 
 import ImageBox from '../helpers/ImageBox';
 import ViewOverlay from '../helpers/ViewOverlay';
 import Controls from './Controls';
 import { WagtailImage_ForEditorFragment as ImageFragment } from './fragments.generated';
 import { Defaults } from './types';
+import { UploadFromFileModal } from './UploadFromFileModal';
 
 const Placeholder = styled.div`
   display: flex;
@@ -85,22 +84,17 @@ export type Props = {
   image?: ImageFragment;
   defaults?: Defaults; // some contexts might provide default title and basename (e.g. event images)
   onChange: (id: string) => Promise<unknown>;
-}
+};
 
-const ImageEditor: React.FC<Props> = ({ image, onChange, defaults }) => {
-  const api = useAPI();
+const ImageEditor: React.FC<Props> = ({ image, onChange, defaults = {} }) => {
+  const [dropFile, setDropFile] = useState<File | undefined>(undefined);
+
+  const closeDropModal = () => {
+    setDropFile(undefined);
+  };
 
   const onDrop = async (acceptedFiles: File[]) => {
-    const formData = new FormData();
-    formData.append('file', acceptedFiles[0]);
-    formData.append('title', defaults?.title || 'UNTITLED'); // TODO - ask for title
-    // TODO - pass basename
-
-    const result = await api.call('wagtail/upload_image', 'POST', formData, {
-      stringifyPayload: false,
-    });
-    const image_id = result.id;
-    return onChange(image_id);
+    setDropFile(acceptedFiles[0]);
   };
 
   const { getRootProps, getInputProps, isDragActive, open } = useDropzone({
@@ -127,11 +121,19 @@ const ImageEditor: React.FC<Props> = ({ image, onChange, defaults }) => {
           <Controls
             openFilePicker={open}
             setImageId={onChange}
-            defaults={defaults || {}}
+            defaults={defaults}
             onExpandChange={setControlsExpanded}
           />
         </ControlsContainer>
       </ImageBox>
+      {dropFile && (
+        <UploadFromFileModal
+          file={dropFile}
+          close={closeDropModal}
+          onChange={onChange}
+          defaults={defaults}
+        />
+      )}
     </Container>
   );
 };

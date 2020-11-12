@@ -42,6 +42,7 @@ export const CommonModal: React.FC<Props> = ({
               kind="primary"
               loading={loading}
               disabled={loading || disabled}
+              onClick={submit}
             >
               {buttonText}
             </Button>
