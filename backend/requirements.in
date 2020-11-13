@@ -23,6 +23,7 @@ slappy == 0.5.1
 feedgen
 telethon
 django == 3.1.*
+asgiref >= 3.3.0
 django-cors-headers
 django-rest-framework
 sentry-sdk[flask] >= 0.16.5
