@@ -1,5 +1,6 @@
 from datetime import date, datetime, timedelta
 
+import pytest
 from kocherga.dateutils import TZ
 from kocherga.events.models import Event
 
@@ -44,8 +45,10 @@ class TestGetEvent:
 
 def test_delete(event):
     event.delete()
-    event = Event.objects.get(pk=event.pk)
+    event = Event.all_objects.get(pk=event.pk)
     assert event.deleted is True
+    with pytest.raises(Event.DoesNotExist):
+        event = Event.objects.get(pk=event.pk)
 
 
 class TestTags:
