@@ -1,11 +1,9 @@
 import pytest
-from tests.helpers.graphql import run_query
-
-from django.contrib.auth import get_user_model
 from django.conf import settings
+from django.contrib.auth import get_user_model
 from django.core import mail
-
-from kocherga.auth.view_utils import get_magic_token
+from kocherga.auth.utils import get_magic_token
+from tests.helpers.graphql import run_query
 
 
 class TestAnyLogin:
@@ -192,7 +190,9 @@ class TestSetPassword:
         client.force_login(user)
 
         res = run_query(
-            client, self.SET_PASSWORD_MUTATION, {'new_password': self.NEW_PASSWORD},
+            client,
+            self.SET_PASSWORD_MUTATION,
+            {'new_password': self.NEW_PASSWORD},
         )
         assert not res['authSetPassword']['error']
         assert res['authSetPassword']['ok']
@@ -205,7 +205,9 @@ class TestSetPassword:
         client.force_login(user)
 
         res = run_query(
-            client, self.SET_PASSWORD_MUTATION, {'new_password': self.NEW_PASSWORD},
+            client,
+            self.SET_PASSWORD_MUTATION,
+            {'new_password': self.NEW_PASSWORD},
         )
         assert not res['authSetPassword']['ok']
         assert (

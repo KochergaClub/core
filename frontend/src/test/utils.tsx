@@ -30,6 +30,7 @@ const customRender = (
         id: '0',
         is_authenticated: false,
         is_staff: false,
+        is_superuser: false,
         permissions: [],
         email: null,
       },

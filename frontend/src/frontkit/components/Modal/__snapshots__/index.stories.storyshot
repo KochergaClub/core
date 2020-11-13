@@ -101,6 +101,7 @@ exports[`Storyshots Components/Modal Basic 1`] = `
       <button
         className="c3"
         onClick={[Function]}
+        type="button"
       >
         <svg
           fill="currentColor"
@@ -237,6 +238,7 @@ exports[`Storyshots Components/Modal Large Modal Story 1`] = `
       <button
         className="c3"
         onClick={[Function]}
+        type="button"
       >
         <svg
           fill="currentColor"
