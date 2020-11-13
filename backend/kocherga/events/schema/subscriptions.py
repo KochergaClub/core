@@ -1,5 +1,7 @@
 import logging
 
+from asgiref.sync import sync_to_async
+
 logger = logging.getLogger(__name__)
 
 import channels.layers
@@ -17,8 +19,10 @@ c = helpers.Collection()
 
 @c.field
 def events(_):
-    @check_permissions([permissions.manage_events])
     async def subscribe(obj, info):
+        # check permissions
+        await sync_to_async(permissions.manage_events, thread_sensitive=True)(obj, info)
+
         channel_layer = channels.layers.get_channel_layer()
         channel_name = await channel_layer.new_channel()
 
