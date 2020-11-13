@@ -14,10 +14,15 @@ c = helpers.Collection()
 class events(helpers.BaseField):
     def resolve(self, obj, info, search=None, filter=None, **pager):
         qs = models.Event.objects.all()
+        if not info.context.user.is_staff:
+            # only staff can access old anticafe events which might include personal data (phone numbers, emails)
+            qs = qs.exclude_anticafe_dates()
+
         if search:
             qs = qs.filter(
                 title__icontains=search
             )  # TODO - use wagtail/elastic search instead
+
         if filter:
             if 'event_type' in filter:
                 qs = qs.filter(event_type=filter['event_type'])
@@ -36,8 +41,13 @@ class events(helpers.BaseField):
 @c.class_field
 class event(helpers.BaseField):
     def resolve(self, obj, info, event_id):
+        qs = models.Event.objects.all()
+        if not info.context.user.is_staff:
+            # only staff can access old anticafe events which might include personal data (phone numbers, emails)
+            qs = qs.exclude_anticafe_dates()
+
         try:
-            event = models.Event.objects.get(uuid=event_id)
+            event = qs.get(uuid=event_id)
         except models.Event.DoesNotExist:
             return None
         return event

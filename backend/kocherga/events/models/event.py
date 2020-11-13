@@ -58,6 +58,9 @@ class EventQuerySet(RelayQuerySetMixin, models.QuerySet):
 
         return qs
 
+    def exclude_anticafe_dates(self):
+        return self.filter_by_period(from_date=datetime.date(2020, 4, 1))
+
     def filter_by_date(self, date: datetime.date):
         return self.filter_by_period(from_date=date, to_date=date)
 
