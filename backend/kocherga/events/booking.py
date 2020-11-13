@@ -48,7 +48,7 @@ class Booking:
 
 
 def day_bookings(date):
-    events = Event.objects.filter_by_date(date=date)
+    events = Event.objects.all().filter_by_date(date=date)
 
     bookings = [Booking.from_event(event) for event in events]
 
