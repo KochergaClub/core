@@ -76,7 +76,8 @@ def related_field(
         # FIXME - note that db_field.related_name can be different from field_name.
         # E.g., if `related_name` is not set on `foo = ForeignKey(...)`, then the field_name should be `foo`,
         # while db_field.related_name will be `foo_set`.
-        # (But I tried the naive solution here and it didn't work, so please investigate first before changing this code.)
+        # (But I tried the naive solution here and it didn't work, so please investigate first before changing this
+        # code.)
         return list(getattr(obj, field_name).all())
 
     return g.Field(g.NNList(item_type), resolve=resolve)

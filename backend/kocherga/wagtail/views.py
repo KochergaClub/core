@@ -3,7 +3,6 @@ import logging
 logger = logging.getLogger(__name__)
 
 from kocherga.error import PublicError
-from kocherga.wagtail.models import CustomImage
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.views import APIView
