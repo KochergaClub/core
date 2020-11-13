@@ -3,16 +3,14 @@ import logging
 logger = logging.getLogger(__name__)
 
 from timeit import default_timer
-from prometheus_client import Histogram, Counter
 
-from django.http import HttpRequest
-from django.conf import settings
-
-from ariadne.types import GraphQLResult
 from ariadne.contrib.django.views import GraphQLView
 from ariadne.contrib.tracing.apollotracing import ApolloTracingExtensionSync
-
+from ariadne.types import GraphQLResult
+from django.conf import settings
+from django.http import HttpRequest
 from kocherga.graphql.schema import schema
+from prometheus_client import Counter, Histogram
 
 duration_histogram = Histogram(
     'graphql_request', 'Duration of GraphQL requests', ['operation']
@@ -29,6 +27,9 @@ class WrappedGraphQLView(GraphQLView):
 
         with failures_counter.labels(operation=operation).count_exceptions():
             start = default_timer()
+            # logger.info(
+            #     f"{operation} {request.get_full_path()} {request.COOKIES.get('sessionid')}"
+            # )
             result = super().execute_query(request, data)
             duration = default_timer() - start
 

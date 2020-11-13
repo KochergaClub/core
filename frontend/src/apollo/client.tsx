@@ -19,7 +19,8 @@ type CacheState = KochergaApolloClient extends ApolloClient<infer T>
 let apolloClient: KochergaApolloClient | null = null;
 
 const createServerLink = (req: NextApolloPageContext['req']) => {
-  // this is important for webpack to remove this code on client
+  // if/else order here is important for webpack to remove this code on client!
+  // don't attempt to simplify it with if (!IS_SERVER) { throw ... }
   if (IS_SERVER) {
     const API_HOST = process.env.DJANGO_HOST;
     if (!API_HOST) {
@@ -27,12 +28,11 @@ const createServerLink = (req: NextApolloPageContext['req']) => {
     }
 
     // req can be empty:
-    // - when we do the last styled-components-extracting rendering pass in _document.
-    // - when we init apollo client from getStaticProps which doesn't have access to req.
+    // 1) when we do the last styled-components-extracting rendering pass in _document (UPD: this was fixed, see _document for ugly details).
+    // 2) when we init apollo client from getStaticProps which doesn't have access to req.
     //
-    // Note that we can't pass always `apolloClient` to WithApollo props, since it can't be serialized.
+    // Note that we can't just pass `apolloClient` to WithApollo props, since it can't be serialized.
     // This is ugly - it means that we do 3 rendering passes on all apollo pages, and that we create server-side ApolloClient twice.
-    // (TODO - recheck if it's true; I suspect React strict mode might actually be to blame here, and it's fixed now.)
     const cookieHeader = req ? req.headers.cookie : undefined;
 
     const cookies = cookie.parse(cookieHeader || '');
@@ -141,7 +141,7 @@ const createApolloClient = (
  * Always creates a new apollo client on the server
  * Creates or reuses apollo client in the browser.
  */
-const initApolloClient = (
+export const initApolloClient = (
   initialState: CacheState | undefined = undefined,
   req: NextApolloPageContext['req'] = undefined
 ) => {
@@ -215,7 +215,7 @@ export const withApollo = <P extends {}, IP = P>(
       <ApolloProvider client={client}>
         <PageComponent
           {
-            ...(pageProps as P) /* casting because typescript is not smart enough to guess that this is ok*/
+            ...(pageProps as P) /* casting because typescript is not smart enough to guess that this is ok */
           }
         />
       </ApolloProvider>
@@ -239,7 +239,7 @@ export const withApollo = <P extends {}, IP = P>(
       const { AppTree } = ctx;
 
       // Initialize ApolloClient, add it to the ctx object so
-      // we can use it in `PageComponent.getInitialProp`.
+      // we can use it in `PageComponent.getInitialProps`.
       const apolloClient = (ctx.apolloClient = initApolloClient(
         undefined,
         ctx.req

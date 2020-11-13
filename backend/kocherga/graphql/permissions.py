@@ -1,4 +1,10 @@
+import logging
+
+logger = logging.getLogger(__name__)
+
 from functools import wraps
+
+import graphql
 
 
 def superuseronly(obj, info):
@@ -48,7 +54,7 @@ def check_permissions(permissions):
 
     def decorator(resolve):
         @wraps(resolve)
-        def wrapper(obj, info, **kwargs):
+        def wrapper(obj, info: graphql.type.GraphQLResolveInfo, **kwargs):
             for permission in permissions:
                 if not permission(obj, info):
                     # TODO - return None on false result?

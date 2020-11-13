@@ -20,7 +20,7 @@ const tabs = [
   },
 ];
 
-const App: NextApolloPage = () => {
+const EvenmanApp: NextApolloPage = () => {
   const router = useRouter();
 
   const renderTab = (name: string) => {
@@ -86,7 +86,7 @@ const App: NextApolloPage = () => {
   );
 };
 
-App.getInitialProps = async (ctx) => {
+EvenmanApp.getInitialProps = async (ctx) => {
   const { apolloClient } = ctx;
 
   await requireAuth(apolloClient, { permissions: ['events.manage'] });
@@ -94,4 +94,5 @@ App.getInitialProps = async (ctx) => {
   return {};
 };
 
-export default withApollo(App);
+// export default withApollo(EvenmanApp, { ssr: false });
+export default withApollo(EvenmanApp);
