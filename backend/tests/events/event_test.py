@@ -1,7 +1,6 @@
 from datetime import date, datetime, timedelta
 
 from kocherga.dateutils import TZ
-from kocherga.events import serializers
 from kocherga.events.models import Event
 
 
@@ -41,19 +40,6 @@ class TestGetEvent:
         assert e.description.startswith('chicken')
 
         assert e.get_room() == 'гэб'
-
-
-class TestImages:
-    def test_add_image(self, event_for_edits, image_file):
-        event = event_for_edits
-
-        with open(image_file, 'rb') as fh:
-            event.add_image(fh)
-
-        assert event.image.file.url
-
-        event = Event.objects.get(pk=event.pk)  # reloading for another check
-        assert event.image.file.url
 
 
 def test_delete(event):

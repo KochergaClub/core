@@ -1,15 +1,14 @@
-import pytest
-import freezegun
-
-from django.contrib.auth import get_user_model
-from kocherga.staff.models import Member, AltEmail
-
-
-from pathlib import Path
 from datetime import datetime, timedelta
+from pathlib import Path
 
-from kocherga.events.models import Event, EventPrototype
+import freezegun
+import pytest
+import wagtail.core.models
+from django.contrib.auth import get_user_model
 from kocherga.dateutils import TZ
+from kocherga.events.models import Event, EventPrototype
+from kocherga.staff.models import AltEmail, Member
+from kocherga.wagtail.utils import create_image_from_fh
 
 
 @pytest.fixture(autouse=True)
@@ -48,10 +47,26 @@ def event(image_file, vk_image_file):
     event.fb_announcement.save()
 
     with open(vk_image_file, 'rb') as fh:
-        event.vk_announcement.add_image(fh)
+        image = create_image_from_fh(
+            fh,
+            title='vk-image',
+            basename='vk-image',
+            user=None,
+            collection=wagtail.core.models.Collection.objects.first(),
+        )
+        event.vk_announcement.image = image
+        event.vk_announcement.save()
 
     with open(image_file, 'rb') as fh:
-        event.add_image(fh)
+        image = create_image_from_fh(
+            fh,
+            title='image',
+            basename='image',
+            user=None,
+            collection=wagtail.core.models.Collection.objects.first(),
+        )
+        event.image = image
+        event.save()
 
     yield event
 
@@ -98,7 +113,9 @@ def common_events(db):
     for i in range(5):
         dt = datetime.now(TZ) + timedelta(days=i)
         Event.objects.create(
-            start=dt, end=dt + timedelta(hours=1), title='test event',
+            start=dt,
+            end=dt + timedelta(hours=1),
+            title='test event',
         )
 
 

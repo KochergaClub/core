@@ -1,14 +1,17 @@
 import pytest
+
 pytestmark = [
     pytest.mark.google,
 ]
 
 import re
-from datetime import datetime
 import time
+from datetime import datetime
 
 import kocherga.vk.api
+import wagtail.core.models
 from kocherga.events import models
+from kocherga.wagtail.utils import create_image_from_fh
 
 
 class TestTexts:
@@ -16,7 +19,7 @@ class TestTexts:
         assert re.match(
             r'Встреча пройдёт в \w+ \d+ \w+, в \d+:\d+, в @kocherga_club \(центре рациональности Кочерга\)\. '
             r'Оплата участия — по тарифам антикафе: 2,5 руб\./минута\. Регистрация: http.*',
-            event.vk_announcement.get_tail()
+            event.vk_announcement.get_tail(),
         )
 
 
@@ -31,17 +34,28 @@ class TestCreate:
         announcement.announce()
         assert announcement.link
 
-        kocherga.vk.api.call('wall.delete', {
-            'owner_id': -announcement.group_id(),
-            'post_id': announcement.post_id(),
-        })
+        kocherga.vk.api.call(
+            'wall.delete',
+            {
+                'owner_id': -announcement.group_id(),
+                'post_id': announcement.post_id(),
+            },
+        )
 
     def test_create_long(self, event_for_edits, image_file):
         event = event_for_edits
         announcement = event.vk_announcement
 
         with open(image_file, 'rb') as fh:
-            announcement.add_image(fh)
+            image = create_image_from_fh(
+                fh,
+                title='test',
+                basename='test',
+                user=None,
+                collection=wagtail.core.models.Collection.objects.first(),
+            )
+            announcement.image = image
+            announcement.save()
 
         announcement.group = 159971736
         event.description = 'Длинный текст.\n' * 100
@@ -53,10 +67,13 @@ class TestCreate:
         assert isinstance(announcement, models.VkAnnouncement)
 
         time.sleep(1)
-        kocherga.vk.api.call('wall.delete', {
-            'owner_id': -announcement.group_id(),
-            'post_id': announcement.post_id(),
-        })
+        kocherga.vk.api.call(
+            'wall.delete',
+            {
+                'owner_id': -announcement.group_id(),
+                'post_id': announcement.post_id(),
+            },
+        )
 
     def test_create_without_group(self, minimal_event):
         assert minimal_event.vk_announcement.group == ''
@@ -84,7 +101,7 @@ class TestGroups:
         assert result[0] == 'blahblah_something'
 
 
-class TestRepostToDaily():
+class TestRepostToDaily:
     def test_repost_to_daily_empty(self):
         models.VkAnnouncement.objects.repost_to_daily()
 
