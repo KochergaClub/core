@@ -57,7 +57,11 @@ const EventCalendar: React.FC<Props> = ({ selected_id }) => {
         },
         fetchPolicy: 'network-only',
       });
-      if (subscriptionData.data.events.type === 'deleted') {
+      if (
+        ['event.deleted', 'event.created'].includes(
+          subscriptionData.data.events.type
+        )
+      ) {
         await queryResults.refetch();
       }
     },
