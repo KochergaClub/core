@@ -56,7 +56,12 @@ def model_field(model: Type[models.Model], field_name: str):
     if not db_field.null:
         type_ = g.NN(type_)
 
-    return g.Field(type_, resolve=resolve)
+    description = None
+    if field_name != 'id' and db_field._verbose_name:
+        # can be lazy, so need to be wrapped in str()
+        description = str(db_field._verbose_name)
+
+    return g.Field(type_, description=description, resolve=resolve)
 
 
 def model_fields(model: Type[models.Model], field_names: List[str]):

@@ -22,6 +22,8 @@ type AuthCurrentUser {
 
 type AuthGroup {
   id: ID!
+
+  """имя"""
   name: String!
   permissions: [AuthPermission!]!
   users: [AuthUser!]!
@@ -133,23 +135,36 @@ type BigContactsBlockValue {
 
 type BlogIndexPage implements WagtailPage {
   id: ID!
+
+  """заголовок"""
   title: String!
   meta: WagtailPageMeta!
+
+  """Подзаголовок"""
   subtitle: String!
   posts: [BlogPostPage!]!
 }
 
 type BlogPostAuthor {
+  """Имя"""
   name: String!
+
+  """Описание"""
   description: String!
   image(spec: String!): WagtailImageRendition!
 }
 
 type BlogPostPage implements WagtailPage {
   id: ID!
+
+  """заголовок"""
   title: String!
   meta: WagtailPageMeta!
+
+  """Дата поста"""
   date: String!
+
+  """Короткое описание"""
   summary: String!
   body: String!
   authors: [BlogPostAuthor!]!
@@ -169,9 +184,17 @@ input CashierCreatePaymentInput {
 
 type CashierPayment {
   id: ID!
+
+  """Сумма"""
   amount: Int!
+
+  """Дата создания"""
   created_dt: String!
+
+  """Дата получения"""
   redeem_dt: String
+
+  """Комментарий"""
   comment: String!
   is_redeemed: Boolean!
   whom: AuthUser!
@@ -666,6 +689,8 @@ type EventsTicket {
 
 type EventsWeeklyDigest {
   id: ID!
+
+  """Дата начала недели"""
   start: String!
   image(spec: String!): WagtailImageRendition
   mailchimp: EventsWeeklyDigestMailchimp!
@@ -705,14 +730,20 @@ interface ExternalServiceAccount {
 
 type FaqEntry {
   id: ID!
+
+  """Вопрос"""
   question: String!
   answer: String!
 }
 
 type FaqPage implements WagtailPage {
   id: ID!
+
+  """заголовок"""
   title: String!
   meta: WagtailPageMeta!
+
+  """Короткое описание"""
   summary: String!
   prev_page: FaqPage
   next_page: FaqPage
@@ -984,10 +1015,13 @@ type My {
 }
 
 type MyCmCustomer {
+  """Номер карты"""
   card_id: Int!
   subscription_until: String
   last_visit: String
   total_spent: Int!
+
+  """Приватность"""
   privacy_mode: String!
   orders_count: Int!
   orders: [MyCmOrder!]!
@@ -1132,18 +1166,30 @@ type PresentationPage implements WagtailPage {
 
 type ProjectIndexPage implements WagtailPage {
   id: ID!
+
+  """заголовок"""
   title: String!
   meta: WagtailPageMeta!
+
+  """Описание активных проектов"""
   active_description: String!
   projects(is_active: Boolean): [ProjectPage!]!
 }
 
 type ProjectPage implements WagtailPage {
   id: ID!
+
+  """заголовок"""
   title: String!
   meta: WagtailPageMeta!
+
+  """Короткое описание"""
   summary: String!
+
+  """Периодичность"""
   activity_summary: String
+
+  """Активный"""
   is_active: Boolean!
   body: String!
   image(spec: String!): WagtailImageRendition!
@@ -1220,9 +1266,17 @@ type Query {
 
 type RatioActivity {
   id: ID!
+
+  """Время"""
   time: String!
+
+  """Тип"""
   activity_type: String!
+
+  """Название"""
   name: String!
+
+  """Локация"""
   location: String!
   trainer: RatioTrainer
 }
@@ -1374,11 +1428,21 @@ type RatioParagraphBlock implements WagtailBlock {
 
 type RatioPayment {
   id: ID!
+
+  """Размер оплаты"""
   amount: Int!
+
+  """Вид оплаты"""
   payment_type: String!
+
+  """Статус"""
   status: String!
+
+  """Статус фискального чека"""
   fiscalization_status: String!
   comment: String!
+
+  """Кастомный заголовок для чека"""
   custom_kkm_title: String!
   ticket: RatioTicket!
 }
@@ -1418,11 +1482,23 @@ type RatioPresentationIndexPage implements WagtailPage {
 
 type RatioPromocode {
   id: ID!
+
+  """Промокод"""
   code: String!
+
+  """Сумма скидки"""
   discount: Int!
+
+  """Процент скидки"""
   discount_percent: Int!
+
+  """Максимальное количество использований"""
   uses_max: Int
+
+  """Количество использований"""
   uses_count: Int!
+
+  """Создан для E-mail'а"""
   for_email: String!
 }
 
@@ -1452,12 +1528,26 @@ type RatioSectionPage implements WagtailPage {
 type RatioTicket {
   id: ID!
   email: String!
+
+  """Имя"""
   first_name: String!
+
+  """Фамилия"""
   last_name: String
+
+  """Дата регистрации"""
   registration_date: String
+
+  """Дата создания"""
   created: String!
+
+  """Статус"""
   status: String!
+
+  """Тип билета"""
   ticket_class: String!
+
+  """Размер оплаты"""
   payment_amount: Int!
   comment: String!
   notion_link: String!
@@ -1478,9 +1568,16 @@ type RatioTicketEdge {
 }
 
 type RatioTicketType {
+  """Стоимость"""
   price: Int!
+
+  """Название"""
   name: String!
+
+  """Сумма скидки одноразового промокода по E-mail'у"""
   discount_by_email: Int!
+
+  """Процент скдики одноразового промокода по E-mail'у"""
   discount_percent_by_email: Int!
   id: ID!
   training: RatioTraining!
@@ -1504,18 +1601,32 @@ input RatioTicketsFilterInput {
 
 type RatioTrainer {
   id: ID!
+
+  """Короткое имя"""
   short_name: String!
+
+  """Длинное имя"""
   long_name: String!
 }
 
 type RatioTraining {
   id: ID!
+
+  """Название"""
   name: String!
   slug: String!
+
+  """Дата начала"""
   date: String
+
+  """Телеграм-чат"""
   telegram_link: String!
   salaries_paid: Boolean!
+
+  """Сумма скидки одноразового промокода по E-mail'у"""
   discount_by_email: Int!
+
+  """Процент скдики одноразового промокода по E-mail'у"""
   discount_percent_by_email: Int!
   promocode_email: String!
   new_ticket_email: String!
@@ -1547,6 +1658,8 @@ input RatioTrainingCopyScheduleFromInput {
 
 type RatioTrainingDay {
   id: ID!
+
+  """Дата"""
   date: String!
   activities: [RatioActivity!]!
 }
@@ -2024,7 +2137,11 @@ input WatchmenCreateWatchmanInput {
 
 type WatchmenGrade {
   id: ID!
+
+  """Код"""
   code: String!
+
+  """Повышающий коэффициент"""
   multiplier: Float!
 }
 
