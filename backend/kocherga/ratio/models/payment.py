@@ -67,6 +67,7 @@ class Payment(models.Model):
             )
 
     def kkm_title(self):
+        # TODO - take from ticket_type
         return (
             self.custom_kkm_title
             or f"Участие в мероприятии: {self.ticket.training.name}"
@@ -82,7 +83,8 @@ class Payment(models.Model):
 
         KkmController.load().register_check(
             title=self.kkm_title(),
-            signMethodCalculation=kkmserver.SignMethodCalculation.PRE_PAYMENT_100,
+            # TODO - pass as argument
+            sign_method_calculation=kkmserver.SignMethodCalculation.PRE_PAYMENT_100,
             email=self.ticket.email,
             sum=self.amount,
         )

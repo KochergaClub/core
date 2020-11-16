@@ -1,11 +1,10 @@
 import hashlib
 
-from django.db import models
 from django.conf import settings
-from django.dispatch import receiver
-from django.db.models.signals import post_save
 from django.core.exceptions import ValidationError
-
+from django.db import models
+from django.db.models.signals import post_save
+from django.dispatch import receiver
 from kocherga.django.managers import RelayQuerySetMixin
 
 from .training import Training
@@ -18,7 +17,9 @@ class TicketQuerySet(models.QuerySet, RelayQuerySetMixin):
         )
 
     def with_unfiscalized_checks(self):
-        return self.filter(payments__fiscalization_status__in=['todo', 'in_progress'])
+        return self.filter(
+            payments__fiscalization_status__in=['todo', 'in_progress']
+        ).distinct()
 
     def without_notion_link(self):
         return self.filter(notion_link='').exclude(training__notion_created_email='')
