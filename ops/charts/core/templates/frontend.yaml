@@ -57,7 +57,13 @@ spec:
         - name: default
           image: {{ .Values.image.frontend | quote }}
 {{- if .Values.dev }}
-          command: ["./node_modules/.bin/nodemon", "--watch", "dist", "./dist/index.js"]
+          command: [
+            "./node_modules/.bin/nodemon",
+            "--watch", "dist",
+            # frontend crashes in dev sometimes for unknown reason.
+            # Fix via https://github.com/remy/nodemon/issues/1221#issuecomment-514814692
+            "--exec", "node ./dist/index.js || (sleep 10; touch ./dist/index.js)"
+          ]
 {{- end }}
           ports:
             - containerPort: 80
