@@ -1,4 +1,3 @@
-from typing import Optional
 import logging
 from dataclasses import dataclass
 
@@ -32,8 +31,6 @@ class kkmRegisterCheck(helpers.UnionFieldMixin, helpers.BaseFieldWithInput):
                 input['sign_method_calculation']
             ],
         )
-
-        raise Exception("oops")
 
         # status values:
         # Ok = 0, Run(Запущено на выполнение) = 1, Error = 2, NotFound(устройство не найдено) = 3, NotRun = 4

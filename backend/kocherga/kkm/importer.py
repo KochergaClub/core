@@ -2,7 +2,7 @@ import logging
 
 logger = logging.getLogger(__name__)
 
-from datetime import date, datetime, timedelta
+from datetime import datetime, timedelta
 
 import kocherga.importer.base
 from kocherga.dateutils import TZ, date_chunks

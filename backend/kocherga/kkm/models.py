@@ -225,7 +225,8 @@ class OfdDocumentManager(models.Manager):
             for old_item in document.items.all():
                 if old_item.pk not in new_item_ids:
                     logger.info(
-                        f"Deleted item {old_item.id} for document {document.id} because it wasn't found in the latest data"
+                        f"Deleted item {old_item.id} for document {document.id} "
+                        "because it wasn't found in the latest data"
                     )
                     old_item.delete()
 
