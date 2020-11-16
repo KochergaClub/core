@@ -2,7 +2,7 @@ import { useCallback, useState } from 'react';
 
 import { Button, ControlsFooter, Modal } from '~/frontkit';
 
-import { FormValues, SignMethodCalculation } from '../../types';
+import { FormValues, signMethodCalculationLabels } from '../../types';
 
 interface Props {
   values: FormValues;
@@ -24,7 +24,7 @@ export default function MainModal({ values, submit, close }: Props) {
       <Modal.Body>
         <header>{values.title}</header>
         <div>{values.amount} руб.</div>
-        <div>{SignMethodCalculation[values.method]}</div>
+        <div>{signMethodCalculationLabels[values.method]}</div>
         <div>{values.email}</div>
       </Modal.Body>
       <Modal.Footer>

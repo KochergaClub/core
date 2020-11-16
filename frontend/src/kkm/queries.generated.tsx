@@ -9,11 +9,14 @@ export type KkmRegisterCheckMutationVariables = Types.Exact<{
 
 export type KkmRegisterCheckMutation = (
   { __typename: 'Mutation' }
-  & { kkmRegisterCheck: (
-    { __typename: 'KkmRegisterCheckResult' }
-    & Pick<Types.KkmRegisterCheckResult, 'url' | 'error' | 'status'>
+  & { result: (
+    { __typename: 'KkmRegisterCheckOkResult' }
+    & Pick<Types.KkmRegisterCheckOkResult, 'url'>
+  ) | (
+    { __typename: 'GenericError' }
+    & Pick<Types.GenericError, 'message'>
   ) }
 );
 
 
-export const KkmRegisterCheckDocument: DocumentNode<KkmRegisterCheckMutation, KkmRegisterCheckMutationVariables> = dedupeFragments({ "kind": "Document", "definitions": [{ "kind": "OperationDefinition", "operation": "mutation", "name": { "kind": "Name", "value": "KkmRegisterCheck" }, "variableDefinitions": [{ "kind": "VariableDefinition", "variable": { "kind": "Variable", "name": { "kind": "Name", "value": "params" } }, "type": { "kind": "NonNullType", "type": { "kind": "NamedType", "name": { "kind": "Name", "value": "KkmRegisterCheckInput" } } }, "directives": [] }], "directives": [], "selectionSet": { "kind": "SelectionSet", "selections": [{ "kind": "Field", "name": { "kind": "Name", "value": "kkmRegisterCheck" }, "arguments": [{ "kind": "Argument", "name": { "kind": "Name", "value": "params" }, "value": { "kind": "Variable", "name": { "kind": "Name", "value": "params" } } }], "directives": [], "selectionSet": { "kind": "SelectionSet", "selections": [{ "kind": "Field", "name": { "kind": "Name", "value": "url" }, "arguments": [], "directives": [] }, { "kind": "Field", "name": { "kind": "Name", "value": "error" }, "arguments": [], "directives": [] }, { "kind": "Field", "name": { "kind": "Name", "value": "status" }, "arguments": [], "directives": [] }] } }] } }] });
+export const KkmRegisterCheckDocument: DocumentNode<KkmRegisterCheckMutation, KkmRegisterCheckMutationVariables> = dedupeFragments({ "kind": "Document", "definitions": [{ "kind": "OperationDefinition", "operation": "mutation", "name": { "kind": "Name", "value": "KkmRegisterCheck" }, "variableDefinitions": [{ "kind": "VariableDefinition", "variable": { "kind": "Variable", "name": { "kind": "Name", "value": "params" } }, "type": { "kind": "NonNullType", "type": { "kind": "NamedType", "name": { "kind": "Name", "value": "KkmRegisterCheckInput" } } }, "directives": [] }], "directives": [], "selectionSet": { "kind": "SelectionSet", "selections": [{ "kind": "Field", "alias": { "kind": "Name", "value": "result" }, "name": { "kind": "Name", "value": "kkmRegisterCheck" }, "arguments": [{ "kind": "Argument", "name": { "kind": "Name", "value": "input" }, "value": { "kind": "Variable", "name": { "kind": "Name", "value": "params" } } }], "directives": [], "selectionSet": { "kind": "SelectionSet", "selections": [{ "kind": "InlineFragment", "typeCondition": { "kind": "NamedType", "name": { "kind": "Name", "value": "KkmRegisterCheckOkResult" } }, "directives": [], "selectionSet": { "kind": "SelectionSet", "selections": [{ "kind": "Field", "name": { "kind": "Name", "value": "url" }, "arguments": [], "directives": [] }] } }, { "kind": "InlineFragment", "typeCondition": { "kind": "NamedType", "name": { "kind": "Name", "value": "GenericError" } }, "directives": [], "selectionSet": { "kind": "SelectionSet", "selections": [{ "kind": "Field", "name": { "kind": "Name", "value": "message" }, "arguments": [], "directives": [] }] } }] } }] } }] });

@@ -4,10 +4,11 @@ import styled from 'styled-components';
 
 import { useMutation } from '@apollo/client';
 
+import { KkmSignMethodCalculation } from '~/apollo/types.generated';
 import { A, Button, Column, Input, Label } from '~/frontkit';
 
-import { KkmRegisterCheckDocument } from '../../queries.generated';
-import { FormValues, SignMethodCalculation } from '../../types';
+import { KkmRegisterCheckDocument, KkmRegisterCheckMutation } from '../../queries.generated';
+import { FormValues, signMethodCalculationLabels } from '../../types';
 import MainModal from './MainModal';
 import Suggestions from './Suggestions';
 
@@ -19,10 +20,48 @@ const WideInput = styled(Input)`
   width: 100%;
 `;
 
-interface Outcome {
-  result: unknown;
+type DataOutcome = {
+  result: KkmRegisterCheckMutation['result'];
+};
+
+type ErrorOutcome = {
   error: unknown;
-}
+};
+
+type Outcome = DataOutcome | ErrorOutcome;
+
+const OutcomeComponent: React.FC<{ outcome: Outcome }> = ({ outcome }) => {
+  if ('result' in outcome) {
+    switch (outcome.result.__typename) {
+      case 'KkmRegisterCheckOkResult':
+        return (
+          <section>
+            <h2>Результат</h2>
+            <div>
+              <a href={outcome.result.url}></a>
+            </div>
+          </section>
+        );
+      case 'GenericError':
+        return (
+          <section>
+            <h2>Ошибка</h2>
+            <div>{outcome.result.message}</div>
+          </section>
+        );
+      default:
+        return <div>Неизвестный результат</div>;
+    }
+  }
+
+  // possible is backend is down or buggy
+  return (
+    <section>
+      <h2>Ошибка</h2>
+      <pre>{JSON.stringify(outcome.error, null, 2)}</pre>
+    </section>
+  );
+};
 
 const MainForm: React.FC = () => {
   const [confirmingValues, setConfirmingValues] = useState<
@@ -56,13 +95,18 @@ const MainForm: React.FC = () => {
           params: request,
         },
       });
-      setOutcome({
-        result: result.data || {},
-        error: {},
-      });
+
+      if (result.data) {
+        setOutcome({
+          result: result.data.result,
+        });
+      } else {
+        setOutcome({
+          error: result.errors || 'Неизвестная ошибка',
+        });
+      }
     } catch (e) {
       setOutcome({
-        result: {},
         error: e,
       });
       cancelSubmit();
@@ -73,7 +117,7 @@ const MainForm: React.FC = () => {
     email: '',
     title: '',
     amount: 0,
-    method: SignMethodCalculation.PrePayment100,
+    method: KkmSignMethodCalculation.PrePayment_100,
   };
 
   const validate = (values: FormValues) => {
@@ -103,10 +147,7 @@ const MainForm: React.FC = () => {
                 )}
               </Field>
               <Suggestions
-                values={[
-                  'Консультация',
-                  'Участие в воркшопе по прикладной рациональности',
-                ]}
+                values={['Консультация']}
                 current={values.title}
                 setValue={(value) => setFieldValue('title', value)}
               />
@@ -119,7 +160,7 @@ const MainForm: React.FC = () => {
                 )}
               </Field>
               <Suggestions
-                values={[3000, 12000, 30000, 36000]}
+                values={[3000]}
                 current={values.amount}
                 setValue={(value) => setFieldValue('amount', value)}
               />
@@ -129,11 +170,12 @@ const MainForm: React.FC = () => {
                 <A href="http://www.consultant.ru/document/cons_doc_LAW_214339/731d2f8d127e3614422af34b4ac197612bd2f64d/">
                   Тип чека
                 </A>
-                : {SignMethodCalculation[values.method]}
+                : {signMethodCalculationLabels[values.method]}
               </Label>
               <Suggestions
-                values={[1, 2, 3, 4, 5, 6, 7]}
-                current={values.method as number}
+                values={Object.values(KkmSignMethodCalculation)}
+                labels={signMethodCalculationLabels}
+                current={values.method}
                 setValue={(value) => setFieldValue('method', value)}
               />
             </FormSection>
@@ -159,14 +201,7 @@ const MainForm: React.FC = () => {
                 close={cancelSubmit}
               />
             )}
-            {outcome && (
-              <section>
-                <h2>Результат</h2>
-                <pre>{JSON.stringify(outcome.result, null, 2)}</pre>
-                <h2>Ошибка</h2>
-                <pre>{JSON.stringify(outcome.error, null, 2)}</pre>
-              </section>
-            )}
+            {outcome && <OutcomeComponent outcome={outcome} />}
           </Column>
         </Form>
       )}

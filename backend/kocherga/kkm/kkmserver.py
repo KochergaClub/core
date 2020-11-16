@@ -1,8 +1,9 @@
 import uuid
-import requests
-from enum import Enum
 from dataclasses import dataclass
+from enum import Enum
+from typing import Dict
 
+import requests
 from django.conf import settings
 
 # TODO - move to config
@@ -76,21 +77,30 @@ def getInfoRequest():
 class SignMethodCalculation(Enum):
     # Признак способа расчета. тег ОФД 1214. Для ФФД.1.05 и выше обязательное поле
     # 1: "ПРЕДОПЛАТА 100% (Полная предварительная оплата до момента передачи предмета расчета)"
-    # 2: "ПРЕДОПЛАТА (Частичная предварительная оплата до момента передачи предмета расчета)"
-    # 3: "АВАНС"
-    # 4: "ПОЛНЫЙ РАСЧЕТ (Полная оплата, в том числе с учетом аванса в момент передачи предмета расчета)"
-    # 5: "ЧАСТИЧНЫЙ РАСЧЕТ И КРЕДИТ
-    #    (Частичная оплата предмета расчета в момент его передачи с последующей оплатой в кредит)"
-    # 6: "ПЕРЕДАЧА В КРЕДИТ
-    #    (Передача предмета расчета без его оплаты в момент его передачи с последующей оплатой в кредит)"
-    # 7: "ОПЛАТА КРЕДИТА (Оплата предмета расчета после его передачи с оплатой в кредит )"
-    PrePayment100 = 1
-    PrePayment = 2
-    Advance = 3
-    FullPayment = 4
-    PartialPaymentAndCredit = 5
-    CreditTransfer = 6
-    CreditPayment = 7
+    PRE_PAYMENT_100 = 1
+    PRE_PAYMENT = 2
+    ADVANCE = 3
+    FULL_PAYMENT = 4
+    PARTIAL_PAYMENT_AND_CREDIT = 5
+    CREDIT_TRANSFER = 6
+    CREDIT_PAYMENT = 7
+
+
+sign_method_calculation_descriptions: Dict[SignMethodCalculation, str] = {
+    SignMethodCalculation.PRE_PAYMENT_100: "ПРЕДОПЛАТА 100% "
+    "(Полная предварительная оплата до момента передачи предмета расчета)",
+    SignMethodCalculation.PRE_PAYMENT: "ПРЕДОПЛАТА "
+    "(Частичная предварительная оплата до момента передачи предмета расчета)",
+    SignMethodCalculation.ADVANCE: "АВАНС",
+    SignMethodCalculation.FULL_PAYMENT: "ПОЛНЫЙ РАСЧЕТ "
+    "(Полная оплата, в том числе с учетом аванса в момент передачи предмета расчета)",
+    SignMethodCalculation.PARTIAL_PAYMENT_AND_CREDIT: "ЧАСТИЧНЫЙ РАСЧЕТ И КРЕДИТ "
+    "(Частичная оплата предмета расчета в момент его передачи с последующей оплатой в кредит)",
+    SignMethodCalculation.CREDIT_TRANSFER: "ПЕРЕДАЧА В КРЕДИТ "
+    "(Передача предмета расчета без его оплаты в момент его передачи с последующей оплатой в кредит)",
+    SignMethodCalculation.CREDIT_PAYMENT: "ОПЛАТА КРЕДИТА "
+    "(Оплата предмета расчета после его передачи с оплатой в кредит)",
+}
 
 
 @dataclass

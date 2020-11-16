@@ -1,6 +1,10 @@
 import datetime
 
 from kocherga.graphql import django_utils, g, helpers
+from kocherga.kkm.kkmserver import (
+    SignMethodCalculation,
+    sign_method_calculation_descriptions,
+)
 
 from .. import models
 
@@ -64,3 +68,15 @@ OfdShift = django_utils.DjangoObjectType(
 )
 
 OfdShiftConnection = helpers.ConnectionType(OfdShift)
+
+
+KkmSignMethodCalculation = g.EnumType(
+    'KkmSignMethodCalculation',
+    {
+        method.name: g.EnumValue(
+            value=method.name,
+            description=sign_method_calculation_descriptions[method]
+        )
+        for method in SignMethodCalculation
+    },
+)

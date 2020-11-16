@@ -36,6 +36,7 @@ export type AuthCurrentUser = {
 export type AuthGroup = {
   __typename?: 'AuthGroup';
   id: Scalars['ID'];
+  /** имя */
   name: Scalars['String'];
   permissions: Array<AuthPermission>;
   users: Array<AuthUser>;
@@ -162,15 +163,19 @@ export type BigContactsBlockValue = {
 export type BlogIndexPage = WagtailPage & {
   __typename?: 'BlogIndexPage';
   id: Scalars['ID'];
+  /** заголовок */
   title: Scalars['String'];
   meta: WagtailPageMeta;
+  /** Подзаголовок */
   subtitle: Scalars['String'];
   posts: Array<BlogPostPage>;
 };
 
 export type BlogPostAuthor = {
   __typename?: 'BlogPostAuthor';
+  /** Имя */
   name: Scalars['String'];
+  /** Описание */
   description: Scalars['String'];
   image: WagtailImageRendition;
 };
@@ -183,9 +188,12 @@ export type BlogPostAuthorImageArgs = {
 export type BlogPostPage = WagtailPage & {
   __typename?: 'BlogPostPage';
   id: Scalars['ID'];
+  /** заголовок */
   title: Scalars['String'];
   meta: WagtailPageMeta;
+  /** Дата поста */
   date: Scalars['String'];
+  /** Короткое описание */
   summary: Scalars['String'];
   body: Scalars['String'];
   authors: Array<BlogPostAuthor>;
@@ -206,9 +214,13 @@ export type CashierCreatePaymentInput = {
 export type CashierPayment = {
   __typename?: 'CashierPayment';
   id: Scalars['ID'];
+  /** Сумма */
   amount: Scalars['Int'];
+  /** Дата создания */
   created_dt: Scalars['String'];
+  /** Дата получения */
   redeem_dt?: Maybe<Scalars['String']>;
+  /** Комментарий */
   comment: Scalars['String'];
   is_redeemed: Scalars['Boolean'];
   whom: AuthUser;
@@ -795,6 +807,7 @@ export type EventsTicket = {
 export type EventsWeeklyDigest = {
   __typename?: 'EventsWeeklyDigest';
   id: Scalars['ID'];
+  /** Дата начала недели */
   start: Scalars['String'];
   image?: Maybe<WagtailImageRendition>;
   mailchimp: EventsWeeklyDigestMailchimp;
@@ -844,6 +857,7 @@ export type ExternalServiceAccount = {
 export type FaqEntry = {
   __typename?: 'FaqEntry';
   id: Scalars['ID'];
+  /** Вопрос */
   question: Scalars['String'];
   answer: Scalars['String'];
 };
@@ -851,8 +865,10 @@ export type FaqEntry = {
 export type FaqPage = WagtailPage & {
   __typename?: 'FaqPage';
   id: Scalars['ID'];
+  /** заголовок */
   title: Scalars['String'];
   meta: WagtailPageMeta;
+  /** Короткое описание */
   summary: Scalars['String'];
   prev_page?: Maybe<FaqPage>;
   next_page?: Maybe<FaqPage>;
@@ -973,15 +989,32 @@ export type KkmRegisterCheckInput = {
   email: Scalars['String'];
   title: Scalars['String'];
   sum: Scalars['Int'];
-  sign_method_calculation: Scalars['Int'];
+  sign_method_calculation: KkmSignMethodCalculation;
 };
 
-export type KkmRegisterCheckResult = {
-  __typename?: 'KkmRegisterCheckResult';
-  status: Scalars['Int'];
-  url?: Maybe<Scalars['String']>;
-  error?: Maybe<Scalars['String']>;
+export type KkmRegisterCheckOkResult = {
+  __typename?: 'KkmRegisterCheckOkResult';
+  url: Scalars['String'];
 };
+
+export type KkmRegisterCheckResult = KkmRegisterCheckOkResult | GenericError;
+
+export enum KkmSignMethodCalculation {
+  /** ПРЕДОПЛАТА 100% (Полная предварительная оплата до момента передачи предмета расчета) */
+  PrePayment_100 = 'PRE_PAYMENT_100',
+  /** ПРЕДОПЛАТА (Частичная предварительная оплата до момента передачи предмета расчета) */
+  PrePayment = 'PRE_PAYMENT',
+  /** АВАНС */
+  Advance = 'ADVANCE',
+  /** ПОЛНЫЙ РАСЧЕТ (Полная оплата, в том числе с учетом аванса в момент передачи предмета расчета) */
+  FullPayment = 'FULL_PAYMENT',
+  /** ЧАСТИЧНЫЙ РАСЧЕТ И КРЕДИТ (Частичная оплата предмета расчета в момент его передачи с последующей оплатой в кредит) */
+  PartialPaymentAndCredit = 'PARTIAL_PAYMENT_AND_CREDIT',
+  /** ПЕРЕДАЧА В КРЕДИТ (Передача предмета расчета без его оплаты в момент его передачи с последующей оплатой в кредит) */
+  CreditTransfer = 'CREDIT_TRANSFER',
+  /** ОПЛАТА КРЕДИТА (Оплата предмета расчета после его передачи с оплатой в кредит) */
+  CreditPayment = 'CREDIT_PAYMENT'
+}
 
 export type MailchimpSubscribeBlock = WagtailBlock & {
   __typename?: 'MailchimpSubscribeBlock';
@@ -1259,7 +1292,7 @@ export type MutationWatchmenSetWatchmanGradeArgs = {
 
 
 export type MutationKkmRegisterCheckArgs = {
-  params: KkmRegisterCheckInput;
+  input: KkmRegisterCheckInput;
 };
 
 
@@ -1659,10 +1692,12 @@ export type MyTicketsArgs = {
 
 export type MyCmCustomer = {
   __typename?: 'MyCmCustomer';
+  /** Номер карты */
   card_id: Scalars['Int'];
   subscription_until?: Maybe<Scalars['String']>;
   last_visit?: Maybe<Scalars['String']>;
   total_spent: Scalars['Int'];
+  /** Приватность */
   privacy_mode: Scalars['String'];
   orders_count: Scalars['Int'];
   orders: Array<MyCmOrder>;
@@ -1834,8 +1869,10 @@ export type PresentationPage = WagtailPage & {
 export type ProjectIndexPage = WagtailPage & {
   __typename?: 'ProjectIndexPage';
   id: Scalars['ID'];
+  /** заголовок */
   title: Scalars['String'];
   meta: WagtailPageMeta;
+  /** Описание активных проектов */
   active_description: Scalars['String'];
   projects: Array<ProjectPage>;
 };
@@ -1848,10 +1885,14 @@ export type ProjectIndexPageProjectsArgs = {
 export type ProjectPage = WagtailPage & {
   __typename?: 'ProjectPage';
   id: Scalars['ID'];
+  /** заголовок */
   title: Scalars['String'];
   meta: WagtailPageMeta;
+  /** Короткое описание */
   summary: Scalars['String'];
+  /** Периодичность */
   activity_summary?: Maybe<Scalars['String']>;
+  /** Активный */
   is_active: Scalars['Boolean'];
   body: Scalars['String'];
   image: WagtailImageRendition;
@@ -2170,9 +2211,13 @@ export type QueryTildaPageArgs = {
 export type RatioActivity = {
   __typename?: 'RatioActivity';
   id: Scalars['ID'];
+  /** Время */
   time: Scalars['String'];
+  /** Тип */
   activity_type: Scalars['String'];
+  /** Название */
   name: Scalars['String'];
+  /** Локация */
   location: Scalars['String'];
   trainer?: Maybe<RatioTrainer>;
 };
@@ -2341,11 +2386,16 @@ export type RatioParagraphBlock = WagtailBlock & {
 export type RatioPayment = {
   __typename?: 'RatioPayment';
   id: Scalars['ID'];
+  /** Размер оплаты */
   amount: Scalars['Int'];
+  /** Вид оплаты */
   payment_type: Scalars['String'];
+  /** Статус */
   status: Scalars['String'];
+  /** Статус фискального чека */
   fiscalization_status: Scalars['String'];
   comment: Scalars['String'];
+  /** Кастомный заголовок для чека */
   custom_kkm_title: Scalars['String'];
   ticket: RatioTicket;
 };
@@ -2390,11 +2440,17 @@ export type RatioPresentationIndexPage = WagtailPage & {
 export type RatioPromocode = {
   __typename?: 'RatioPromocode';
   id: Scalars['ID'];
+  /** Промокод */
   code: Scalars['String'];
+  /** Сумма скидки */
   discount: Scalars['Int'];
+  /** Процент скидки */
   discount_percent: Scalars['Int'];
+  /** Максимальное количество использований */
   uses_max?: Maybe<Scalars['Int']>;
+  /** Количество использований */
   uses_count: Scalars['Int'];
+  /** Создан для E-mail'а */
   for_email: Scalars['String'];
 };
 
@@ -2429,12 +2485,19 @@ export type RatioTicket = {
   __typename?: 'RatioTicket';
   id: Scalars['ID'];
   email: Scalars['String'];
+  /** Имя */
   first_name: Scalars['String'];
+  /** Фамилия */
   last_name?: Maybe<Scalars['String']>;
+  /** Дата регистрации */
   registration_date?: Maybe<Scalars['String']>;
+  /** Дата создания */
   created: Scalars['String'];
+  /** Статус */
   status: Scalars['String'];
+  /** Тип билета */
   ticket_class: Scalars['String'];
+  /** Размер оплаты */
   payment_amount: Scalars['Int'];
   comment: Scalars['String'];
   notion_link: Scalars['String'];
@@ -2458,9 +2521,13 @@ export type RatioTicketEdge = {
 
 export type RatioTicketType = {
   __typename?: 'RatioTicketType';
+  /** Стоимость */
   price: Scalars['Int'];
+  /** Название */
   name: Scalars['String'];
+  /** Сумма скидки одноразового промокода по E-mail'у */
   discount_by_email: Scalars['Int'];
+  /** Процент скдики одноразового промокода по E-mail'у */
   discount_percent_by_email: Scalars['Int'];
   id: Scalars['ID'];
   training: RatioTraining;
@@ -2493,19 +2560,26 @@ export type RatioTicketsFilterInput = {
 export type RatioTrainer = {
   __typename?: 'RatioTrainer';
   id: Scalars['ID'];
+  /** Короткое имя */
   short_name: Scalars['String'];
+  /** Длинное имя */
   long_name: Scalars['String'];
 };
 
 export type RatioTraining = {
   __typename?: 'RatioTraining';
   id: Scalars['ID'];
+  /** Название */
   name: Scalars['String'];
   slug: Scalars['String'];
+  /** Дата начала */
   date?: Maybe<Scalars['String']>;
+  /** Телеграм-чат */
   telegram_link: Scalars['String'];
   salaries_paid: Scalars['Boolean'];
+  /** Сумма скидки одноразового промокода по E-mail'у */
   discount_by_email: Scalars['Int'];
+  /** Процент скдики одноразового промокода по E-mail'у */
   discount_percent_by_email: Scalars['Int'];
   promocode_email: Scalars['String'];
   new_ticket_email: Scalars['String'];
@@ -2547,6 +2621,7 @@ export type RatioTrainingCopyScheduleFromInput = {
 export type RatioTrainingDay = {
   __typename?: 'RatioTrainingDay';
   id: Scalars['ID'];
+  /** Дата */
   date: Scalars['String'];
   activities: Array<RatioActivity>;
 };
@@ -3103,7 +3178,9 @@ export type WatchmenCreateWatchmanInput = {
 export type WatchmenGrade = {
   __typename?: 'WatchmenGrade';
   id: Scalars['ID'];
+  /** Код */
   code: Scalars['String'];
+  /** Повышающий коэффициент */
   multiplier: Scalars['Float'];
 };
 

@@ -23,6 +23,10 @@
       "SlackAccount",
       "WikiAccount"
     ],
+    "KkmRegisterCheckResult": [
+      "KkmRegisterCheckOkResult",
+      "GenericError"
+    ],
     "RatioCreateOrderResult": [
       "RatioOrder",
       "ValidationError",

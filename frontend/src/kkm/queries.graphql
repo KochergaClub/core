@@ -1,7 +1,10 @@
 mutation KkmRegisterCheck($params: KkmRegisterCheckInput!) {
-  kkmRegisterCheck(params: $params) {
-    url
-    error
-    status
+  result: kkmRegisterCheck(input: $params) {
+    ... on KkmRegisterCheckOkResult {
+      url
+    }
+    ... on GenericError {
+      message
+    }
   }
 }

@@ -1,10 +1,10 @@
-from django.db import models
 from django.core.exceptions import ValidationError
-
-from kocherga.kkm import kkmserver
+from django.db import models
+from kocherga.kkm.models import Controller as KkmController
+from kocherga.kkm.models import kkmserver
+from kocherga.yandex_kassa.models import Payment as KassaPayment
 
 from .ticket import Ticket
-from kocherga.yandex_kassa.models import Payment as KassaPayment
 
 
 class Payment(models.Model):
@@ -80,15 +80,11 @@ class Payment(models.Model):
         self.full_clean()
         self.save()
 
-        kkmserver.execute(
-            kkmserver.getCheckRequest(
-                kkmserver.OnlineCheck(
-                    title=self.kkm_title(),
-                    signMethodCalculation=kkmserver.SignMethodCalculation.PrePayment100,
-                    email=self.ticket.email,
-                    sum=self.amount,
-                )
-            )
+        KkmController.load().register_check(
+            title=self.kkm_title(),
+            signMethodCalculation=kkmserver.SignMethodCalculation.PRE_PAYMENT_100,
+            email=self.ticket.email,
+            sum=self.amount,
         )
 
         self.fiscalization_status = 'fiscalized'

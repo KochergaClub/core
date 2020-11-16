@@ -7,10 +7,12 @@ from decimal import Decimal
 from typing import Any, Dict
 
 from django.db import models
+from django.utils import timezone
 from kocherga.dateutils import TZ
 from kocherga.django.managers import RelayQuerySetMixin
+from kocherga.django.models import SingletonModel
 
-from . import ofd
+from . import kkmserver, ofd
 
 logger = logging.getLogger(__name__)
 
@@ -32,6 +34,38 @@ class Permissions(models.Model):
             ('kkmserver', 'Can access kkmserver'),
             ('ofd', 'Can access imported OFD data'),
         ]
+
+
+class Controller(SingletonModel):
+    """This model stores KKM state and implements shift-closing business logic."""
+
+    last_shift_closed = models.DateTimeField(
+        'Время последнего закрытия смены', null=True, blank=True
+    )
+
+    def close_shift(self):
+        kkmserver.execute(kkmserver.getCloseShiftRequest())
+        self.last_shift_closed = timezone.now()
+        self.full_clean()
+        self.save()
+
+    def register_check(
+        self,
+        email: str,
+        title: str,
+        sum: int,
+        sign_method_calculation: kkmserver.SignMethodCalculation,
+    ):
+        return kkmserver.execute(
+            kkmserver.getCheckRequest(
+                kkmserver.OnlineCheck(
+                    email=email,
+                    title=title,
+                    sum=sum,
+                    signMethodCalculation=sign_method_calculation,
+                )
+            )
+        )
 
 
 def parse_ofd_datetime(date_string: str):

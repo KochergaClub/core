@@ -1,4 +1,5 @@
-from typing import Dict, Any, Union
+from typing import Any, Dict, Union
+
 import graphql
 
 Field = graphql.GraphQLField
@@ -23,6 +24,7 @@ InputObjectType = graphql.GraphQLInputObjectType
 InterfaceType = graphql.GraphQLInterfaceType
 UnionType = graphql.GraphQLUnionType
 EnumType = graphql.GraphQLEnumType
+EnumValue = graphql.GraphQLEnumValue
 Argument = graphql.GraphQLArgument
 
 

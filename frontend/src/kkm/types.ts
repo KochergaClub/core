@@ -1,24 +1,22 @@
-export enum SignMethodCalculation {
-  // Признак способа расчета. тег ОФД 1214. Для ФФД.1.05 и выше обязательное поле
-  // 1: "ПРЕДОПЛАТА 100% (Полная предварительная оплата до момента передачи предмета расчета)"
-  // 2: "ПРЕДОПЛАТА (Частичная предварительная оплата до момента передачи предмета расчета)"
-  // 3: "АВАНС"
-  // 4: "ПОЛНЫЙ РАСЧЕТ (Полная оплата, в том числе с учетом аванса в момент передачи предмета расчета)"
-  // 5: "ЧАСТИЧНЫЙ РАСЧЕТ И КРЕДИТ (Частичная оплата предмета расчета в момент его передачи с последующей оплатой в кредит )"
-  // 6: "ПЕРЕДАЧА В КРЕДИТ (Передача предмета расчета без его оплаты в момент его передачи с последующей оплатой в кредит)"
-  // 7: "ОПЛАТА КРЕДИТА (Оплата предмета расчета после его передачи с оплатой в кредит )"
-  PrePayment100 = 1,
-  PrePayment = 2,
-  Advance = 3,
-  FullPayment = 4,
-  PartialPaymentAndCredit = 5,
-  CreditTransfer = 6,
-  CreditPayment = 7,
-}
+import { KkmSignMethodCalculation } from '~/apollo/types.generated';
+
+export const signMethodCalculationLabels: Record<
+  KkmSignMethodCalculation,
+  string
+> = {
+  [KkmSignMethodCalculation.PrePayment_100]: 'ПРЕДОПЛАТА 100%',
+  [KkmSignMethodCalculation.PrePayment]: 'ПРЕДОПЛАТА',
+  [KkmSignMethodCalculation.Advance]: 'АВАНС',
+  [KkmSignMethodCalculation.FullPayment]: 'ПОЛНЫЙ РАСЧЕТ',
+  [KkmSignMethodCalculation.PartialPaymentAndCredit]:
+    'ЧАСТИЧНЫЙ РАСЧЕТ И КРЕДИТ',
+  [KkmSignMethodCalculation.CreditTransfer]: 'ПЕРЕДАЧА В КРЕДИТ',
+  [KkmSignMethodCalculation.CreditPayment]: 'ОПЛАТА КРЕДИТА',
+};
 
 export interface FormValues {
   email: string;
   title: string;
   amount: number;
-  method: SignMethodCalculation;
+  method: KkmSignMethodCalculation;
 }

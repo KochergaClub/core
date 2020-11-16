@@ -842,13 +842,48 @@ input KkmRegisterCheckInput {
   email: String!
   title: String!
   sum: Int!
-  sign_method_calculation: Int!
+  sign_method_calculation: KkmSignMethodCalculation!
 }
 
-type KkmRegisterCheckResult {
-  status: Int!
-  url: String
-  error: String
+type KkmRegisterCheckOkResult {
+  url: String!
+}
+
+union KkmRegisterCheckResult = KkmRegisterCheckOkResult | GenericError
+
+enum KkmSignMethodCalculation {
+  """
+  ПРЕДОПЛАТА 100% (Полная предварительная оплата до момента передачи предмета расчета)
+  """
+  PRE_PAYMENT_100
+
+  """
+  ПРЕДОПЛАТА (Частичная предварительная оплата до момента передачи предмета расчета)
+  """
+  PRE_PAYMENT
+
+  """АВАНС"""
+  ADVANCE
+
+  """
+  ПОЛНЫЙ РАСЧЕТ (Полная оплата, в том числе с учетом аванса в момент передачи предмета расчета)
+  """
+  FULL_PAYMENT
+
+  """
+  ЧАСТИЧНЫЙ РАСЧЕТ И КРЕДИТ (Частичная оплата предмета расчета в момент его передачи с последующей оплатой в кредит)
+  """
+  PARTIAL_PAYMENT_AND_CREDIT
+
+  """
+  ПЕРЕДАЧА В КРЕДИТ (Передача предмета расчета без его оплаты в момент его передачи с последующей оплатой в кредит)
+  """
+  CREDIT_TRANSFER
+
+  """
+  ОПЛАТА КРЕДИТА (Оплата предмета расчета после его передачи с оплатой в кредит)
+  """
+  CREDIT_PAYMENT
 }
 
 type MailchimpSubscribeBlock implements WagtailBlock {
@@ -920,7 +955,7 @@ type Mutation {
   watchmenUpdateShift(params: WatchmenUpdateShiftInput!): WatchmenShift!
   watchmenSetWatchmanPriority(params: WatchmenSetWatchmanPriorityInput!): Boolean!
   watchmenSetWatchmanGrade(params: WatchmenSetWatchmanGradeInput!): Boolean!
-  kkmRegisterCheck(params: KkmRegisterCheckInput!): KkmRegisterCheckResult!
+  kkmRegisterCheck(input: KkmRegisterCheckInput!): KkmRegisterCheckResult!
   closeKkmShift: BasicResult!
   cashierCreatePayment(params: CashierCreatePaymentInput!): Boolean
   cashierRedeemPayment(id: ID!): Boolean
