@@ -53,6 +53,22 @@ class Controller(SingletonModel):
         self.full_clean()
         self.save()
 
+    def auto_close_shift(self):
+        # close first shift immediately
+        if not self.last_shift_closed:
+            self.close_shift()
+            return
+
+        # close shifts every 12 hours, no matter what time it is
+        MAX_SHIFT_DURATION_IN_HOURS = 12
+
+        now = timezone.now()
+        if now - self.last_shift_closed < timedelta(hours=MAX_SHIFT_DURATION_IN_HOURS):
+            # too early
+            return
+
+        self.close_shift()
+
     def register_check(
         self,
         email: str,

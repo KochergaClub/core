@@ -1,5 +1,7 @@
 #!/usr/bin/env python
-import sys, pathlib, os.path
+import os.path
+import pathlib
+import sys
 
 sys.path.append(os.path.abspath(str(pathlib.Path(__file__).parent.parent)))
 
@@ -7,14 +9,13 @@ import django
 
 django.setup()
 
-from apscheduler.schedulers.blocking import BlockingScheduler
-
-from kocherga.events.models import VkAnnouncement
-import kocherga.events.models
-import kocherga.vk.tools
-
-from django.db import transaction
 import django.utils.timezone
+import kocherga.events.models
+import kocherga.kkm.models
+import kocherga.vk.tools
+from apscheduler.schedulers.blocking import BlockingScheduler
+from django.db import transaction
+from kocherga.events.models import VkAnnouncement
 
 
 def job_wrapper(func):
@@ -66,6 +67,16 @@ def main():
         hour=8,
         minute=0,
         second=0,
+    )
+
+    scheduler.add_job(
+        func=job_wrapper(
+            lambda: kocherga.kkm.models.Controller.load().auto_close_shift()
+        ),
+        trigger='interval',
+        name='kkm_close_shift',
+        # auto_close_shift manages shift durations by itself, but we don't want to try to often in case of crazy bugs
+        minutes=30,
     )
 
     scheduler.start()
