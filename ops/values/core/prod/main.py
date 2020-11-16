@@ -1,12 +1,12 @@
 import logging.config
-from .base import *
-from .secrets import *
-
-import socket
 import os
+import socket
 
 import sentry_sdk
 from sentry_sdk.integrations.django import DjangoIntegration
+
+from .base import *
+from .secrets import *
 
 SENTRY_DSN = "https://379bb5d0da004b9fbf140914d870c555:147a473bac5641d79000d51873032874@sentry.io/1160229"
 sentry_sdk.init(dsn=SENTRY_DSN, integrations=[DjangoIntegration()])
@@ -134,7 +134,14 @@ BASE_URL = KOCHERGA_WEBSITE
 TILDA_PUBLIC_KEY = "egq8lznrfxn6ok7bjvte"
 
 KKM_SERVER = "https://kkm.kocherga.club"
+# unused - we use nginx+letsencrypt with strong passwords instead
 # KKM_SERVER_CERT = "/KKMServer.pem"
+
+KKT_NUMBER = "00106107239381"
+KKT_CASHIER = {
+    "name": "Матюхин Вячеслав Анатольевич",  # Продавец, тег ОФД 1021
+    "inn": "761401504036",  # ИНН продавца тег ОФД 1203
+}
 
 if os.environ.get("STATIC_S3_BUCKET"):
     DEFAULT_FILE_STORAGE = "kocherga.django.storages.MediaStorage"

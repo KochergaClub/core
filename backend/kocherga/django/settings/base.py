@@ -290,4 +290,13 @@ TELEGRAM_PROXY = ''
 
 KOCHERGA_IMPORTER_DISABLED = False
 
+KKM_SERVER = None
 KKM_SERVER_CERT = None  # can be set to custom certificate file path
+KKT_NUMBER = None
+
+KKT_CASHIER = None
+# example value:
+# {
+#    "name": "Элиезер Шломо Юдковский",  # Продавец, тег ОФД 1021
+#    "inn": "1234567890",  # ИНН продавца тег ОФД 1203
+# }

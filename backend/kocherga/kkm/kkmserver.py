@@ -6,13 +6,6 @@ from typing import Dict
 import requests
 from django.conf import settings
 
-# TODO - move to config
-KKT_NUMBER = '00106107239381'
-CASHIER = {
-    'name': 'Матюхин Вячеслав Анатольевич',  # Продавец, тег ОФД 1021
-    'inn': '761401504036',  # ИНН продавца тег ОФД 1203
-}
-
 
 def execute(data):
     if not settings.KKM_SERVER:
@@ -28,10 +21,19 @@ def execute(data):
     return r.json()
 
 
+def _check_settings():
+    if not settings.KKT_NUMBER:
+        raise Exception("KKT_NUMBER is not configured")
+    if not settings.KKT_CASHIER:
+        raise Exception("KKT_CASHIER is not configured")
+
+
 def getTextRequest(text):
+    _check_settings()
+
     return {
         'Command': 'RegisterCheck',  # Команда серверу.
-        'KktNumber': KKT_NUMBER,  # Заводской номер ККМ для поиска.
+        'KktNumber': settings.KKT_NUMBER,  # Заводской номер ККМ для поиска.
         # Уникальный идентификатор команды.
         # Любая строка из 40 символов - должна быть уникальна для каждой подаваемой команды.
         # По этому идентификатору можно запросить результат выполнения команды.
@@ -50,9 +52,9 @@ def getTextRequest(text):
         # Количество копий документа
         'NumberCopies': 0,
         # Продавец, тег ОФД 1021
-        'CashierName': CASHIER['name'],
+        'CashierName': settings.KKT_CASHIER['name'],
         # ИНН продавца тег ОФД 1203
-        'CashierVATIN': CASHIER['inn'],
+        'CashierVATIN': settings.KKT_CASHIER['inn'],
         # Строки чека
         'CheckStrings': [
             {
@@ -112,11 +114,13 @@ class OnlineCheck:
 
 
 def getCheckRequest(check: OnlineCheck):
+    _check_settings()
+
     return {
         # Команда серверу
         'Command': 'RegisterCheck',
         # Заводской номер ККМ для поиска.
-        'KktNumber': KKT_NUMBER,
+        'KktNumber': settings.KKT_NUMBER,
         'IdCommand': str(uuid.uuid4()),
         # Это фискальный или не фискальный чек
         'IsFiscalCheck': True,
@@ -130,8 +134,8 @@ def getCheckRequest(check: OnlineCheck):
         'NotPrint': False,  # TODO - true
         # Количество копий документа
         'NumberCopies': 0,
-        'CashierName': CASHIER['name'],
-        'CashierVATIN': CASHIER['inn'],
+        'CashierName': settings.KKT_CASHIER['name'],
+        'CashierVATIN': settings.KKT_CASHIER['inn'],
         # Телефон или е-Майл покупателя, тег ОФД 1008
         # Если чек не печатается (NotPrint = true) то указывать обязательно
         # Формат: Телефон +{Ц} или Email {С}@{C}
@@ -195,13 +199,15 @@ def getCheckRequest(check: OnlineCheck):
 
 
 def getCloseShiftRequest():
+    _check_settings()
+
     return {
         # Команда серверу
         'Command': "CloseShift",
         # Номер устройства. Если 0 то первое не блокированное на сервере
         'NumDevice': 0,
-        'CashierName': CASHIER['name'],
-        'CashierVATIN': CASHIER['inn'],
+        'CashierName': settings.KKT_CASHIER['name'],
+        'CashierVATIN': settings.KKT_CASHIER['inn'],
         # Не печатать чек на бумагу
         'NotPrint': True,
         # Id устройства. Строка. Если = "" то первое не блокированное на сервере
