@@ -3,7 +3,7 @@ import { utcToZonedTime } from 'date-fns-tz';
 import { ru } from 'date-fns/locale';
 import Link from 'next/link';
 import { useCallback } from 'react';
-import { FaTicketAlt } from 'react-icons/fa';
+import { FaTicketAlt, FaTrash } from 'react-icons/fa';
 import { FiVideo } from 'react-icons/fi';
 import styled from 'styled-components';
 
@@ -63,7 +63,7 @@ const TicketCard: React.FC<Props> = ({ ticket, later }) => {
     <Card>
       <DropdownContainer>
         <DropdownMenu>
-          <Action act={cancel}>Отменить регистрацию</Action>
+          <Action act={cancel} title="Отменить регистрацию" icon={FaTrash} />
         </DropdownMenu>
       </DropdownContainer>
       <Row gutter={24} vCentered stretch>

@@ -1,3 +1,5 @@
+import { FaRegFileImage } from 'react-icons/fa';
+
 import DropdownMenu, { Action } from '~/components/DropdownMenu';
 
 import ChooseImageAction from './ChooseImageAction';
@@ -22,7 +24,11 @@ const Controls: React.FC<Props> = ({
       placement="bottom-start"
       onExpandChange={onExpandChange}
     >
-      <Action syncAct={openFilePicker}>Локальный файл</Action>
+      <Action
+        syncAct={openFilePicker}
+        title="Локальный файл"
+        icon={FaRegFileImage}
+      />
       <UploadFromUrlAction setImageId={setImageId} defaults={defaults} />
       <ChooseImageAction setImageId={setImageId} />
     </DropdownMenu>

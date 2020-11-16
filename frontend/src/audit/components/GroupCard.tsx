@@ -1,10 +1,12 @@
 import React, { useCallback } from 'react';
+import { FaMinus, FaPlus, FaUser } from 'react-icons/fa';
 
 import { useMutation } from '@apollo/client';
 
 import { MutationButton } from '~/components';
 import Card from '~/components/Card';
 import DropdownMenu, { LinkAction, ModalAction } from '~/components/DropdownMenu';
+import WagtailIcon from '~/components/icons/WagtailIcon';
 import { AsyncButton, Badge, Column, Row } from '~/frontkit';
 
 import {
@@ -69,25 +71,27 @@ const GroupCard: React.FC<Props> = ({ group }) => {
         <Row stretch>
           <strong>{group.name}</strong>
           <DropdownMenu placement="bottom-start">
-            <LinkAction href={`/wagtail/groups/${group.id}/`}>
-              Редактировать в Wagtail
-            </LinkAction>
-            <ModalAction title="Добавить сотрудника">
+            <LinkAction
+              href={`/wagtail/groups/${group.id}/`}
+              title="Редактировать в Wagtail"
+              icon={WagtailIcon}
+            />
+            <ModalAction title="Добавить сотрудника" icon={FaUser}>
               {({ close }) => (
                 <AddMemberToGroupModal close={close} group={group} />
               )}
             </ModalAction>
-            <ModalAction title="Добавить пользователя">
+            <ModalAction title="Добавить пользователя" icon={FaUser}>
               {({ close }) => (
                 <AddUserToGroupModal close={close} group={group} />
               )}
             </ModalAction>
-            <ModalAction title="Добавить разрешение">
+            <ModalAction title="Добавить разрешение" icon={FaPlus}>
               {({ close }) => (
                 <AddPermissionToGroupModal close={close} group={group} />
               )}
             </ModalAction>
-            <ModalAction title="Убрать разрешение">
+            <ModalAction title="Убрать разрешение" icon={FaMinus}>
               {({ close }) => (
                 <RemovePermissionFromGroupModal close={close} group={group} />
               )}

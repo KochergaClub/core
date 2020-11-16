@@ -1,4 +1,5 @@
 import React from 'react';
+import { FaEdit, FaPlus } from 'react-icons/fa';
 
 import Card from '~/components/Card';
 import DropdownMenu, { ModalAction } from '~/components/DropdownMenu';
@@ -21,12 +22,12 @@ const TicketTypeCard: React.FC<Props> = ({ ticketType }) => {
         <Row spaced>
           <strong>{ticketType.price} руб.</strong>
           <DropdownMenu>
-            <ModalAction title="Редактировать">
+            <ModalAction title="Редактировать" icon={FaEdit}>
               {({ close }) => (
                 <EditTicketTypeModal close={close} ticketType={ticketType} />
               )}
             </ModalAction>
-            <ModalAction title="Создать промокод">
+            <ModalAction title="Создать промокод" icon={FaPlus}>
               {({ close }) => (
                 <CreatePromocodeModal
                   close={close}

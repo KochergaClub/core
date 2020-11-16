@@ -1,16 +1,16 @@
-import { useContext, useCallback } from 'react';
+import { useCallback, useContext } from 'react';
+import { VscWindow } from 'react-icons/vsc';
 
-import ActionContainer from './ActionContainer';
-import { DropdownMenuContext } from './contexts';
-
-import { ModalCreator } from './contexts';
+import { ActionLayout } from './ActionLayout';
+import { DropdownMenuContext, ModalCreator } from './contexts';
 
 interface Props {
   title: string;
+  icon?: React.ElementType;
   children: ModalCreator;
 }
 
-const ModalAction: React.FC<Props> = ({ children, title }) => {
+const ModalAction: React.FC<Props> = ({ children, title, icon }) => {
   const { close, setModal } = useContext(DropdownMenuContext);
 
   const openModal = useCallback(() => {
@@ -18,7 +18,9 @@ const ModalAction: React.FC<Props> = ({ children, title }) => {
     close();
   }, [close, setModal, children]);
 
-  return <ActionContainer onClick={openModal}>{title}</ActionContainer>;
+  return (
+    <ActionLayout onClick={openModal} title={title} icon={icon || VscWindow} />
+  );
 };
 
 export default ModalAction;

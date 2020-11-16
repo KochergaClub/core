@@ -1,4 +1,5 @@
 import { useCallback, useState } from 'react';
+import { FiGrid } from 'react-icons/fi';
 
 import { useCommonHotkeys, useFocusOnFirstModalRender } from '~/common/hooks';
 import { ModalAction } from '~/components/DropdownMenu';
@@ -71,7 +72,7 @@ const ChooseImageModal: React.FC<ModalProps> = ({ close, save }) => {
 
 const ChooseImageAction: React.FC<Props> = ({ setImageId }) => {
   return (
-    <ModalAction title="Выбрать существующую">
+    <ModalAction title="Выбрать существующую" icon={FiGrid}>
       {({ close }) => <ChooseImageModal close={close} save={setImageId} />}
     </ModalAction>
   );

@@ -1,4 +1,5 @@
 import { useCallback } from 'react';
+import { FaLink } from 'react-icons/fa';
 
 import { useMutation } from '@apollo/client';
 
@@ -33,7 +34,7 @@ const UploadFromUrlAction: React.FC<Props> = ({ setImageId, defaults }) => {
   );
 
   return (
-    <ModalAction title="По ссылке">
+    <ModalAction title="По ссылке" icon={FaLink}>
       {({ close }) => (
         <UploadFromUrlModal close={close} save={submit} defaults={defaults} />
       )}

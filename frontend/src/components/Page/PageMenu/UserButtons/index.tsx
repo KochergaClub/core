@@ -1,5 +1,5 @@
 import Link from 'next/link';
-import { useCallback, useContext, useEffect, useState } from 'react';
+import { useCallback, useContext, useEffect } from 'react';
 import { FaEdit, FaUser, FaUserCircle, FaUserTie } from 'react-icons/fa';
 import { GoGear, GoSignOut } from 'react-icons/go';
 import styled from 'styled-components';
@@ -10,8 +10,7 @@ import { CurrentUserDocument } from '~/auth/queries.generated';
 import { WagtailPageContext } from '~/cms/contexts';
 import { ApolloQueryResults, DropdownMenu } from '~/components';
 import { Action, NextLinkAction } from '~/components/DropdownMenu';
-import { BasicSpinner } from '~/components/Spinner';
-import { colors, fonts, Row, useNotification } from '~/frontkit';
+import { fonts, useNotification } from '~/frontkit';
 import { LogoutDocument } from '~/my/queries.generated';
 
 import { MenuKind } from '../../types';
@@ -25,34 +24,19 @@ const Email = styled.div`
 `;
 
 const LogoutAction: React.FC = () => {
-  const [acting, setActing] = useState(false);
-
   const [logoutMutation] = useMutation(LogoutDocument);
   const notify = useNotification();
 
   const act = useCallback(async () => {
-    setActing(true);
     const { data } = await logoutMutation();
     if (!data?.result?.ok) {
       notify({ text: 'Не получилось выйти', type: 'Error' });
-      setActing(false);
       return;
     }
     window.location.href = '/';
   }, [logoutMutation, notify]);
 
-  return (
-    <Action act={act}>
-      <Row vCentered>
-        {acting ? (
-          <BasicSpinner color={colors.grey[500]} />
-        ) : (
-          <GoSignOut color={colors.grey[500]} />
-        )}
-        <span>Выйти</span>
-      </Row>
-    </Action>
-  );
+  return <Action act={act} title="Выйти" icon={GoSignOut} />;
 };
 
 const EditWagtailPageAction: React.FC = () => {
@@ -91,14 +75,7 @@ const EditWagtailPageAction: React.FC = () => {
     return null;
   }
 
-  return (
-    <Action act={act}>
-      <Row vCentered>
-        <FaEdit color={colors.grey[500]} />
-        <span>Редактировать</span>
-      </Row>
-    </Action>
-  );
+  return <Action act={act} title="Редактировать" icon={FaEdit} />;
 };
 
 interface Props {
@@ -136,26 +113,15 @@ const UserButtons: React.FC<Props> = (
             <Link href="/my">
               <Email>{user.email}</Email>
             </Link>
-            <NextLinkAction href="/my">
-              <Row vCentered>
-                <FaUser color={colors.grey[500]} />
-                <span>Личный кабинет</span>
-              </Row>
-            </NextLinkAction>
+            <NextLinkAction href="/my" icon={FaUser} title="Личный кабинет" />
             {user.is_staff ? (
-              <NextLinkAction href="/team">
-                <Row vCentered>
-                  <FaUserTie color={colors.grey[500]} />
-                  <span>Интранет</span>
-                </Row>
-              </NextLinkAction>
+              <NextLinkAction href="/team" icon={FaUserTie} title="Интранет" />
             ) : null}
-            <NextLinkAction href="/my/settings">
-              <Row vCentered>
-                <GoGear color={colors.grey[500]} />
-                <span>Настройки</span>
-              </Row>
-            </NextLinkAction>
+            <NextLinkAction
+              href="/my/settings"
+              icon={GoGear}
+              title="Настройки"
+            />
             <LogoutAction />
             <EditWagtailPageAction />
           </DropdownMenu>

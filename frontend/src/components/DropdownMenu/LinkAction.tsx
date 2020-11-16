@@ -1,20 +1,24 @@
+import { FaArrowRight } from 'react-icons/fa';
 import styled from 'styled-components';
 
-import ActionContainer from './ActionContainer';
+import { ActionLayout } from './ActionLayout';
 
-interface Props {
+type Props = {
   href: string;
-}
+  title: string;
+  icon?: React.ElementType;
+  children?: null;
+};
 
 export const LinkActionA = styled.a`
   color: black;
   text-decoration: none;
 `;
 
-export const LinkAction: React.FC<Props> = ({ children, href }) => {
+export const LinkAction: React.FC<Props> = ({ href, icon, title }) => {
   return (
     <LinkActionA href={href}>
-      <ActionContainer>{children}</ActionContainer>
+      <ActionLayout title={title} icon={icon || FaArrowRight} />
     </LinkActionA>
   );
 };

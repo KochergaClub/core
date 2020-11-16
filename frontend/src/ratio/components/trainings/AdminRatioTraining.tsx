@@ -1,6 +1,6 @@
 import Head from 'next/head';
 import React from 'react';
-import { FaComments, FaRegListAlt } from 'react-icons/fa';
+import { FaComments, FaEdit, FaPlus, FaRegListAlt } from 'react-icons/fa';
 
 import { useQuery } from '@apollo/client';
 
@@ -60,12 +60,12 @@ const AdminRatioTraining: React.FC<Props> = ({ slug }) => {
                 <Row>
                   <div>Управление:</div>
                   <DropdownMenu>
-                    <ModalAction title="Редактировать">
+                    <ModalAction title="Редактировать" icon={FaEdit}>
                       {({ close }) => (
                         <EditTrainingModal close={close} training={training} />
                       )}
                     </ModalAction>
-                    <ModalAction title="Создать промокод">
+                    <ModalAction title="Создать промокод" icon={FaPlus}>
                       {({ close }) => (
                         <CreatePromocodeModal
                           close={close}

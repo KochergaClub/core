@@ -1,3 +1,5 @@
+import { FaEdit, FaTrash } from 'react-icons/fa';
+
 import DropdownMenu, { ModalAction, NextLinkAction } from '~/components/DropdownMenu';
 
 import { prototypeRoute } from '../routes';
@@ -13,14 +15,15 @@ const EventDropdownMenu: React.FC<Props> = ({ event }) => {
   return (
     <DropdownMenu title="Действия">
       {event.prototype && (
-        <NextLinkAction href={prototypeRoute(event.prototype.id)}>
-          Открыть прототип
-        </NextLinkAction>
+        <NextLinkAction
+          title="Открыть прототип"
+          href={prototypeRoute(event.prototype.id)}
+        />
       )}
-      <ModalAction title="Заполнить из прототипа">
+      <ModalAction title="Заполнить из прототипа" icon={FaEdit}>
         {({ close }) => <LinkToPrototypeModal close={close} event={event} />}
       </ModalAction>
-      <ModalAction title="Удалить">
+      <ModalAction title="Удалить" icon={FaTrash}>
         {({ close }) => <EventDeleteModal close={close} event={event} />}
       </ModalAction>
     </DropdownMenu>

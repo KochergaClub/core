@@ -1,5 +1,5 @@
 import { useCallback } from 'react';
-import { FaCashRegister, FaCheck, FaTimes } from 'react-icons/fa';
+import { FaCashRegister, FaCheck, FaTimes, FaTrash } from 'react-icons/fa';
 
 import { useMutation } from '@apollo/client';
 
@@ -19,7 +19,7 @@ interface Props {
 const CanceledBadge = () => <Badge type="accent">ОТКАЗ</Badge>;
 
 const FiscalizeAction: React.FC<Props> = ({ payment }) => {
-  const [isKkmUser] = usePermissions(['cashier.kkm_user']);
+  const [isKkmUser] = usePermissions(['kkm.kkmserver']);
   const [fiscalizeMutation] = useMutation(RatioPaymentFiscalizeDocument, {
     refetchQueries: ['RatioTrainingBySlug', 'RatioTickets', 'RatioTicketById'],
     awaitRefetchQueries: true,
@@ -43,7 +43,7 @@ const FiscalizeAction: React.FC<Props> = ({ payment }) => {
     return null;
   }
 
-  return <Action act={act}>Напечатать чек</Action>;
+  return <Action act={act} title="Напечатать чек" />;
 };
 
 const DeleteAction: React.FC<Props> = ({ payment }) => {
@@ -59,7 +59,7 @@ const DeleteAction: React.FC<Props> = ({ payment }) => {
     await mutation();
   }, [mutation]);
 
-  return <Action act={act}>Удалить</Action>;
+  return <Action act={act} title="Удалить" icon={FaTrash} />;
 };
 
 const FiscalizedManuallyAction: React.FC<Props> = ({ payment }) => {
@@ -82,7 +82,7 @@ const FiscalizedManuallyAction: React.FC<Props> = ({ payment }) => {
   ) {
     return null;
   }
-  return <Action act={act}>Чек пробит вручную</Action>;
+  return <Action act={act} title="Чек пробит вручную" />;
 };
 
 const PaymentStatus: React.FC<Props> = ({ payment }) => {
@@ -119,7 +119,8 @@ const FiscalizationStatus: React.FC<Props> = ({ payment }) => {
 const SetStatusAction: React.FC<{
   payment: RatioPaymentFragment;
   status: string;
-}> = ({ payment, status, children }) => {
+  title: string;
+}> = ({ payment, status, title }) => {
   const [setStatusMutation] = useMutation(RatioPaymentSetStatusDocument);
 
   const act = useCallback(async () => {
@@ -133,21 +134,17 @@ const SetStatusAction: React.FC<{
     });
   }, [payment.id, status, setStatusMutation]);
 
-  return <Action act={act}>{children}</Action>;
+  return <Action act={act} title={title} />;
 };
 
 const StatusActions: React.FC<Props> = ({ payment }) => {
   return (
     <>
       {payment.status === 'todo' && (
-        <SetStatusAction payment={payment} status="paid">
-          Оплачен
-        </SetStatusAction>
+        <SetStatusAction payment={payment} status="paid" title="Оплачен" />
       )}
       {payment.status === 'paid' && (
-        <SetStatusAction payment={payment} status="todo">
-          Не оплачен
-        </SetStatusAction>
+        <SetStatusAction payment={payment} status="todo" title="Не оплачен" />
       )}
     </>
   );

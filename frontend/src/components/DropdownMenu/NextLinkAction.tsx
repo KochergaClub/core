@@ -1,17 +1,21 @@
 import Link from 'next/link';
+import { FaArrowRight } from 'react-icons/fa';
 
-import ActionContainer from './ActionContainer';
+import { ActionLayout } from './ActionLayout';
 import { LinkActionA } from './LinkAction';
 
-interface Props {
+type Props = {
   href: string;
-}
+  title: string;
+  icon?: React.ElementType;
+  children?: null;
+};
 
-const NextLinkAction: React.FC<Props> = ({ children, href }) => {
+const NextLinkAction: React.FC<Props> = ({ href, icon, title }) => {
   return (
     <Link href={href} passHref>
       <LinkActionA>
-        <ActionContainer>{children}</ActionContainer>
+        <ActionLayout title={title} icon={icon || FaArrowRight} />
       </LinkActionA>
     </Link>
   );

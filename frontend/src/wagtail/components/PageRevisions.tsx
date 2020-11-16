@@ -2,6 +2,7 @@ import { differenceInCalendarDays, formatRelative } from 'date-fns';
 import { ru } from 'date-fns/locale';
 import { FragmentDefinitionNode } from 'graphql';
 import { useContext } from 'react';
+import { FaHistory } from 'react-icons/fa';
 import styled from 'styled-components';
 
 import { gql, TypedDocumentNode, useApolloClient, useQuery } from '@apollo/client';
@@ -21,10 +22,6 @@ const ScrollableDropdownArea = styled.div`
   overflow-x: hidden; /* vertical scroll covers some part of area children, but we compensate for it with margin-right */
   overflow-y: auto;
   max-height: 80vh;
-`;
-
-const ActionWrapper = styled.div`
-  margin-right: 10px;
 `;
 
 const formatRelativeWrapped = (date: Date) => {
@@ -152,11 +149,9 @@ const PageRevisions: React.FC = () => {
                     await pickRevision(revision.id);
                   }}
                   key={revision.id}
-                >
-                  <ActionWrapper>
-                    {formatRelativeWrapped(new Date(revision.created_at))}
-                  </ActionWrapper>
-                </Action>
+                  title={formatRelativeWrapped(new Date(revision.created_at))}
+                  icon={FaHistory}
+                />
               ))}
             </ScrollableDropdownArea>
           </DropdownMenu>
