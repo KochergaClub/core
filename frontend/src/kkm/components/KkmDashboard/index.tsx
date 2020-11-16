@@ -52,7 +52,7 @@ const CloseShiftButton: React.FC = () => {
     <MutationButton
       mutation={CloseKkmShiftDocument}
       variables={{}}
-      confirmText="Вы точно хотите закрыть смену вручную?"
+      confirmText="Вы точно хотите закрыть смену вручную? Cмены закрываются автоматически каждые 12 часов."
       refetchQueries={['KkmDashboard']}
       kind="primary"
     >
