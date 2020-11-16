@@ -886,6 +886,10 @@ enum KkmSignMethodCalculation {
   CREDIT_PAYMENT
 }
 
+type KkmStatusResult {
+  last_shift_closed: String
+}
+
 type MailchimpSubscribeBlock implements WagtailBlock {
   id: ID!
   value: MailchimpSubscribeBlockValue!
@@ -1258,6 +1262,7 @@ type Query {
   watchmenWatchmenAll(currentStaff: Boolean, currentRole: Boolean): [WatchmenWatchman!]!
   watchmenGradesAll: [WatchmenGrade!]!
   watchmenShifts(from_date: String!, to_date: String!): [WatchmenShift!]!
+  kkmStatus: KkmStatusResult!
   ofdFiscalDrives: [OfdFiscalDrive!]!
   ofdDocuments(before: String, after: String, first: Int, last: Int): OfdDocumentConnection!
   ofdShifts(before: String, after: String, first: Int, last: Int, filter: OfdShiftsFilterInput): OfdShiftConnection!

@@ -74,8 +74,7 @@ KkmSignMethodCalculation = g.EnumType(
     'KkmSignMethodCalculation',
     {
         method.name: g.EnumValue(
-            value=method.name,
-            description=sign_method_calculation_descriptions[method]
+            value=method.name, description=sign_method_calculation_descriptions[method]
         )
         for method in SignMethodCalculation
     },

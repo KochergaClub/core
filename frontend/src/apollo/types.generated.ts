@@ -1016,6 +1016,11 @@ export enum KkmSignMethodCalculation {
   CreditPayment = 'CREDIT_PAYMENT'
 }
 
+export type KkmStatusResult = {
+  __typename?: 'KkmStatusResult';
+  last_shift_closed?: Maybe<Scalars['String']>;
+};
+
 export type MailchimpSubscribeBlock = WagtailBlock & {
   __typename?: 'MailchimpSubscribeBlock';
   id: Scalars['ID'];
@@ -1933,6 +1938,7 @@ export type Query = {
   watchmenWatchmenAll: Array<WatchmenWatchman>;
   watchmenGradesAll: Array<WatchmenGrade>;
   watchmenShifts: Array<WatchmenShift>;
+  kkmStatus: KkmStatusResult;
   ofdFiscalDrives: Array<OfdFiscalDrive>;
   ofdDocuments: OfdDocumentConnection;
   ofdShifts: OfdShiftConnection;

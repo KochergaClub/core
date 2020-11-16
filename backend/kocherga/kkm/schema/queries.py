@@ -10,6 +10,20 @@ c = helpers.Collection()
 
 
 @c.class_field
+class kkmStatus(helpers.BaseField):
+    def resolve(self, _, info):
+        return {
+            'last_shift_closed': models.Controller.load().last_shift_closed,
+        }
+
+    permissions = [user_perm('kkm.kkmserver')]
+
+    result = {
+        'last_shift_closed': Optional[str],
+    }
+
+
+@c.class_field
 class ofdFiscalDrives(helpers.BaseField):
     def resolve(self, _, info):
         return models.OfdFiscalDrive.objects.all()

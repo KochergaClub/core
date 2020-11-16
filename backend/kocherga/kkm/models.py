@@ -44,7 +44,11 @@ class Controller(SingletonModel):
     )
 
     def close_shift(self):
-        kkmserver.execute(kkmserver.getCloseShiftRequest())
+        result = kkmserver.execute(kkmserver.getCloseShiftRequest())
+        if result['Status'] != 0:
+            raise Exception(
+                f"Expected status 0, got: {result['Status']}. Error: {result.get('Error')}"
+            )
         self.last_shift_closed = timezone.now()
         self.full_clean()
         self.save()

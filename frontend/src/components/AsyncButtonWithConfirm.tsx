@@ -1,6 +1,6 @@
 import { useCallback, useState } from 'react';
 
-import { Button, ControlsFooter, Modal } from '~/frontkit';
+import { Button, ControlsFooter, Modal, useNotification } from '~/frontkit';
 
 interface Props {
   act: () => Promise<void>;
@@ -25,6 +25,7 @@ const AsyncButtonWithConfirm = ({
 }: Props) => {
   const [confirming, setConfirming] = useState(false);
   const [loading, setLoading] = useState(false);
+  const notify = useNotification();
 
   const askConfirm = useCallback(() => {
     setConfirming(true);
@@ -36,10 +37,16 @@ const AsyncButtonWithConfirm = ({
 
   const confirm = useCallback(async () => {
     setLoading(true);
-    await act();
+    try {
+      await act();
+    } catch (e) {
+      notify({ text: String(e), type: 'Error' });
+      setLoading(false);
+      return;
+    }
     setLoading(false);
     closeConfirm();
-  }, [act, closeConfirm]);
+  }, [act, closeConfirm, notify]);
 
   return (
     <>

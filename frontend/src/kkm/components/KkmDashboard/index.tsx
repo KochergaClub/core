@@ -6,30 +6,35 @@ import { MdCheckCircle, MdError } from 'react-icons/md';
 import { useQuery } from '@apollo/client';
 
 import { ApolloQueryResults, MutationButton, PaddedBlock } from '~/components';
-import { CardList } from '~/components/Card';
 import { colors, Column, Row } from '~/frontkit';
 
-import OfdShiftCard from '../ofd/OfdShiftCard';
-import {
-    CloseKkmShiftDocument, KkmDashboardDocument, KkmDashboardQuery
-} from './queries.generated';
+import { CloseKkmShiftDocument, KkmDashboardDocument } from './queries.generated';
 
-const LastImport: React.FC<{ data: KkmDashboardQuery }> = ({
-  data: { importer },
+const parseMaybeDate = (dateStr: string | null | undefined): Date | undefined =>
+  dateStr ? parseISO(dateStr) : undefined;
+
+type DateReportProps = {
+  date: Date | undefined;
+  label: string;
+  maxMinutesAge: number;
+};
+
+const DateReport: React.FC<DateReportProps> = ({
+  date,
+  label,
+  maxMinutesAge,
 }) => {
-  const date = importer.last_dt ? parseISO(importer.last_dt) : undefined;
   const now = new Date();
-  const MAX_MINUTES_AGE = 30;
   const diffMinutes = date ? differenceInMinutes(now, date) : undefined;
   return (
     <Row vCentered gutter={16}>
-      {diffMinutes && diffMinutes < MAX_MINUTES_AGE ? (
+      {diffMinutes && diffMinutes < maxMinutesAge ? (
         <MdCheckCircle size={32} color={colors.grey[700]} />
       ) : (
         <MdError size={32} color={colors.accent[700]} />
       )}
       <div>
-        Последний импорт из ОФД:
+        <small>{label}</small>
         <br />
         {date
           ? formatRelative(date, new Date(), {
@@ -48,6 +53,8 @@ const CloseShiftButton: React.FC = () => {
       mutation={CloseKkmShiftDocument}
       variables={{}}
       confirmText="Вы точно хотите закрыть смену вручную?"
+      refetchQueries={['KkmDashboard']}
+      kind="primary"
     >
       Закрыть смену
     </MutationButton>
@@ -60,22 +67,23 @@ const KkmDashboard: React.FC = () => {
     <PaddedBlock>
       <ApolloQueryResults {...queryResults}>
         {({ data }) => (
-          <div>
-            <LastImport data={data} />
-            <h2>Открытые смены</h2>
-            <Column stretch gutter={8}>
-              <small>
-                Данные о сменах импортируются из ОФД и могут быть не
-                актуальными.
-              </small>
-              <CardList>
-                {data.ofdShifts.nodes.map((shift) => (
-                  <OfdShiftCard shift={shift} key={shift.id} />
-                ))}
-              </CardList>
-              <CloseShiftButton />
-            </Column>
-          </div>
+          <Column stretch gutter={16}>
+            <DateReport
+              date={parseMaybeDate(data.importer.last_dt)}
+              label="Последний импорт из ОФД:"
+              maxMinutesAge={30}
+            />
+            <DateReport
+              date={parseMaybeDate(data.kkmStatus.last_shift_closed)}
+              label="Время закрытия последней смены:"
+              maxMinutesAge={60 * 23}
+            />
+            <small>
+              Время закрытия последней смены хранится в БД. Если смена была
+              закрыта прямым взаимодействием с кассой, время обновлено не будет.
+            </small>
+            <CloseShiftButton />
+          </Column>
         )}
       </ApolloQueryResults>
     </PaddedBlock>
