@@ -2790,6 +2790,7 @@ export type StaffMember = {
 
 export type Subscription = {
   __typename?: 'Subscription';
+  watchmenScheduleUpdates: WatchmenScheduleUpdateNotification;
   events: EventNotification;
 };
 
@@ -3188,6 +3189,11 @@ export type WatchmenGrade = {
   code: Scalars['String'];
   /** Повышающий коэффициент */
   multiplier: Scalars['Float'];
+};
+
+export type WatchmenScheduleUpdateNotification = {
+  __typename?: 'WatchmenScheduleUpdateNotification';
+  updated: Scalars['Boolean'];
 };
 
 export type WatchmenSetWatchmanGradeInput = {

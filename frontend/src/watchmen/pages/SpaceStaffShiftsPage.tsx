@@ -1,25 +1,25 @@
 import { addWeeks, format, parseISO, startOfWeek } from 'date-fns';
 import { useState } from 'react';
 
-import { useQuery } from '@apollo/client';
-import { Column } from '~/frontkit';
+import { useQuery, useSubscription } from '@apollo/client';
 
 import { NextApolloPage, withApollo, withStaff } from '~/apollo';
-import { useListeningWebSocket, usePermissions } from '~/common/hooks';
+import { usePermissions } from '~/common/hooks';
 import { ApolloQueryResults, Page } from '~/components';
+import { Column } from '~/frontkit';
 
 import EditingSwitch from '../components/EditingSwitch';
 import Pager from '../components/Pager';
 import ShiftsCalendar from '../components/ShiftsCalendar';
 import { EditingContext } from '../contexts';
-import { WatchmenShiftsDocument } from '../queries.generated';
+import { OnWatchmenScheduleUpdatesDocument, WatchmenShiftsDocument } from '../queries.generated';
 
 interface Props {
   from_date: string;
   to_date: string;
 }
 
-const SpaceStaffShiftsPage: NextApolloPage<Props> = props => {
+const SpaceStaffShiftsPage: NextApolloPage<Props> = (props) => {
   const [editable] = usePermissions(['watchmen.manage']);
 
   const [editing, setEditing] = useState(false);
@@ -34,8 +34,13 @@ const SpaceStaffShiftsPage: NextApolloPage<Props> = props => {
     },
   });
 
-  useListeningWebSocket('ws/watchmen-schedule/', async () => {
-    queryResults.refetch();
+  useSubscription(OnWatchmenScheduleUpdatesDocument, {
+    async onSubscriptionData({ subscriptionData }) {
+      if (!subscriptionData.data) {
+        return;
+      }
+      await queryResults.refetch();
+    },
   });
 
   return (

@@ -1,12 +1,16 @@
+import logging
+
+logger = logging.getLogger(__name__)
+
 from typing import Optional
 from kocherga.graphql import g, helpers
-from kocherga.graphql.permissions import user_perm
 
 import channels.layers
 from asgiref.sync import async_to_sync
+from django.db import transaction
 
 import kocherga.staff.tools
-from .. import models
+from .. import models, permissions
 from . import types
 
 c = helpers.Collection()
@@ -18,7 +22,7 @@ class watchmenCreateWatchman(helpers.BaseFieldWithInput):
         kocherga.staff.tools.add_watchman(**params)
         return True
 
-    permissions = [user_perm('watchmen.manage')]
+    permissions = [permissions.manage_watchmen]
     input = {
         'email': str,
         'short_name': str,
@@ -40,7 +44,8 @@ class watchmenUpdateShift(helpers.BaseFieldWithInput):
     def resolve(self, _, info, params):
         # TODO - move to model
         (shift, _) = models.Shift.objects.get_or_create(
-            date=params['date'], shift=params['shift'],
+            date=params['date'],
+            shift=params['shift'],
         )
         shift.is_night = params.get('is_night', False)
         if 'watchman_id' in params:
@@ -51,12 +56,15 @@ class watchmenUpdateShift(helpers.BaseFieldWithInput):
         shift.full_clean()
         shift.save()
 
-        async_to_sync(channels.layers.get_channel_layer().group_send)(
-            'watchmen_schedule_group', {'type': 'notify.update'}
-        )
+        def on_commit():
+            async_to_sync(channels.layers.get_channel_layer().group_send)(
+                'watchmen_schedule_group', {}
+            )
+
+        transaction.on_commit(on_commit)
         return shift
 
-    permissions = [user_perm('watchmen.manage')]
+    permissions = [permissions.manage_watchmen]
     input = {
         'date': str,
         'shift': str,
@@ -77,7 +85,7 @@ class watchmenSetWatchmanPriority(helpers.BaseFieldWithInput):
         watchman.save()
         return True
 
-    permissions = [user_perm('watchmen.manage')]
+    permissions = [permissions.manage_watchmen]
     input = {
         'watchman_id': 'ID!',
         'priority': int,
@@ -96,7 +104,7 @@ class watchmenSetWatchmanGrade(helpers.BaseFieldWithInput):
         watchman.save()
         return True
 
-    permissions = [user_perm('watchmen.manage')]
+    permissions = [permissions.manage_watchmen]
     input = {
         'watchman_id': 'ID!',
         'grade_id': 'ID!',

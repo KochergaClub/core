@@ -1843,6 +1843,7 @@ type StaffMember {
 }
 
 type Subscription {
+  watchmenScheduleUpdates: WatchmenScheduleUpdateNotification!
   events: EventNotification!
 }
 
@@ -2183,6 +2184,10 @@ type WatchmenGrade {
 
   """Повышающий коэффициент"""
   multiplier: Float!
+}
+
+type WatchmenScheduleUpdateNotification {
+  updated: Boolean!
 }
 
 input WatchmenSetWatchmanGradeInput {

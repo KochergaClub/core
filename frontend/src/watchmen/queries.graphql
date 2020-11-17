@@ -79,3 +79,9 @@ mutation WatchmenUpdateShift($params: WatchmenUpdateShiftInput!) {
     ...Shift
   }
 }
+
+subscription onWatchmenScheduleUpdates {
+  watchmenScheduleUpdates {
+    updated
+  }
+}

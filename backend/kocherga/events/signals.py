@@ -3,13 +3,11 @@ import logging
 logger = logging.getLogger(__name__)
 
 import channels.layers
-from asgiref.sync import async_to_sync
-
-from django.db import transaction
-from django.dispatch import receiver
-from django.db.models.signals import post_save
-
 import reversion.signals
+from asgiref.sync import async_to_sync
+from django.db import transaction
+from django.db.models.signals import post_save
+from django.dispatch import receiver
 
 from . import models
 
@@ -32,7 +30,7 @@ def cb_flush_new_revisions(sender, revision, versions, **kwargs):
                 )
                 break
 
-    # We use ATOMIC_REQUESTS, so we shouldn't notify the worker until transaction commits.
+    # We use ATOMIC_REQUESTS (FIXME - do we really?), so we shouldn't notify the worker until transaction commits.
     # Otherwise the worker could query the DB too early and won't find the version object.
     transaction.on_commit(on_commit)
 
