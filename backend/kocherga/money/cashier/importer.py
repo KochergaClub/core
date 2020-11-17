@@ -3,18 +3,19 @@ import logging
 logger = logging.getLogger(__name__)
 
 from datetime import datetime
-import pandas as pd
-
-from django.conf import settings
-from django.db import models
 
 import kocherga.google
 import kocherga.importer.base
+from django.conf import settings
+from django.db import models
 
 from .models import CashierItem
 
 
 def load_df_from_google():
+    # FIXME - rewrite without pandas, this is the only pandas dependency in kocherga's codebase
+    import pandas as pd
+
     gc = kocherga.google.gspread_client()
     gs = gc.open_by_key(settings.KOCHERGA_WATCHMEN_SPREADSHEET_KEY)
     gw = gs.worksheet("Деньги")

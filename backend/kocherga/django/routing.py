@@ -1,14 +1,13 @@
-from channels.routing import ProtocolTypeRouter, ChannelNameRouter, URLRouter
-from channels.auth import AuthMiddlewareStack
-from django.urls import path
-
-import kocherga.events.consumers
 import kocherga.email.consumers
-import kocherga.watchmen.consumers
+import kocherga.events.consumers
 import kocherga.slack.consumers
-
+import kocherga.watchmen.consumers
+from channels.auth import AuthMiddlewareStack
+from channels.routing import ChannelNameRouter, ProtocolTypeRouter, URLRouter
 from kocherga.graphql.asgi import asgi_graphql_app
 
+from django.core.asgi import get_asgi_application
+from django.urls import path
 
 application = ProtocolTypeRouter(
     {
@@ -16,11 +15,8 @@ application = ProtocolTypeRouter(
             URLRouter(
                 [
                     path(
-                        "ws/events/", kocherga.events.consumers.UpdatesWebsocketConsumer
-                    ),
-                    path(
                         "ws/watchmen-schedule/",
-                        kocherga.watchmen.consumers.ScheduleUpdatesWebsocketConsumer,
+                        kocherga.watchmen.consumers.ScheduleUpdatesWebsocketConsumer.as_asgi(),
                     ),
                     path("ws/graphql", asgi_graphql_app),
                 ]
@@ -34,6 +30,6 @@ application = ProtocolTypeRouter(
                 "mailchimp-subscribe": kocherga.email.consumers.MailchimpSubscribeConsumer,
             }
         ),
-        # (http->django views is added by default)
+        "http": get_asgi_application(),
     }
 )

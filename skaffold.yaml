@@ -76,9 +76,9 @@ profiles:
             setFiles:
               config.main_py: ops/values/core/dev/main.py
               config.secrets_py: ops/secrets/core/dev/secrets.py
-        flags:
-          upgrade:
-            - --install
+        # flags:
+        #   upgrade:
+        #     - --install
       statusCheckDeadlineSeconds: 600
       kubeContext: dev
   - name: prod
@@ -100,7 +100,6 @@ profiles:
               image.frontend: registry.gitlab.com/kocherga/core/frontend
               image.mysql_backup: registry.gitlab.com/kocherga/core/mysql-backup
             setFiles:
-              config.KKMServer_pem: ops/secrets/core/prod/KKMServer.pem
               config.main_py: ops/values/core/prod/main.py
               config.secrets_py: ops/secrets/core/prod/secrets.py
         flags:

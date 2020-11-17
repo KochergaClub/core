@@ -3,26 +3,13 @@ import logging
 logger = logging.getLogger(__name__)
 
 from asgiref.sync import async_to_sync
-from channels.generic.websocket import SyncConsumer, WebsocketConsumer
+from channels.generic.websocket import SyncConsumer
 from django.core.exceptions import ObjectDoesNotExist
 from django.utils import timezone
-from kocherga.dateutils import dts, humanize_date
+from kocherga.dateutils import humanize_date
 from reversion.models import Version
 
 from .models import Event, GoogleCalendar
-
-
-class UpdatesWebsocketConsumer(WebsocketConsumer):
-    def connect(self):
-        if not self.scope["user"].is_staff:
-            self.close()
-            return
-
-        async_to_sync(self.channel_layer.group_add)('events_group', self.channel_name)
-        self.accept()
-
-    def notify_update(self, message):
-        self.send(text_data='updated')
 
 
 class NotifySlackConsumer(SyncConsumer):
@@ -86,15 +73,6 @@ class NotifySlackConsumer(SyncConsumer):
 
 
 class GoogleExportConsumer(SyncConsumer):
-    def event_to_google(self, event):
-        return {
-            "summary": event.title,
-            "description": event.description,
-            "location": event.location,
-            "start": {"dateTime": dts(event.start)},
-            "end": {"dateTime": dts(event.end)},
-        }
-
     def export_event(self, message):
         event_pk = message['event_pk']
         event = Event.all_objects.get(pk=event_pk)
