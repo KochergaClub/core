@@ -143,7 +143,6 @@ TEMPLATES = [
     },
 ]
 
-WSGI_APPLICATION = 'kocherga.django.wsgi.application'
 ASGI_APPLICATION = 'kocherga.django.routing.application'
 
 REDIS_HOST = os.environ['REDIS_HOST']
