@@ -12,6 +12,7 @@ dev:
 	# https://github.com/GoogleContainerTools/skaffold/issues/3864
 	# (but it doesn't really help)
 	# `--no-prune` is used because django migrations are SLOW.
+	# FIXME - for some reason neither --force=false nor --no-prune work correctly.
 	skaffold dev --force=false --no-prune
 
 wait_for_migrate:
