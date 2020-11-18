@@ -6,11 +6,10 @@ import urllib.parse
 from datetime import datetime
 from typing import Optional
 
-import channels.layers
 import kocherga.auth.utils
 import kocherga.dateutils
+import kocherga.email.channels
 import reversion
-from asgiref.sync import async_to_sync
 from django.conf import settings
 from django.core.mail import send_mail
 from django.db import models
@@ -19,12 +18,6 @@ from django.utils import timezone
 from kocherga.dateutils import TZ
 from kocherga.django.managers import RelayQuerySetMixin
 from kocherga.email.tools import mjml2html
-
-
-# FIXME - copy-pasted from kocherga.events.signals, extract into common module
-def channel_send(channel: str, message):
-    channel_layer = channels.layers.get_channel_layer()
-    async_to_sync(channel_layer.send)(channel, message)
 
 
 class TicketQuerySet(RelayQuerySetMixin, models.QuerySet):
@@ -218,9 +211,7 @@ class Ticket(models.Model):
 
         email = self.user.email
 
-        channel_send(
-            "mailchimp-subscribe", {"type": "subscribe_to_main_list", "email": email}
-        )
+        kocherga.email.channels.subscribe_to_main_list(email=email)
         logger.info(f'Scheduled subscription of {email}')
 
     @property

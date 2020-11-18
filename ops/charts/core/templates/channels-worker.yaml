@@ -19,7 +19,7 @@ spec:
       containers:
         - name: default
           image: {{ .Values.image.backend }}
-          command: ["./scripts/channels-worker.sh"]
+          command: ["./scripts/channels-worker.py"]
           resources:
             requests:
               memory: "128Mi"

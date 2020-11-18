@@ -9,6 +9,7 @@ aiohttp==3.6.2            # via aiogram, google-auth
 aioredis==1.3.1           # via channels-redis
 anyascii==0.1.7           # via wagtail
 appdirs==1.4.4            # via black, pyppeteer
+appnope==0.1.0            # via ipython
 apscheduler==3.6.3        # via -r requirements.in, slappy
 ariadne==0.12.0           # via -r requirements.in
 asgiref==3.3.1            # via -r requirements.in, channels, channels-redis, daphne, django
@@ -106,7 +107,7 @@ parso==0.7.1              # via jedi
 pathspec==0.8.0           # via black
 pexpect==4.8.0            # via ipython
 pickleshare==0.7.5        # via ipython
-pillow==7.2.0             # via wagtail
+pillow==8.0.1             # via wagtail
 pluggy==0.13.1            # via pytest
 prometheus-client==0.8.0  # via django-prometheus
 prompt-toolkit==3.0.7     # via ipython

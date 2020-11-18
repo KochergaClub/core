@@ -42,7 +42,6 @@ class eventCreate(helpers.BaseFieldWithInput):
                 params[field] = input[field]
 
         event = models.Event.objects.create(**params)
-        models.Event.objects.notify_update()  # send notification message to websocket
 
         return {
             'ok': True,
@@ -121,7 +120,6 @@ class eventUpdate(helpers.BaseFieldWithInput):
 
         event.full_clean()
         event.save()
-        models.Event.objects.notify_update()
 
         return {
             'ok': True,
@@ -166,7 +164,6 @@ class eventDelete(helpers.BaseFieldWithInput):
 
         event = models.Event.objects.get(uuid=event_id)
         event.delete()
-        models.Event.objects.notify_update()
 
         return {'ok': True}
 
@@ -182,7 +179,6 @@ class eventGenerateZoomLink(helpers.BaseFieldWithInput):
 
         event = models.Event.objects.get(uuid=event_id)
         event.generate_zoom_link()
-        models.Event.objects.notify_update()
 
         return {
             'ok': True,
@@ -200,7 +196,6 @@ class eventAddTag(helpers.BaseFieldWithInput):
         event = models.Event.objects.get(uuid=input['event_id'])
 
         event.add_tag(input['tag'])
-        models.Event.objects.notify_update()
 
         return {
             'ok': True,
@@ -218,7 +213,6 @@ class eventDeleteTag(helpers.BaseFieldWithInput):
         event = models.Event.objects.get(uuid=input['event_id'])
 
         event.delete_tag(input['tag'])
-        models.Event.objects.notify_update()
 
         return {
             'ok': True,
@@ -237,7 +231,6 @@ class eventMove(helpers.BaseFieldWithInput):
         start = dateutil.parser.isoparse(input['start'])
 
         event.move(start)
-        models.Event.objects.notify_update()
 
         return {
             'ok': True,

@@ -2,18 +2,36 @@ import logging
 
 logger = logging.getLogger(__name__)
 
-from asgiref.sync import async_to_sync
-from channels.generic.websocket import SyncConsumer
+import kocherga.slack.channels
 from django.core.exceptions import ObjectDoesNotExist
 from django.utils import timezone
 from kocherga.dateutils import humanize_date
+from kocherga.django.channels_utils import channel_send
 from reversion.models import Version
+
+from channels.consumer import SyncConsumer
 
 from .models import Event, GoogleCalendar
 
+WORKER_CHANNEL = 'events-worker'
 
-class NotifySlackConsumer(SyncConsumer):
-    def version_to_user_text(self, version):
+
+def notify_slack_by_event_version(version_id: int):
+    channel_send(
+        WORKER_CHANNEL,
+        {"type": "notify_slack_by_event_version", "version_id": version_id},
+    )
+
+
+def export_event_to_google(event_pk: int):
+    channel_send(
+        WORKER_CHANNEL,
+        {"type": "export_event_to_google", "event_pk": event_pk},
+    )
+
+
+class EventsWorker(SyncConsumer):
+    def _version_to_user_text(self, version):
         user = version.revision.user
         user_text = user.email
         try:
@@ -27,7 +45,7 @@ class NotifySlackConsumer(SyncConsumer):
 
         return user_text
 
-    def notify_by_version(self, message):
+    def notify_slack_by_event_version(self, message):
         version_id = message['version_id']
         version = Version.objects.get(pk=version_id)
 
@@ -48,35 +66,31 @@ class NotifySlackConsumer(SyncConsumer):
 
         start = timezone.localtime(version.field_dict['start'])
         day_str = humanize_date(start).capitalize()
-        room = version.field_dict[
-            'location'
-        ]  # TODO - kocherga.room.pretty(obj.get_room())
 
         attachments = [
             {
                 "title": version.field_dict['title'],
-                "text": f"{day_str}, {start:%H:%M} в {room}",
+                "text": f"{day_str}, {start:%H:%M}",
             }
         ]
 
-        user_text = self.version_to_user_text(version)
+        user_text = self._version_to_user_text(version)
 
-        async_to_sync(self.channel_layer.send)(
-            "slack-notify",
-            {
-                "type": "notify",
-                "channel": "#calendar",
-                "text": f'{text} ({user_text})',
-                "attachments": attachments,
-            },
+        kocherga.slack.channels.notify(
+            channel="#calendar",
+            text=f'{text} ({user_text})',
+            attachments=attachments,
         )
 
-
-class GoogleExportConsumer(SyncConsumer):
-    def export_event(self, message):
+    def export_event_to_google(self, message):
         event_pk = message['event_pk']
         event = Event.all_objects.get(pk=event_pk)
 
         for google_calendar in GoogleCalendar.objects.all():
             # TODO - try/catch?
             google_calendar.export_event(event)
+
+
+workers = {
+    WORKER_CHANNEL: EventsWorker.as_asgi(),
+}

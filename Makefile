@@ -79,6 +79,9 @@ tail:
 tail_front:
 	$(K) logs -f -l app=core-frontend -c default
 
+tail_channels_worker:
+	$(K) logs -f -l app=core-channels-worker
+
 superuser:
 	$(K) exec -it $(shell $(K) get po -l app=core-django -o name) -- ./manage.py createsuperuser --email=$(SUPERUSER_EMAIL)
 

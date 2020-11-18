@@ -16,10 +16,11 @@ import kocherga.events.markup
 import kocherga.openvidu.api
 import kocherga.room
 import kocherga.zoom.models
+import reversion
 import wagtail.search.index
 from asgiref.sync import async_to_sync
 from django.conf import settings
-from django.db import models, transaction
+from django.db import models
 from django.utils import timezone
 from kocherga.dateutils import TZ, inflected_month, inflected_weekday
 from kocherga.django.managers import RelayQuerySetMixin
@@ -81,14 +82,6 @@ class AllEventManager(models.Manager):
     def get_queryset(self):
         return EventQuerySet(self.model, using=self._db)
 
-    def notify_update(self):
-        def send_update():
-            async_to_sync(channels.layers.get_channel_layer().group_send)(
-                'events_group', {'type': 'notify.update'}
-            )
-
-        transaction.on_commit(send_update)
-
     def public_only(self):
         return self.get_queryset().public_only()
 
@@ -102,6 +95,7 @@ def generate_uuid():
     return base64.b32encode(uuid.uuid4().bytes)[:26].lower().decode('ascii')
 
 
+@reversion.register()
 class Event(wagtail.search.index.Indexed, models.Model):
     uuid = models.SlugField(default=generate_uuid, unique=True)
 
@@ -246,26 +240,30 @@ class Event(wagtail.search.index.Indexed, models.Model):
     # overrides django method, but that's probably ok
     def delete(self):
         self.deleted = True
+        self.save()
+
+        logger.info('sending event_updates delete notification')
         async_to_sync(channels.layers.get_channel_layer().group_send)(
             'event_updates', {'type': 'event.deleted', 'uuid': self.uuid}
         )
-        self.save()
+
+    def notify_update(self, created=False):
+        if self.deleted:
+            return
+
+        logger.info('sending event_updates notification')
+        async_to_sync(channels.layers.get_channel_layer().group_send)(
+            'event_updates',
+            {
+                'type': 'event.created' if created else 'event.updated',
+                'uuid': self.uuid,
+            },
+        )
 
     def save(self, *args, **kwargs):
-        adding = not bool(self.pk)
+        created = not bool(self.pk)
         super().save(*args, **kwargs)
-
-        if not self.deleted:
-            logger.info('sending event_updates notification')
-            layer = channels.layers.get_channel_layer()
-
-            async_to_sync(layer.group_send)(
-                'event_updates',
-                {
-                    'type': 'event.created' if adding else 'event.updated',
-                    'uuid': self.uuid,
-                },
-            )
+        self.notify_update(created=created)
 
     def tag_names(self):
         return [tag.name for tag in self.tags.all()]
@@ -278,9 +276,11 @@ class Event(wagtail.search.index.Indexed, models.Model):
         if tag_name in self.tag_names():
             raise Exception(f"Tag {tag_name} already exists on this event")
         Tag.objects.create(name=tag_name, event=self)
+        self.notify_update()
 
     def delete_tag(self, tag_name):
         self.tags.get(name=tag_name).delete()
+        self.notify_update()
 
     def timepad_event(self):
         timepad_link = self.timepad_announcement.link

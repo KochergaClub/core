@@ -96,7 +96,7 @@ class eventVkAnnouncementSetImage(helpers.BaseFieldWithInput):
 
         vk_announcement.full_clean()
         vk_announcement.save()
-        models.Event.objects.notify_update()
+        event.notify_update()
 
         return {
             'ok': True,
@@ -128,7 +128,7 @@ class eventAnnounce(helpers.BaseFieldWithInput):
         else:
             raise Exception(f"Unknown target {target}")
 
-        models.Event.objects.notify_update()
+        event.notify_update()
 
         return {
             'ok': True,
@@ -166,7 +166,7 @@ class eventSetAnnounceUrl(helpers.BaseFieldWithInput):
         announcement.link = url
         announcement.full_clean()
         announcement.save()
-        models.Event.objects.notify_update()
+        event.notify_update()
 
         return {
             'ok': True,

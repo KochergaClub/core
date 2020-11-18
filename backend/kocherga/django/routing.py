@@ -1,6 +1,6 @@
-import kocherga.email.consumers
-import kocherga.events.consumers
-import kocherga.slack.consumers
+import kocherga.email.channels
+import kocherga.events.channels
+import kocherga.slack.channels
 from channels.auth import AuthMiddlewareStack
 from channels.routing import ChannelNameRouter, ProtocolTypeRouter, URLRouter
 from kocherga.graphql.asgi import asgi_graphql_app
@@ -19,10 +19,9 @@ application = ProtocolTypeRouter(
         ),
         "channel": ChannelNameRouter(
             {
-                "slack-notify": kocherga.slack.consumers.NotifyConsumer,
-                "events-slack-notify": kocherga.events.consumers.NotifySlackConsumer,
-                "events-google-export": kocherga.events.consumers.GoogleExportConsumer,
-                "mailchimp-subscribe": kocherga.email.consumers.MailchimpSubscribeConsumer,
+                **kocherga.email.channels.workers,
+                **kocherga.events.channels.workers,
+                **kocherga.slack.channels.workers,
             }
         ),
         "http": get_asgi_application(),

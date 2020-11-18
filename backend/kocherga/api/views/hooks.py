@@ -2,15 +2,13 @@ import logging
 
 logger = logging.getLogger(__name__)
 
-from django.conf import settings
-from django.http import HttpResponse
-
-from rest_framework.decorators import api_view, permission_classes
-from rest_framework import permissions
-
+import kocherga.ratio.models
 import kocherga.slack.client
 import kocherga.tilda.models
-import kocherga.ratio.models
+from django.conf import settings
+from django.http import HttpResponse
+from rest_framework import permissions
+from rest_framework.decorators import api_view, permission_classes
 
 # Routes for external hooks.
 
@@ -35,6 +33,7 @@ def r_vk_callback(request):
     group_id = payload["group_id"]
 
     def notify(prefix, link):
+        # TODO - notify kocherga.slack.channels instead for faster hook
         result = kocherga.slack.client.client().api_call(
             "chat.postMessage",
             text=f'{prefix}: {link}\n>>> {obj["text"]}',
