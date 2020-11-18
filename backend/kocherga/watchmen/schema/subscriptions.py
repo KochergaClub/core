@@ -4,11 +4,10 @@ from asgiref.sync import sync_to_async
 
 logger = logging.getLogger(__name__)
 
-import channels.layers
 from kocherga.graphql import g, helpers
 from kocherga.graphql.permissions import check_permissions
 
-from .. import permissions
+from .. import permissions, channels
 
 c = helpers.Collection()
 
@@ -26,15 +25,7 @@ def watchmenScheduleUpdates(_):
             obj, info
         )
 
-        channel_layer = channels.layers.get_channel_layer()
-        channel_name = await channel_layer.new_channel()
-
-        GROUP_NAME = 'watchmen_schedule_group'
-        await channel_layer.group_add(GROUP_NAME, channel_name)
-        logger.info(f'Subscribed {channel_name} to {GROUP_NAME} group')
-
-        while True:
-            await channel_layer.receive(channel_name)
+        async for msg in channels.watchmen_updates_group.subscribe():
             logger.info('yielding True')
             yield True
 

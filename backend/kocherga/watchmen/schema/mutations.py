@@ -6,11 +6,10 @@ from typing import Optional
 from kocherga.graphql import g, helpers
 
 import channels.layers
-from asgiref.sync import async_to_sync
 from django.db import transaction
 
 import kocherga.staff.tools
-from .. import models, permissions
+from .. import models, permissions, channels
 from . import types
 
 c = helpers.Collection()
@@ -57,9 +56,8 @@ class watchmenUpdateShift(helpers.BaseFieldWithInput):
         shift.save()
 
         def on_commit():
-            async_to_sync(channels.layers.get_channel_layer().group_send)(
-                'watchmen_schedule_group', {}
-            )
+            # can't broadcast empty dict, channels-redis complains
+            channels.watchmen_updates_group.broadcast({'updated': True}) 
 
         transaction.on_commit(on_commit)
         return shift

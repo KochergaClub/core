@@ -10,7 +10,6 @@ import re
 import uuid
 from typing import Any, Optional
 
-import channels.layers
 import dateutil.parser
 import kocherga.events.markup
 import kocherga.openvidu.api
@@ -18,7 +17,6 @@ import kocherga.room
 import kocherga.zoom.models
 import reversion
 import wagtail.search.index
-from asgiref.sync import async_to_sync
 from django.conf import settings
 from django.db import models
 from django.utils import timezone
@@ -243,8 +241,13 @@ class Event(wagtail.search.index.Indexed, models.Model):
         self.save()
 
         logger.info('sending event_updates delete notification')
-        async_to_sync(channels.layers.get_channel_layer().group_send)(
-            'event_updates', {'type': 'event.deleted', 'uuid': self.uuid}
+        from .. import channels
+
+        channels.update_group.broadcast(
+            {
+                'type': 'event.deleted',
+                'uuid': self.uuid,
+            }
         )
 
     def notify_update(self, created=False):
@@ -252,12 +255,13 @@ class Event(wagtail.search.index.Indexed, models.Model):
             return
 
         logger.info('sending event_updates notification')
-        async_to_sync(channels.layers.get_channel_layer().group_send)(
-            'event_updates',
+        from .. import channels
+
+        channels.update_group.broadcast(
             {
                 'type': 'event.created' if created else 'event.updated',
                 'uuid': self.uuid,
-            },
+            }
         )
 
     def save(self, *args, **kwargs):

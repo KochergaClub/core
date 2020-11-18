@@ -6,7 +6,7 @@ import kocherga.slack.channels
 from django.core.exceptions import ObjectDoesNotExist
 from django.utils import timezone
 from kocherga.dateutils import humanize_date
-from kocherga.django.channels_utils import channel_send
+from kocherga.django.channels_utils import ChannelsGroup, channel_send
 from reversion.models import Version
 
 from channels.consumer import SyncConsumer
@@ -14,6 +14,9 @@ from channels.consumer import SyncConsumer
 from .models import Event, GoogleCalendar
 
 WORKER_CHANNEL = 'events-worker'
+
+
+update_group = ChannelsGroup('event_updates')
 
 
 def notify_slack_by_event_version(version_id: int):

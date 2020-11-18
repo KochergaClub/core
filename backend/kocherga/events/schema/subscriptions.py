@@ -4,11 +4,10 @@ from asgiref.sync import sync_to_async
 
 logger = logging.getLogger(__name__)
 
-import channels.layers
 from kocherga.graphql import g, helpers
 from kocherga.graphql.permissions import check_permissions
 
-from .. import permissions
+from .. import permissions, channels
 
 EventNotification = g.ObjectType(
     'EventNotification', g.fields({'type': str, 'id': 'ID!'})
@@ -23,14 +22,7 @@ def events(_):
         # check permissions
         await sync_to_async(permissions.manage_events, thread_sensitive=True)(obj, info)
 
-        channel_layer = channels.layers.get_channel_layer()
-        channel_name = await channel_layer.new_channel()
-
-        await channel_layer.group_add("event_updates", channel_name)
-        logger.info(f'Subscribed {channel_name} to event_updates group')
-
-        while True:
-            msg = await channel_layer.receive(channel_name)
+        async for msg in channels.update_group.subscribe():
             logger.debug('Event update: ' + str(msg))
             yield msg
 
