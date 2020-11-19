@@ -12,7 +12,9 @@ from .client import client
 WORKER_CHANNEL = 'slack-worker'
 
 
-def notify(channel: str, text: str, attachments: list[Any] = None):
+def notify(
+    channel: str, text: str, attachments: list[Any] = None, blocks: list[Any] = None
+):
     channel_send(
         WORKER_CHANNEL,
         {
@@ -20,6 +22,7 @@ def notify(channel: str, text: str, attachments: list[Any] = None):
             "channel": channel,
             "text": text,
             **({"attachments": attachments} if attachments else {}),
+            **({"blocks": blocks} if blocks else {}),
         },
     )
 
@@ -35,8 +38,13 @@ class SlackWorker(channels.consumer.SyncConsumer):
         if 'attachments' in message:
             logger.info('Message has attachments')
             args['attachments'] = message['attachments']
+        if 'blocks' in message:
+            logger.info('Message has blocks')
+            args['blocks'] = message['blocks']
 
-        client().api_call("chat.postMessage", **args)
+        result = client().api_call("chat.postMessage", **args)
+        if not result['ok']:
+            logger.error(result.get('error', 'Unknown error'))
 
 
 workers = {

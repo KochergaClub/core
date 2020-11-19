@@ -15,6 +15,7 @@ django.setup()
 
 import kocherga.email.channels
 import kocherga.events.channels
+import kocherga.ratio.channels
 import kocherga.slack.channels
 from channels.layers import get_channel_layer
 from channels.routing import get_default_application
@@ -26,6 +27,7 @@ def main():
     for workers in (
         kocherga.events.channels.workers,
         kocherga.slack.channels.workers,
+        kocherga.ratio.channels.workers,
         kocherga.email.channels.workers,
     ):
         channel_names += workers.keys()

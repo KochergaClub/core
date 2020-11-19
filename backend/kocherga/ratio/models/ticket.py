@@ -1,10 +1,12 @@
+import logging
+
+logger = logging.getLogger(__name__)
+
 import hashlib
 
 from django.conf import settings
 from django.core.exceptions import ValidationError
-from django.db import models
-from django.db.models.signals import post_save
-from django.dispatch import receiver
+from django.db import models, transaction
 from kocherga.django.managers import RelayQuerySetMixin
 
 from .training import Training
@@ -111,6 +113,16 @@ class Ticket(models.Model):
                 {'ticket_type': ['Тип билета должен соответствовать тренингу']}
             )
 
+    def save(self, *args, **kwargs):
+        created = not bool(self.pk)
+        super().save(*args, **kwargs)
+
+        if created:
+            from ..channels import send_new_ticket_email
+
+            logger.info('scheduling new_ticket email on commit')
+            transaction.on_commit(lambda: send_new_ticket_email(self))
+
     def set_notion_link(self, link: str):
         if self.notion_link:
             raise ValidationError({'notion_link': ['Ссылка на Notion уже заполнена']})
@@ -129,12 +141,3 @@ class Ticket(models.Model):
     def uid(self):
         SALT = settings.KOCHERGA_MAILCHIMP_UID_SALT.encode()
         return hashlib.sha1(SALT + self.email.lower().encode()).hexdigest()[:10]
-
-
-@receiver(post_save, sender=Ticket)
-def first_email(sender, instance, created, **kwargs):
-    if not created:
-        return
-
-    # TODO - notify consumer for async
-    instance.training.send_new_ticket_email(instance)

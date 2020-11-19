@@ -3,16 +3,17 @@ import logging
 logger = logging.getLogger(__name__)
 
 from typing import Optional
-from django.db import models
+
 from django.core.exceptions import ValidationError
+from django.db import models, transaction
 from kocherga.django.fields import ShortUUIDField
 from kocherga.django.managers import RelayQuerySetMixin
+from kocherga.yandex_kassa.models import Payment as KassaPayment
 
-from .ticket import Ticket
 from .payment import Payment
 from .promocode import Promocode
+from .ticket import Ticket
 from .ticket_type import TicketType
-from kocherga.yandex_kassa.models import Payment as KassaPayment
 
 
 class OrderQuerySet(models.QuerySet, RelayQuerySetMixin):
@@ -164,5 +165,13 @@ class Order(models.Model):
 
         if self.payment.waiting_for_capture:
             self.payment.capture()
+
+        from ..channels import notify_slack_about_fulfilled_order
+
+        def on_commit():
+            logger.info('notifying slack on commit')
+            notify_slack_about_fulfilled_order(self, ticket)
+
+        transaction.on_commit(on_commit)
 
         return ticket
