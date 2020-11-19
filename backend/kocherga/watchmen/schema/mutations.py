@@ -57,7 +57,7 @@ class watchmenUpdateShift(helpers.BaseFieldWithInput):
 
         def on_commit():
             # can't broadcast empty dict, channels-redis complains
-            channels.watchmen_updates_group.broadcast({'updated': True}) 
+            channels.watchmen_updates_group.broadcast({'updated': True})
 
         transaction.on_commit(on_commit)
         return shift
