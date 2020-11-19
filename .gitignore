@@ -3,6 +3,7 @@
 .idea/
 .vscode/
 /.dir-locals.el
+/.python-version
 
 /backend/node_modules
 
