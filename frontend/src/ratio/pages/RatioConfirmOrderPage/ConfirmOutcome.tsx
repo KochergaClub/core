@@ -4,13 +4,13 @@ import styled from 'styled-components';
 
 import { RatioConfirmOrderOutcome } from '~/apollo/types.generated';
 import { PaddedBlock } from '~/components';
-import { A, colors, deviceMediaQueries, fonts, Row } from '~/frontkit';
+import Card from '~/components/Card';
+import { A, colors, Column, deviceMediaQueries, fonts, Row } from '~/frontkit';
 
 const BigOutcomeContainer = styled.div`
-  max-width: 480px;
-  margin: 60px auto;
+  padding: 0px 40px; // default HintCard padding is not enough since we use a big header
   ${deviceMediaQueries.mobile(`
-  margin: 0 auto;
+    padding: 0;
   `)}
 `;
 
@@ -30,13 +30,17 @@ const BigOutcome: React.FC<{
   const Icon = icon;
   return (
     <PaddedBlock>
-      <BigOutcomeContainer>
-        <Row gutter={16} vCentered>
-          <Icon style={{ color }} size={32} />
-          <BigOutcomeHeader>{title}</BigOutcomeHeader>
-        </Row>
-        <div>{children}</div>
-      </BigOutcomeContainer>
+      <Column centered>
+        <Card>
+          <BigOutcomeContainer>
+            <Row gutter={16} vCentered>
+              <Icon style={{ color }} size={32} />
+              <BigOutcomeHeader>{title}</BigOutcomeHeader>
+            </Row>
+            <div>{children}</div>
+          </BigOutcomeContainer>
+        </Card>
+      </Column>
     </PaddedBlock>
   );
 };
