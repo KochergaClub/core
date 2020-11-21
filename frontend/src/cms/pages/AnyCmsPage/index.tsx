@@ -2,15 +2,15 @@ import { GetStaticPaths, GetStaticProps } from 'next';
 import { useRouter } from 'next/router';
 
 import { NextApolloPage, withApollo } from '~/apollo';
-import { apolloClientForStaticProps } from '~/apollo/client';
+import { apolloClientForDataFetching } from '~/apollo/client';
 import { KochergaApolloClient } from '~/apollo/types';
 import { APIError } from '~/common/api';
 import { Spinner } from '~/components';
 
 import TildaPage from '../../components/TildaPage';
 import { TildaPageQuery } from '../../queries.generated';
-import { loadTildaPage, tildaPageUrls } from '../../tilda-utils';
-import { KnownWagtailPageFragment, loadWagtailPage, wagtailPageUrls } from '../../wagtail-utils';
+import { loadTildaPage } from '../../tilda-utils';
+import { KnownWagtailPageFragment, loadWagtailPage } from '../../wagtail-utils';
 import PrivateWagtailCmsPage from './PrivateWagtailCmsPage';
 import WagtailCmsPage from './WagtailCmsPage';
 
@@ -50,25 +50,27 @@ export const AnyCmsPage: NextApolloPage<Props> = (props) => {
 };
 
 export const getStaticPaths: GetStaticPaths = async () => {
-  const apolloClient = await apolloClientForStaticProps();
+  // const apolloClient = await apolloClientForDataFetching();
 
-  const tildaUrls = await tildaPageUrls(apolloClient);
-  const wagtailUrls = await wagtailPageUrls(apolloClient);
+  // const tildaUrls = await tildaPageUrls(apolloClient);
+  // const wagtailUrls = await wagtailPageUrls(apolloClient);
 
-  const urls = [...tildaUrls, ...wagtailUrls];
+  // const urls = [...tildaUrls, ...wagtailUrls];
 
-  const paths = urls
-    .filter((u) => u !== '') // filter out front page - will be rendered from pages/index.tsx
-    .filter((u) => !u.match(/^team($|\/)/)) // filter out team/ pages - can't be prerendered anyway
-    .map((url) => ({
-      params: {
-        slug: url.split('/'),
-      },
-    }));
+  // const paths = urls
+  //   .filter((u) => u !== '') // filter out front page - will be rendered from pages/index.tsx
+  //   .filter((u) => !u.match(/^team($|\/)/)) // filter out team/ pages - can't be prerendered anyway
+  //   .map((url) => ({
+  //     params: {
+  //       slug: url.split('/'),
+  //     },
+  //   }));
+
+  const paths: string[] = [];
 
   return {
     paths,
-    fallback: true,
+    fallback: 'blocking',
   };
 };
 
@@ -107,10 +109,10 @@ export const getCmsProps = async (
 };
 
 export const getStaticProps: GetStaticProps<Props> = async (context) => {
-  const apolloClient = await apolloClientForStaticProps();
+  const apolloClient = await apolloClientForDataFetching();
 
   const path = context.params
-    ? (context.params.slug as string[]).join('/')
+    ? ((context.params.slug || []) as string[]).join('/')
     : '';
 
   try {

@@ -162,10 +162,11 @@ export const initApolloClient = (
   return apolloClient;
 };
 
-export const apolloClientForStaticProps = async () => {
+// used in getStaticProps and getServerSideProps
+export const apolloClientForDataFetching = async () => {
   const apolloClient = initApolloClient();
 
-  // the result is always non-authenticated user, but a lot of components still rely of this data being in apollo cache
+  // in case of getStaticProps the result is always a non-authenticated user, but a lot of components still rely of this data being in apollo cache
   const currentUserQueryResult = await apolloClient.query({
     query: CurrentUserDocument,
   });

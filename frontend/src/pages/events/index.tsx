@@ -1,4 +1,4 @@
 export {
   default,
-  getStaticProps,
+  getServerSideProps,
 } from '~/events/pages/PublicEventIndexPage';
