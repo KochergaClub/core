@@ -1,6 +1,14 @@
 process.env.TZ = 'Europe/Moscow';
 
+import express from 'express';
+import http from 'http';
+import httpProxy from 'http-proxy';
+import next from 'next';
 import * as yargs from 'yargs';
+
+import { API_HOST } from './constants';
+import nextjsEntrypoint from './nextjsEntrypoint';
+import trailingSlashEndpoint from './trailingSlashEndpoint';
 
 const argv = yargs
   .option('p', {
@@ -16,17 +24,6 @@ const argv = yargs
   .help('h')
   .alias('h', 'help')
   .strict().argv;
-
-import http from 'http';
-import express from 'express';
-import httpProxy from 'http-proxy';
-
-import { API_HOST } from './constants';
-
-import trailingSlashEndpoint from './trailingSlashEndpoint';
-import nextjsEntrypoint from './nextjsEntrypoint';
-
-import next from 'next';
 
 const ADDRESS = argv.address as string;
 const PORT = parseInt(argv.port as string);
@@ -47,23 +44,23 @@ async function main() {
   // import bodyParser from 'body-parser';
   // app.use(bodyParser.json({ limit: '2mb' }));
 
+  const proxyTarget = {
+    host: API_HOST.split(':', 2)[0],
+    port: API_HOST.split(':', 2)[1] || '80',
+  };
+
   const proxy = httpProxy.createProxyServer({
-    target: {
-      host: API_HOST.split(':', 2)[0],
-      port: API_HOST.split(':', 2)[1] || '80',
-    },
+    target: proxyTarget,
   });
 
   // TODO - this duplicate proxy can probably be simplified, re-read https://github.com/http-party/node-http-proxy#proxying-websockets docs
   const wsProxy = httpProxy.createProxyServer({
     ws: true,
-    target: {
-      host: API_HOST.split(':', 2)[0],
-      port: API_HOST.split(':', 2)[1] || '80',
-    },
+    target: proxyTarget,
   });
+
   app.all(/^\/(?:api|static|media|wagtail|admin)(?:$|\/)/, (req, res) => {
-    proxy.web(req, res, {}, e => {
+    proxy.web(req, res, {}, (e) => {
       console.error(e);
       try {
         res.status(500).send({ error: 'Backend is down' });
@@ -77,7 +74,7 @@ async function main() {
       console.log('not a typical websocket');
       socket.end();
     }
-    wsProxy.ws(req, socket, head, {}, e => {
+    wsProxy.ws(req, socket, head, {}, (e) => {
       console.error(e);
     });
   });
