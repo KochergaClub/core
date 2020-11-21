@@ -56,7 +56,7 @@ class ProjectPage(KochergaPage):
     def upcoming_events(self):
         qs = (
             self.events.filter(event_type='public', published=True, deleted=False)
-            .filter(start__gte=datetime.now(TZ))
+            .filter(end__gte=datetime.now(TZ))
             .order_by('start')
         )
 
