@@ -1,4 +1,4 @@
-import EditableString from '../components/EditableString';
+import { EditableString } from '../components/EditableString';
 import { MutedSpan, UserSpan } from '../components/ui';
 
 interface Props {

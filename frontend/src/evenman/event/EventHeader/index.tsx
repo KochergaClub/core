@@ -2,11 +2,11 @@ import { formatDistanceToNow, parseISO } from 'date-fns';
 import { ru } from 'date-fns/locale';
 
 import { useMutation } from '@apollo/client';
-import { Column, Row } from '~/frontkit';
 
 import { formatDate } from '~/common/utils';
+import { Column, Row } from '~/frontkit';
 
-import EditableString from '../../components/EditableString';
+import { EditableString } from '../../components/EditableString';
 import { MutedSpan } from '../../components/ui';
 import EditableDateSpan from '../EditableDateSpan';
 import EventDropdownMenu from '../EventDropdownMenu';

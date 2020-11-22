@@ -3,7 +3,7 @@ import { useMutation } from '@apollo/client';
 import { AsyncButton, colors, Column, Label, Row } from '~/frontkit';
 
 import EditableLink from '../components/EditableLink';
-import EditableString from '../components/EditableString';
+import { EditableString } from '../components/EditableString';
 import { useUpdateMutation } from './hooks';
 import {
     EvenmanEvent_DetailsFragment, EvenmanGenerateZoomLinkDocument, EvenmanUpdateDocument

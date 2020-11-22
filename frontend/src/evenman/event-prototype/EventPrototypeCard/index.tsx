@@ -1,7 +1,7 @@
 import { useMutation, useQuery } from '@apollo/client';
-import { Column, Label, Row } from '~/frontkit';
 
 import { ApolloQueryResults } from '~/components';
+import { Column, Label, Row } from '~/frontkit';
 
 import EventShapeDescription from '../../common/EventShapeDescription';
 import EventShapeProjectLink from '../../common/EventShapeProjectLink';
@@ -10,7 +10,7 @@ import EventShapeTimingDescription from '../../common/EventShapeTimingDescriptio
 import TimepadCategoryPicker from '../../common/TimepadCategoryPicker';
 import VkGroupPicker from '../../common/VkGroupPicker';
 import { Card, CardBody, CardHeader } from '../../components/Card';
-import EditableString from '../../components/EditableString';
+import { EditableString } from '../../components/EditableString';
 import { Header } from '../../components/ui';
 import {
     EvenmanPrototypeAddTagDocument, EvenmanPrototypeDeleteTagDocument, EvenmanPrototypeDocument

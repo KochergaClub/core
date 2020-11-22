@@ -1,18 +1,28 @@
 import { RefObject, useCallback, useRef, useState } from 'react';
 import { FaEdit, FaSpinner } from 'react-icons/fa';
+import styled from 'styled-components';
 
 import { Input } from '~/frontkit';
 
 import { IconLink } from './ui';
 
-export interface Props {
+const Container = styled.div`
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  > * + * {
+    margin-left: 4px;
+  }
+`;
+
+type Props = {
   value: string | undefined;
   save: (value: string) => Promise<unknown>;
   renderPrefix?: () => React.ReactNode;
   renderValue: (ref: RefObject<HTMLElement>) => React.ReactNode;
-}
+};
 
-const EditableString: React.FC<Props> = ({
+export const EditableString: React.FC<Props> = ({
   value,
   save,
   renderPrefix,
@@ -83,7 +93,7 @@ const EditableString: React.FC<Props> = ({
         ref={setInput}
         disabled={saving}
         defaultValue={value}
-        onKeyDown={(e) => keypress(e)}
+        onKeyDown={keypress}
         style={{
           width,
           minWidth: 100,
@@ -105,7 +115,7 @@ const EditableString: React.FC<Props> = ({
     }
     return (
       <IconLink
-        href="#"
+        href=""
         onClick={(e) => {
           e.preventDefault();
           startEditing();
@@ -117,10 +127,10 @@ const EditableString: React.FC<Props> = ({
   };
 
   return (
-    <div>
-      {renderPrefix && renderPrefix()} {renderValueOrInput()} {renderEditIcon()}
-    </div>
+    <Container>
+      {renderPrefix && renderPrefix()}
+      <div>{renderValueOrInput()}</div>
+      {renderEditIcon()}
+    </Container>
   );
 };
-
-export default EditableString;

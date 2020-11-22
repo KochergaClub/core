@@ -2,11 +2,10 @@ import { useCallback } from 'react';
 
 import { Row } from '~/frontkit';
 
-import EditableString from '../components/EditableString';
-
+import { EditableString } from '../components/EditableString';
 import { MutedSpan } from '../components/ui';
-import { EvenmanEvent_DetailsFragment } from './queries.generated';
 import { useUpdateMutation } from './hooks';
+import { EvenmanEvent_DetailsFragment } from './queries.generated';
 
 interface Props {
   event: EvenmanEvent_DetailsFragment;
@@ -27,7 +26,7 @@ const EventVisitors: React.FC<Props> = ({ event }) => {
       <div>Число участников:</div>
       <EditableString
         value={event.visitors || undefined}
-        save={value => update({ visitors: value })}
+        save={(value) => update({ visitors: value })}
         renderValue={renderValue}
       />
     </Row>

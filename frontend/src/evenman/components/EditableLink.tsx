@@ -3,7 +3,7 @@ import { RefObject } from 'react';
 import { A } from '~/frontkit';
 
 import BinaryIndicator from './BinaryIndicator';
-import EditableString from './EditableString';
+import { EditableString } from './EditableString';
 
 export interface Props {
   value: string | undefined;
@@ -20,7 +20,7 @@ const EditableLink: React.FC<Props> = ({ value, title, save }) => {
 
   const renderValue = (ref?: RefObject<HTMLElement>) => {
     if (!hasValue) {
-      return title;
+      return <span ref={ref}>{title}</span>;
     }
     return (
       <A ref={ref as RefObject<HTMLAnchorElement>} href={value || ''}>
