@@ -10,10 +10,10 @@ exports[`Storyshots Components/AsyncButton Basic 1`] = `
   font-weight: 500;
   line-height: 24px;
   padding: 4px 16px;
-  color: hsl(210,55%,20%);
-  border: 0;
+  color: hsl(210,55%,35%);
+  border: none;
   background: hsl(210,80%,95%);
-  box-shadow: 0 1px 2px hsl(210,12%,33%);
+  border-radius: 4px;
 }
 
 .c0:hover {
@@ -27,10 +27,9 @@ exports[`Storyshots Components/AsyncButton Basic 1`] = `
 }
 
 .c0:active {
-  -webkit-transform: scale(0.99);
-  -ms-transform: scale(0.99);
-  transform: scale(0.99);
-  box-shadow: none;
+  -webkit-transform: scale(0.98);
+  -ms-transform: scale(0.98);
+  transform: scale(0.98);
 }
 
 .c0:focus {

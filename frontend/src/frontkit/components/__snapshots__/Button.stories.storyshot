@@ -10,10 +10,10 @@ exports[`Storyshots Components/Button All 1`] = `
   font-weight: 500;
   line-height: 24px;
   padding: 0 8px;
-  color: hsl(210,55%,20%);
-  border: 0;
+  color: hsl(210,55%,35%);
+  border: none;
   background: hsl(210,80%,95%);
-  box-shadow: 0 1px 1px hsl(210,12%,33%);
+  border-radius: 4px;
 }
 
 .c2:hover {
@@ -27,10 +27,9 @@ exports[`Storyshots Components/Button All 1`] = `
 }
 
 .c2:active {
-  -webkit-transform: scale(0.99);
-  -ms-transform: scale(0.99);
-  transform: scale(0.99);
-  box-shadow: none;
+  -webkit-transform: scale(0.98);
+  -ms-transform: scale(0.98);
+  transform: scale(0.98);
 }
 
 .c2:focus {
@@ -46,10 +45,10 @@ exports[`Storyshots Components/Button All 1`] = `
   font-weight: 500;
   line-height: 24px;
   padding: 4px 16px;
-  color: hsl(210,55%,20%);
-  border: 0;
+  color: hsl(210,55%,35%);
+  border: none;
   background: hsl(210,80%,95%);
-  box-shadow: 0 1px 2px hsl(210,12%,33%);
+  border-radius: 4px;
 }
 
 .c3:hover {
@@ -63,10 +62,9 @@ exports[`Storyshots Components/Button All 1`] = `
 }
 
 .c3:active {
-  -webkit-transform: scale(0.99);
-  -ms-transform: scale(0.99);
-  transform: scale(0.99);
-  box-shadow: none;
+  -webkit-transform: scale(0.98);
+  -ms-transform: scale(0.98);
+  transform: scale(0.98);
 }
 
 .c3:focus {
@@ -82,10 +80,10 @@ exports[`Storyshots Components/Button All 1`] = `
   font-weight: bold;
   line-height: 24px;
   padding: 20px 32px;
-  color: hsl(210,55%,20%);
-  border: 0;
+  color: hsl(210,55%,35%);
+  border: none;
   background: hsl(210,80%,95%);
-  box-shadow: 0 2px 4px hsl(210,12%,33%);
+  border-radius: 4px;
 }
 
 .c4:hover {
@@ -99,10 +97,9 @@ exports[`Storyshots Components/Button All 1`] = `
 }
 
 .c4:active {
-  -webkit-transform: scale(0.99);
-  -ms-transform: scale(0.99);
-  transform: scale(0.99);
-  box-shadow: none;
+  -webkit-transform: scale(0.98);
+  -ms-transform: scale(0.98);
+  transform: scale(0.98);
 }
 
 .c4:focus {
@@ -118,9 +115,10 @@ exports[`Storyshots Components/Button All 1`] = `
   font-weight: 500;
   line-height: 24px;
   padding: 0 8px;
-  color: hsl(210,55%,20%);
-  border: 0;
+  color: hsl(210,55%,35%);
+  border: none;
   background: transparent;
+  border-radius: 4px;
 }
 
 .c5:hover {
@@ -134,10 +132,9 @@ exports[`Storyshots Components/Button All 1`] = `
 }
 
 .c5:active {
-  -webkit-transform: scale(0.99);
-  -ms-transform: scale(0.99);
-  transform: scale(0.99);
-  box-shadow: none;
+  -webkit-transform: scale(0.98);
+  -ms-transform: scale(0.98);
+  transform: scale(0.98);
 }
 
 .c5:focus {
@@ -153,9 +150,10 @@ exports[`Storyshots Components/Button All 1`] = `
   font-weight: 500;
   line-height: 24px;
   padding: 4px 16px;
-  color: hsl(210,55%,20%);
-  border: 0;
+  color: hsl(210,55%,35%);
+  border: none;
   background: transparent;
+  border-radius: 4px;
 }
 
 .c7:hover {
@@ -169,10 +167,9 @@ exports[`Storyshots Components/Button All 1`] = `
 }
 
 .c7:active {
-  -webkit-transform: scale(0.99);
-  -ms-transform: scale(0.99);
-  transform: scale(0.99);
-  box-shadow: none;
+  -webkit-transform: scale(0.98);
+  -ms-transform: scale(0.98);
+  transform: scale(0.98);
 }
 
 .c7:focus {
@@ -188,9 +185,10 @@ exports[`Storyshots Components/Button All 1`] = `
   font-weight: bold;
   line-height: 24px;
   padding: 20px 32px;
-  color: hsl(210,55%,20%);
-  border: 0;
+  color: hsl(210,55%,35%);
+  border: none;
   background: transparent;
+  border-radius: 4px;
 }
 
 .c8:hover {
@@ -204,10 +202,9 @@ exports[`Storyshots Components/Button All 1`] = `
 }
 
 .c8:active {
-  -webkit-transform: scale(0.99);
-  -ms-transform: scale(0.99);
-  transform: scale(0.99);
-  box-shadow: none;
+  -webkit-transform: scale(0.98);
+  -ms-transform: scale(0.98);
+  transform: scale(0.98);
 }
 
 .c8:focus {
@@ -224,9 +221,9 @@ exports[`Storyshots Components/Button All 1`] = `
   line-height: 24px;
   padding: 0 8px;
   color: white;
-  border: 0;
+  border: none;
   background: hsl(210,55%,55%);
-  box-shadow: 0 1px 1px hsl(210,12%,33%);
+  border-radius: 4px;
 }
 
 .c9:hover {
@@ -240,10 +237,9 @@ exports[`Storyshots Components/Button All 1`] = `
 }
 
 .c9:active {
-  -webkit-transform: scale(0.99);
-  -ms-transform: scale(0.99);
-  transform: scale(0.99);
-  box-shadow: none;
+  -webkit-transform: scale(0.98);
+  -ms-transform: scale(0.98);
+  transform: scale(0.98);
 }
 
 .c9:focus {
@@ -260,9 +256,9 @@ exports[`Storyshots Components/Button All 1`] = `
   line-height: 24px;
   padding: 4px 16px;
   color: white;
-  border: 0;
+  border: none;
   background: hsl(210,55%,55%);
-  box-shadow: 0 1px 2px hsl(210,12%,33%);
+  border-radius: 4px;
 }
 
 .c10:hover {
@@ -276,10 +272,9 @@ exports[`Storyshots Components/Button All 1`] = `
 }
 
 .c10:active {
-  -webkit-transform: scale(0.99);
-  -ms-transform: scale(0.99);
-  transform: scale(0.99);
-  box-shadow: none;
+  -webkit-transform: scale(0.98);
+  -ms-transform: scale(0.98);
+  transform: scale(0.98);
 }
 
 .c10:focus {
@@ -296,9 +291,9 @@ exports[`Storyshots Components/Button All 1`] = `
   line-height: 24px;
   padding: 20px 32px;
   color: white;
-  border: 0;
+  border: none;
   background: hsl(210,55%,55%);
-  box-shadow: 0 2px 4px hsl(210,12%,33%);
+  border-radius: 4px;
 }
 
 .c11:hover {
@@ -312,10 +307,9 @@ exports[`Storyshots Components/Button All 1`] = `
 }
 
 .c11:active {
-  -webkit-transform: scale(0.99);
-  -ms-transform: scale(0.99);
-  transform: scale(0.99);
-  box-shadow: none;
+  -webkit-transform: scale(0.98);
+  -ms-transform: scale(0.98);
+  transform: scale(0.98);
 }
 
 .c11:focus {
@@ -332,8 +326,9 @@ exports[`Storyshots Components/Button All 1`] = `
   line-height: 24px;
   padding: 0 8px;
   color: white;
-  border: 0;
+  border: none;
   background: transparent;
+  border-radius: 4px;
 }
 
 .c12:hover {
@@ -347,10 +342,9 @@ exports[`Storyshots Components/Button All 1`] = `
 }
 
 .c12:active {
-  -webkit-transform: scale(0.99);
-  -ms-transform: scale(0.99);
-  transform: scale(0.99);
-  box-shadow: none;
+  -webkit-transform: scale(0.98);
+  -ms-transform: scale(0.98);
+  transform: scale(0.98);
 }
 
 .c12:focus {
@@ -367,8 +361,9 @@ exports[`Storyshots Components/Button All 1`] = `
   line-height: 24px;
   padding: 4px 16px;
   color: white;
-  border: 0;
+  border: none;
   background: transparent;
+  border-radius: 4px;
 }
 
 .c13:hover {
@@ -382,10 +377,9 @@ exports[`Storyshots Components/Button All 1`] = `
 }
 
 .c13:active {
-  -webkit-transform: scale(0.99);
-  -ms-transform: scale(0.99);
-  transform: scale(0.99);
-  box-shadow: none;
+  -webkit-transform: scale(0.98);
+  -ms-transform: scale(0.98);
+  transform: scale(0.98);
 }
 
 .c13:focus {
@@ -402,8 +396,9 @@ exports[`Storyshots Components/Button All 1`] = `
   line-height: 24px;
   padding: 20px 32px;
   color: white;
-  border: 0;
+  border: none;
   background: transparent;
+  border-radius: 4px;
 }
 
 .c14:hover {
@@ -417,10 +412,9 @@ exports[`Storyshots Components/Button All 1`] = `
 }
 
 .c14:active {
-  -webkit-transform: scale(0.99);
-  -ms-transform: scale(0.99);
-  transform: scale(0.99);
-  box-shadow: none;
+  -webkit-transform: scale(0.98);
+  -ms-transform: scale(0.98);
+  transform: scale(0.98);
 }
 
 .c14:focus {
@@ -437,9 +431,9 @@ exports[`Storyshots Components/Button All 1`] = `
   line-height: 24px;
   padding: 0 8px;
   color: white;
-  border: 0;
+  border: none;
   background: hsl(0,60%,60%);
-  box-shadow: 0 1px 1px hsl(210,12%,33%);
+  border-radius: 4px;
 }
 
 .c15:hover {
@@ -453,10 +447,9 @@ exports[`Storyshots Components/Button All 1`] = `
 }
 
 .c15:active {
-  -webkit-transform: scale(0.99);
-  -ms-transform: scale(0.99);
-  transform: scale(0.99);
-  box-shadow: none;
+  -webkit-transform: scale(0.98);
+  -ms-transform: scale(0.98);
+  transform: scale(0.98);
 }
 
 .c15:focus {
@@ -473,9 +466,9 @@ exports[`Storyshots Components/Button All 1`] = `
   line-height: 24px;
   padding: 4px 16px;
   color: white;
-  border: 0;
+  border: none;
   background: hsl(0,60%,60%);
-  box-shadow: 0 1px 2px hsl(210,12%,33%);
+  border-radius: 4px;
 }
 
 .c16:hover {
@@ -489,10 +482,9 @@ exports[`Storyshots Components/Button All 1`] = `
 }
 
 .c16:active {
-  -webkit-transform: scale(0.99);
-  -ms-transform: scale(0.99);
-  transform: scale(0.99);
-  box-shadow: none;
+  -webkit-transform: scale(0.98);
+  -ms-transform: scale(0.98);
+  transform: scale(0.98);
 }
 
 .c16:focus {
@@ -509,9 +501,9 @@ exports[`Storyshots Components/Button All 1`] = `
   line-height: 24px;
   padding: 20px 32px;
   color: white;
-  border: 0;
+  border: none;
   background: hsl(0,60%,60%);
-  box-shadow: 0 2px 4px hsl(210,12%,33%);
+  border-radius: 4px;
 }
 
 .c17:hover {
@@ -525,10 +517,9 @@ exports[`Storyshots Components/Button All 1`] = `
 }
 
 .c17:active {
-  -webkit-transform: scale(0.99);
-  -ms-transform: scale(0.99);
-  transform: scale(0.99);
-  box-shadow: none;
+  -webkit-transform: scale(0.98);
+  -ms-transform: scale(0.98);
+  transform: scale(0.98);
 }
 
 .c17:focus {
@@ -545,8 +536,9 @@ exports[`Storyshots Components/Button All 1`] = `
   line-height: 24px;
   padding: 0 8px;
   color: white;
-  border: 0;
+  border: none;
   background: transparent;
+  border-radius: 4px;
 }
 
 .c18:hover {
@@ -560,10 +552,9 @@ exports[`Storyshots Components/Button All 1`] = `
 }
 
 .c18:active {
-  -webkit-transform: scale(0.99);
-  -ms-transform: scale(0.99);
-  transform: scale(0.99);
-  box-shadow: none;
+  -webkit-transform: scale(0.98);
+  -ms-transform: scale(0.98);
+  transform: scale(0.98);
 }
 
 .c18:focus {
@@ -580,8 +571,9 @@ exports[`Storyshots Components/Button All 1`] = `
   line-height: 24px;
   padding: 4px 16px;
   color: white;
-  border: 0;
+  border: none;
   background: transparent;
+  border-radius: 4px;
 }
 
 .c20:hover {
@@ -595,10 +587,9 @@ exports[`Storyshots Components/Button All 1`] = `
 }
 
 .c20:active {
-  -webkit-transform: scale(0.99);
-  -ms-transform: scale(0.99);
-  transform: scale(0.99);
-  box-shadow: none;
+  -webkit-transform: scale(0.98);
+  -ms-transform: scale(0.98);
+  transform: scale(0.98);
 }
 
 .c20:focus {
@@ -615,8 +606,9 @@ exports[`Storyshots Components/Button All 1`] = `
   line-height: 24px;
   padding: 20px 32px;
   color: white;
-  border: 0;
+  border: none;
   background: transparent;
+  border-radius: 4px;
 }
 
 .c21:hover {
@@ -630,10 +622,9 @@ exports[`Storyshots Components/Button All 1`] = `
 }
 
 .c21:active {
-  -webkit-transform: scale(0.99);
-  -ms-transform: scale(0.99);
-  transform: scale(0.99);
-  box-shadow: none;
+  -webkit-transform: scale(0.98);
+  -ms-transform: scale(0.98);
+  transform: scale(0.98);
 }
 
 .c21:focus {
@@ -937,10 +928,10 @@ exports[`Storyshots Components/Button Basic 1`] = `
   font-weight: 500;
   line-height: 24px;
   padding: 4px 16px;
-  color: hsl(210,55%,20%);
-  border: 0;
+  color: hsl(210,55%,35%);
+  border: none;
   background: hsl(210,80%,95%);
-  box-shadow: 0 1px 2px hsl(210,12%,33%);
+  border-radius: 4px;
 }
 
 .c0:hover {
@@ -954,10 +945,9 @@ exports[`Storyshots Components/Button Basic 1`] = `
 }
 
 .c0:active {
-  -webkit-transform: scale(0.99);
-  -ms-transform: scale(0.99);
-  transform: scale(0.99);
-  box-shadow: none;
+  -webkit-transform: scale(0.98);
+  -ms-transform: scale(0.98);
+  transform: scale(0.98);
 }
 
 .c0:focus {
@@ -981,10 +971,10 @@ exports[`Storyshots Components/Button Большая 1`] = `
   font-weight: bold;
   line-height: 24px;
   padding: 20px 32px;
-  color: hsl(210,55%,20%);
-  border: 0;
+  color: hsl(210,55%,35%);
+  border: none;
   background: hsl(210,80%,95%);
-  box-shadow: 0 2px 4px hsl(210,12%,33%);
+  border-radius: 4px;
 }
 
 .c0:hover {
@@ -998,10 +988,9 @@ exports[`Storyshots Components/Button Большая 1`] = `
 }
 
 .c0:active {
-  -webkit-transform: scale(0.99);
-  -ms-transform: scale(0.99);
-  transform: scale(0.99);
-  box-shadow: none;
+  -webkit-transform: scale(0.98);
+  -ms-transform: scale(0.98);
+  transform: scale(0.98);
 }
 
 .c0:focus {
@@ -1026,9 +1015,10 @@ exports[`Storyshots Components/Button Во время выполнения де�
   font-weight: 500;
   line-height: 24px;
   padding: 4px 16px;
-  color: hsl(210,55%,20%);
-  border: 0;
+  color: hsl(210,55%,35%);
+  border: none;
   background: transparent;
+  border-radius: 4px;
 }
 
 .c0:hover {
@@ -1042,10 +1032,9 @@ exports[`Storyshots Components/Button Во время выполнения де�
 }
 
 .c0:active {
-  -webkit-transform: scale(0.99);
-  -ms-transform: scale(0.99);
-  transform: scale(0.99);
-  box-shadow: none;
+  -webkit-transform: scale(0.98);
+  -ms-transform: scale(0.98);
+  transform: scale(0.98);
 }
 
 .c0:focus {
@@ -1086,9 +1075,9 @@ exports[`Storyshots Components/Button Главная 1`] = `
   line-height: 24px;
   padding: 4px 16px;
   color: white;
-  border: 0;
+  border: none;
   background: hsl(210,55%,55%);
-  box-shadow: 0 1px 2px hsl(210,12%,33%);
+  border-radius: 4px;
 }
 
 .c0:hover {
@@ -1102,10 +1091,9 @@ exports[`Storyshots Components/Button Главная 1`] = `
 }
 
 .c0:active {
-  -webkit-transform: scale(0.99);
-  -ms-transform: scale(0.99);
-  transform: scale(0.99);
-  box-shadow: none;
+  -webkit-transform: scale(0.98);
+  -ms-transform: scale(0.98);
+  transform: scale(0.98);
 }
 
 .c0:focus {
@@ -1126,14 +1114,14 @@ exports[`Storyshots Components/Button Маленькая 1`] = `
   z-index: 0;
   overflow: hidden;
   cursor: pointer;
-  font-size: 12px;
+  font-size: 14px;
   font-weight: 500;
   line-height: 24px;
-  padding: 0 8px;
-  color: hsl(210,55%,20%);
-  border: 0;
+  padding: 4px 16px;
+  color: hsl(210,55%,35%);
+  border: none;
   background: hsl(210,80%,95%);
-  box-shadow: 0 1px 1px hsl(210,12%,33%);
+  border-radius: 4px;
 }
 
 .c0:hover {
@@ -1147,10 +1135,9 @@ exports[`Storyshots Components/Button Маленькая 1`] = `
 }
 
 .c0:active {
-  -webkit-transform: scale(0.99);
-  -ms-transform: scale(0.99);
-  transform: scale(0.99);
-  box-shadow: none;
+  -webkit-transform: scale(0.98);
+  -ms-transform: scale(0.98);
+  transform: scale(0.98);
 }
 
 .c0:focus {
@@ -1174,10 +1161,10 @@ exports[`Storyshots Components/Button Неактивная 1`] = `
   font-weight: 500;
   line-height: 24px;
   padding: 4px 16px;
-  color: hsl(210,55%,20%);
-  border: 0;
+  color: hsl(210,55%,35%);
+  border: none;
   background: hsl(210,80%,95%);
-  box-shadow: 0 1px 2px hsl(210,12%,33%);
+  border-radius: 4px;
 }
 
 .c0:hover {
@@ -1191,10 +1178,9 @@ exports[`Storyshots Components/Button Неактивная 1`] = `
 }
 
 .c0:active {
-  -webkit-transform: scale(0.99);
-  -ms-transform: scale(0.99);
-  transform: scale(0.99);
-  box-shadow: none;
+  -webkit-transform: scale(0.98);
+  -ms-transform: scale(0.98);
+  transform: scale(0.98);
 }
 
 .c0:focus {
