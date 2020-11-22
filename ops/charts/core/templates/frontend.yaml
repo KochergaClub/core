@@ -74,10 +74,6 @@ spec:
             - name: dist
               mountPath: /code/dist
               readOnly: true
-{{- else }}
-          volumeMounts:
-            - name: build
-              mountPath: /code/.next
 {{- end }}
 
 {{- if .Values.dev }}
