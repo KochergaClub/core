@@ -1,4 +1,9 @@
-import { useCallback } from 'react';
+import 'react-toggle/style.css';
+
+import { useCallback, useState } from 'react';
+import { FaSpinner } from 'react-icons/fa';
+import Toggle from 'react-toggle';
+import styled from 'styled-components';
 
 import { useMutation } from '@apollo/client';
 
@@ -15,6 +20,20 @@ interface InterestProps {
   interest: EmailSubscriptionInterestFragment;
 }
 
+// FIXME - mostly copy-pasted from ~/components/Spinner, can't use BasicSpinner because it's grey
+export const SpinnerForToggle = styled(FaSpinner)`
+  animation: icon-spin 2s infinite linear;
+
+  @keyframes icon-spin {
+    0% {
+      transform: rotate(0deg);
+    }
+    100% {
+      transform: rotate(359deg);
+    }
+  }
+`;
+
 const InterestCheckbox: React.FC<InterestProps> = ({ interest }) => {
   const [subscribeMutation] = useMutation(MyEmailSubscribeToInterestDocument, {
     refetchQueries: ['MySettingsPage'],
@@ -27,8 +46,10 @@ const InterestCheckbox: React.FC<InterestProps> = ({ interest }) => {
       awaitRefetchQueries: true,
     }
   );
+  const [acting, setActing] = useState(false);
 
   const act = useCallback(async () => {
+    setActing(true);
     const mutation = interest.subscribed
       ? unsubscribeMutation
       : subscribeMutation;
@@ -37,6 +58,7 @@ const InterestCheckbox: React.FC<InterestProps> = ({ interest }) => {
         interest_id: interest.id,
       },
     });
+    setActing(false);
   }, [
     interest.subscribed,
     interest.id,
@@ -47,9 +69,18 @@ const InterestCheckbox: React.FC<InterestProps> = ({ interest }) => {
   return (
     <Row spaced>
       <div>{interest.name}</div>
-      <AsyncButton act={act} size="small">
-        {interest.subscribed ? 'subscribed' : 'unsubscribed'}
-      </AsyncButton>
+      <Toggle
+        checked={interest.subscribed || false}
+        onChange={act}
+        icons={
+          acting
+            ? {
+                checked: <SpinnerForToggle size={12} color="white" />,
+                unchecked: <SpinnerForToggle size={12} color="white" />,
+              }
+            : undefined
+        }
+      />
     </Row>
   );
 };
@@ -88,6 +119,7 @@ const EmailSettings: React.FC<Props> = ({ email_subscription }) => {
         <Badge>{email_subscription.status}</Badge>
         {email_subscription.status === 'unsubscribed' && (
           <AsyncButton
+            kind="primary"
             act={async () => {
               await resubscribeCb();
             }}
@@ -101,6 +133,7 @@ const EmailSettings: React.FC<Props> = ({ email_subscription }) => {
               <InterestList interests={email_subscription.interests} />
             ) : null}
             <AsyncButton
+              kind="primary"
               act={async () => {
                 await unsubscribeCb();
               }}

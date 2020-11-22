@@ -2,10 +2,10 @@ import { useCallback, useState } from 'react';
 import styled from 'styled-components';
 
 import { useMutation } from '@apollo/client';
-import { Button, colors, Column, Input, Label } from '~/frontkit';
 
 import { useCommonHotkeys } from '~/common/hooks';
 import { HintCard } from '~/components';
+import { Button, colors, Column, Input, Label } from '~/frontkit';
 
 import { SetPasswordDocument } from '../queries.generated';
 import HeadedFragment from './HeadedFragment';
@@ -71,7 +71,7 @@ const SetPassword: React.FC = () => {
               id="old_password"
               autoComplete="new-password"
               value={oldPassword}
-              onChange={e => setOldPassword(e.currentTarget.value)}
+              onChange={(e) => setOldPassword(e.currentTarget.value)}
             />
           </Column>
           <Column centered>
@@ -81,10 +81,15 @@ const SetPassword: React.FC = () => {
               id="new_password"
               autoComplete="new-password"
               value={newPassword}
-              onChange={e => setNewPassword(e.currentTarget.value)}
+              onChange={(e) => setNewPassword(e.currentTarget.value)}
             />
           </Column>
-          <Button loading={acting} disabled={acting} onClick={act}>
+          <Button
+            kind="primary"
+            loading={acting}
+            disabled={acting}
+            onClick={act}
+          >
             Сменить пароль
           </Button>
           {error ? <ErrorMessage>{error}</ErrorMessage> : null}

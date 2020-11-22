@@ -60,7 +60,7 @@ const CreatePaymentButton = ({ ticket_id }: { ticket_id: string }) => {
   return (
     <ApolloModalFormButton
       mutation={addMutation}
-      small
+      size="small"
       shape={fields}
       buttonName="Добавить платёж"
       modalButtonName="Добавить"
@@ -107,7 +107,7 @@ const NotionLinkRow: React.FC<Props> = ({ ticket }) => {
         {ticket.notion_link ? null : (
           <ApolloModalFormButton
             mutation={updateMutation}
-            small
+            size="small"
             shape={[
               {
                 name: 'id',

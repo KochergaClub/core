@@ -3,10 +3,10 @@ import { FaCheck } from 'react-icons/fa';
 import styled from 'styled-components';
 
 import { useMutation } from '@apollo/client';
-import { Button, colors, Column, Input, Label, Row } from '~/frontkit';
 
 import { useCommonHotkeys } from '~/common/hooks';
 import { HintCard } from '~/components';
+import { Button, colors, Column, Input, Label, Row } from '~/frontkit';
 
 import { MySettingsPageFragment, SetMyNamesDocument } from '../queries.generated';
 import HeadedFragment from './HeadedFragment';
@@ -74,7 +74,7 @@ const SetNames: React.FC<Props> = ({ user }) => {
             <Input
               id="first_name"
               value={firstName}
-              onChange={e => {
+              onChange={(e) => {
                 setFirstName(e.currentTarget.value);
                 setSaved(false);
               }}
@@ -85,13 +85,18 @@ const SetNames: React.FC<Props> = ({ user }) => {
             <Input
               id="last_name"
               value={lastName}
-              onChange={e => {
+              onChange={(e) => {
                 setLastName(e.currentTarget.value);
                 setSaved(false);
               }}
             />
           </Column>
-          <Button loading={acting} disabled={acting || saved} onClick={act}>
+          <Button
+            kind="primary"
+            loading={acting}
+            disabled={acting || saved}
+            onClick={act}
+          >
             <Row vCentered>
               {saved ? <FaCheck /> : null}
               <span>{saved ? 'Сохранено' : 'Сохранить'}</span>

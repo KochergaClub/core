@@ -11,7 +11,7 @@ interface Props<FormResult extends AnyFormValues> {
   buttonName: string;
   modalButtonName: string;
   modalTitle: string;
-  small?: boolean;
+  size?: Parameters<typeof ModalFormButton>[0]['size'];
   mutation: (options: {
     variables: { input: FormResult };
   }) => Promise<FetchResult<unknown>>;
