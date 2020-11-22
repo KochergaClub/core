@@ -109,7 +109,7 @@ const CohortEventLink: React.FC<Props> = ({ cohort }) => {
             {cohort.event.title}
           </A>
         </div>
-        <AsyncButton act={unsetEvent} small>
+        <AsyncButton act={unsetEvent} size="small">
           Отвязать
         </AsyncButton>
       </Row>

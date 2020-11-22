@@ -47,7 +47,7 @@ const InterestCheckbox: React.FC<InterestProps> = ({ interest }) => {
   return (
     <Row spaced>
       <div>{interest.name}</div>
-      <AsyncButton act={act} small>
+      <AsyncButton act={act} size="small">
         {interest.subscribed ? 'subscribed' : 'unsubscribed'}
       </AsyncButton>
     </Row>

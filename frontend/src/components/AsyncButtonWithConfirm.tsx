@@ -6,7 +6,6 @@ interface Props {
   act: () => Promise<void>;
   size?: Parameters<typeof Button>[0]['size'];
   kind?: Parameters<typeof Button>[0]['kind'];
-  small?: boolean; // deprecated
   children?: React.ReactNode;
   confirmText: string;
   cancelText?: string;
@@ -16,7 +15,6 @@ interface Props {
 const AsyncButtonWithConfirm = ({
   act,
   children,
-  small,
   size,
   kind,
   confirmText,
@@ -54,7 +52,6 @@ const AsyncButtonWithConfirm = ({
         loading={confirming}
         disabled={confirming}
         onClick={askConfirm}
-        small={small}
         size={size}
         kind={kind}
       >

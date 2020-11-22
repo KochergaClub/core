@@ -29,7 +29,7 @@ const TildaPageCard: React.FC<{
               variables: { page_id: page.page_id },
             })
           }
-          small
+          size="small"
         >
           Обновить
         </AsyncButton>

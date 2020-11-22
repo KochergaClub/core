@@ -45,7 +45,7 @@ const RealmDetails: React.FC<Props> = ({ event }) => {
             save={(v) => update({ zoom_link: v })}
           />
           {event.zoom_link ? null : (
-            <AsyncButton act={generateZoomLinkMutation} small>
+            <AsyncButton act={generateZoomLinkMutation} size="small">
               Сгенерировать
             </AsyncButton>
           )}

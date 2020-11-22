@@ -46,7 +46,7 @@ const SuggestedEvents: React.FC<Props> = ({ prototype }) => {
             <td>
               <Row>
                 <AsyncButton
-                  small
+                  size="small"
                   kind="primary"
                   act={() =>
                     newEvent({
@@ -60,7 +60,7 @@ const SuggestedEvents: React.FC<Props> = ({ prototype }) => {
                   Создать
                 </AsyncButton>
                 <AsyncButton
-                  small
+                  size="small"
                   act={() =>
                     cancelDate({
                       variables: {

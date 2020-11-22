@@ -105,10 +105,10 @@ const EditableText: React.FC<Props> = ({ title, text, save, empty }) => {
           disabled={saving}
         />
         <ControlsFooter>
-          <Button small onClick={cancelEditing}>
+          <Button size="small" onClick={cancelEditing}>
             Отменить
           </Button>
-          <AsyncButton small kind="primary" act={commitEditing}>
+          <AsyncButton size="small" kind="primary" act={commitEditing}>
             Сохранить
           </AsyncButton>
         </ControlsFooter>
@@ -127,7 +127,7 @@ const EditableText: React.FC<Props> = ({ title, text, save, empty }) => {
       return (
         <>
           {empty}
-          <Button small onClick={startEditing}>
+          <Button size="small" onClick={startEditing}>
             добавить описание
           </Button>
         </>

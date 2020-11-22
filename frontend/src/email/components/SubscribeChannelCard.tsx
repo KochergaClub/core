@@ -1,12 +1,12 @@
 import { useCallback } from 'react';
 
 import { useMutation } from '@apollo/client';
-import { Column, Label, Row } from '~/frontkit';
 
 import { AsyncButtonWithConfirm, CopyToClipboardIcon } from '~/components';
 import Card, { CardHeader } from '~/components/Card';
 import ModalFormButton from '~/components/forms/ModalFormButton';
 import { FormShape } from '~/components/forms/types';
+import { Column, Label, Row } from '~/frontkit';
 
 import {
     EmailSubscribeChannelAddEmailDocument, EmailSubscribeChannelDeleteDocument,
@@ -66,7 +66,7 @@ const SubscribeChannelCard: React.FC<Props> = ({ subscribeChannel }) => {
           <Row gutter={8}>
             <div>{subscribeChannel.slug}</div>
             <AsyncButtonWithConfirm
-              small
+              size="small"
               act={deleteCb}
               confirmText="Точно удалить?"
             >
@@ -74,7 +74,7 @@ const SubscribeChannelCard: React.FC<Props> = ({ subscribeChannel }) => {
             </AsyncButtonWithConfirm>
             <ModalFormButton
               shape={manualSubscribeFormShape}
-              small
+              size="small"
               buttonName="Подписать вручную"
               modalTitle="Подписать вручную"
               modalButtonName="Подписать"

@@ -39,7 +39,7 @@ const AnnounceLinkTimepad: React.FC<Props> = ({ event }) => {
   }
 
   return (
-    <AsyncButton act={announce} small>
+    <AsyncButton act={announce} size="small">
       создать
     </AsyncButton>
   );

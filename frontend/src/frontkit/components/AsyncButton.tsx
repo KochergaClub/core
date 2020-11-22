@@ -5,7 +5,6 @@ import { useNotification } from '../global/WithToaster';
 
 export interface Props {
   act: () => Promise<unknown>;
-  small?: boolean; // deprecated
   size?: Parameters<typeof Button>[0]['size'];
   kind?: Parameters<typeof Button>[0]['kind'];
   disabled?: boolean;
@@ -15,7 +14,6 @@ export interface Props {
 export const AsyncButton: React.FC<Props> = ({
   act,
   children,
-  small,
   size,
   kind,
   disabled,
@@ -39,7 +37,6 @@ export const AsyncButton: React.FC<Props> = ({
       loading={acting}
       disabled={disabled || acting}
       onClick={cb}
-      small={small}
       size={size}
       kind={kind}
     >

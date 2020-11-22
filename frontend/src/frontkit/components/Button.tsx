@@ -5,10 +5,7 @@ import * as colors from '../colors';
 
 export type Props = {
   size?: 'small' | 'normal' | 'big';
-  small?: boolean; // deprecated
-
   kind?: 'primary' | 'danger' | 'default';
-  primary?: boolean; // deprecated
 
   loading?: boolean;
   children?: React.ReactNode;
@@ -154,20 +151,8 @@ const ButtonBackground = styled.div`
 `;
 
 export const Button = (props: Props) => {
-  if (props.primary && props.kind && props.kind !== 'primary') {
-    throw new Error('props.primary is incompatible with props.theme');
-  }
-  if (props.small && props.size && props.size !== 'small') {
-    throw new Error('props.small is incompatible with props.size');
-  }
-
-  const kindTheme = props.primary
-    ? KIND_THEMES.primary
-    : KIND_THEMES[props.kind || 'default'];
-
-  const sizeTheme = props.small
-    ? SIZE_THEMES.small
-    : SIZE_THEMES[props.size || 'normal'];
+  const kindTheme = KIND_THEMES[props.kind || 'default'];
+  const sizeTheme = SIZE_THEMES[props.size || 'normal'];
 
   const theme = {
     ...kindTheme,

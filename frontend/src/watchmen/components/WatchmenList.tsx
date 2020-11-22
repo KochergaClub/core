@@ -57,7 +57,7 @@ const WatchmanPriorityButton: React.FC<{
   }
 
   return (
-    <AsyncButton small act={cb}>
+    <AsyncButton size="small" act={cb}>
       {children}
     </AsyncButton>
   );
@@ -109,7 +109,7 @@ const WatchmanItem = ({ watchman }: { watchman: WatchmanFragment }) => {
         </FixedRow>
         {canManage && (
           <>
-            <Button small onClick={askForGrade}>
+            <Button size="small" onClick={askForGrade}>
               <FaEdit /> Редактировать
             </Button>
             {askingForGrade && (

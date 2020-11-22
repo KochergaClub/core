@@ -95,7 +95,7 @@ const ManagerControls: React.FC<Props> = ({ member }) => {
   if (!member.is_current) {
     return (
       <Row>
-        <AsyncButton small act={unfire}>
+        <AsyncButton size="small" act={unfire}>
           Восстановить
         </AsyncButton>
       </Row>
@@ -104,11 +104,15 @@ const ManagerControls: React.FC<Props> = ({ member }) => {
 
   return (
     <Row>
-      <AsyncButton small act={grantGooglePermissions}>
+      <AsyncButton size="small" act={grantGooglePermissions}>
         Выдать права в Google
       </AsyncButton>
 
-      <AsyncButtonWithConfirm small act={fire} confirmText="Точно уволить?">
+      <AsyncButtonWithConfirm
+        size="small"
+        act={fire}
+        confirmText="Точно уволить?"
+      >
         Уволить
       </AsyncButtonWithConfirm>
     </Row>

@@ -32,7 +32,7 @@ const EditButton: React.FC<Props> = ({ block }) => {
   }
 
   return (
-    <ButtonWithModal title="Редактировать" small>
+    <ButtonWithModal title="Редактировать" size="small">
       {({ close }) => (
         <ModalBlockForm
           modalTitle={`Редактирование блока ${block.__typename}`}

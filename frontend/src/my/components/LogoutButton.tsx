@@ -1,6 +1,7 @@
 import { useCallback, useState } from 'react';
 
 import { useMutation } from '@apollo/client';
+
 import { Button } from '~/frontkit';
 
 import { LogoutDocument } from '../queries.generated';
@@ -22,7 +23,7 @@ export default function LogoutButton() {
   }, [logoutMutation]);
 
   return (
-    <Button loading={acting} disabled={acting} onClick={act} small>
+    <Button loading={acting} disabled={acting} size="small" onClick={act}>
       Выйти
     </Button>
   );

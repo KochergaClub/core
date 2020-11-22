@@ -8,13 +8,13 @@ interface Props<Values extends AnyFormValues> {
   buttonName: string;
   modalButtonName: string;
   modalTitle: string;
-  small?: boolean;
+  size?: Parameters<typeof ButtonWithModal>[0]['size'];
   post: (values: Values) => Promise<PostResult<Values> | void>;
 }
 
 function ModalFormButton<Values extends AnyFormValues>(props: Props<Values>) {
   return (
-    <ButtonWithModal title={props.buttonName} small={props.small}>
+    <ButtonWithModal title={props.buttonName} size={props.size}>
       {({ close }) => <ModalForm {...props} close={close} />}
     </ButtonWithModal>
   );
