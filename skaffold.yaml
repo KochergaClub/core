@@ -1,6 +1,8 @@
 apiVersion: skaffold/v2beta5
 kind: Config
 build:
+  local:
+    useBuildkit: true
   artifacts:
     - image: registry.gitlab.com/kocherga/core/backend
       context: backend
@@ -56,9 +58,9 @@ profiles:
       - op: add
         path: /build/artifacts/1/docker/target
         value: base # avoid slow `next build`
-    build:
-      local:
-        push: false
+      - op: add
+        path: /build/local/push
+        value: false # don't need to push images in dev
     deploy:
       helm:
         releases:

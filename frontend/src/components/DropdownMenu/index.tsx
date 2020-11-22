@@ -3,18 +3,18 @@ import { FaEllipsisH } from 'react-icons/fa';
 import { usePopper } from 'react-popper';
 import styled from 'styled-components';
 
-import { colors, fonts } from '~/frontkit';
 import { Placement } from '@popperjs/core';
 
 import { useExpandable } from '~/common/hooks';
 import { FloatingList } from '~/components';
+import { colors, fonts } from '~/frontkit';
 
 import { DropdownMenuContext, ModalCreator } from './contexts';
 
 export { default as Action } from './Action';
 export { default as LinkAction } from './LinkAction';
-export { default as NextLinkAction } from './NextLinkAction';
 export { default as ModalAction } from './ModalAction';
+export { default as NextLinkAction } from './NextLinkAction';
 
 const Container = styled.div`
   white-space: nowrap;
@@ -135,7 +135,7 @@ const DropdownMenu: React.FC<Props> = ({
             expanded={expanded}
             ref={setPopperElement}
             style={styles.popper}
-            attributes={attributes.popper}
+            attributes={attributes.popper || {}}
           >
             {children}
           </FloatingList>

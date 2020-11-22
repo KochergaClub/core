@@ -30,29 +30,6 @@ spec:
         app: {{ .Release.Name }}-frontend
         release: {{ .Release.Name }}
     spec:
-{{- if not .Values.dev }}
-      initContainers:
-        - name: next-build
-          image: {{ .Values.image.frontend | quote }}
-          command: ["./node_modules/.bin/next", "build"]
-          volumeMounts:
-            - name: build
-              mountPath: /code/.next
-          envFrom:
-{{ include "core.frontend_env_from" . | indent 12 }}
-          env:
-            - name: DJANGO_HOST
-              value: {{ .Release.Name }}-django
-            - name: NODE_ENV
-              value: production
-          resources:
-            requests:
-              memory: "1024Mi"
-              cpu: 100m
-            limits:
-              memory: "2048Mi"
-              cpu: 800m
-{{- end }}
       containers:
         - name: default
           image: {{ .Values.image.frontend | quote }}

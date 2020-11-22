@@ -1,3 +1,4 @@
+# syntax=docker/dockerfile:experimental
 FROM node:14.5 as base
 
 RUN apt-get update && apt-get install -y locales \
@@ -11,8 +12,9 @@ RUN npm config set registry https://npm.team.kocherga.club/
 
 WORKDIR /code
 
-COPY package.json package-lock.json /code/
-RUN npm ci
+COPY package.json yarn.lock /code/
+COPY patches /code/patches/
+RUN yarn install --frozen-lockfile  && yarn cache clean
 
 COPY . /code/
 
@@ -23,7 +25,7 @@ CMD ["node", "./dist/index.js"]
 
 FROM base as production
 
-# RUN NODE_ENV=production npx next build
-RUN NODE_ENV=production npx webpack --config webpack.server.js
-
-
+# see https://github.com/moby/buildkit/blob/master/frontend/dockerfile/docs/experimental.md for details
+RUN --mount=id=webpack-cache,sharing=locked,type=cache,target=/code/.next/cache/webpack \
+    NODE_ENV=production npx next build && \
+    NODE_ENV=production npx webpack --config webpack.server.js

@@ -1,10 +1,10 @@
 // jest-specific-snapshot (which we use in runTest code below) doesn't work with jest-styled-components out of the box.
 // So we have to call addSerializer() manually.
-// See details: https://github.com/styled-components/jest-styled-components#serializer
 import { addSerializer } from 'jest-specific-snapshot';
 import { styleSheetSerializer } from 'jest-styled-components';
 import { act, create, ReactTestRenderer } from 'react-test-renderer';
 
+// See details: https://github.com/styled-components/jest-styled-components#serializer
 import initStoryshots, { Stories2SnapsConverter } from '@storybook/addon-storyshots';
 
 addSerializer(styleSheetSerializer);
@@ -59,7 +59,7 @@ const runTest = async (story: any, context: any) => {
 
 initStoryshots({
   asyncJest: true,
-  test: ({ story, context, done }) => {
+  test: ({ story, context, done }: any) => {
     runTest(story, context).then(done);
   },
 });
