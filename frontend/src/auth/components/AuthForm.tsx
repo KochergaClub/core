@@ -142,6 +142,7 @@ const AuthForm: React.FC<Props> = (props) => {
         </Column>
         <Button
           type="submit"
+          kind="primary"
           disabled={acting}
           loading={acting}
           onClick={submit}

@@ -16,8 +16,9 @@ export type Props = {
 
 const KIND_THEMES = {
   default: {
-    color: colors.primary[900],
+    color: colors.primary[700],
     background: colors.primary[100],
+    borderColor: colors.primary[100],
     hoverBackgroundColor: colors.primary[300],
     outlineColor: colors.primary[500],
     blur: colors.grey[800],
@@ -55,7 +56,6 @@ const SIZE_THEMES = {
     fontSize: '12px',
     fontWeight: 500,
     padding: '0 8px',
-    shadow: '0 1px 1px',
   },
   normal: {
     fontSize: '14px',
@@ -67,7 +67,6 @@ const SIZE_THEMES = {
     fontSize: '20px',
     fontWeight: 'bold',
     padding: '20px 32px',
-    shadow: '0 2px 4px',
   },
 };
 
@@ -93,16 +92,12 @@ const ButtonFrame = styled.button<FrameProps>`
   padding: ${(props) => props.theme.padding};
 
   color: ${(props) => props.theme.color};
-  border: 0;
+  border: none;
+  /* border: 2px solid ${(props) => props.theme.borderColor}; */
   background: ${(props) =>
     props.isLoading ? 'transparent' : props.theme.background};
 
   border-radius: 4px;
-
-  /* ${(props) =>
-    props.isLoading
-      ? ''
-      : `box-shadow: ${props.theme.shadow} ${props.theme.blur};`} */
 
   &:hover {
     background: ${(props) =>
@@ -116,8 +111,7 @@ const ButtonFrame = styled.button<FrameProps>`
   }
 
   &:active {
-    transform: scale(0.99);
-    box-shadow: none;
+    transform: scale(0.98);
   }
 
   &:focus {

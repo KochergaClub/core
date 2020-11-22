@@ -5,7 +5,7 @@ import Markdown from 'react-markdown';
 import breaks from 'remark-breaks';
 import styled from 'styled-components';
 
-import { AsyncButton, Button, ControlsFooter } from '~/frontkit';
+import { AsyncButton, Button, Column, ControlsFooter } from '~/frontkit';
 
 import { Header, IconLink, UserText } from './ui';
 
@@ -97,7 +97,7 @@ const EditableText: React.FC<Props> = ({ title, text, save, empty }) => {
 
   const renderEditing = () => {
     return (
-      <div>
+      <Column stretch>
         <Textarea
           ref={setTextarea}
           onKeyDown={editText}
@@ -112,7 +112,7 @@ const EditableText: React.FC<Props> = ({ title, text, save, empty }) => {
             Сохранить
           </AsyncButton>
         </ControlsFooter>
-      </div>
+      </Column>
     );
   };
 

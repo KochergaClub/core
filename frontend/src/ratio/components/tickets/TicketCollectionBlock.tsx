@@ -26,7 +26,7 @@ const TicketCollectionBlock: React.FC = () => {
     <PaddedBlock width="wide">
       <Column stretch gutter={16}>
         <h2>
-          <Row gutter={8}>
+          <Row gutter={8} vCentered>
             <div>Билеты</div>
             <AsyncButton act={queryResults.refetch}>
               <Row vCentered>

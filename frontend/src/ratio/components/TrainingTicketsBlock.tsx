@@ -83,7 +83,7 @@ const TrainingTicketsBlock: React.FC<Props> = ({ training }) => {
   return (
     <PaddedBlock width="wide">
       <h2>
-        <Row>
+        <Row vCentered gutter={8}>
           <div>Участники: {training.tickets.length}</div>
           <CreateTicketButton training_id={training.id} />
         </Row>

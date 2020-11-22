@@ -3,14 +3,15 @@ import { useRef } from 'react';
 import { BiChevronsLeft, BiChevronsRight } from 'react-icons/bi';
 import styled from 'styled-components';
 
-import { grey } from '../../colors';
+import * as colors from '../../colors';
+import * as fonts from '../../fonts';
 import { Row } from '../../layout/Row';
 import { SidebarControls } from './types';
 
 const DesktopContainer = styled.div`
-  background-color: ${grey[100]};
+  background-color: ${colors.grey[100]};
   height: 100%;
-  border-right: 1px solid ${grey[300]};
+  border-right: 1px solid ${colors.grey[300]};
 `;
 
 const MobileContainerInner = styled(DesktopContainer)`
@@ -52,14 +53,16 @@ const CommonControlsContainer = styled.div`
   align-items: center;
   justify-content: center;
   cursor: pointer;
+  color: ${colors.primary[700]};
+  font-size: ${fonts.sizes.S};
 
   &:hover {
-    background-color: ${grey[200]};
+    background-color: ${colors.grey[200]};
   }
 `;
 
 const BottomControlsContainer = styled(CommonControlsContainer)`
-  border-top: 1px solid ${grey[300]};
+  border-top: 1px solid ${colors.grey[300]};
 `;
 
 const BottomControls: React.FC<{ sidebar: SidebarControls }> = ({
@@ -68,7 +71,7 @@ const BottomControls: React.FC<{ sidebar: SidebarControls }> = ({
   return (
     <BottomControlsContainer onClick={sidebar.toggle}>
       <Row vCentered gutter={0}>
-        <BiChevronsLeft size={24} />
+        <BiChevronsLeft size={16} />
         <div>Скрыть</div>
       </Row>
     </BottomControlsContainer>
@@ -103,10 +106,10 @@ const FloatingControlsContainer = styled(CommonControlsContainer)<CornerProps>`
   bottom: 0;
   ${(props) => (props.corner === 'right' ? 'right: -32px;' : 'left: 0;')}
   width: 32px;
-  border-right: 1px solid ${grey[300]};
-  border-top: 1px solid ${grey[300]};
+  border-right: 1px solid ${colors.grey[300]};
+  border-top: 1px solid ${colors.grey[300]};
   z-index: 1;
-  background-color: ${grey[100]};
+  background-color: ${colors.grey[100]};
 `;
 
 const FloatingControls: React.FC<
@@ -114,7 +117,7 @@ const FloatingControls: React.FC<
 > = ({ sidebar, corner }) => {
   return (
     <FloatingControlsContainer onClick={sidebar.toggle} corner={corner}>
-      <BiChevronsRight size={24} />
+      <BiChevronsRight size={16} />
     </FloatingControlsContainer>
   );
 };
