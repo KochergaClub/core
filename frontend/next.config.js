@@ -42,6 +42,7 @@ const rawConfig = {
       process.env.SENTRY_PROJECT &&
       process.env.SENTRY_RELEASE
     ) {
+      console.log('Pushing maps to Sentry');
       config.plugins.push(
         new SentryWebpackPlugin({
           include: '.next',
