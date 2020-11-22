@@ -7,6 +7,7 @@ import styled from 'styled-components';
 
 import { useMutation } from '@apollo/client';
 
+import { HintCard } from '~/components';
 import { AsyncButton, Badge, Column, Row } from '~/frontkit';
 
 import {
@@ -115,33 +116,54 @@ const EmailSettings: React.FC<Props> = ({ email_subscription }) => {
 
   return (
     <HeadedFragment title="Рассылки">
-      <Column centered>
-        <Badge>{email_subscription.status}</Badge>
-        {email_subscription.status === 'unsubscribed' && (
-          <AsyncButton
-            kind="primary"
-            act={async () => {
-              await resubscribeCb();
-            }}
-          >
-            Подписаться заново
-          </AsyncButton>
-        )}
-        {email_subscription.status === 'subscribed' && (
-          <Column centered gutter={20}>
-            {email_subscription.interests ? (
-              <InterestList interests={email_subscription.interests} />
-            ) : null}
-            <AsyncButton
-              kind="primary"
-              act={async () => {
-                await unsubscribeCb();
-              }}
-            >
-              Отписаться от всех писем
-            </AsyncButton>
-          </Column>
-        )}
+      <Column centered gutter={20}>
+        {(() => {
+          switch (email_subscription.status) {
+            case 'unsubscribed':
+              return (
+                <>
+                  <div>Вы отписаны от всех рассылок Кочерги.</div>
+                  <AsyncButton
+                    kind="primary"
+                    act={async () => {
+                      await resubscribeCb();
+                    }}
+                  >
+                    Подписаться
+                  </AsyncButton>
+                </>
+              );
+            case 'pending':
+              return (
+                <HintCard>
+                  Вы отписаны от всех отсылок Кочерги, но передумали и запросили
+                  переподписку. Чтобы подтвердить эту операцию, найдите входящее
+                  письмо с запросом подтверждения переподписки и нажмите кнопку
+                  в нём.
+                </HintCard>
+              );
+            case 'subscribed':
+              return (
+                <Column centered gutter={20}>
+                  {email_subscription.interests ? (
+                    <InterestList interests={email_subscription.interests} />
+                  ) : null}
+                  <AsyncButton
+                    kind="primary"
+                    act={async () => {
+                      await unsubscribeCb();
+                    }}
+                  >
+                    Отписаться от всех писем
+                  </AsyncButton>
+                </Column>
+              );
+            default:
+              return (
+                <Badge>Неизвестный статус: {email_subscription.status}</Badge>
+              );
+          }
+        })()}
       </Column>
     </HeadedFragment>
   );
