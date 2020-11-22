@@ -79,7 +79,7 @@ const Search: React.FC = () => {
         expanded={Boolean(searchData)}
         ref={setPopperElement}
         style={styles.popper}
-        attributes={attributes.popper}
+        attributes={attributes.popper || {}}
       >
         <SearchResults results={searchData} />
       </FloatingList>
