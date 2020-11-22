@@ -15,19 +15,7 @@ metadata:
   namespace: {{ .Release.Namespace }}
   labels:
     release: {{ .Release.Name }}
-data:
-  NEXT_PUBLIC_GOOGLE_ANALYTICS_ID: {{ .Values.env.frontend.GOOGLE_ANALYTICS_ID | quote }}
-  NEXT_PUBLIC_FACEBOOK_PIXEL_ID: {{ .Values.env.frontend.FACEBOOK_PIXEL_ID | quote }}
-  NEXT_PUBLIC_YANDEX_METRIKA_ID: {{ .Values.env.frontend.YANDEX_METRIKA_ID | quote }}
-  NEXT_PUBLIC_VK_RETARGETING_ID: {{ .Values.env.frontend.VK_RETARGETING_ID | quote }}
-  NEXT_PUBLIC_SENTRY_DSN_FRONTEND: {{ .Values.env.frontend.SENTRY_DSN_FRONTEND | quote }}
-  NEXT_PUBLIC_VK_MESSAGES_WIDGET_ID: {{ .Values.env.frontend.VK_MESSAGES_WIDGET_ID | quote }}
-  NEXT_PUBLIC_GOOGLE_MAPS_KEY: {{ .Values.env.frontend.GOOGLE_MAPS_KEY | quote }}
-  NEXT_PUBLIC_KOCHERGA_WEBSITE: {{ .Values.env.common.KOCHERGA_WEBSITE | quote }}
-  SENTRY_AUTH_TOKEN: {{ .Values.sentry.auth_token | quote }}
-  SENTRY_ORG: {{ .Values.sentry.org | quote }}
-  SENTRY_PROJECT: {{ .Values.sentry.projects.frontend | quote }}
-  NEXT_PUBLIC_CDN_DOMAIN: {{ .Values.cdn_domain | quote }}
+data: {} # configured with https://nextjs.org/docs/basic-features/environment-variables since we need the same env on build
 ---
 apiVersion: v1
 kind: ConfigMap
