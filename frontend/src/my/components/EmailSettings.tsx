@@ -1,14 +1,11 @@
-import 'react-toggle/style.css';
-
 import { useCallback, useState } from 'react';
 import { FaSpinner } from 'react-icons/fa';
-import Toggle from 'react-toggle';
 import styled from 'styled-components';
 
 import { useMutation } from '@apollo/client';
 
 import { HintCard } from '~/components';
-import { AsyncButton, Badge, Column, Row } from '~/frontkit';
+import { AsyncButton, Badge, Column, Row, Toggle } from '~/frontkit';
 
 import {
     EmailSubscriptionFragment, EmailSubscriptionInterestFragment, MyEmailResubscribeDocument,

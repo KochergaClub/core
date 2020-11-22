@@ -1,8 +1,4 @@
-import 'react-toggle/style.css';
-
-import Toggle from 'react-toggle';
-
-import { Row } from '~/frontkit';
+import { Row, Toggle } from '~/frontkit';
 
 import { EventsPrototypeFragment } from '../queries.generated';
 import { useUpdateMutation } from './hooks';

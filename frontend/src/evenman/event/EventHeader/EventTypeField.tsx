@@ -1,10 +1,7 @@
-import 'react-toggle/style.css';
-
 import { useCallback } from 'react';
 import { FaGlobeAfrica, FaLock } from 'react-icons/fa';
-import Toggle from 'react-toggle';
 
-import { Button, Row } from '~/frontkit';
+import { Button, Row, Toggle } from '~/frontkit';
 
 import { useUpdateMutation } from '../hooks';
 import { EvenmanEvent_DetailsFragment } from '../queries.generated';

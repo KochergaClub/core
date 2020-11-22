@@ -1,6 +1,5 @@
-import styled from 'styled-components';
-
 import { FaGlobeAfrica, FaLock } from 'react-icons/fa';
+import styled from 'styled-components';
 
 import { EventsEvent_SummaryFragment } from './queries.generated';
 
@@ -34,7 +33,7 @@ const ProgressBack = styled.div<ProgressProps>`
   width: 100%;
   height: 100%;
 
-  background-color: ${props =>
+  background-color: ${(props) =>
     props.selected
       ? props.private
         ? 'hsl(180, 100%, 80%)'
@@ -48,10 +47,10 @@ const ProgressBar = styled.div<ProgressProps>`
   position: absolute;
   left: 0;
   top: 0;
-  width: ${props => (100 * props.value) / props.max}%;
+  width: ${(props) => (100 * props.value) / props.max}%;
   height: 100%;
 
-  background-color: ${props =>
+  background-color: ${(props) =>
     props.selected ? 'hsl(120, 60%, 70%)' : 'hsl(120, 40%, 90%)'};
 `;
 
@@ -74,7 +73,7 @@ interface Props {
   onSelect: (id: string) => void;
 }
 
-const EventCalendarItem: React.FC<Props> = props => {
+const EventCalendarItem: React.FC<Props> = (props) => {
   const { event } = props;
 
   const progressParams = () => {

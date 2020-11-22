@@ -1,12 +1,9 @@
-import 'react-toggle/style.css';
-
 import { useCallback } from 'react';
-import Toggle from 'react-toggle';
 import styled from 'styled-components';
 
 import { useMutation } from '@apollo/client';
 
-import { AsyncButton, colors, Column, fonts, Row } from '~/frontkit';
+import { AsyncButton, colors, Column, fonts, Row, Toggle } from '~/frontkit';
 
 import {
     MastermindDatingActivateVotingDocument, MastermindDatingParticipantFragment as Participant,

@@ -1,9 +1,6 @@
-import 'react-toggle/style.css';
-
 import React from 'react';
-import Toggle from 'react-toggle';
 
-import { Row } from '~/frontkit';
+import { Row, Toggle } from '~/frontkit';
 
 import UnknownEventsDropdown from '../UnknownEventsDropdown';
 import { Action, setEventType, setHideAnnounced, State } from './filters';

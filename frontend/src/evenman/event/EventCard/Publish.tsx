@@ -1,8 +1,4 @@
-import 'react-toggle/style.css';
-
-import Toggle from 'react-toggle';
-
-import { A, Row } from '~/frontkit';
+import { A, Row, Toggle } from '~/frontkit';
 
 import { useUpdateMutation } from '../hooks';
 import { EvenmanEvent_DetailsFragment } from '../queries.generated';

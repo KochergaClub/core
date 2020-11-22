@@ -1,11 +1,8 @@
-import 'react-toggle/style.css';
-
 import { useState } from 'react';
-import Toggle from 'react-toggle';
 
 import { useMutation } from '@apollo/client';
 
-import { AsyncButton, Column, Row } from '~/frontkit';
+import { AsyncButton, Column, Row, Toggle } from '~/frontkit';
 
 import {
     MastermindDatingCohortDetailsFragment as Cohort,

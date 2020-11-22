@@ -1,13 +1,10 @@
-import 'react-toggle/style.css';
-
 import { useCallback, useEffect, useState } from 'react';
-import Toggle from 'react-toggle';
 
 import { useLazyQuery } from '@apollo/client';
 
 import { EventUpdateInput } from '~/apollo/types.generated';
 import { Spinner } from '~/components';
-import { AsyncButton, Button, Column, ControlsFooter, Modal, Row } from '~/frontkit';
+import { AsyncButton, Button, Column, ControlsFooter, Modal, Row, Toggle } from '~/frontkit';
 
 import { EvenmanPrototypeDocument } from '../event-prototype/queries.generated';
 import { useUpdateMutation } from './hooks';
