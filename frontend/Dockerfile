@@ -12,8 +12,8 @@ RUN npm config set registry https://npm.team.kocherga.club/
 
 WORKDIR /code
 
-COPY package.json yarn.lock /code/
-RUN yarn install --frozen-lockfile  # TODO - call `yarn cache clean` for smaller image
+COPY package.json yarn.lock patches /code/
+RUN yarn install --frozen-lockfile  && yarn cache clean
 
 COPY . /code/
 
