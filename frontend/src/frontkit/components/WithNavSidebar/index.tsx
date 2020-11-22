@@ -1,5 +1,7 @@
 import styled from 'styled-components';
 
+import * as colors from '../../colors';
+import * as fonts from '../../fonts';
 import { Column } from '../../layout/Column';
 import { ColumnNav } from '../ColumnNav';
 import { WithSmartSidebar } from '../WithSmartSidebar';
@@ -22,14 +24,16 @@ interface Props {
 }
 
 const LogoLink = styled.a`
-  color: black;
-  font-size: 24px;
-  padding: 0 10px;
+  display: block;
+  color: ${colors.grey[700]};
+  font-size: ${fonts.sizes.N};
+  font-weight: bolder;
+  padding: 10px 20px;
 
   text-decoration: none;
+  border-bottom: 1px solid ${colors.grey[300]};
   &:hover {
-    color: black;
-    text-decoration: underline;
+    color: ${colors.primary[500]};
   }
 `;
 
@@ -53,7 +57,7 @@ const Sidebar: React.FC<Props> = (props) => {
   const { selectTab, header } = props;
   return (
     <Column stretch spaced>
-      <Column stretch>
+      <div>
         <header>
           <LogoLink
             href={header.href}
@@ -66,7 +70,7 @@ const Sidebar: React.FC<Props> = (props) => {
           </LogoLink>
         </header>
         <MainNav {...props} />
-      </Column>
+      </div>
     </Column>
   );
 };

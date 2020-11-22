@@ -10,11 +10,15 @@ const Li = styled.li<{ selected?: boolean }>`
 `;
 
 const LiInner = styled.div`
-  padding: 8px 10px;
+  padding: 8px 20px;
   cursor: pointer;
   font-size: ${fonts.sizes.XS};
   position: relative;
   z-index: 1;
+
+  &:hover {
+    color: ${colors.primary[500]};
+  }
 `;
 
 const Highlight = styled(motion.div)`
