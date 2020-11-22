@@ -6,19 +6,6 @@ import { render } from '@testing-library/react';
 import KochergaApolloCache from '~/apollo/cache';
 import { CurrentUserDocument } from '~/auth/queries.generated';
 
-// TODO - move to global tests setup
-const useRouter = jest.spyOn(require('next/router'), 'useRouter'); // eslint-disable-line @typescript-eslint/no-var-requires
-useRouter.mockImplementation(() => ({
-  useRouter() {
-    return {
-      route: '/',
-      pathname: '',
-      query: '',
-      asPath: '',
-    };
-  },
-}));
-
 const customRender = (
   children: React.ReactElement,
   { mocks }: { mocks: MockedResponse[] } = { mocks: [] }
