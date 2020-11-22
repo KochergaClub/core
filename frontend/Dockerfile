@@ -25,7 +25,6 @@ CMD ["node", "./dist/index.js"]
 
 FROM base as production
 
-RUN echo 2  # temporary cache busting
 # see https://github.com/moby/buildkit/blob/master/frontend/dockerfile/docs/experimental.md for details
 RUN --mount=id=webpack-cache,sharing=locked,type=cache,target=/code/.next/cache/webpack \
     NODE_ENV=production npx next build && \
