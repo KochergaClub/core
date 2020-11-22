@@ -97,10 +97,14 @@ const ButtonFrame = styled.button<FrameProps>`
   background: ${(props) =>
     props.isLoading ? 'transparent' : props.theme.background};
 
-  ${(props) =>
+  border-radius: 4px;
+
+  /* ${(props) =>
     props.isLoading
       ? ''
-      : `box-shadow: ${props.theme.shadow} ${props.theme.blur};`} &:hover {
+      : `box-shadow: ${props.theme.shadow} ${props.theme.blur};`} */
+
+  &:hover {
     background: ${(props) =>
       props.isLoading ? 'transparent' : props.theme.hoverBackgroundColor};
   }
