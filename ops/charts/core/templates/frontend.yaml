@@ -57,7 +57,7 @@ spec:
             requests:
               memory: "128Mi"
             limits:
-              memory: {{ if .Values.dev }}"4096Mi"{{ else }}"2048Mi"{{ end }}
+              memory: {{ if .Values.dev }}"8Gi"{{ else }}"2Gi"{{ end }}
           envFrom:
 {{ include "core.frontend_env_from" . | indent 12 }}
           env:
