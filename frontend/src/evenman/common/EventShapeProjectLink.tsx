@@ -2,7 +2,6 @@ import Select from 'react-select';
 import { ActionTypes } from 'react-select/src/types';
 
 import { useQuery } from '@apollo/client';
-import { Label } from '~/frontkit';
 
 import { ApolloQueryResults } from '~/components';
 
@@ -39,7 +38,6 @@ const EventShapeProjectLink = ({ selected, select }: Props) => {
 
         return (
           <div>
-            <Label>Проект:</Label>
             <Select
               value={currentProject || null}
               options={options}

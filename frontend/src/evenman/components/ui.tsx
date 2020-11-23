@@ -3,15 +3,15 @@ import styled from 'styled-components';
 import { colors, RichText } from '~/frontkit';
 
 export { default as Checkbox } from './Checkbox';
-export { default as UpdatingOverlay } from './UpdatingOverlay';
 export { default as LoadingOverlay } from './LoadingOverlay';
+export { default as UpdatingOverlay } from './UpdatingOverlay';
 
 export const Header = styled.header`
   font-size: 1.2rem;
   text-align: center;
   margin: 12px 0;
-  padding: 2px 8px;
-  background-color: ${colors.primary[100]};
+  padding: 4px 8px;
+  background-color: ${colors.grey[100]};
 `;
 
 export const IconLink = styled.a`

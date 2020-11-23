@@ -1,8 +1,7 @@
 import { Column } from '~/frontkit';
+
 import { Header } from '../../components/ui';
-
 import { EvenmanEvent_DetailsFragment } from '../queries.generated';
-
 import FbAnnounce from './FbAnnounce';
 import TimepadAnnounce from './TimepadAnnounce';
 import VkAnnounce from './VkAnnounce';
@@ -12,10 +11,10 @@ interface Props {
 }
 
 const HeadedSection: React.FC<{ title: string }> = ({ title, children }) => (
-  <div>
+  <section>
     <Header>{title}</Header>
     <Column stretch>{children}</Column>
-  </div>
+  </section>
 );
 
 const EventAnnounce: React.FC<Props> = ({ event }) => {

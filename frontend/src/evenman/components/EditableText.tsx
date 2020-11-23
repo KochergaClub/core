@@ -140,7 +140,7 @@ const EditableText: React.FC<Props> = ({ title, text, save, empty }) => {
       <Header>
         {title}{' '}
         <IconLink
-          href="#"
+          href=""
           onClick={(e: React.SyntheticEvent<EventTarget>) => {
             e.preventDefault();
             startEditing();

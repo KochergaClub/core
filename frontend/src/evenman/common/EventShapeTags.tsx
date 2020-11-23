@@ -19,7 +19,7 @@ const EventShapeTags: React.FC<Props> = ({ tags, addTag, deleteTag }) => {
     };
   };
 
-  const allTags = ['ratio', 'feedback', 'slides', 'record'];
+  const allTags = ['ratio'];
 
   return (
     <div>

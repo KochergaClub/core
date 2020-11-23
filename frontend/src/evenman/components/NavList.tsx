@@ -2,8 +2,10 @@ import React from 'react';
 import FlipMove from 'react-flip-move';
 import styled from 'styled-components';
 
+import { colors, fonts } from '~/frontkit';
+
 const NavListUl = (styled(FlipMove)`
-  border-bottom: 1px solid #d8d8d8;
+  border-bottom: 1px solid ${colors.grey[300]};
   background-color: white;
   list-style-type: none;
   padding: 0;
@@ -11,14 +13,15 @@ const NavListUl = (styled(FlipMove)`
   position: relative;
 
   & > li {
-    padding: 3px 5px;
-    font-size: 0.8rem;
-    border-top: 1px solid #d8d8d8;
+    padding: 4px 16px;
+    font-size: ${fonts.sizes.XS};
+    border-top: 1px solid ${colors.grey[300]};
   }
 ` as unknown) as typeof FlipMove; // weird fix for typescript + styled + react-flip-move
 
 const Header = styled.header`
-  padding: 4px;
+  padding: 4px 16px;
+  color: ${colors.grey[700]};
 `;
 
 interface ListProps {
@@ -41,9 +44,10 @@ interface ItemProps {
 }
 
 const NavListItemLi = styled('li')<ItemProps>`
+  cursor: pointer;
+
   background-color: ${(props) =>
     props.selected ? '#ffffb3' : props.blur ? '#f0f0f0' : ''};
-  cursor: pointer;
 
   &:hover {
     background-color: ${(props) =>

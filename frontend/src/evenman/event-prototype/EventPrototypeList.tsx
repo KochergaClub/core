@@ -1,9 +1,9 @@
 import { addWeeks, getUnixTime, startOfToday } from 'date-fns';
 
 import { useQuery } from '@apollo/client';
-import { Column } from '~/frontkit';
 
 import { ApolloQueryResults } from '~/components';
+import { Column } from '~/frontkit';
 
 import LoadingOverlay from '../components/LoadingOverlay';
 import PrototypeNavList from './PrototypeNavList';
@@ -29,12 +29,12 @@ const EventPrototypeList = (props: Props) => {
         <div>
           <Column gutter={10} stretch>
             <PrototypeNavList
-              title="Активные"
+              title="Активные прототипы"
               items={prototypes.filter((p) => p.active)}
               selectedId={props.selectedId}
             />
             <PrototypeNavList
-              title="Неактивные"
+              title="Неактивные прототипы"
               items={prototypes.filter((p) => !p.active)}
               selectedId={props.selectedId}
             />

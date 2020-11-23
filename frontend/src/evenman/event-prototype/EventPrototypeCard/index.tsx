@@ -51,11 +51,6 @@ const EventPrototypeCard: React.FC<Props> = ({ prototype_id }) => {
               />
               <ActiveStatus prototype={prototype} />
             </Row>
-            <EditableString
-              value={prototype.location}
-              renderValue={() => prototype.location}
-              save={(v) => update({ location: v })}
-            />
           </CardHeader>
           <CardBody>
             <Column stretch gutter={8}>

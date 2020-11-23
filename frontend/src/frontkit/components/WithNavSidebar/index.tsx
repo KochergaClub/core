@@ -29,6 +29,7 @@ const LogoLink = styled.a`
   font-size: ${fonts.sizes.N};
   font-weight: bolder;
   padding: 10px 20px;
+  min-width: 180px;
 
   text-decoration: none;
   border-bottom: 1px solid ${colors.grey[300]};

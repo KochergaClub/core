@@ -1,7 +1,5 @@
 import styled from 'styled-components';
 
-import { Column } from '~/frontkit';
-
 import EventPrototypeAdd from './EventPrototypeAdd';
 import EventPrototypeList from './EventPrototypeList';
 
@@ -9,24 +7,26 @@ interface Props {
   selected_id?: number;
 }
 
-const Container = styled(Column).attrs({
-  stretch: true,
-  gutter: 8,
-})`
-  width: 320px;
+const Container = styled.div`
+  width: 300px;
   overflow: auto;
-  padding-bottom: 10px;
-  justify-content: space-between;
   height: 100%;
+`;
+
+const AddContainer = styled.div`
+  padding: 16px 16px 12px;
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
 `;
 
 const Sidebar: React.FC<Props> = ({ selected_id }) => {
   return (
     <Container>
-      <EventPrototypeList selectedId={String(selected_id)} />
-      <div style={{ textAlign: 'center' }}>
+      <AddContainer>
         <EventPrototypeAdd />
-      </div>
+      </AddContainer>
+      <EventPrototypeList selectedId={String(selected_id)} />
     </Container>
   );
 };
