@@ -1,4 +1,3 @@
-import { getHours, getMinutes } from 'date-fns';
 import React, { useCallback, useMemo, useState } from 'react';
 
 import { useMutation } from '@apollo/client';
@@ -6,8 +5,8 @@ import { useMutation } from '@apollo/client';
 import { useCommonHotkeys, useFocusOnFirstModalRender } from '~/common/hooks';
 import { AsyncButton, Column, ControlsFooter, Input, Label, Modal } from '~/frontkit';
 
+import TimePicker from '../common/TimePicker';
 import { EvenmanPrototypeCreateDocument } from './queries.generated';
-import TimePicker from './TimePicker';
 import WeekdayPicker from './WeekdayPicker';
 
 interface Props {
@@ -22,7 +21,9 @@ const NewPrototypeModal: React.FC<Props> = ({ close }) => {
 
   const [title, setTitle] = useState('');
   const [weekday, setWeekday] = useState<number | undefined>(undefined);
-  const [time, setTime] = useState<Date | undefined>();
+  const [time, setTime] = useState<
+    { hour: number; minute: number } | undefined
+  >();
   const [length, setLength] = useState(120);
 
   const canCreate = useMemo(
@@ -41,14 +42,12 @@ const NewPrototypeModal: React.FC<Props> = ({ close }) => {
     if (time === undefined || weekday === undefined) {
       return; // shouldn't happen, but this satisfies typescript
     }
-    const hour = getHours(time);
-    const minute = getMinutes(time);
     await createMutation({
       variables: {
         title,
         weekday,
-        hour,
-        minute,
+        hour: time.hour,
+        minute: time.minute,
         length,
       },
     });
@@ -85,6 +84,7 @@ const NewPrototypeModal: React.FC<Props> = ({ close }) => {
           />
           <Label>День недели:</Label>
           <WeekdayPicker value={weekday} setValue={setWeekday} />
+          <Label>Время:</Label>
           <TimePicker time={time} setTime={setTime} />
           <Label>Продолжительность в минутах:</Label>
           <Input type="number" value={length} onChange={updateLength} />

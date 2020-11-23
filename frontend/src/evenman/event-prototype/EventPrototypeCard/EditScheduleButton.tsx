@@ -1,11 +1,10 @@
-import { getHours, getMinutes, setHours, setMinutes } from 'date-fns';
 import { useCallback, useState } from 'react';
 
 import { useCommonHotkeys, useFocusOnFirstModalRender } from '~/common/hooks';
 import { AsyncButton, Button, Column, ControlsFooter, Input, Label, Modal } from '~/frontkit';
 
+import TimePicker from '../../common/TimePicker';
 import { EventsPrototypeFragment } from '../queries.generated';
-import TimePicker from '../TimePicker';
 import WeekdayPicker from '../WeekdayPicker';
 import { useUpdateMutation } from './hooks';
 
@@ -19,9 +18,10 @@ interface ModalProps extends Props {
 
 const EditScheduleModal: React.FC<ModalProps> = ({ prototype, close }) => {
   const [weekday, setWeekday] = useState(prototype.weekday);
-  const [time, setTime] = useState(() =>
-    setHours(setMinutes(new Date(), prototype.minute), prototype.hour)
-  );
+  const [time, setTime] = useState({
+    hour: prototype.hour,
+    minute: prototype.minute,
+  });
   const [length, setLength] = useState(prototype.length);
 
   const updateLength = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
@@ -30,13 +30,11 @@ const EditScheduleModal: React.FC<ModalProps> = ({ prototype, close }) => {
 
   const updateMutation = useUpdateMutation(prototype.id);
   const saveCb = useCallback(async () => {
-    const hour = getHours(time);
-    const minute = getMinutes(time);
     await updateMutation({
       weekday,
       length,
-      hour,
-      minute,
+      hour: time.hour,
+      minute: time.minute,
     });
     close();
   }, [weekday, length, time, close, updateMutation]);

@@ -1,15 +1,15 @@
 import 'react-datepicker/dist/react-datepicker.css';
 
-import { addHours, getHours, getMinutes, parseISO, setHours, setMinutes } from 'date-fns';
+import { addHours, parseISO, setHours, setMinutes } from 'date-fns';
 import Router from 'next/router';
 import { useCallback, useState } from 'react';
-import DatePicker from 'react-datepicker';
 
 import { useMutation } from '@apollo/client';
 
 import { useCommonHotkeys, useFocusOnFirstModalRender } from '~/common/hooks';
 import { Button, Column, ControlsFooter, Input, Label, Modal, useNotification } from '~/frontkit';
 
+import TimePicker from '../common/TimePicker';
 import { evenmanEventRoute } from '../routes';
 import { EvenmanEventCreateDocument } from './queries.generated';
 
@@ -29,22 +29,23 @@ const NewEventModal: React.FC<Props> = (props) => {
   );
 
   const [title, setTitle] = useState('');
-  const [time, setTime] = useState(new Date());
+  const [time, setTime] = useState<
+    { hour: number; minute: number } | undefined
+  >();
 
   const isValid = title && time;
-
-  const changeTime = useCallback((newTime: Date) => {
-    setTime(newTime);
-  }, []);
 
   const create = useCallback(async () => {
     if (!isValid) {
       return;
     }
+    if (!time) {
+      return; // shouldn't happen
+    }
 
     const start = setHours(
-      setMinutes(parseISO(props.date), getMinutes(time)),
-      getHours(time)
+      setMinutes(parseISO(props.date), time.minute),
+      time.hour
     );
     const end = addHours(start, 2);
 
@@ -86,19 +87,8 @@ const NewEventModal: React.FC<Props> = (props) => {
             onChange={(e) => setTitle(e.currentTarget.value)}
             ref={focus}
           />
-          <DatePicker
-            selected={time}
-            onChange={changeTime}
-            showTimeSelect
-            showTimeSelectOnly
-            timeIntervals={15}
-            minTime={setHours(setMinutes(new Date(), 0), 9)}
-            maxTime={setHours(setMinutes(new Date(), 30), 23)}
-            timeCaption="Время"
-            dateFormat="HH:mm"
-            timeFormat="HH:mm"
-            inline
-          />
+          <Label>Время:</Label>
+          <TimePicker time={time} setTime={setTime} />
         </Column>
       </Modal.Body>
       <Modal.Footer>
