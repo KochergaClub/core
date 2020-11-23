@@ -1,7 +1,7 @@
 import { useMutation } from '@apollo/client';
 
 import { EventAnnounceTarget } from '~/apollo/types.generated';
-import { AsyncButton } from '~/frontkit';
+import { AsyncButton, Column } from '~/frontkit';
 
 import VkGroupPicker from '../../common/VkGroupPicker';
 import { EvenmanAnnounceDocument, EvenmanEvent_DetailsFragment } from '../queries.generated';
@@ -33,7 +33,7 @@ const AnnounceLinkVk: React.FC<Props> = ({ event }) => {
   }
 
   return (
-    <AsyncButton act={announce} size="small">
+    <AsyncButton act={announce} size="small" kind="primary">
       создать
     </AsyncButton>
   );
@@ -45,7 +45,7 @@ const VkAnnounce: React.FC<Props> = ({ event }) => {
   const setAnnounceUrl = useSetAnnounceUrl(event.id, EventAnnounceTarget.Vk);
 
   return (
-    <div>
+    <Column stretch>
       <VkGroupPicker
         value={event.announcements.vk.group || ''}
         setValue={(value) =>
@@ -60,7 +60,7 @@ const VkAnnounce: React.FC<Props> = ({ event }) => {
         save={setAnnounceUrl}
         el={<AnnounceLinkVk event={event} />}
       />
-    </div>
+    </Column>
   );
 };
 

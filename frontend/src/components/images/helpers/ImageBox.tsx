@@ -44,19 +44,27 @@ const Overlay = styled.div.attrs(() => ({ className: 'overlay' }))`
 
 interface Props {
   src?: string;
+  src_x2?: string;
   empty: () => JSX.Element;
   displayOverlay?: boolean; // sometimes we want to show overlay even if the ImageBox is not hovered, e.g. if there's an open DropdownMenu (see ImageEditor)
 }
 
 const ImageBox: React.FC<Props> = ({
   src,
+  src_x2,
   empty,
   displayOverlay,
   children,
 }) => {
   return (
     <Container displayOverlay={displayOverlay}>
-      <div className="image-container">{src ? <img src={src} /> : empty()}</div>
+      <div className="image-container">
+        {src ? (
+          <img src={src} srcSet={src_x2 ? `${src}, ${src_x2} 2x` : undefined} />
+        ) : (
+          empty()
+        )}
+      </div>
       <Overlay>{children}</Overlay>
     </Container>
   );

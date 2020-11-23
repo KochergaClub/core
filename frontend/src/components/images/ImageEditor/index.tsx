@@ -112,6 +112,7 @@ const ImageEditor: React.FC<Props> = ({ image, onChange, defaults = {} }) => {
     <Container {...getRootProps()} active={isDragActive} ref={hoverRef}>
       <ImageBox
         src={image?.rendition.url}
+        src_x2={image?.rendition_x2.url}
         empty={() => <Placeholder>Сюда можно бросить файл</Placeholder>}
         displayOverlay={showControls}
       >

@@ -1,10 +1,10 @@
 import styled from 'styled-components';
 
 import { useQuery } from '@apollo/client';
-import { Column } from '~/frontkit';
 
 import { ApolloQueryResults } from '~/components';
 import ImagePreview from '~/components/images/ImagePreview';
+import { Column } from '~/frontkit';
 
 import Buttons from './Buttons';
 import { EvenmanWeeklyDigestDocument } from './queries.generated';
@@ -22,9 +22,10 @@ const ScheduleScreen: React.FC = () => {
         <ApolloQueryResults {...queryResults} size="block">
           {({ data: { digest } }) => (
             <>
-              {digest.image && (
+              {digest.image && digest.image_x2 && (
                 <ImagePreview
                   url={digest.image.url}
+                  url_x2={digest.image_x2.url}
                   link={digest.image.original_image.url}
                 />
               )}

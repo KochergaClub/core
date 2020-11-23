@@ -40,7 +40,12 @@ const EmailDigestButton: React.FC = ({ children }) => {
 
   return (
     <>
-      <Button onClick={toggleModal} loading={acting} style={{ width: '100%' }}>
+      <Button
+        onClick={toggleModal}
+        loading={acting}
+        style={{ width: '100%' }}
+        kind="primary"
+      >
         {children}
       </Button>
       {showModal && <DigestEmailModal close={toggleModal} save={post} />}
@@ -74,7 +79,7 @@ const Buttons: React.FC<Props> = ({ digest }) => {
               Анонс в VK
             </A>
           ) : (
-            <WideAsyncButton act={postToVk}>
+            <WideAsyncButton act={postToVk} kind="primary">
               Создать пост с расписанием
             </WideAsyncButton>
           )}
@@ -87,7 +92,7 @@ const Buttons: React.FC<Props> = ({ digest }) => {
             Анонс в Telegram
           </A>
         ) : (
-          <WideAsyncButton act={postToTelegram}>
+          <WideAsyncButton act={postToTelegram} kind="primary">
             Запостить расписание
           </WideAsyncButton>
         )}

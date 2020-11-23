@@ -127,7 +127,7 @@ const EditableText: React.FC<Props> = ({ title, text, save, empty }) => {
       return (
         <>
           {empty}
-          <Button size="small" onClick={startEditing}>
+          <Button size="small" kind="primary" onClick={startEditing}>
             добавить описание
           </Button>
         </>

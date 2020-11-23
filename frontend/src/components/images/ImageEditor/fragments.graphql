@@ -5,4 +5,8 @@ fragment WagtailImage_ForEditor on WagtailImage {
     id
     url
   }
+  rendition_x2: rendition(spec: "width-480") {
+    id
+    url
+  }
 }

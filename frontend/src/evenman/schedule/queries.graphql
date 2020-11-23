@@ -5,8 +5,13 @@ fragment EvenmanWeeklyDigest on EventsWeeklyDigest {
     id
     url
     original_image {
-      ...WagtailImage_ForEditor
+      id
+      url
     }
+  }
+  image_x2: image(spec: "width-480") {
+    id
+    url
   }
   mailchimp {
     link
