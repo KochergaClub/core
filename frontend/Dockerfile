@@ -31,3 +31,4 @@ FROM base as production
 RUN --mount=id=webpack-cache,sharing=locked,type=cache,target=/code/.next/cache/webpack \
     NODE_ENV=production npx next build && \
     NODE_ENV=production npx webpack --config webpack.server.js
+

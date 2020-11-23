@@ -657,24 +657,6 @@ exports[`Storyshots Components/Button All 1`] = `
   animation: move-bg 1s linear infinite;
 }
 
-.c0 {
-  display: -webkit-box;
-  display: -webkit-flex;
-  display: -ms-flexbox;
-  display: flex;
-  -webkit-flex-direction: row;
-  -ms-flex-direction: row;
-  flex-direction: row;
-  -webkit-align-items: flex-start;
-  -webkit-box-align: flex-start;
-  -ms-flex-align: flex-start;
-  align-items: flex-start;
-}
-
-.c0 > * + * {
-  margin-left: 4px;
-}
-
 .c1 {
   display: -webkit-box;
   display: -webkit-flex;
@@ -691,6 +673,24 @@ exports[`Storyshots Components/Button All 1`] = `
 
 .c1 > * + * {
   margin-top: 4px;
+}
+
+.c0 {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-flex-direction: row;
+  -ms-flex-direction: row;
+  flex-direction: row;
+  -webkit-align-items: flex-start;
+  -webkit-box-align: flex-start;
+  -ms-flex-align: flex-start;
+  align-items: flex-start;
+}
+
+.c0 > * + * {
+  margin-left: 4px;
 }
 
 <div

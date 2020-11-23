@@ -60,11 +60,15 @@ exports[`Storyshots Components/WithSidebar With Column Nav 1`] = `
 }
 
 .c4 {
-  padding: 8px 10px;
+  padding: 8px 20px;
   cursor: pointer;
   font-size: 12px;
   position: relative;
   z-index: 1;
+}
+
+.c4:hover {
+  color: hsl(210,55%,55%);
 }
 
 .c5 {
