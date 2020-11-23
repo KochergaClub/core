@@ -39,7 +39,7 @@ const EventPrototypeCard: React.FC<Props> = ({ prototype_id }) => {
   const [deleteTag] = useMutation(EvenmanPrototypeDeleteTagDocument);
 
   return (
-    <ApolloQueryResults {...queryResults}>
+    <ApolloQueryResults {...queryResults} size="block">
       {({ data: { prototype } }) => (
         <Card>
           <CardHeader>
