@@ -1,21 +1,25 @@
-import { useState, useCallback } from 'react';
+import { useCallback, useState } from 'react';
 import styled from 'styled-components';
 
 import { formatDate } from '~/common/utils';
+import { Button } from '~/frontkit';
 
 import NewEventModal from '../NewEventModal';
 
-interface Props {
-  date: Date;
-}
+const Container = styled.div`
+  display: flex;
+  flex-direction: row;
+  justify-content: end;
+  align-items: center;
 
-const NewButton = styled.a`
-  color: black;
-  text-decoration: none;
-  &:hover {
-    color: red;
+  > .CalendarCell--OnHover {
+    margin-right: 4px;
   }
 `;
+
+type Props = {
+  date: Date;
+};
 
 const CalendarCellHeader: React.FC<Props> = ({ date }) => {
   const [isNewEventModalOpen, setNewEventModalOpen] = useState(false);
@@ -30,22 +34,20 @@ const CalendarCellHeader: React.FC<Props> = ({ date }) => {
   }, []);
 
   return (
-    <div>
-      <NewButton
-        className="CalendarCell--OnHover"
-        href="#"
-        onClick={openNewEventModal}
-      >
-        +
-      </NewButton>
+    <Container>
+      <span className="CalendarCell--OnHover">
+        <Button size="tiny" onClick={openNewEventModal}>
+          Создать
+        </Button>
+      </span>
+      <div>{formatDate(date, 'd MMMM')}</div>
       {isNewEventModalOpen && (
         <NewEventModal
           date={formatDate(date, 'yyyy-MM-dd')}
           close={closeNewEventModal}
         />
       )}
-      {formatDate(date, 'd MMMM')}
-    </div>
+    </Container>
   );
 };
 

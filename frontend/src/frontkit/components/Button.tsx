@@ -4,7 +4,7 @@ import styled, { ThemeProvider } from 'styled-components';
 import * as colors from '../colors';
 
 export type Props = {
-  size?: 'small' | 'normal' | 'big';
+  size?: 'tiny' | 'small' | 'normal' | 'big';
   kind?: 'primary' | 'danger' | 'default';
 
   loading?: boolean;
@@ -49,6 +49,12 @@ const KIND_THEMES = {
 };
 
 const SIZE_THEMES = {
+  tiny: {
+    fontSize: '11px',
+    fontWeight: 500,
+    lineHeight: 1,
+    padding: '4px 8px',
+  },
   small: {
     fontSize: '12px',
     fontWeight: 500,
@@ -84,7 +90,7 @@ const ButtonFrame = styled.button<FrameProps>`
 
   font-size: ${(props) => props.theme.fontSize};
   font-weight: ${(props) => props.theme.fontWeight};
-  line-height: 24px;
+  line-height: ${(props) => props.theme.lineHeight || '24px'};
 
   padding: ${(props) => props.theme.padding};
 

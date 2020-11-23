@@ -16,14 +16,13 @@ const Container = styled.div`
   flex-direction: row;
   align-items: center;
   position: relative;
-
-  font-size: 0.7em;
 `;
 
 const Icon = styled.div`
-  height: 1em;
-  width: 1em;
+  line-height: 1;
   z-index: 1;
+  margin-right: 2px;
+  margin-left: 2px;
 `;
 
 const ProgressBack = styled.div<ProgressProps>`
@@ -65,6 +64,8 @@ const TitleContainer = styled.div`
   position: relative;
   overflow: hidden;
   z-index: 1;
+  line-height: 1;
+  font-size: 11px;
 `;
 
 interface Props {
@@ -117,9 +118,9 @@ const EventCalendarItem: React.FC<Props> = (props) => {
       {renderProgress()}
       <Icon>
         {event.event_type === 'public' ? (
-          <FaGlobeAfrica style={{ color: 'green', verticalAlign: 'inherit' }} />
+          <FaGlobeAfrica color="green" size="11" />
         ) : (
-          <FaLock style={{ color: 'black', verticalAlign: 'inherit' }} />
+          <FaLock color="black" size="11" />
         )}
       </Icon>
       <TitleContainer>
