@@ -10,6 +10,9 @@
       "YandexKassaPayment",
       "GenericError"
     ],
+    "CreateCommunityLeadResult": [
+      "CommunityLead"
+    ],
     "CreateRatioPromocodeResult": [
       "RatioPromocode",
       "ValidationError",

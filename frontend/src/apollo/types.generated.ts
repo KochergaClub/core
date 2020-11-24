@@ -340,6 +340,34 @@ export type ColumnsButtonsBlockValueImageArgs = {
   spec: Scalars['String'];
 };
 
+export type CommunityLead = {
+  __typename?: 'CommunityLead';
+  id: Scalars['ID'];
+  name: Scalars['String'];
+  description: Scalars['String'];
+  created: Scalars['String'];
+  updated: Scalars['String'];
+};
+
+export type CommunityLeadConnection = {
+  __typename?: 'CommunityLeadConnection';
+  pageInfo: PageInfo;
+  nodes: Array<CommunityLead>;
+  edges: Array<CommunityLeadEdge>;
+};
+
+export type CommunityLeadEdge = {
+  __typename?: 'CommunityLeadEdge';
+  node: CommunityLead;
+};
+
+export type CreateCommunityLeadInput = {
+  name: Scalars['String'];
+  description?: Maybe<Scalars['String']>;
+};
+
+export type CreateCommunityLeadResult = CommunityLead;
+
 export type CreateRatioPromocodeInput = {
   ticket_type_id?: Maybe<Scalars['ID']>;
   training_id?: Maybe<Scalars['ID']>;
@@ -1183,6 +1211,7 @@ export type Mutation = {
   tildaImportAll?: Maybe<BasicResult>;
   tildaImport?: Maybe<BasicResult>;
   openviduGenerateRoomToken: OpenviduGenerateRoomTokenResult;
+  createCommunityLead: CreateCommunityLeadResult;
 };
 
 
@@ -1679,6 +1708,11 @@ export type MutationTildaImportArgs = {
   input: TildaImportInput;
 };
 
+
+export type MutationCreateCommunityLeadArgs = {
+  input: CreateCommunityLeadInput;
+};
+
 export type My = {
   __typename?: 'My';
   user: AuthCurrentUser;
@@ -1977,6 +2011,7 @@ export type Query = {
   tildaPage?: Maybe<TildaPage>;
   tildaPages: Array<TildaPage>;
   externalServices: Array<ExternalService>;
+  communityLeads: CommunityLeadConnection;
   my: My;
 };
 
@@ -2212,6 +2247,14 @@ export type QueryImageTemplateBySlugArgs = {
 
 export type QueryTildaPageArgs = {
   path: Scalars['String'];
+};
+
+
+export type QueryCommunityLeadsArgs = {
+  before?: Maybe<Scalars['String']>;
+  after?: Maybe<Scalars['String']>;
+  first?: Maybe<Scalars['Int']>;
+  last?: Maybe<Scalars['Int']>;
 };
 
 export type RatioActivity = {

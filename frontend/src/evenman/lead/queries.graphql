@@ -1,0 +1,29 @@
+fragment EvenmanLead on CommunityLead {
+  id
+  created
+  updated
+  name
+  description
+}
+
+query EvenmanLeads($before: String, $after: String, $first: Int, $last: Int) {
+  communityLeads(before: $before, after: $after, first: $first, last: $last) {
+    pageInfo {
+      hasNextPage
+      hasPreviousPage
+      startCursor
+      endCursor
+    }
+    edges {
+      node {
+        ...EvenmanLead
+      }
+    }
+  }
+}
+
+mutation CreateEvenmanLead($input: CreateCommunityLeadInput!) {
+  createCommunityLead(input: $input) {
+    ...EvenmanLead
+  }
+}

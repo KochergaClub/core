@@ -288,6 +288,31 @@ type ColumnsButtonsBlockValue {
   link: String!
 }
 
+type CommunityLead {
+  id: ID!
+  name: String!
+  description: String!
+  created: String!
+  updated: String!
+}
+
+type CommunityLeadConnection {
+  pageInfo: PageInfo!
+  nodes: [CommunityLead!]!
+  edges: [CommunityLeadEdge!]!
+}
+
+type CommunityLeadEdge {
+  node: CommunityLead!
+}
+
+input CreateCommunityLeadInput {
+  name: String!
+  description: String
+}
+
+union CreateCommunityLeadResult = CommunityLead
+
 input CreateRatioPromocodeInput {
   ticket_type_id: ID
   training_id: ID
@@ -1044,6 +1069,7 @@ type Mutation {
   tildaImportAll: BasicResult
   tildaImport(input: TildaImportInput!): BasicResult
   openviduGenerateRoomToken: OpenviduGenerateRoomTokenResult!
+  createCommunityLead(input: CreateCommunityLeadInput!): CreateCommunityLeadResult!
 }
 
 type My {
@@ -1301,6 +1327,7 @@ type Query {
   tildaPage(path: String!): TildaPage
   tildaPages: [TildaPage!]!
   externalServices: [ExternalService!]!
+  communityLeads(before: String, after: String, first: Int, last: Int): CommunityLeadConnection!
   my: My!
 }
 
