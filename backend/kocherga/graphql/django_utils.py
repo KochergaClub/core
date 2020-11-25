@@ -1,7 +1,7 @@
 import inspect
 import types
 from abc import abstractmethod
-from typing import Any, Callable, Dict, List, Optional, Tuple, Type, Union
+from typing import Any, Callable, Dict, List, Tuple, Type, Union
 
 from django.db import models
 from django.db.models.fields.reverse_related import ForeignObjectRel
@@ -9,7 +9,7 @@ from kocherga.graphql.permissions import check_permissions
 
 import graphql
 
-from . import g, helpers
+from . import basic_types, g, helpers
 
 
 def model_field(model: Type[models.Model], field_name: str):
@@ -228,3 +228,30 @@ class UpdateMutation(helpers.UnionFieldMixin, helpers.BaseFieldWithInput):
     @property
     def result_types(self):
         return {self.model: self.result_type}
+
+
+class DeleteMutation(helpers.UnionFieldMixin, helpers.BaseField):
+    """
+    Example:
+        class deleteFoo(DeleteMutation):
+            model = models.Foo
+            permissions = [...]
+    """
+
+    class Ok:
+        ok = True
+
+    def resolve(self, _, info, id):
+        obj = self.model.objects.get(id=id)
+        obj.delete()
+        return self.Ok()
+
+    @property
+    @abstractmethod
+    def model(self) -> Type[models.Model]:
+        ...
+
+    # TODO - implement lookup_field arg, e.g. for Event.uuid case
+    args = {'id': 'ID!'}
+
+    result_types = {Ok: basic_types.BasicResult}

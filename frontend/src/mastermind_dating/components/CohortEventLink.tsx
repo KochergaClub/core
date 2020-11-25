@@ -92,7 +92,7 @@ const CohortEventLink: React.FC<Props> = ({ cohort }) => {
       return; // this shouldn't happen
     }
 
-    setEvent({
+    await setEvent({
       variables: {
         cohort_id: cohort.id,
         event_id: confirming.id,
@@ -122,11 +122,11 @@ const CohortEventLink: React.FC<Props> = ({ cohort }) => {
       <Async loadOptions={loadEvents} onChange={pickEventForConfirming} />
       {confirming && (
         <ConfirmModal
-          yes="Выбрать событие"
+          submitButton="Выбрать событие"
           close={cancelConfirming}
           act={setEventCb}
         >
-          Установить событие {confirming.title}
+          Связать событие {confirming.title} с когортой?
         </ConfirmModal>
       )}
     </div>

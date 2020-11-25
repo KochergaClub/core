@@ -34,4 +34,10 @@ class updateCommunityLead(django_utils.UpdateMutation):
     result_type = types.CommunityLead
 
 
+@c.class_field
+class deleteCommunityLead(django_utils.DeleteMutation):
+    permissions = [permissions.manage_crm]
+    model = models.Lead
+
+
 mutations = c.as_dict()

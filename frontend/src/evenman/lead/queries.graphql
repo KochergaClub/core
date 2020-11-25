@@ -33,3 +33,11 @@ mutation UpdateEvenmanLead($input: UpdateCommunityLeadInput!) {
     ...EvenmanLead
   }
 }
+
+mutation DeleteEvenmanLead($id: ID!) {
+  deleteCommunityLead(id: $id) {
+    ... on BasicResult {
+      ok
+    }
+  }
+}

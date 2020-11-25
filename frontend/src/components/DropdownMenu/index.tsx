@@ -14,6 +14,7 @@ import { DropdownMenuContext, ModalCreator } from './contexts';
 export { default as Action } from './Action';
 export { default as LinkAction } from './LinkAction';
 export { default as ModalAction } from './ModalAction';
+export { MutationAction } from './MutationAction';
 export { default as NextLinkAction } from './NextLinkAction';
 
 const Container = styled.div`

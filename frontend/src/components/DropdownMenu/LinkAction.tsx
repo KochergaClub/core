@@ -2,13 +2,12 @@ import { FaArrowRight } from 'react-icons/fa';
 import styled from 'styled-components';
 
 import { ActionLayout } from './ActionLayout';
+import { CommonActionProps } from './types';
 
-type Props = {
+interface Props extends CommonActionProps {
   href: string;
-  title: string;
-  icon?: React.ElementType;
   children?: null;
-};
+}
 
 export const LinkActionA = styled.a`
   color: black;

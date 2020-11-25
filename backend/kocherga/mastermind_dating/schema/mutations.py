@@ -63,7 +63,9 @@ def mastermindDatingDeleteCohort(helper):
         return {'ok': True}
 
     return g.Field(
-        g.NN(BasicResult), args=g.arguments({'cohort_id': 'ID!'}), resolve=resolve,
+        g.NN(BasicResult),
+        args=g.arguments({'cohort_id': 'ID!'}),
+        resolve=resolve,
     )
 
 
@@ -71,7 +73,7 @@ def mastermindDatingDeleteCohort(helper):
 def mastermindDatingCreateGroup(helper):
     @check_permissions([staffonly])
     def resolve(_, info, cohort_id):
-        cohort = models.Cohort.objects.get(cohort_id)
+        cohort = models.Cohort.objects.get(pk=cohort_id)
         models.Group.objects.create_for_cohort(cohort)
         return {'cohort': cohort}
 
@@ -86,7 +88,7 @@ def mastermindDatingCreateGroup(helper):
 def mastermindDatingSetEventForCohort(_):
     @check_permissions([staffonly])
     def resolve(_, info, cohort_id, event_id):
-        cohort = models.Cohort.objects.get(cohort_id)
+        cohort = models.Cohort.objects.get(pk=cohort_id)
         event = Event.objects.get(uuid=event_id)
         cohort.event = event
         cohort.save()
@@ -103,7 +105,7 @@ def mastermindDatingSetEventForCohort(_):
 def mastermindDatingUnsetEventForCohort(_):
     @check_permissions([staffonly])
     def resolve(_, info, cohort_id):
-        cohort = models.Cohort.objects.get(cohort_id)
+        cohort = models.Cohort.objects.get(pk=cohort_id)
         cohort.event = None
         cohort.save()
         return {'cohort': cohort}
@@ -126,7 +128,8 @@ def mastermindDatingCreateParticipant(_):
             kocherga_user = KchUser.objects.create_user(email)
 
         (participant, _) = models.Participant.objects.get_or_create(
-            user=kocherga_user, cohort=cohort,
+            user=kocherga_user,
+            cohort=cohort,
         )
 
         return {'participant': participant}

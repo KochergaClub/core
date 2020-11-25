@@ -331,6 +331,8 @@ input CreateRatioTicketTypeInput {
   discount_percent_by_email: Int
 }
 
+union DeleteCommunityLeadResult = BasicResult
+
 input DeleteRatioTicketTypeInput {
   id: ID!
 }
@@ -1071,6 +1073,7 @@ type Mutation {
   openviduGenerateRoomToken: OpenviduGenerateRoomTokenResult!
   createCommunityLead(input: CreateCommunityLeadInput!): CreateCommunityLeadResult!
   updateCommunityLead(input: UpdateCommunityLeadInput!): UpdateCommunityLeadResult!
+  deleteCommunityLead(id: ID!): DeleteCommunityLeadResult!
 }
 
 type My {

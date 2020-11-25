@@ -18,6 +18,9 @@
       "ValidationError",
       "GenericError"
     ],
+    "DeleteCommunityLeadResult": [
+      "BasicResult"
+    ],
     "ExternalService": [
       "SlackExternalService",
       "WikiExternalService"

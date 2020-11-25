@@ -386,6 +386,8 @@ export type CreateRatioTicketTypeInput = {
   discount_percent_by_email?: Maybe<Scalars['Int']>;
 };
 
+export type DeleteCommunityLeadResult = BasicResult;
+
 export type DeleteRatioTicketTypeInput = {
   id: Scalars['ID'];
 };
@@ -1213,6 +1215,7 @@ export type Mutation = {
   openviduGenerateRoomToken: OpenviduGenerateRoomTokenResult;
   createCommunityLead: CreateCommunityLeadResult;
   updateCommunityLead: UpdateCommunityLeadResult;
+  deleteCommunityLead: DeleteCommunityLeadResult;
 };
 
 
@@ -1717,6 +1720,11 @@ export type MutationCreateCommunityLeadArgs = {
 
 export type MutationUpdateCommunityLeadArgs = {
   input: UpdateCommunityLeadInput;
+};
+
+
+export type MutationDeleteCommunityLeadArgs = {
+  id: Scalars['ID'];
 };
 
 export type My = {

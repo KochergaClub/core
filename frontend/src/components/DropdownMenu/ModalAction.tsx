@@ -3,10 +3,9 @@ import { VscWindow } from 'react-icons/vsc';
 
 import { ActionLayout } from './ActionLayout';
 import { DropdownMenuContext, ModalCreator } from './contexts';
+import { CommonActionProps } from './types';
 
-interface Props {
-  title: string;
-  icon?: React.ElementType;
+interface Props extends CommonActionProps {
   children: ModalCreator;
 }
 
