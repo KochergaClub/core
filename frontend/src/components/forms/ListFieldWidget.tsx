@@ -6,11 +6,11 @@ import styled from 'styled-components';
 import { Button, colors, Column, fonts, Label, Row } from '~/frontkit';
 
 import AnyFieldWidget from './AnyFieldWidget';
-import { AnyFormValues, ListFormField } from './types';
+import { AnyFormValues, ListFieldShape } from './types';
 import { buildInitialValues } from './utils';
 
 interface Props {
-  field: ListFormField;
+  field: ListFieldShape;
   values: AnyFormValues[];
   name: string;
   hideLabel?: boolean;

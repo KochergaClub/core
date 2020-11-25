@@ -1,10 +1,13 @@
 import { parseISO } from 'date-fns';
 import React from 'react';
+import { FaEdit } from 'react-icons/fa';
 import styled from 'styled-components';
 
-import { HumanizedDateTime } from '~/components';
-import { Column, HR, RichText } from '~/frontkit';
+import { DropdownMenu, HumanizedDateTime } from '~/components';
+import { ModalAction } from '~/components/DropdownMenu';
+import { Column, HR, RichText, Row } from '~/frontkit';
 
+import { EditLeadModal } from './EditLeadModal';
 import { EvenmanLeadFragment } from './queries.generated';
 
 type Props = {
@@ -18,7 +21,16 @@ const DescriptionContainer = styled.div`
 export const LeadCard: React.FC<Props> = ({ lead }) => {
   return (
     <Column stretch>
+        <Row vCentered>
       <strong>{lead.name}</strong>
+                  <DropdownMenu>
+                    <ModalAction title="Редактировать" icon={FaEdit}>
+                      {({ close }) => (
+                        <EditLeadModal close={close} lead={lead} />
+                      )}
+                    </ModalAction>
+                  </DropdownMenu>
+        </Row>
       <small>
         Создан: <HumanizedDateTime date={parseISO(lead.created)} />
       </small>

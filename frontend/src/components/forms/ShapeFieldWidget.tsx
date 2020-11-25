@@ -1,10 +1,10 @@
 import { Label } from '~/frontkit';
 
 import AnyFieldWidget from './AnyFieldWidget';
-import { AnyFormValues, ShapeFormField } from './types';
+import { AnyFormValues, ShapeFieldShape } from './types';
 
 interface Props {
-  field: ShapeFormField;
+  field: ShapeFieldShape;
   values: AnyFormValues;
   name: string;
   hideLabel?: boolean;

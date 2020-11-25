@@ -6,7 +6,7 @@ import { Button, Column, ControlsFooter, Modal } from '~/frontkit';
 
 import AnyFieldWidget from './AnyFieldWidget';
 import ErrorLabel from './BasicFieldWidget/ErrorLabel'; // TODO - move ErrorLabel to one level up
-import { AnyFormValues, FormField, FormShape, PostResult } from './types';
+import { AnyFormValues, FieldShape, FormShape, PostResult } from './types';
 import { buildInitialValues } from './utils';
 
 interface Props<Values extends AnyFormValues> {
@@ -24,7 +24,7 @@ interface ModalProps<Values extends AnyFormValues> extends Props<Values> {
 type ValidationErrors = { [k: string]: string };
 
 const validateByField = (
-  field: FormField,
+  field: FieldShape,
   value: AnyFormValues[keyof AnyFormValues]
 ): ValidationErrors | undefined => {
   if (field.type === 'shape') {
@@ -96,7 +96,7 @@ const validateByShape = <Values extends AnyFormValues>(
 };
 
 const prepareValueByField = (
-  field: FormField,
+  field: FieldShape,
   value: AnyFormValues[keyof AnyFormValues]
 ): any => {
   switch (field.type) {

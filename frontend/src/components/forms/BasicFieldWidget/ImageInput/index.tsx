@@ -1,12 +1,12 @@
 import { useEffect } from 'react';
 
 import { useLazyQuery } from '@apollo/client';
-import { Row } from '~/frontkit';
 
 import { ApolloQueryResults } from '~/components';
 import ImageEditor from '~/components/images/ImageEditor';
+import { Row } from '~/frontkit';
 
-import { ImageFormField } from '../../types';
+import { ImageFieldShape } from '../../types';
 import LabeledField from '../LabeledField';
 import { WagtailImageDocument } from './queries.generated';
 
@@ -44,7 +44,7 @@ const ImageEditorById: React.FC<EditorProps> = ({ id, onChange }) => {
 };
 
 const ImageInput: React.FC<{
-  field: ImageFormField;
+  field: ImageFieldShape;
   name: string;
 }> = ({ field, name }) => {
   return (

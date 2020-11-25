@@ -1212,6 +1212,7 @@ export type Mutation = {
   tildaImport?: Maybe<BasicResult>;
   openviduGenerateRoomToken: OpenviduGenerateRoomTokenResult;
   createCommunityLead: CreateCommunityLeadResult;
+  updateCommunityLead: UpdateCommunityLeadResult;
 };
 
 
@@ -1711,6 +1712,11 @@ export type MutationTildaImportArgs = {
 
 export type MutationCreateCommunityLeadArgs = {
   input: CreateCommunityLeadInput;
+};
+
+
+export type MutationUpdateCommunityLeadArgs = {
+  input: UpdateCommunityLeadInput;
 };
 
 export type My = {
@@ -2887,6 +2893,14 @@ export type TimepadCategory = {
   code: Scalars['String'];
   name: Scalars['String'];
 };
+
+export type UpdateCommunityLeadInput = {
+  id: Scalars['ID'];
+  name?: Maybe<Scalars['String']>;
+  description?: Maybe<Scalars['String']>;
+};
+
+export type UpdateCommunityLeadResult = CommunityLead;
 
 export type UpdateRatioTicketInput = {
   id: Scalars['ID'];

@@ -1,8 +1,8 @@
-import { AnyFormValues, FormField, FormShape } from './types';
+import { AnyFormValues, FieldShape, FormShape } from './types';
 
 interface TransformParams {
   exclude?: string[];
-  transform?: { [k: string]: (field: FormField) => FormField };
+  transform?: { [k: string]: (field: FieldShape) => FieldShape };
 }
 
 export const transformShape = (

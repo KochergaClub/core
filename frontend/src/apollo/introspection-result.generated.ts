@@ -47,6 +47,9 @@
       "SlideFragmentsBlock_RichTextBlock",
       "SlideFragmentsBlock_RawHtmlBlock"
     ],
+    "UpdateCommunityLeadResult": [
+      "CommunityLead"
+    ],
     "UpdateYandexKassaPaymentResult": [
       "YandexKassaPayment",
       "GenericError"

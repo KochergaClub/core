@@ -1,50 +1,50 @@
 import { FormikErrors } from 'formik';
 
-export interface AnyFormField {
+export interface AnyFieldShape {
   readonly name: string;
   readonly title?: string;
 }
 
-export interface AnyBasicFormField extends AnyFormField {
+export interface AnyBasicFieldShape extends AnyFieldShape {
   readonly?: boolean;
   optional?: boolean;
 }
 
-export interface StringFormField extends AnyBasicFormField {
+export interface StringFieldShape extends AnyBasicFieldShape {
   readonly type: 'string' | 'email' | 'password' | 'date';
   readonly default?: string;
 }
 
-export interface RichTextFormField extends AnyBasicFormField {
+export interface RichTextFieldShape extends AnyBasicFieldShape {
   readonly type: 'richtext';
   readonly default?: string;
 }
 
-export interface NumberFormField extends AnyBasicFormField {
+export interface NumberFieldShape extends AnyBasicFieldShape {
   readonly type: 'number';
   readonly default?: number;
   readonly min?: number;
   readonly max?: number;
 }
 
-export interface ChoiceFormField extends AnyBasicFormField {
+export interface ChoiceFieldShape extends AnyBasicFieldShape {
   readonly type: 'choice';
   readonly widget?: 'radio' | 'dropdown';
   readonly default?: string;
   readonly options: [string, string][];
 }
 
-export interface BooleanFormField extends AnyBasicFormField {
+export interface BooleanFieldShape extends AnyBasicFieldShape {
   readonly type: 'boolean';
   readonly default?: boolean;
 }
 
-export interface ImageFormField extends AnyBasicFormField {
+export interface ImageFieldShape extends AnyBasicFieldShape {
   readonly type: 'image';
   readonly default?: string;
 }
 
-export interface ForeignKeyFormField extends AnyBasicFormField {
+export interface ForeignKeyFieldShape extends AnyBasicFieldShape {
   readonly type: 'fk';
   readonly default?: number | string;
   readonly widget?: {
@@ -55,28 +55,28 @@ export interface ForeignKeyFormField extends AnyBasicFormField {
   };
 }
 
-export interface ShapeFormField extends AnyFormField {
+export interface ShapeFieldShape extends AnyFieldShape {
   readonly type: 'shape';
   readonly shape: FormShape;
 }
 
-export interface ListFormField extends AnyFormField {
+export interface ListFieldShape extends AnyFieldShape {
   readonly type: 'list';
-  readonly field: FormField;
+  readonly field: FieldShape;
 }
 
-export type BasicFormField =
-  | StringFormField
-  | RichTextFormField
-  | NumberFormField
-  | ChoiceFormField
-  | BooleanFormField
-  | ImageFormField
-  | ForeignKeyFormField;
+export type BasicFieldShape =
+  | StringFieldShape
+  | RichTextFieldShape
+  | NumberFieldShape
+  | ChoiceFieldShape
+  | BooleanFieldShape
+  | ImageFieldShape
+  | ForeignKeyFieldShape;
 
-export type FormField = BasicFormField | ShapeFormField | ListFormField;
+export type FieldShape = BasicFieldShape | ShapeFieldShape | ListFieldShape;
 
-export type FormShape = FormField[];
+export type FormShape = FieldShape[];
 
 export type AnyFormValues = {
   [k: string]:

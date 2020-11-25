@@ -9,7 +9,7 @@ import styled from 'styled-components';
 
 import { Input, Label } from '~/frontkit';
 
-import { BasicFormField, ChoiceFormField } from '../types';
+import { BasicFieldShape, ChoiceFieldShape } from '../types';
 import ErrorLabel from './ErrorLabel';
 import ForeignKeyWidget from './ForeignKeyWidget';
 import ImageInput from './ImageInput';
@@ -17,7 +17,7 @@ import LabeledField from './LabeledField';
 import RichTextInput from './RichTextInput';
 
 interface Props {
-  field: BasicFormField;
+  field: BasicFieldShape;
   name: string;
   hideLabel?: boolean; // TODO - handle hideLabel flag
 }
@@ -27,7 +27,7 @@ const WideInput = styled(Input)`
 `;
 
 const FieldInputForType: React.FC<{
-  field: BasicFormField;
+  field: BasicFieldShape;
   type: string;
   name: string;
 }> = ({ field, type, name }) => (
@@ -42,7 +42,7 @@ const FieldInputForType: React.FC<{
   </LabeledField>
 );
 
-const FieldInputForDate: React.FC<{ field: BasicFormField; name: string }> = ({
+const FieldInputForDate: React.FC<{ field: BasicFieldShape; name: string }> = ({
   field,
   name,
 }) => (
@@ -65,7 +65,7 @@ const FieldInputForDate: React.FC<{ field: BasicFormField; name: string }> = ({
   </LabeledField>
 );
 
-const ChoiceFieldInput: React.FC<{ field: ChoiceFormField; name: string }> = ({
+const ChoiceFieldInput: React.FC<{ field: ChoiceFieldShape; name: string }> = ({
   field,
   name,
 }) => {

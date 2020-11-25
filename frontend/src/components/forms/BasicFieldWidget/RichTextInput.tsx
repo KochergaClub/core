@@ -3,13 +3,13 @@ import 'react-quill/dist/quill.snow.css';
 import dynamic from 'next/dynamic';
 import { useEffect, useRef, useState } from 'react';
 
-import { RichTextFormField } from '../types';
+import { RichTextFieldShape } from '../types';
 import LabeledField from './LabeledField';
 
 const ReactQuill = dynamic(() => import('react-quill'), { ssr: false });
 
 const RichTextInput: React.FC<{
-  field: RichTextFormField;
+  field: RichTextFieldShape;
   name: string;
 }> = ({ field, name }) => {
   const ref = useRef<HTMLDivElement>(null);

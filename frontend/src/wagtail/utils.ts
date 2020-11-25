@@ -1,6 +1,6 @@
 import { FieldNode, FragmentDefinitionNode } from 'graphql';
 
-import { FormField, FormShape } from '~/components/forms/types';
+import { FieldShape, FormShape } from '~/components/forms/types';
 
 import { allBlockComponents, isKnownBlock } from './blocks';
 import {
@@ -49,16 +49,16 @@ export const getBlockValueKey = (
   return valueKey;
 };
 
-const structureToFormField = (
+const structureToFieldShape = (
   structure:
     | StructureCommonFragment
     | StructureL1Fragment
     | StructureL2Fragment
     | StructureL3Fragment,
   name: string
-): FormField => {
+): FieldShape => {
   if (!structure.__typename) {
-    throw new Error("Expected __typename to be set");
+    throw new Error('Expected __typename to be set');
   }
   switch (structure.__typename) {
     case 'WagtailCharBlockStructure':
@@ -105,10 +105,10 @@ const structureToFormField = (
       }
 
       // we can't just map on child_blocks since typescript is not smart enough
-      const structShape: FormField[] = [];
+      const structShape: FieldShape[] = [];
       for (const child_block of structure.child_blocks) {
         structShape.push(
-          structureToFormField(child_block.definition, child_block.name)
+          structureToFieldShape(child_block.definition, child_block.name)
         );
       }
       return {
@@ -125,17 +125,17 @@ const structureToFormField = (
         type: 'list',
         name,
         title: structure.label,
-        field: structureToFormField(structure.child_block, 'item'),
+        field: structureToFieldShape(structure.child_block, 'item'),
       };
   }
 };
 
 export const structureToShape = (structure: StructureFragment): FormShape => {
-  const formField = structureToFormField(structure, 'form');
-  if (formField.type === 'shape') {
-    return formField.shape;
+  const fieldShape = structureToFieldShape(structure, 'form');
+  if (fieldShape.type === 'shape') {
+    return fieldShape.shape;
   } else {
-    return [formField];
+    return [fieldShape];
   }
 };
 

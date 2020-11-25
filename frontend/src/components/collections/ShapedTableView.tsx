@@ -1,6 +1,6 @@
 import { FaCheck } from 'react-icons/fa';
 
-import { FormField, FormShape } from '~/components/forms/types';
+import { FieldShape, FormShape } from '~/components/forms/types';
 
 import { Table, TableHeaderCell } from './tables';
 import { AnyViewProps } from './types';
@@ -12,7 +12,7 @@ interface Props<I> extends AnyViewProps<I> {
 }
 
 interface CellProps<I> {
-  field: FormField;
+  field: FieldShape;
   item: I;
 }
 

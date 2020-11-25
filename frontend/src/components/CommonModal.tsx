@@ -12,6 +12,7 @@ interface Props {
   submitError?: string;
   loading?: boolean;
   disabled?: boolean;
+  submitOnEnter?: boolean;
 }
 
 export const CommonModal: React.FC<Props> = ({
@@ -20,12 +21,13 @@ export const CommonModal: React.FC<Props> = ({
   submit,
   buttonText = 'Сохранить',
   submitError,
+  submitOnEnter = true,
   loading,
   disabled,
   children,
 }) => {
   const hotkeys = useCommonHotkeys({
-    onEnter: submit,
+    onEnter: submitOnEnter ? submit : undefined,
     onEscape: close,
   });
 

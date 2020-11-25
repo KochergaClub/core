@@ -1,11 +1,11 @@
 import { useCallback } from 'react';
 import AsyncSelect from 'react-select/async';
 
-import { ForeignKeyFormField } from '../types';
+import { ForeignKeyFieldShape } from '../types';
 import LabeledField from './LabeledField';
 
 interface Props {
-  field: ForeignKeyFormField;
+  field: ForeignKeyFieldShape;
   name: string;
 }
 

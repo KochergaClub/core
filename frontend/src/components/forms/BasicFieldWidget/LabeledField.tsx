@@ -2,17 +2,17 @@ import { ErrorMessage, Field, FieldProps } from 'formik';
 
 import { Label, Row } from '~/frontkit';
 
-import { AnyFormField, FormField } from '../types';
+import { AnyFieldShape, FieldShape } from '../types';
 import ErrorLabel from './ErrorLabel';
 
 interface Props {
-  for: AnyFormField;
+  for: AnyFieldShape;
   name: string;
   children: (fieldProps: FieldProps<any>) => React.ReactNode;
 }
 
 const LabeledField: React.FC<Props> = ({ for: field, name, children }) => {
-  if ((field as FormField).type === 'boolean') {
+  if ((field as FieldShape).type === 'boolean') {
     return (
       <div>
         <Label>

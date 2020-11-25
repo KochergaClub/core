@@ -27,3 +27,9 @@ mutation CreateEvenmanLead($input: CreateCommunityLeadInput!) {
     ...EvenmanLead
   }
 }
+
+mutation UpdateEvenmanLead($input: UpdateCommunityLeadInput!) {
+  updateCommunityLead(input: $input) {
+    ...EvenmanLead
+  }
+}

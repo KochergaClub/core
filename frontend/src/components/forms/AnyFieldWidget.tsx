@@ -1,10 +1,10 @@
 import BasicFieldWidget from './BasicFieldWidget';
 import ListFieldWidget from './ListFieldWidget';
 import ShapeFieldWidget from './ShapeFieldWidget';
-import { AnyFormValues, FormField } from './types';
+import { AnyFormValues, FieldShape } from './types';
 
 interface Props {
-  field: FormField;
+  field: FieldShape;
   name: string;
   value: AnyFormValues[keyof AnyFormValues];
   hideLabel?: boolean;
