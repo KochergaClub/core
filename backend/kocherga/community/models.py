@@ -1,3 +1,4 @@
+import reversion
 from django.contrib.auth import get_user_model
 from django.db import models
 from kocherga.django.managers import RelayQuerySet
@@ -6,6 +7,7 @@ from wagtail.core.fields import RichTextField
 User = get_user_model()
 
 
+@reversion.register()
 class Lead(models.Model):
     name = models.CharField(max_length=250)
     description = RichTextField(blank=True)
