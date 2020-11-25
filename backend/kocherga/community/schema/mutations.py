@@ -13,6 +13,7 @@ class createCommunityLead(helpers.UnionFieldMixin, helpers.BaseFieldWithInput):
         lead = models.Lead.objects.create(
             name=input['name'],
             description=input.get('description', ''),
+            created_by=info.context.user,
         )
         lead.full_clean()
         return lead
