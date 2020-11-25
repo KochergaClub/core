@@ -33,6 +33,7 @@ const AsyncButtonWithConfirm = ({
     setConfirming(false);
   }, []);
 
+  // TODO - unify with ButtonWithModal?
   return (
     <>
       <Button
