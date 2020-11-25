@@ -1,5 +1,5 @@
 from typing import Optional
-from kocherga.graphql import helpers
+from kocherga.graphql import helpers, django_utils
 
 from .. import models, permissions
 from . import types
@@ -24,6 +24,14 @@ class createCommunityLead(helpers.UnionFieldMixin, helpers.BaseFieldWithInput):
         'description': Optional[str],
     }
     result_types = {models.Lead: types.CommunityLead}
+
+
+@c.class_field
+class updateCommunityLead(django_utils.UpdateMutation):
+    permissions = [permissions.manage_crm]
+    model = models.Lead
+    fields = ['name', 'description']
+    result_type = types.CommunityLead
 
 
 mutations = c.as_dict()

@@ -1,13 +1,15 @@
 import inspect
 import types
-from typing import Any, Callable, Dict, List, Tuple, Type, Union
+from abc import abstractmethod
+from typing import Any, Callable, Dict, List, Optional, Tuple, Type, Union
 
 from django.db import models
 from django.db.models.fields.reverse_related import ForeignObjectRel
-from kocherga.graphql import g
 from kocherga.graphql.permissions import check_permissions
 
 import graphql
+
+from . import g, helpers
 
 
 def model_field(model: Type[models.Model], field_name: str):
@@ -165,3 +167,64 @@ def DjangoObjectType(
             }
         ),
     )
+
+
+class UpdateMutation(helpers.UnionFieldMixin, helpers.BaseFieldWithInput):
+    """
+    Example:
+        class updateFoo(UpdateMutation):
+            model = models.Foo
+            fields = ['first', 'second']
+            permissions = [...]
+            result_type = types.Foo  # note that the actual mutation result will be a union for future extensibility
+    """
+
+    def resolve(self, _, info, input):
+        obj = self.model.objects.get(id=input['id'])
+        for field in self.fields:
+            if field in input:
+                setattr(obj, field, input[field])
+
+        obj.full_clean()
+        obj.save()
+        return obj
+
+    @property
+    @abstractmethod
+    def model(self) -> Type[models.Model]:
+        ...
+
+    @property
+    @abstractmethod
+    def fields(self) -> List[str]:
+        ...
+
+    @property
+    @abstractmethod
+    def result_type(self) -> g.ObjectType:
+        ...
+
+    @property
+    def input(self):
+        result: Dict[str, Any] = {'id': 'ID!'}
+        model = self.model
+        for field_name in self.fields:
+            if field_name == 'id':
+                raise Exception(
+                    "`id` is forbidden in mutation fields since it's a default lookup field"
+                )
+
+            graphql_field = model_field(model, field_name)
+            graphql_type = graphql_field.type
+
+            # all update input fields must be nullable
+            if isinstance(graphql_type, graphql.GraphQLNonNull):
+                graphql_type = graphql_type.of_type
+
+            result[field_name] = graphql_type
+
+        return result
+
+    @property
+    def result_types(self):
+        return {self.model: self.result_type}

@@ -1,14 +1,15 @@
 from __future__ import annotations
+
 import logging
 
 logger = logging.getLogger(__name__)
 
+from abc import ABC, abstractmethod
+from typing import Any, Callable, Dict, List, Optional, Union
+
 import graphql
-from typing import Callable, Any, Optional, List, Dict
 
-from abc import abstractmethod, ABC
-
-from . import g, basic_types
+from . import basic_types, g
 from .permissions import check_permissions
 
 
@@ -185,7 +186,7 @@ class BaseFieldWithInput(BaseField):
     @property
     def args(self):
         input = self.input
-        if type(input) == dict:
+        if isinstance(input, dict):
             # unique anonymous input
             input = g.InputObjectType(
                 capitalize_first_only(self.__class__.__name__) + 'Input',
@@ -195,7 +196,7 @@ class BaseFieldWithInput(BaseField):
 
     @property
     @abstractmethod
-    def input(self):
+    def input(self) -> Union[graphql.GraphQLInputObjectType, Dict[str, Any]]:
         ...
 
     input_argument_name = 'input'

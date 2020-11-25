@@ -1070,6 +1070,7 @@ type Mutation {
   tildaImport(input: TildaImportInput!): BasicResult
   openviduGenerateRoomToken: OpenviduGenerateRoomTokenResult!
   createCommunityLead(input: CreateCommunityLeadInput!): CreateCommunityLeadResult!
+  updateCommunityLead(input: UpdateCommunityLeadInput!): UpdateCommunityLeadResult!
 }
 
 type My {
@@ -1910,6 +1911,14 @@ type TimepadCategory {
   code: String!
   name: String!
 }
+
+input UpdateCommunityLeadInput {
+  id: ID!
+  name: String
+  description: String
+}
+
+union UpdateCommunityLeadResult = CommunityLead
 
 input UpdateRatioTicketInput {
   id: ID!
