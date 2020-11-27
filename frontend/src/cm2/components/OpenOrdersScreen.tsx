@@ -53,7 +53,7 @@ const OpenOrdersScreen: React.FC = () => {
           }
           return customersData.cm2Customers.edges.map((e) => e.node);
         },
-        getValue: (c: CustomerFragment) => parseInt(c.id),
+        getValue: (c: CustomerFragment) => c.id,
       },
     },
   ];

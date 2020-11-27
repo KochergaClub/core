@@ -52,7 +52,7 @@ const PaymentCollection: React.FC = () => {
           return data.staffMembersAll;
         },
         display: (member: StaffMemberFullFragment) => member.full_name,
-        getValue: (member: StaffMemberFullFragment) => parseInt(member.user.id),
+        getValue: (member: StaffMemberFullFragment) => member.user.id,
       },
     },
   ];

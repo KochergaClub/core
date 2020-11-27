@@ -31,7 +31,7 @@ export interface ChoiceFieldShape extends AnyBasicFieldShape {
   readonly type: 'choice';
   readonly widget?: 'radio' | 'dropdown';
   readonly default?: string;
-  readonly options: [string, string][];
+  readonly options: readonly (readonly [string, string])[];
 }
 
 export interface BooleanFieldShape extends AnyBasicFieldShape {
@@ -46,12 +46,12 @@ export interface ImageFieldShape extends AnyBasicFieldShape {
 
 export interface ForeignKeyFieldShape extends AnyBasicFieldShape {
   readonly type: 'fk';
-  readonly default?: number | string;
-  readonly widget?: {
+  readonly default?: string;
+  readonly widget: {
     type: 'async';
     display: (item: any) => string;
     load: (inputValue: string) => Promise<any[]>;
-    getValue: (item: any) => number | string;
+    getValue: (item: any) => string;
   };
 }
 
@@ -76,7 +76,13 @@ export type BasicFieldShape =
 
 export type FieldShape = BasicFieldShape | ShapeFieldShape | ListFieldShape;
 
-export type FormShape = FieldShape[];
+// most shapes are readonly (known at compile time); this gives us nice features such as deriving Values from FormShape
+// export type StaticFormShape = readonly FieldShape[];
+// other shapes are dynamic
+// export type DynamicFormShape = FieldShape[];
+
+// export type FormShape = StaticFormShape | DynamicFormShape;
+export type FormShape = readonly FieldShape[];
 
 export type AnyFormValues = {
   [k: string]:

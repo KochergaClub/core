@@ -8,7 +8,7 @@ import FieldContainer from './FieldContainer';
 interface Props<T extends Record<string, unknown>> {
   name: keyof T;
   title: string;
-  type?: 'string' | 'email' | 'number' | 'url';
+  type?: 'string' | 'email' | 'number' | 'url' | 'password';
   placeholder?: string;
   form: UseFormMethods<T>;
   required?: boolean;

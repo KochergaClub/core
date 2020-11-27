@@ -30,7 +30,7 @@ const CreatePaymentButton = ({ ticket_id }: { ticket_id: string }) => {
   });
 
   const fields: FormShape = [
-    { name: 'ticket_id', type: 'fk', readonly: true, default: ticket_id },
+    { name: 'ticket_id', type: 'string', readonly: true, default: ticket_id },
     { name: 'amount', title: 'Сумма', type: 'number', min: 0, max: 1000000 },
     {
       name: 'fiscalization_status',

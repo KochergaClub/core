@@ -4,11 +4,23 @@ import { useForm } from 'react-hook-form';
 import { useMutation } from '@apollo/client';
 
 import { CommonModal } from '~/components';
-import { BasicInputField } from '~/components/forms2';
-import RichTextField from '~/components/forms2/RichTextField';
-import { Column } from '~/frontkit';
+import { FormShapeFields } from '~/components/forms2/FormShapeFields';
 
 import { EvenmanLeadFragment, UpdateEvenmanLeadDocument } from './queries.generated';
+
+const shape = [
+  {
+    name: 'name',
+    type: 'string',
+    title: 'Имя',
+  },
+  {
+    name: 'description',
+    type: 'richtext',
+    title: 'Описание',
+    optional: true,
+  },
+] as const;
 
 type FormData = {
   name: string;
@@ -21,11 +33,14 @@ interface Props {
 }
 
 export const EditLeadModal: React.FC<Props> = ({ lead, close }) => {
-  const form = useForm<FormData>();
+  const form = useForm<FormData>({
+    defaultValues: {
+      name: lead.name,
+      description: lead.description,
+    },
+  });
 
-  const [updateMutation, mutationResult] = useMutation(
-    UpdateEvenmanLeadDocument
-  );
+  const [updateMutation] = useMutation(UpdateEvenmanLeadDocument);
 
   const submit = async (data: FormData) => {
     await updateMutation({
@@ -46,24 +61,10 @@ export const EditLeadModal: React.FC<Props> = ({ lead, close }) => {
       close={close}
       submit={form.handleSubmit(submit)}
       submitOnEnter={false} // otherwise RichTextField won't behave properly
-      loading={mutationResult.loading}
+      loading={form.formState.isSubmitting}
     >
       <form onSubmit={form.handleSubmit(submit)}>
-        <Column gutter={16} stretch>
-          <BasicInputField
-            title="Имя"
-            name="name"
-            defaultValue={lead.name}
-            form={form}
-            required
-          />
-          <RichTextField
-            title="Описание"
-            name="description"
-            defaultValue={lead.description}
-            form={form}
-          />
-        </Column>
+        <FormShapeFields shape={shape} form={form} />
       </form>
     </CommonModal>
   );

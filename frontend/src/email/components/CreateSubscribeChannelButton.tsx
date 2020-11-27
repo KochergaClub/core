@@ -3,7 +3,7 @@ import { useCallback, useMemo } from 'react';
 import { useMutation, useQuery } from '@apollo/client';
 
 import ModalFormButton from '~/components/forms/ModalFormButton';
-import { FormShape } from '~/components/forms/types';
+import { FieldShape } from '~/components/forms/types';
 
 import {
     EmailMailchimpCategoriesDocument, EmailSubscribeChannelCreateDocument
@@ -17,13 +17,13 @@ const CreateSubscribeChannelButton: React.FC = () => {
   });
 
   const formShape = useMemo(() => {
-    const result: FormShape = [{ name: 'slug', type: 'string' }];
+    const result: FieldShape[] = [{ name: 'slug', type: 'string' }];
     if (!queryResults.data) {
       return result;
     }
 
     for (const mailchimpCategory of queryResults.data.mailchimpCategories) {
-      const subShape: FormShape = [];
+      const subShape: FieldShape[] = [];
       for (const mailchimpInterest of mailchimpCategory.interests) {
         subShape.push({
           type: 'boolean',

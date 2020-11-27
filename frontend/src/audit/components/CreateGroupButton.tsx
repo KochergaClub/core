@@ -2,17 +2,16 @@ import React, { useCallback } from 'react';
 
 import { useMutation } from '@apollo/client';
 
-import ModalFormButton from '~/components/forms/ModalFormButton';
-import { FormShape } from '~/components/forms/types';
+import { FormShapeModalButton } from '~/components/forms2/FormShapeModalButton';
 
 import { CreateAuthGroupDocument } from '../queries.generated';
 
-const shape: FormShape = [
+const shape = [
   {
     name: 'name',
     type: 'string',
   },
-];
+] as const;
 
 export const CreateGroupButton: React.FC = () => {
   const [createMutation] = useMutation(CreateAuthGroupDocument, {
@@ -32,7 +31,7 @@ export const CreateGroupButton: React.FC = () => {
   );
 
   return (
-    <ModalFormButton
+    <FormShapeModalButton
       shape={shape}
       buttonName="Создать"
       modalButtonName="Создать группу"

@@ -60,7 +60,7 @@ const RichTextField = <T extends Record<string, unknown>>({
           render={({ onChange }) => (
             <ReactQuill
               theme="snow"
-              defaultValue={defaultValue}
+              defaultValue={defaultValue || ''}
               onChange={(value) => {
                 let formValue = value;
                 if (formValue === '<p><br></p>') {
