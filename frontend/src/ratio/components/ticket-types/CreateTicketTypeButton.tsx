@@ -2,8 +2,8 @@ import { useCallback } from 'react';
 
 import { useMutation } from '@apollo/client';
 
-import ModalFormButton from '~/components/forms/ModalFormButton';
-import { FormShape } from '~/components/forms/types';
+import { ShapeToValues } from '~/components/forms/types';
+import { FormShapeModalButton } from '~/components/forms2';
 
 import { CreateRatioTicketTypeDocument } from './queries.generated';
 
@@ -17,29 +17,22 @@ const CreateTicketTypeButton: React.FC<Props> = ({ training_id }) => {
     awaitRefetchQueries: true,
   });
 
-  const fields: FormShape = [
+  const shape = [
     { name: 'price', title: 'Стоимость', type: 'number' },
     { name: 'name', title: 'Название', type: 'string' },
     {
       name: 'discount_by_email',
       title: "Сумма одноразового промокода по e-mail'у",
       type: 'number',
-      default: 0,
     },
     {
       name: 'discount_percent_by_email',
       title: "Процент скидки одноразового промокода по e-mail'у",
       type: 'number',
-      default: 0,
     },
-  ];
+  ] as const;
 
-  type Values = {
-    price: number;
-    name: string;
-    discount_by_email: number;
-    discount_percent_by_email: number;
-  };
+  type Values = ShapeToValues<typeof shape>;
 
   const cb = useCallback(
     async (values: Values) => {
@@ -47,10 +40,13 @@ const CreateTicketTypeButton: React.FC<Props> = ({ training_id }) => {
         variables: {
           input: {
             training_id,
-            price: values.price,
+            price: parseInt(values.price, 10),
             name: values.name,
-            discount_by_email: values.discount_by_email,
-            discount_percent_by_email: values.discount_percent_by_email,
+            discount_by_email: parseInt(values.discount_by_email, 10),
+            discount_percent_by_email: parseInt(
+              values.discount_percent_by_email,
+              10
+            ),
           },
         },
       });
@@ -63,9 +59,13 @@ const CreateTicketTypeButton: React.FC<Props> = ({ training_id }) => {
   );
 
   return (
-    <ModalFormButton
+    <FormShapeModalButton
       post={cb}
-      shape={fields}
+      shape={shape}
+      defaultValues={{
+        discount_by_email: '0',
+        discount_percent_by_email: '0',
+      }}
       buttonName="Добавить"
       modalButtonName="Добавить"
       modalTitle="Добавить вид билета"

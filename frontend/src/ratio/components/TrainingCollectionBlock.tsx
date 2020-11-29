@@ -7,14 +7,14 @@ import { usePermissions } from '~/common/hooks';
 import { ApolloQueryResults, PaddedBlock } from '~/components';
 import { CustomCardListView, PagedApolloCollection } from '~/components/collections';
 import { AnyViewProps } from '~/components/collections/types';
-import { FormShape } from '~/components/forms/types';
+import { ShapeToValues } from '~/components/forms/types';
 
 import {
     RatioAddTrainingDocument, RatioTraining_SummaryFragment, RatioTrainingsDocument
 } from '../queries.generated';
 import TrainingCard from './trainings/TrainingCard';
 
-const trainingShape: FormShape = [
+const trainingShape = [
   {
     name: 'name',
     title: 'Название',
@@ -37,14 +37,9 @@ const trainingShape: FormShape = [
     title: 'Ссылка на Telegram-чат',
     type: 'string',
   },
-];
+] as const;
 
-type CreateTrainingParams = {
-  name: string;
-  slug: string;
-  date?: string;
-  telegram_link: string;
-};
+type CreateTrainingValues = ShapeToValues<typeof trainingShape>;
 
 const isMuted = (training: RatioTraining_SummaryFragment) =>
   training.date ? isBefore(parseISO(training.date), new Date()) : false;
@@ -81,8 +76,10 @@ const TrainingCollectionBlock: React.FC<Props> = ({ eternal }) => {
   });
 
   const add = useCallback(
-    async (values: CreateTrainingParams) => {
-      const params = { ...values };
+    async (values: CreateTrainingValues) => {
+      const params = { ...values } as Omit<CreateTrainingValues, 'date'> & {
+        date?: string;
+      };
       if (!params.date) {
         delete params.date; // don't pass empty date
       }

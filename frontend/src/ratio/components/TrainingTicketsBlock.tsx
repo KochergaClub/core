@@ -1,10 +1,9 @@
-import { useCallback } from 'react';
+import React, { useCallback } from 'react';
 
 import { useMutation } from '@apollo/client';
 
 import { PaddedBlock } from '~/components';
-import ModalFormButton from '~/components/forms/ModalFormButton';
-import { FormShape } from '~/components/forms/types';
+import { FormShapeModalButton } from '~/components/forms2';
 import { Column, Row } from '~/frontkit';
 
 import { RatioAddTicketDocument, RatioTrainingFragment } from '../queries.generated';
@@ -16,7 +15,7 @@ const CreateTicketButton = ({ training_id }: { training_id: string }) => {
     awaitRefetchQueries: true,
   });
 
-  const fields: FormShape = [
+  const fields = [
     { name: 'email', type: 'email' },
     { name: 'first_name', title: 'Имя', type: 'string' },
     { name: 'last_name', title: 'Фамилия', type: 'string' },
@@ -31,15 +30,14 @@ const CreateTicketButton = ({ training_id }: { training_id: string }) => {
         ['staff', 'Стафф'],
         ['free-repeat', 'Бесплатный повтор'],
       ],
-      default: 'normal',
     },
-  ];
+  ] as const;
 
   type Values = {
     email: string;
     first_name: string;
     last_name: string;
-    payment_amount: number;
+    payment_amount: string;
   };
 
   const cb = useCallback(
@@ -49,7 +47,7 @@ const CreateTicketButton = ({ training_id }: { training_id: string }) => {
           params: {
             training: training_id,
             email: values.email,
-            payment_amount: values.payment_amount,
+            payment_amount: parseInt(values.payment_amount, 10),
             first_name: values.first_name,
             last_name: values.last_name,
             ticket_class: 'normal',
@@ -65,12 +63,15 @@ const CreateTicketButton = ({ training_id }: { training_id: string }) => {
   );
 
   return (
-    <ModalFormButton
+    <FormShapeModalButton
       post={cb}
       shape={fields}
       buttonName="Добавить"
       modalButtonName="Добавить"
       modalTitle="Добавить билет"
+      defaultValues={{
+        ticket_class: 'normal',
+      }}
     />
   );
 };

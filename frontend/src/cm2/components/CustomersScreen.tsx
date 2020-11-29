@@ -4,7 +4,7 @@ import { useMutation, useQuery } from '@apollo/client';
 
 import { ApolloQueryResults } from '~/components';
 import { CustomCardListView, PagedApolloCollection } from '~/components/collections';
-import { FormShape } from '~/components/forms/types';
+import { ShapeToValues } from '~/components/forms/types';
 import { Label, Row } from '~/frontkit';
 
 import {
@@ -43,13 +43,7 @@ const CustomersScreen: React.FC = () => {
     []
   );
 
-  type FormData = {
-    card_id: number;
-    first_name: string;
-    last_name: string;
-  };
-
-  const addShape: FormShape = [
+  const addShape = [
     {
       name: 'card_id',
       optional: false,
@@ -68,7 +62,9 @@ const CustomersScreen: React.FC = () => {
       title: 'Фамилия',
       type: 'string',
     },
-  ];
+  ] as const;
+
+  type FormData = ShapeToValues<typeof addShape>;
 
   return (
     <ApolloQueryResults {...queryResults}>
@@ -83,7 +79,14 @@ const CustomersScreen: React.FC = () => {
             }}
             add={{
               cb: async (data: FormData) => {
-                await add({ variables: { params: data } });
+                await add({
+                  variables: {
+                    params: {
+                      ...data,
+                      card_id: parseInt(data.card_id, 10),
+                    },
+                  },
+                });
               },
               shape: addShape,
             }}

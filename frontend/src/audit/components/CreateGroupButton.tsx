@@ -2,7 +2,7 @@ import React, { useCallback } from 'react';
 
 import { useMutation } from '@apollo/client';
 
-import { FormShapeModalButton } from '~/components/forms2/FormShapeModalButton';
+import { FormShapeModalButton } from '~/components/forms2';
 
 import { CreateAuthGroupDocument } from '../queries.generated';
 

@@ -1,7 +1,6 @@
 import { useMutation } from '@apollo/client';
 
 import ApolloModalFormButton from '~/components/forms/ApolloModalFormButton';
-import { FormShape } from '~/components/forms/types';
 
 import { RatioTrainingAddDayDocument, RatioTrainingFragment } from '../queries.generated';
 
@@ -15,7 +14,7 @@ const CreateDayButton: React.FC<Props> = ({ training }) => {
     awaitRefetchQueries: true,
   });
 
-  const shape: FormShape = [
+  const shape = [
     {
       name: 'training_slug',
       type: 'string',
@@ -26,7 +25,7 @@ const CreateDayButton: React.FC<Props> = ({ training }) => {
       name: 'date',
       type: 'date',
     },
-  ];
+  ] as const;
 
   return (
     <ApolloModalFormButton
@@ -35,6 +34,9 @@ const CreateDayButton: React.FC<Props> = ({ training }) => {
       modalButtonName="Добавить"
       modalTitle="Добавить день"
       shape={shape}
+      defaultValues={{
+        training_slug: training.slug,
+      }}
     />
   );
 };

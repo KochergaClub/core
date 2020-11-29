@@ -3,10 +3,9 @@ import FlipMove from 'react-flip-move';
 import { useFieldArray, UseFormMethods } from 'react-hook-form';
 import styled from 'styled-components';
 
-import { ListFieldShape } from '~/components/forms/types';
-import { buildInitialValues } from '~/components/forms/utils';
 import { Button, colors, Column, fonts, Label, Row } from '~/frontkit';
 
+import { AnyFormValues, FormShape, ShapeListFieldShape } from '../forms/types';
 import { FieldShapeBox } from './FieldShapeBox';
 
 const ListContainer = styled.div`
@@ -32,13 +31,36 @@ const ItemContainer = styled.div`
   }
 `;
 
+// TODO - move back to utils.ts?
+const buildInitialValues = (shape: FormShape): AnyFormValues => {
+  const result: AnyFormValues = {};
+  for (const field of shape) {
+    let value: AnyFormValues[keyof AnyFormValues] = '';
+
+    switch (field.type) {
+      case 'boolean':
+        value = false;
+        break;
+      case 'shape':
+        value = buildInitialValues(field.shape);
+        break;
+      case 'shape-list':
+        value = [];
+        break;
+      // TODO - value = 0 for numbers after we adopt `valueAsNumber`
+    }
+    result[field.name] = value;
+  }
+  return result;
+};
+
 interface Props<T extends Record<string, unknown>> {
   name: string;
   form: UseFormMethods<T>;
-  field: ListFieldShape;
+  field: ShapeListFieldShape;
 }
 
-export const ListFieldShapeBox = <T extends Record<string, unknown>>({
+export const ShapeListFieldShapeBox = <T extends Record<string, unknown>>({
   name,
   form,
   field,
@@ -91,11 +113,17 @@ export const ListFieldShapeBox = <T extends Record<string, unknown>>({
                   )}
                 </Row>
               </Row>
-              <FieldShapeBox
-                name={`name[${i}].${field.field.name}`}
-                field={field.field}
-                form={form}
-              />
+              <div>
+                {field.shape.map((subfield) => (
+                  <FieldShapeBox
+                    key={subfield.name}
+                    name={`${name}[${i}].${subfield.name}`}
+                    field={subfield}
+                    form={form}
+                    defaultValue={hookField[subfield.name]}
+                  />
+                ))}
+              </div>
             </Column>
           </ItemContainer>
         ))}
@@ -104,7 +132,7 @@ export const ListFieldShapeBox = <T extends Record<string, unknown>>({
         size="small"
         type="button"
         onClick={() => {
-          const result = buildInitialValues([field.field]);
+          const result = buildInitialValues(field.shape);
           append(result);
         }}
       >

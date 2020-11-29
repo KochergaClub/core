@@ -1,9 +1,8 @@
-import { useCallback } from 'react';
+import React, { useCallback } from 'react';
 
 import { useMutation } from '@apollo/client';
 
-import ModalFormButton from '~/components/forms/ModalFormButton';
-import { FormShape } from '~/components/forms/types';
+import { FormShapeModalButton } from '~/components/forms2';
 
 import {
     MastermindDatingCohortDetailsFragment as Cohort, MastermindDatingCreateParticipantDocument
@@ -14,12 +13,15 @@ interface Props {
 }
 
 const CreateParticipantButton = ({ cohort }: Props) => {
-  const fields: FormShape = [{ name: 'email', type: 'string' }];
+  const fields = [{ name: 'email', type: 'string' }] as const;
 
-  const [createMutation] = useMutation(MastermindDatingCreateParticipantDocument, {
-    refetchQueries: ['MastermindDatingCohortById'],
-    awaitRefetchQueries: true,
-  });
+  const [createMutation] = useMutation(
+    MastermindDatingCreateParticipantDocument,
+    {
+      refetchQueries: ['MastermindDatingCohortById'],
+      awaitRefetchQueries: true,
+    }
+  );
 
   const createCb = useCallback(
     async (values) => {
@@ -34,7 +36,7 @@ const CreateParticipantButton = ({ cohort }: Props) => {
   );
 
   return (
-    <ModalFormButton
+    <FormShapeModalButton
       post={createCb}
       buttonName="Добавить"
       modalButtonName="Добавить"

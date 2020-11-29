@@ -2,7 +2,7 @@ import ButtonWithModal from '../ButtonWithModal';
 import { FormShape } from '../forms/types';
 import { FormShapeModal, Props as ModalProps } from './FormShapeModal';
 
-type Props<S extends FormShape> = Pick<
+export type Props<S extends FormShape> = Pick<
   ModalProps<S>,
   'shape' | 'defaultValues' | 'post'
 > & {

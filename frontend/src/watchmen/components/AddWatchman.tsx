@@ -1,11 +1,10 @@
 import { useMutation } from '@apollo/client';
 
 import ApolloModalFormButton from '~/components/forms/ApolloModalFormButton';
-import { FormShape } from '~/components/forms/types';
 
 import { WatchmenCreateWatchmanDocument } from '../queries.generated';
 
-const fields: FormShape = [
+const fields = [
   { name: 'email', type: 'email' },
   { name: 'short_name', type: 'string' },
   { name: 'full_name', type: 'string' },
@@ -18,7 +17,6 @@ const fields: FormShape = [
       ['MALE', 'М'],
       ['FEMALE', 'Ж'],
     ],
-    default: 'FEMALE',
   },
   { name: 'skip_wiki', title: 'Не добавлять на вики', type: 'boolean' },
   {
@@ -31,7 +29,7 @@ const fields: FormShape = [
     title: 'Не добавлять пользователя в КМ',
     type: 'boolean',
   },
-];
+] as const;
 
 const AddWatchman: React.FC = () => {
   const [createMutation] = useMutation(WatchmenCreateWatchmanDocument, {
@@ -44,6 +42,9 @@ const AddWatchman: React.FC = () => {
       <ApolloModalFormButton
         mutation={createMutation}
         shape={fields}
+        defaultValues={{
+          gender: 'FEMALE',
+        }}
         modalTitle="Добавить админа"
         modalButtonName="Добавить"
         buttonName="Добавить"

@@ -1,4 +1,8 @@
-export { default as BasicInputField } from './BasicInputField';
-export { default as FieldErrorMessage } from './FieldErrorMessage';
-export { default as ErrorMessage } from './ErrorMessage';
-export { default as FieldContainer } from './FieldContainer';
+export { BasicInputField } from './BasicInputField';
+// TODO - export other field widgets
+export { ErrorMessage } from './ErrorMessage';
+export { FieldContainer } from './FieldContainer';
+export { FieldErrorMessage } from './FieldErrorMessage';
+export { FormShapeFields } from './FormShapeFields';
+export { FormShapeModal } from './FormShapeModal';
+export { FormShapeModalButton } from './FormShapeModalButton';

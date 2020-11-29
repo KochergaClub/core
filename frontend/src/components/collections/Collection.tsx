@@ -2,25 +2,25 @@ import React from 'react';
 import { MdRefresh } from 'react-icons/md';
 
 import { capitalize } from '~/common/utils';
-import { AnyFormValues, FormShape } from '~/components/forms/types';
+import { FormShape, ShapeToValues } from '~/components/forms/types';
 import { AsyncButton, Column, Row } from '~/frontkit';
 
 import CreateItemButton from './CreateItemButton';
 import DumpJSONView from './DumpJSONView';
 import { AnyViewProps, EntityNames } from './types';
 
-interface Props<I, A extends AnyFormValues> {
+interface Props<I, S extends FormShape> {
   items: I[];
   names?: EntityNames;
   add?: {
-    shape: FormShape;
-    cb: (values: A) => Promise<void>;
+    shape: S;
+    cb: (values: ShapeToValues<S>) => Promise<void>;
   };
   refetch?: () => Promise<unknown>;
   view?: React.ElementType<AnyViewProps<I>>;
 }
 
-function Collection<I, A extends AnyFormValues>(props: Props<I, A>) {
+function Collection<I, S extends FormShape>(props: Props<I, S>) {
   const View = props.view || DumpJSONView;
 
   return (

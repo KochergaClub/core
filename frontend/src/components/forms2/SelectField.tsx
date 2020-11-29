@@ -1,8 +1,9 @@
+import get from 'lodash/get';
 import React, { CSSProperties } from 'react';
 import { Controller, FieldError, UseFormMethods } from 'react-hook-form';
 import Select from 'react-select';
 
-import FieldContainer from './FieldContainer';
+import { FieldContainer } from './FieldContainer';
 
 const tupleToSelectOption = (t: readonly [string, string]) => ({
   value: t[0],
@@ -12,8 +13,9 @@ const tupleToSelectOption = (t: readonly [string, string]) => ({
 interface Props<T extends Record<string, unknown>> {
   name: keyof T;
   title: string;
-  form: UseFormMethods<T>;
   options: readonly (readonly [string, string])[];
+  form: UseFormMethods<T>;
+  defaultValue?: string;
   required?: boolean;
 }
 
@@ -22,14 +24,16 @@ export const SelectField = <T extends Record<string, unknown>>({
   title,
   options,
   form,
+  defaultValue,
   required = false,
 }: Props<T>): React.ReactElement => {
   return (
-    <FieldContainer title={title} error={form.errors[name] as FieldError}>
+    <FieldContainer title={title} error={get(form.errors, name) as FieldError}>
       <Controller
         name={name as string}
         control={form.control as any}
         rules={{ required }}
+        defaultValue={defaultValue}
         render={({ onChange, value }) => {
           const option = options.find((option) => option[0] === value);
           return (

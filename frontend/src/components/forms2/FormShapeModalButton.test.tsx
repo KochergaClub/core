@@ -2,17 +2,16 @@ import { fireEvent, waitFor } from '@testing-library/react';
 
 import { render } from '~/test/utils';
 
-import ModalFormButton from './ModalFormButton';
-import { FormShape } from './types';
+import { FormShapeModalButton } from './FormShapeModalButton';
 
 it('renders without crashing', async () => {
-  const shape: FormShape = [
+  const shape = [
     {
       name: 'foo',
       type: 'string',
       optional: true,
     },
-  ];
+  ] as const;
 
   type FormValues = { foo: string };
   let posted: FormValues | undefined;
@@ -20,7 +19,7 @@ it('renders without crashing', async () => {
     posted = v;
   };
   const { getByText, queryByText } = render(
-    <ModalFormButton
+    <FormShapeModalButton
       shape={shape}
       buttonName="Кнопка"
       modalButtonName="Отправить"

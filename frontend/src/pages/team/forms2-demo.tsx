@@ -3,7 +3,8 @@ import { useForm } from 'react-hook-form';
 
 import { withApollo, withStaff } from '~/apollo';
 import { PaddedBlock, Page } from '~/components';
-import { FormShapeFields, ShapeToValues } from '~/components/forms2/FormShapeFields';
+import { ShapeToValues } from '~/components/forms/types';
+import { FormShapeFields } from '~/components/forms2';
 import { Button, Column } from '~/frontkit';
 
 const shape = [
@@ -55,11 +56,13 @@ const shape = [
   },
   {
     name: 'repeat',
-    type: 'list',
-    field: {
-      name: 'baz',
-      type: 'string',
-    },
+    type: 'shape-list',
+    shape: [
+      {
+        name: 'child-f1',
+        type: 'string',
+      },
+    ],
   },
 ] as const;
 

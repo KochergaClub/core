@@ -3,31 +3,53 @@ import { useCallback } from 'react';
 
 import { FetchResult } from '@apollo/client';
 
-import ModalFormButton from './ModalFormButton';
-import { AnyFormValues, FormShape } from './types';
+import {
+    FormShapeModalButton, Props as FormShapeModalButtonProps
+} from '../forms2/FormShapeModalButton';
+import { FormShape, ShapeToValues } from './types';
 
-interface Props<FormResult extends AnyFormValues> {
-  shape: FormShape; // FormShape should match mutation params!
-  buttonName: string;
-  modalButtonName: string;
-  modalTitle: string;
-  size?: Parameters<typeof ModalFormButton>[0]['size'];
+type SimpleProps<S extends FormShape> = Omit<
+  FormShapeModalButtonProps<S>,
+  'post'
+> & {
   mutation: (options: {
-    variables: { input: FormResult };
+    variables: { input: ShapeToValues<S> };
   }) => Promise<FetchResult<unknown>>;
-}
+  valuesToVariables?: undefined;
+};
+
+type PropsWithConversion<S extends FormShape, Variables> = Omit<
+  FormShapeModalButtonProps<S>,
+  'post'
+> & {
+  mutation: (options: {
+    variables: Variables;
+  }) => Promise<FetchResult<unknown>>;
+  valuesToVariables: (v: ShapeToValues<S>) => Variables;
+};
+
+type Props<S extends FormShape, Variables> =
+  | SimpleProps<S>
+  | PropsWithConversion<S, Variables>;
 
 export default function ApolloModalFormButton<
-  FormResult extends AnyFormValues
->({ mutation, ...otherProps }: Props<FormResult>) {
+  S extends FormShape,
+  Variables = { input: ShapeToValues<S> }
+>({ mutation, valuesToVariables, ...otherProps }: Props<S, Variables>) {
   const cb = useCallback(
-    async (values: FormResult) => {
+    async (values: ShapeToValues<S>) => {
       try {
-        await mutation({
-          variables: {
-            input: values,
-          },
-        });
+        if (valuesToVariables) {
+          // PropsWithConversion
+          await (mutation as PropsWithConversion<S, Variables>['mutation'])({
+            variables: valuesToVariables(values),
+          });
+        } else {
+          // SimpleProps
+          await (mutation as SimpleProps<S>['mutation'])({
+            variables: { input: values },
+          });
+        }
         return;
       } catch (e) {
         const errors = e.graphQLErrors as GraphQLError[];
@@ -51,8 +73,8 @@ export default function ApolloModalFormButton<
         };
       }
     },
-    [mutation]
+    [valuesToVariables, mutation]
   );
 
-  return <ModalFormButton post={cb} {...otherProps} />;
+  return <FormShapeModalButton post={cb} {...otherProps} />;
 }

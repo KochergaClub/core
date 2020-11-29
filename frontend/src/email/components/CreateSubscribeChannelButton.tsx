@@ -2,8 +2,8 @@ import { useCallback, useMemo } from 'react';
 
 import { useMutation, useQuery } from '@apollo/client';
 
-import ModalFormButton from '~/components/forms/ModalFormButton';
 import { FieldShape } from '~/components/forms/types';
+import { FormShapeModalButton } from '~/components/forms2';
 
 import {
     EmailMailchimpCategoriesDocument, EmailSubscribeChannelCreateDocument
@@ -43,8 +43,7 @@ const CreateSubscribeChannelButton: React.FC = () => {
   }, [queryResults.data]);
 
   const postCb = useCallback(
-    async (values: { [k: string]: string | { [k: string]: boolean } }) => {
-      console.log(values);
+    async (values: Record<string, unknown>) => {
       const interest_ids = [];
       const slug = values.slug as string;
 
@@ -75,7 +74,7 @@ const CreateSubscribeChannelButton: React.FC = () => {
   );
 
   return (
-    <ModalFormButton
+    <FormShapeModalButton
       post={postCb}
       buttonName="Создать канал подписки"
       modalButtonName="Создать"

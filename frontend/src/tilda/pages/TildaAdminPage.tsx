@@ -4,8 +4,8 @@ import { withApollo, withStaff } from '~/apollo';
 import { NextApolloPage } from '~/apollo/types';
 import { ApolloQueryResults, Page } from '~/components';
 import { CardList } from '~/components/Card';
-import ModalFormButton from '~/components/forms/ModalFormButton';
-import { FormShape } from '~/components/forms/types';
+import { ShapeToValues } from '~/components/forms/types';
+import { FormShapeModalButton } from '~/components/forms2';
 import { AsyncButton, Column, Row } from '~/frontkit';
 
 import TildaPageCard from '../components/TildaPageCard';
@@ -15,20 +15,20 @@ import { TildaImportAllDocument, TildaPagesForAdminDocument } from '../queries.g
 const ImportByIdButton: React.FC = () => {
   const importMutation = useImportMutation();
 
-  const shape: FormShape = [
+  const shape = [
     {
       type: 'number',
       name: 'ID',
     },
-  ];
+  ] as const;
 
-  const post = async (values: { ID: number }) => {
+  const post = async (values: ShapeToValues<typeof shape>) => {
     await importMutation({
-      variables: { page_id: values.ID },
+      variables: { page_id: parseInt(values.ID, 10) },
     });
   };
   return (
-    <ModalFormButton
+    <FormShapeModalButton
       shape={shape}
       post={post}
       buttonName="Скачать страницу по ID"

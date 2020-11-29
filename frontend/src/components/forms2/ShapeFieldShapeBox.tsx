@@ -1,26 +1,26 @@
 import React from 'react';
 import { UseFormMethods } from 'react-hook-form';
 
-import { ShapeFieldShape } from '../forms/types';
-import FieldContainer from './FieldContainer';
+import { FieldToValue, ShapeFieldShape, ShapeToValues } from '../forms/types';
+import { FieldContainer } from './FieldContainer';
 import { FieldShapeBox } from './FieldShapeBox';
 
-// interface Props<T extends Record<string, unknown>> {
-//   name: string;
-//   form: UseFormMethods<T>;
-// }
-
-interface Props<T extends Record<string, unknown>> {
+interface Props<T extends Record<string, unknown>, F extends ShapeFieldShape> {
   name: keyof T;
   form: UseFormMethods<T>;
-  field: ShapeFieldShape;
+  field: F;
+  defaultValue?: ShapeToValues<F['shape']>;
 }
 
-export const ShapeFieldShapeBox = <T extends Record<string, unknown>>({
+export const ShapeFieldShapeBox = <
+  T extends Record<string, unknown>,
+  F extends ShapeFieldShape
+>({
   name,
   field,
+  defaultValue,
   form,
-}: Props<T>): React.ReactElement => {
+}: Props<T, F>): React.ReactElement => {
   return (
     <FieldContainer title={field.title || field.name} error={undefined}>
       {field.shape.map((subfield, i) => (
@@ -28,6 +28,11 @@ export const ShapeFieldShapeBox = <T extends Record<string, unknown>>({
           key={i}
           name={name + '.' + subfield.name}
           field={subfield}
+          defaultValue={
+            defaultValue
+              ? (defaultValue[subfield.name] as FieldToValue<typeof subfield>)
+              : undefined
+          }
           form={form}
         />
       ))}

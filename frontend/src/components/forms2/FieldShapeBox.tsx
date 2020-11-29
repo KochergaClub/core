@@ -1,29 +1,41 @@
 import React from 'react';
 import { UseFormMethods } from 'react-hook-form';
 
-import { FieldShape } from '../forms/types';
+import { FieldShape, FieldToValue } from '../forms/types';
 import { AsyncSelectField } from './AsyncSelectField';
-import BasicInputField from './BasicInputField';
+import { BasicInputField } from './BasicInputField';
 import { CheckboxField } from './CheckboxField';
 import { DateField } from './DateField';
 import { ImageField } from './ImageField';
-import { ListFieldShapeBox } from './ListFieldShapeBox';
 import { RadioField } from './RadioField';
-import RichTextField from './RichTextField';
+import { RichTextField } from './RichTextField';
 import { SelectField } from './SelectField';
 import { ShapeFieldShapeBox } from './ShapeFieldShapeBox';
+import { ShapeListFieldShapeBox } from './ShapeListFieldShapeBox';
 
-type Props<V extends Record<string, unknown>> = {
+type Props<V extends Record<string, unknown>, F extends FieldShape> = {
   name: string;
-  field: FieldShape;
+  field: F;
   form: UseFormMethods<V>;
+  // We _mostly_ don't need this prop since `defaultValues` argument to useForm() is usually better.
+  // But we still need it because fields built by useFieldArray require an explicit defaultValue,
+  // and ShapeListFieldShapeBox children can include any fields (even nested).
+  // Note that, unlike `defaultValues` in useForm(), this field is not DeepPartial, at least for now.
+  defaultValue?: FieldToValue<F>;
 };
 
-export const FieldShapeBox = <V extends Record<string, unknown>>({
+export const FieldShapeBox = <
+  V extends Record<string, unknown>,
+  F extends FieldShape
+>({
   name,
-  field,
+  field: _field,
+  defaultValue,
   form,
-}: Props<V>): React.ReactElement => {
+}: Props<V, F>): React.ReactElement => {
+  // ts can't discriminate unions over generic parameters
+  const field: FieldShape = _field;
+
   switch (field.type) {
     case 'string':
     case 'email':
@@ -34,6 +46,7 @@ export const FieldShapeBox = <V extends Record<string, unknown>>({
           name={name}
           title={field.title || field.name}
           type={field.type}
+          defaultValue={defaultValue as FieldToValue<typeof field> | undefined}
           required={!field.optional}
           form={form}
         />
@@ -43,8 +56,9 @@ export const FieldShapeBox = <V extends Record<string, unknown>>({
         <DateField
           name={name}
           title={field.title || field.name}
-          form={form}
+          defaultValue={defaultValue as FieldToValue<typeof field> | undefined}
           required={!field.optional}
+          form={form}
         />
       );
     case 'boolean':
@@ -53,6 +67,7 @@ export const FieldShapeBox = <V extends Record<string, unknown>>({
           name={name}
           title={field.title || field.name}
           form={form}
+          defaultValue={defaultValue as FieldToValue<typeof field> | undefined}
           // checkboxes are never required (for now)
           // required={!field.optional}
         />
@@ -63,6 +78,7 @@ export const FieldShapeBox = <V extends Record<string, unknown>>({
           name={name}
           title={field.title || field.name}
           form={form}
+          defaultValue={defaultValue as FieldToValue<typeof field> | undefined}
           required={!field.optional}
         />
       );
@@ -72,6 +88,7 @@ export const FieldShapeBox = <V extends Record<string, unknown>>({
           name={name}
           title={field.title || field.name}
           form={form}
+          defaultValue={defaultValue as FieldToValue<typeof field> | undefined}
           required={!field.optional}
         />
       );
@@ -82,6 +99,9 @@ export const FieldShapeBox = <V extends Record<string, unknown>>({
             name={name}
             title={field.title || field.name}
             form={form}
+            defaultValue={
+              defaultValue as FieldToValue<typeof field> | undefined
+            }
             options={field.options}
             required={!field.optional}
           />
@@ -92,15 +112,33 @@ export const FieldShapeBox = <V extends Record<string, unknown>>({
             name={name}
             title={field.title || field.name}
             form={form}
+            defaultValue={
+              defaultValue as FieldToValue<typeof field> | undefined
+            }
             options={field.options}
             required={!field.optional}
           />
         );
       }
     case 'shape':
-      return <ShapeFieldShapeBox name={name} form={form} field={field} />;
-    case 'list':
-      return <ListFieldShapeBox name={name} form={form} field={field} />;
+      return (
+        <ShapeFieldShapeBox
+          name={name}
+          form={form}
+          field={field}
+          defaultValue={defaultValue as FieldToValue<typeof field> | undefined}
+        />
+      );
+    case 'shape-list':
+      return (
+        <ShapeListFieldShapeBox
+          name={name}
+          form={form}
+          field={field}
+          // TODO - defaultValue for shape-list is not supported yet
+          // defaultValue={defaultValue as FieldToValue<typeof field> | undefined}
+        />
+      );
     case 'fk':
       return (
         <AsyncSelectField

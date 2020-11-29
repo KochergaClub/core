@@ -1,12 +1,12 @@
 import { FieldError } from 'react-hook-form';
 
-import ErrorMessage from './ErrorMessage';
+import { ErrorMessage } from './ErrorMessage';
 
 interface Props {
   error?: FieldError;
 }
 
-const FieldErrorMessage: React.FC<Props> = ({ error }) => {
+export const FieldErrorMessage: React.FC<Props> = ({ error }) => {
   if (!error) {
     return null;
   }
@@ -15,10 +15,10 @@ const FieldErrorMessage: React.FC<Props> = ({ error }) => {
       return <ErrorMessage>Обязательное поле</ErrorMessage>;
     case 'manual':
       return <ErrorMessage>{error.message}</ErrorMessage>;
+    case 'pattern':
+      return <ErrorMessage>Недопустимое значение</ErrorMessage>;
     default:
-      // TODO
+      // TODO - support min, max, minLength, maxLength, validate
       return <ErrorMessage>Ошибка: {error.type}</ErrorMessage>;
   }
 };
-
-export default FieldErrorMessage;

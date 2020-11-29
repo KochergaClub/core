@@ -1,25 +1,26 @@
 import React, { useCallback, useState } from 'react';
-import { useForm } from 'react-hook-form';
+import { DeepPartial, FieldError, useForm } from 'react-hook-form';
 
 import { CommonModal } from '../CommonModal';
-import { FormShape } from '../forms/types';
-import { FormShapeFields, ShapeToValues } from './FormShapeFields';
+import { FormShape, ShapeToValues } from '../forms/types';
+import { FormShapeFields } from './FormShapeFields';
 
 // "Simple" prefix so that we don't mix this up with PostResult from old forms/types,
 // which included a `errors` field for formik errors
-export interface SimplePostResult {
+export interface PostResult {
   close: boolean;
   error?: string;
+  fieldErrors?: Record<string, FieldError>;
 }
 
 type AnyValues = Record<string, any>;
 
 export type Props<S extends FormShape> = {
   shape: S;
-  defaultValues?: ShapeToValues<S>;
+  defaultValues?: DeepPartial<ShapeToValues<S>>;
   buttonText: string;
   title: string;
-  post: (values: ShapeToValues<S>) => Promise<SimplePostResult | void>;
+  post: (values: ShapeToValues<S>) => Promise<PostResult | void>;
   close: () => void;
 };
 
@@ -36,7 +37,7 @@ export const FormShapeModal = <S extends FormShape>({
 
   const submit = useCallback(
     async (values: AnyValues) => {
-      let postResult: SimplePostResult | undefined;
+      let postResult: PostResult | undefined;
       try {
         postResult = (await post(values as any)) || { close: true };
       } catch (e) {
@@ -51,12 +52,19 @@ export const FormShapeModal = <S extends FormShape>({
       if (postResult.error) {
         setSubmitError(postResult.error);
       }
+      if (postResult.fieldErrors) {
+        Object.keys(postResult.fieldErrors).forEach((path) => {
+          if (!postResult || !postResult.fieldErrors) {
+            return; // shouldn't happen but satisfies typescript
+          }
+          const fieldError = postResult.fieldErrors[path];
+          form.setError(path, fieldError);
+        });
+      }
     },
-    [close, post]
+    [close, post, form]
   );
 
-  // TODO:
-  // {submitError && <ErrorMessage>{submitError}</ErrorMessage>}
   return (
     <CommonModal
       close={close}

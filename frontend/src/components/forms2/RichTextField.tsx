@@ -1,10 +1,11 @@
 import 'react-quill/dist/quill.snow.css';
 
+import get from 'lodash/get';
 import dynamic from 'next/dynamic';
 import React, { useEffect, useRef, useState } from 'react';
 import { Controller, FieldError, UseFormMethods } from 'react-hook-form';
 
-import FieldContainer from './FieldContainer';
+import { FieldContainer } from './FieldContainer';
 
 const ReactQuill = dynamic(() => import('react-quill'), { ssr: false });
 
@@ -16,7 +17,7 @@ interface Props<T extends Record<string, unknown>> {
   defaultValue?: string;
 }
 
-const RichTextField = <T extends Record<string, unknown>>({
+export const RichTextField = <T extends Record<string, unknown>>({
   name,
   title,
   defaultValue,
@@ -50,17 +51,24 @@ const RichTextField = <T extends Record<string, unknown>>({
 
   return (
     <div ref={ref}>
-      <FieldContainer title={title} error={form.errors[name] as FieldError}>
+      <FieldContainer
+        title={title}
+        error={get(form.errors, name) as FieldError}
+      >
         <Controller
           control={
             form.control as any /* there's something wrong with react-hook-form types, don't know what exactly */
           }
           name={name as string}
           rules={{ required }}
-          render={({ onChange }) => (
+          defaultValue={defaultValue}
+          render={({ onChange, value }) => (
+            // This is actually an uncontrolled mode, even though we use render prop from react-hook-prop controller.
+            // The reason for this is that we need to override onChange.
+            // TODO - switch to the new `setValueAs` feature from react-hook-form, see https://github.com/react-hook-form/react-hook-form/releases/tag/v6.12.0 for details.
             <ReactQuill
               theme="snow"
-              defaultValue={defaultValue || ''}
+              defaultValue={value}
               onChange={(value) => {
                 let formValue = value;
                 if (formValue === '<p><br></p>') {
@@ -80,5 +88,3 @@ const RichTextField = <T extends Record<string, unknown>>({
     </div>
   );
 };
-
-export default RichTextField;

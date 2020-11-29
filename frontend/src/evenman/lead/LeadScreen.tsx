@@ -5,22 +5,19 @@ import { useMutation, useQuery } from '@apollo/client';
 import { ApolloQueryResults, PaddedBlock } from '~/components';
 import { CustomCardListView, PagedApolloCollection } from '~/components/collections';
 import { AnyViewProps } from '~/components/collections/types';
-import { FormShape } from '~/components/forms/types';
+import { ShapeToValues } from '~/components/forms/types';
 
 import { LeadCard } from './LeadCard';
 import {
     CreateEvenmanLeadDocument, EvenmanLeadFragment, EvenmanLeadsDocument
 } from './queries.generated';
 
-const leadShape: FormShape = [
+const leadShape = [
   { name: 'name', title: 'Имя', type: 'string' },
   { name: 'description', title: 'Описание', type: 'richtext', optional: true },
-];
+] as const;
 
-type CreateLeadValues = {
-  name: string;
-  description: string;
-};
+type CreateLeadValues = ShapeToValues<typeof leadShape>;
 
 const renderItem = (lead: EvenmanLeadFragment) => <LeadCard lead={lead} />;
 

@@ -1,8 +1,9 @@
+import get from 'lodash/get';
 import React, { CSSProperties, useCallback } from 'react';
 import { Controller, FieldError, UseFormMethods } from 'react-hook-form';
 import AsyncSelect from 'react-select/async';
 
-import FieldContainer from './FieldContainer';
+import { FieldContainer } from './FieldContainer';
 
 interface Props<T extends Record<string, unknown>, I> {
   name: keyof T;
@@ -36,7 +37,7 @@ export const AsyncSelectField = <T extends Record<string, unknown>, I>({
   );
 
   return (
-    <FieldContainer title={title} error={form.errors[name] as FieldError}>
+    <FieldContainer title={title} error={get(form.errors, name) as FieldError}>
       <Controller
         name={name as string}
         control={form.control as any}

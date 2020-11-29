@@ -9,7 +9,6 @@ import { useMutation } from '@apollo/client';
 import { HumanizedDateTime } from '~/components';
 import Card from '~/components/Card';
 import ApolloModalFormButton from '~/components/forms/ApolloModalFormButton';
-import { FormShape } from '~/components/forms/types';
 import NotionIcon from '~/components/icons/NotionIcon';
 import { A, Badge, Column, Row } from '~/frontkit';
 import { adminTicketRoute, adminTrainingRoute } from '~/ratio/routes';
@@ -29,15 +28,13 @@ const CreatePaymentButton = ({ ticket_id }: { ticket_id: string }) => {
     awaitRefetchQueries: true,
   });
 
-  const fields: FormShape = [
-    { name: 'ticket_id', type: 'string', readonly: true, default: ticket_id },
+  const fields = [
     { name: 'amount', title: 'Сумма', type: 'number', min: 0, max: 1000000 },
     {
       name: 'fiscalization_status',
       title: 'Нужен чек?',
       type: 'choice',
       widget: 'dropdown',
-      default: 'todo',
       options: [
         ['todo', 'Да'],
         ['not_needed', 'Нет'],
@@ -48,20 +45,30 @@ const CreatePaymentButton = ({ ticket_id }: { ticket_id: string }) => {
       title: 'Вид оплаты',
       type: 'choice',
       widget: 'dropdown',
-      default: 'kassa',
       options: [
         ['kassa', 'Яндекс.Касса'],
         ['cash', 'Наличные'],
         ['other', 'Другое'],
       ],
     },
-  ];
+  ] as const;
 
   return (
     <ApolloModalFormButton
       mutation={addMutation}
       size="small"
       shape={fields}
+      defaultValues={{
+        fiscalization_status: 'todo',
+        payment_type: 'kassa',
+      }}
+      valuesToVariables={(v) => ({
+        input: {
+          ...v,
+          ticket_id,
+          amount: parseInt(v.amount, 10),
+        },
+      })}
       buttonName="Добавить платёж"
       modalButtonName="Добавить"
       modalTitle="Добавить платёж"
@@ -108,19 +115,23 @@ const NotionLinkRow: React.FC<Props> = ({ ticket }) => {
           <ApolloModalFormButton
             mutation={updateMutation}
             size="small"
-            shape={[
-              {
-                name: 'id',
-                type: 'string',
-                readonly: true,
-                default: ticket.id,
-              },
-              {
-                name: 'notion_link',
-                type: 'string',
-                default: ticket.notion_link,
-              },
-            ]}
+            shape={
+              [
+                {
+                  name: 'id',
+                  type: 'string',
+                  readonly: true,
+                  default: ticket.id,
+                },
+                {
+                  name: 'notion_link',
+                  type: 'string',
+                },
+              ] as const
+            }
+            defaultValues={{
+              id: ticket.id,
+            }}
             modalTitle="Добавить Notion-ссылку"
             modalButtonName="Добавить"
             buttonName="Добавить Notion-ссылку"

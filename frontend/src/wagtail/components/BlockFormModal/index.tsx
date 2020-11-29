@@ -1,12 +1,13 @@
-import { useCallback, useEffect, useMemo, useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
+import { FieldError } from 'react-hook-form';
 
 import { gql, TypedDocumentNode, useApolloClient } from '@apollo/client';
 
 import { dedupeFragments } from '~/common/dedupeFragments';
 import { withFragments } from '~/common/utils';
 import { Spinner } from '~/components';
-import ModalForm from '~/components/forms/ModalForm';
 import { AnyFormValues, FormShape } from '~/components/forms/types';
+import { FormShapeModal } from '~/components/forms2';
 import { Modal } from '~/frontkit';
 
 import { allBlockComponents, KnownBlockFragment } from '../../blocks';
@@ -19,41 +20,48 @@ import {
     WagtailBlockValidationError_L3FragmentDoc
 } from './fragments.generated';
 
-interface Props {
-  block?: KnownBlockFragment;
-  typename: KnownBlockFragment['__typename'];
-  post: (block: KnownBlockFragment) => Promise<unknown>;
-  close: () => void;
-  modalTitle: string;
-}
-
-const validationErrorToFormErrors = (
+const validationErrorToFieldErrors = (
   error:
     | WagtailBlockValidationError_L3Fragment
     | WagtailBlockValidationError_L2Fragment
     | WagtailBlockValidationError_L1Fragment
-    | WagtailBlockValidationError_L0Fragment
-): any => {
+    | WagtailBlockValidationError_L0Fragment,
+  path = ''
+): Record<string, FieldError> => {
+  const result: Record<string, FieldError> = {};
+  const updateResult = (childErrors: Record<string, FieldError>) => {
+    Object.keys(childErrors).forEach((key) => {
+      result[key] = childErrors[key];
+    });
+  };
+
   switch (error.__typename) {
     case 'WagtailStructBlockValidationError':
       if (!('errors' in error)) {
         throw new Error('Too deeply nested validation error');
       }
-      return Object.fromEntries(
-        (error.errors as any[]).map((field) => {
-          return [field.name, validationErrorToFormErrors(field.error)];
-        })
-      );
+      const prefix = path ? path + '.' : '';
+      (error.errors as any[]).forEach((field) => {
+        updateResult(
+          validationErrorToFieldErrors(field.error, `${prefix}${field.name}`)
+        );
+      });
+      return result;
     case 'WagtailListBlockValidationError':
       if (!('list_errors' in error)) {
         throw new Error('Too deeply nested validation error');
       }
-      return (error.list_errors as any[]).map(
-        (subError) => (subError ? validationErrorToFormErrors(subError) : '') // list errors can be null, that's normal
-      );
-      return;
+      (error.list_errors as any[]).forEach((subError, i) => {
+        // list errors can be null, that's normal
+        if (subError) {
+          updateResult(validationErrorToFieldErrors(subError, `${path}[${i}]`));
+        }
+      });
+      return result;
     case 'WagtailAnyBlockValidationError':
-      return error.error_message;
+      return {
+        [path]: { type: 'manual', message: error.error_message },
+      };
   }
 };
 
@@ -104,7 +112,15 @@ const buildRenderBlockDocument = <T extends KnownBlockFragment['__typename']>(
   );
 };
 
-const ModalBlockForm: React.FC<Props> = ({
+interface Props {
+  block?: KnownBlockFragment;
+  typename: KnownBlockFragment['__typename'];
+  post: (block: KnownBlockFragment) => Promise<unknown>;
+  close: () => void;
+  modalTitle: string;
+}
+
+export const BlockFormModal: React.FC<Props> = ({
   block,
   typename,
   post,
@@ -130,7 +146,10 @@ const ModalBlockForm: React.FC<Props> = ({
   );
 
   const valueWrappedInForm = useMemo(
-    () => structure && structure.__typename !== 'WagtailStructBlockStructure',
+    () =>
+      structure &&
+      structure.__typename !== 'WagtailStructBlockStructure' &&
+      structure.__typename !== 'WagtailStaticBlockStructure',
     [structure]
   );
 
@@ -148,7 +167,7 @@ const ModalBlockForm: React.FC<Props> = ({
   const apolloClient = useApolloClient();
 
   const save = useCallback(
-    async (v: AnyFormValues) => {
+    async (v: Record<string, unknown>) => {
       const value = valueWrappedInForm ? v.form : v;
 
       const RenderBlockDocument = buildRenderBlockDocument(typename);
@@ -174,8 +193,8 @@ const ModalBlockForm: React.FC<Props> = ({
             .error as WagtailBlockValidationError_L3Fragment;
           return {
             close: false,
-            formErrors: validationErrorToFormErrors(innerError),
-            error: 'Server-side validation error',
+            fieldErrors: validationErrorToFieldErrors(innerError),
+            error: 'Server-side validation error', // FIXME - better russian message
           };
         }
         throw new Error(
@@ -200,15 +219,13 @@ const ModalBlockForm: React.FC<Props> = ({
   }
 
   return (
-    <ModalForm
-      initialValues={blockParams}
+    <FormShapeModal
+      defaultValues={blockParams}
       shape={shape}
-      modalButtonName="Сохранить"
-      modalTitle={modalTitle}
+      buttonText="Сохранить"
+      title={modalTitle}
       post={save}
       close={close}
     />
   );
 };
-
-export default ModalBlockForm;

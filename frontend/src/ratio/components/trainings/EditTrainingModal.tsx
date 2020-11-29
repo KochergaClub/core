@@ -1,3 +1,4 @@
+import get from 'lodash/get';
 import React from 'react';
 import { Controller, FieldError, useForm, UseFormMethods } from 'react-hook-form';
 import Select from 'react-select';
@@ -36,7 +37,7 @@ const DumbSelectField: React.FC<{
   defaultValue: string;
   form: UseFormMethods<FormData>;
 }> = ({ field, title, values, defaultValue, form }) => (
-  <FieldContainer title={title} error={form.errors[field] as FieldError}>
+  <FieldContainer title={title} error={get(form.errors, field) as FieldError}>
     <Controller
       name={field}
       as={Select}

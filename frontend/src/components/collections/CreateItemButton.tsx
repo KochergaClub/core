@@ -1,17 +1,17 @@
-import ModalFormButton from '~/components/forms/ModalFormButton';
-import { AnyFormValues, FormShape } from '~/components/forms/types';
+import { FormShape, ShapeToValues } from '~/components/forms/types';
+import { FormShapeModalButton } from '~/components/forms2';
 
 import { EntityNames } from './types';
 
-interface Props<A extends AnyFormValues> {
+interface Props<S extends FormShape> {
   names?: EntityNames;
-  shape: FormShape;
-  add: (item: A) => Promise<void>;
+  shape: S;
+  add: (item: ShapeToValues<S>) => Promise<void>;
 }
 
-function CreateItemButton<A extends AnyFormValues>(props: Props<A>) {
+function CreateItemButton<S extends FormShape>(props: Props<S>) {
   return (
-    <ModalFormButton
+    <FormShapeModalButton
       post={props.add}
       buttonName="Создать"
       modalButtonName="Создать"

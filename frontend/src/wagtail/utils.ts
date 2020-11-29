@@ -91,14 +91,7 @@ const structureToFieldShape = (
         optional: !structure.required,
       };
     case 'WagtailStaticBlockStructure':
-      return {
-        type: 'string',
-        name,
-        title: structure.label,
-        optional: !structure.required,
-        readonly: true,
-        default: 'static', // FIXME
-      };
+      throw new Error('Deep static blocks are not supported');
     case 'WagtailStructBlockStructure':
       if (!('child_blocks' in structure)) {
         throw new Error('Structure is too deeply nested');
@@ -121,16 +114,23 @@ const structureToFieldShape = (
       if (!('child_block' in structure)) {
         throw new Error('Structure is too deeply nested');
       }
+      const itemShape = structureToFieldShape(structure.child_block, 'item');
+      if (itemShape.type !== 'shape') {
+        throw new Error('Lists of non-struct values are not supported');
+      }
       return {
-        type: 'list',
+        type: 'shape-list',
         name,
         title: structure.label,
-        field: structureToFieldShape(structure.child_block, 'item'),
+        shape: itemShape.shape,
       };
   }
 };
 
 export const structureToShape = (structure: StructureFragment): FormShape => {
+  if (structure.__typename === 'WagtailStaticBlockStructure') {
+    return []; // special case - empty form
+  }
   const fieldShape = structureToFieldShape(structure, 'form');
   if (fieldShape.type === 'shape') {
     return fieldShape.shape;

@@ -1,16 +1,17 @@
+import get from 'lodash/get';
 import React from 'react';
 import { FieldError, UseFormMethods } from 'react-hook-form';
 
 import { Column, LabelDiv, Row } from '~/frontkit';
 
-import FieldErrorMessage from './FieldErrorMessage';
+import { FieldErrorMessage } from './FieldErrorMessage';
 
 interface Props<T extends Record<string, unknown>> {
   name: keyof T;
   title: string;
   form: UseFormMethods<T>;
   required?: boolean;
-  defaultValue?: string;
+  defaultValue?: boolean;
 }
 
 export const CheckboxField = <T extends Record<string, unknown>>({
@@ -28,11 +29,11 @@ export const CheckboxField = <T extends Record<string, unknown>>({
           <input
             type="checkbox"
             name={name as string}
-            defaultValue={defaultValue}
+            defaultChecked={defaultValue}
             ref={form.register({ required })}
           />
           {form.errors[name] && (
-            <FieldErrorMessage error={form.errors[name] as FieldError} />
+            <FieldErrorMessage error={get(form.errors, name) as FieldError} />
           )}
         </Row>
       </Column>
