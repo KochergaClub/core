@@ -33,6 +33,7 @@ export interface BooleanFieldShape extends AnyBasicFieldShape {
 
 export interface ImageFieldShape extends AnyBasicFieldShape {
   readonly type: 'image';
+  valueAsNumber?: boolean;
 }
 
 export interface ForeignKeyFieldShape extends AnyBasicFieldShape {

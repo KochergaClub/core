@@ -193,7 +193,10 @@ export const BlockFormModal: React.FC<Props> = ({
             .error as WagtailBlockValidationError_L3Fragment;
           return {
             close: false,
-            fieldErrors: validationErrorToFieldErrors(innerError),
+            fieldErrors: validationErrorToFieldErrors(
+              innerError,
+              valueWrappedInForm ? 'form' : ''
+            ),
             error: 'Server-side validation error', // FIXME - better russian message
           };
         }

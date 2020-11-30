@@ -90,6 +90,7 @@ export const FieldShapeBox = <
           form={form}
           defaultValue={defaultValue as FieldToValue<typeof field> | undefined}
           required={!field.optional}
+          valueAsNumber={field.valueAsNumber}
         />
       );
     case 'choice':

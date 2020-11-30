@@ -89,6 +89,7 @@ const structureToFieldShape = (
         name,
         title: structure.label,
         optional: !structure.required,
+        valueAsNumber: true, // wagtail block refuses to validate if we pass a quoted string as image id
       };
     case 'WagtailStaticBlockStructure':
       throw new Error('Deep static blocks are not supported');
@@ -212,7 +213,7 @@ const blockValueToParams = (
           "No original image ID, can't save image. " + JSON.stringify(value)
         );
       }
-      return originalImageId;
+      return parseInt(originalImageId, 10);
     default:
       throw new Error(`Unknown type in structure: ${structure.__typename}`);
   }

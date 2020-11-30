@@ -50,6 +50,7 @@ interface Props<T extends Record<string, unknown>> {
   form: UseFormMethods<T>;
   defaultValue?: string;
   required?: boolean;
+  valueAsNumber?: boolean;
 }
 
 export const ImageField = <T extends Record<string, unknown>>({
@@ -58,6 +59,7 @@ export const ImageField = <T extends Record<string, unknown>>({
   form,
   defaultValue,
   required = false,
+  valueAsNumber,
 }: Props<T>): React.ReactElement | null => {
   return (
     <FieldContainer title={title} error={get(form.errors, name) as FieldError}>
@@ -66,7 +68,7 @@ export const ImageField = <T extends Record<string, unknown>>({
           form.control as any /* there's something wrong with react-hook-form types, don't know what exactly */
         }
         name={name as string}
-        rules={{ required }}
+        rules={{ required, valueAsNumber }}
         defaultValue={defaultValue}
         render={({ value, onChange }) => {
           // wrapped in Row because form fields are stretched by default and ImageEditor doesn't handle it well
