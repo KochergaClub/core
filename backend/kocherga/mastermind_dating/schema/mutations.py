@@ -1,10 +1,8 @@
 from django.contrib.auth import get_user_model
-
-from kocherga.graphql import g, helpers
-from kocherga.graphql.permissions import staffonly, check_permissions
-from kocherga.graphql.basic_types import BasicResult
-
 from kocherga.events.models import Event
+from kocherga.graphql import g, helpers
+from kocherga.graphql.basic_types import BasicResult
+from kocherga.graphql.permissions import check_permissions, staffonly
 
 from .. import models
 from . import types
@@ -120,12 +118,14 @@ def mastermindDatingUnsetEventForCohort(_):
 @c.field
 def mastermindDatingCreateParticipant(_):
     @check_permissions([staffonly])
-    def resolve(_, info, cohort, email):
+    def resolve(_, info, cohort_id, email):
         KchUser = get_user_model()
         try:
             kocherga_user = KchUser.objects.get(email=email)
         except KchUser.DoesNotExist:
             kocherga_user = KchUser.objects.create_user(email)
+
+        cohort = models.Cohort.objects.get(pk=cohort_id)
 
         (participant, _) = models.Participant.objects.get_or_create(
             user=kocherga_user,
