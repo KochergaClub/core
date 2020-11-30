@@ -6,8 +6,8 @@ import { gql, TypedDocumentNode, useApolloClient } from '@apollo/client';
 import { dedupeFragments } from '~/common/dedupeFragments';
 import { withFragments } from '~/common/utils';
 import { Spinner } from '~/components';
+import { FormShapeModal } from '~/components/forms';
 import { AnyFormValues, FormShape } from '~/components/forms/types';
-import { FormShapeModal } from '~/components/forms2';
 import { Modal } from '~/frontkit';
 
 import { allBlockComponents, KnownBlockFragment } from '../../blocks';

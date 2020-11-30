@@ -1,7 +1,7 @@
 import React from 'react';
 
 import { useCommonHotkeys } from '~/common/hooks';
-import { ErrorMessage } from '~/components/forms2';
+import { ErrorMessage } from '~/components/forms';
 import { Button, ControlsFooter, Modal, Row } from '~/frontkit';
 
 interface Props {

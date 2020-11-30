@@ -1,7 +1,6 @@
 import React from 'react';
 import { UseFormMethods } from 'react-hook-form';
 
-import { FieldShape, FieldToValue } from '../forms/types';
 import { AsyncSelectField } from './AsyncSelectField';
 import { BasicInputField } from './BasicInputField';
 import { CheckboxField } from './CheckboxField';
@@ -12,6 +11,7 @@ import { RichTextField } from './RichTextField';
 import { SelectField } from './SelectField';
 import { ShapeFieldShapeBox } from './ShapeFieldShapeBox';
 import { ShapeListFieldShapeBox } from './ShapeListFieldShapeBox';
+import { FieldShape, FieldToValue } from './types';
 
 type Props<V extends Record<string, unknown>, F extends FieldShape> = {
   name: string;

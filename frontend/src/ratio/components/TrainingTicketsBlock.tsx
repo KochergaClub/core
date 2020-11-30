@@ -3,7 +3,7 @@ import React, { useCallback } from 'react';
 import { useMutation } from '@apollo/client';
 
 import { PaddedBlock } from '~/components';
-import { FormShapeModalButton } from '~/components/forms2';
+import { FormShapeModalButton } from '~/components/forms';
 import { Column, Row } from '~/frontkit';
 
 import { RatioAddTicketDocument, RatioTrainingFragment } from '../queries.generated';

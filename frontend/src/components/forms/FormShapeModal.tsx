@@ -2,8 +2,8 @@ import React, { useCallback, useState } from 'react';
 import { DeepPartial, FieldError, useForm } from 'react-hook-form';
 
 import { CommonModal } from '../CommonModal';
-import { FormShape, ShapeToValues } from '../forms/types';
 import { FormShapeFields } from './FormShapeFields';
+import { FormShape, ShapeToValues } from './types';
 
 // "Simple" prefix so that we don't mix this up with PostResult from old forms/types,
 // which included a `errors` field for formik errors

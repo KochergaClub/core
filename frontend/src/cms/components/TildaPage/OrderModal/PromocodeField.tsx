@@ -5,7 +5,7 @@ import styled from 'styled-components';
 
 import { useMutation } from '@apollo/client';
 
-import { ErrorMessage, FieldContainer } from '~/components/forms2';
+import { ErrorMessage, FieldContainer } from '~/components/forms';
 import { AsyncButton, colors, deviceMediaQueries, Input, Row } from '~/frontkit';
 
 import { FormData } from './FormOrderModal';

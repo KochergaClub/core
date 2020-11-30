@@ -2,8 +2,8 @@ import { useCallback, useMemo } from 'react';
 
 import { useMutation, useQuery } from '@apollo/client';
 
+import { FormShapeModalButton } from '~/components/forms';
 import { FieldShape } from '~/components/forms/types';
-import { FormShapeModalButton } from '~/components/forms2';
 
 import {
     EmailMailchimpCategoriesDocument, EmailSubscribeChannelCreateDocument

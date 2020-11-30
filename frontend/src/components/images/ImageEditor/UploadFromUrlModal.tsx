@@ -2,7 +2,7 @@ import React, { useCallback, useState } from 'react';
 import { useForm } from 'react-hook-form';
 
 import { CommonModal } from '~/components';
-import { BasicInputField } from '~/components/forms2';
+import { BasicInputField } from '~/components/forms';
 import { Column } from '~/frontkit';
 
 import { CommonFormData, CommonImageFields } from './CommonImageFields';

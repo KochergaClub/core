@@ -4,7 +4,7 @@ import { useMutation } from '@apollo/client';
 
 import { CopyToClipboardIcon, MutationButton } from '~/components';
 import Card, { CardHeader } from '~/components/Card';
-import { FormShapeModalButton } from '~/components/forms2';
+import { FormShapeModalButton } from '~/components/forms';
 import { Column, Label, Row } from '~/frontkit';
 
 import {

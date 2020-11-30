@@ -2,8 +2,8 @@ import React from 'react';
 
 import { useMutation } from '@apollo/client';
 
+import { FormShapeModal } from '~/components/forms';
 import { ShapeToValues } from '~/components/forms/types';
-import { FormShapeModal } from '~/components/forms2';
 import { useNotification } from '~/frontkit';
 
 import { CreateRatioPromocodeDocument } from './queries.generated';

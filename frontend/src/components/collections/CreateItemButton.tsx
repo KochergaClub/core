@@ -1,5 +1,5 @@
+import { FormShapeModalButton } from '~/components/forms';
 import { FormShape, ShapeToValues } from '~/components/forms/types';
-import { FormShapeModalButton } from '~/components/forms2';
 
 import { EntityNames } from './types';
 

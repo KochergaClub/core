@@ -4,8 +4,8 @@ import { withApollo, withStaff } from '~/apollo';
 import { NextApolloPage } from '~/apollo/types';
 import { ApolloQueryResults, Page } from '~/components';
 import { CardList } from '~/components/Card';
+import { FormShapeModalButton } from '~/components/forms';
 import { ShapeToValues } from '~/components/forms/types';
-import { FormShapeModalButton } from '~/components/forms2';
 import { AsyncButton, Column, Row } from '~/frontkit';
 
 import TildaPageCard from '../components/TildaPageCard';

@@ -3,8 +3,8 @@ import { useForm } from 'react-hook-form';
 
 import { withApollo, withStaff } from '~/apollo';
 import { PaddedBlock, Page } from '~/components';
+import { FormShapeFields } from '~/components/forms';
 import { ShapeToValues } from '~/components/forms/types';
-import { FormShapeFields } from '~/components/forms2';
 import { Button, Column } from '~/frontkit';
 
 const shape = [

@@ -4,7 +4,7 @@ import { useForm } from 'react-hook-form';
 import { useMutation } from '@apollo/client';
 
 import { CommonModal } from '~/components';
-import { FormShapeFields } from '~/components/forms2/FormShapeFields';
+import { FormShapeFields } from '~/components/forms/FormShapeFields';
 
 import { EvenmanLeadFragment, UpdateEvenmanLeadDocument } from './queries.generated';
 

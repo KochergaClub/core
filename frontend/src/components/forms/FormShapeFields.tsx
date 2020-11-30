@@ -3,8 +3,8 @@ import { UseFormMethods } from 'react-hook-form';
 
 import { Column } from '~/frontkit';
 
-import { FormShape, ShapeToValues } from '../forms/types';
 import { FieldShapeBox } from './FieldShapeBox';
+import { FormShape, ShapeToValues } from './types';
 
 type Props<S extends FormShape> = {
   shape: S;

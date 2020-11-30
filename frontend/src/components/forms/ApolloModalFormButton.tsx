@@ -3,9 +3,7 @@ import { useCallback } from 'react';
 
 import { FetchResult } from '@apollo/client';
 
-import {
-    FormShapeModalButton, Props as FormShapeModalButtonProps
-} from '../forms2/FormShapeModalButton';
+import { FormShapeModalButton, Props as FormShapeModalButtonProps } from './FormShapeModalButton';
 import { FormShape, ShapeToValues } from './types';
 
 type SimpleProps<S extends FormShape> = Omit<

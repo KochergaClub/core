@@ -1,9 +1,9 @@
 import React from 'react';
 import { UseFormMethods } from 'react-hook-form';
 
-import { FieldToValue, ShapeFieldShape, ShapeToValues } from '../forms/types';
 import { FieldContainer } from './FieldContainer';
 import { FieldShapeBox } from './FieldShapeBox';
+import { FieldToValue, ShapeFieldShape, ShapeToValues } from './types';
 
 interface Props<T extends Record<string, unknown>, F extends ShapeFieldShape> {
   name: keyof T;

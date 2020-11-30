@@ -5,8 +5,8 @@ import styled from 'styled-components';
 
 import { Button, colors, Column, fonts, Label, Row } from '~/frontkit';
 
-import { AnyFormValues, FormShape, ShapeListFieldShape } from '../forms/types';
 import { FieldShapeBox } from './FieldShapeBox';
+import { AnyFormValues, FormShape, ShapeListFieldShape } from './types';
 
 const ListContainer = styled.div`
   border: 1px dotted ${colors.grey[300]};

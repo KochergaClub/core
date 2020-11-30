@@ -12,7 +12,7 @@ import {
 import shapes from '~/shapes';
 
 const feedbackShape: FormShape = shapes.events.feedback.filter(
-  f => f.name !== 'event_id' && f.name !== 'id'
+  (f) => f.name !== 'event_id' && f.name !== 'id'
 );
 
 const DeleteFeedback: React.FC<{ feedback: TeamEventFeedbackFragment }> = ({
@@ -71,7 +71,7 @@ const FeedbackCollection: React.FC<Props> = ({ event }) => {
         cb: add,
         shape: feedbackShape,
       }}
-      view={props => (
+      view={(props) => (
         <ShapedTableView
           {...props}
           shape={feedbackShape}

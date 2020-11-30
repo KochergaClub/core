@@ -43,7 +43,7 @@ const CohortCollection: React.FC = () => {
             cb: add,
             shape: cohortShape,
           }}
-          view={props => (
+          view={(props) => (
             <CustomCardListView {...props} renderItem={renderItem} />
           )}
         />

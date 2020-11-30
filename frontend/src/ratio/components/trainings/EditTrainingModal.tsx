@@ -5,7 +5,7 @@ import Select from 'react-select';
 
 import { useMutation } from '@apollo/client';
 
-import { BasicInputField, FieldContainer } from '~/components/forms2';
+import { BasicInputField, FieldContainer } from '~/components/forms';
 import { Button, Column, ControlsFooter, Modal } from '~/frontkit';
 
 import { RatioTrainingFragment } from '../../queries.generated';
