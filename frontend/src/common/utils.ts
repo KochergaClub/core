@@ -77,3 +77,5 @@ export const withFragments = <Operation, Variables>(
     definitions,
   };
 };
+
+export const range = (n: number) => Array.from(Array(n).keys());

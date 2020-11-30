@@ -8,12 +8,18 @@ import { FieldErrorMessage } from './FieldErrorMessage';
 interface Props {
   error: FieldError | undefined;
   title: string;
+  stretch?: boolean;
 }
 
-export const FieldContainer: React.FC<Props> = ({ error, title, children }) => {
+export const FieldContainer: React.FC<Props> = ({
+  error,
+  title,
+  stretch = true,
+  children,
+}) => {
   return (
     <label>
-      <Column gutter={4} stretch>
+      <Column gutter={4} stretch={stretch}>
         <Row vCentered>
           <LabelDiv>{title}</LabelDiv>
           {error && <FieldErrorMessage error={error} />}

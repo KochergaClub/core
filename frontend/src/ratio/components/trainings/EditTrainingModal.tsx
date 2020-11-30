@@ -1,61 +1,29 @@
-import get from 'lodash/get';
 import React from 'react';
-import { Controller, FieldError, useForm, UseFormMethods } from 'react-hook-form';
-import Select from 'react-select';
+import { useForm } from 'react-hook-form';
 
 import { useMutation } from '@apollo/client';
 
-import { BasicInputField, FieldContainer } from '~/components/forms';
-import { Button, Column, ControlsFooter, Modal } from '~/frontkit';
+import { CommonModal } from '~/components';
+import { BasicInputField } from '~/components/forms';
+import { SelectField } from '~/components/forms/SelectField';
+import { Column } from '~/frontkit';
 
 import { RatioTrainingFragment } from '../../queries.generated';
 import { UpdateRatioTrainingDocument } from './queries.generated';
 
-type SelectOptionType = {
-  value: string;
-  label: string;
-};
-
-const stringToOption = (s: string): SelectOptionType => ({
-  value: s,
-  label: s || '(пусто)',
-});
+const stringToSelectOption = (s: string): [string, string] => [
+  s,
+  s || '(пусто)',
+];
 
 type FormData = {
   name: string;
   discount_by_email: string;
   discount_percent_by_email: string;
-  promocode_email: SelectOptionType;
-  new_ticket_email: SelectOptionType;
-  notion_created_email: SelectOptionType;
+  promocode_email: string;
+  new_ticket_email: string;
+  notion_created_email: string;
 };
-
-const DumbSelectField: React.FC<{
-  field: keyof FormData;
-  title: string;
-  values: string[];
-  defaultValue: string;
-  form: UseFormMethods<FormData>;
-}> = ({ field, title, values, defaultValue, form }) => (
-  <FieldContainer title={title} error={get(form.errors, field) as FieldError}>
-    <Controller
-      name={field}
-      as={Select}
-      menuPortalTarget={document.body}
-      styles={{
-        menuPortal: (base: any) => ({
-          ...base,
-          zIndex: 1500,
-        }),
-      }}
-      placeholder="Выбрать..."
-      options={values.map(stringToOption)}
-      defaultValue={stringToOption(defaultValue)}
-      control={form.control}
-      rules={{ required: true }}
-    />
-  </FieldContainer>
-);
 
 interface Props {
   training: RatioTrainingFragment;
@@ -78,9 +46,9 @@ const EditTrainingModal: React.FC<Props> = ({ training, close }) => {
             data.discount_percent_by_email,
             10
           ),
-          promocode_email: data.promocode_email.value,
-          new_ticket_email: data.new_ticket_email.value,
-          notion_created_email: data.notion_created_email.value,
+          promocode_email: data.promocode_email,
+          new_ticket_email: data.new_ticket_email,
+          notion_created_email: data.notion_created_email,
         },
       },
     });
@@ -88,69 +56,61 @@ const EditTrainingModal: React.FC<Props> = ({ training, close }) => {
   };
 
   return (
-    <Modal>
-      <Modal.Header close={close}>Редактирование тренинга</Modal.Header>
+    <CommonModal
+      close={close}
+      title="Редактирование тренинга"
+      buttonText="Сохранить"
+      loading={form.formState.isSubmitting}
+      submit={form.handleSubmit(updateCb)}
+    >
       <form onSubmit={form.handleSubmit(updateCb)}>
-        <Modal.Body>
-          <Column gutter={16} stretch>
-            <BasicInputField
-              title="Название"
-              name="name"
-              defaultValue={training.name}
-              form={form}
-              required
-            />
-            <BasicInputField
-              title="Сумма одноразового промокода по e-mail'у"
-              name="discount_by_email"
-              type="number"
-              defaultValue={String(training.discount_by_email)}
-              form={form}
-            />
-            <BasicInputField
-              title="Процент скидки одноразового промокода по e-mail'у"
-              name="discount_percent_by_email"
-              type="number"
-              defaultValue={String(training.discount_percent_by_email)}
-              form={form}
-            />
-            <DumbSelectField
-              field="promocode_email"
-              title="Шаблон письма с промокодом"
-              values={['notion-template', '']}
-              defaultValue={training.promocode_email}
-              form={form}
-            />
-            <DumbSelectField
-              field="new_ticket_email"
-              title="Шаблон письма при регистрации"
-              values={['training', 'wait-for-notion']}
-              defaultValue={training.new_ticket_email}
-              form={form}
-            />
-            <DumbSelectField
-              field="notion_created_email"
-              title="Шаблон письма при заполнении notion-ссылки"
-              values={['notion-template', '']}
-              defaultValue={training.notion_created_email}
-              form={form}
-            />
-          </Column>
-        </Modal.Body>
-        <Modal.Footer>
-          <ControlsFooter>
-            <Button
-              loading={form.formState.isSubmitting}
-              disabled={form.formState.isSubmitting}
-              kind="primary"
-              type="submit"
-            >
-              Сохранить
-            </Button>
-          </ControlsFooter>
-        </Modal.Footer>
+        <Column gutter={16} stretch>
+          <BasicInputField
+            title="Название"
+            name="name"
+            defaultValue={training.name}
+            form={form}
+            required
+          />
+          <BasicInputField
+            title="Сумма одноразового промокода по e-mail'у"
+            name="discount_by_email"
+            type="number"
+            defaultValue={String(training.discount_by_email)}
+            form={form}
+          />
+          <BasicInputField
+            title="Процент скидки одноразового промокода по e-mail'у"
+            name="discount_percent_by_email"
+            type="number"
+            defaultValue={String(training.discount_percent_by_email)}
+            form={form}
+          />
+          <SelectField
+            name="promocode_email"
+            title="Шаблон письма с промокодом"
+            options={['notion-template', ''].map(stringToSelectOption)}
+            defaultValue={training.promocode_email}
+            form={form}
+          />
+          <SelectField
+            name="new_ticket_email"
+            title="Шаблон письма при регистрации"
+            options={['training', 'wait-for-notion'].map(stringToSelectOption)}
+            defaultValue={training.new_ticket_email}
+            form={form}
+            required={true}
+          />
+          <SelectField
+            name="notion_created_email"
+            title="Шаблон письма при заполнении notion-ссылки"
+            options={['notion-template', ''].map(stringToSelectOption)}
+            defaultValue={training.notion_created_email}
+            form={form}
+          />
+        </Column>
       </form>
-    </Modal>
+    </CommonModal>
   );
 };
 

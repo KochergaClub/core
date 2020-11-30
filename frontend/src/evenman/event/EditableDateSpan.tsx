@@ -1,11 +1,11 @@
-import { formatDistanceToNow, getHours, getMinutes, parse, setHours, setMinutes } from 'date-fns';
+import 'react-datepicker/dist/react-datepicker.css';
+
+import { formatDistanceToNow, parse, setHours, setMinutes } from 'date-fns';
 import { ru } from 'date-fns/locale';
-import { useCallback } from 'react';
 import DatePicker from 'react-datepicker';
 
-import { A, Row } from '~/frontkit';
-
 import { formatDate } from '~/common/utils';
+import { A, Row } from '~/frontkit';
 
 interface Props {
   date: Date;
@@ -22,9 +22,14 @@ const CustomInput: React.FC<{
     return null;
   }
 
+  const act = (e: React.SyntheticEvent) => {
+    e.preventDefault();
+    onClick();
+  };
+
   const date = parse(value, SERIALIZE_FORMAT, new Date());
   return (
-    <A href="#" onClick={onClick}>
+    <A href="" onClick={act}>
       <b>{formatDate(date, 'EEEEEE').toUpperCase()}</b>{' '}
       {formatDate(date, 'd MMMM, HH:mm')}
     </A>
@@ -32,20 +37,11 @@ const CustomInput: React.FC<{
 };
 
 const EditableDateSpan: React.FC<Props> = ({ date, onChange }) => {
-  const onDateChange = useCallback(
-    (newDate: Date) => {
-      setHours(newDate, getHours(date));
-      setMinutes(newDate, getMinutes(date));
-      onChange(newDate);
-    },
-    [date, onChange]
-  );
-
   return (
     <Row>
       <DatePicker
         selected={date}
-        onChange={onDateChange}
+        onChange={onChange}
         showTimeSelect
         timeIntervals={15}
         minTime={setHours(setMinutes(new Date(), 0), 9)}
