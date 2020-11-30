@@ -5,8 +5,6 @@ import { CommonModal } from '../CommonModal';
 import { FormShapeFields } from './FormShapeFields';
 import { FormShape, ShapeToValues } from './types';
 
-// "Simple" prefix so that we don't mix this up with PostResult from old forms/types,
-// which included a `errors` field for formik errors
 export interface PostResult {
   close: boolean;
   error?: string;
