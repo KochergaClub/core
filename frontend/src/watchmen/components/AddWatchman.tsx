@@ -1,6 +1,6 @@
 import { useMutation } from '@apollo/client';
 
-import ApolloModalFormButton from '~/components/forms/ApolloModalFormButton';
+import { MutationModalButton } from '~/components/forms';
 
 import { WatchmenCreateWatchmanDocument } from '../queries.generated';
 
@@ -39,7 +39,7 @@ const AddWatchman: React.FC = () => {
 
   return (
     <div>
-      <ApolloModalFormButton
+      <MutationModalButton
         mutation={createMutation}
         shape={fields}
         defaultValues={{

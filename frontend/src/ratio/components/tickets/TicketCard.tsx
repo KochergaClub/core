@@ -8,7 +8,7 @@ import { useMutation } from '@apollo/client';
 
 import { HumanizedDateTime } from '~/components';
 import Card from '~/components/Card';
-import ApolloModalFormButton from '~/components/forms/ApolloModalFormButton';
+import { MutationModalButton } from '~/components/forms';
 import NotionIcon from '~/components/icons/NotionIcon';
 import { A, Badge, Column, Row } from '~/frontkit';
 import { adminTicketRoute, adminTrainingRoute } from '~/ratio/routes';
@@ -54,7 +54,7 @@ const CreatePaymentButton = ({ ticket_id }: { ticket_id: string }) => {
   ] as const;
 
   return (
-    <ApolloModalFormButton
+    <MutationModalButton
       mutation={addMutation}
       size="small"
       shape={fields}
@@ -112,7 +112,7 @@ const NotionLinkRow: React.FC<Props> = ({ ticket }) => {
       <Row>
         <A href={ticket.notion_link}>{ticket.notion_link}</A>
         {ticket.notion_link ? null : (
-          <ApolloModalFormButton
+          <MutationModalButton
             mutation={updateMutation}
             size="small"
             shape={

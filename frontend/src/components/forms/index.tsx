@@ -6,3 +6,4 @@ export { FieldErrorMessage } from './FieldErrorMessage';
 export { FormShapeFields } from './FormShapeFields';
 export { FormShapeModal } from './FormShapeModal';
 export { FormShapeModalButton } from './FormShapeModalButton';
+export { MutationModalButton } from './MutationModalButton';

@@ -69,6 +69,11 @@ export const RichTextField = <T extends Record<string, unknown>>({
             <ReactQuill
               theme="snow"
               defaultValue={value}
+              onKeyDown={(e) => {
+                if (e.keyCode === 13 && !e.metaKey) {
+                  e.stopPropagation(); // prevent accidental modal form submission
+                }
+              }}
               onChange={(value) => {
                 let formValue = value;
                 if (formValue === '<p><br></p>') {

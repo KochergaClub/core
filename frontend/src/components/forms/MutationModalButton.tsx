@@ -30,7 +30,7 @@ type Props<S extends FormShape, Variables> =
   | SimpleProps<S>
   | PropsWithConversion<S, Variables>;
 
-export default function ApolloModalFormButton<
+export function MutationModalButton<
   S extends FormShape,
   Variables = { input: ShapeToValues<S> }
 >({ mutation, valuesToVariables, ...otherProps }: Props<S, Variables>) {
@@ -53,16 +53,7 @@ export default function ApolloModalFormButton<
         const errors = e.graphQLErrors as GraphQLError[];
 
         const error = errors.length
-          ? errors
-              .map(
-                (e) =>
-                  e.message +
-                  ': ' +
-                  JSON.stringify(
-                    e.extensions?.response?.body || 'unknown reason'
-                  )
-              )
-              .join('. ')
+          ? errors.map((e) => e.message || 'Неизвестная ошибка').join('. ')
           : String(e);
 
         return {

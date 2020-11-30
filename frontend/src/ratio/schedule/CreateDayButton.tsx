@@ -1,6 +1,6 @@
 import { useMutation } from '@apollo/client';
 
-import ApolloModalFormButton from '~/components/forms/ApolloModalFormButton';
+import { MutationModalButton } from '~/components/forms';
 
 import { RatioTrainingAddDayDocument, RatioTrainingFragment } from '../queries.generated';
 
@@ -28,7 +28,7 @@ const CreateDayButton: React.FC<Props> = ({ training }) => {
   ] as const;
 
   return (
-    <ApolloModalFormButton
+    <MutationModalButton
       mutation={createMutation}
       buttonName="Добавить день"
       modalButtonName="Добавить"
