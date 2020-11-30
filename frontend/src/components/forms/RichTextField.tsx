@@ -68,6 +68,7 @@ export const RichTextField = <T extends Record<string, unknown>>({
             // TODO - switch to the new `setValueAs` feature from react-hook-form, see https://github.com/react-hook-form/react-hook-form/releases/tag/v6.12.0 for details.
             <ReactQuill
               theme="snow"
+              style={{ backgroundColor: 'white' }} // prevent grey on hover in some cases, e.g. when using ShapeListFieldShapeBox
               defaultValue={value}
               onKeyDown={(e) => {
                 if (e.keyCode === 13 && !e.metaKey) {

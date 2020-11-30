@@ -60,7 +60,6 @@ export const EditLeadModal: React.FC<Props> = ({ lead, close }) => {
       title="Редактирование лида"
       close={close}
       submit={form.handleSubmit(submit)}
-      submitOnEnter={false} // otherwise RichTextField won't behave properly
       loading={form.formState.isSubmitting}
     >
       <form onSubmit={form.handleSubmit(submit)}>
