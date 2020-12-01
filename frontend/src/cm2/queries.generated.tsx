@@ -1,9 +1,9 @@
 import * as Types from '../apollo/types.generated';
 
-import { PageInfoFragment } from '../apollo/common-fragments.generated';
+import { PageInfoFragment, GenericErrorFragment, ValidationErrorFragment } from '../apollo/common-fragments.generated';
 import { dedupeFragments } from '~/common/dedupeFragments';
 import { TypedDocumentNode as DocumentNode } from '@graphql-typed-document-node/core';
-import { PageInfoFragmentDoc } from '../apollo/common-fragments.generated';
+import { PageInfoFragmentDoc, GenericErrorFragmentDoc, ValidationErrorFragmentDoc } from '../apollo/common-fragments.generated';
 export type CustomerFragment = (
   { __typename: 'Cm2Customer' }
   & Pick<Types.Cm2Customer, 'id' | 'first_name' | 'last_name' | 'card_id'>

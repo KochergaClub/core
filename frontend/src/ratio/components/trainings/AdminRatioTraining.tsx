@@ -15,7 +15,7 @@ import {
 import CreatePromocodeModal from '../promocodes/CreatePromocodeModal';
 import EmailDiscount from '../promocodes/EmailDiscount';
 import TrainingTicketTypesBlock from '../ticket-types/TicketTypesBlock';
-// import CreateEmailButton from '~/ratio/components/CreateEmailButton';
+// import CreateEmailButton from './CreateEmailButton';
 import TrainingTicketsBlock from '../TrainingTicketsBlock';
 import EditTrainingModal from './EditTrainingModal';
 import TrainingPromocodesBlock from './TrainingPromocodesBlock';

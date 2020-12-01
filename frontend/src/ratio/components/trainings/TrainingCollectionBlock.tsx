@@ -1,18 +1,19 @@
 import { isBefore, parseISO } from 'date-fns';
 import { useCallback } from 'react';
 
-import { useMutation, useQuery } from '@apollo/client';
+import { useQuery } from '@apollo/client';
 
 import { usePermissions } from '~/common/hooks';
 import { ApolloQueryResults, PaddedBlock } from '~/components';
 import { CustomCardListView, PagedApolloCollection } from '~/components/collections';
 import { AnyViewProps } from '~/components/collections/types';
+import { useFormModalSmartMutation } from '~/components/forms/hooks';
 import { ShapeToValues } from '~/components/forms/types';
 
 import {
-    RatioAddTrainingDocument, RatioTraining_SummaryFragment, RatioTrainingsDocument
-} from '../queries.generated';
-import TrainingCard from './trainings/TrainingCard';
+    CreateRatioTrainingDocument, RatioTraining_SummaryFragment, RatioTrainingsDocument
+} from '../../queries.generated';
+import TrainingCard from './TrainingCard';
 
 const trainingShape = [
   {
@@ -70,22 +71,25 @@ const TrainingCollectionBlock: React.FC<Props> = ({ eternal }) => {
       eternal,
     },
   });
-  const [addTrainingMutation] = useMutation(RatioAddTrainingDocument, {
-    refetchQueries: ['RatioTrainings'],
-    awaitRefetchQueries: true,
-  });
+  const addTrainingMutation = useFormModalSmartMutation(
+    CreateRatioTrainingDocument,
+    {
+      refetchQueries: ['RatioTrainings'],
+      expectedTypename: 'RatioTraining',
+    }
+  );
 
   const add = useCallback(
     async (values: CreateTrainingValues) => {
-      const params = { ...values } as Omit<CreateTrainingValues, 'date'> & {
+      const input = { ...values } as Omit<CreateTrainingValues, 'date'> & {
         date?: string;
       };
-      if (!params.date) {
-        delete params.date; // don't pass empty date
+      if (!input.date) {
+        delete input.date; // don't pass empty date
       }
-      await addTrainingMutation({
+      return await addTrainingMutation({
         variables: {
-          params,
+          input,
         },
       });
     },

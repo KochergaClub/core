@@ -311,7 +311,7 @@ input CreateCommunityLeadInput {
   description: String
 }
 
-union CreateCommunityLeadResult = CommunityLead
+union CreateCommunityLeadResult = CommunityLead | ValidationError | GenericError
 
 input CreateRatioPromocodeInput {
   ticket_type_id: ID
@@ -330,6 +330,17 @@ input CreateRatioTicketTypeInput {
   discount_by_email: Int
   discount_percent_by_email: Int
 }
+
+input CreateRatioTrainingInput {
+  name: String!
+  slug: String!
+  date: String
+  telegram_link: String
+  discount_by_email: Int
+  discount_percent_by_email: Int
+}
+
+union CreateRatioTrainingResult = RatioTraining | ValidationError | GenericError
 
 union DeleteCommunityLeadResult = BasicResult
 
@@ -1041,8 +1052,8 @@ type Mutation {
   ratioAddTicket(input: RatioAddTicketInput!): RatioTicket!
   updateRatioTicket(input: UpdateRatioTicketInput!): RatioTicket!
   setRatioTicketNotionLink(input: SetRatioTicketNotionLinkInput!): RatioTicket!
-  ratioAddTraining(params: RatioAddTrainingInput!): RatioTraining!
-  updateRatioTraining(input: UpdateRatioTrainingInput!): RatioTraining!
+  createRatioTraining(input: CreateRatioTrainingInput!): CreateRatioTrainingResult!
+  updateRatioTraining(input: UpdateRatioTrainingInput!): UpdateRatioTrainingResult!
   ratioDeleteTraining(input: RatioDeleteTrainingInput!): BasicResult!
   createRatioPromocode(input: CreateRatioPromocodeInput!): CreateRatioPromocodeResult!
   checkRatioPromocode(input: CheckRatioPromocodeInput!): CheckRatioPromocodeResult
@@ -1360,15 +1371,6 @@ input RatioAddTicketInput {
   payment_amount: Int!
   ticket_class: String
   comment: String
-}
-
-input RatioAddTrainingInput {
-  name: String!
-  slug: String!
-  date: String
-  telegram_link: String
-  discount_by_email: Int
-  discount_percent_by_email: Int
 }
 
 type RatioBriefingBlock implements WagtailBlock {
@@ -1940,7 +1942,7 @@ input UpdateRatioTicketTypeInput {
 
 input UpdateRatioTrainingInput {
   id: ID!
-  name: String!
+  name: String
   date: String
   telegram_link: String
   discount_by_email: Int
@@ -1949,6 +1951,8 @@ input UpdateRatioTrainingInput {
   new_ticket_email: String
   notion_created_email: String
 }
+
+union UpdateRatioTrainingResult = RatioTraining | ValidationError | GenericError
 
 input UpdateSettingsInput {
   default_events_images_collection: ID

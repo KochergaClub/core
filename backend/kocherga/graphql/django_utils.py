@@ -172,14 +172,95 @@ def DjangoObjectType(
     )
 
 
+class CreateMutation(helpers.UnionFieldMixin, helpers.BaseFieldWithInput):
+    """
+    Example:
+        class createFoo(CreateMutation):
+            model = models.Foo
+            fields = ['first', 'second']
+
+            permissions = [...]
+
+            # note that the actual mutation result will be a union including GenericError and ValidationError
+            result_type = types.Foo
+    """
+
+    def resolve(self, _, info, input):
+        params = {}
+        for field in self.fields:
+            if field in input:
+                params[field] = input[field]
+
+        params = self.prepare_params(params, info)
+        obj = self.model(**params)
+
+        try:
+            obj.full_clean()
+        except ValidationError as e:
+            return BoxedError(e)
+        obj.save()
+        return obj
+
+    def prepare_params(
+        self, params: Dict[str, Any], info: graphql.type.GraphQLResolveInfo
+    ):
+        """Override this method if you need to set additional default params or rewrite input arguments before creating
+        an object."""
+        return params
+
+    @property
+    @abstractmethod
+    def model(self) -> Type[models.Model]:
+        ...
+
+    @property
+    @abstractmethod
+    def fields(self) -> List[str]:
+        ...
+
+    @property
+    @abstractmethod
+    def result_type(self) -> g.ObjectType:
+        ...
+
+    @property
+    def input(self):
+        result: Dict[str, Any] = {}
+        model = self.model
+        for field_name in self.fields:
+            graphql_field = model_field(model, field_name)
+            graphql_type = graphql_field.type
+
+            if isinstance(graphql_type, graphql.GraphQLNonNull):
+                # set nullable is field has a preset default or if it can be blank
+                db_field = model._meta.get_field(field_name)
+                if db_field.has_default() or db_field.blank:
+                    graphql_type = graphql_type.of_type
+
+            result[field_name] = graphql_type
+
+        return result
+
+    @property
+    def result_types(self):
+        return {
+            self.model: self.result_type,
+            BoxedError: kocherga.django.schema.types.ValidationError,
+            GenericError: kocherga.django.schema.types.GenericError,  # unused for now
+        }
+
+
 class UpdateMutation(helpers.UnionFieldMixin, helpers.BaseFieldWithInput):
     """
     Example:
         class updateFoo(UpdateMutation):
             model = models.Foo
             fields = ['first', 'second']
+
             permissions = [...]
-            result_type = types.Foo  # note that the actual mutation result will be a union for future extensibility
+
+            # note that the actual mutation result will be a union including GenericError and ValidationError
+            result_type = types.Foo
     """
 
     def resolve(self, _, info, input):

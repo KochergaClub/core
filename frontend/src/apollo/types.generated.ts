@@ -366,7 +366,7 @@ export type CreateCommunityLeadInput = {
   description?: Maybe<Scalars['String']>;
 };
 
-export type CreateCommunityLeadResult = CommunityLead;
+export type CreateCommunityLeadResult = CommunityLead | ValidationError | GenericError;
 
 export type CreateRatioPromocodeInput = {
   ticket_type_id?: Maybe<Scalars['ID']>;
@@ -385,6 +385,17 @@ export type CreateRatioTicketTypeInput = {
   discount_by_email?: Maybe<Scalars['Int']>;
   discount_percent_by_email?: Maybe<Scalars['Int']>;
 };
+
+export type CreateRatioTrainingInput = {
+  name: Scalars['String'];
+  slug: Scalars['String'];
+  date?: Maybe<Scalars['String']>;
+  telegram_link?: Maybe<Scalars['String']>;
+  discount_by_email?: Maybe<Scalars['Int']>;
+  discount_percent_by_email?: Maybe<Scalars['Int']>;
+};
+
+export type CreateRatioTrainingResult = RatioTraining | ValidationError | GenericError;
 
 export type DeleteCommunityLeadResult = BasicResult;
 
@@ -1183,8 +1194,8 @@ export type Mutation = {
   ratioAddTicket: RatioTicket;
   updateRatioTicket: RatioTicket;
   setRatioTicketNotionLink: RatioTicket;
-  ratioAddTraining: RatioTraining;
-  updateRatioTraining: RatioTraining;
+  createRatioTraining: CreateRatioTrainingResult;
+  updateRatioTraining: UpdateRatioTrainingResult;
   ratioDeleteTraining: BasicResult;
   createRatioPromocode: CreateRatioPromocodeResult;
   checkRatioPromocode?: Maybe<CheckRatioPromocodeResult>;
@@ -1584,8 +1595,8 @@ export type MutationSetRatioTicketNotionLinkArgs = {
 };
 
 
-export type MutationRatioAddTrainingArgs = {
-  params: RatioAddTrainingInput;
+export type MutationCreateRatioTrainingArgs = {
+  input: CreateRatioTrainingInput;
 };
 
 
@@ -2295,15 +2306,6 @@ export type RatioAddTicketInput = {
   comment?: Maybe<Scalars['String']>;
 };
 
-export type RatioAddTrainingInput = {
-  name: Scalars['String'];
-  slug: Scalars['String'];
-  date?: Maybe<Scalars['String']>;
-  telegram_link?: Maybe<Scalars['String']>;
-  discount_by_email?: Maybe<Scalars['Int']>;
-  discount_percent_by_email?: Maybe<Scalars['Int']>;
-};
-
 export type RatioBriefingBlock = WagtailBlock & {
   __typename?: 'RatioBriefingBlock';
   id: Scalars['ID'];
@@ -2927,7 +2929,7 @@ export type UpdateRatioTicketTypeInput = {
 
 export type UpdateRatioTrainingInput = {
   id: Scalars['ID'];
-  name: Scalars['String'];
+  name?: Maybe<Scalars['String']>;
   date?: Maybe<Scalars['String']>;
   telegram_link?: Maybe<Scalars['String']>;
   discount_by_email?: Maybe<Scalars['Int']>;
@@ -2936,6 +2938,8 @@ export type UpdateRatioTrainingInput = {
   new_ticket_email?: Maybe<Scalars['String']>;
   notion_created_email?: Maybe<Scalars['String']>;
 };
+
+export type UpdateRatioTrainingResult = RatioTraining | ValidationError | GenericError;
 
 export type UpdateSettingsInput = {
   default_events_images_collection?: Maybe<Scalars['ID']>;

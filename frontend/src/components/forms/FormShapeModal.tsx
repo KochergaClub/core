@@ -1,17 +1,11 @@
 import React, { useCallback, useState } from 'react';
-import { DeepPartial, FieldError, useForm } from 'react-hook-form';
+import { DeepPartial, useForm } from 'react-hook-form';
 
 import { useFocusOnFirstInput } from '~/common/hooks';
 
 import { CommonModal } from '../CommonModal';
 import { FormShapeFields } from './FormShapeFields';
-import { FormShape, ShapeToValues } from './types';
-
-export interface PostResult {
-  close: boolean;
-  error?: string;
-  fieldErrors?: Record<string, FieldError>;
-}
+import { FormShape, ModalPostResult, ShapeToValues } from './types';
 
 type AnyValues = Record<string, any>;
 
@@ -20,7 +14,7 @@ export type Props<S extends FormShape> = {
   defaultValues?: DeepPartial<ShapeToValues<S>>;
   submitLabel?: string;
   title: string;
-  post: (values: ShapeToValues<S>) => Promise<PostResult | void>;
+  post: (values: ShapeToValues<S>) => Promise<ModalPostResult | void>;
   close: () => void;
 };
 
@@ -37,7 +31,7 @@ export const FormShapeModal = <S extends FormShape>({
 
   const submit = useCallback(
     async (values: AnyValues) => {
-      let postResult: PostResult | undefined;
+      let postResult: ModalPostResult;
       try {
         postResult = (await post(values as any)) || { close: true };
       } catch (e) {

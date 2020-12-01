@@ -11,10 +11,17 @@
       "GenericError"
     ],
     "CreateCommunityLeadResult": [
-      "CommunityLead"
+      "CommunityLead",
+      "ValidationError",
+      "GenericError"
     ],
     "CreateRatioPromocodeResult": [
       "RatioPromocode",
+      "ValidationError",
+      "GenericError"
+    ],
+    "CreateRatioTrainingResult": [
+      "RatioTraining",
       "ValidationError",
       "GenericError"
     ],
@@ -52,6 +59,11 @@
     ],
     "UpdateCommunityLeadResult": [
       "CommunityLead",
+      "ValidationError",
+      "GenericError"
+    ],
+    "UpdateRatioTrainingResult": [
+      "RatioTraining",
       "ValidationError",
       "GenericError"
     ],

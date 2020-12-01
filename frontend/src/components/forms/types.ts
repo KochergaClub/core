@@ -1,3 +1,5 @@
+import { FieldError } from 'react-hook-form';
+
 interface AnyFieldShape {
   readonly name: string;
   readonly title?: string;
@@ -112,3 +114,12 @@ export type ShapeToValues<T extends FormShape> =
   ? { [K in keyof T as _FilterKey<T, K>]: _ValueByKey<T, K> }
   : Record<string, unknown> // TODO - use AnyFormValues instead?
 ;
+
+// TODO - refactor into FormPostResult, rename `close` to `ok`
+export type ModalPostResult =
+  | {
+      close: boolean;
+      error?: string;
+      fieldErrors?: Record<string, FieldError>;
+    }
+  | undefined;

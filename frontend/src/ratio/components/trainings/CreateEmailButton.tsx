@@ -7,7 +7,7 @@ import { AsyncButton, Button, Column, Input, Modal, Row } from '~/frontkit';
 
 import {
     RatioTrainingEmailPrototypeDocument, RatioTrainingSendEmailDocument
-} from '../queries.generated';
+} from '../../queries.generated';
 
 interface PrototypeParams {
   title: string;

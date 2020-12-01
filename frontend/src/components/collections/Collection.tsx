@@ -2,7 +2,7 @@ import React from 'react';
 import { MdRefresh } from 'react-icons/md';
 
 import { capitalize } from '~/common/utils';
-import { FormShape, ShapeToValues } from '~/components/forms/types';
+import { FormShape, ModalPostResult, ShapeToValues } from '~/components/forms/types';
 import { AsyncButton, Column, Row } from '~/frontkit';
 
 import CreateItemButton from './CreateItemButton';
@@ -14,7 +14,7 @@ interface Props<I, S extends FormShape> {
   names?: EntityNames;
   add?: {
     shape: S;
-    cb: (values: ShapeToValues<S>) => Promise<void>;
+    cb: (values: ShapeToValues<S>) => Promise<ModalPostResult | void>;
   };
   refetch?: () => Promise<unknown>;
   view?: React.ElementType<AnyViewProps<I>>;

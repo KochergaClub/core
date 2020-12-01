@@ -1,9 +1,9 @@
 import * as Types from '../apollo/types.generated';
 
-import { PageInfoFragment } from '../apollo/common-fragments.generated';
+import { PageInfoFragment, GenericErrorFragment, ValidationErrorFragment } from '../apollo/common-fragments.generated';
 import { dedupeFragments } from '~/common/dedupeFragments';
 import { TypedDocumentNode as DocumentNode } from '@graphql-typed-document-node/core';
-import { PageInfoFragmentDoc } from '../apollo/common-fragments.generated';
+import { PageInfoFragmentDoc, GenericErrorFragmentDoc, ValidationErrorFragmentDoc } from '../apollo/common-fragments.generated';
 export type TrainingForPickerFragment = (
   { __typename: 'RatioTraining' }
   & Pick<Types.RatioTraining, 'id' | 'slug' | 'name'>
@@ -214,16 +214,22 @@ export type RatioTrainingEmailPrototypeQuery = (
   & { content: Types.Query['ratioTrainingEmailPrototype'] }
 );
 
-export type RatioAddTrainingMutationVariables = Types.Exact<{
-  params: Types.RatioAddTrainingInput;
+export type CreateRatioTrainingMutationVariables = Types.Exact<{
+  input: Types.CreateRatioTrainingInput;
 }>;
 
 
-export type RatioAddTrainingMutation = (
+export type CreateRatioTrainingMutation = (
   { __typename: 'Mutation' }
-  & { ratioAddTraining: (
+  & { result: (
     { __typename: 'RatioTraining' }
     & RatioTrainingFragment
+  ) | (
+    { __typename: 'ValidationError' }
+    & ValidationErrorFragment
+  ) | (
+    { __typename: 'GenericError' }
+    & GenericErrorFragment
   ) }
 );
 
@@ -379,7 +385,7 @@ export const RatioTrainersDocument: DocumentNode<RatioTrainersQuery, RatioTraine
 
 export const RatioTrainingEmailPrototypeDocument: DocumentNode<RatioTrainingEmailPrototypeQuery, RatioTrainingEmailPrototypeQueryVariables> = dedupeFragments({ "kind": "Document", "definitions": [{ "kind": "OperationDefinition", "operation": "query", "name": { "kind": "Name", "value": "RatioTrainingEmailPrototype" }, "variableDefinitions": [{ "kind": "VariableDefinition", "variable": { "kind": "Variable", "name": { "kind": "Name", "value": "training_id" } }, "type": { "kind": "NonNullType", "type": { "kind": "NamedType", "name": { "kind": "Name", "value": "ID" } } }, "directives": [] }, { "kind": "VariableDefinition", "variable": { "kind": "Variable", "name": { "kind": "Name", "value": "type" } }, "type": { "kind": "NonNullType", "type": { "kind": "NamedType", "name": { "kind": "Name", "value": "String" } } }, "directives": [] }], "directives": [], "selectionSet": { "kind": "SelectionSet", "selections": [{ "kind": "Field", "alias": { "kind": "Name", "value": "content" }, "name": { "kind": "Name", "value": "ratioTrainingEmailPrototype" }, "arguments": [{ "kind": "Argument", "name": { "kind": "Name", "value": "training_id" }, "value": { "kind": "Variable", "name": { "kind": "Name", "value": "training_id" } } }, { "kind": "Argument", "name": { "kind": "Name", "value": "type" }, "value": { "kind": "Variable", "name": { "kind": "Name", "value": "type" } } }], "directives": [] }] } }] });
 
-export const RatioAddTrainingDocument: DocumentNode<RatioAddTrainingMutation, RatioAddTrainingMutationVariables> = dedupeFragments({ "kind": "Document", "definitions": [{ "kind": "OperationDefinition", "operation": "mutation", "name": { "kind": "Name", "value": "RatioAddTraining" }, "variableDefinitions": [{ "kind": "VariableDefinition", "variable": { "kind": "Variable", "name": { "kind": "Name", "value": "params" } }, "type": { "kind": "NonNullType", "type": { "kind": "NamedType", "name": { "kind": "Name", "value": "RatioAddTrainingInput" } } }, "directives": [] }], "directives": [], "selectionSet": { "kind": "SelectionSet", "selections": [{ "kind": "Field", "name": { "kind": "Name", "value": "ratioAddTraining" }, "arguments": [{ "kind": "Argument", "name": { "kind": "Name", "value": "params" }, "value": { "kind": "Variable", "name": { "kind": "Name", "value": "params" } } }], "directives": [], "selectionSet": { "kind": "SelectionSet", "selections": [{ "kind": "FragmentSpread", "name": { "kind": "Name", "value": "RatioTraining" }, "directives": [] }] } }] } }, ...RatioTrainingFragmentDoc.definitions] });
+export const CreateRatioTrainingDocument: DocumentNode<CreateRatioTrainingMutation, CreateRatioTrainingMutationVariables> = dedupeFragments({ "kind": "Document", "definitions": [{ "kind": "OperationDefinition", "operation": "mutation", "name": { "kind": "Name", "value": "CreateRatioTraining" }, "variableDefinitions": [{ "kind": "VariableDefinition", "variable": { "kind": "Variable", "name": { "kind": "Name", "value": "input" } }, "type": { "kind": "NonNullType", "type": { "kind": "NamedType", "name": { "kind": "Name", "value": "CreateRatioTrainingInput" } } }, "directives": [] }], "directives": [], "selectionSet": { "kind": "SelectionSet", "selections": [{ "kind": "Field", "alias": { "kind": "Name", "value": "result" }, "name": { "kind": "Name", "value": "createRatioTraining" }, "arguments": [{ "kind": "Argument", "name": { "kind": "Name", "value": "input" }, "value": { "kind": "Variable", "name": { "kind": "Name", "value": "input" } } }], "directives": [], "selectionSet": { "kind": "SelectionSet", "selections": [{ "kind": "FragmentSpread", "name": { "kind": "Name", "value": "RatioTraining" }, "directives": [] }, { "kind": "FragmentSpread", "name": { "kind": "Name", "value": "GenericError" }, "directives": [] }, { "kind": "FragmentSpread", "name": { "kind": "Name", "value": "ValidationError" }, "directives": [] }] } }] } }, ...RatioTrainingFragmentDoc.definitions, ...GenericErrorFragmentDoc.definitions, ...ValidationErrorFragmentDoc.definitions] });
 
 export const RatioAddTicketDocument: DocumentNode<RatioAddTicketMutation, RatioAddTicketMutationVariables> = dedupeFragments({ "kind": "Document", "definitions": [{ "kind": "OperationDefinition", "operation": "mutation", "name": { "kind": "Name", "value": "RatioAddTicket" }, "variableDefinitions": [{ "kind": "VariableDefinition", "variable": { "kind": "Variable", "name": { "kind": "Name", "value": "params" } }, "type": { "kind": "NonNullType", "type": { "kind": "NamedType", "name": { "kind": "Name", "value": "RatioAddTicketInput" } } }, "directives": [] }], "directives": [], "selectionSet": { "kind": "SelectionSet", "selections": [{ "kind": "Field", "name": { "kind": "Name", "value": "ratioAddTicket" }, "arguments": [{ "kind": "Argument", "name": { "kind": "Name", "value": "input" }, "value": { "kind": "Variable", "name": { "kind": "Name", "value": "params" } } }], "directives": [], "selectionSet": { "kind": "SelectionSet", "selections": [{ "kind": "FragmentSpread", "name": { "kind": "Name", "value": "RatioTicket" }, "directives": [] }] } }] } }, ...RatioTicketFragmentDoc.definitions] });
 

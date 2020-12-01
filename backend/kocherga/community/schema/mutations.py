@@ -1,5 +1,4 @@
-from typing import Optional
-from kocherga.graphql import helpers, django_utils
+from kocherga.graphql import django_utils, helpers
 
 from .. import models, permissions
 from . import types
@@ -8,22 +7,14 @@ c = helpers.Collection()
 
 
 @c.class_field
-class createCommunityLead(helpers.UnionFieldMixin, helpers.BaseFieldWithInput):
-    def resolve(self, _, info, input):
-        lead = models.Lead.objects.create(
-            name=input['name'],
-            description=input.get('description', ''),
-            created_by=info.context.user,
-        )
-        lead.full_clean()
-        return lead
-
+class createCommunityLead(django_utils.CreateMutation):
     permissions = [permissions.manage_crm]
-    input = {
-        'name': str,
-        'description': Optional[str],
-    }
-    result_types = {models.Lead: types.CommunityLead}
+    model = models.Lead
+    fields = ['name', 'description']
+    result_type = types.CommunityLead
+
+    def prepare_params(self, params, info):
+        return {'created_by': info.context.user, **params}
 
 
 @c.class_field

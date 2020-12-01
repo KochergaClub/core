@@ -1,10 +1,11 @@
 import React, { useCallback } from 'react';
 
-import { useMutation, useQuery } from '@apollo/client';
+import { useQuery } from '@apollo/client';
 
 import { ApolloQueryResults, PaddedBlock } from '~/components';
 import { CustomCardListView, PagedApolloCollection } from '~/components/collections';
 import { AnyViewProps } from '~/components/collections/types';
+import { useFormModalSmartMutation } from '~/components/forms/hooks';
 import { ShapeToValues } from '~/components/forms/types';
 
 import { LeadCard } from './LeadCard';
@@ -34,20 +35,20 @@ export const LeadScreen: React.FC = () => {
     variables: { first: 20 },
   });
 
-  const [addMutation] = useMutation(CreateEvenmanLeadDocument, {
+  const innerAdd = useFormModalSmartMutation(CreateEvenmanLeadDocument, {
     refetchQueries: ['EvenmanLeads'],
-    awaitRefetchQueries: true,
+    expectedTypename: 'CommunityLead',
   });
 
   const add = useCallback(
     async (values: CreateLeadValues) => {
-      await addMutation({
+      return await innerAdd({
         variables: {
           input: values,
         },
       });
     },
-    [addMutation]
+    [innerAdd]
   );
 
   return (

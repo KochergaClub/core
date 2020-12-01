@@ -45,7 +45,7 @@ export const EditLeadModal: React.FC<Props> = ({ lead, close }) => {
         description: lead.description,
       }}
       close={close}
-      title="Редактирование лида!"
+      title="Редактирование лида"
       submitLabel="Сохранить"
     />
   );

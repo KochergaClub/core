@@ -23,8 +23,10 @@ query EvenmanLeads($before: String, $after: String, $first: Int, $last: Int) {
 }
 
 mutation CreateEvenmanLead($input: CreateCommunityLeadInput!) {
-  createCommunityLead(input: $input) {
+  result: createCommunityLead(input: $input) {
     ...EvenmanLead
+    ...GenericError
+    ...ValidationError
   }
 }
 
