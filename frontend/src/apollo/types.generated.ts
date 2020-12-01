@@ -111,7 +111,9 @@ export type AuthSetPasswordResult = {
 export type AuthUser = {
   __typename?: 'AuthUser';
   id: Scalars['ID'];
-  email: Scalars['String'];
+  first_name: Scalars['String'];
+  last_name: Scalars['String'];
+  email?: Maybe<Scalars['String']>;
   staff_member?: Maybe<StaffMember>;
   external_accounts: Array<ExternalServiceAccount>;
 };
@@ -347,6 +349,7 @@ export type CommunityLead = {
   description: Scalars['String'];
   created: Scalars['String'];
   updated: Scalars['String'];
+  created_by?: Maybe<AuthUser>;
 };
 
 export type CommunityLeadConnection = {

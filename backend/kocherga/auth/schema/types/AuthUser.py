@@ -1,9 +1,10 @@
-from kocherga.graphql import g, helpers
-from kocherga.graphql.permissions import user_perm
-from kocherga.staff.schema.types import StaffMember
+from typing import Optional
 
-from kocherga.external_services.schema.types import ExternalServiceAccount
 from kocherga.external_services import registry as external_services_registry
+from kocherga.external_services.schema.types import ExternalServiceAccount
+from kocherga.graphql import g, helpers
+from kocherga.graphql.permissions import staffonly, user_perm
+from kocherga.staff.schema.types import StaffMember
 
 
 class external_accounts_field(helpers.BaseField):
@@ -25,10 +26,18 @@ class external_accounts_field(helpers.BaseField):
 
 AuthUser = g.ObjectType(
     'AuthUser',
-    fields={
-        'id': g.Field(g.NN(g.ID)),
-        'email': g.Field(g.NN(g.String)),
-        'staff_member': g.Field(StaffMember),
-        'external_accounts': external_accounts_field().as_field(),
-    },
+    fields=g.fields(
+        {
+            'id': 'ID!',
+            'first_name': str,
+            'last_name': str,
+            'email': helpers.field_with_permissions(
+                g.String, [staffonly], fallback_to_null=True
+            ),
+            'staff_member': helpers.field_with_permissions(
+                StaffMember, [staffonly], fallback_to_null=True
+            ),
+            'external_accounts': external_accounts_field().as_field(),
+        }
+    ),
 )

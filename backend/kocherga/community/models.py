@@ -16,10 +16,11 @@ class Lead(models.Model):
     updated = models.DateTimeField(auto_now=True)
 
     created_by = models.ForeignKey(
-        User, null=True, blank=True, on_delete=models.SET_NULL
+        User, blank=True, null=True, on_delete=models.PROTECT
     )
 
     objects = RelayQuerySet.as_manager()
 
     class Meta:
         default_permissions = ()
+        ordering = ['-pk']

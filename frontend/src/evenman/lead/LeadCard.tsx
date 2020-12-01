@@ -10,6 +10,18 @@ import { Column, HR, RichText, Row } from '~/frontkit';
 import { EditLeadModal } from './EditLeadModal';
 import { DeleteEvenmanLeadDocument, EvenmanLeadFragment } from './queries.generated';
 
+const UserSpan: React.FC<{
+  user: { id: string; first_name: string; last_name: string };
+}> = ({ user }) => {
+  return (
+    <div>
+      {user.first_name
+        ? `${user.first_name} ${user.last_name}`
+        : `Анон#${user.id}`}
+    </div>
+  );
+};
+
 type Props = {
   lead: EvenmanLeadFragment;
 };
@@ -38,10 +50,24 @@ export const LeadCard: React.FC<Props> = ({ lead }) => {
         </DropdownMenu>
       </Row>
       <small>
-        Создан: <HumanizedDateTime date={parseISO(lead.created)} />
+        <Row>
+          <div>Создан:</div>
+          <HumanizedDateTime date={parseISO(lead.created)} />
+        </Row>
       </small>
+      {lead.created_by && (
+        <small>
+          <Row>
+            <div>Кем создан:</div>
+            <UserSpan user={lead.created_by} />
+          </Row>
+        </small>
+      )}
       <small>
-        Обновлён: <HumanizedDateTime date={parseISO(lead.updated)} />
+        <Row>
+          <div>Обновлён:</div>
+          <HumanizedDateTime date={parseISO(lead.updated)} />
+        </Row>
       </small>
       {lead.description ? (
         <DescriptionContainer>

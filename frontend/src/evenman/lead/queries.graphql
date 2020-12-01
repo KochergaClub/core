@@ -4,6 +4,11 @@ fragment EvenmanLead on CommunityLead {
   updated
   name
   description
+  created_by {
+    id
+    first_name
+    last_name
+  }
 }
 
 query EvenmanLeads($before: String, $after: String, $first: Int, $last: Int) {

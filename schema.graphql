@@ -91,7 +91,9 @@ type AuthSetPasswordResult {
 
 type AuthUser {
   id: ID!
-  email: String!
+  first_name: String!
+  last_name: String!
+  email: String
   staff_member: StaffMember
   external_accounts: [ExternalServiceAccount!]!
 }
@@ -294,6 +296,7 @@ type CommunityLead {
   description: String!
   created: String!
   updated: String!
+  created_by: AuthUser
 }
 
 type CommunityLeadConnection {

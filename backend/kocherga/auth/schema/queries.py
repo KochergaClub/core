@@ -1,13 +1,12 @@
 from typing import Optional
-from django.contrib.auth import models as auth_models
-from wagtail.search.backends import get_search_backend
 
+from django.contrib.auth import models as auth_models
 from kocherga.graphql import g, helpers
 from kocherga.graphql.permissions import check_permissions, user_perm
+from wagtail.search.backends import get_search_backend
 
-from . import types
 from .. import models
-
+from . import types
 
 c = helpers.Collection()
 
@@ -65,7 +64,7 @@ class searchUsers(helpers.BaseFieldWithInput):
             'more': more,
         }
 
-    permissions = [user_perm('kocherga_auth.view_user')]
+    permissions = [user_perm('auth.audit')]
     input = {
         'query': str,
         'limit': Optional[int],
