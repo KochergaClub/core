@@ -33,8 +33,8 @@ export const CreateGroupButton: React.FC = () => {
   return (
     <FormShapeModalButton
       shape={shape}
-      buttonName="Создать"
-      modalButtonName="Создать группу"
+      buttonLabel="Создать"
+      modalSubmitLabel="Создать группу"
       modalTitle="Создать группу"
       post={post}
     />

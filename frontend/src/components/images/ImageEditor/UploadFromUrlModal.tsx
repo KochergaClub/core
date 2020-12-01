@@ -53,7 +53,7 @@ export const UploadFromUrlModal: React.FC<Props> = ({
       submit={form.handleSubmit(submit)}
       title="Загрузка картинки по ссылке"
       close={close}
-      buttonText="Сохранить"
+      submitLabel="Сохранить"
       submitError={submitError}
       loading={form.formState.isSubmitting}
     >

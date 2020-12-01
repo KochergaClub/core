@@ -76,8 +76,8 @@ const CreateSubscribeChannelButton: React.FC = () => {
   return (
     <FormShapeModalButton
       post={postCb}
-      buttonName="Создать канал подписки"
-      modalButtonName="Создать"
+      buttonLabel="Создать канал подписки"
+      modalSubmitLabel="Создать"
       modalTitle="Создать канал подписки"
       shape={formShape}
     />

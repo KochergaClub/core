@@ -68,9 +68,9 @@ const EmailDiscount: React.FC<Props> = ({ entity, entityType }) => {
       <FormShapeModalButton
         shape={shape}
         size="small"
-        buttonName="Сгенерировать"
+        buttonLabel="Сгенерировать"
         modalTitle="Сгенерировать промокод по e-mail"
-        modalButtonName="Сгенерировать и отправить"
+        modalSubmitLabel="Сгенерировать и отправить"
         post={post}
       />
     </Row>

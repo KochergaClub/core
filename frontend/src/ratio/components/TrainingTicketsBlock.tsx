@@ -66,8 +66,8 @@ const CreateTicketButton = ({ training_id }: { training_id: string }) => {
     <FormShapeModalButton
       post={cb}
       shape={fields}
-      buttonName="Добавить"
-      modalButtonName="Добавить"
+      buttonLabel="Добавить"
+      modalSubmitLabel="Добавить"
       modalTitle="Добавить билет"
       defaultValues={{
         ticket_class: 'normal',

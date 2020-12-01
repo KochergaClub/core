@@ -1,42 +1,33 @@
-import { useMutation } from '@apollo/client';
-
 import { MutationModalButton } from '~/components/forms';
 
 import { RatioTrainingAddDayDocument, RatioTrainingFragment } from '../queries.generated';
+
+const shape = [
+  {
+    name: 'date',
+    type: 'date',
+  },
+] as const;
 
 interface Props {
   training: RatioTrainingFragment;
 }
 
 const CreateDayButton: React.FC<Props> = ({ training }) => {
-  const [createMutation] = useMutation(RatioTrainingAddDayDocument, {
-    refetchQueries: ['RatioTrainingWithSchedule'],
-    awaitRefetchQueries: true,
-  });
-
-  const shape = [
-    {
-      name: 'training_slug',
-      type: 'string',
-      default: training.slug,
-      readonly: true,
-    },
-    {
-      name: 'date',
-      type: 'date',
-    },
-  ] as const;
-
   return (
     <MutationModalButton
-      mutation={createMutation}
-      buttonName="Добавить день"
-      modalButtonName="Добавить"
-      modalTitle="Добавить день"
+      mutation={RatioTrainingAddDayDocument}
+      valuesToVariables={(v) => ({
+        input: {
+          training_slug: training.slug,
+          date: v.date,
+        },
+      })}
+      refetchQueries={['RatioTrainingWithSchedule']}
       shape={shape}
-      defaultValues={{
-        training_slug: training.slug,
-      }}
+      buttonLabel="Добавить день"
+      modalSubmitLabel="Добавить"
+      modalTitle="Добавить день"
     />
   );
 };

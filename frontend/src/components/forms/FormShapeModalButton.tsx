@@ -6,20 +6,20 @@ export type Props<S extends FormShape> = Pick<
   ModalProps<S>,
   'shape' | 'defaultValues' | 'post'
 > & {
-  buttonName: string;
-  modalButtonName: string;
+  buttonLabel: string;
+  modalSubmitLabel: string;
   modalTitle: string;
   size?: Parameters<typeof ButtonWithModal>[0]['size'];
 };
 
 export function FormShapeModalButton<S extends FormShape>(props: Props<S>) {
   return (
-    <ButtonWithModal title={props.buttonName} size={props.size}>
+    <ButtonWithModal title={props.buttonLabel} size={props.size}>
       {({ close }) => (
         <FormShapeModal
           close={close}
           title={props.modalTitle}
-          buttonText={props.modalButtonName}
+          submitLabel={props.modalSubmitLabel}
           shape={props.shape}
           post={props.post}
           defaultValues={props.defaultValues}

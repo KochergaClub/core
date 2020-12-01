@@ -1,69 +1,42 @@
-import { GraphQLError } from 'graphql';
-import { useCallback } from 'react';
-
-import { FetchResult } from '@apollo/client';
-
-import { FormShapeModalButton, Props as FormShapeModalButtonProps } from './FormShapeModalButton';
+import { ButtonWithModal } from '../';
+import { MutationModal, Props as MutationModalProps } from './MutationModal';
 import { FormShape, ShapeToValues } from './types';
 
-type SimpleProps<S extends FormShape> = Omit<
-  FormShapeModalButtonProps<S>,
-  'post'
-> & {
-  mutation: (options: {
-    variables: { input: ShapeToValues<S> };
-  }) => Promise<FetchResult<unknown>>;
-  valuesToVariables?: undefined;
-};
+type PropsForModal<S extends FormShape, Variables> = Omit<
+  MutationModalProps<S, Variables>,
+  'close' | 'title' | 'submitLabel'
+>;
 
-type PropsWithConversion<S extends FormShape, Variables> = Omit<
-  FormShapeModalButtonProps<S>,
-  'post'
-> & {
-  mutation: (options: {
-    variables: Variables;
-  }) => Promise<FetchResult<unknown>>;
-  valuesToVariables: (v: ShapeToValues<S>) => Variables;
+type Props<S extends FormShape, Variables> = PropsForModal<S, Variables> & {
+  buttonLabel: string;
+  modalSubmitLabel: string;
+  modalTitle: string;
+  size?: Parameters<typeof ButtonWithModal>[0]['size'];
 };
-
-type Props<S extends FormShape, Variables> =
-  | SimpleProps<S>
-  | PropsWithConversion<S, Variables>;
 
 export function MutationModalButton<
   S extends FormShape,
   Variables = { input: ShapeToValues<S> }
->({ mutation, valuesToVariables, ...otherProps }: Props<S, Variables>) {
-  const cb = useCallback(
-    async (values: ShapeToValues<S>) => {
-      try {
-        if (valuesToVariables) {
-          // PropsWithConversion
-          await (mutation as PropsWithConversion<S, Variables>['mutation'])({
-            variables: valuesToVariables(values),
-          });
-        } else {
-          // SimpleProps
-          await (mutation as SimpleProps<S>['mutation'])({
-            variables: { input: values },
-          });
-        }
-        return;
-      } catch (e) {
-        const errors = e.graphQLErrors as GraphQLError[];
-
-        const error = errors.length
-          ? errors.map((e) => e.message || 'Неизвестная ошибка').join('. ')
-          : String(e);
-
-        return {
-          close: false,
-          error,
-        };
-      }
-    },
-    [valuesToVariables, mutation]
+>({
+  buttonLabel,
+  modalTitle,
+  modalSubmitLabel,
+  size,
+  ...otherProps
+}: Props<S, Variables>) {
+  return (
+    <ButtonWithModal title={buttonLabel} size={size}>
+      {({ close }) => (
+        <MutationModal
+          close={close}
+          title={modalTitle}
+          submitLabel={modalSubmitLabel}
+          {
+            /* MutationModal is tricky to type, see comments in its implementation */
+            ...((otherProps as PropsForModal<S, Variables>) as any)
+          }
+        />
+      )}
+    </ButtonWithModal>
   );
-
-  return <FormShapeModalButton post={cb} {...otherProps} />;
 }

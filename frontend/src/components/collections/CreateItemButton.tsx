@@ -13,8 +13,8 @@ function CreateItemButton<S extends FormShape>(props: Props<S>) {
   return (
     <FormShapeModalButton
       post={props.add}
-      buttonName="Создать"
-      modalButtonName="Создать"
+      buttonLabel="Создать"
+      modalSubmitLabel="Создать"
       modalTitle={`Создать${
         props.names && props.names.genitive ? ' ' + props.names.genitive : ''
       }`}

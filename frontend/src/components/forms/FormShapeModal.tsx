@@ -1,6 +1,8 @@
 import React, { useCallback, useState } from 'react';
 import { DeepPartial, FieldError, useForm } from 'react-hook-form';
 
+import { useFocusOnFirstInput } from '~/common/hooks';
+
 import { CommonModal } from '../CommonModal';
 import { FormShapeFields } from './FormShapeFields';
 import { FormShape, ShapeToValues } from './types';
@@ -16,7 +18,7 @@ type AnyValues = Record<string, any>;
 export type Props<S extends FormShape> = {
   shape: S;
   defaultValues?: DeepPartial<ShapeToValues<S>>;
-  buttonText: string;
+  submitLabel?: string;
   title: string;
   post: (values: ShapeToValues<S>) => Promise<PostResult | void>;
   close: () => void;
@@ -27,7 +29,7 @@ export const FormShapeModal = <S extends FormShape>({
   defaultValues,
   close,
   title,
-  buttonText,
+  submitLabel,
   post,
 }: Props<S>): React.ReactElement => {
   const form = useForm<AnyValues>({ defaultValues });
@@ -63,16 +65,18 @@ export const FormShapeModal = <S extends FormShape>({
     [close, post, form]
   );
 
+  const formRef = useFocusOnFirstInput();
+
   return (
     <CommonModal
       close={close}
       title={title}
-      buttonText={buttonText}
+      submitLabel={submitLabel}
       submit={form.handleSubmit(submit)}
       loading={form.formState.isSubmitting}
       submitError={submitError}
     >
-      <form onSubmit={form.handleSubmit(submit)}>
+      <form onSubmit={form.handleSubmit(submit)} ref={formRef}>
         <FormShapeFields shape={shape} form={form as any} />
       </form>
     </CommonModal>

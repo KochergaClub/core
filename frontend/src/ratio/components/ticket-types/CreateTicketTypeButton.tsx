@@ -66,8 +66,8 @@ const CreateTicketTypeButton: React.FC<Props> = ({ training_id }) => {
         discount_by_email: '0',
         discount_percent_by_email: '0',
       }}
-      buttonName="Добавить"
-      modalButtonName="Добавить"
+      buttonLabel="Добавить"
+      modalSubmitLabel="Добавить"
       modalTitle="Добавить вид билета"
     />
   );

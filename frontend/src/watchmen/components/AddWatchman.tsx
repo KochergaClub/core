@@ -1,5 +1,3 @@
-import { useMutation } from '@apollo/client';
-
 import { MutationModalButton } from '~/components/forms';
 
 import { WatchmenCreateWatchmanDocument } from '../queries.generated';
@@ -32,22 +30,18 @@ const fields = [
 ] as const;
 
 const AddWatchman: React.FC = () => {
-  const [createMutation] = useMutation(WatchmenCreateWatchmanDocument, {
-    refetchQueries: ['WatchmenWatchmenList'],
-    awaitRefetchQueries: true,
-  });
-
   return (
     <div>
       <MutationModalButton
-        mutation={createMutation}
+        mutation={WatchmenCreateWatchmanDocument}
+        refetchQueries={['WatchmenWatchmenList']}
         shape={fields}
         defaultValues={{
           gender: 'FEMALE',
         }}
         modalTitle="Добавить админа"
-        modalButtonName="Добавить"
-        buttonName="Добавить"
+        modalSubmitLabel="Добавить"
+        buttonLabel="Добавить"
       />
     </div>
   );

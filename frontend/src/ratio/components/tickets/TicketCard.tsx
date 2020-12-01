@@ -4,8 +4,6 @@ import React from 'react';
 import { FaRegMoneyBillAlt, FaTicketAlt, FaUserAlt } from 'react-icons/fa';
 import { MdEmail } from 'react-icons/md';
 
-import { useMutation } from '@apollo/client';
-
 import { HumanizedDateTime } from '~/components';
 import Card from '~/components/Card';
 import { MutationModalButton } from '~/components/forms';
@@ -23,12 +21,7 @@ import {
 const CanceledBadge = () => <Badge>ОТКАЗ</Badge>;
 
 const CreatePaymentButton = ({ ticket_id }: { ticket_id: string }) => {
-  const [addMutation] = useMutation(RatioPaymentAddDocument, {
-    refetchQueries: ['RatioTrainingBySlug', 'RatioTickets', 'RatioTicketById'],
-    awaitRefetchQueries: true,
-  });
-
-  const fields = [
+  const shape = [
     { name: 'amount', title: 'Сумма', type: 'number', min: 0, max: 1000000 },
     {
       name: 'fiscalization_status',
@@ -55,9 +48,14 @@ const CreatePaymentButton = ({ ticket_id }: { ticket_id: string }) => {
 
   return (
     <MutationModalButton
-      mutation={addMutation}
+      mutation={RatioPaymentAddDocument}
+      refetchQueries={[
+        'RatioTrainingBySlug',
+        'RatioTickets',
+        'RatioTicketById',
+      ]}
       size="small"
-      shape={fields}
+      shape={shape}
       defaultValues={{
         fiscalization_status: 'todo',
         payment_type: 'kassa',
@@ -69,8 +67,8 @@ const CreatePaymentButton = ({ ticket_id }: { ticket_id: string }) => {
           amount: parseInt(v.amount, 10),
         },
       })}
-      buttonName="Добавить платёж"
-      modalButtonName="Добавить"
+      buttonLabel="Добавить платёж"
+      modalSubmitLabel="Добавить"
       modalTitle="Добавить платёж"
     />
   );
@@ -101,8 +99,6 @@ const RemainingPayments: React.FC<Props> = ({ ticket }) => {
 };
 
 const NotionLinkRow: React.FC<Props> = ({ ticket }) => {
-  const [updateMutation] = useMutation(SetRatioTicketNotionLinkDocument);
-
   if (!ticket.need_notion_link && !ticket.notion_link) {
     return null;
   }
@@ -113,7 +109,7 @@ const NotionLinkRow: React.FC<Props> = ({ ticket }) => {
         <A href={ticket.notion_link}>{ticket.notion_link}</A>
         {ticket.notion_link ? null : (
           <MutationModalButton
-            mutation={updateMutation}
+            mutation={SetRatioTicketNotionLinkDocument}
             size="small"
             shape={
               [
@@ -133,8 +129,8 @@ const NotionLinkRow: React.FC<Props> = ({ ticket }) => {
               id: ticket.id,
             }}
             modalTitle="Добавить Notion-ссылку"
-            modalButtonName="Добавить"
-            buttonName="Добавить Notion-ссылку"
+            modalSubmitLabel="Добавить"
+            buttonLabel="Добавить Notion-ссылку"
           />
         )}
       </Row>

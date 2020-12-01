@@ -66,9 +66,9 @@ const SubscribeChannelCard: React.FC<Props> = ({ subscribeChannel }) => {
             <FormShapeModalButton
               shape={manualSubscribeFormShape}
               size="small"
-              buttonName="Подписать вручную"
+              buttonLabel="Подписать вручную"
               modalTitle="Подписать вручную"
-              modalButtonName="Подписать"
+              modalSubmitLabel="Подписать"
               post={manualSubscribeCb}
             />
           </Row>

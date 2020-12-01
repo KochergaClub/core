@@ -225,7 +225,7 @@ export const BlockFormModal: React.FC<Props> = ({
     <FormShapeModal
       defaultValues={blockParams}
       shape={shape}
-      buttonText="Сохранить"
+      submitLabel="Сохранить"
       title={modalTitle}
       post={save}
       close={close}

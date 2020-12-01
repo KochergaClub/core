@@ -38,8 +38,8 @@ const CreateParticipantButton = ({ cohort }: Props) => {
   return (
     <FormShapeModalButton
       post={createCb}
-      buttonName="Добавить"
-      modalButtonName="Добавить"
+      buttonLabel="Добавить"
+      modalSubmitLabel="Добавить"
       modalTitle="Добавить: Участник дейтинга"
       shape={fields}
     />

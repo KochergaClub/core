@@ -21,8 +21,8 @@ it('renders without crashing', async () => {
   const { getByText, queryByText } = render(
     <FormShapeModalButton
       shape={shape}
-      buttonName="Кнопка"
-      modalButtonName="Отправить"
+      buttonLabel="Кнопка"
+      modalSubmitLabel="Отправить"
       modalTitle="Форма"
       post={post}
     />

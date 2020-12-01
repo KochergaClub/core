@@ -1,10 +1,8 @@
 import React from 'react';
-import { useForm } from 'react-hook-form';
 
-import { useMutation } from '@apollo/client';
+import { VariablesOf } from '@graphql-typed-document-node/core';
 
-import { CommonModal } from '~/components';
-import { FormShapeFields } from '~/components/forms/FormShapeFields';
+import { MutationModal } from '~/components/forms/MutationModal';
 
 import { EvenmanLeadFragment, UpdateEvenmanLeadDocument } from './queries.generated';
 
@@ -22,49 +20,32 @@ const shape = [
   },
 ] as const;
 
-type FormData = {
-  name: string;
-  description: string;
-};
-
 interface Props {
   lead: EvenmanLeadFragment;
   close: () => void;
 }
 
 export const EditLeadModal: React.FC<Props> = ({ lead, close }) => {
-  const form = useForm<FormData>({
-    defaultValues: {
-      name: lead.name,
-      description: lead.description,
-    },
-  });
-
-  const [updateMutation] = useMutation(UpdateEvenmanLeadDocument);
-
-  const submit = async (data: FormData) => {
-    await updateMutation({
-      variables: {
+  return (
+    <MutationModal
+      mutation={UpdateEvenmanLeadDocument}
+      valuesToVariables={(
+        v
+      ): VariablesOf<typeof UpdateEvenmanLeadDocument> => ({
         input: {
           id: lead.id,
-          name: data.name,
-          description: data.description,
+          name: v.name,
+          description: v.description,
         },
-      },
-    });
-    close();
-  };
-
-  return (
-    <CommonModal
-      title="Редактирование лида"
+      })}
+      shape={shape}
+      defaultValues={{
+        name: lead.name,
+        description: lead.description,
+      }}
       close={close}
-      submit={form.handleSubmit(submit)}
-      loading={form.formState.isSubmitting}
-    >
-      <form onSubmit={form.handleSubmit(submit)}>
-        <FormShapeFields shape={shape} form={form} />
-      </form>
-    </CommonModal>
+      title="Редактирование лида!"
+      submitLabel="Сохранить"
+    />
   );
 };

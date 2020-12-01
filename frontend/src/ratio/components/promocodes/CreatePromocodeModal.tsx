@@ -63,7 +63,7 @@ const CreatePromocodeModal: React.FC<Props> = ({
     <FormShapeModal
       close={close}
       shape={shape}
-      buttonText="Создать"
+      submitLabel="Создать"
       title="Создание промокода"
       post={post}
     />

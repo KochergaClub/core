@@ -59,7 +59,7 @@ const EditTrainingModal: React.FC<Props> = ({ training, close }) => {
     <CommonModal
       close={close}
       title="Редактирование тренинга"
-      buttonText="Сохранить"
+      submitLabel="Сохранить"
       loading={form.formState.isSubmitting}
       submit={form.handleSubmit(updateCb)}
     >

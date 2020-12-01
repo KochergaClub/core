@@ -8,7 +8,7 @@ interface Props {
   title: string;
   close: () => void;
   submit: () => Promise<unknown>;
-  buttonText?: string;
+  submitLabel?: string;
   submitError?: string;
   loading?: boolean;
   disabled?: boolean;
@@ -19,7 +19,7 @@ export const CommonModal: React.FC<Props> = ({
   title,
   close,
   submit,
-  buttonText = 'Сохранить',
+  submitLabel = 'Сохранить',
   submitError,
   submitOnEnter = true,
   loading,
@@ -46,7 +46,7 @@ export const CommonModal: React.FC<Props> = ({
               disabled={loading || disabled}
               onClick={submit}
             >
-              {buttonText}
+              {submitLabel}
             </Button>
           </Row>
         </ControlsFooter>

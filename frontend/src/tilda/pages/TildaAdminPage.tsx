@@ -31,9 +31,9 @@ const ImportByIdButton: React.FC = () => {
     <FormShapeModalButton
       shape={shape}
       post={post}
-      buttonName="Скачать страницу по ID"
-      modalButtonName="Скачать"
+      buttonLabel="Скачать страницу по ID"
       modalTitle="Скачать страницу по ID"
+      modalSubmitLabel="Скачать"
     />
   );
 };
