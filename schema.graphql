@@ -1921,7 +1921,7 @@ input UpdateCommunityLeadInput {
   description: String
 }
 
-union UpdateCommunityLeadResult = CommunityLead
+union UpdateCommunityLeadResult = CommunityLead | ValidationError | GenericError
 
 input UpdateRatioTicketInput {
   id: ID!

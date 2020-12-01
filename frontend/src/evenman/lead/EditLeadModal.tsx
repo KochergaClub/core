@@ -2,7 +2,7 @@ import React from 'react';
 
 import { VariablesOf } from '@graphql-typed-document-node/core';
 
-import { MutationModal } from '~/components/forms/MutationModal';
+import { SmartMutationModal } from '~/components/forms/SmartMutationModal';
 
 import { EvenmanLeadFragment, UpdateEvenmanLeadDocument } from './queries.generated';
 
@@ -27,8 +27,9 @@ interface Props {
 
 export const EditLeadModal: React.FC<Props> = ({ lead, close }) => {
   return (
-    <MutationModal
+    <SmartMutationModal
       mutation={UpdateEvenmanLeadDocument}
+      expectedTypename="CommunityLead"
       valuesToVariables={(
         v
       ): VariablesOf<typeof UpdateEvenmanLeadDocument> => ({

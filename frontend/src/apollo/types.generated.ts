@@ -2908,7 +2908,7 @@ export type UpdateCommunityLeadInput = {
   description?: Maybe<Scalars['String']>;
 };
 
-export type UpdateCommunityLeadResult = CommunityLead;
+export type UpdateCommunityLeadResult = CommunityLead | ValidationError | GenericError;
 
 export type UpdateRatioTicketInput = {
   id: Scalars['ID'];

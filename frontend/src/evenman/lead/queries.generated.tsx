@@ -1,7 +1,9 @@
 import * as Types from '../../apollo/types.generated';
 
+import { GenericErrorFragment, ValidationErrorFragment } from '../../apollo/common-fragments.generated';
 import { dedupeFragments } from '~/common/dedupeFragments';
 import { TypedDocumentNode as DocumentNode } from '@graphql-typed-document-node/core';
+import { GenericErrorFragmentDoc, ValidationErrorFragmentDoc } from '../../apollo/common-fragments.generated';
 export type EvenmanLeadFragment = (
   { __typename: 'CommunityLead' }
   & Pick<Types.CommunityLead, 'id' | 'created' | 'updated' | 'name' | 'description'>
@@ -52,9 +54,15 @@ export type UpdateEvenmanLeadMutationVariables = Types.Exact<{
 
 export type UpdateEvenmanLeadMutation = (
   { __typename: 'Mutation' }
-  & { updateCommunityLead: (
+  & { result: (
     { __typename: 'CommunityLead' }
     & EvenmanLeadFragment
+  ) | (
+    { __typename: 'ValidationError' }
+    & ValidationErrorFragment
+  ) | (
+    { __typename: 'GenericError' }
+    & GenericErrorFragment
   ) }
 );
 
@@ -76,6 +84,6 @@ export const EvenmanLeadsDocument: DocumentNode<EvenmanLeadsQuery, EvenmanLeadsQ
 
 export const CreateEvenmanLeadDocument: DocumentNode<CreateEvenmanLeadMutation, CreateEvenmanLeadMutationVariables> = dedupeFragments({ "kind": "Document", "definitions": [{ "kind": "OperationDefinition", "operation": "mutation", "name": { "kind": "Name", "value": "CreateEvenmanLead" }, "variableDefinitions": [{ "kind": "VariableDefinition", "variable": { "kind": "Variable", "name": { "kind": "Name", "value": "input" } }, "type": { "kind": "NonNullType", "type": { "kind": "NamedType", "name": { "kind": "Name", "value": "CreateCommunityLeadInput" } } }, "directives": [] }], "directives": [], "selectionSet": { "kind": "SelectionSet", "selections": [{ "kind": "Field", "name": { "kind": "Name", "value": "createCommunityLead" }, "arguments": [{ "kind": "Argument", "name": { "kind": "Name", "value": "input" }, "value": { "kind": "Variable", "name": { "kind": "Name", "value": "input" } } }], "directives": [], "selectionSet": { "kind": "SelectionSet", "selections": [{ "kind": "FragmentSpread", "name": { "kind": "Name", "value": "EvenmanLead" }, "directives": [] }] } }] } }, ...EvenmanLeadFragmentDoc.definitions] });
 
-export const UpdateEvenmanLeadDocument: DocumentNode<UpdateEvenmanLeadMutation, UpdateEvenmanLeadMutationVariables> = dedupeFragments({ "kind": "Document", "definitions": [{ "kind": "OperationDefinition", "operation": "mutation", "name": { "kind": "Name", "value": "UpdateEvenmanLead" }, "variableDefinitions": [{ "kind": "VariableDefinition", "variable": { "kind": "Variable", "name": { "kind": "Name", "value": "input" } }, "type": { "kind": "NonNullType", "type": { "kind": "NamedType", "name": { "kind": "Name", "value": "UpdateCommunityLeadInput" } } }, "directives": [] }], "directives": [], "selectionSet": { "kind": "SelectionSet", "selections": [{ "kind": "Field", "name": { "kind": "Name", "value": "updateCommunityLead" }, "arguments": [{ "kind": "Argument", "name": { "kind": "Name", "value": "input" }, "value": { "kind": "Variable", "name": { "kind": "Name", "value": "input" } } }], "directives": [], "selectionSet": { "kind": "SelectionSet", "selections": [{ "kind": "FragmentSpread", "name": { "kind": "Name", "value": "EvenmanLead" }, "directives": [] }] } }] } }, ...EvenmanLeadFragmentDoc.definitions] });
+export const UpdateEvenmanLeadDocument: DocumentNode<UpdateEvenmanLeadMutation, UpdateEvenmanLeadMutationVariables> = dedupeFragments({ "kind": "Document", "definitions": [{ "kind": "OperationDefinition", "operation": "mutation", "name": { "kind": "Name", "value": "UpdateEvenmanLead" }, "variableDefinitions": [{ "kind": "VariableDefinition", "variable": { "kind": "Variable", "name": { "kind": "Name", "value": "input" } }, "type": { "kind": "NonNullType", "type": { "kind": "NamedType", "name": { "kind": "Name", "value": "UpdateCommunityLeadInput" } } }, "directives": [] }], "directives": [], "selectionSet": { "kind": "SelectionSet", "selections": [{ "kind": "Field", "alias": { "kind": "Name", "value": "result" }, "name": { "kind": "Name", "value": "updateCommunityLead" }, "arguments": [{ "kind": "Argument", "name": { "kind": "Name", "value": "input" }, "value": { "kind": "Variable", "name": { "kind": "Name", "value": "input" } } }], "directives": [], "selectionSet": { "kind": "SelectionSet", "selections": [{ "kind": "FragmentSpread", "name": { "kind": "Name", "value": "EvenmanLead" }, "directives": [] }, { "kind": "FragmentSpread", "name": { "kind": "Name", "value": "GenericError" }, "directives": [] }, { "kind": "FragmentSpread", "name": { "kind": "Name", "value": "ValidationError" }, "directives": [] }] } }] } }, ...EvenmanLeadFragmentDoc.definitions, ...GenericErrorFragmentDoc.definitions, ...ValidationErrorFragmentDoc.definitions] });
 
 export const DeleteEvenmanLeadDocument: DocumentNode<DeleteEvenmanLeadMutation, DeleteEvenmanLeadMutationVariables> = dedupeFragments({ "kind": "Document", "definitions": [{ "kind": "OperationDefinition", "operation": "mutation", "name": { "kind": "Name", "value": "DeleteEvenmanLead" }, "variableDefinitions": [{ "kind": "VariableDefinition", "variable": { "kind": "Variable", "name": { "kind": "Name", "value": "id" } }, "type": { "kind": "NonNullType", "type": { "kind": "NamedType", "name": { "kind": "Name", "value": "ID" } } }, "directives": [] }], "directives": [], "selectionSet": { "kind": "SelectionSet", "selections": [{ "kind": "Field", "name": { "kind": "Name", "value": "deleteCommunityLead" }, "arguments": [{ "kind": "Argument", "name": { "kind": "Name", "value": "id" }, "value": { "kind": "Variable", "name": { "kind": "Name", "value": "id" } } }], "directives": [], "selectionSet": { "kind": "SelectionSet", "selections": [{ "kind": "InlineFragment", "typeCondition": { "kind": "NamedType", "name": { "kind": "Name", "value": "BasicResult" } }, "directives": [], "selectionSet": { "kind": "SelectionSet", "selections": [{ "kind": "Field", "name": { "kind": "Name", "value": "ok" }, "arguments": [], "directives": [] }] } }] } }] } }] });

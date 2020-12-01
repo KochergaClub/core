@@ -51,7 +51,9 @@
       "SlideFragmentsBlock_RawHtmlBlock"
     ],
     "UpdateCommunityLeadResult": [
-      "CommunityLead"
+      "CommunityLead",
+      "ValidationError",
+      "GenericError"
     ],
     "UpdateYandexKassaPaymentResult": [
       "YandexKassaPayment",

@@ -3,8 +3,11 @@ import types
 from abc import abstractmethod
 from typing import Any, Callable, Dict, List, Tuple, Type, Union
 
+import kocherga.django.schema.types
+from django.core.exceptions import ValidationError
 from django.db import models
 from django.db.models.fields.reverse_related import ForeignObjectRel
+from kocherga.django.errors import BoxedError, GenericError
 from kocherga.graphql.permissions import check_permissions
 
 import graphql
@@ -180,12 +183,17 @@ class UpdateMutation(helpers.UnionFieldMixin, helpers.BaseFieldWithInput):
     """
 
     def resolve(self, _, info, input):
+        # TODO - return generic error if object is not found
         obj = self.model.objects.get(id=input['id'])
+
         for field in self.fields:
             if field in input:
                 setattr(obj, field, input[field])
 
-        obj.full_clean()
+        try:
+            obj.full_clean()
+        except ValidationError as e:
+            return BoxedError(e)
         obj.save()
         return obj
 
@@ -227,7 +235,11 @@ class UpdateMutation(helpers.UnionFieldMixin, helpers.BaseFieldWithInput):
 
     @property
     def result_types(self):
-        return {self.model: self.result_type}
+        return {
+            self.model: self.result_type,
+            BoxedError: kocherga.django.schema.types.ValidationError,
+            GenericError: kocherga.django.schema.types.GenericError,  # unused for now
+        }
 
 
 class DeleteMutation(helpers.UnionFieldMixin, helpers.BaseField):

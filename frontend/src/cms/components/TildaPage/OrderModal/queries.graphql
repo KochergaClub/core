@@ -5,18 +5,9 @@ fragment RatioOrder_Created on RatioOrder {
 
 mutation RatioCreateOrder($input: RatioCreateOrderInput!) {
   result: ratioCreateOrder(input: $input) {
-    ... on RatioOrder {
-      ...RatioOrder_Created
-    }
-    ... on GenericError {
-      message
-    }
-    ... on ValidationError {
-      errors {
-        name
-        messages
-      }
-    }
+    ...RatioOrder_Created
+    ...GenericError
+    ...ValidationError
   }
 }
 

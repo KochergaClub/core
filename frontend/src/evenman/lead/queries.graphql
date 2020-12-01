@@ -29,8 +29,10 @@ mutation CreateEvenmanLead($input: CreateCommunityLeadInput!) {
 }
 
 mutation UpdateEvenmanLead($input: UpdateCommunityLeadInput!) {
-  updateCommunityLead(input: $input) {
+  result: updateCommunityLead(input: $input) {
     ...EvenmanLead
+    ...GenericError
+    ...ValidationError
   }
 }
 
