@@ -3,13 +3,15 @@ from kocherga.graphql import django_utils, g, helpers
 
 from .. import models
 
+CommunityLeadStatus = g.EnumType('CommunityLeadStatus', models.Lead.Status)
+
 CommunityLead = django_utils.DjangoObjectType(
     'CommunityLead',
     model=models.Lead,
     db_fields=['id', 'name', 'description', 'created', 'updated'],
     extra_fields={
         'created_by': auth_types.AuthUser,
-        'status': g.NN(g.EnumType('CommunityLeadStatus', models.Lead.Status)),
+        'status': g.NN(CommunityLeadStatus),
     },
 )
 

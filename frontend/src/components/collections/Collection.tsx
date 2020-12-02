@@ -3,7 +3,7 @@ import { MdRefresh } from 'react-icons/md';
 
 import { capitalize } from '~/common/utils';
 import { FormShape, ModalPostResult, ShapeToValues } from '~/components/forms/types';
-import { AsyncButton, Column, Row } from '~/frontkit';
+import { AsyncButton, Row } from '~/frontkit';
 
 import CreateItemButton from './CreateItemButton';
 import DumpJSONView from './DumpJSONView';
@@ -47,9 +47,9 @@ function Collection<I, S extends FormShape>(props: Props<I, S>) {
           )}
         </Row>
       </h2>
-      <Column stretch>
+      <div>
         <View items={props.items} />
-      </Column>
+      </div>
     </section>
   );
 }
