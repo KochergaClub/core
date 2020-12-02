@@ -1,3 +1,5 @@
+import enum
+
 import reversion
 from django.contrib.auth import get_user_model
 from django.db import models
@@ -17,6 +19,16 @@ class Lead(models.Model):
 
     created_by = models.ForeignKey(
         User, blank=True, null=True, on_delete=models.PROTECT
+    )
+
+    class Status(models.TextChoices):
+        ACTIVE = 'ACTIVE', 'Активный'
+        INACTIVE = 'INACTIVE', 'Неактивный'
+
+    status = models.CharField(
+        max_length=20,
+        choices=Status.choices,
+        default='ACTIVE',
     )
 
     objects = RelayQuerySet.as_manager()

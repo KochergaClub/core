@@ -297,6 +297,7 @@ type CommunityLead {
   created: String!
   updated: String!
   created_by: AuthUser
+  status: CommunityLeadStatus!
 }
 
 type CommunityLeadConnection {
@@ -309,9 +310,15 @@ type CommunityLeadEdge {
   node: CommunityLead!
 }
 
+enum CommunityLeadStatus {
+  ACTIVE
+  INACTIVE
+}
+
 input CreateCommunityLeadInput {
   name: String!
   description: String
+  status: String
 }
 
 union CreateCommunityLeadResult = CommunityLead | ValidationError | GenericError
@@ -1924,6 +1931,7 @@ input UpdateCommunityLeadInput {
   id: ID!
   name: String
   description: String
+  status: String
 }
 
 union UpdateCommunityLeadResult = CommunityLead | ValidationError | GenericError

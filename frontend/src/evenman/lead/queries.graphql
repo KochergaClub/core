@@ -4,6 +4,7 @@ fragment EvenmanLead on CommunityLead {
   updated
   name
   description
+  status
   created_by {
     id
     first_name

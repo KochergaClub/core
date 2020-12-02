@@ -10,7 +10,7 @@ c = helpers.Collection()
 class createCommunityLead(django_utils.CreateMutation):
     permissions = [permissions.manage_crm]
     model = models.Lead
-    fields = ['name', 'description']
+    fields = ['name', 'description', 'status']
     result_type = types.CommunityLead
 
     def prepare_params(self, params, info):
@@ -21,7 +21,7 @@ class createCommunityLead(django_utils.CreateMutation):
 class updateCommunityLead(django_utils.UpdateMutation):
     permissions = [permissions.manage_crm]
     model = models.Lead
-    fields = ['name', 'description']
+    fields = ['name', 'description', 'status']
     result_type = types.CommunityLead
 
 

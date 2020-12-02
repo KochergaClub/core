@@ -350,6 +350,7 @@ export type CommunityLead = {
   created: Scalars['String'];
   updated: Scalars['String'];
   created_by?: Maybe<AuthUser>;
+  status: CommunityLeadStatus;
 };
 
 export type CommunityLeadConnection = {
@@ -364,9 +365,15 @@ export type CommunityLeadEdge = {
   node: CommunityLead;
 };
 
+export enum CommunityLeadStatus {
+  Active = 'ACTIVE',
+  Inactive = 'INACTIVE'
+}
+
 export type CreateCommunityLeadInput = {
   name: Scalars['String'];
   description?: Maybe<Scalars['String']>;
+  status?: Maybe<Scalars['String']>;
 };
 
 export type CreateCommunityLeadResult = CommunityLead | ValidationError | GenericError;
@@ -2911,6 +2918,7 @@ export type UpdateCommunityLeadInput = {
   id: Scalars['ID'];
   name?: Maybe<Scalars['String']>;
   description?: Maybe<Scalars['String']>;
+  status?: Maybe<Scalars['String']>;
 };
 
 export type UpdateCommunityLeadResult = CommunityLead | ValidationError | GenericError;

@@ -3,12 +3,14 @@ import React from 'react';
 import { FaEdit, FaTrash } from 'react-icons/fa';
 import styled from 'styled-components';
 
+import { CommunityLeadStatus } from '~/apollo/types.generated';
 import { DropdownMenu, HumanizedDateTime } from '~/components';
 import { ModalAction, MutationAction } from '~/components/DropdownMenu';
-import { Column, HR, RichText, Row } from '~/frontkit';
+import { Badge, Column, HR, RichText, Row } from '~/frontkit';
 
 import { EditLeadModal } from './EditLeadModal';
 import { DeleteEvenmanLeadDocument, EvenmanLeadFragment } from './queries.generated';
+import { statusNames } from './utils';
 
 const UserSpan: React.FC<{
   user: { id: string; first_name: string; last_name: string };
@@ -20,6 +22,10 @@ const UserSpan: React.FC<{
         : `Анон#${user.id}`}
     </div>
   );
+};
+
+const Status: React.FC<{ status: CommunityLeadStatus }> = ({ status }) => {
+  return <Badge>{statusNames[status] || status}</Badge>;
 };
 
 type Props = {
@@ -55,6 +61,12 @@ export const LeadCard: React.FC<Props> = ({ lead }) => {
           <HumanizedDateTime date={parseISO(lead.created)} />
         </Row>
       </small>
+      <small>
+        <Row>
+          <div>Последнее обновление:</div>
+          <HumanizedDateTime date={parseISO(lead.updated)} />
+        </Row>
+      </small>
       {lead.created_by && (
         <small>
           <Row>
@@ -65,8 +77,8 @@ export const LeadCard: React.FC<Props> = ({ lead }) => {
       )}
       <small>
         <Row>
-          <div>Обновлён:</div>
-          <HumanizedDateTime date={parseISO(lead.updated)} />
+          <div>Статус:</div>
+          <Status status={lead.status} />
         </Row>
       </small>
       {lead.description ? (
