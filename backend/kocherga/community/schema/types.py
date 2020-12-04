@@ -11,6 +11,7 @@ CommunityLead = django_utils.DjangoObjectType(
     db_fields=['id', 'name', 'description', 'created', 'updated'],
     extra_fields={
         'created_by': auth_types.AuthUser,
+        'curated_by': auth_types.AuthUser,
         'status': g.NN(CommunityLeadStatus),
     },
 )

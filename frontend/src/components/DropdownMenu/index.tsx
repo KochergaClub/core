@@ -122,7 +122,7 @@ const DropdownMenu: React.FC<Props> = ({
       <DropdownMenuContext.Provider value={{ close: unexpand, setModal }}>
         <Container ref={ref}>
           <UnstyledLink
-            href="#"
+            href=""
             onClick={flipExpandWithPrevent}
             ref={setReferenceElement}
           >

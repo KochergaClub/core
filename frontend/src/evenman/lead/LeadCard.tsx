@@ -9,7 +9,10 @@ import { ModalAction, MutationAction } from '~/components/DropdownMenu';
 import { Badge, Column, HR, RichText, Row } from '~/frontkit';
 
 import { EditLeadModal } from './EditLeadModal';
-import { DeleteEvenmanLeadDocument, EvenmanLeadFragment } from './queries.generated';
+import {
+    BecomeEvenmanLeadCuratorDocument, ClearEvenmanLeadCuratorDocument, DeleteEvenmanLeadDocument,
+    EvenmanLeadFragment
+} from './queries.generated';
 import { statusNames } from './utils';
 
 const UserSpan: React.FC<{
@@ -25,7 +28,11 @@ const UserSpan: React.FC<{
 };
 
 const Status: React.FC<{ status: CommunityLeadStatus }> = ({ status }) => {
-  return <Badge>{statusNames[status] || status}</Badge>;
+  return (
+    <Badge type={status === CommunityLeadStatus.Active ? 'good' : 'default'}>
+      {statusNames[status] || status}
+    </Badge>
+  );
 };
 
 type Props = {
@@ -53,6 +60,18 @@ export const LeadCard: React.FC<Props> = ({ lead }) => {
             refetchQueries={['EvenmanLeads']}
             confirmText={`Удалить ${lead.name}?`}
           />
+          <MutationAction
+            title="Стать куратором"
+            mutation={BecomeEvenmanLeadCuratorDocument}
+            refetchQueries={['EvenmanLeads']}
+            variables={{ id: lead.id }}
+          />
+          <MutationAction
+            title="Очистить куратора"
+            mutation={ClearEvenmanLeadCuratorDocument}
+            refetchQueries={['EvenmanLeads']}
+            variables={{ id: lead.id }}
+          />
         </DropdownMenu>
       </Row>
       <small>
@@ -72,6 +91,14 @@ export const LeadCard: React.FC<Props> = ({ lead }) => {
           <Row>
             <div>Кем создан:</div>
             <UserSpan user={lead.created_by} />
+          </Row>
+        </small>
+      )}
+      {lead.curated_by && (
+        <small>
+          <Row>
+            <div>Куратор:</div>
+            <UserSpan user={lead.curated_by} />
           </Row>
         </small>
       )}

@@ -18,7 +18,10 @@ class Lead(models.Model):
     updated = models.DateTimeField(auto_now=True)
 
     created_by = models.ForeignKey(
-        User, blank=True, null=True, on_delete=models.PROTECT
+        User, blank=True, null=True, on_delete=models.SET_NULL, related_name='+'
+    )
+    curated_by = models.ForeignKey(
+        User, blank=True, null=True, on_delete=models.SET_NULL, related_name='+'
     )
 
     class Status(models.TextChoices):

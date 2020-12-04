@@ -147,6 +147,12 @@ export type BasicTextBlockValue = {
   centered: Scalars['Boolean'];
 };
 
+export type BecomeCommunityLeadCuratorInput = {
+  id: Scalars['ID'];
+};
+
+export type BecomeCommunityLeadCuratorResult = CommunityLead;
+
 export type BigContactsBlock = WagtailBlock & {
   __typename?: 'BigContactsBlock';
   id: Scalars['ID'];
@@ -250,6 +256,12 @@ export type CheckRatioPromocodeResult = {
   discounted_price: Scalars['Int'];
 };
 
+export type ClearCommunityLeadCuratorInput = {
+  id: Scalars['ID'];
+};
+
+export type ClearCommunityLeadCuratorResult = CommunityLead;
+
 export type Cm2CreateCustomerInput = {
   card_id: Scalars['Int'];
   first_name: Scalars['String'];
@@ -350,6 +362,7 @@ export type CommunityLead = {
   created: Scalars['String'];
   updated: Scalars['String'];
   created_by?: Maybe<AuthUser>;
+  curated_by?: Maybe<AuthUser>;
   status: CommunityLeadStatus;
 };
 
@@ -372,6 +385,7 @@ export enum CommunityLeadStatus {
 
 export type CommunityLeadsFilterInput = {
   status?: Maybe<CommunityLeadStatus>;
+  curated_by_me?: Maybe<Scalars['Boolean']>;
 };
 
 export type CreateCommunityLeadInput = {
@@ -1241,6 +1255,8 @@ export type Mutation = {
   createCommunityLead: CreateCommunityLeadResult;
   updateCommunityLead: UpdateCommunityLeadResult;
   deleteCommunityLead: DeleteCommunityLeadResult;
+  becomeCommunityLeadCurator: BecomeCommunityLeadCuratorResult;
+  clearCommunityLeadCurator: ClearCommunityLeadCuratorResult;
 };
 
 
@@ -1750,6 +1766,16 @@ export type MutationUpdateCommunityLeadArgs = {
 
 export type MutationDeleteCommunityLeadArgs = {
   id: Scalars['ID'];
+};
+
+
+export type MutationBecomeCommunityLeadCuratorArgs = {
+  input: BecomeCommunityLeadCuratorInput;
+};
+
+
+export type MutationClearCommunityLeadCuratorArgs = {
+  input: ClearCommunityLeadCuratorInput;
 };
 
 export type My = {

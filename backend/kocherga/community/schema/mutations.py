@@ -1,4 +1,4 @@
-from kocherga.graphql import django_utils, helpers
+from kocherga.graphql import django_utils, g, helpers
 
 from .. import models, permissions
 from . import types
@@ -29,6 +29,52 @@ class updateCommunityLead(django_utils.UpdateMutation):
 class deleteCommunityLead(django_utils.DeleteMutation):
     permissions = [permissions.manage_crm]
     model = models.Lead
+
+
+@c.class_field
+class becomeCommunityLeadCurator(helpers.UnionFieldMixin, helpers.BaseFieldWithInput):
+    model = models.Lead
+
+    def resolve(self, _, info, input):
+        obj = self.model.objects.get(id=input['id'])
+        obj.curated_by = info.context.user
+        obj.full_clean()
+        obj.save()
+        return obj
+
+    input = {
+        'id': 'ID!',
+    }
+    permissions = [permissions.manage_crm]
+
+    @property
+    def result_types(self):
+        return {
+            self.model: types.CommunityLead,
+        }
+
+
+@c.class_field
+class clearCommunityLeadCurator(helpers.UnionFieldMixin, helpers.BaseFieldWithInput):
+    model = models.Lead
+
+    def resolve(self, _, info, input):
+        obj = self.model.objects.get(id=input['id'])
+        obj.curated_by = None
+        obj.full_clean()
+        obj.save()
+        return obj
+
+    input = {
+        'id': 'ID!',
+    }
+    permissions = [permissions.manage_crm]
+
+    @property
+    def result_types(self):
+        return {
+            self.model: types.CommunityLead,
+        }
 
 
 mutations = c.as_dict()

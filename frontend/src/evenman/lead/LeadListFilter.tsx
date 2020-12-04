@@ -9,6 +9,7 @@ export const filterNameToInput: {
   [k in FilterName]: CommunityLeadsFilterInput;
 } = {
   active: { status: CommunityLeadStatus.Active },
+  curated_by_me: { status: CommunityLeadStatus.Active, curated_by_me: true },
   all: {},
 };
 
@@ -28,6 +29,9 @@ export const LeadListFilter: React.FC<Props> = ({ filter, setFilter }) => {
   return (
     <RadioButtonGroup selected={filter} select={asyncSetFilter}>
       <RadioButtonGroup.Button name="active">Активные</RadioButtonGroup.Button>
+      <RadioButtonGroup.Button name="curated_by_me">
+        Активные курируемые мной
+      </RadioButtonGroup.Button>
       <RadioButtonGroup.Button name="all">Все</RadioButtonGroup.Button>
     </RadioButtonGroup>
   );

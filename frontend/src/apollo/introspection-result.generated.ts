@@ -6,9 +6,15 @@
       }
       const result: PossibleTypesResultData = {
   "possibleTypes": {
+    "BecomeCommunityLeadCuratorResult": [
+      "CommunityLead"
+    ],
     "CancelYandexKassaPaymentResult": [
       "YandexKassaPayment",
       "GenericError"
+    ],
+    "ClearCommunityLeadCuratorResult": [
+      "CommunityLead"
     ],
     "CreateCommunityLeadResult": [
       "CommunityLead",

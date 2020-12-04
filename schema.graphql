@@ -122,6 +122,12 @@ type BasicTextBlockValue {
   centered: Boolean!
 }
 
+input BecomeCommunityLeadCuratorInput {
+  id: ID!
+}
+
+union BecomeCommunityLeadCuratorResult = CommunityLead
+
 type BigContactsBlock implements WagtailBlock {
   id: ID!
   value: BigContactsBlockValue!
@@ -221,6 +227,12 @@ type CheckRatioPromocodeResult {
   discounted_price: Int!
 }
 
+input ClearCommunityLeadCuratorInput {
+  id: ID!
+}
+
+union ClearCommunityLeadCuratorResult = CommunityLead
+
 input Cm2CreateCustomerInput {
   card_id: Int!
   first_name: String!
@@ -297,6 +309,7 @@ type CommunityLead {
   created: String!
   updated: String!
   created_by: AuthUser
+  curated_by: AuthUser
   status: CommunityLeadStatus!
 }
 
@@ -317,6 +330,7 @@ enum CommunityLeadStatus {
 
 input CommunityLeadsFilterInput {
   status: CommunityLeadStatus
+  curated_by_me: Boolean
 }
 
 input CreateCommunityLeadInput {
@@ -1099,6 +1113,8 @@ type Mutation {
   createCommunityLead(input: CreateCommunityLeadInput!): CreateCommunityLeadResult!
   updateCommunityLead(input: UpdateCommunityLeadInput!): UpdateCommunityLeadResult!
   deleteCommunityLead(id: ID!): DeleteCommunityLeadResult!
+  becomeCommunityLeadCurator(input: BecomeCommunityLeadCuratorInput!): BecomeCommunityLeadCuratorResult!
+  clearCommunityLeadCurator(input: ClearCommunityLeadCuratorInput!): ClearCommunityLeadCuratorResult!
 }
 
 type My {

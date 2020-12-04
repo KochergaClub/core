@@ -1,3 +1,9 @@
+fragment UserForCrm on AuthUser {
+  id
+  first_name
+  last_name
+}
+
 fragment EvenmanLead on CommunityLead {
   id
   created
@@ -6,9 +12,10 @@ fragment EvenmanLead on CommunityLead {
   description
   status
   created_by {
-    id
-    first_name
-    last_name
+    ...UserForCrm
+  }
+  curated_by {
+    ...UserForCrm
   }
 }
 
@@ -61,5 +68,17 @@ mutation DeleteEvenmanLead($id: ID!) {
     ... on BasicResult {
       ok
     }
+  }
+}
+
+mutation BecomeEvenmanLeadCurator($id: ID!) {
+  becomeCommunityLeadCurator(input: { id: $id }) {
+    ...EvenmanLead
+  }
+}
+
+mutation ClearEvenmanLeadCurator($id: ID!) {
+  clearCommunityLeadCurator(input: { id: $id }) {
+    ...EvenmanLead
   }
 }
