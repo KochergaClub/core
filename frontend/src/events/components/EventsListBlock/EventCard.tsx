@@ -19,7 +19,7 @@ const Background = styled.div<{
 }>`
   display: flex;
   flex-direction: column;
-  justify-content: end;
+  justify-content: flex-end;
 
   ${padding}
   padding-top: 20px;

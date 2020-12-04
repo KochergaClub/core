@@ -9,7 +9,7 @@ import NewEventModal from '../NewEventModal';
 const Container = styled.div`
   display: flex;
   flex-direction: row;
-  justify-content: end;
+  justify-content: flex-end;
   align-items: center;
 
   > .CalendarCell--OnHover {
