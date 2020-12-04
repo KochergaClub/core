@@ -386,6 +386,7 @@ export enum CommunityLeadStatus {
 export type CommunityLeadsFilterInput = {
   status?: Maybe<CommunityLeadStatus>;
   curated_by_me?: Maybe<Scalars['Boolean']>;
+  curated_by_empty?: Maybe<Scalars['Boolean']>;
 };
 
 export type CreateCommunityLeadInput = {

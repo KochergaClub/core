@@ -21,7 +21,11 @@ class Lead(models.Model):
         User, blank=True, null=True, on_delete=models.SET_NULL, related_name='+'
     )
     curated_by = models.ForeignKey(
-        User, blank=True, null=True, on_delete=models.SET_NULL, related_name='+'
+        User,
+        blank=True,
+        null=True,
+        on_delete=models.SET_NULL,
+        related_name='+',
     )
 
     class Status(models.TextChoices):
@@ -32,6 +36,7 @@ class Lead(models.Model):
         max_length=20,
         choices=Status.choices,
         default='ACTIVE',
+        db_index=True,
     )
 
     objects = RelayQuerySet.as_manager()

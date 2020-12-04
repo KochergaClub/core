@@ -17,6 +17,8 @@ class communityLeads(helpers.BaseField):
                 qs = qs.filter(status=filter['status'])
             if filter.get('curated_by_me'):
                 qs = qs.filter(curated_by=info.context.user)
+            if filter.get('curated_by_empty'):
+                qs = qs.filter(curated_by__isnull=True)
         return qs.relay_page(**pager)
 
     permissions = [permissions.manage_crm]
@@ -27,6 +29,7 @@ class communityLeads(helpers.BaseField):
             {
                 'status': types.CommunityLeadStatus,
                 'curated_by_me': Optional[bool],
+                'curated_by_empty': Optional[bool],
             }
         ),
     )
