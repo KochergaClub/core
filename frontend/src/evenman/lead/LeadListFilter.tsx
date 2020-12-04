@@ -3,7 +3,7 @@ import { useCallback } from 'react';
 import { CommunityLeadsFilterInput, CommunityLeadStatus } from '~/apollo/types.generated';
 import { RadioButtonGroup } from '~/frontkit';
 
-export type FilterName = 'all' | 'my_active' | 'uncurated_active' | 'active';
+export type FilterName = 'active' | 'my_active' | 'uncurated_active' | 'all';
 
 export const filterNameToInput: {
   [k in FilterName]: CommunityLeadsFilterInput;

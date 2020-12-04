@@ -2,6 +2,7 @@ import logging
 
 logger = logging.getLogger(__name__)
 
+import kocherga.community.models
 import kocherga.ratio.models
 import kocherga.slack.client
 import kocherga.tilda.models
@@ -91,7 +92,7 @@ def r_tilda_webhook(request):
 @api_view(['POST'])
 @permission_classes((permissions.AllowAny,))
 def r_generate_promocode_webhook(request):
-    # Tilda sends test response when adding new webhooks
+    # Tilda sends test request when adding new webhooks
     if request.data.get('test', '') == 'test':
         return HttpResponse('test response')
 
@@ -109,5 +110,41 @@ def r_generate_promocode_webhook(request):
 
     training = kocherga.ratio.models.Training.objects.get(slug=training_slug)
     training.send_unique_promocode(email)
+
+    return HttpResponse('ok')
+
+
+@api_view(['POST'])
+@permission_classes((permissions.AllowAny,))
+def r_create_community_lead_webhook(request):
+    # Tilda sends test request when adding new webhooks
+    if request.data.get('test', '') == 'test':
+        return HttpResponse('test response')
+
+    email = (
+        request.data.get('EMAIL')
+        or request.data.get('email')
+        or request.data.get('Email')
+    )
+    if not email:
+        raise Exception("Email is not set")
+
+    name = request.data.get('name')
+    if not name:
+        raise Exception("name is not set")
+
+    phone = request.data.get('phone', '')
+
+    description = f"""
+        Email: {email}<br />
+        Phone: {phone}
+    """
+
+    lead = kocherga.community.models.Lead(
+        name=name,
+        description=description,
+    )
+    lead.full_clean()
+    lead.save()
 
     return HttpResponse('ok')
