@@ -12,8 +12,20 @@ fragment EvenmanLead on CommunityLead {
   }
 }
 
-query EvenmanLeads($before: String, $after: String, $first: Int, $last: Int) {
-  communityLeads(before: $before, after: $after, first: $first, last: $last) {
+query EvenmanLeads(
+  $before: String
+  $after: String
+  $first: Int
+  $last: Int
+  $filter: CommunityLeadsFilterInput
+) {
+  communityLeads(
+    before: $before
+    after: $after
+    first: $first
+    last: $last
+    filter: $filter
+  ) {
     pageInfo {
       hasNextPage
       hasPreviousPage

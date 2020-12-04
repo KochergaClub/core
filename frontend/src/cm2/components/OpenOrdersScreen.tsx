@@ -78,7 +78,7 @@ const OpenOrdersScreen: React.FC = () => {
                 cb: add,
                 shape: addShape,
               }}
-              view={OrdersTableView}
+              view={({ items }) => <OrdersTableView items={items} />}
             />
           );
         }}

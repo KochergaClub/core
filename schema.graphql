@@ -315,6 +315,10 @@ enum CommunityLeadStatus {
   INACTIVE
 }
 
+input CommunityLeadsFilterInput {
+  status: CommunityLeadStatus
+}
+
 input CreateCommunityLeadInput {
   name: String!
   description: String
@@ -1352,7 +1356,7 @@ type Query {
   tildaPage(path: String!): TildaPage
   tildaPages: [TildaPage!]!
   externalServices: [ExternalService!]!
-  communityLeads(before: String, after: String, first: Int, last: Int): CommunityLeadConnection!
+  communityLeads(before: String, after: String, first: Int, last: Int, filter: CommunityLeadsFilterInput): CommunityLeadConnection!
   my: My!
 }
 

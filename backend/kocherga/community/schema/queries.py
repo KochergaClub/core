@@ -11,7 +11,7 @@ class communityLeads(helpers.BaseField):
     def resolve(self, _, info, filter=None, **pager):
         qs = models.Lead.objects.all()
         if filter:
-            if 'status' in filter:
+            if filter.get('status'):
                 qs = qs.filter(status=filter['status'])
         return qs.relay_page(**pager)
 

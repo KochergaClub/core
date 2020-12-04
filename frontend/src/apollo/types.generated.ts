@@ -370,6 +370,10 @@ export enum CommunityLeadStatus {
   Inactive = 'INACTIVE'
 }
 
+export type CommunityLeadsFilterInput = {
+  status?: Maybe<CommunityLeadStatus>;
+};
+
 export type CreateCommunityLeadInput = {
   name: Scalars['String'];
   description?: Maybe<Scalars['String']>;
@@ -2290,6 +2294,7 @@ export type QueryCommunityLeadsArgs = {
   after?: Maybe<Scalars['String']>;
   first?: Maybe<Scalars['Int']>;
   last?: Maybe<Scalars['Int']>;
+  filter?: Maybe<CommunityLeadsFilterInput>;
 };
 
 export type RatioActivity = {

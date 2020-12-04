@@ -1,14 +1,14 @@
-import React, { useCallback } from 'react';
+import React, { useCallback, useState } from 'react';
 
 import { useQuery } from '@apollo/client';
 
 import { ApolloQueryResults, PaddedBlock } from '~/components';
 import { CustomCardListView, PagedApolloCollection } from '~/components/collections';
-import { AnyViewProps } from '~/components/collections/types';
 import { useFormModalSmartMutation } from '~/components/forms/hooks';
 import { ShapeToValues } from '~/components/forms/types';
 
 import { LeadCard } from './LeadCard';
+import { FilterName, filterNameToInput, LeadListFilter } from './LeadListFilter';
 import {
     CreateEvenmanLeadDocument, EvenmanLeadFragment, EvenmanLeadsDocument
 } from './queries.generated';
@@ -22,17 +22,11 @@ type CreateLeadValues = ShapeToValues<typeof leadShape>;
 
 const renderItem = (lead: EvenmanLeadFragment) => <LeadCard lead={lead} />;
 
-const View: React.FC<AnyViewProps<EvenmanLeadFragment>> = (props) => (
-  <CustomCardListView
-    {...props}
-    renderItem={renderItem}
-    item2key={(lead) => lead.id}
-  />
-);
-
 export const LeadScreen: React.FC = () => {
+  const [filterName, setFilterName] = useState<FilterName>('active');
+
   const queryResults = useQuery(EvenmanLeadsDocument, {
-    variables: { first: 20 },
+    variables: { first: 20, filter: filterNameToInput[filterName] },
   });
 
   const innerAdd = useFormModalSmartMutation(CreateEvenmanLeadDocument, {
@@ -63,7 +57,16 @@ export const LeadScreen: React.FC = () => {
               cb: add,
               shape: leadShape,
             }}
-            view={View}
+            controls={() => (
+              <LeadListFilter filter={filterName} setFilter={setFilterName} />
+            )}
+            view={({ items }) => (
+              <CustomCardListView
+                items={items}
+                renderItem={renderItem}
+                item2key={(lead) => lead.id}
+              />
+            )}
           />
         )}
       </ApolloQueryResults>

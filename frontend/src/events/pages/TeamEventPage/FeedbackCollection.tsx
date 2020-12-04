@@ -1,8 +1,8 @@
-import { useCallback } from 'react';
+import React, { useCallback } from 'react';
 
 import { useMutation } from '@apollo/client';
 
-import { AsyncButtonWithConfirm } from '~/components';
+import { MutationButton } from '~/components';
 import { Collection, ShapedTableView } from '~/components/collections';
 import { FormShape } from '~/components/forms/types';
 import {
@@ -18,18 +18,17 @@ const feedbackShape: FormShape = shapes.events.feedback.filter(
 const DeleteFeedback: React.FC<{ feedback: TeamEventFeedbackFragment }> = ({
   feedback,
 }) => {
-  const [deleteMutation] = useMutation(EventFeedbackDeleteDocument, {
-    refetchQueries: ['TeamEventDetails'],
-    awaitRefetchQueries: true,
-  });
-  const deleteCb = useCallback(async () => {
-    await deleteMutation({ variables: { id: feedback.id } });
-  }, [deleteMutation, feedback.id]);
-
   return (
-    <AsyncButtonWithConfirm confirmText="Точно удалить?" act={deleteCb}>
+    <MutationButton
+      mutation={EventFeedbackDeleteDocument}
+      refetchQueries={['TeamEventDetails']}
+      confirmText="Точно удалить?"
+      variables={{
+        id: feedback.id,
+      }}
+    >
       Удалить
-    </AsyncButtonWithConfirm>
+    </MutationButton>
   );
 };
 
@@ -46,9 +45,15 @@ const FeedbackCollection: React.FC<Props> = ({ event }) => {
 
   const add = useCallback(
     async (values: any) => {
+      const toInt = (v?: string) =>
+        v === undefined ? undefined : parseInt(v, 10);
       await createMutation({
         variables: {
           ...values,
+          overall_score: toInt(values.overall_score as string | undefined),
+          recommend_score: toInt(values.recommend_score as string | undefined),
+          content_score: toInt(values.content_score as string | undefined),
+          conductor_score: toInt(values.conductor_score as string | undefined),
           event_id: event.id,
         },
       });
@@ -71,9 +76,9 @@ const FeedbackCollection: React.FC<Props> = ({ event }) => {
         cb: add,
         shape: feedbackShape,
       }}
-      view={(props) => (
+      view={({ items }) => (
         <ShapedTableView
-          {...props}
+          items={items}
           shape={feedbackShape}
           extraColumns={['Удалить']}
           renderExtraColumn={renderExtraColumn}

@@ -6,7 +6,6 @@ import { useQuery } from '@apollo/client';
 import { usePermissions } from '~/common/hooks';
 import { ApolloQueryResults, PaddedBlock } from '~/components';
 import { CustomCardListView, PagedApolloCollection } from '~/components/collections';
-import { AnyViewProps } from '~/components/collections/types';
 import { useFormModalSmartMutation } from '~/components/forms/hooks';
 import { ShapeToValues } from '~/components/forms/types';
 
@@ -47,15 +46,6 @@ const isMuted = (training: RatioTraining_SummaryFragment) =>
 
 const renderItem = (training: RatioTraining_SummaryFragment) => (
   <TrainingCard training={training} />
-);
-
-const View: React.FC<AnyViewProps<RatioTraining_SummaryFragment>> = (props) => (
-  <CustomCardListView
-    {...props}
-    renderItem={renderItem}
-    isMuted={isMuted}
-    item2key={(training) => training.id}
-  />
 );
 
 interface Props {
@@ -108,7 +98,14 @@ const TrainingCollectionBlock: React.FC<Props> = ({ eternal }) => {
               genitive: 'тренинг',
             }}
             add={canCreate ? { cb: add, shape: trainingShape } : undefined}
-            view={View}
+            view={({ items }) => (
+              <CustomCardListView
+                items={items}
+                renderItem={renderItem}
+                isMuted={isMuted}
+                item2key={(training) => training.id}
+              />
+            )}
           />
         )}
       </ApolloQueryResults>

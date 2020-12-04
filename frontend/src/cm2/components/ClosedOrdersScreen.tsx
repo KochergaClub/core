@@ -28,7 +28,7 @@ const ClosedOrdersScreen: React.FC = () => {
                 plural: 'заказы',
                 genitive: 'заказ',
               }}
-              view={OrdersTableView}
+              view={({ items }) => <OrdersTableView items={items} />}
             />
           );
         }}

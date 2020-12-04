@@ -3,7 +3,7 @@ import { FormShape, ModalPostResult, ShapeToValues } from '~/components/forms/ty
 import { Collection } from './';
 import HeadlessConnection from './HeadlessConnection';
 import Pager from './Pager';
-import { AnyViewProps, EntityNames } from './types';
+import { EntityNames } from './types';
 
 interface Props<T, S extends FormShape> {
   connection: {
@@ -30,7 +30,8 @@ interface Props<T, S extends FormShape> {
     shape: S;
     cb: (values: ShapeToValues<S>) => Promise<ModalPostResult | void>;
   };
-  view?: React.ElementType<AnyViewProps<T>>;
+  view?: (props: { items: T[] }) => React.ReactNode;
+  controls?: () => React.ReactNode;
 }
 
 function PagedApolloCollection<T, S extends FormShape>(props: Props<T, S>) {
@@ -48,6 +49,7 @@ function PagedApolloCollection<T, S extends FormShape>(props: Props<T, S>) {
             add={props.add}
             refetch={props.fetchPage}
             view={props.view}
+            controls={props.controls}
           />
           <Pager
             pageInfo={props.connection.pageInfo}
