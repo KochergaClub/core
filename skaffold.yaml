@@ -34,8 +34,6 @@ build:
             dest: .
           - src: public/**
             dest: .
-    - image: registry.gitlab.com/kocherga/core/booking
-      context: booking
     - image: registry.gitlab.com/kocherga/core/chrome
       context: ops/images/chrome
     - image: registry.gitlab.com/kocherga/core/mysql-backup
@@ -73,7 +71,6 @@ profiles:
               - ops/secrets/core/dev/main.yaml
             artifactOverrides:
               image.backend: registry.gitlab.com/kocherga/core/backend
-              image.booking: registry.gitlab.com/kocherga/core/booking
               image.chrome: registry.gitlab.com/kocherga/core/chrome
               image.frontend: registry.gitlab.com/kocherga/core/frontend
               image.mysql_backup: registry.gitlab.com/kocherga/core/mysql-backup
@@ -99,7 +96,6 @@ profiles:
               - ops/secrets/core/prod/main.yaml
             artifactOverrides:
               image.backend: registry.gitlab.com/kocherga/core/backend
-              image.booking: registry.gitlab.com/kocherga/core/booking
               image.chrome: registry.gitlab.com/kocherga/core/chrome
               image.frontend: registry.gitlab.com/kocherga/core/frontend
               image.mysql_backup: registry.gitlab.com/kocherga/core/mysql-backup

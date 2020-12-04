@@ -1,7 +1,6 @@
 image:
   backend: ""
   frontend: ""
-  booking: ""
   chrome: ""
   mysql_backup: ""
 

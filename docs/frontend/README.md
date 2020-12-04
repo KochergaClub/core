@@ -2,8 +2,6 @@
 
 Фронтенд Кочерги написан на React, Typescript, [NextJS](https://nextjs.org/) и [Apollo Client](https://www.apollographql.com/docs/react/).
 
-Отдельные интерфейсы (в частности, [форма брони](https://booking.kocherga.club) пока что живут в отдельном lerna-моно-репозитории [kocherga/core/frontend](https://gitlab.com/kocherga/code/frontend). В будущем они (все, кроме frontkit?) тоже переедут в core.
-
 ## Организация файлов
 
 Весь фронтенд-код располагается в директории `src`. Небольшое количество серверного кода расположено в директории `server`.
