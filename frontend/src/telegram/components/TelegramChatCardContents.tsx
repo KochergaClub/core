@@ -35,7 +35,7 @@ export const TelegramChatCardContents: React.FC<Props> = ({
   hideProjectLink,
   renderControls,
 }) => {
-  const href = `https://t.me/${chat.username}`;
+  const href = chat.link;
   return (
     <Row gutter={16}>
       <ChatLink href={href}>
@@ -56,7 +56,9 @@ export const TelegramChatCardContents: React.FC<Props> = ({
         </ChatLink>
         <Row vCentered>
           <ChatLink href={href}>
-            <LabelDiv>@{chat.username}</LabelDiv>
+            <LabelDiv>
+              {chat.username ? `@${chat.username}` : chat.link}
+            </LabelDiv>
           </ChatLink>
           {renderControls ? renderControls() : null}
         </Row>

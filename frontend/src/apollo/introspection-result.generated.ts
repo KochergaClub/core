@@ -31,6 +31,11 @@
       "ValidationError",
       "GenericError"
     ],
+    "CreateTelegramChatByInviteLinkResult": [
+      "TelegramChat",
+      "ValidationError",
+      "GenericError"
+    ],
     "CreateTelegramChatResult": [
       "TelegramChat",
       "ValidationError",

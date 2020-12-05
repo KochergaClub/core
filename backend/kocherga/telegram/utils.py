@@ -51,7 +51,7 @@ def split_message_into_chunks(message):
     ]
 
 
-def post_to_channel(message):
+def post_to_chat(message: str, chat_id: str):
     chunks = split_message_into_chunks(message)
     result = []
 
@@ -59,7 +59,7 @@ def post_to_channel(message):
         response = api_call(
             'sendMessage',
             params={
-                "chat_id": get_channel_id(),
+                "chat_id": chat_id,
                 "text": message,
                 "parse_mode": "html",
                 "disable_web_page_preview": "true",
@@ -68,6 +68,10 @@ def post_to_channel(message):
         result.append(response)
 
     return result
+
+
+def post_to_channel(message):
+    return post_to_chat(message, get_channel_id())
 
 
 def channel_message_link_by_id(message_id: str):

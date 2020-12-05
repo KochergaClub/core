@@ -1,6 +1,7 @@
 fragment TelegramChat on TelegramChat {
   id
   username
+  link
   title
   photo(spec: "fill-50x50") {
     id
@@ -27,6 +28,16 @@ query TelegramChats {
 
 mutation CreateTelegramChat($input: CreateTelegramChatInput!) {
   result: createTelegramChat(input: $input) {
+    ...TelegramChat
+    ...ValidationError
+    ...GenericError
+  }
+}
+
+mutation CreateTelegramChatByInviteLink(
+  $input: CreateTelegramChatByInviteLinkInput!
+) {
+  result: createTelegramChatByInviteLink(input: $input) {
     ...TelegramChat
     ...ValidationError
     ...GenericError

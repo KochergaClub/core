@@ -371,8 +371,14 @@ input CreateRatioTrainingInput {
 
 union CreateRatioTrainingResult = RatioTraining | ValidationError | GenericError
 
+input CreateTelegramChatByInviteLinkInput {
+  invite_link: String!
+}
+
+union CreateTelegramChatByInviteLinkResult = TelegramChat | ValidationError | GenericError
+
 input CreateTelegramChatInput {
-  username: String!
+  username: String
 }
 
 union CreateTelegramChatResult = TelegramChat | ValidationError | GenericError
@@ -1117,6 +1123,7 @@ type Mutation {
   myEmailSubscribeToInterest(interest_id: ID!): Boolean!
   myEmailUnsubscribeFromInterest(interest_id: ID!): Boolean!
   createTelegramChat(input: CreateTelegramChatInput!): CreateTelegramChatResult!
+  createTelegramChatByInviteLink(input: CreateTelegramChatByInviteLinkInput!): CreateTelegramChatByInviteLinkResult!
   deleteTelegramChat(id: ID!): DeleteTelegramChatResult!
   refreshTelegramChatData(id: ID!): RefreshTelegramChatDataResult!
   tildaImportAll: BasicResult
@@ -1930,6 +1937,7 @@ type TelegramChat {
   title: String!
   photo(spec: String!): WagtailImageRendition
   project: ProjectPage
+  link: String!
 }
 
 type TildaAsset {

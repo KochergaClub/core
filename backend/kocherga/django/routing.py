@@ -2,6 +2,7 @@ import kocherga.email.channels
 import kocherga.events.channels
 import kocherga.ratio.channels
 import kocherga.slack.channels
+import kocherga.telegram.channels
 from channels.auth import AuthMiddlewareStack
 from channels.routing import ChannelNameRouter, ProtocolTypeRouter, URLRouter
 from kocherga.graphql.asgi import asgi_graphql_app
@@ -22,6 +23,7 @@ application = ProtocolTypeRouter(
             {
                 **kocherga.email.channels.workers,
                 **kocherga.events.channels.workers,
+                **kocherga.telegram.channels.workers,
                 **kocherga.ratio.channels.workers,
                 **kocherga.slack.channels.workers,
             }

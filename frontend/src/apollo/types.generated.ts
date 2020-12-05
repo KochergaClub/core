@@ -426,8 +426,14 @@ export type CreateRatioTrainingInput = {
 
 export type CreateRatioTrainingResult = RatioTraining | ValidationError | GenericError;
 
+export type CreateTelegramChatByInviteLinkInput = {
+  invite_link: Scalars['String'];
+};
+
+export type CreateTelegramChatByInviteLinkResult = TelegramChat | ValidationError | GenericError;
+
 export type CreateTelegramChatInput = {
-  username: Scalars['String'];
+  username?: Maybe<Scalars['String']>;
 };
 
 export type CreateTelegramChatResult = TelegramChat | ValidationError | GenericError;
@@ -1259,6 +1265,7 @@ export type Mutation = {
   myEmailSubscribeToInterest: Scalars['Boolean'];
   myEmailUnsubscribeFromInterest: Scalars['Boolean'];
   createTelegramChat: CreateTelegramChatResult;
+  createTelegramChatByInviteLink: CreateTelegramChatByInviteLinkResult;
   deleteTelegramChat: DeleteTelegramChatResult;
   refreshTelegramChatData: RefreshTelegramChatDataResult;
   tildaImportAll?: Maybe<BasicResult>;
@@ -1763,6 +1770,11 @@ export type MutationMyEmailUnsubscribeFromInterestArgs = {
 
 export type MutationCreateTelegramChatArgs = {
   input: CreateTelegramChatInput;
+};
+
+
+export type MutationCreateTelegramChatByInviteLinkArgs = {
+  input: CreateTelegramChatByInviteLinkInput;
 };
 
 
@@ -2930,6 +2942,7 @@ export type TelegramChat = {
   title: Scalars['String'];
   photo?: Maybe<WagtailImageRendition>;
   project?: Maybe<ProjectPage>;
+  link: Scalars['String'];
 };
 
 

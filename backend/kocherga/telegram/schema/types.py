@@ -10,6 +10,7 @@ def TelegramChat_extra_fields():
     return {
         'photo': wagtail_utils.image_rendition_field(models.Chat, 'photo'),
         'project': ProjectPage,
+        'link': str,
     }
 
 

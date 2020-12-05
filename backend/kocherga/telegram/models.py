@@ -27,9 +27,12 @@ class Manage(models.Model):
 
 
 class Chat(Orderable, models.Model):
-    username = models.CharField(max_length=40)
+    username = models.CharField(max_length=40, blank=True)
 
-    # will be populated by update()
+    # "xxxx" code in https://t.me/joinchat/xxxx URL
+    invite_code = models.CharField(max_length=80, blank=True)
+
+    # will be populated by update_from_api()
     title = models.CharField(max_length=255, editable=False, blank=True)
     photo = models.ForeignKey(
         'kocherga_wagtail.CustomImage',
@@ -40,7 +43,7 @@ class Chat(Orderable, models.Model):
         blank=True,
     )
 
-    # used to avoid image refetches from telegram
+    # cache, used to avoid image refetches from telegram
     photo_file_id = models.CharField(max_length=255, editable=False, blank=True)
 
     project = models.ForeignKey(
@@ -55,6 +58,20 @@ class Chat(Orderable, models.Model):
         edit_handlers.FieldPanel('username'),
         edit_handlers.PageChooserPanel('project', 'projects.ProjectPage'),
     ]
+
+    @property
+    def link(self):
+        if self.username:
+            return f'https://t.me/{self.username}'
+        if self.invite_code:
+            return f'https://t.me/joinchat/{self.invite_code}'
+        raise Exception("Neither username nor invite_code is set")
+
+    def full_clean(self):
+        if not self.username and not self.invite_code:
+            raise Exception("One of `username` and `invite_code` must be set")
+        if self.username and self.invite_code:
+            raise Exception("Only one of `username` and `invite_code` must be set")
 
     def update_from_api(self):
         response = api.api_call('getChat', {'chat_id': '@' + self.username})

@@ -10,13 +10,12 @@ os.environ['DB_HOST'] = 'whatever'
 KOCHERGA_WEBSITE = "https://yudkowsky.cult"
 os.environ['KOCHERGA_WEBSITE'] = KOCHERGA_WEBSITE
 
-from .base import *
-
-from .sample_secrets import *
-
+import logging
 import os
 
-import logging
+from .base import *
+# You can copy sample_secrets.py to local_secrets.py is local_secrets.py is missing.
+from .local_secrets import *
 
 logging.basicConfig(level=logging.INFO)
 
@@ -31,6 +30,8 @@ DATABASES = {
         'NAME': 'local_db',
     }
 }
+
+MEDIA_ROOT = os.path.join(BASE_DIR, 'upload')
 
 # Kocherga settings
 KOCHERGA_WATCHMEN_SPREADSHEET_KEY = "FAKE"

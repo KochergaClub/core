@@ -5,24 +5,33 @@ import { useQuery } from '@apollo/client';
 
 import { NextApolloPage, withApollo, withStaff } from '~/apollo';
 import TL02 from '~/blocks/TL02';
-import { ApolloQueryResults, DropdownMenu, PaddedBlock, Page } from '~/components';
+import { ApolloQueryResults, ButtonWithModal, DropdownMenu, PaddedBlock, Page } from '~/components';
 import { Collection, CustomCardListView } from '~/components/collections';
 import { MutationAction } from '~/components/DropdownMenu';
 import { useFormModalSmartMutation } from '~/components/forms/hooks';
+import { SmartMutationModal } from '~/components/forms/SmartMutationModal';
 import { ShapeToValues } from '~/components/forms/types';
 import { A } from '~/frontkit';
 
 import { TelegramChatCardContents } from '../components/TelegramChatCardContents';
 import {
-    CreateTelegramChatDocument, DeleteTelegramChatDocument, RefreshTelegramChatDataDocument,
-    TelegramChatsDocument
+    CreateTelegramChatByInviteLinkDocument, CreateTelegramChatDocument, DeleteTelegramChatDocument,
+    RefreshTelegramChatDataDocument, TelegramChatsDocument
 } from '../queries.generated';
 
-const shape = [
+const addShape = [
   { name: 'username', title: 'Username', type: 'string' },
 ] as const;
 
-type CreateChatValues = ShapeToValues<typeof shape>;
+const inviteAddShape = [
+  {
+    name: 'invite_link',
+    title: 'Invite link',
+    type: 'string',
+  },
+] as const;
+
+type AddChatValues = ShapeToValues<typeof addShape>;
 
 const AdminTelegramChatsPage: NextApolloPage = () => {
   const queryResults = useQuery(TelegramChatsDocument);
@@ -33,7 +42,7 @@ const AdminTelegramChatsPage: NextApolloPage = () => {
   });
 
   const add = useCallback(
-    async (values: CreateChatValues) => {
+    async (values: AddChatValues) => {
       return await innerAdd({
         variables: {
           input: values,
@@ -42,6 +51,7 @@ const AdminTelegramChatsPage: NextApolloPage = () => {
     },
     [innerAdd]
   );
+
   return (
     <Page title="Управление Telegram-чатами" menu="team">
       <Page.Main>
@@ -57,13 +67,30 @@ const AdminTelegramChatsPage: NextApolloPage = () => {
             {({ data: { telegramChats } }) => (
               <Collection
                 items={telegramChats}
+                controls={() => (
+                  <div>
+                    <ButtonWithModal title="Создать по ссылке">
+                      {({ close }) => (
+                        <SmartMutationModal
+                          close={close}
+                          title="Добавить Telegram-чат по ссылке"
+                          submitLabel="Добавить"
+                          shape={inviteAddShape}
+                          expectedTypename="TelegramChat"
+                          refetchQueries={['TelegramChats']}
+                          mutation={CreateTelegramChatByInviteLinkDocument}
+                        />
+                      )}
+                    </ButtonWithModal>
+                  </div>
+                )}
                 names={{
                   plural: 'чаты',
                   genitive: 'чат',
                 }}
                 add={{
                   cb: add,
-                  shape,
+                  shape: addShape,
                 }}
                 view={() => (
                   <CustomCardListView
