@@ -371,11 +371,19 @@ input CreateRatioTrainingInput {
 
 union CreateRatioTrainingResult = RatioTraining | ValidationError | GenericError
 
+input CreateTelegramChatInput {
+  username: String!
+}
+
+union CreateTelegramChatResult = TelegramChat | ValidationError | GenericError
+
 union DeleteCommunityLeadResult = BasicResult
 
 input DeleteRatioTicketTypeInput {
   id: ID!
 }
+
+union DeleteTelegramChatResult = BasicResult
 
 type EmailMailchimpCategory {
   id: ID!
@@ -1108,6 +1116,9 @@ type Mutation {
   myEmailUnsubscribe: Boolean
   myEmailSubscribeToInterest(interest_id: ID!): Boolean!
   myEmailUnsubscribeFromInterest(interest_id: ID!): Boolean!
+  createTelegramChat(input: CreateTelegramChatInput!): CreateTelegramChatResult!
+  deleteTelegramChat(id: ID!): DeleteTelegramChatResult!
+  refreshTelegramChatData(id: ID!): RefreshTelegramChatDataResult!
   tildaImportAll: BasicResult
   tildaImport(input: TildaImportInput!): BasicResult
   openviduGenerateRoomToken: OpenviduGenerateRoomTokenResult!
@@ -1785,6 +1796,8 @@ type RatioTrainingSendEmailResult {
 input RatioTrainingsFilterInput {
   eternal: Boolean
 }
+
+union RefreshTelegramChatDataResult = TelegramChat
 
 input SearchInput {
   query: String!

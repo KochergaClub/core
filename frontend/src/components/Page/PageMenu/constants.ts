@@ -133,6 +133,11 @@ const teamMenuItems: Item[] = [
         title: 'Касса и чеки',
         permissions: ['kkm.kkmserver'],
       },
+      {
+        link: '/team/telegram-chats',
+        title: 'Telegram-чаты',
+        permissions: ['telegram.manage_chats'],
+      },
       { link: '/admin/', title: 'Django-админка', mode: 'external' },
       { link: '/wagtail/', title: 'Wagtail-админка', mode: 'external' },
     ],

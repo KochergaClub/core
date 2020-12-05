@@ -426,11 +426,19 @@ export type CreateRatioTrainingInput = {
 
 export type CreateRatioTrainingResult = RatioTraining | ValidationError | GenericError;
 
+export type CreateTelegramChatInput = {
+  username: Scalars['String'];
+};
+
+export type CreateTelegramChatResult = TelegramChat | ValidationError | GenericError;
+
 export type DeleteCommunityLeadResult = BasicResult;
 
 export type DeleteRatioTicketTypeInput = {
   id: Scalars['ID'];
 };
+
+export type DeleteTelegramChatResult = BasicResult;
 
 export type EmailMailchimpCategory = {
   __typename?: 'EmailMailchimpCategory';
@@ -1250,6 +1258,9 @@ export type Mutation = {
   myEmailUnsubscribe?: Maybe<Scalars['Boolean']>;
   myEmailSubscribeToInterest: Scalars['Boolean'];
   myEmailUnsubscribeFromInterest: Scalars['Boolean'];
+  createTelegramChat: CreateTelegramChatResult;
+  deleteTelegramChat: DeleteTelegramChatResult;
+  refreshTelegramChatData: RefreshTelegramChatDataResult;
   tildaImportAll?: Maybe<BasicResult>;
   tildaImport?: Maybe<BasicResult>;
   openviduGenerateRoomToken: OpenviduGenerateRoomTokenResult;
@@ -1747,6 +1758,21 @@ export type MutationMyEmailSubscribeToInterestArgs = {
 
 export type MutationMyEmailUnsubscribeFromInterestArgs = {
   interest_id: Scalars['ID'];
+};
+
+
+export type MutationCreateTelegramChatArgs = {
+  input: CreateTelegramChatInput;
+};
+
+
+export type MutationDeleteTelegramChatArgs = {
+  id: Scalars['ID'];
+};
+
+
+export type MutationRefreshTelegramChatDataArgs = {
+  id: Scalars['ID'];
 };
 
 
@@ -2752,6 +2778,8 @@ export type RatioTrainingSendEmailResult = {
 export type RatioTrainingsFilterInput = {
   eternal?: Maybe<Scalars['Boolean']>;
 };
+
+export type RefreshTelegramChatDataResult = TelegramChat;
 
 export type SearchInput = {
   query: Scalars['String'];

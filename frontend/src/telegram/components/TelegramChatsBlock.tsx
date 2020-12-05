@@ -2,7 +2,7 @@ import { PaddedBlock } from '~/components';
 import { CardList } from '~/components/Card';
 
 import { TelegramChatFragment } from '../queries.generated';
-import TelegramChatCard from './TelegramChatCard';
+import { TelegramChatCardContents } from './TelegramChatCardContents';
 
 interface Props {
   chats: TelegramChatFragment[];
@@ -14,11 +14,12 @@ const TelegramChatsBlock: React.FC<Props> = ({ chats, hideProjectLink }) => {
     <PaddedBlock width="small">
       <CardList>
         {chats.map((chat) => (
-          <TelegramChatCard
-            key={chat.id}
-            chat={chat}
-            hideProjectLink={hideProjectLink}
-          />
+          <Card key={chat.id}>
+            <TelegramChatCardContents
+              chat={chat}
+              hideProjectLink={hideProjectLink}
+            />
+          </Card>
         ))}
       </CardList>
     </PaddedBlock>

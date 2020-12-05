@@ -31,7 +31,15 @@
       "ValidationError",
       "GenericError"
     ],
+    "CreateTelegramChatResult": [
+      "TelegramChat",
+      "ValidationError",
+      "GenericError"
+    ],
     "DeleteCommunityLeadResult": [
+      "BasicResult"
+    ],
+    "DeleteTelegramChatResult": [
       "BasicResult"
     ],
     "ExternalService": [
@@ -50,6 +58,9 @@
       "RatioOrder",
       "ValidationError",
       "GenericError"
+    ],
+    "RefreshTelegramChatDataResult": [
+      "TelegramChat"
     ],
     "SearchItem": [
       "PageSearchItem",

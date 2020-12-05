@@ -24,3 +24,25 @@ query TelegramChats {
     ...TelegramChat
   }
 }
+
+mutation CreateTelegramChat($input: CreateTelegramChatInput!) {
+  result: createTelegramChat(input: $input) {
+    ...TelegramChat
+    ...ValidationError
+    ...GenericError
+  }
+}
+
+mutation DeleteTelegramChat($id: ID!) {
+  result: deleteTelegramChat(id: $id) {
+    ... on BasicResult {
+      ok
+    }
+  }
+}
+
+mutation RefreshTelegramChatData($id: ID!) {
+  result: refreshTelegramChatData(id: $id) {
+    ...TelegramChat
+  }
+}
