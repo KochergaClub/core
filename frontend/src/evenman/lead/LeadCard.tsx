@@ -66,12 +66,14 @@ export const LeadCard: React.FC<Props> = ({ lead }) => {
             refetchQueries={['EvenmanLeads']}
             variables={{ id: lead.id }}
           />
-          <MutationAction
-            title="Очистить куратора"
-            mutation={ClearEvenmanLeadCuratorDocument}
-            refetchQueries={['EvenmanLeads']}
-            variables={{ id: lead.id }}
-          />
+          {lead.curated_by ? (
+            <MutationAction
+              title="Очистить куратора"
+              mutation={ClearEvenmanLeadCuratorDocument}
+              refetchQueries={['EvenmanLeads']}
+              variables={{ id: lead.id }}
+            />
+          ) : null}
         </DropdownMenu>
       </Row>
       <small>

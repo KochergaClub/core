@@ -50,3 +50,10 @@ class Settings(SingletonModel):
         on_delete=models.PROTECT,
         related_name='+',
     )
+    community_org_team_telegram_chat = models.ForeignKey(
+        'telegram.Chat',
+        blank=True,
+        null=True,
+        related_name='+',
+        on_delete=models.PROTECT,
+    )

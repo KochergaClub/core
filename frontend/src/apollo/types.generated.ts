@@ -2863,6 +2863,7 @@ export type Settings = {
   default_events_vk_images_collection: WagtailCollection;
   weekly_digest_images_collection: WagtailCollection;
   telegram_images_collection: WagtailCollection;
+  community_org_team_telegram_chat?: Maybe<TelegramChat>;
 };
 
 export type SlackAccount = ExternalServiceAccount & {

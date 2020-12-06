@@ -79,6 +79,20 @@ const SettingsPage: NextApolloPage = () => {
                     collection={settings.telegram_images_collection}
                   />
                 </section>
+                <section>
+                  <h2>Telegram-чат орг.команды сообщества</h2>
+                  {settings.community_org_team_telegram_chat ? (
+                    <div>
+                      <A href={settings.community_org_team_telegram_chat.link}>
+                        {settings.community_org_team_telegram_chat.title}
+                      </A>
+                    </div>
+                  ) : (
+                    <div>
+                      <em>Чат не настроен.</em>
+                    </div>
+                  )}
+                </section>
               </Column>
             )}
           </ApolloQueryResults>

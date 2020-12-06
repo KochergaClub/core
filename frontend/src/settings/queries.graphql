@@ -17,5 +17,10 @@ query GlobalSettings {
     telegram_images_collection {
       ...WagtailCollection_ForSettings
     }
+    community_org_team_telegram_chat {
+      id
+      title
+      link
+    }
   }
 }

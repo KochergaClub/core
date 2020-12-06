@@ -3,8 +3,10 @@ import logging
 logger = logging.getLogger(__name__)
 
 import kocherga.community.models
+import kocherga.django.models
 import kocherga.ratio.models
 import kocherga.slack.client
+import kocherga.telegram.channels
 import kocherga.tilda.models
 from django.conf import settings
 from django.http import HttpResponse
@@ -146,5 +148,12 @@ def r_create_community_lead_webhook(request):
     )
     lead.full_clean()
     lead.save()
+
+    global_settings = kocherga.django.models.Settings.load()
+    if global_settings.community_org_team_telegram_chat:
+        kocherga.telegram.channels.post_to_telegram_chat(
+            global_settings.community_org_team_telegram_chat.id,
+            f'Новый лид: {name}. Проверить и стать куратором: {settings.KOCHERGA_WEBSITE}/events/manage/leads',
+        )
 
     return HttpResponse('ok')
