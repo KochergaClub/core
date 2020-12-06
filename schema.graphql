@@ -1126,6 +1126,7 @@ type Mutation {
   addTelegramChatByInviteLink(input: AddTelegramChatByInviteLinkInput!): AddTelegramChatByInviteLinkResult!
   deleteTelegramChat(id: ID!): DeleteTelegramChatResult!
   refreshTelegramChatData(id: ID!): RefreshTelegramChatDataResult!
+  postToTelegramChat(input: PostToTelegramChatInput!): PostToTelegramChatResult!
   tildaImportAll: BasicResult
   tildaImport(input: TildaImportInput!): BasicResult
   openviduGenerateRoomToken: OpenviduGenerateRoomTokenResult!
@@ -1286,6 +1287,13 @@ type PhotoRibbonBlock implements WagtailBlock {
   value(spec: String!): [WagtailImageRendition!]!
 }
 
+input PostToTelegramChatInput {
+  id: ID!
+  message: String!
+}
+
+union PostToTelegramChatResult = BasicResult
+
 type PresentationPage implements WagtailPage {
   title: String!
   id: ID!
@@ -1387,7 +1395,9 @@ type Query {
   emailSubscribeChannelsAll: [EmailSubscribeChannel!]!
   imageTemplatesAll: [ImageTemplate!]!
   imageTemplateBySlug(slug: String!): ImageTemplate!
+  publicTelegramChats: [TelegramChat!]!
   telegramChats: [TelegramChat!]!
+  allTelegramChats: [TelegramChat!]!
   tildaPage(path: String!): TildaPage
   tildaPages: [TildaPage!]!
   externalServices: [ExternalService!]!

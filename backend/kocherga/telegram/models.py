@@ -26,12 +26,22 @@ class Permissions(models.Model):
 
         permissions = [
             ('manage_chats', 'Can manage all telegram chats'),
+            ('view_all_chats', 'Can list and access all telegram chats'),
+            ('post_to_chats', 'Can post to any telegram chats via bot'),
         ]
+
+
+class ChatQuerySet(models.QuerySet):
+    def public_only(self):
+        return self.exclude(username='')
 
 
 class ChatManager(models.Manager):
     class BadInviteLinkFormatError(Exception):
         pass
+
+    def get_queryset(self):
+        return ChatQuerySet(self.model, using=self._db)
 
     def create_by_invite_link(self, invite_link: str):
         match = re.match(r'^https://t.me/joinchat/(\S+)$', invite_link)

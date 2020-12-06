@@ -1268,6 +1268,7 @@ export type Mutation = {
   addTelegramChatByInviteLink: AddTelegramChatByInviteLinkResult;
   deleteTelegramChat: DeleteTelegramChatResult;
   refreshTelegramChatData: RefreshTelegramChatDataResult;
+  postToTelegramChat: PostToTelegramChatResult;
   tildaImportAll?: Maybe<BasicResult>;
   tildaImport?: Maybe<BasicResult>;
   openviduGenerateRoomToken: OpenviduGenerateRoomTokenResult;
@@ -1788,6 +1789,11 @@ export type MutationRefreshTelegramChatDataArgs = {
 };
 
 
+export type MutationPostToTelegramChatArgs = {
+  input: PostToTelegramChatInput;
+};
+
+
 export type MutationTildaImportArgs = {
   input: TildaImportInput;
 };
@@ -2001,6 +2007,13 @@ export type PhotoRibbonBlockValueArgs = {
   spec: Scalars['String'];
 };
 
+export type PostToTelegramChatInput = {
+  id: Scalars['ID'];
+  message: Scalars['String'];
+};
+
+export type PostToTelegramChatResult = BasicResult;
+
 export type PresentationPage = WagtailPage & {
   __typename?: 'PresentationPage';
   title: Scalars['String'];
@@ -2111,7 +2124,9 @@ export type Query = {
   emailSubscribeChannelsAll: Array<EmailSubscribeChannel>;
   imageTemplatesAll: Array<ImageTemplate>;
   imageTemplateBySlug: ImageTemplate;
+  publicTelegramChats: Array<TelegramChat>;
   telegramChats: Array<TelegramChat>;
+  allTelegramChats: Array<TelegramChat>;
   tildaPage?: Maybe<TildaPage>;
   tildaPages: Array<TildaPage>;
   externalServices: Array<ExternalService>;

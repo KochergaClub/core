@@ -59,6 +59,9 @@
       "KkmRegisterCheckOkResult",
       "GenericError"
     ],
+    "PostToTelegramChatResult": [
+      "BasicResult"
+    ],
     "RatioCreateOrderResult": [
       "RatioOrder",
       "ValidationError",

@@ -8,9 +8,9 @@ from typing import Any, Dict
 import kocherga.django.schema.types
 from django.core.exceptions import ValidationError
 from kocherga.django.errors import BoxedError, GenericError
-from kocherga.graphql import django_utils, helpers
+from kocherga.graphql import basic_types, django_utils, helpers
 
-from .. import models, permissions
+from .. import channels, models, permissions
 from . import types
 
 c = helpers.Collection()
@@ -64,6 +64,23 @@ class refreshTelegramChatData(helpers.UnionFieldMixin, helpers.BaseField):
     args = {'id': 'ID!'}
     permissions = [permissions.manage_telegram_chats]
     result_types = {models.Chat: types.TelegramChat}
+
+
+@c.class_field
+class postToTelegramChat(helpers.UnionFieldMixin, helpers.BaseFieldWithInput):
+    class Ok:
+        ok = True
+
+    def resolve(self, _, info, input):
+        channels.post_to_telegram_chat(input['id'], input['message'])
+        return self.Ok()
+
+    input = {
+        'id': 'ID!',
+        'message': str,
+    }
+    permissions = [permissions.post_to_telegram_chats]
+    result_types = {Ok: basic_types.BasicResult}
 
 
 mutations = c.as_dict()

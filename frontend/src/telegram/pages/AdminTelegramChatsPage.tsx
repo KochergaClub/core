@@ -7,16 +7,17 @@ import { NextApolloPage, withApollo, withStaff } from '~/apollo';
 import TL02 from '~/blocks/TL02';
 import { ApolloQueryResults, ButtonWithModal, DropdownMenu, PaddedBlock, Page } from '~/components';
 import { Collection, CustomCardListView } from '~/components/collections';
-import { MutationAction } from '~/components/DropdownMenu';
+import { ModalAction, MutationAction } from '~/components/DropdownMenu';
 import { useFormModalSmartMutation } from '~/components/forms/hooks';
+import { MutationModal } from '~/components/forms/MutationModal';
 import { SmartMutationModal } from '~/components/forms/SmartMutationModal';
 import { ShapeToValues } from '~/components/forms/types';
 import { A } from '~/frontkit';
 
 import { TelegramChatCardContents } from '../components/TelegramChatCardContents';
 import {
-    AddTelegramChatByInviteLinkDocument, AddTelegramChatDocument, DeleteTelegramChatDocument,
-    RefreshTelegramChatDataDocument, TelegramChatsDocument
+    AddTelegramChatByInviteLinkDocument, AddTelegramChatDocument, AllTelegramChatsDocument,
+    DeleteTelegramChatDocument, PostToTelegramChatDocument, RefreshTelegramChatDataDocument
 } from '../queries.generated';
 
 const addShape = [
@@ -34,7 +35,7 @@ const inviteAddShape = [
 type AddChatValues = ShapeToValues<typeof addShape>;
 
 const AdminTelegramChatsPage: NextApolloPage = () => {
-  const queryResults = useQuery(TelegramChatsDocument);
+  const queryResults = useQuery(AllTelegramChatsDocument);
 
   const innerAdd = useFormModalSmartMutation(AddTelegramChatDocument, {
     refetchQueries: ['TelegramChats'],
@@ -64,9 +65,9 @@ const AdminTelegramChatsPage: NextApolloPage = () => {
             </A>
           </div>
           <ApolloQueryResults {...queryResults} size="block">
-            {({ data: { telegramChats } }) => (
+            {({ data: { chats } }) => (
               <Collection
-                items={telegramChats}
+                items={chats}
                 refetch={queryResults.refetch}
                 controls={() => (
                   <div>
@@ -95,7 +96,7 @@ const AdminTelegramChatsPage: NextApolloPage = () => {
                 }}
                 view={() => (
                   <CustomCardListView
-                    items={telegramChats}
+                    items={chats}
                     renderItem={(chat) => (
                       <TelegramChatCardContents
                         chat={chat}
@@ -117,6 +118,31 @@ const AdminTelegramChatsPage: NextApolloPage = () => {
                               mutation={RefreshTelegramChatDataDocument}
                               variables={{ id: chat.id }}
                             />
+                            <ModalAction title="Отправить сообщение">
+                              {({ close }) => (
+                                <MutationModal
+                                  close={close}
+                                  title="Отправить сообщение в Telegram-чат через бота"
+                                  submitLabel="Отправить"
+                                  shape={
+                                    [
+                                      {
+                                        name: 'message',
+                                        type: 'string',
+                                        title: 'Текст',
+                                      },
+                                    ] as const
+                                  }
+                                  valuesToVariables={(v) => ({
+                                    input: {
+                                      id: chat.id,
+                                      message: v.message,
+                                    },
+                                  })}
+                                  mutation={PostToTelegramChatDocument}
+                                />
+                              )}
+                            </ModalAction>
                           </DropdownMenu>
                         )}
                       />

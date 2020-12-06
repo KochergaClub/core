@@ -20,8 +20,14 @@ fragment TelegramChat on TelegramChat {
   }
 }
 
-query TelegramChats {
-  telegramChats {
+query PublicTelegramChats {
+  chats: publicTelegramChats {
+    ...TelegramChat
+  }
+}
+
+query AllTelegramChats {
+  chats: allTelegramChats {
     ...TelegramChat
   }
 }
@@ -55,5 +61,13 @@ mutation DeleteTelegramChat($id: ID!) {
 mutation RefreshTelegramChatData($id: ID!) {
   result: refreshTelegramChatData(id: $id) {
     ...TelegramChat
+  }
+}
+
+mutation PostToTelegramChat($input: PostToTelegramChatInput!) {
+  result: postToTelegramChat(input: $input) {
+    ... on BasicResult {
+      ok
+    }
   }
 }
