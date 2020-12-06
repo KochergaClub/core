@@ -34,17 +34,24 @@ const Container = styled.div<{ hideOnMobile: boolean }>`
   }
 `;
 
+const LOGO_HEIGHT = 50;
+
 const LogoImage = () => (
-  <img src={staticUrl('menu-logo.png')} width="190" height="50" />
+  <img src={staticUrl('menu-logo.png')} width="190" height={LOGO_HEIGHT} />
 );
+
+const LogoLink = styled.a`
+  display: block;
+  height: ${LOGO_HEIGHT}px;
+`;
 
 const Logo = ({ kind }: Props) => {
   if (kind === 'team') {
     return (
       <Link href="/team" passHref>
-        <a>
+        <LogoLink>
           <LogoImage />
-        </a>
+        </LogoLink>
       </Link>
     );
   }
