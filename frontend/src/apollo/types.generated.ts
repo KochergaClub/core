@@ -9,6 +9,18 @@ export type Scalars = {
   Float: number;
 };
 
+export type AddTelegramChatByInviteLinkInput = {
+  invite_link: Scalars['String'];
+};
+
+export type AddTelegramChatByInviteLinkResult = TelegramChat | ValidationError | GenericError;
+
+export type AddTelegramChatInput = {
+  username?: Maybe<Scalars['String']>;
+};
+
+export type AddTelegramChatResult = TelegramChat | ValidationError | GenericError;
+
 export type AnalyticsBovStat = {
   __typename?: 'AnalyticsBovStat';
   date: Scalars['String'];
@@ -425,18 +437,6 @@ export type CreateRatioTrainingInput = {
 };
 
 export type CreateRatioTrainingResult = RatioTraining | ValidationError | GenericError;
-
-export type CreateTelegramChatByInviteLinkInput = {
-  invite_link: Scalars['String'];
-};
-
-export type CreateTelegramChatByInviteLinkResult = TelegramChat | ValidationError | GenericError;
-
-export type CreateTelegramChatInput = {
-  username?: Maybe<Scalars['String']>;
-};
-
-export type CreateTelegramChatResult = TelegramChat | ValidationError | GenericError;
 
 export type DeleteCommunityLeadResult = BasicResult;
 
@@ -1264,8 +1264,8 @@ export type Mutation = {
   myEmailUnsubscribe?: Maybe<Scalars['Boolean']>;
   myEmailSubscribeToInterest: Scalars['Boolean'];
   myEmailUnsubscribeFromInterest: Scalars['Boolean'];
-  createTelegramChat: CreateTelegramChatResult;
-  createTelegramChatByInviteLink: CreateTelegramChatByInviteLinkResult;
+  addTelegramChat: AddTelegramChatResult;
+  addTelegramChatByInviteLink: AddTelegramChatByInviteLinkResult;
   deleteTelegramChat: DeleteTelegramChatResult;
   refreshTelegramChatData: RefreshTelegramChatDataResult;
   tildaImportAll?: Maybe<BasicResult>;
@@ -1768,13 +1768,13 @@ export type MutationMyEmailUnsubscribeFromInterestArgs = {
 };
 
 
-export type MutationCreateTelegramChatArgs = {
-  input: CreateTelegramChatInput;
+export type MutationAddTelegramChatArgs = {
+  input: AddTelegramChatInput;
 };
 
 
-export type MutationCreateTelegramChatByInviteLinkArgs = {
-  input: CreateTelegramChatByInviteLinkInput;
+export type MutationAddTelegramChatByInviteLinkArgs = {
+  input: AddTelegramChatByInviteLinkInput;
 };
 
 

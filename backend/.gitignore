@@ -6,9 +6,8 @@ __pycache__
 /kocherga/django/settings/local_secrets.py
 
 /minizinc
-/upload/event_image
-/upload/mailchimp
 /collected_static
-/data/
+/data
+/upload
 /.coverage
 /venv

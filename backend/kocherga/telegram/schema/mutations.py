@@ -17,7 +17,7 @@ c = helpers.Collection()
 
 
 @c.class_field
-class createTelegramChat(django_utils.CreateMutation):
+class addTelegramChat(django_utils.CreateMutation):
     model = models.Chat
     permissions = [permissions.manage_telegram_chats]
     fields = ['username']
@@ -26,24 +26,16 @@ class createTelegramChat(django_utils.CreateMutation):
 
 
 @c.class_field
-class createTelegramChatByInviteLink(
-    helpers.UnionFieldMixin, helpers.BaseFieldWithInput
-):
+class addTelegramChatByInviteLink(helpers.UnionFieldMixin, helpers.BaseFieldWithInput):
     def resolve(self, _, info, input):
-        match = re.match(r'^https://t.me/joinchat/(\S+)$', input['invite_link'])
-        if not match:
+        try:
+            return models.Chat.objects.create_by_invite_link(input['invite_link'])
+        except models.Chat.objects.BadInviteLinkFormatError:
             return GenericError(
                 "invite_link должен быть в форме https://t.me/joinchat/xxxxx"
             )
-        invite_code = match.group(1)
-
-        chat = models.Chat(invite_code=invite_code)
-        try:
-            chat.full_clean()
         except ValidationError as e:
             return BoxedError(e)
-        chat.save()
-        return chat
 
     permissions = [permissions.manage_telegram_chats]
     input = {

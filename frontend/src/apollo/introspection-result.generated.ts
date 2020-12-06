@@ -6,6 +6,16 @@
       }
       const result: PossibleTypesResultData = {
   "possibleTypes": {
+    "AddTelegramChatByInviteLinkResult": [
+      "TelegramChat",
+      "ValidationError",
+      "GenericError"
+    ],
+    "AddTelegramChatResult": [
+      "TelegramChat",
+      "ValidationError",
+      "GenericError"
+    ],
     "BecomeCommunityLeadCuratorResult": [
       "CommunityLead"
     ],
@@ -28,16 +38,6 @@
     ],
     "CreateRatioTrainingResult": [
       "RatioTraining",
-      "ValidationError",
-      "GenericError"
-    ],
-    "CreateTelegramChatByInviteLinkResult": [
-      "TelegramChat",
-      "ValidationError",
-      "GenericError"
-    ],
-    "CreateTelegramChatResult": [
-      "TelegramChat",
       "ValidationError",
       "GenericError"
     ],

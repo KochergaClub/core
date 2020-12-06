@@ -1,7 +1,7 @@
+from asgiref.sync import sync_to_async
+from django.conf import settings
 from telethon import TelegramClient
 from telethon.sessions import StringSession
-
-from django.conf import settings
 
 from .models import Auth
 
@@ -10,13 +10,18 @@ API_HASH = settings.KOCHERGA_TELEGRAM['core_api']['api_hash']
 
 
 async def get_client():
-    auth = Auth.load()
-    client = TelegramClient(StringSession(auth.token), API_ID, API_HASH)
+    token = await sync_to_async(lambda: Auth.load().token)()
+    client = TelegramClient(StringSession(token), API_ID, API_HASH)
     await client.start()
 
-    token = client.session.save()
-    if auth.token != token:
-        auth.token = token
-        auth.save()
+    new_token = client.session.save()
+    if new_token != token:
+
+        def update_token():
+            auth = Auth.load()
+            auth.token = new_token
+            auth.save()
+
+        await sync_to_async(update_token)()
 
     return client

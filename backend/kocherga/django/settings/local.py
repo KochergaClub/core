@@ -14,6 +14,7 @@ import logging
 import os
 
 from .base import *
+
 # You can copy sample_secrets.py to local_secrets.py is local_secrets.py is missing.
 from .local_secrets import *
 
@@ -74,11 +75,6 @@ KOCHERGA_VK = {
     "daily_page": "UNSET",
     "client_id": 11111,
     "callback_secret": "11111",
-}
-
-KOCHERGA_TELEGRAM = {
-    "channel": "-111111",
-    "core_api": {"api_id": 11111, "api_hash": "00000"},
 }
 
 KOCHERGA_API_ROOT = "http://localhost:5302/api"

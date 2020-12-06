@@ -55,6 +55,10 @@ KOCHERGA_SLACK_BOT_TOKEN = 'xoxb-...'
 KOCHERGA_SLACK_SIGNING_SECRET = None
 
 KOCHERGA_TELEGRAM_TOKEN = None
+KOCHERGA_TELEGRAM = {
+    "channel": "-111111",
+    "core_api": {"api_id": 11111, "api_hash": "00000"},
+}
 
 KOCHERGA_TIMEPAD_TOKEN = None
 

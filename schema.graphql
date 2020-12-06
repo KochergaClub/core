@@ -1,3 +1,15 @@
+input AddTelegramChatByInviteLinkInput {
+  invite_link: String!
+}
+
+union AddTelegramChatByInviteLinkResult = TelegramChat | ValidationError | GenericError
+
+input AddTelegramChatInput {
+  username: String
+}
+
+union AddTelegramChatResult = TelegramChat | ValidationError | GenericError
+
 type AnalyticsBovStat {
   date: String!
   count: Int!
@@ -370,18 +382,6 @@ input CreateRatioTrainingInput {
 }
 
 union CreateRatioTrainingResult = RatioTraining | ValidationError | GenericError
-
-input CreateTelegramChatByInviteLinkInput {
-  invite_link: String!
-}
-
-union CreateTelegramChatByInviteLinkResult = TelegramChat | ValidationError | GenericError
-
-input CreateTelegramChatInput {
-  username: String
-}
-
-union CreateTelegramChatResult = TelegramChat | ValidationError | GenericError
 
 union DeleteCommunityLeadResult = BasicResult
 
@@ -1122,8 +1122,8 @@ type Mutation {
   myEmailUnsubscribe: Boolean
   myEmailSubscribeToInterest(interest_id: ID!): Boolean!
   myEmailUnsubscribeFromInterest(interest_id: ID!): Boolean!
-  createTelegramChat(input: CreateTelegramChatInput!): CreateTelegramChatResult!
-  createTelegramChatByInviteLink(input: CreateTelegramChatByInviteLinkInput!): CreateTelegramChatByInviteLinkResult!
+  addTelegramChat(input: AddTelegramChatInput!): AddTelegramChatResult!
+  addTelegramChatByInviteLink(input: AddTelegramChatByInviteLinkInput!): AddTelegramChatByInviteLinkResult!
   deleteTelegramChat(id: ID!): DeleteTelegramChatResult!
   refreshTelegramChatData(id: ID!): RefreshTelegramChatDataResult!
   tildaImportAll: BasicResult

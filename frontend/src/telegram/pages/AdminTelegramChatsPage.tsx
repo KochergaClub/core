@@ -15,7 +15,7 @@ import { A } from '~/frontkit';
 
 import { TelegramChatCardContents } from '../components/TelegramChatCardContents';
 import {
-    CreateTelegramChatByInviteLinkDocument, CreateTelegramChatDocument, DeleteTelegramChatDocument,
+    AddTelegramChatByInviteLinkDocument, AddTelegramChatDocument, DeleteTelegramChatDocument,
     RefreshTelegramChatDataDocument, TelegramChatsDocument
 } from '../queries.generated';
 
@@ -36,7 +36,7 @@ type AddChatValues = ShapeToValues<typeof addShape>;
 const AdminTelegramChatsPage: NextApolloPage = () => {
   const queryResults = useQuery(TelegramChatsDocument);
 
-  const innerAdd = useFormModalSmartMutation(CreateTelegramChatDocument, {
+  const innerAdd = useFormModalSmartMutation(AddTelegramChatDocument, {
     refetchQueries: ['TelegramChats'],
     expectedTypename: 'TelegramChat',
   });
@@ -67,6 +67,7 @@ const AdminTelegramChatsPage: NextApolloPage = () => {
             {({ data: { telegramChats } }) => (
               <Collection
                 items={telegramChats}
+                refetch={queryResults.refetch}
                 controls={() => (
                   <div>
                     <ButtonWithModal title="Создать по ссылке">
@@ -78,7 +79,7 @@ const AdminTelegramChatsPage: NextApolloPage = () => {
                           shape={inviteAddShape}
                           expectedTypename="TelegramChat"
                           refetchQueries={['TelegramChats']}
-                          mutation={CreateTelegramChatByInviteLinkDocument}
+                          mutation={AddTelegramChatByInviteLinkDocument}
                         />
                       )}
                     </ButtonWithModal>
