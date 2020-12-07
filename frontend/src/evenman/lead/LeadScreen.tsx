@@ -27,6 +27,7 @@ export const LeadScreen: React.FC = () => {
 
   const queryResults = useQuery(EvenmanLeadsDocument, {
     variables: { first: 20, filter: filterNameToInput[filterName] },
+    nextFetchPolicy: 'cache-and-network',
   });
 
   const innerAdd = useFormModalSmartMutation(CreateEvenmanLeadDocument, {

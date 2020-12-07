@@ -86,14 +86,18 @@ export const LeadCard: React.FC<Props> = ({ lead }) => {
           </Row>
         </small>
       )}
-      {lead.curated_by && (
+      {lead.curated_by || lead.status !== CommunityLeadStatus.Inactive ? (
         <small>
           <Row>
             <div>Куратор:</div>
-            <UserLink user={lead.curated_by} />
+            {lead.curated_by ? (
+              <UserLink user={lead.curated_by} />
+            ) : (
+              <Badge type="accent">отсутствует</Badge>
+            )}
           </Row>
         </small>
-      )}
+      ) : null}
       <small>
         <Row>
           <div>Статус:</div>
