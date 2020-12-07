@@ -26,6 +26,9 @@
     "ClearCommunityLeadCuratorResult": [
       "CommunityLead"
     ],
+    "CommentOnCommunityLeadResult": [
+      "CommunityLead"
+    ],
     "CreateCommunityLeadResult": [
       "CommunityLead",
       "ValidationError",

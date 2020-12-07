@@ -366,6 +366,21 @@ export type ColumnsButtonsBlockValueImageArgs = {
   spec: Scalars['String'];
 };
 
+export type Comment = {
+  __typename?: 'Comment';
+  id: Scalars['ID'];
+  created: Scalars['String'];
+  text: Scalars['String'];
+  author?: Maybe<AuthUser>;
+};
+
+export type CommentOnCommunityLeadInput = {
+  lead_id: Scalars['ID'];
+  text: Scalars['String'];
+};
+
+export type CommentOnCommunityLeadResult = CommunityLead;
+
 export type CommunityLead = {
   __typename?: 'CommunityLead';
   id: Scalars['ID'];
@@ -376,6 +391,8 @@ export type CommunityLead = {
   created_by?: Maybe<AuthUser>;
   curated_by?: Maybe<AuthUser>;
   status: CommunityLeadStatus;
+  comments_count: Scalars['Int'];
+  comments: Array<Comment>;
 };
 
 export type CommunityLeadConnection = {
@@ -1277,6 +1294,7 @@ export type Mutation = {
   deleteCommunityLead: DeleteCommunityLeadResult;
   becomeCommunityLeadCurator: BecomeCommunityLeadCuratorResult;
   clearCommunityLeadCurator: ClearCommunityLeadCuratorResult;
+  commentOnCommunityLead: CommentOnCommunityLeadResult;
 };
 
 
@@ -1821,6 +1839,11 @@ export type MutationBecomeCommunityLeadCuratorArgs = {
 
 export type MutationClearCommunityLeadCuratorArgs = {
   input: ClearCommunityLeadCuratorInput;
+};
+
+
+export type MutationCommentOnCommunityLeadArgs = {
+  input: CommentOnCommunityLeadInput;
 };
 
 export type My = {
@@ -3045,7 +3068,7 @@ export type UpdateSettingsInput = {
   default_events_images_collection?: Maybe<Scalars['ID']>;
   default_events_vk_images_collection?: Maybe<Scalars['ID']>;
   weekly_digest_images_collection?: Maybe<Scalars['ID']>;
-  telegram_images_collection?: Maybe<Scalars['ID']>;
+  community_org_team_telegram_chat?: Maybe<Scalars['ID']>;
 };
 
 export type UpdateYandexKassaPaymentInput = {

@@ -46,12 +46,7 @@ class becomeCommunityLeadCurator(helpers.UnionFieldMixin, helpers.BaseFieldWithI
         'id': 'ID!',
     }
     permissions = [permissions.manage_crm]
-
-    @property
-    def result_types(self):
-        return {
-            self.model: types.CommunityLead,
-        }
+    result_types = {model: types.CommunityLead}
 
 
 @c.class_field
@@ -69,12 +64,24 @@ class clearCommunityLeadCurator(helpers.UnionFieldMixin, helpers.BaseFieldWithIn
         'id': 'ID!',
     }
     permissions = [permissions.manage_crm]
+    result_types = {model: types.CommunityLead}
 
-    @property
-    def result_types(self):
-        return {
-            self.model: types.CommunityLead,
-        }
+
+@c.class_field
+class commentOnCommunityLead(helpers.UnionFieldMixin, helpers.BaseFieldWithInput):
+    model = models.Lead
+
+    def resolve(self, _, info, input):
+        obj = self.model.objects.get(id=input['lead_id'])
+        obj.create_comment(info.context.user, input['text'])
+        return obj
+
+    permissions = [permissions.manage_crm]
+    input = {
+        'lead_id': 'ID!',
+        'text': str,
+    }
+    result_types = {model: types.CommunityLead}
 
 
 mutations = c.as_dict()

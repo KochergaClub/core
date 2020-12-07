@@ -86,6 +86,7 @@ INSTALLED_APPS = [
     'kocherga.external_services',
     'kocherga.presentations',
     'kocherga.community',
+    'kocherga.comments',
     'taggit',
     'modelcluster',
     'wagtail.api.v2',

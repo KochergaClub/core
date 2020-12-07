@@ -4,6 +4,15 @@ fragment UserForCrm on AuthUser {
   last_name
 }
 
+fragment Comment on Comment {
+  id
+  text
+  created
+  author {
+    ...UserForCrm
+  }
+}
+
 fragment EvenmanLead on CommunityLead {
   id
   created
@@ -16,6 +25,10 @@ fragment EvenmanLead on CommunityLead {
   }
   curated_by {
     ...UserForCrm
+  }
+  comments_count
+  comments {
+    ...Comment
   }
 }
 

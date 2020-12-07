@@ -35,19 +35,33 @@ const Status: React.FC<{ status: CommunityLeadStatus }> = ({ status }) => {
   );
 };
 
+const DescriptionContainer = styled.div`
+  font-size: 0.8em;
+`;
+
 type Props = {
   lead: EvenmanLeadFragment;
 };
 
-const DescriptionContainer = styled.div`
-  font-size: 0.8em;
-`;
+const LeadComments: React.FC<Props> = ({ lead }) => {
+  return (
+    <div>
+      <div>Комментариев: {lead.comments_count}</div>
+      {lead.comments.map((comment) => (
+        <div key={comment.id}>{comment.text}</div>
+      ))}
+      <button>добавить</button>
+    </div>
+  );
+};
 
 export const LeadCard: React.FC<Props> = ({ lead }) => {
   return (
     <Column stretch>
       <Row vCentered>
-        <strong>{lead.name}</strong>
+        <strong>
+          {lead.name} #{lead.id}
+        </strong>
         <DropdownMenu>
           <ModalAction title="Редактировать" icon={FaEdit}>
             {({ close }) => <EditLeadModal close={close} lead={lead} />}
@@ -116,6 +130,8 @@ export const LeadCard: React.FC<Props> = ({ lead }) => {
           <RichText dangerouslySetInnerHTML={{ __html: lead.description }} />
         </DescriptionContainer>
       ) : null}
+      <HR />
+      <LeadComments lead={lead} />
     </Column>
   );
 };

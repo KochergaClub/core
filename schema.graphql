@@ -314,6 +314,20 @@ type ColumnsButtonsBlockValue {
   link: String!
 }
 
+type Comment {
+  id: ID!
+  created: String!
+  text: String!
+  author: AuthUser
+}
+
+input CommentOnCommunityLeadInput {
+  lead_id: ID!
+  text: String!
+}
+
+union CommentOnCommunityLeadResult = CommunityLead
+
 type CommunityLead {
   id: ID!
   name: String!
@@ -323,6 +337,8 @@ type CommunityLead {
   created_by: AuthUser
   curated_by: AuthUser
   status: CommunityLeadStatus!
+  comments_count: Int!
+  comments: [Comment!]!
 }
 
 type CommunityLeadConnection {
@@ -1135,6 +1151,7 @@ type Mutation {
   deleteCommunityLead(id: ID!): DeleteCommunityLeadResult!
   becomeCommunityLeadCurator(input: BecomeCommunityLeadCuratorInput!): BecomeCommunityLeadCuratorResult!
   clearCommunityLeadCurator(input: ClearCommunityLeadCuratorInput!): ClearCommunityLeadCuratorResult!
+  commentOnCommunityLead(input: CommentOnCommunityLeadInput!): CommentOnCommunityLeadResult!
 }
 
 type My {
@@ -2022,7 +2039,7 @@ input UpdateSettingsInput {
   default_events_images_collection: ID
   default_events_vk_images_collection: ID
   weekly_digest_images_collection: ID
-  telegram_images_collection: ID
+  community_org_team_telegram_chat: ID
 }
 
 input UpdateYandexKassaPaymentInput {
