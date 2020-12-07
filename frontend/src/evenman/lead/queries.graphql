@@ -95,3 +95,9 @@ mutation ClearEvenmanLeadCurator($id: ID!) {
     ...EvenmanLead
   }
 }
+
+mutation CommentOnCommunityLead($input: CommentOnCommunityLeadInput!) {
+  result: commentOnCommunityLead(input: $input) {
+    ...EvenmanLead
+  }
+}

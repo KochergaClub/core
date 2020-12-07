@@ -4,14 +4,15 @@ import { FaEdit, FaTrash } from 'react-icons/fa';
 import styled from 'styled-components';
 
 import { CommunityLeadStatus } from '~/apollo/types.generated';
-import { DropdownMenu, HumanizedDateTime } from '~/components';
+import { ButtonWithModal, DropdownMenu, HumanizedDateTime } from '~/components';
 import { ModalAction, MutationAction } from '~/components/DropdownMenu';
-import { Badge, Column, HR, RichText, Row } from '~/frontkit';
+import { SmartMutationModal } from '~/components/forms/SmartMutationModal';
+import { Badge, Column, fonts, HR, RichText, Row } from '~/frontkit';
 
 import { EditLeadModal } from './EditLeadModal';
 import {
-    BecomeEvenmanLeadCuratorDocument, ClearEvenmanLeadCuratorDocument, DeleteEvenmanLeadDocument,
-    EvenmanLeadFragment
+    BecomeEvenmanLeadCuratorDocument, ClearEvenmanLeadCuratorDocument,
+    CommentOnCommunityLeadDocument, DeleteEvenmanLeadDocument, EvenmanLeadFragment
 } from './queries.generated';
 import { statusNames } from './utils';
 
@@ -35,8 +36,8 @@ const Status: React.FC<{ status: CommunityLeadStatus }> = ({ status }) => {
   );
 };
 
-const DescriptionContainer = styled.div`
-  font-size: 0.8em;
+const SmallRichText = styled(RichText)`
+  font-size: ${fonts.sizes.XS};
 `;
 
 type Props = {
@@ -45,13 +46,41 @@ type Props = {
 
 const LeadComments: React.FC<Props> = ({ lead }) => {
   return (
-    <div>
-      <div>Комментариев: {lead.comments_count}</div>
+    <Column>
+      <strong>Комментарии</strong>
       {lead.comments.map((comment) => (
-        <div key={comment.id}>{comment.text}</div>
+        <SmallRichText
+          key={comment.id}
+          dangerouslySetInnerHTML={{ __html: comment.text }}
+        />
       ))}
-      <button>добавить</button>
-    </div>
+      <ButtonWithModal title="Добавить" size="small">
+        {({ close }) => (
+          <SmartMutationModal
+            close={close}
+            title="Добавить комментарий"
+            submitLabel="Добавить"
+            shape={
+              [
+                {
+                  name: 'text',
+                  type: 'richtext',
+                  title: 'Текст',
+                },
+              ] as const
+            }
+            valuesToVariables={(v) => ({
+              input: {
+                lead_id: lead.id,
+                text: v.text,
+              },
+            })}
+            expectedTypename="CommunityLead"
+            mutation={CommentOnCommunityLeadDocument}
+          />
+        )}
+      </ButtonWithModal>
+    </Column>
   );
 };
 
@@ -59,9 +88,8 @@ export const LeadCard: React.FC<Props> = ({ lead }) => {
   return (
     <Column stretch>
       <Row vCentered>
-        <strong>
-          {lead.name} #{lead.id}
-        </strong>
+        <span>#{lead.id}</span>
+        <strong>{lead.name}</strong>
         <DropdownMenu>
           <ModalAction title="Редактировать" icon={FaEdit}>
             {({ close }) => <EditLeadModal close={close} lead={lead} />}
@@ -125,13 +153,17 @@ export const LeadCard: React.FC<Props> = ({ lead }) => {
         </Row>
       </small>
       {lead.description ? (
-        <DescriptionContainer>
+        <div>
           <HR />
-          <RichText dangerouslySetInnerHTML={{ __html: lead.description }} />
-        </DescriptionContainer>
+          <SmallRichText
+            dangerouslySetInnerHTML={{ __html: lead.description }}
+          />
+        </div>
       ) : null}
-      <HR />
-      <LeadComments lead={lead} />
+      <div>
+        <HR />
+        <LeadComments lead={lead} />
+      </div>
     </Column>
   );
 };
