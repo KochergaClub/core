@@ -16,7 +16,7 @@ const shape = [
   },
   {
     name: 'description',
-    type: 'richtext',
+    type: 'markdown',
     title: 'Описание',
     optional: true,
   },

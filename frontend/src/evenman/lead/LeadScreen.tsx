@@ -15,7 +15,7 @@ import {
 
 const leadShape = [
   { name: 'name', title: 'Имя', type: 'string' },
-  { name: 'description', title: 'Описание', type: 'richtext', optional: true },
+  { name: 'description', title: 'Описание', type: 'markdown', optional: true },
 ] as const;
 
 type CreateLeadValues = ShapeToValues<typeof leadShape>;

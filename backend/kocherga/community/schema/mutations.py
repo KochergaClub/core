@@ -84,4 +84,14 @@ class commentOnCommunityLead(helpers.UnionFieldMixin, helpers.BaseFieldWithInput
     result_types = {model: types.CommunityLead}
 
 
+## TODO: implement generic Mutation class, e.g.:
+# @c.class_field
+# class commentOnCommunityLead(comment_utils.CreateCommentMutation):
+#     model = models.Lead
+#     permissions = [permissions.manage_crm]
+#     graphql_field = 'lead_id'
+#     model_field = 'pk'
+#     result_type = types.CommunityLead
+
+
 mutations = c.as_dict()

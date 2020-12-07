@@ -8,9 +8,10 @@ export const useFocusOnFirstInput = () => {
       if (!formRef.current) {
         return; // huh, form is still not ready
       }
-      const maybeInput = formRef.current.querySelector(
-        'input'
-      ) as HTMLInputElement | null;
+      const maybeInput = formRef.current.querySelector('input, textarea') as
+        | HTMLInputElement
+        | HTMLTextAreaElement
+        | null;
       if (maybeInput && 'focus' in maybeInput) {
         maybeInput.focus();
       }

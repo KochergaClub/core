@@ -5,7 +5,6 @@ from django.contrib.auth import get_user_model
 from django.db import models
 from kocherga.comments.models import Commentable
 from kocherga.django.managers import RelayQuerySet
-from wagtail.core.fields import RichTextField
 
 User = get_user_model()
 
@@ -13,7 +12,7 @@ User = get_user_model()
 @reversion.register()
 class Lead(Commentable, models.Model):
     name = models.CharField(max_length=250)
-    description = RichTextField(blank=True)
+    description = models.TextField(blank=True)
 
     created = models.DateTimeField(auto_now_add=True)
     updated = models.DateTimeField(auto_now=True)

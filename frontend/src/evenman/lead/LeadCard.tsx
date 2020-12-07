@@ -1,13 +1,15 @@
 import { parseISO } from 'date-fns';
 import React from 'react';
 import { FaEdit, FaTrash } from 'react-icons/fa';
+import Markdown from 'react-markdown';
+import breaks from 'remark-breaks';
 
 import { CommunityLeadStatus } from '~/apollo/types.generated';
 import { useUser } from '~/common/hooks';
 import { DropdownMenu, HumanizedDateTime } from '~/components';
 import { ModalAction, MutationAction } from '~/components/DropdownMenu';
 import { UserLink } from '~/components/UserLink';
-import { Badge, Column, HR, RichText, Row } from '~/frontkit';
+import { Badge, Column, Row } from '~/frontkit';
 
 import { CommentsList } from './CommentsList';
 import { EditLeadModal } from './EditLeadModal';
@@ -106,12 +108,12 @@ export const LeadCard: React.FC<Props> = ({ lead }) => {
       </small>
       {lead.description ? (
         <div>
-          <HR />
-          <RichText dangerouslySetInnerHTML={{ __html: lead.description }} />
+          <hr />
+          <Markdown source={lead.description} plugins={[breaks]} />
         </div>
       ) : null}
       <div>
-        <HR />
+        <hr />
         <CommentsList
           commentable={lead}
           create={{

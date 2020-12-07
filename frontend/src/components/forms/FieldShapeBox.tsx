@@ -6,6 +6,7 @@ import { BasicInputField } from './BasicInputField';
 import { CheckboxField } from './CheckboxField';
 import { DateField } from './DateField';
 import { ImageField } from './ImageField';
+import { MarkdownField } from './MarkdownField';
 import { RadioField } from './RadioField';
 import { RichTextField } from './RichTextField';
 import { SelectField } from './SelectField';
@@ -70,6 +71,16 @@ export const FieldShapeBox = <
           defaultValue={defaultValue as FieldToValue<typeof field> | undefined}
           // checkboxes are never required (for now)
           // required={!field.optional}
+        />
+      );
+    case 'markdown':
+      return (
+        <MarkdownField
+          name={name}
+          title={field.title || field.name}
+          form={form}
+          defaultValue={defaultValue as FieldToValue<typeof field> | undefined}
+          required={!field.optional}
         />
       );
     case 'richtext':

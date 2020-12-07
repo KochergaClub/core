@@ -13,6 +13,10 @@ export interface StringFieldShape extends AnyBasicFieldShape {
   readonly type: 'string' | 'email' | 'password' | 'date';
 }
 
+export interface MarkdownFieldShape extends AnyBasicFieldShape {
+  readonly type: 'markdown';
+}
+
 export interface RichTextFieldShape extends AnyBasicFieldShape {
   readonly type: 'richtext';
 }
@@ -61,6 +65,7 @@ export interface ShapeListFieldShape extends AnyFieldShape {
 export type BasicFieldShape =
   | StringFieldShape
   | RichTextFieldShape
+  | MarkdownFieldShape
   | NumberFieldShape
   | ChoiceFieldShape
   | BooleanFieldShape
@@ -92,9 +97,8 @@ export type AnyFormValues = {
 };
 
 export type FieldToValue<T extends FieldShape> = (
-    T extends StringFieldShape ? string :
+    T extends StringFieldShape | RichTextFieldShape | MarkdownFieldShape ? string :
     T extends NumberFieldShape ? string : // number is represented as string in form.handleSubmit
-    T extends RichTextFieldShape ? string :
     T extends BooleanFieldShape ? boolean :
     T extends ImageFieldShape ? string :
     T extends ChoiceFieldShape ? string :

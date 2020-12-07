@@ -1,5 +1,7 @@
 import { parseISO } from 'date-fns';
 import React from 'react';
+import Markdown from 'react-markdown';
+import breaks from 'remark-breaks';
 
 import { TypedDocumentNode } from '@apollo/client';
 
@@ -7,7 +9,7 @@ import { ButtonWithModal, HumanizedDateTime } from '~/components';
 import { SmartMutationResult } from '~/components/forms/hooks';
 import { SmartMutationModal } from '~/components/forms/SmartMutationModal';
 import { UserLink } from '~/components/UserLink';
-import { Column, RichText, Row } from '~/frontkit';
+import { Column, Row } from '~/frontkit';
 
 import { CommentableFragment, CommentFragment } from './queries.generated';
 
@@ -26,7 +28,7 @@ const Comment: React.FC<CommentProps> = ({ comment }) => {
           (<HumanizedDateTime date={parseISO(comment.created)} />)
         </em>
       </Row>
-      <RichText dangerouslySetInnerHTML={{ __html: comment.text }} />
+      <Markdown source={comment.text} plugins={[breaks]} />
       <hr />
     </div>
   );
@@ -58,7 +60,7 @@ export const CommentsList: React.FC<Props> = ({ commentable, create }) => {
                 [
                   {
                     name: 'text',
-                    type: 'richtext',
+                    type: 'markdown',
                     title: 'Текст',
                   },
                 ] as const

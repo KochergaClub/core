@@ -10,7 +10,7 @@ class Comment(models.Model):
     updated = models.DateTimeField(auto_now=True)
 
     author = models.ForeignKey(KchUser, on_delete=models.PROTECT)
-    text = RichTextField()
+    text = models.TextField()
 
 
 class Commentable(models.Model):
