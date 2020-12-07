@@ -371,7 +371,7 @@ export type Comment = {
   id: Scalars['ID'];
   created: Scalars['String'];
   text: Scalars['String'];
-  author?: Maybe<AuthUser>;
+  author: AuthUser;
 };
 
 export type CommentOnCommunityLeadInput = {
@@ -381,7 +381,12 @@ export type CommentOnCommunityLeadInput = {
 
 export type CommentOnCommunityLeadResult = CommunityLead;
 
-export type CommunityLead = {
+export type Commentable = {
+  comments_count: Scalars['Int'];
+  comments: Array<Comment>;
+};
+
+export type CommunityLead = Commentable & {
   __typename?: 'CommunityLead';
   id: Scalars['ID'];
   name: Scalars['String'];

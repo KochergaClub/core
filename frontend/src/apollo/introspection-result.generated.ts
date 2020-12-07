@@ -29,6 +29,9 @@
     "CommentOnCommunityLeadResult": [
       "CommunityLead"
     ],
+    "Commentable": [
+      "CommunityLead"
+    ],
     "CreateCommunityLeadResult": [
       "CommunityLead",
       "ValidationError",

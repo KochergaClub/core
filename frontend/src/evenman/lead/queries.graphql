@@ -1,15 +1,16 @@
-fragment UserForCrm on AuthUser {
-  id
-  first_name
-  last_name
-}
-
 fragment Comment on Comment {
   id
   text
   created
   author {
-    ...UserForCrm
+    ...User
+  }
+}
+
+fragment Commentable on Commentable {
+  comments_count
+  comments {
+    ...Comment
   }
 }
 
@@ -21,15 +22,12 @@ fragment EvenmanLead on CommunityLead {
   description
   status
   created_by {
-    ...UserForCrm
+    ...User
   }
   curated_by {
-    ...UserForCrm
+    ...User
   }
-  comments_count
-  comments {
-    ...Comment
-  }
+  ...Commentable
 }
 
 query EvenmanLeads(

@@ -110,6 +110,7 @@ def DjangoObjectType(
     ] = {},
     method_fields: List[str] = [],
     extra_fields={},
+    interfaces: List[g.InterfaceType] = [],
 ):
     def build_related():
         result = {}
@@ -169,6 +170,7 @@ def DjangoObjectType(
                 **build_extra(),
             }
         ),
+        interfaces=interfaces,
     )
 
 

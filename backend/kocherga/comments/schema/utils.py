@@ -23,3 +23,10 @@ def build_comments_count_field(permissions: List[helpers.PermissionType]):
 
     result = g.NN(g.Int)
     return g.Field(result, resolve=check_permissions(permissions)(resolve))
+
+
+def build_commentable_fields(permissions: List[helpers.PermissionType]):
+    return {
+        'comments_count': build_comments_count_field(permissions=permissions),
+        'comments': build_comments_field(permissions=permissions),
+    }

@@ -1,36 +1,40 @@
 import * as Types from '../../apollo/types.generated';
 
+import { UserFragment } from '../../components/UserLink/fragments.generated';
 import { GenericErrorFragment, ValidationErrorFragment } from '../../apollo/common-fragments.generated';
 import { dedupeFragments } from '~/common/dedupeFragments';
 import { TypedDocumentNode as DocumentNode } from '@graphql-typed-document-node/core';
+import { UserFragmentDoc } from '../../components/UserLink/fragments.generated';
 import { GenericErrorFragmentDoc, ValidationErrorFragmentDoc } from '../../apollo/common-fragments.generated';
-export type UserForCrmFragment = (
-  { __typename: 'AuthUser' }
-  & Pick<Types.AuthUser, 'id' | 'first_name' | 'last_name'>
-);
-
 export type CommentFragment = (
   { __typename: 'Comment' }
   & Pick<Types.Comment, 'id' | 'text' | 'created'>
-  & { author?: Types.Maybe<(
+  & { author: (
     { __typename: 'AuthUser' }
-    & UserForCrmFragment
+    & UserFragment
+  ) }
+);
+
+export type CommentableFragment = (
+  { __typename: 'CommunityLead' }
+  & Pick<Types.CommunityLead, 'comments_count'>
+  & { comments: Array<(
+    { __typename: 'Comment' }
+    & CommentFragment
   )> }
 );
 
 export type EvenmanLeadFragment = (
   { __typename: 'CommunityLead' }
-  & Pick<Types.CommunityLead, 'id' | 'created' | 'updated' | 'name' | 'description' | 'status' | 'comments_count'>
+  & Pick<Types.CommunityLead, 'id' | 'created' | 'updated' | 'name' | 'description' | 'status'>
   & { created_by?: Types.Maybe<(
     { __typename: 'AuthUser' }
-    & UserForCrmFragment
+    & UserFragment
   )>, curated_by?: Types.Maybe<(
     { __typename: 'AuthUser' }
-    & UserForCrmFragment
-  )>, comments: Array<(
-    { __typename: 'Comment' }
-    & CommentFragment
+    & UserFragment
   )> }
+  & CommentableFragment
 );
 
 export type EvenmanLeadsQueryVariables = Types.Exact<{
@@ -149,9 +153,9 @@ export type CommentOnCommunityLeadMutation = (
   ) }
 );
 
-export const UserForCrmFragmentDoc: DocumentNode<UserForCrmFragment, unknown> = {"kind":"Document","definitions":[{"kind":"FragmentDefinition","name":{"kind":"Name","value":"UserForCrm"},"typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"AuthUser"}},"directives":[],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"},"arguments":[],"directives":[]},{"kind":"Field","name":{"kind":"Name","value":"first_name"},"arguments":[],"directives":[]},{"kind":"Field","name":{"kind":"Name","value":"last_name"},"arguments":[],"directives":[]}]}}]};
-export const CommentFragmentDoc: DocumentNode<CommentFragment, unknown> = {"kind":"Document","definitions":[{"kind":"FragmentDefinition","name":{"kind":"Name","value":"Comment"},"typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"Comment"}},"directives":[],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"},"arguments":[],"directives":[]},{"kind":"Field","name":{"kind":"Name","value":"text"},"arguments":[],"directives":[]},{"kind":"Field","name":{"kind":"Name","value":"created"},"arguments":[],"directives":[]},{"kind":"Field","name":{"kind":"Name","value":"author"},"arguments":[],"directives":[],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"FragmentSpread","name":{"kind":"Name","value":"UserForCrm"},"directives":[]}]}}]}},...UserForCrmFragmentDoc.definitions]};
-export const EvenmanLeadFragmentDoc: DocumentNode<EvenmanLeadFragment, unknown> = {"kind":"Document","definitions":[{"kind":"FragmentDefinition","name":{"kind":"Name","value":"EvenmanLead"},"typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"CommunityLead"}},"directives":[],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"},"arguments":[],"directives":[]},{"kind":"Field","name":{"kind":"Name","value":"created"},"arguments":[],"directives":[]},{"kind":"Field","name":{"kind":"Name","value":"updated"},"arguments":[],"directives":[]},{"kind":"Field","name":{"kind":"Name","value":"name"},"arguments":[],"directives":[]},{"kind":"Field","name":{"kind":"Name","value":"description"},"arguments":[],"directives":[]},{"kind":"Field","name":{"kind":"Name","value":"status"},"arguments":[],"directives":[]},{"kind":"Field","name":{"kind":"Name","value":"created_by"},"arguments":[],"directives":[],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"FragmentSpread","name":{"kind":"Name","value":"UserForCrm"},"directives":[]}]}},{"kind":"Field","name":{"kind":"Name","value":"curated_by"},"arguments":[],"directives":[],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"FragmentSpread","name":{"kind":"Name","value":"UserForCrm"},"directives":[]}]}},{"kind":"Field","name":{"kind":"Name","value":"comments_count"},"arguments":[],"directives":[]},{"kind":"Field","name":{"kind":"Name","value":"comments"},"arguments":[],"directives":[],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"FragmentSpread","name":{"kind":"Name","value":"Comment"},"directives":[]}]}}]}},...UserForCrmFragmentDoc.definitions,...CommentFragmentDoc.definitions]};
+export const CommentFragmentDoc: DocumentNode<CommentFragment, unknown> = {"kind":"Document","definitions":[{"kind":"FragmentDefinition","name":{"kind":"Name","value":"Comment"},"typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"Comment"}},"directives":[],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"},"arguments":[],"directives":[]},{"kind":"Field","name":{"kind":"Name","value":"text"},"arguments":[],"directives":[]},{"kind":"Field","name":{"kind":"Name","value":"created"},"arguments":[],"directives":[]},{"kind":"Field","name":{"kind":"Name","value":"author"},"arguments":[],"directives":[],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"FragmentSpread","name":{"kind":"Name","value":"User"},"directives":[]}]}}]}},...UserFragmentDoc.definitions]};
+export const CommentableFragmentDoc: DocumentNode<CommentableFragment, unknown> = {"kind":"Document","definitions":[{"kind":"FragmentDefinition","name":{"kind":"Name","value":"Commentable"},"typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"Commentable"}},"directives":[],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"comments_count"},"arguments":[],"directives":[]},{"kind":"Field","name":{"kind":"Name","value":"comments"},"arguments":[],"directives":[],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"FragmentSpread","name":{"kind":"Name","value":"Comment"},"directives":[]}]}}]}},...CommentFragmentDoc.definitions]};
+export const EvenmanLeadFragmentDoc: DocumentNode<EvenmanLeadFragment, unknown> = {"kind":"Document","definitions":[{"kind":"FragmentDefinition","name":{"kind":"Name","value":"EvenmanLead"},"typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"CommunityLead"}},"directives":[],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"},"arguments":[],"directives":[]},{"kind":"Field","name":{"kind":"Name","value":"created"},"arguments":[],"directives":[]},{"kind":"Field","name":{"kind":"Name","value":"updated"},"arguments":[],"directives":[]},{"kind":"Field","name":{"kind":"Name","value":"name"},"arguments":[],"directives":[]},{"kind":"Field","name":{"kind":"Name","value":"description"},"arguments":[],"directives":[]},{"kind":"Field","name":{"kind":"Name","value":"status"},"arguments":[],"directives":[]},{"kind":"Field","name":{"kind":"Name","value":"created_by"},"arguments":[],"directives":[],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"FragmentSpread","name":{"kind":"Name","value":"User"},"directives":[]}]}},{"kind":"Field","name":{"kind":"Name","value":"curated_by"},"arguments":[],"directives":[],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"FragmentSpread","name":{"kind":"Name","value":"User"},"directives":[]}]}},{"kind":"FragmentSpread","name":{"kind":"Name","value":"Commentable"},"directives":[]}]}},...UserFragmentDoc.definitions,...CommentableFragmentDoc.definitions]};
 export const EvenmanLeadsDocument: DocumentNode<EvenmanLeadsQuery, EvenmanLeadsQueryVariables> = dedupeFragments({ "kind": "Document", "definitions": [{ "kind": "OperationDefinition", "operation": "query", "name": { "kind": "Name", "value": "EvenmanLeads" }, "variableDefinitions": [{ "kind": "VariableDefinition", "variable": { "kind": "Variable", "name": { "kind": "Name", "value": "before" } }, "type": { "kind": "NamedType", "name": { "kind": "Name", "value": "String" } }, "directives": [] }, { "kind": "VariableDefinition", "variable": { "kind": "Variable", "name": { "kind": "Name", "value": "after" } }, "type": { "kind": "NamedType", "name": { "kind": "Name", "value": "String" } }, "directives": [] }, { "kind": "VariableDefinition", "variable": { "kind": "Variable", "name": { "kind": "Name", "value": "first" } }, "type": { "kind": "NamedType", "name": { "kind": "Name", "value": "Int" } }, "directives": [] }, { "kind": "VariableDefinition", "variable": { "kind": "Variable", "name": { "kind": "Name", "value": "last" } }, "type": { "kind": "NamedType", "name": { "kind": "Name", "value": "Int" } }, "directives": [] }, { "kind": "VariableDefinition", "variable": { "kind": "Variable", "name": { "kind": "Name", "value": "filter" } }, "type": { "kind": "NamedType", "name": { "kind": "Name", "value": "CommunityLeadsFilterInput" } }, "directives": [] }], "directives": [], "selectionSet": { "kind": "SelectionSet", "selections": [{ "kind": "Field", "name": { "kind": "Name", "value": "communityLeads" }, "arguments": [{ "kind": "Argument", "name": { "kind": "Name", "value": "before" }, "value": { "kind": "Variable", "name": { "kind": "Name", "value": "before" } } }, { "kind": "Argument", "name": { "kind": "Name", "value": "after" }, "value": { "kind": "Variable", "name": { "kind": "Name", "value": "after" } } }, { "kind": "Argument", "name": { "kind": "Name", "value": "first" }, "value": { "kind": "Variable", "name": { "kind": "Name", "value": "first" } } }, { "kind": "Argument", "name": { "kind": "Name", "value": "last" }, "value": { "kind": "Variable", "name": { "kind": "Name", "value": "last" } } }, { "kind": "Argument", "name": { "kind": "Name", "value": "filter" }, "value": { "kind": "Variable", "name": { "kind": "Name", "value": "filter" } } }], "directives": [], "selectionSet": { "kind": "SelectionSet", "selections": [{ "kind": "Field", "name": { "kind": "Name", "value": "pageInfo" }, "arguments": [], "directives": [], "selectionSet": { "kind": "SelectionSet", "selections": [{ "kind": "Field", "name": { "kind": "Name", "value": "hasNextPage" }, "arguments": [], "directives": [] }, { "kind": "Field", "name": { "kind": "Name", "value": "hasPreviousPage" }, "arguments": [], "directives": [] }, { "kind": "Field", "name": { "kind": "Name", "value": "startCursor" }, "arguments": [], "directives": [] }, { "kind": "Field", "name": { "kind": "Name", "value": "endCursor" }, "arguments": [], "directives": [] }] } }, { "kind": "Field", "name": { "kind": "Name", "value": "edges" }, "arguments": [], "directives": [], "selectionSet": { "kind": "SelectionSet", "selections": [{ "kind": "Field", "name": { "kind": "Name", "value": "node" }, "arguments": [], "directives": [], "selectionSet": { "kind": "SelectionSet", "selections": [{ "kind": "FragmentSpread", "name": { "kind": "Name", "value": "EvenmanLead" }, "directives": [] }] } }] } }] } }] } }, ...EvenmanLeadFragmentDoc.definitions] });
 
 export const CreateEvenmanLeadDocument: DocumentNode<CreateEvenmanLeadMutation, CreateEvenmanLeadMutationVariables> = dedupeFragments({ "kind": "Document", "definitions": [{ "kind": "OperationDefinition", "operation": "mutation", "name": { "kind": "Name", "value": "CreateEvenmanLead" }, "variableDefinitions": [{ "kind": "VariableDefinition", "variable": { "kind": "Variable", "name": { "kind": "Name", "value": "input" } }, "type": { "kind": "NonNullType", "type": { "kind": "NamedType", "name": { "kind": "Name", "value": "CreateCommunityLeadInput" } } }, "directives": [] }], "directives": [], "selectionSet": { "kind": "SelectionSet", "selections": [{ "kind": "Field", "alias": { "kind": "Name", "value": "result" }, "name": { "kind": "Name", "value": "createCommunityLead" }, "arguments": [{ "kind": "Argument", "name": { "kind": "Name", "value": "input" }, "value": { "kind": "Variable", "name": { "kind": "Name", "value": "input" } } }], "directives": [], "selectionSet": { "kind": "SelectionSet", "selections": [{ "kind": "FragmentSpread", "name": { "kind": "Name", "value": "EvenmanLead" }, "directives": [] }, { "kind": "FragmentSpread", "name": { "kind": "Name", "value": "GenericError" }, "directives": [] }, { "kind": "FragmentSpread", "name": { "kind": "Name", "value": "ValidationError" }, "directives": [] }] } }] } }, ...EvenmanLeadFragmentDoc.definitions, ...GenericErrorFragmentDoc.definitions, ...ValidationErrorFragmentDoc.definitions] });

@@ -1,8 +1,6 @@
 from kocherga.auth.schema import types as auth_types
-from kocherga.comments.schema.utils import (
-    build_comments_count_field,
-    build_comments_field,
-)
+from kocherga.comments.schema import types as comment_types
+from kocherga.comments.schema.utils import build_commentable_fields
 from kocherga.graphql import django_utils, g, helpers
 
 from .. import models, permissions
@@ -17,11 +15,9 @@ CommunityLead = django_utils.DjangoObjectType(
         'created_by': auth_types.AuthUser,
         'curated_by': auth_types.AuthUser,
         'status': g.NN(CommunityLeadStatus),
-        'comments_count': build_comments_count_field(
-            permissions=[permissions.manage_crm]
-        ),
-        'comments': build_comments_field(permissions=[permissions.manage_crm]),
+        **build_commentable_fields(permissions=[permissions.manage_crm]),
     },
+    interfaces=[comment_types.Commentable],
 )
 
 CommunityLeadConnection = helpers.ConnectionType(CommunityLead)

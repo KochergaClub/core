@@ -318,7 +318,7 @@ type Comment {
   id: ID!
   created: String!
   text: String!
-  author: AuthUser
+  author: AuthUser!
 }
 
 input CommentOnCommunityLeadInput {
@@ -328,7 +328,12 @@ input CommentOnCommunityLeadInput {
 
 union CommentOnCommunityLeadResult = CommunityLead
 
-type CommunityLead {
+interface Commentable {
+  comments_count: Int!
+  comments: [Comment!]!
+}
+
+type CommunityLead implements Commentable {
   id: ID!
   name: String!
   description: String!
