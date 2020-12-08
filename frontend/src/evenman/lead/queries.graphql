@@ -111,3 +111,11 @@ mutation AddEventToCommunityLead($input: AddEventToCommunityLeadInput!) {
     ...EvenmanLead
   }
 }
+
+mutation RemoveEventFromCommunityLead(
+  $input: RemoveEventFromCommunityLeadInput!
+) {
+  result: removeEventFromCommunityLead(input: $input) {
+    ...EvenmanLead
+  }
+}

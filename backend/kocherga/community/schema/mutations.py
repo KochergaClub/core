@@ -87,6 +87,24 @@ class addEventToCommunityLead(helpers.UnionFieldMixin, helpers.BaseFieldWithInpu
 
 
 @c.class_field
+class removeEventFromCommunityLead(helpers.UnionFieldMixin, helpers.BaseFieldWithInput):
+    model = models.Lead
+
+    def resolve(self, _, info, input):
+        lead = self.model.objects.get(id=input['lead_id'])
+        event = event_models.Event.objects.get(uuid=input['event_id'])
+        lead.events.remove(event)
+        return lead
+
+    input = {
+        'lead_id': 'ID!',
+        'event_id': 'ID!',
+    }
+    permissions = [permissions.manage_crm]
+    result_types = {model: types.CommunityLead}
+
+
+@c.class_field
 class commentOnCommunityLead(helpers.UnionFieldMixin, helpers.BaseFieldWithInput):
     model = models.Lead
 

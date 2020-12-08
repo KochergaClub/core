@@ -1308,6 +1308,7 @@ export type Mutation = {
   becomeCommunityLeadCurator: BecomeCommunityLeadCuratorResult;
   clearCommunityLeadCurator: ClearCommunityLeadCuratorResult;
   addEventToCommunityLead: AddEventToCommunityLeadResult;
+  removeEventFromCommunityLead: RemoveEventFromCommunityLeadResult;
   commentOnCommunityLead: CommentOnCommunityLeadResult;
 };
 
@@ -1858,6 +1859,11 @@ export type MutationClearCommunityLeadCuratorArgs = {
 
 export type MutationAddEventToCommunityLeadArgs = {
   input: AddEventToCommunityLeadInput;
+};
+
+
+export type MutationRemoveEventFromCommunityLeadArgs = {
+  input: RemoveEventFromCommunityLeadInput;
 };
 
 
@@ -2849,6 +2855,13 @@ export type RatioTrainingsFilterInput = {
 };
 
 export type RefreshTelegramChatDataResult = TelegramChat;
+
+export type RemoveEventFromCommunityLeadInput = {
+  lead_id: Scalars['ID'];
+  event_id: Scalars['ID'];
+};
+
+export type RemoveEventFromCommunityLeadResult = CommunityLead;
 
 export type SearchInput = {
   query: Scalars['String'];

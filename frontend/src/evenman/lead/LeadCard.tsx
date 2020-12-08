@@ -7,7 +7,7 @@ import breaks from 'remark-breaks';
 
 import { CommunityLeadStatus } from '~/apollo/types.generated';
 import { useUser } from '~/common/hooks';
-import { DropdownMenu, HumanizedDateTime } from '~/components';
+import { DropdownMenu, HumanizedDateTime, MutationButton } from '~/components';
 import { ModalAction, MutationAction } from '~/components/DropdownMenu';
 import { UserLink } from '~/components/UserLink';
 import { A, Badge, Column, Row } from '~/frontkit';
@@ -18,7 +18,8 @@ import { CommentsList } from './CommentsList';
 import { EditLeadModal } from './EditLeadModal';
 import {
     BecomeEvenmanLeadCuratorDocument, ClearEvenmanLeadCuratorDocument,
-    CommentOnCommunityLeadDocument, DeleteEvenmanLeadDocument, EvenmanLeadFragment
+    CommentOnCommunityLeadDocument, DeleteEvenmanLeadDocument, EvenmanLeadFragment,
+    RemoveEventFromCommunityLeadDocument
 } from './queries.generated';
 import { statusNames } from './utils';
 
@@ -119,9 +120,20 @@ export const LeadCard: React.FC<Props> = ({ lead }) => {
           <hr />
           <div>События:</div>
           {lead.events.map((event) => (
-            <Link key={event.id} href={evenmanEventRoute(event.id)} passHref>
-              <A>{event.title}</A>
-            </Link>
+            <Row key={event.id}>
+              <Link href={evenmanEventRoute(event.id)} passHref>
+                <A>{event.title}</A>
+              </Link>
+              <div>(<HumanizedDateTime date={parseISO(event.start)} />)</div>
+              <MutationButton
+                mutation={RemoveEventFromCommunityLeadDocument}
+                variables={{ input: { lead_id: lead.id, event_id: event.id } }}
+                size="small"
+                confirmText="Отвязать событие от лида?"
+              >
+                Отвязать
+              </MutationButton>
+            </Row>
           ))}
         </div>
       ) : null}

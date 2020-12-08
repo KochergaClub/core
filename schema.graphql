@@ -1165,6 +1165,7 @@ type Mutation {
   becomeCommunityLeadCurator(input: BecomeCommunityLeadCuratorInput!): BecomeCommunityLeadCuratorResult!
   clearCommunityLeadCurator(input: ClearCommunityLeadCuratorInput!): ClearCommunityLeadCuratorResult!
   addEventToCommunityLead(input: AddEventToCommunityLeadInput!): AddEventToCommunityLeadResult!
+  removeEventFromCommunityLead(input: RemoveEventFromCommunityLeadInput!): RemoveEventFromCommunityLeadResult!
   commentOnCommunityLead(input: CommentOnCommunityLeadInput!): CommentOnCommunityLeadResult!
 }
 
@@ -1846,6 +1847,13 @@ input RatioTrainingsFilterInput {
 }
 
 union RefreshTelegramChatDataResult = TelegramChat
+
+input RemoveEventFromCommunityLeadInput {
+  lead_id: ID!
+  event_id: ID!
+}
+
+union RemoveEventFromCommunityLeadResult = CommunityLead
 
 input SearchInput {
   query: String!

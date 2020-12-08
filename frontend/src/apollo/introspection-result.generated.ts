@@ -79,6 +79,9 @@
     "RefreshTelegramChatDataResult": [
       "TelegramChat"
     ],
+    "RemoveEventFromCommunityLeadResult": [
+      "CommunityLead"
+    ],
     "SearchItem": [
       "PageSearchItem",
       "EventSearchItem"
