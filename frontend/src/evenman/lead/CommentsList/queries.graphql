@@ -1,0 +1,31 @@
+fragment Comment on Comment {
+  id
+  text
+  created
+  author {
+    ...User
+  }
+}
+
+fragment Commentable on Commentable {
+  comments_count
+  comments {
+    ...Comment
+  }
+}
+
+mutation DeleteComment($id: ID!) {
+  result: deleteComment(input: { id: $id }) {
+    ... on BasicResult {
+      ok
+    }
+    ...GenericError
+  }
+}
+
+mutation EditComment($input: EditCommentInput!) {
+  result: editComment(input: $input) {
+    ...Comment
+    ...GenericError
+  }
+}

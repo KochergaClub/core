@@ -50,11 +50,19 @@
       "ValidationError",
       "GenericError"
     ],
+    "DeleteCommentResult": [
+      "BasicResult",
+      "GenericError"
+    ],
     "DeleteCommunityLeadResult": [
       "BasicResult"
     ],
     "DeleteTelegramChatResult": [
       "BasicResult"
+    ],
+    "EditCommentResult": [
+      "Comment",
+      "GenericError"
     ],
     "ExternalService": [
       "SlackExternalService",

@@ -1,6 +1,6 @@
 import { useCallback } from 'react';
 
-import { useMutation } from '@apollo/client';
+import { MutationUpdaterFn, useMutation } from '@apollo/client';
 import { TypedDocumentNode } from '@graphql-typed-document-node/core';
 
 import { AsyncButton } from '~/frontkit';
@@ -14,11 +14,13 @@ interface Props<V extends Record<string, unknown>> {
   kind?: Parameters<typeof AsyncButton>[0]['kind'];
   confirmText?: string;
   refetchQueries?: string[];
+  updateCache?: MutationUpdaterFn<unknown>;
   children: React.ReactNode;
 }
 
 function MutationButton<V extends Record<string, unknown>>({
   mutation,
+  updateCache,
   variables,
   size,
   kind,
@@ -28,6 +30,7 @@ function MutationButton<V extends Record<string, unknown>>({
 }: Props<V>) {
   const [mutationCb] = useMutation(mutation, {
     refetchQueries,
+    update: updateCache,
     awaitRefetchQueries: true,
   });
   const act = useCallback(async () => {

@@ -1,10 +1,11 @@
+import reversion
 from django.contrib.auth import get_user_model
 from django.db import models
-from wagtail.core.fields import RichTextField
 
 KchUser = get_user_model()
 
 
+@reversion.register()
 class Comment(models.Model):
     created = models.DateTimeField(auto_now_add=True)
     updated = models.DateTimeField(auto_now=True)

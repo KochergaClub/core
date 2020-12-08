@@ -412,6 +412,12 @@ input CreateRatioTrainingInput {
 
 union CreateRatioTrainingResult = RatioTraining | ValidationError | GenericError
 
+input DeleteCommentInput {
+  id: ID!
+}
+
+union DeleteCommentResult = BasicResult | GenericError
+
 union DeleteCommunityLeadResult = BasicResult
 
 input DeleteRatioTicketTypeInput {
@@ -419,6 +425,13 @@ input DeleteRatioTicketTypeInput {
 }
 
 union DeleteTelegramChatResult = BasicResult
+
+input EditCommentInput {
+  id: ID!
+  text: String!
+}
+
+union EditCommentResult = Comment | GenericError
 
 type EmailMailchimpCategory {
   id: ID!
@@ -1167,6 +1180,8 @@ type Mutation {
   addEventToCommunityLead(input: AddEventToCommunityLeadInput!): AddEventToCommunityLeadResult!
   removeEventFromCommunityLead(input: RemoveEventFromCommunityLeadInput!): RemoveEventFromCommunityLeadResult!
   commentOnCommunityLead(input: CommentOnCommunityLeadInput!): CommentOnCommunityLeadResult!
+  editComment(input: EditCommentInput!): EditCommentResult!
+  deleteComment(input: DeleteCommentInput!): DeleteCommentResult!
 }
 
 type My {

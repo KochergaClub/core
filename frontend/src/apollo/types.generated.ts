@@ -468,6 +468,12 @@ export type CreateRatioTrainingInput = {
 
 export type CreateRatioTrainingResult = RatioTraining | ValidationError | GenericError;
 
+export type DeleteCommentInput = {
+  id: Scalars['ID'];
+};
+
+export type DeleteCommentResult = BasicResult | GenericError;
+
 export type DeleteCommunityLeadResult = BasicResult;
 
 export type DeleteRatioTicketTypeInput = {
@@ -475,6 +481,13 @@ export type DeleteRatioTicketTypeInput = {
 };
 
 export type DeleteTelegramChatResult = BasicResult;
+
+export type EditCommentInput = {
+  id: Scalars['ID'];
+  text: Scalars['String'];
+};
+
+export type EditCommentResult = Comment | GenericError;
 
 export type EmailMailchimpCategory = {
   __typename?: 'EmailMailchimpCategory';
@@ -1310,6 +1323,8 @@ export type Mutation = {
   addEventToCommunityLead: AddEventToCommunityLeadResult;
   removeEventFromCommunityLead: RemoveEventFromCommunityLeadResult;
   commentOnCommunityLead: CommentOnCommunityLeadResult;
+  editComment: EditCommentResult;
+  deleteComment: DeleteCommentResult;
 };
 
 
@@ -1869,6 +1884,16 @@ export type MutationRemoveEventFromCommunityLeadArgs = {
 
 export type MutationCommentOnCommunityLeadArgs = {
   input: CommentOnCommunityLeadInput;
+};
+
+
+export type MutationEditCommentArgs = {
+  input: EditCommentInput;
+};
+
+
+export type MutationDeleteCommentArgs = {
+  input: DeleteCommentInput;
 };
 
 export type My = {

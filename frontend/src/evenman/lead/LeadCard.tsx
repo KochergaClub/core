@@ -124,7 +124,9 @@ export const LeadCard: React.FC<Props> = ({ lead }) => {
               <Link href={evenmanEventRoute(event.id)} passHref>
                 <A>{event.title}</A>
               </Link>
-              <div>(<HumanizedDateTime date={parseISO(event.start)} />)</div>
+              <div>
+                (<HumanizedDateTime date={parseISO(event.start)} />)
+              </div>
               <MutationButton
                 mutation={RemoveEventFromCommunityLeadDocument}
                 variables={{ input: { lead_id: lead.id, event_id: event.id } }}

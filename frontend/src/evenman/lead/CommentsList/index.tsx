@@ -5,19 +5,22 @@ import breaks from 'remark-breaks';
 
 import { TypedDocumentNode } from '@apollo/client';
 
-import { ButtonWithModal, HumanizedDateTime } from '~/components';
+import { ButtonWithModal, HumanizedDateTime, MutationButton } from '~/components';
 import { SmartMutationResult } from '~/components/forms/hooks';
 import { SmartMutationModal } from '~/components/forms/SmartMutationModal';
 import { UserLink } from '~/components/UserLink';
 import { Column, Row } from '~/frontkit';
 
-import { CommentableFragment, CommentFragment } from './queries.generated';
+import {
+    CommentableFragment, CommentFragment, DeleteCommentDocument, EditCommentDocument
+} from './queries.generated';
 
 type CommentProps = {
+  commentable: CommentableFragment;
   comment: CommentFragment;
 };
 
-const Comment: React.FC<CommentProps> = ({ comment }) => {
+const Comment: React.FC<CommentProps> = ({ comment, commentable }) => {
   return (
     <div>
       <Row>
@@ -27,6 +30,51 @@ const Comment: React.FC<CommentProps> = ({ comment }) => {
         <em>
           (<HumanizedDateTime date={parseISO(comment.created)} />)
         </em>
+        <MutationButton
+          mutation={DeleteCommentDocument}
+          variables={{ id: comment.id }}
+          size="small"
+          confirmText="Удалить комментарий?"
+          updateCache={(cache) => {
+            cache.modify({
+              id: cache.identify(commentable),
+              fields: {
+                comments(existingCommentRefs, { readField }) {
+                  return existingCommentRefs.filter(
+                    (commentRef: any) =>
+                      comment.id !== readField('id', commentRef)
+                  );
+                },
+              },
+            });
+          }}
+        >
+          Удалить
+        </MutationButton>
+        <ButtonWithModal title="Редактировать" size="small">
+          {({ close }) => (
+            <SmartMutationModal
+              close={close}
+              title="Редактирование комментария"
+              submitLabel="Сохранить"
+              shape={
+                [
+                  {
+                    name: 'text',
+                    type: 'markdown',
+                    title: 'Текст',
+                  },
+                ] as const
+              }
+              defaultValues={{ text: comment.text }}
+              valuesToVariables={(v) => ({
+                input: { id: comment.id, text: v.text },
+              })}
+              expectedTypename="Comment"
+              mutation={EditCommentDocument}
+            />
+          )}
+        </ButtonWithModal>
       </Row>
       <Markdown source={comment.text} plugins={[breaks]} />
       <hr />
@@ -47,7 +95,7 @@ export const CommentsList: React.FC<Props> = ({ commentable, create }) => {
   return (
     <Column stretch>
       {commentable.comments.map((comment) => (
-        <Comment key={comment.id} comment={comment} />
+        <Comment key={comment.id} comment={comment} commentable={commentable} />
       ))}
       <div>
         <ButtonWithModal title="Добавить комментарий" size="small">
