@@ -2,13 +2,14 @@ import { parseISO } from 'date-fns';
 import Link from 'next/link';
 import React from 'react';
 import { FaEdit, FaLink, FaTrash } from 'react-icons/fa';
+import styled from 'styled-components';
 
 import { CommunityLeadStatus } from '~/apollo/types.generated';
 import { useUser } from '~/common/hooks';
 import { DropdownMenu, HumanizedDateTime, Markdown, MutationButton } from '~/components';
 import { ModalAction, MutationAction } from '~/components/DropdownMenu';
 import { UserLink } from '~/components/UserLink';
-import { A, Badge, Column, Row } from '~/frontkit';
+import { A, Badge, Column, Label, Row } from '~/frontkit';
 
 import { evenmanEventRoute } from '../routes';
 import { AddEventToLeadModal } from './AddEventToLeadModal';
@@ -20,6 +21,22 @@ import {
     RemoveEventFromCommunityLeadDocument
 } from './queries.generated';
 import { statusNames } from './utils';
+
+const SectionHr = styled.hr`
+  margin-top: 4px;
+  margin-bottom: 16px;
+  height: 1px;
+`;
+
+const CardSection: React.FC<{ title: string }> = ({ title, children }) => {
+  return (
+    <section>
+      <Label>{title}</Label>
+      <SectionHr />
+      {children}
+    </section>
+  );
+};
 
 const Status: React.FC<{ status: CommunityLeadStatus }> = ({ status }) => {
   return (
@@ -36,7 +53,7 @@ type Props = {
 export const LeadCard: React.FC<Props> = ({ lead }) => {
   const user = useUser();
   return (
-    <Column stretch>
+    <Column stretch gutter={16}>
       <Row vCentered>
         <span>#{lead.id}</span>
         <strong>{lead.name}</strong>
@@ -75,48 +92,48 @@ export const LeadCard: React.FC<Props> = ({ lead }) => {
           }
         </DropdownMenu>
       </Row>
-      <small>
-        <Row>
-          <div>Создан:</div>
-          <HumanizedDateTime date={parseISO(lead.created)} />
-        </Row>
-      </small>
-      <small>
-        <Row>
-          <div>Последнее обновление:</div>
-          <HumanizedDateTime date={parseISO(lead.updated)} />
-        </Row>
-      </small>
-      {lead.created_by && (
+      <Column>
         <small>
           <Row>
-            <div>Кем создан:</div>
-            <UserLink user={lead.created_by} />
+            <div>Создан:</div>
+            <HumanizedDateTime date={parseISO(lead.created)} />
           </Row>
         </small>
-      )}
-      {lead.curated_by || lead.status !== CommunityLeadStatus.Inactive ? (
         <small>
           <Row>
-            <div>Куратор:</div>
-            {lead.curated_by ? (
-              <UserLink user={lead.curated_by} />
-            ) : (
-              <Badge type="accent">отсутствует</Badge>
-            )}
+            <div>Последнее обновление:</div>
+            <HumanizedDateTime date={parseISO(lead.updated)} />
           </Row>
         </small>
-      ) : null}
-      <small>
-        <Row>
-          <div>Статус:</div>
-          <Status status={lead.status} />
-        </Row>
-      </small>
+        {lead.created_by && (
+          <small>
+            <Row>
+              <div>Кем создан:</div>
+              <UserLink user={lead.created_by} />
+            </Row>
+          </small>
+        )}
+        {lead.curated_by || lead.status !== CommunityLeadStatus.Inactive ? (
+          <small>
+            <Row>
+              <div>Куратор:</div>
+              {lead.curated_by ? (
+                <UserLink user={lead.curated_by} />
+              ) : (
+                <Badge type="accent">отсутствует</Badge>
+              )}
+            </Row>
+          </small>
+        ) : null}
+        <small>
+          <Row>
+            <div>Статус:</div>
+            <Status status={lead.status} />
+          </Row>
+        </small>
+      </Column>
       {lead.events.length ? (
-        <div>
-          <hr />
-          <div>События:</div>
+        <CardSection title="События">
           {lead.events.map((event) => (
             <Row key={event.id}>
               <Link href={evenmanEventRoute(event.id)} passHref>
@@ -135,16 +152,14 @@ export const LeadCard: React.FC<Props> = ({ lead }) => {
               </MutationButton>
             </Row>
           ))}
-        </div>
+        </CardSection>
       ) : null}
       {lead.description ? (
-        <div>
-          <hr />
+        <CardSection title="Описание">
           <Markdown source={lead.description} />
-        </div>
+        </CardSection>
       ) : null}
-      <div>
-        <hr />
+      <CardSection title="Комментарии">
         <CommentsList
           commentable={lead}
           create={{
@@ -158,7 +173,7 @@ export const LeadCard: React.FC<Props> = ({ lead }) => {
             }),
           }}
         />
-      </div>
+      </CardSection>
     </Column>
   );
 };
