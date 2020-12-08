@@ -1,6 +1,7 @@
 import { parseISO } from 'date-fns';
+import Link from 'next/link';
 import React from 'react';
-import { FaEdit, FaTrash } from 'react-icons/fa';
+import { FaEdit, FaLink, FaTrash } from 'react-icons/fa';
 import Markdown from 'react-markdown';
 import breaks from 'remark-breaks';
 
@@ -9,8 +10,10 @@ import { useUser } from '~/common/hooks';
 import { DropdownMenu, HumanizedDateTime } from '~/components';
 import { ModalAction, MutationAction } from '~/components/DropdownMenu';
 import { UserLink } from '~/components/UserLink';
-import { Badge, Column, Row } from '~/frontkit';
+import { A, Badge, Column, Row } from '~/frontkit';
 
+import { evenmanEventRoute } from '../routes';
+import { AddEventToLeadModal } from './AddEventToLeadModal';
 import { CommentsList } from './CommentsList';
 import { EditLeadModal } from './EditLeadModal';
 import {
@@ -66,6 +69,11 @@ export const LeadCard: React.FC<Props> = ({ lead }) => {
               variables={{ id: lead.id }}
             />
           ) : null}
+          {
+            <ModalAction title="Связать с событием" icon={FaLink}>
+              {({ close }) => <AddEventToLeadModal close={close} lead={lead} />}
+            </ModalAction>
+          }
         </DropdownMenu>
       </Row>
       <small>
@@ -106,6 +114,17 @@ export const LeadCard: React.FC<Props> = ({ lead }) => {
           <Status status={lead.status} />
         </Row>
       </small>
+      {lead.events.length ? (
+        <div>
+          <hr />
+          <div>События:</div>
+          {lead.events.map((event) => (
+            <Link key={event.id} href={evenmanEventRoute(event.id)} passHref>
+              <A>{event.title}</A>
+            </Link>
+          ))}
+        </div>
+      ) : null}
       {lead.description ? (
         <div>
           <hr />

@@ -39,6 +39,8 @@ class Lead(Commentable, models.Model):
         db_index=True,
     )
 
+    events = models.ManyToManyField('events.Event', related_name='community_leads')
+
     objects = RelayQuerySet.as_manager()
 
     class Meta:

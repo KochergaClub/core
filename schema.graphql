@@ -1,3 +1,10 @@
+input AddEventToCommunityLeadInput {
+  lead_id: ID!
+  event_id: ID!
+}
+
+union AddEventToCommunityLeadResult = CommunityLead
+
 input AddTelegramChatByInviteLinkInput {
   invite_link: String!
 }
@@ -339,6 +346,7 @@ type CommunityLead implements Commentable {
   description: String!
   created: String!
   updated: String!
+  events: [Event!]!
   created_by: AuthUser
   curated_by: AuthUser
   status: CommunityLeadStatus!
@@ -1156,6 +1164,7 @@ type Mutation {
   deleteCommunityLead(id: ID!): DeleteCommunityLeadResult!
   becomeCommunityLeadCurator(input: BecomeCommunityLeadCuratorInput!): BecomeCommunityLeadCuratorResult!
   clearCommunityLeadCurator(input: ClearCommunityLeadCuratorInput!): ClearCommunityLeadCuratorResult!
+  addEventToCommunityLead(input: AddEventToCommunityLeadInput!): AddEventToCommunityLeadResult!
   commentOnCommunityLead(input: CommentOnCommunityLeadInput!): CommentOnCommunityLeadResult!
 }
 

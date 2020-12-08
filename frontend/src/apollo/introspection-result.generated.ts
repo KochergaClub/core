@@ -6,6 +6,9 @@
       }
       const result: PossibleTypesResultData = {
   "possibleTypes": {
+    "AddEventToCommunityLeadResult": [
+      "CommunityLead"
+    ],
     "AddTelegramChatByInviteLinkResult": [
       "TelegramChat",
       "ValidationError",

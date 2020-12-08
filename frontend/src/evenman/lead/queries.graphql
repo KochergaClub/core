@@ -27,6 +27,12 @@ fragment EvenmanLead on CommunityLead {
   curated_by {
     ...User
   }
+  events {
+    id
+    title
+    start
+    published
+  }
   ...Commentable
 }
 
@@ -96,6 +102,12 @@ mutation ClearEvenmanLeadCurator($id: ID!) {
 
 mutation CommentOnCommunityLead($input: CommentOnCommunityLeadInput!) {
   result: commentOnCommunityLead(input: $input) {
+    ...EvenmanLead
+  }
+}
+
+mutation AddEventToCommunityLead($input: AddEventToCommunityLeadInput!) {
+  result: addEventToCommunityLead(input: $input) {
     ...EvenmanLead
   }
 }

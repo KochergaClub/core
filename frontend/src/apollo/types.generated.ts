@@ -9,6 +9,13 @@ export type Scalars = {
   Float: number;
 };
 
+export type AddEventToCommunityLeadInput = {
+  lead_id: Scalars['ID'];
+  event_id: Scalars['ID'];
+};
+
+export type AddEventToCommunityLeadResult = CommunityLead;
+
 export type AddTelegramChatByInviteLinkInput = {
   invite_link: Scalars['String'];
 };
@@ -393,6 +400,7 @@ export type CommunityLead = Commentable & {
   description: Scalars['String'];
   created: Scalars['String'];
   updated: Scalars['String'];
+  events: Array<Event>;
   created_by?: Maybe<AuthUser>;
   curated_by?: Maybe<AuthUser>;
   status: CommunityLeadStatus;
@@ -1299,6 +1307,7 @@ export type Mutation = {
   deleteCommunityLead: DeleteCommunityLeadResult;
   becomeCommunityLeadCurator: BecomeCommunityLeadCuratorResult;
   clearCommunityLeadCurator: ClearCommunityLeadCuratorResult;
+  addEventToCommunityLead: AddEventToCommunityLeadResult;
   commentOnCommunityLead: CommentOnCommunityLeadResult;
 };
 
@@ -1844,6 +1853,11 @@ export type MutationBecomeCommunityLeadCuratorArgs = {
 
 export type MutationClearCommunityLeadCuratorArgs = {
   input: ClearCommunityLeadCuratorInput;
+};
+
+
+export type MutationAddEventToCommunityLeadArgs = {
+  input: AddEventToCommunityLeadInput;
 };
 
 

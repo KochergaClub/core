@@ -1,0 +1,13 @@
+fragment Event_ForPicker on Event {
+  id
+  title
+  start
+}
+
+query SearchEventsForPicker($search: String!) {
+  events(search: $search, first: 20) {
+    nodes {
+      ...Event_ForPicker
+    }
+  }
+}

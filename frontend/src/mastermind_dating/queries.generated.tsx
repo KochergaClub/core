@@ -78,22 +78,6 @@ export type MastermindDatingCohortByIdQuery = (
   ) }
 );
 
-export type MastermindDatingSearchEventsQueryVariables = Types.Exact<{
-  search: Types.Scalars['String'];
-}>;
-
-
-export type MastermindDatingSearchEventsQuery = (
-  { __typename: 'Query' }
-  & { events: (
-    { __typename: 'EventConnection' }
-    & { nodes: Array<(
-      { __typename: 'Event' }
-      & MastermindDatingEventFragment
-    )> }
-  ) }
-);
-
 export type MastermindDatingCreateCohortMutationVariables = Types.Exact<{ [key: string]: never; }>;
 
 
@@ -277,8 +261,6 @@ export const MastermindDatingEventFragmentDoc: DocumentNode<MastermindDatingEven
 export const MastermindDatingCohortsDocument: DocumentNode<MastermindDatingCohortsQuery, MastermindDatingCohortsQueryVariables> = dedupeFragments({ "kind": "Document", "definitions": [{ "kind": "OperationDefinition", "operation": "query", "name": { "kind": "Name", "value": "MastermindDatingCohorts" }, "variableDefinitions": [], "directives": [], "selectionSet": { "kind": "SelectionSet", "selections": [{ "kind": "Field", "alias": { "kind": "Name", "value": "cohorts" }, "name": { "kind": "Name", "value": "mastermindDatingCohorts" }, "arguments": [], "directives": [], "selectionSet": { "kind": "SelectionSet", "selections": [{ "kind": "FragmentSpread", "name": { "kind": "Name", "value": "MastermindDatingCohortSummary" }, "directives": [] }] } }] } }, ...MastermindDatingCohortSummaryFragmentDoc.definitions] });
 
 export const MastermindDatingCohortByIdDocument: DocumentNode<MastermindDatingCohortByIdQuery, MastermindDatingCohortByIdQueryVariables> = dedupeFragments({ "kind": "Document", "definitions": [{ "kind": "OperationDefinition", "operation": "query", "name": { "kind": "Name", "value": "MastermindDatingCohortById" }, "variableDefinitions": [{ "kind": "VariableDefinition", "variable": { "kind": "Variable", "name": { "kind": "Name", "value": "id" } }, "type": { "kind": "NonNullType", "type": { "kind": "NamedType", "name": { "kind": "Name", "value": "ID" } } }, "directives": [] }], "directives": [], "selectionSet": { "kind": "SelectionSet", "selections": [{ "kind": "Field", "alias": { "kind": "Name", "value": "cohort" }, "name": { "kind": "Name", "value": "mastermindDatingCohortById" }, "arguments": [{ "kind": "Argument", "name": { "kind": "Name", "value": "id" }, "value": { "kind": "Variable", "name": { "kind": "Name", "value": "id" } } }], "directives": [], "selectionSet": { "kind": "SelectionSet", "selections": [{ "kind": "FragmentSpread", "name": { "kind": "Name", "value": "MastermindDatingCohortDetails" }, "directives": [] }] } }] } }, ...MastermindDatingCohortDetailsFragmentDoc.definitions] });
-
-export const MastermindDatingSearchEventsDocument: DocumentNode<MastermindDatingSearchEventsQuery, MastermindDatingSearchEventsQueryVariables> = dedupeFragments({ "kind": "Document", "definitions": [{ "kind": "OperationDefinition", "operation": "query", "name": { "kind": "Name", "value": "MastermindDatingSearchEvents" }, "variableDefinitions": [{ "kind": "VariableDefinition", "variable": { "kind": "Variable", "name": { "kind": "Name", "value": "search" } }, "type": { "kind": "NonNullType", "type": { "kind": "NamedType", "name": { "kind": "Name", "value": "String" } } }, "directives": [] }], "directives": [], "selectionSet": { "kind": "SelectionSet", "selections": [{ "kind": "Field", "name": { "kind": "Name", "value": "events" }, "arguments": [{ "kind": "Argument", "name": { "kind": "Name", "value": "search" }, "value": { "kind": "Variable", "name": { "kind": "Name", "value": "search" } } }, { "kind": "Argument", "name": { "kind": "Name", "value": "first" }, "value": { "kind": "IntValue", "value": "20" } }], "directives": [], "selectionSet": { "kind": "SelectionSet", "selections": [{ "kind": "Field", "name": { "kind": "Name", "value": "nodes" }, "arguments": [], "directives": [], "selectionSet": { "kind": "SelectionSet", "selections": [{ "kind": "FragmentSpread", "name": { "kind": "Name", "value": "MastermindDatingEvent" }, "directives": [] }] } }] } }] } }, ...MastermindDatingEventFragmentDoc.definitions] });
 
 export const MastermindDatingCreateCohortDocument: DocumentNode<MastermindDatingCreateCohortMutation, MastermindDatingCreateCohortMutationVariables> = dedupeFragments({ "kind": "Document", "definitions": [{ "kind": "OperationDefinition", "operation": "mutation", "name": { "kind": "Name", "value": "MastermindDatingCreateCohort" }, "variableDefinitions": [], "directives": [], "selectionSet": { "kind": "SelectionSet", "selections": [{ "kind": "Field", "name": { "kind": "Name", "value": "mastermindDatingCreateCohort" }, "arguments": [], "directives": [], "selectionSet": { "kind": "SelectionSet", "selections": [{ "kind": "Field", "name": { "kind": "Name", "value": "cohort" }, "arguments": [], "directives": [], "selectionSet": { "kind": "SelectionSet", "selections": [{ "kind": "FragmentSpread", "name": { "kind": "Name", "value": "MastermindDatingCohortSummary" }, "directives": [] }] } }] } }] } }, ...MastermindDatingCohortSummaryFragmentDoc.definitions] });
 
