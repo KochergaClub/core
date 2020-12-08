@@ -3,12 +3,13 @@ from django.contrib.auth import get_user_model
 from django.db import models
 from kocherga.comments.models import Commentable
 from kocherga.django.managers import RelayQuerySet
+from wagtail.search import index
 
 User = get_user_model()
 
 
 @reversion.register()
-class Lead(Commentable, models.Model):
+class Lead(index.Indexed, Commentable, models.Model):
     name = models.CharField(max_length=250)
     description = models.TextField(blank=True)
 
@@ -40,6 +41,13 @@ class Lead(Commentable, models.Model):
     events = models.ManyToManyField('events.Event', related_name='community_leads')
 
     objects = RelayQuerySet.as_manager()
+
+    search_fields = [
+        index.SearchField('name', partial_match=True, boost=10),
+        index.SearchField('description'),
+        index.FilterField('status'),
+        index.FilterField('curated_by_id'),
+    ]
 
     class Meta:
         default_permissions = ()

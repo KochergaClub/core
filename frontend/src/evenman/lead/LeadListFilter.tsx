@@ -31,15 +31,19 @@ export const LeadListFilter: React.FC<Props> = ({ filter, setFilter }) => {
   );
 
   return (
-    <RadioButtonGroup selected={filter} select={asyncSetFilter}>
-      <RadioButtonGroup.Button name="active">Активные</RadioButtonGroup.Button>
-      <RadioButtonGroup.Button name="my_active">
-        Активные мои
-      </RadioButtonGroup.Button>
-      <RadioButtonGroup.Button name="uncurated_active">
-        Активные неназначенные
-      </RadioButtonGroup.Button>
-      <RadioButtonGroup.Button name="all">Все</RadioButtonGroup.Button>
-    </RadioButtonGroup>
+    <div>
+      <RadioButtonGroup selected={filter} select={asyncSetFilter}>
+        <RadioButtonGroup.Button name="active">
+          Активные
+        </RadioButtonGroup.Button>
+        <RadioButtonGroup.Button name="my_active">
+          Активные мои
+        </RadioButtonGroup.Button>
+        <RadioButtonGroup.Button name="uncurated_active">
+          Активные неназначенные
+        </RadioButtonGroup.Button>
+        <RadioButtonGroup.Button name="all">Все</RadioButtonGroup.Button>
+      </RadioButtonGroup>
+    </div>
   );
 };

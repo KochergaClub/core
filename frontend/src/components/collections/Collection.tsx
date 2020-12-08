@@ -1,11 +1,10 @@
 import React from 'react';
-import { MdRefresh } from 'react-icons/md';
 
 import { capitalize } from '~/common/utils';
 import { FormShape, ModalPostResult, ShapeToValues } from '~/components/forms/types';
-import { AsyncButton, Column, Row } from '~/frontkit';
+import { Column } from '~/frontkit';
 
-import CreateItemButton from './CreateItemButton';
+import { CollectionHeader } from './CollectionHeader';
 import DumpJSONView from './DumpJSONView';
 import { EntityNames } from './types';
 
@@ -26,28 +25,22 @@ function Collection<I, S extends FormShape>(props: Props<I, S>) {
 
   return (
     <section>
-      <Row vCentered gutter={8}>
-        <h2>
-          {props.names && props.names.plural && (
-            <div>{capitalize(props.names.plural)}</div>
-          )}
-        </h2>
-        {props.add && (
-          <CreateItemButton
-            add={props.add.cb}
-            shape={props.add.shape}
-            names={props.names}
-          />
-        )}
-        {props.refetch && (
-          <AsyncButton act={props.refetch}>
-            <Row vCentered>
-              <MdRefresh />
-              <span>Обновить</span>
-            </Row>
-          </AsyncButton>
-        )}
-      </Row>
+      <CollectionHeader
+        title={capitalize(props?.names?.plural || '')}
+        add={
+          props.add
+            ? {
+                ...props.add,
+                title: `Создать${
+                  props.names && props.names.genitive
+                    ? ' ' + props.names.genitive
+                    : ''
+                }`,
+              }
+            : undefined
+        }
+        refetch={props.refetch}
+      />
       <Column gutter={8} stretch>
         {props.controls ? props.controls() : null}
         <div>{view({ items: props.items })}</div>

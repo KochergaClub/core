@@ -373,6 +373,7 @@ input CommunityLeadsFilterInput {
   status: CommunityLeadStatus
   curated_by_me: Boolean
   curated_by_empty: Boolean
+  search: String
 }
 
 input CreateCommunityLeadInput {

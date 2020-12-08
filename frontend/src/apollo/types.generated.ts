@@ -429,6 +429,7 @@ export type CommunityLeadsFilterInput = {
   status?: Maybe<CommunityLeadStatus>;
   curated_by_me?: Maybe<Scalars['Boolean']>;
   curated_by_empty?: Maybe<Scalars['Boolean']>;
+  search?: Maybe<Scalars['String']>;
 };
 
 export type CreateCommunityLeadInput = {

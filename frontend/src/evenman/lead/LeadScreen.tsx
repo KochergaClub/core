@@ -3,9 +3,13 @@ import React, { useCallback, useState } from 'react';
 import { useQuery } from '@apollo/client';
 
 import { ApolloQueryResults, PaddedBlock } from '~/components';
-import { CustomCardListView, PagedApolloCollection } from '~/components/collections';
+import { CustomCardListView } from '~/components/collections';
+import { CollectionHeader } from '~/components/collections/CollectionHeader';
+import HeadlessConnection from '~/components/collections/HeadlessConnection';
+import Pager from '~/components/collections/Pager';
 import { useFormModalSmartMutation } from '~/components/forms/hooks';
 import { ShapeToValues } from '~/components/forms/types';
+import { Column, Input, Row } from '~/frontkit';
 
 import { LeadCard } from './LeadCard';
 import { FilterName, filterNameToInput, LeadListFilter } from './LeadListFilter';
@@ -24,9 +28,16 @@ const renderItem = (lead: EvenmanLeadFragment) => <LeadCard lead={lead} />;
 
 export const LeadScreen: React.FC = () => {
   const [filterName, setFilterName] = useState<FilterName>('active');
+  const [searchQuery, setSearchQuery] = useState('');
 
   const queryResults = useQuery(EvenmanLeadsDocument, {
-    variables: { first: 20, filter: filterNameToInput[filterName] },
+    variables: {
+      first: 20,
+      filter: {
+        ...filterNameToInput[filterName],
+        search: searchQuery,
+      },
+    },
     nextFetchPolicy: 'cache-and-network',
   });
 
@@ -48,29 +59,51 @@ export const LeadScreen: React.FC = () => {
 
   return (
     <PaddedBlock>
-      <ApolloQueryResults {...queryResults} size="block">
-        {({ data: { communityLeads } }) => (
-          <PagedApolloCollection
-            connection={communityLeads}
-            fetchPage={queryResults.refetch}
-            names={{ plural: 'лиды', genitive: 'лида' }}
-            add={{
-              cb: add,
-              shape: leadShape,
+      <CollectionHeader
+        title="Лиды"
+        add={{
+          cb: add,
+          shape: leadShape,
+          title: 'Создать лида',
+        }}
+        refetch={queryResults.refetch}
+      />
+      <Column gutter={8} stretch>
+        <Row spaced>
+          <LeadListFilter filter={filterName} setFilter={setFilterName} />
+          <Input
+            type="text"
+            value={searchQuery}
+            onChange={(e) => {
+              e.preventDefault();
+              setSearchQuery(e.currentTarget.value);
             }}
-            controls={() => (
-              <LeadListFilter filter={filterName} setFilter={setFilterName} />
-            )}
-            view={({ items }) => (
-              <CustomCardListView
-                items={items}
-                renderItem={renderItem}
-                item2key={(lead) => lead.id}
-              />
-            )}
           />
-        )}
-      </ApolloQueryResults>
+        </Row>
+        <ApolloQueryResults {...queryResults} size="block">
+          {({ data: { communityLeads } }) => (
+            <HeadlessConnection
+              connection={communityLeads}
+              fetchPage={queryResults.refetch}
+            >
+              {({ items, next, previous }) => (
+                <div>
+                  <CustomCardListView
+                    items={items}
+                    renderItem={renderItem}
+                    item2key={(lead) => lead.id}
+                  />
+                  <Pager
+                    pageInfo={communityLeads.pageInfo}
+                    next={next}
+                    previous={previous}
+                  />
+                </div>
+              )}
+            </HeadlessConnection>
+          )}
+        </ApolloQueryResults>
+      </Column>
     </PaddedBlock>
   );
 };
