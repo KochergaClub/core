@@ -1,9 +1,9 @@
 import React, { useState } from 'react';
 
-import { useMutation } from '@apollo/client';
-
+import { useSmartMutation } from '~/common/hooks';
 import { CommonModal } from '~/components';
 import { EventPicker } from '~/events/components/EventPicker';
+import { useNotification } from '~/frontkit';
 
 import { AddEventToCommunityLeadDocument, EvenmanLeadFragment } from './queries.generated';
 
@@ -14,8 +14,11 @@ type Props = {
 
 export const AddEventToLeadModal: React.FC<Props> = ({ lead, close }) => {
   const [eventId, setEventId] = useState<string | undefined>(undefined);
+  const notify = useNotification();
 
-  const [addMutation] = useMutation(AddEventToCommunityLeadDocument);
+  const mutate = useSmartMutation(AddEventToCommunityLeadDocument, {
+    expectedTypename: 'CommunityLead',
+  });
 
   const submit = async () => {
     if (eventId === undefined) {
@@ -23,7 +26,7 @@ export const AddEventToLeadModal: React.FC<Props> = ({ lead, close }) => {
         close: false,
       };
     }
-    await addMutation({
+    const result = await mutate({
       variables: {
         input: {
           lead_id: lead.id,
@@ -31,7 +34,14 @@ export const AddEventToLeadModal: React.FC<Props> = ({ lead, close }) => {
         },
       },
     });
-    close();
+    if (!result.ok) {
+      notify({
+        type: 'Error',
+        text: result.error || 'Неизвестная ошибка',
+      });
+    } else {
+      close();
+    }
   };
 
   return (

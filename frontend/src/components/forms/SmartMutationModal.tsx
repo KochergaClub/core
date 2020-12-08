@@ -2,8 +2,10 @@ import { useCallback } from 'react';
 
 import { TypedDocumentNode } from '@apollo/client';
 
+import { SmartMutationResult } from '~/common/hooks';
+
 import { FormShapeModal, Props as FormShapeModalProps } from './FormShapeModal';
-import { SmartMutationResult, useFormModalSmartMutation } from './hooks';
+import { useFormModalSmartMutation } from './hooks';
 import { FormShape, ShapeToValues } from './types';
 
 type CommonProps<S extends FormShape> = Omit<FormShapeModalProps<S>, 'post'> & {

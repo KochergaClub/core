@@ -5,9 +5,10 @@ import breaks from 'remark-breaks';
 
 import { TypedDocumentNode } from '@apollo/client';
 
-import { ButtonWithModal, HumanizedDateTime, MutationButton } from '~/components';
-import { SmartMutationResult } from '~/components/forms/hooks';
+import { SmartMutationResult } from '~/common/hooks';
+import { ButtonWithModal, HumanizedDateTime } from '~/components';
 import { SmartMutationModal } from '~/components/forms/SmartMutationModal';
+import { SmartMutationButton } from '~/components/SmartMutationButton';
 import { UserLink } from '~/components/UserLink';
 import { Column, Row } from '~/frontkit';
 
@@ -30,9 +31,10 @@ const Comment: React.FC<CommentProps> = ({ comment, commentable }) => {
         <em>
           (<HumanizedDateTime date={parseISO(comment.created)} />)
         </em>
-        <MutationButton
+        <SmartMutationButton
           mutation={DeleteCommentDocument}
           variables={{ id: comment.id }}
+          expectedTypename="BasicResult"
           size="small"
           confirmText="Удалить комментарий?"
           updateCache={(cache) => {
@@ -50,7 +52,7 @@ const Comment: React.FC<CommentProps> = ({ comment, commentable }) => {
           }}
         >
           Удалить
-        </MutationButton>
+        </SmartMutationButton>
         <ButtonWithModal title="Редактировать" size="small">
           {({ close }) => (
             <SmartMutationModal
