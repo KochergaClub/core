@@ -16,7 +16,7 @@ export const ConfirmModal: React.FC<Props> = ({
   close,
   children,
   submitButton,
-  title = 'Точно?',
+  title = 'Вы уверены?',
   cancelText = 'Отменить',
   danger = false,
 }) => {
