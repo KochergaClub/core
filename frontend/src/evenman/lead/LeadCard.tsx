@@ -2,12 +2,10 @@ import { parseISO } from 'date-fns';
 import Link from 'next/link';
 import React from 'react';
 import { FaEdit, FaLink, FaTrash } from 'react-icons/fa';
-import Markdown from 'react-markdown';
-import breaks from 'remark-breaks';
 
 import { CommunityLeadStatus } from '~/apollo/types.generated';
 import { useUser } from '~/common/hooks';
-import { DropdownMenu, HumanizedDateTime, MutationButton } from '~/components';
+import { DropdownMenu, HumanizedDateTime, Markdown, MutationButton } from '~/components';
 import { ModalAction, MutationAction } from '~/components/DropdownMenu';
 import { UserLink } from '~/components/UserLink';
 import { A, Badge, Column, Row } from '~/frontkit';
@@ -142,7 +140,7 @@ export const LeadCard: React.FC<Props> = ({ lead }) => {
       {lead.description ? (
         <div>
           <hr />
-          <Markdown source={lead.description} plugins={[breaks]} />
+          <Markdown source={lead.description} />
         </div>
       ) : null}
       <div>

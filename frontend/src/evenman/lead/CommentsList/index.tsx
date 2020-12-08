@@ -1,12 +1,10 @@
 import { parseISO } from 'date-fns';
 import React from 'react';
-import Markdown from 'react-markdown';
-import breaks from 'remark-breaks';
 
 import { TypedDocumentNode } from '@apollo/client';
 
 import { SmartMutationResult } from '~/common/hooks';
-import { ButtonWithModal, HumanizedDateTime } from '~/components';
+import { ButtonWithModal, HumanizedDateTime, Markdown } from '~/components';
 import { SmartMutationModal } from '~/components/forms/SmartMutationModal';
 import { SmartMutationButton } from '~/components/SmartMutationButton';
 import { UserLink } from '~/components/UserLink';
@@ -78,7 +76,7 @@ const Comment: React.FC<CommentProps> = ({ comment, commentable }) => {
           )}
         </ButtonWithModal>
       </Row>
-      <Markdown source={comment.text} plugins={[breaks]} />
+      <Markdown source={comment.text} />
       <hr />
     </div>
   );

@@ -10,6 +10,7 @@ export { default as DropdownMenu } from './DropdownMenu';
 export { default as FloatingList } from './FloatingList';
 export { default as HintCard } from './HintCard';
 export { default as HumanizedDateTime } from './HumanizedDateTime';
+export { Markdown } from './Markdown';
 export { default as MutationButton } from './MutationButton';
 export { default as PaddedBlock } from './PaddedBlock';
 export { default as Page } from './Page';
