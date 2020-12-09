@@ -6,7 +6,7 @@ import { AsyncButton, Row } from '~/frontkit';
 import { FormShapeModalButton } from '../forms';
 import { FormShape, ModalPostResult, ShapeToValues } from '../forms/types';
 
-type Props<S> = {
+type Props<S extends FormShape> = {
   title: string;
   add?: {
     shape: S;
