@@ -8,17 +8,21 @@ def test_empty_trainings(client, admin_user):
 
 def test_nonempty_trainings(client, admin_user):
     client.force_login(admin_user)
-    run_query(client, """
+    result = run_query(
+        client,
+        """
     mutation AppliedSolstice {
-      ratioAddTraining(params: {
+      result: createRatioTraining(input: {
         name: "Прикладное солнцестояние"
         slug: "solstice-training"
         date: "2020-12-21"
-        telegram_link: "http://whatever"
+        telegram_link: "http://whatever.com"
       }) {
-        id
+        __typename
       }
     }
- """)
+ """,
+    )
+    assert result['result']['__typename'] == 'RatioTraining'
 
     run_query(client, "{ ratioTrainings(first: 10) { edges { node { id } } } }")
