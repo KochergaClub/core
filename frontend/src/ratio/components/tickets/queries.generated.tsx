@@ -1,11 +1,11 @@
 import * as Types from '../../../apollo/types.generated';
 
 import { RatioTicketFragment } from '../../queries.generated';
-import { PageInfoFragment } from '../../../apollo/queries.generated';
+import { PageInfoFragment, GenericErrorFragment, ValidationErrorFragment } from '../../../apollo/common-fragments.generated';
 import { dedupeFragments } from '~/common/dedupeFragments';
 import { TypedDocumentNode as DocumentNode } from '@graphql-typed-document-node/core';
 import { RatioTicketFragmentDoc } from '../../queries.generated';
-import { PageInfoFragmentDoc } from '../../../apollo/queries.generated';
+import { PageInfoFragmentDoc, GenericErrorFragmentDoc, ValidationErrorFragmentDoc } from '../../../apollo/common-fragments.generated';
 export type RatioTicketWithTrainingFragment = (
   { __typename: 'RatioTicket' }
   & { training: (

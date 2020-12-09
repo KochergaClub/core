@@ -1,14 +1,15 @@
 from __future__ import annotations
+
 import logging
 
 logger = logging.getLogger(__name__)
 
+from abc import ABC, abstractmethod
+from typing import Any, Callable, Dict, List, Optional, Union
+
 import graphql
-from typing import Callable, Any, Optional, List, Dict
 
-from abc import abstractmethod, ABC
-
-from . import g, basic_types
+from . import basic_types, g
 from .permissions import check_permissions
 
 
@@ -127,10 +128,20 @@ PermissionType = Callable[[Any, Any], bool]
 
 
 def field_with_permissions(
-    type_: graphql.GraphQLOutputType, permissions: List[PermissionType]
+    type_: graphql.GraphQLOutputType,
+    permissions: List[PermissionType],
+    fallback_to_null=False,
 ):
+    field_type = type_
+    if fallback_to_null:
+        if isinstance(field_type, graphql.GraphQLNonNull):
+            field_type = field_type.of_type
+
     return g.Field(
-        type_, resolve=check_permissions(permissions)(graphql.default_field_resolver)
+        field_type,
+        resolve=check_permissions(permissions, fallback_to_null=fallback_to_null)(
+            graphql.default_field_resolver
+        ),
     )
 
 
@@ -185,7 +196,7 @@ class BaseFieldWithInput(BaseField):
     @property
     def args(self):
         input = self.input
-        if type(input) == dict:
+        if isinstance(input, dict):
             # unique anonymous input
             input = g.InputObjectType(
                 capitalize_first_only(self.__class__.__name__) + 'Input',
@@ -195,7 +206,7 @@ class BaseFieldWithInput(BaseField):
 
     @property
     @abstractmethod
-    def input(self):
+    def input(self) -> Union[graphql.GraphQLInputObjectType, Dict[str, Any]]:
         ...
 
     input_argument_name = 'input'

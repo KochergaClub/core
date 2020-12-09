@@ -1,10 +1,19 @@
+import React from 'react';
+
 import { useMutation } from '@apollo/client';
 
-import ModalFormButton from '~/components/forms/ModalFormButton';
-import { FormShape } from '~/components/forms/types';
+import { FormShapeModalButton } from '~/components/forms';
+import { ShapeToValues } from '~/components/forms/types';
 import { Row } from '~/frontkit';
 
 import { SendUniqueRatioPromocodeDocument } from './queries.generated';
+
+const shape = [
+  {
+    name: 'email',
+    type: 'email',
+  },
+] as const;
 
 interface Props {
   entity: {
@@ -20,7 +29,7 @@ const EmailDiscount: React.FC<Props> = ({ entity, entityType }) => {
     refetchQueries: ['RatioTrainingBySlug'],
     awaitRefetchQueries: true,
   });
-  const post = async (v: { email: string }) => {
+  const post = async (v: ShapeToValues<typeof shape>) => {
     const input =
       entityType === 'training'
         ? {
@@ -44,13 +53,6 @@ const EmailDiscount: React.FC<Props> = ({ entity, entityType }) => {
     });
   };
 
-  const shape: FormShape = [
-    {
-      name: 'email',
-      type: 'email',
-    },
-  ];
-
   if (!entity.discount_by_email && !entity.discount_percent_by_email) {
     return null;
   }
@@ -63,12 +65,12 @@ const EmailDiscount: React.FC<Props> = ({ entity, entityType }) => {
           ? `${entity.discount_by_email} руб.`
           : `${entity.discount_percent_by_email} %`}
       </div>
-      <ModalFormButton
+      <FormShapeModalButton
         shape={shape}
         size="small"
-        buttonName="Сгенерировать"
+        buttonLabel="Сгенерировать"
         modalTitle="Сгенерировать промокод по e-mail"
-        modalButtonName="Сгенерировать и отправить"
+        modalSubmitLabel="Сгенерировать и отправить"
         post={post}
       />
     </Row>

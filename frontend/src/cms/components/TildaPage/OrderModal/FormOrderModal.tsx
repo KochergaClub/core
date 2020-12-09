@@ -8,7 +8,7 @@ import { useMutation } from '@apollo/client';
 import { useCommonHotkeys, useFocusOnFirstModalRender } from '~/common/hooks';
 import {
     BasicInputField, ErrorMessage, FieldContainer, FieldErrorMessage
-} from '~/components/forms2';
+} from '~/components/forms';
 import { A, Button, Column, ControlsFooter, Label, Modal, Row } from '~/frontkit';
 
 import PromocodeField from './PromocodeField';

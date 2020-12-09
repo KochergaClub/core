@@ -1,17 +1,14 @@
 import { differenceInCalendarDays, parseISO } from 'date-fns';
 import { utcToZonedTime } from 'date-fns-tz';
-import { useRef } from 'react';
-import Markdown from 'react-markdown';
-import breaks from 'remark-breaks';
+import React, { useRef } from 'react';
 import styled from 'styled-components';
 
 import { useQuery } from '@apollo/client';
-import { RichText } from '~/frontkit';
 
 import { NextApolloPage, withApollo } from '~/apollo';
 import TL03 from '~/blocks/TL03';
 import { formatDate, timezone } from '~/common/utils';
-import { ApolloQueryResults, PaddedBlock, Page } from '~/components';
+import { ApolloQueryResults, Markdown, PaddedBlock, Page } from '~/components';
 import ErrorBlock from '~/error-pages/ErrorBlock';
 
 import AnyRegistration from './AnyRegistration';
@@ -80,9 +77,7 @@ export const PublicEventPage: NextApolloPage<Props> = ({ event_id }) => {
               <ProjectInfo event={event} />
               <EventAnnouncements event={event} />
               <PaddedBlock>
-                <RichText>
-                  <Markdown source={event.description} plugins={[breaks]} />
-                </RichText>
+                <Markdown source={event.description} />
               </PaddedBlock>
               <EventToCalendar event={event} />
               {inFuture ? (

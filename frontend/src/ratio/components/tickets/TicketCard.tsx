@@ -4,12 +4,9 @@ import React from 'react';
 import { FaRegMoneyBillAlt, FaTicketAlt, FaUserAlt } from 'react-icons/fa';
 import { MdEmail } from 'react-icons/md';
 
-import { useMutation } from '@apollo/client';
-
 import { HumanizedDateTime } from '~/components';
 import Card from '~/components/Card';
-import ApolloModalFormButton from '~/components/forms/ApolloModalFormButton';
-import { FormShape } from '~/components/forms/types';
+import { MutationModalButton } from '~/components/forms';
 import NotionIcon from '~/components/icons/NotionIcon';
 import { A, Badge, Column, Row } from '~/frontkit';
 import { adminTicketRoute, adminTrainingRoute } from '~/ratio/routes';
@@ -24,20 +21,13 @@ import {
 const CanceledBadge = () => <Badge>ОТКАЗ</Badge>;
 
 const CreatePaymentButton = ({ ticket_id }: { ticket_id: string }) => {
-  const [addMutation] = useMutation(RatioPaymentAddDocument, {
-    refetchQueries: ['RatioTrainingBySlug', 'RatioTickets', 'RatioTicketById'],
-    awaitRefetchQueries: true,
-  });
-
-  const fields: FormShape = [
-    { name: 'ticket_id', type: 'fk', readonly: true, default: ticket_id },
+  const shape = [
     { name: 'amount', title: 'Сумма', type: 'number', min: 0, max: 1000000 },
     {
       name: 'fiscalization_status',
       title: 'Нужен чек?',
       type: 'choice',
       widget: 'dropdown',
-      default: 'todo',
       options: [
         ['todo', 'Да'],
         ['not_needed', 'Нет'],
@@ -48,22 +38,37 @@ const CreatePaymentButton = ({ ticket_id }: { ticket_id: string }) => {
       title: 'Вид оплаты',
       type: 'choice',
       widget: 'dropdown',
-      default: 'kassa',
       options: [
         ['kassa', 'Яндекс.Касса'],
         ['cash', 'Наличные'],
         ['other', 'Другое'],
       ],
     },
-  ];
+  ] as const;
 
   return (
-    <ApolloModalFormButton
-      mutation={addMutation}
+    <MutationModalButton
+      mutation={RatioPaymentAddDocument}
+      refetchQueries={[
+        'RatioTrainingBySlug',
+        'RatioTickets',
+        'RatioTicketById',
+      ]}
       size="small"
-      shape={fields}
-      buttonName="Добавить платёж"
-      modalButtonName="Добавить"
+      shape={shape}
+      defaultValues={{
+        fiscalization_status: 'todo',
+        payment_type: 'kassa',
+      }}
+      valuesToVariables={(v) => ({
+        input: {
+          ...v,
+          ticket_id,
+          amount: parseInt(v.amount, 10),
+        },
+      })}
+      buttonLabel="Добавить платёж"
+      modalSubmitLabel="Добавить"
       modalTitle="Добавить платёж"
     />
   );
@@ -94,8 +99,6 @@ const RemainingPayments: React.FC<Props> = ({ ticket }) => {
 };
 
 const NotionLinkRow: React.FC<Props> = ({ ticket }) => {
-  const [updateMutation] = useMutation(SetRatioTicketNotionLinkDocument);
-
   if (!ticket.need_notion_link && !ticket.notion_link) {
     return null;
   }
@@ -105,25 +108,29 @@ const NotionLinkRow: React.FC<Props> = ({ ticket }) => {
       <Row>
         <A href={ticket.notion_link}>{ticket.notion_link}</A>
         {ticket.notion_link ? null : (
-          <ApolloModalFormButton
-            mutation={updateMutation}
+          <MutationModalButton
+            mutation={SetRatioTicketNotionLinkDocument}
             size="small"
-            shape={[
-              {
-                name: 'id',
-                type: 'string',
-                readonly: true,
-                default: ticket.id,
-              },
-              {
-                name: 'notion_link',
-                type: 'string',
-                default: ticket.notion_link,
-              },
-            ]}
+            shape={
+              [
+                {
+                  name: 'id',
+                  type: 'string',
+                  readonly: true,
+                  default: ticket.id,
+                },
+                {
+                  name: 'notion_link',
+                  type: 'string',
+                },
+              ] as const
+            }
+            defaultValues={{
+              id: ticket.id,
+            }}
             modalTitle="Добавить Notion-ссылку"
-            modalButtonName="Добавить"
-            buttonName="Добавить Notion-ссылку"
+            modalSubmitLabel="Добавить"
+            buttonLabel="Добавить Notion-ссылку"
           />
         )}
       </Row>

@@ -1,9 +1,8 @@
 import Card, { CardList } from '~/components/Card';
-
 import { FormShape } from '~/components/forms/types';
-import { AnyViewProps } from './types';
 
 import ItemDump from './ItemDump';
+import { AnyViewProps } from './types';
 
 interface Props<I> extends AnyViewProps<I> {
   shape: FormShape;

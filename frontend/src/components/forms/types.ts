@@ -1,82 +1,89 @@
-import { FormikErrors } from 'formik';
+import { FieldError } from 'react-hook-form';
 
-export interface AnyFormField {
+interface AnyFieldShape {
   readonly name: string;
   readonly title?: string;
 }
 
-export interface AnyBasicFormField extends AnyFormField {
-  readonly?: boolean;
+interface AnyBasicFieldShape extends AnyFieldShape {
   optional?: boolean;
 }
 
-export interface StringFormField extends AnyBasicFormField {
+export interface StringFieldShape extends AnyBasicFieldShape {
   readonly type: 'string' | 'email' | 'password' | 'date';
-  readonly default?: string;
 }
 
-export interface RichTextFormField extends AnyBasicFormField {
+export interface MarkdownFieldShape extends AnyBasicFieldShape {
+  readonly type: 'markdown';
+}
+
+export interface RichTextFieldShape extends AnyBasicFieldShape {
   readonly type: 'richtext';
-  readonly default?: string;
 }
 
-export interface NumberFormField extends AnyBasicFormField {
+export interface NumberFieldShape extends AnyBasicFieldShape {
   readonly type: 'number';
-  readonly default?: number;
   readonly min?: number;
   readonly max?: number;
 }
 
-export interface ChoiceFormField extends AnyBasicFormField {
+export interface ChoiceFieldShape extends AnyBasicFieldShape {
   readonly type: 'choice';
   readonly widget?: 'radio' | 'dropdown';
-  readonly default?: string;
-  readonly options: [string, string][];
+  readonly options: readonly (readonly [string, string])[];
 }
 
-export interface BooleanFormField extends AnyBasicFormField {
+export interface BooleanFieldShape extends AnyBasicFieldShape {
   readonly type: 'boolean';
-  readonly default?: boolean;
 }
 
-export interface ImageFormField extends AnyBasicFormField {
+export interface ImageFieldShape extends AnyBasicFieldShape {
   readonly type: 'image';
-  readonly default?: string;
+  valueAsNumber?: boolean;
 }
 
-export interface ForeignKeyFormField extends AnyBasicFormField {
+export interface ForeignKeyFieldShape extends AnyBasicFieldShape {
   readonly type: 'fk';
-  readonly default?: number | string;
-  readonly widget?: {
+  readonly widget: {
     type: 'async';
     display: (item: any) => string;
     load: (inputValue: string) => Promise<any[]>;
-    getValue: (item: any) => number | string;
+    getValue: (item: any) => string;
   };
 }
 
-export interface ShapeFormField extends AnyFormField {
+export interface ShapeFieldShape extends AnyFieldShape {
   readonly type: 'shape';
   readonly shape: FormShape;
 }
 
-export interface ListFormField extends AnyFormField {
-  readonly type: 'list';
-  readonly field: FormField;
+export interface ShapeListFieldShape extends AnyFieldShape {
+  readonly type: 'shape-list';
+  readonly shape: FormShape;
 }
 
-export type BasicFormField =
-  | StringFormField
-  | RichTextFormField
-  | NumberFormField
-  | ChoiceFormField
-  | BooleanFormField
-  | ImageFormField
-  | ForeignKeyFormField;
+export type BasicFieldShape =
+  | StringFieldShape
+  | RichTextFieldShape
+  | MarkdownFieldShape
+  | NumberFieldShape
+  | ChoiceFieldShape
+  | BooleanFieldShape
+  | ImageFieldShape
+  | ForeignKeyFieldShape;
 
-export type FormField = BasicFormField | ShapeFormField | ListFormField;
+export type FieldShape = 
+  | BasicFieldShape
+  | ShapeFieldShape
+  | ShapeListFieldShape;
 
-export type FormShape = FormField[];
+// most shapes are readonly (known at compile time); this gives us nice features such as deriving Values from FormShape
+// export type StaticFormShape = readonly FieldShape[];
+// other shapes are dynamic
+// export type DynamicFormShape = FieldShape[];
+
+// export type FormShape = StaticFormShape | DynamicFormShape;
+export type FormShape = readonly FieldShape[];
 
 export type AnyFormValues = {
   [k: string]:
@@ -89,8 +96,34 @@ export type AnyFormValues = {
     | undefined;
 };
 
-export interface PostResult<Values extends AnyFormValues> {
-  close: boolean;
-  error?: string;
-  formErrors?: FormikErrors<Values>;
-}
+export type FieldToValue<T extends FieldShape> = (
+    T extends StringFieldShape | RichTextFieldShape | MarkdownFieldShape ? string :
+    T extends NumberFieldShape ? string : // number is represented as string in form.handleSubmit
+    T extends BooleanFieldShape ? boolean :
+    T extends ImageFieldShape ? string :
+    T extends ChoiceFieldShape ? string :
+    T extends ShapeFieldShape ? ShapeToValues<T['shape']> :
+    T extends ShapeListFieldShape ? ShapeToValues<T['shape']>[] :
+    never
+);
+
+type _FilterKey<T extends FormShape, K extends keyof T> = 
+  T[K] extends FieldShape ? (K extends number ? never : T[K]['name']) : never;
+
+type _ValueByKey<T extends FormShape, K extends keyof T> = 
+  T[K] extends FieldShape ? (K extends number ? never : FieldToValue<T[K]>) : never;
+
+export type ShapeToValues<T extends FormShape> =
+  T extends readonly [unknown, ...unknown[]]
+  ? { [K in keyof T as _FilterKey<T, K>]: _ValueByKey<T, K> }
+  : Record<string, unknown> // TODO - use AnyFormValues instead?
+;
+
+// TODO - refactor into FormPostResult, rename `close` to `ok`
+export type ModalPostResult =
+  | {
+      close: boolean;
+      error?: string;
+      fieldErrors?: Record<string, FieldError>;
+    }
+  | undefined;

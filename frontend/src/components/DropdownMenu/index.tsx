@@ -14,15 +14,15 @@ import { DropdownMenuContext, ModalCreator } from './contexts';
 export { default as Action } from './Action';
 export { default as LinkAction } from './LinkAction';
 export { default as ModalAction } from './ModalAction';
+export { MutationAction } from './MutationAction';
 export { default as NextLinkAction } from './NextLinkAction';
 
 const Container = styled.div`
   white-space: nowrap;
 `;
 
-const UnstyledLink = styled.a`
-  text-decoration: none;
-  color: black;
+const OuterWrapper = styled.div`
+  cursor: pointer;
 `;
 
 const DropdownButtonContainer = styled.div`
@@ -99,7 +99,7 @@ const DropdownMenu: React.FC<Props> = ({
   const [
     referenceElement,
     setReferenceElement,
-  ] = useState<HTMLAnchorElement | null>(null);
+  ] = useState<HTMLDivElement | null>(null);
   const [popperElement, setPopperElement] = useState<HTMLDivElement | null>(
     null
   );
@@ -120,8 +120,7 @@ const DropdownMenu: React.FC<Props> = ({
       {modalWrapper ? modalWrapper.modal({ close: closeModal }) : null}
       <DropdownMenuContext.Provider value={{ close: unexpand, setModal }}>
         <Container ref={ref}>
-          <UnstyledLink
-            href="#"
+          <OuterWrapper
             onClick={flipExpandWithPrevent}
             ref={setReferenceElement}
           >
@@ -130,7 +129,7 @@ const DropdownMenu: React.FC<Props> = ({
             ) : (
               <DropdownButton title={title || null} />
             )}
-          </UnstyledLink>
+          </OuterWrapper>
           <FloatingList
             expanded={expanded}
             ref={setPopperElement}

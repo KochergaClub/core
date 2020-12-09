@@ -1,6 +1,6 @@
 import { FieldNode, FragmentDefinitionNode } from 'graphql';
 
-import { FormField, FormShape } from '~/components/forms/types';
+import { FieldShape, FormShape } from '~/components/forms/types';
 
 import { allBlockComponents, isKnownBlock } from './blocks';
 import {
@@ -49,16 +49,16 @@ export const getBlockValueKey = (
   return valueKey;
 };
 
-const structureToFormField = (
+const structureToFieldShape = (
   structure:
     | StructureCommonFragment
     | StructureL1Fragment
     | StructureL2Fragment
     | StructureL3Fragment,
   name: string
-): FormField => {
+): FieldShape => {
   if (!structure.__typename) {
-    throw new Error("Expected __typename to be set");
+    throw new Error('Expected __typename to be set');
   }
   switch (structure.__typename) {
     case 'WagtailCharBlockStructure':
@@ -89,26 +89,20 @@ const structureToFormField = (
         name,
         title: structure.label,
         optional: !structure.required,
+        valueAsNumber: true, // wagtail block refuses to validate if we pass a quoted string as image id
       };
     case 'WagtailStaticBlockStructure':
-      return {
-        type: 'string',
-        name,
-        title: structure.label,
-        optional: !structure.required,
-        readonly: true,
-        default: 'static', // FIXME
-      };
+      throw new Error('Deep static blocks are not supported');
     case 'WagtailStructBlockStructure':
       if (!('child_blocks' in structure)) {
         throw new Error('Structure is too deeply nested');
       }
 
       // we can't just map on child_blocks since typescript is not smart enough
-      const structShape: FormField[] = [];
+      const structShape: FieldShape[] = [];
       for (const child_block of structure.child_blocks) {
         structShape.push(
-          structureToFormField(child_block.definition, child_block.name)
+          structureToFieldShape(child_block.definition, child_block.name)
         );
       }
       return {
@@ -121,21 +115,28 @@ const structureToFormField = (
       if (!('child_block' in structure)) {
         throw new Error('Structure is too deeply nested');
       }
+      const itemShape = structureToFieldShape(structure.child_block, 'item');
+      if (itemShape.type !== 'shape') {
+        throw new Error('Lists of non-struct values are not supported');
+      }
       return {
-        type: 'list',
+        type: 'shape-list',
         name,
         title: structure.label,
-        field: structureToFormField(structure.child_block, 'item'),
+        shape: itemShape.shape,
       };
   }
 };
 
 export const structureToShape = (structure: StructureFragment): FormShape => {
-  const formField = structureToFormField(structure, 'form');
-  if (formField.type === 'shape') {
-    return formField.shape;
+  if (structure.__typename === 'WagtailStaticBlockStructure') {
+    return []; // special case - empty form
+  }
+  const fieldShape = structureToFieldShape(structure, 'form');
+  if (fieldShape.type === 'shape') {
+    return fieldShape.shape;
   } else {
-    return [formField];
+    return [fieldShape];
   }
 };
 
@@ -212,7 +213,7 @@ const blockValueToParams = (
           "No original image ID, can't save image. " + JSON.stringify(value)
         );
       }
-      return originalImageId;
+      return parseInt(originalImageId, 10);
     default:
       throw new Error(`Unknown type in structure: ${structure.__typename}`);
   }

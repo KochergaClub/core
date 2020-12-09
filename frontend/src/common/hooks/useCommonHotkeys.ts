@@ -16,11 +16,13 @@ const useCommonHotkeys = ({
 }) => {
   const onKeyDown = useCallback(
     (e: React.KeyboardEvent<HTMLElement>) => {
-      if (e.keyCode === 27) {
-        onEscape && onEscape();
+      if (e.keyCode === 27 && onEscape) {
+        e.preventDefault();
+        onEscape();
       }
-      if (e.keyCode === 13) {
-        onEnter && onEnter();
+      if (e.keyCode === 13 && onEnter) {
+        e.preventDefault();
+        onEnter();
       }
     },
     [onEscape, onEnter]

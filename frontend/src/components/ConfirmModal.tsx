@@ -1,42 +1,57 @@
 import React, { useCallback, useState } from 'react';
 
-import { Button, ControlsFooter, Modal } from '~/frontkit';
+import { Button, ControlsFooter, Modal, useNotification } from '~/frontkit';
 
 interface Props {
-  yes: string;
-  no?: string;
   act: () => Promise<void>;
   close: () => void;
+  submitButton: React.ReactNode;
+  title?: string;
+  cancelText?: string;
+  danger?: boolean;
 }
 
-const ConfirmModal: React.FC<Props> = ({ yes, no, act, close, children }) => {
+export const ConfirmModal: React.FC<Props> = ({
+  act,
+  close,
+  children,
+  submitButton,
+  title = 'Вы уверены?',
+  cancelText = 'Отменить',
+  danger = false,
+}) => {
   const [acting, setActing] = useState(false);
+  const notify = useNotification();
 
   const wrappedAct = useCallback(async () => {
     setActing(true);
-    await act();
+    try {
+      await act();
+    } catch (e) {
+      notify({ text: String(e), type: 'Error' }); // TODO - display error inside modal?
+      setActing(false);
+      return;
+    }
     close();
-  }, [act, close]);
+  }, [act, close, notify]);
 
   return (
     <Modal>
-      <Modal.Header close={close}>Подтвердите</Modal.Header>
+      <Modal.Header close={close}>{title}</Modal.Header>
       <Modal.Body>{children}</Modal.Body>
       <Modal.Footer>
         <ControlsFooter>
-          <Button onClick={close}>{no || 'Отмена'}</Button>
+          <Button onClick={close}>{cancelText}</Button>
           <Button
             onClick={wrappedAct}
             loading={acting}
             disabled={acting}
-            kind="danger"
+            kind={danger ? 'danger' : 'primary'}
           >
-            {yes}
+            {submitButton}
           </Button>
         </ControlsFooter>
       </Modal.Footer>
     </Modal>
   );
 };
-
-export default ConfirmModal;

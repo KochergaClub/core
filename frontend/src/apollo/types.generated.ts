@@ -9,6 +9,25 @@ export type Scalars = {
   Float: number;
 };
 
+export type AddEventToCommunityLeadInput = {
+  lead_id: Scalars['ID'];
+  event_id: Scalars['ID'];
+};
+
+export type AddEventToCommunityLeadResult = CommunityLead;
+
+export type AddTelegramChatByInviteLinkInput = {
+  invite_link: Scalars['String'];
+};
+
+export type AddTelegramChatByInviteLinkResult = TelegramChat | ValidationError | GenericError;
+
+export type AddTelegramChatInput = {
+  username?: Maybe<Scalars['String']>;
+};
+
+export type AddTelegramChatResult = TelegramChat | ValidationError | GenericError;
+
 export type AnalyticsBovStat = {
   __typename?: 'AnalyticsBovStat';
   date: Scalars['String'];
@@ -111,7 +130,9 @@ export type AuthSetPasswordResult = {
 export type AuthUser = {
   __typename?: 'AuthUser';
   id: Scalars['ID'];
-  email: Scalars['String'];
+  first_name: Scalars['String'];
+  last_name: Scalars['String'];
+  email?: Maybe<Scalars['String']>;
   staff_member?: Maybe<StaffMember>;
   external_accounts: Array<ExternalServiceAccount>;
 };
@@ -144,6 +165,12 @@ export type BasicTextBlockValue = {
   text: Scalars['String'];
   centered: Scalars['Boolean'];
 };
+
+export type BecomeCommunityLeadCuratorInput = {
+  id: Scalars['ID'];
+};
+
+export type BecomeCommunityLeadCuratorResult = CommunityLead;
 
 export type BigContactsBlock = WagtailBlock & {
   __typename?: 'BigContactsBlock';
@@ -248,6 +275,12 @@ export type CheckRatioPromocodeResult = {
   discounted_price: Scalars['Int'];
 };
 
+export type ClearCommunityLeadCuratorInput = {
+  id: Scalars['ID'];
+};
+
+export type ClearCommunityLeadCuratorResult = CommunityLead;
+
 export type Cm2CreateCustomerInput = {
   card_id: Scalars['Int'];
   first_name: Scalars['String'];
@@ -340,6 +373,73 @@ export type ColumnsButtonsBlockValueImageArgs = {
   spec: Scalars['String'];
 };
 
+export type Comment = {
+  __typename?: 'Comment';
+  id: Scalars['ID'];
+  created: Scalars['String'];
+  text: Scalars['String'];
+  author: AuthUser;
+};
+
+export type CommentOnCommunityLeadInput = {
+  lead_id: Scalars['ID'];
+  text: Scalars['String'];
+};
+
+export type CommentOnCommunityLeadResult = CommunityLead;
+
+export type Commentable = {
+  comments_count: Scalars['Int'];
+  comments: Array<Comment>;
+};
+
+export type CommunityLead = Commentable & {
+  __typename?: 'CommunityLead';
+  id: Scalars['ID'];
+  name: Scalars['String'];
+  description: Scalars['String'];
+  created: Scalars['String'];
+  updated: Scalars['String'];
+  events: Array<Event>;
+  created_by?: Maybe<AuthUser>;
+  curated_by?: Maybe<AuthUser>;
+  status: CommunityLeadStatus;
+  comments_count: Scalars['Int'];
+  comments: Array<Comment>;
+};
+
+export type CommunityLeadConnection = {
+  __typename?: 'CommunityLeadConnection';
+  pageInfo: PageInfo;
+  nodes: Array<CommunityLead>;
+  edges: Array<CommunityLeadEdge>;
+};
+
+export type CommunityLeadEdge = {
+  __typename?: 'CommunityLeadEdge';
+  node: CommunityLead;
+};
+
+export enum CommunityLeadStatus {
+  Active = 'ACTIVE',
+  Inactive = 'INACTIVE'
+}
+
+export type CommunityLeadsFilterInput = {
+  status?: Maybe<CommunityLeadStatus>;
+  curated_by_me?: Maybe<Scalars['Boolean']>;
+  curated_by_empty?: Maybe<Scalars['Boolean']>;
+  search?: Maybe<Scalars['String']>;
+};
+
+export type CreateCommunityLeadInput = {
+  name: Scalars['String'];
+  description?: Maybe<Scalars['String']>;
+  status?: Maybe<Scalars['String']>;
+};
+
+export type CreateCommunityLeadResult = CommunityLead | ValidationError | GenericError;
+
 export type CreateRatioPromocodeInput = {
   ticket_type_id?: Maybe<Scalars['ID']>;
   training_id?: Maybe<Scalars['ID']>;
@@ -358,9 +458,37 @@ export type CreateRatioTicketTypeInput = {
   discount_percent_by_email?: Maybe<Scalars['Int']>;
 };
 
+export type CreateRatioTrainingInput = {
+  name: Scalars['String'];
+  slug: Scalars['String'];
+  date?: Maybe<Scalars['String']>;
+  telegram_link?: Maybe<Scalars['String']>;
+  discount_by_email?: Maybe<Scalars['Int']>;
+  discount_percent_by_email?: Maybe<Scalars['Int']>;
+};
+
+export type CreateRatioTrainingResult = RatioTraining | ValidationError | GenericError;
+
+export type DeleteCommentInput = {
+  id: Scalars['ID'];
+};
+
+export type DeleteCommentResult = BasicResult | GenericError;
+
+export type DeleteCommunityLeadResult = BasicResult;
+
 export type DeleteRatioTicketTypeInput = {
   id: Scalars['ID'];
 };
+
+export type DeleteTelegramChatResult = BasicResult;
+
+export type EditCommentInput = {
+  id: Scalars['ID'];
+  text: Scalars['String'];
+};
+
+export type EditCommentResult = Comment | GenericError;
 
 export type EmailMailchimpCategory = {
   __typename?: 'EmailMailchimpCategory';
@@ -1153,8 +1281,8 @@ export type Mutation = {
   ratioAddTicket: RatioTicket;
   updateRatioTicket: RatioTicket;
   setRatioTicketNotionLink: RatioTicket;
-  ratioAddTraining: RatioTraining;
-  updateRatioTraining: RatioTraining;
+  createRatioTraining: CreateRatioTrainingResult;
+  updateRatioTraining: UpdateRatioTrainingResult;
   ratioDeleteTraining: BasicResult;
   createRatioPromocode: CreateRatioPromocodeResult;
   checkRatioPromocode?: Maybe<CheckRatioPromocodeResult>;
@@ -1180,9 +1308,24 @@ export type Mutation = {
   myEmailUnsubscribe?: Maybe<Scalars['Boolean']>;
   myEmailSubscribeToInterest: Scalars['Boolean'];
   myEmailUnsubscribeFromInterest: Scalars['Boolean'];
+  addTelegramChat: AddTelegramChatResult;
+  addTelegramChatByInviteLink: AddTelegramChatByInviteLinkResult;
+  deleteTelegramChat: DeleteTelegramChatResult;
+  refreshTelegramChatData: RefreshTelegramChatDataResult;
+  postToTelegramChat: PostToTelegramChatResult;
   tildaImportAll?: Maybe<BasicResult>;
   tildaImport?: Maybe<BasicResult>;
   openviduGenerateRoomToken: OpenviduGenerateRoomTokenResult;
+  createCommunityLead: CreateCommunityLeadResult;
+  updateCommunityLead: UpdateCommunityLeadResult;
+  deleteCommunityLead: DeleteCommunityLeadResult;
+  becomeCommunityLeadCurator: BecomeCommunityLeadCuratorResult;
+  clearCommunityLeadCurator: ClearCommunityLeadCuratorResult;
+  addEventToCommunityLead: AddEventToCommunityLeadResult;
+  removeEventFromCommunityLead: RemoveEventFromCommunityLeadResult;
+  commentOnCommunityLead: CommentOnCommunityLeadResult;
+  editComment: EditCommentResult;
+  deleteComment: DeleteCommentResult;
 };
 
 
@@ -1551,8 +1694,8 @@ export type MutationSetRatioTicketNotionLinkArgs = {
 };
 
 
-export type MutationRatioAddTrainingArgs = {
-  params: RatioAddTrainingInput;
+export type MutationCreateRatioTrainingArgs = {
+  input: CreateRatioTrainingInput;
 };
 
 
@@ -1675,8 +1818,83 @@ export type MutationMyEmailUnsubscribeFromInterestArgs = {
 };
 
 
+export type MutationAddTelegramChatArgs = {
+  input: AddTelegramChatInput;
+};
+
+
+export type MutationAddTelegramChatByInviteLinkArgs = {
+  input: AddTelegramChatByInviteLinkInput;
+};
+
+
+export type MutationDeleteTelegramChatArgs = {
+  id: Scalars['ID'];
+};
+
+
+export type MutationRefreshTelegramChatDataArgs = {
+  id: Scalars['ID'];
+};
+
+
+export type MutationPostToTelegramChatArgs = {
+  input: PostToTelegramChatInput;
+};
+
+
 export type MutationTildaImportArgs = {
   input: TildaImportInput;
+};
+
+
+export type MutationCreateCommunityLeadArgs = {
+  input: CreateCommunityLeadInput;
+};
+
+
+export type MutationUpdateCommunityLeadArgs = {
+  input: UpdateCommunityLeadInput;
+};
+
+
+export type MutationDeleteCommunityLeadArgs = {
+  id: Scalars['ID'];
+};
+
+
+export type MutationBecomeCommunityLeadCuratorArgs = {
+  input: BecomeCommunityLeadCuratorInput;
+};
+
+
+export type MutationClearCommunityLeadCuratorArgs = {
+  input: ClearCommunityLeadCuratorInput;
+};
+
+
+export type MutationAddEventToCommunityLeadArgs = {
+  input: AddEventToCommunityLeadInput;
+};
+
+
+export type MutationRemoveEventFromCommunityLeadArgs = {
+  input: RemoveEventFromCommunityLeadInput;
+};
+
+
+export type MutationCommentOnCommunityLeadArgs = {
+  input: CommentOnCommunityLeadInput;
+};
+
+
+export type MutationEditCommentArgs = {
+  input: EditCommentInput;
+};
+
+
+export type MutationDeleteCommentArgs = {
+  input: DeleteCommentInput;
 };
 
 export type My = {
@@ -1863,6 +2081,13 @@ export type PhotoRibbonBlockValueArgs = {
   spec: Scalars['String'];
 };
 
+export type PostToTelegramChatInput = {
+  id: Scalars['ID'];
+  message: Scalars['String'];
+};
+
+export type PostToTelegramChatResult = BasicResult;
+
 export type PresentationPage = WagtailPage & {
   __typename?: 'PresentationPage';
   title: Scalars['String'];
@@ -1973,10 +2198,13 @@ export type Query = {
   emailSubscribeChannelsAll: Array<EmailSubscribeChannel>;
   imageTemplatesAll: Array<ImageTemplate>;
   imageTemplateBySlug: ImageTemplate;
+  publicTelegramChats: Array<TelegramChat>;
   telegramChats: Array<TelegramChat>;
+  allTelegramChats: Array<TelegramChat>;
   tildaPage?: Maybe<TildaPage>;
   tildaPages: Array<TildaPage>;
   externalServices: Array<ExternalService>;
+  communityLeads: CommunityLeadConnection;
   my: My;
 };
 
@@ -2214,6 +2442,15 @@ export type QueryTildaPageArgs = {
   path: Scalars['String'];
 };
 
+
+export type QueryCommunityLeadsArgs = {
+  before?: Maybe<Scalars['String']>;
+  after?: Maybe<Scalars['String']>;
+  first?: Maybe<Scalars['Int']>;
+  last?: Maybe<Scalars['Int']>;
+  filter?: Maybe<CommunityLeadsFilterInput>;
+};
+
 export type RatioActivity = {
   __typename?: 'RatioActivity';
   id: Scalars['ID'];
@@ -2236,15 +2473,6 @@ export type RatioAddTicketInput = {
   payment_amount: Scalars['Int'];
   ticket_class?: Maybe<Scalars['String']>;
   comment?: Maybe<Scalars['String']>;
-};
-
-export type RatioAddTrainingInput = {
-  name: Scalars['String'];
-  slug: Scalars['String'];
-  date?: Maybe<Scalars['String']>;
-  telegram_link?: Maybe<Scalars['String']>;
-  discount_by_email?: Maybe<Scalars['Int']>;
-  discount_percent_by_email?: Maybe<Scalars['Int']>;
 };
 
 export type RatioBriefingBlock = WagtailBlock & {
@@ -2652,6 +2880,15 @@ export type RatioTrainingsFilterInput = {
   eternal?: Maybe<Scalars['Boolean']>;
 };
 
+export type RefreshTelegramChatDataResult = TelegramChat;
+
+export type RemoveEventFromCommunityLeadInput = {
+  lead_id: Scalars['ID'];
+  event_id: Scalars['ID'];
+};
+
+export type RemoveEventFromCommunityLeadResult = CommunityLead;
+
 export type SearchInput = {
   query: Scalars['String'];
   limit?: Maybe<Scalars['Int']>;
@@ -2707,6 +2944,7 @@ export type Settings = {
   default_events_vk_images_collection: WagtailCollection;
   weekly_digest_images_collection: WagtailCollection;
   telegram_images_collection: WagtailCollection;
+  community_org_team_telegram_chat?: Maybe<TelegramChat>;
 };
 
 export type SlackAccount = ExternalServiceAccount & {
@@ -2801,6 +3039,7 @@ export type TelegramChat = {
   title: Scalars['String'];
   photo?: Maybe<WagtailImageRendition>;
   project?: Maybe<ProjectPage>;
+  link: Scalars['String'];
 };
 
 
@@ -2845,6 +3084,15 @@ export type TimepadCategory = {
   name: Scalars['String'];
 };
 
+export type UpdateCommunityLeadInput = {
+  id: Scalars['ID'];
+  name?: Maybe<Scalars['String']>;
+  description?: Maybe<Scalars['String']>;
+  status?: Maybe<Scalars['String']>;
+};
+
+export type UpdateCommunityLeadResult = CommunityLead | ValidationError | GenericError;
+
 export type UpdateRatioTicketInput = {
   id: Scalars['ID'];
   first_name?: Maybe<Scalars['String']>;
@@ -2862,7 +3110,7 @@ export type UpdateRatioTicketTypeInput = {
 
 export type UpdateRatioTrainingInput = {
   id: Scalars['ID'];
-  name: Scalars['String'];
+  name?: Maybe<Scalars['String']>;
   date?: Maybe<Scalars['String']>;
   telegram_link?: Maybe<Scalars['String']>;
   discount_by_email?: Maybe<Scalars['Int']>;
@@ -2872,11 +3120,13 @@ export type UpdateRatioTrainingInput = {
   notion_created_email?: Maybe<Scalars['String']>;
 };
 
+export type UpdateRatioTrainingResult = RatioTraining | ValidationError | GenericError;
+
 export type UpdateSettingsInput = {
   default_events_images_collection?: Maybe<Scalars['ID']>;
   default_events_vk_images_collection?: Maybe<Scalars['ID']>;
   weekly_digest_images_collection?: Maybe<Scalars['ID']>;
-  telegram_images_collection?: Maybe<Scalars['ID']>;
+  community_org_team_telegram_chat?: Maybe<Scalars['ID']>;
 };
 
 export type UpdateYandexKassaPaymentInput = {

@@ -1,0 +1,5 @@
+query WagtailImageForEditor($id: ID!) {
+  result: wagtailImage(input: { id: $id }) {
+    ...WagtailImage_ForEditor
+  }
+}

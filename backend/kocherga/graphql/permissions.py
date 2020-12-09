@@ -7,11 +7,15 @@ from functools import wraps
 import graphql
 
 
+class PermissionException(Exception):
+    pass
+
+
 def superuseronly(obj, info):
     """Checks that user is superuser."""
 
     if not info.context.user.is_superuser:
-        raise Exception("Forbidden: need to be superuser")
+        raise PermissionException("Forbidden: need to be superuser")
 
     return True
 
@@ -20,7 +24,7 @@ def staffonly(obj, info):
     """Checks that user belongs to staff."""
 
     if not info.context.user.is_staff:
-        raise Exception("Forbidden: need to be staff member")
+        raise PermissionException("Forbidden: need to be staff member")
 
     return True
 
@@ -29,7 +33,7 @@ def authenticated(obj, info):
     """Checks that user is authenticated."""
 
     if not info.context.user.is_authenticated:
-        raise Exception("Forbidden: need to be authenticated")
+        raise PermissionException("Forbidden: need to be authenticated")
 
     return True
 
@@ -39,14 +43,14 @@ def user_perm(permission: str):
 
     def checker(obj, info):
         if not info.context.user.has_perm(permission):
-            raise Exception(f"Forbidden: missing permission {permission}")
+            raise PermissionException(f"Forbidden: missing permission {permission}")
 
         return True
 
     return checker
 
 
-def check_permissions(permissions):
+def check_permissions(permissions, fallback_to_null=False):
     """Decorator for adding permission checks to a given resolve() function."""
 
     # sanity check
@@ -55,11 +59,17 @@ def check_permissions(permissions):
     def decorator(resolve):
         @wraps(resolve)
         def wrapper(obj, info: graphql.type.GraphQLResolveInfo, **kwargs):
-            for permission in permissions:
-                if not permission(obj, info):
-                    # TODO - return None on false result?
-                    # permission checkers can throw exceptions when permission is denied
-                    raise Exception("Permission denied")
+            try:
+                for permission in permissions:
+                    if not permission(obj, info):
+                        # TODO - return None on false result?
+                        # permission checkers can throw exceptions when permission is denied
+                        raise PermissionException("Permission denied")
+            except PermissionException:
+                if fallback_to_null:
+                    return None
+                else:
+                    raise
             return resolve(obj, info, **kwargs)
 
         return wrapper

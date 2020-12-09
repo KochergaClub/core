@@ -1,54 +1,49 @@
 import React from 'react';
-import { MdRefresh } from 'react-icons/md';
 
 import { capitalize } from '~/common/utils';
-import { AnyFormValues, FormShape } from '~/components/forms/types';
-import { AsyncButton, Column, Row } from '~/frontkit';
+import { FormShape, ModalPostResult, ShapeToValues } from '~/components/forms/types';
+import { Column } from '~/frontkit';
 
-import CreateItemButton from './CreateItemButton';
+import { CollectionHeader } from './CollectionHeader';
 import DumpJSONView from './DumpJSONView';
-import { AnyViewProps, EntityNames } from './types';
+import { EntityNames } from './types';
 
-interface Props<I, A extends AnyFormValues> {
+interface Props<I, S extends FormShape> {
   items: I[];
   names?: EntityNames;
   add?: {
-    shape: FormShape;
-    cb: (values: A) => Promise<void>;
+    shape: S;
+    cb: (values: ShapeToValues<S>) => Promise<ModalPostResult | void>;
   };
   refetch?: () => Promise<unknown>;
-  view?: React.ElementType<AnyViewProps<I>>;
+  view?: (props: { items: I[] }) => React.ReactNode;
+  controls?: () => React.ReactNode;
 }
 
-function Collection<I, A extends AnyFormValues>(props: Props<I, A>) {
-  const View = props.view || DumpJSONView;
+function Collection<I, S extends FormShape>(props: Props<I, S>) {
+  const view = props.view || DumpJSONView;
 
   return (
     <section>
-      <h2>
-        <Row vCentered gutter={8}>
-          {props.names && props.names.plural && (
-            <div>{capitalize(props.names.plural)}</div>
-          )}
-          {props.add && (
-            <CreateItemButton
-              add={props.add.cb}
-              shape={props.add.shape}
-              names={props.names}
-            />
-          )}
-          {props.refetch && (
-            <AsyncButton act={props.refetch}>
-              <Row vCentered>
-                <MdRefresh />
-                <span>Обновить</span>
-              </Row>
-            </AsyncButton>
-          )}
-        </Row>
-      </h2>
-      <Column stretch>
-        <View items={props.items} />
+      <CollectionHeader
+        title={capitalize(props?.names?.plural || '')}
+        add={
+          props.add
+            ? {
+                ...props.add,
+                title: `Создать${
+                  props.names && props.names.genitive
+                    ? ' ' + props.names.genitive
+                    : ''
+                }`,
+              }
+            : undefined
+        }
+        refetch={props.refetch}
+      />
+      <Column gutter={8} stretch>
+        {props.controls ? props.controls() : null}
+        <div>{view({ items: props.items })}</div>
       </Column>
     </section>
   );

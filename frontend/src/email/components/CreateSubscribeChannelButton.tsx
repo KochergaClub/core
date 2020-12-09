@@ -2,8 +2,8 @@ import { useCallback, useMemo } from 'react';
 
 import { useMutation, useQuery } from '@apollo/client';
 
-import ModalFormButton from '~/components/forms/ModalFormButton';
-import { FormShape } from '~/components/forms/types';
+import { FormShapeModalButton } from '~/components/forms';
+import { FieldShape } from '~/components/forms/types';
 
 import {
     EmailMailchimpCategoriesDocument, EmailSubscribeChannelCreateDocument
@@ -17,13 +17,13 @@ const CreateSubscribeChannelButton: React.FC = () => {
   });
 
   const formShape = useMemo(() => {
-    const result: FormShape = [{ name: 'slug', type: 'string' }];
+    const result: FieldShape[] = [{ name: 'slug', type: 'string' }];
     if (!queryResults.data) {
       return result;
     }
 
     for (const mailchimpCategory of queryResults.data.mailchimpCategories) {
-      const subShape: FormShape = [];
+      const subShape: FieldShape[] = [];
       for (const mailchimpInterest of mailchimpCategory.interests) {
         subShape.push({
           type: 'boolean',
@@ -43,8 +43,7 @@ const CreateSubscribeChannelButton: React.FC = () => {
   }, [queryResults.data]);
 
   const postCb = useCallback(
-    async (values: { [k: string]: string | { [k: string]: boolean } }) => {
-      console.log(values);
+    async (values: Record<string, unknown>) => {
       const interest_ids = [];
       const slug = values.slug as string;
 
@@ -75,10 +74,10 @@ const CreateSubscribeChannelButton: React.FC = () => {
   );
 
   return (
-    <ModalFormButton
+    <FormShapeModalButton
       post={postCb}
-      buttonName="Создать канал подписки"
-      modalButtonName="Создать"
+      buttonLabel="Создать канал подписки"
+      modalSubmitLabel="Создать"
       modalTitle="Создать канал подписки"
       shape={formShape}
     />

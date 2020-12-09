@@ -4,12 +4,11 @@ import { FaArrowRight } from 'react-icons/fa';
 import { BasicSpinner } from '../Spinner';
 import { ActionLayout } from './ActionLayout';
 import { DropdownMenuContext } from './contexts';
+import { CommonActionProps } from './types';
 
-interface Props {
+interface Props extends CommonActionProps {
   act?: () => Promise<void>;
   syncAct?: () => void;
-  title: string;
-  icon?: React.ElementType;
   children?: null;
 }
 

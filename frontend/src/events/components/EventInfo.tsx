@@ -1,13 +1,10 @@
+import { utcToZonedTime } from 'date-fns-tz';
+import React from 'react';
 import styled from 'styled-components';
 
-import { utcToZonedTime } from 'date-fns-tz';
-
-import breaks from 'remark-breaks';
-import Markdown from 'react-markdown';
-
-import { A, RichText, Row, Label } from '~/frontkit';
-
-import { timezone, formatDate } from '~/common/utils';
+import { formatDate, timezone } from '~/common/utils';
+import { Markdown } from '~/components';
+import { A, Label, Row } from '~/frontkit';
 
 import { TeamCalendarEventFragment } from '../queries.generated';
 
@@ -65,9 +62,7 @@ export const EventInfo: React.FC<Props> = ({ event }) => {
       </Row>
       {event.description && (
         <EventDescription>
-          <RichText>
-            <Markdown source={event.description} plugins={[breaks]} />
-          </RichText>
+          <Markdown source={event.description} />
         </EventDescription>
       )}
       <EventAnnouncements event={event} />

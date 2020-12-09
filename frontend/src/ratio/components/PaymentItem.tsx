@@ -1,10 +1,8 @@
-import { useCallback } from 'react';
+import React from 'react';
 import { FaCashRegister, FaCheck, FaTimes, FaTrash } from 'react-icons/fa';
 
-import { useMutation } from '@apollo/client';
-
 import { usePermissions } from '~/common/hooks';
-import DropdownMenu, { Action } from '~/components/DropdownMenu';
+import DropdownMenu, { MutationAction } from '~/components/DropdownMenu';
 import { Badge, colors, Row } from '~/frontkit';
 
 import {
@@ -20,18 +18,6 @@ const CanceledBadge = () => <Badge type="accent">ОТКАЗ</Badge>;
 
 const FiscalizeAction: React.FC<Props> = ({ payment }) => {
   const [isKkmUser] = usePermissions(['kkm.kkmserver']);
-  const [fiscalizeMutation] = useMutation(RatioPaymentFiscalizeDocument, {
-    refetchQueries: ['RatioTrainingBySlug', 'RatioTickets', 'RatioTicketById'],
-    awaitRefetchQueries: true,
-  });
-
-  const act = useCallback(async () => {
-    await fiscalizeMutation({
-      variables: {
-        payment_id: payment.id,
-      },
-    });
-  }, [payment.id, fiscalizeMutation]);
 
   if (!isKkmUser) {
     return null;
@@ -43,36 +29,39 @@ const FiscalizeAction: React.FC<Props> = ({ payment }) => {
     return null;
   }
 
-  return <Action act={act} title="Напечатать чек" />;
+  return (
+    <MutationAction
+      mutation={RatioPaymentFiscalizeDocument}
+      variables={{
+        payment_id: payment.id,
+      }}
+      refetchQueries={[
+        'RatioTrainingBySlug',
+        'RatioTickets',
+        'RatioTicketById',
+      ]}
+      title="Напечатать чек"
+    />
+  );
 };
 
 const DeleteAction: React.FC<Props> = ({ payment }) => {
-  const [mutation] = useMutation(RatioPaymentDeleteDocument, {
-    variables: {
-      payment_id: payment.id,
-    },
-    refetchQueries: ['RatioTrainingBySlug', 'RatioTickets', 'RatioTicketById'],
-    awaitRefetchQueries: true,
-  });
-
-  const act = useCallback(async () => {
-    await mutation();
-  }, [mutation]);
-
-  return <Action act={act} title="Удалить" icon={FaTrash} />;
+  return (
+    <MutationAction
+      mutation={RatioPaymentDeleteDocument}
+      variables={{ payment_id: payment.id }}
+      refetchQueries={[
+        'RatioTrainingBySlug',
+        'RatioTickets',
+        'RatioTicketById',
+      ]}
+      title="Удалить"
+      icon={FaTrash}
+    />
+  );
 };
 
 const FiscalizedManuallyAction: React.FC<Props> = ({ payment }) => {
-  const [mutation] = useMutation(RatioPaymentFiscalizedManuallyDocument, {
-    variables: {
-      payment_id: payment.id,
-    },
-  });
-
-  const act = useCallback(async () => {
-    await mutation();
-  }, [mutation]);
-
   if (payment.status !== 'paid') {
     return null;
   }
@@ -82,7 +71,16 @@ const FiscalizedManuallyAction: React.FC<Props> = ({ payment }) => {
   ) {
     return null;
   }
-  return <Action act={act} title="Чек пробит вручную" />;
+
+  return (
+    <MutationAction
+      mutation={RatioPaymentFiscalizedManuallyDocument}
+      variables={{
+        payment_id: payment.id,
+      }}
+      title="Чек пробит вручную"
+    />
+  );
 };
 
 const PaymentStatus: React.FC<Props> = ({ payment }) => {
@@ -121,20 +119,18 @@ const SetStatusAction: React.FC<{
   status: string;
   title: string;
 }> = ({ payment, status, title }) => {
-  const [setStatusMutation] = useMutation(RatioPaymentSetStatusDocument);
-
-  const act = useCallback(async () => {
-    await setStatusMutation({
-      variables: {
+  return (
+    <MutationAction
+      mutation={RatioPaymentSetStatusDocument}
+      variables={{
         input: {
           payment_id: payment.id,
           status,
         },
-      },
-    });
-  }, [payment.id, status, setStatusMutation]);
-
-  return <Action act={act} title={title} />;
+      }}
+      title={title}
+    />
+  );
 };
 
 const StatusActions: React.FC<Props> = ({ payment }) => {

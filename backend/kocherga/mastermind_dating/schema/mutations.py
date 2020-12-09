@@ -1,10 +1,8 @@
 from django.contrib.auth import get_user_model
-
-from kocherga.graphql import g, helpers
-from kocherga.graphql.permissions import staffonly, check_permissions
-from kocherga.graphql.basic_types import BasicResult
-
 from kocherga.events.models import Event
+from kocherga.graphql import g, helpers
+from kocherga.graphql.basic_types import BasicResult
+from kocherga.graphql.permissions import check_permissions, staffonly
 
 from .. import models
 from . import types
@@ -63,7 +61,9 @@ def mastermindDatingDeleteCohort(helper):
         return {'ok': True}
 
     return g.Field(
-        g.NN(BasicResult), args=g.arguments({'cohort_id': 'ID!'}), resolve=resolve,
+        g.NN(BasicResult),
+        args=g.arguments({'cohort_id': 'ID!'}),
+        resolve=resolve,
     )
 
 
@@ -71,7 +71,7 @@ def mastermindDatingDeleteCohort(helper):
 def mastermindDatingCreateGroup(helper):
     @check_permissions([staffonly])
     def resolve(_, info, cohort_id):
-        cohort = models.Cohort.objects.get(cohort_id)
+        cohort = models.Cohort.objects.get(pk=cohort_id)
         models.Group.objects.create_for_cohort(cohort)
         return {'cohort': cohort}
 
@@ -86,7 +86,7 @@ def mastermindDatingCreateGroup(helper):
 def mastermindDatingSetEventForCohort(_):
     @check_permissions([staffonly])
     def resolve(_, info, cohort_id, event_id):
-        cohort = models.Cohort.objects.get(cohort_id)
+        cohort = models.Cohort.objects.get(pk=cohort_id)
         event = Event.objects.get(uuid=event_id)
         cohort.event = event
         cohort.save()
@@ -103,7 +103,7 @@ def mastermindDatingSetEventForCohort(_):
 def mastermindDatingUnsetEventForCohort(_):
     @check_permissions([staffonly])
     def resolve(_, info, cohort_id):
-        cohort = models.Cohort.objects.get(cohort_id)
+        cohort = models.Cohort.objects.get(pk=cohort_id)
         cohort.event = None
         cohort.save()
         return {'cohort': cohort}
@@ -118,15 +118,18 @@ def mastermindDatingUnsetEventForCohort(_):
 @c.field
 def mastermindDatingCreateParticipant(_):
     @check_permissions([staffonly])
-    def resolve(_, info, cohort, email):
+    def resolve(_, info, cohort_id, email):
         KchUser = get_user_model()
         try:
             kocherga_user = KchUser.objects.get(email=email)
         except KchUser.DoesNotExist:
             kocherga_user = KchUser.objects.create_user(email)
 
+        cohort = models.Cohort.objects.get(pk=cohort_id)
+
         (participant, _) = models.Participant.objects.get_or_create(
-            user=kocherga_user, cohort=cohort,
+            user=kocherga_user,
+            cohort=cohort,
         )
 
         return {'participant': participant}

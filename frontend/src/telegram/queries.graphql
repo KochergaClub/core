@@ -1,6 +1,7 @@
 fragment TelegramChat on TelegramChat {
   id
   username
+  link
   title
   photo(spec: "fill-50x50") {
     id
@@ -19,8 +20,54 @@ fragment TelegramChat on TelegramChat {
   }
 }
 
-query TelegramChats {
-  telegramChats {
+query PublicTelegramChats {
+  chats: publicTelegramChats {
     ...TelegramChat
+  }
+}
+
+query AllTelegramChats {
+  chats: allTelegramChats {
+    ...TelegramChat
+  }
+}
+
+mutation AddTelegramChat($input: AddTelegramChatInput!) {
+  result: addTelegramChat(input: $input) {
+    ...TelegramChat
+    ...ValidationError
+    ...GenericError
+  }
+}
+
+mutation AddTelegramChatByInviteLink(
+  $input: AddTelegramChatByInviteLinkInput!
+) {
+  result: addTelegramChatByInviteLink(input: $input) {
+    ...TelegramChat
+    ...ValidationError
+    ...GenericError
+  }
+}
+
+mutation DeleteTelegramChat($id: ID!) {
+  result: deleteTelegramChat(id: $id) {
+    ... on BasicResult {
+      ok
+    }
+  }
+}
+
+mutation RefreshTelegramChatData($id: ID!) {
+  result: refreshTelegramChatData(id: $id) {
+    ...TelegramChat
+  }
+}
+
+mutation PostToTelegramChat($input: PostToTelegramChatInput!) {
+  result: postToTelegramChat(input: $input) {
+    ... on BasicResult {
+      ok
+    }
   }
 }

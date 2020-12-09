@@ -11,10 +11,6 @@ domains:
     host: ludwig.team.kocherga.club
     service: core-ludwig
 
-  - name: booking
-    host: booking.kocherga.club
-    service: core-booking
-
   - name: verdaccio
     host: npm.team.kocherga.club
     service: verdaccio-verdaccio

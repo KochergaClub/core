@@ -6,13 +6,62 @@
       }
       const result: PossibleTypesResultData = {
   "possibleTypes": {
+    "AddEventToCommunityLeadResult": [
+      "CommunityLead"
+    ],
+    "AddTelegramChatByInviteLinkResult": [
+      "TelegramChat",
+      "ValidationError",
+      "GenericError"
+    ],
+    "AddTelegramChatResult": [
+      "TelegramChat",
+      "ValidationError",
+      "GenericError"
+    ],
+    "BecomeCommunityLeadCuratorResult": [
+      "CommunityLead"
+    ],
     "CancelYandexKassaPaymentResult": [
       "YandexKassaPayment",
+      "GenericError"
+    ],
+    "ClearCommunityLeadCuratorResult": [
+      "CommunityLead"
+    ],
+    "CommentOnCommunityLeadResult": [
+      "CommunityLead"
+    ],
+    "Commentable": [
+      "CommunityLead"
+    ],
+    "CreateCommunityLeadResult": [
+      "CommunityLead",
+      "ValidationError",
       "GenericError"
     ],
     "CreateRatioPromocodeResult": [
       "RatioPromocode",
       "ValidationError",
+      "GenericError"
+    ],
+    "CreateRatioTrainingResult": [
+      "RatioTraining",
+      "ValidationError",
+      "GenericError"
+    ],
+    "DeleteCommentResult": [
+      "BasicResult",
+      "GenericError"
+    ],
+    "DeleteCommunityLeadResult": [
+      "BasicResult"
+    ],
+    "DeleteTelegramChatResult": [
+      "BasicResult"
+    ],
+    "EditCommentResult": [
+      "Comment",
       "GenericError"
     ],
     "ExternalService": [
@@ -27,10 +76,19 @@
       "KkmRegisterCheckOkResult",
       "GenericError"
     ],
+    "PostToTelegramChatResult": [
+      "BasicResult"
+    ],
     "RatioCreateOrderResult": [
       "RatioOrder",
       "ValidationError",
       "GenericError"
+    ],
+    "RefreshTelegramChatDataResult": [
+      "TelegramChat"
+    ],
+    "RemoveEventFromCommunityLeadResult": [
+      "CommunityLead"
     ],
     "SearchItem": [
       "PageSearchItem",
@@ -43,6 +101,16 @@
     "SlideFragmentsBlockValues": [
       "SlideFragmentsBlock_RichTextBlock",
       "SlideFragmentsBlock_RawHtmlBlock"
+    ],
+    "UpdateCommunityLeadResult": [
+      "CommunityLead",
+      "ValidationError",
+      "GenericError"
+    ],
+    "UpdateRatioTrainingResult": [
+      "RatioTraining",
+      "ValidationError",
+      "GenericError"
     ],
     "UpdateYandexKassaPaymentResult": [
       "YandexKassaPayment",

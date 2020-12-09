@@ -1,7 +1,9 @@
+import React from 'react';
+
 import { useMutation } from '@apollo/client';
 
-import ModalForm from '~/components/forms/ModalForm';
-import { FormShape } from '~/components/forms/types';
+import { FormShapeModal } from '~/components/forms';
+import { ShapeToValues } from '~/components/forms/types';
 import { useNotification } from '~/frontkit';
 
 import { CreateRatioPromocodeDocument } from './queries.generated';
@@ -12,11 +14,13 @@ interface Props {
   trainingId?: string;
 }
 
-const shape: FormShape = [
+const shape = [
   { name: 'code', type: 'string' },
   { name: 'discount', type: 'number' },
   { name: 'uses_max', type: 'number', optional: true },
-];
+] as const;
+
+type FormValues = ShapeToValues<typeof shape>;
 
 const CreatePromocodeModal: React.FC<Props> = ({
   close,
@@ -29,19 +33,13 @@ const CreatePromocodeModal: React.FC<Props> = ({
     awaitRefetchQueries: true,
   });
 
-  type FormValues = {
-    code: string;
-    discount: number;
-    uses_max?: number;
-  };
-
   const post = async (v: FormValues) => {
     const result = await create({
       variables: {
         input: {
           code: v.code,
-          discount: v.discount,
-          uses_max: v.uses_max,
+          discount: parseInt(v.discount, 10),
+          uses_max: v.uses_max ? parseInt(v.uses_max, 10) : undefined,
           ticket_type_id: ticketTypeId,
           training_id: trainingId,
         },
@@ -62,11 +60,11 @@ const CreatePromocodeModal: React.FC<Props> = ({
   };
 
   return (
-    <ModalForm
+    <FormShapeModal
       close={close}
       shape={shape}
-      modalButtonName="Создать"
-      modalTitle="Создание промокода"
+      submitLabel="Создать"
+      title="Создание промокода"
       post={post}
     />
   );

@@ -6,6 +6,7 @@ import hashlib
 
 from django.conf import settings
 from django.core.exceptions import ValidationError
+from django.core.validators import MaxValueValidator, MinValueValidator
 from django.db import models, transaction
 from kocherga.django.managers import RelayQuerySetMixin
 
@@ -90,7 +91,10 @@ class Ticket(models.Model):
         on_delete=models.PROTECT,
     )
 
-    payment_amount = models.IntegerField('Размер оплаты')
+    payment_amount = models.IntegerField(
+        'Размер оплаты',
+        validators=[MinValueValidator(0), MaxValueValidator(1000000)],
+    )
 
     comment = models.TextField(blank=True)
 

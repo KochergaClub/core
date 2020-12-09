@@ -5,10 +5,10 @@ import TL02 from '~/blocks/TL02';
 import { ApolloQueryResults, Page } from '~/components';
 
 import TelegramChatsBlock from '../components/TelegramChatsBlock';
-import { TelegramChatsDocument } from '../queries.generated';
+import { PublicTelegramChatsDocument } from '../queries.generated';
 
 const TelegramChatsPage: NextApolloPage = () => {
-  const queryResults = useQuery(TelegramChatsDocument);
+  const queryResults = useQuery(PublicTelegramChatsDocument);
 
   return (
     <Page
@@ -18,9 +18,7 @@ const TelegramChatsPage: NextApolloPage = () => {
       <Page.Main>
         <TL02 title="Чаты сообщества Кочерги" />
         <ApolloQueryResults {...queryResults} size="block">
-          {({ data: { telegramChats } }) => (
-            <TelegramChatsBlock chats={telegramChats} />
-          )}
+          {({ data: { chats } }) => <TelegramChatsBlock chats={chats} />}
         </ApolloQueryResults>
       </Page.Main>
     </Page>

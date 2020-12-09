@@ -109,7 +109,15 @@ const UserButtons: React.FC<Props> = (
         },
       }) =>
         user.is_authenticated ? (
-          <DropdownMenu render={() => <FaUserCircle size="24" color="white" />}>
+          <DropdownMenu
+            render={() => (
+              <FaUserCircle
+                size="24"
+                color="white"
+                style={{ display: 'block' }}
+              />
+            )}
+          >
             <Link href="/my">
               <Email>{user.email}</Email>
             </Link>

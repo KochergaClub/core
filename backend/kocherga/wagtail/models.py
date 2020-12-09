@@ -7,12 +7,14 @@ import json
 
 from django.contrib.contenttypes.models import ContentType
 from django.db import models
-
-import wagtail.images.models
-import wagtail.core.models
-from wagtail.admin.edit_handlers import FieldPanel
-from .mixins import HeadlessPreviewMixin
 from kocherga.django.managers import RelayQuerySetMixin
+from storages.backends.s3boto3 import S3Boto3Storage
+
+import wagtail.core.models
+import wagtail.images.models
+from wagtail.admin.edit_handlers import FieldPanel
+
+from .mixins import HeadlessPreviewMixin
 
 
 class PagePreview(models.Model):
@@ -78,14 +80,17 @@ class CustomRendition(wagtail.images.models.AbstractRendition):
     def url(self):
         result = self.file.url
         if not self.image.private:
-            result = self.image.file.storage._strip_signing_parameters(result)
+            storage = self.image.file.storage
+            if isinstance(storage, S3Boto3Storage):
+                result = self.image.file.storage._strip_signing_parameters(result)
         return result
 
     def save(self, *args, **kwargs):
         super().save(*args, **kwargs)
         # TODO - compare current and previous `private` value
         # note that we update ACL after saving, because before saving file is InMemoryUploadedFile and not on S3 yet
-        self._update_acl()
+        if getattr(self.file.file, 'obj', None):
+            self._update_acl()
 
     def _update_acl(self):
         acl = 'private' if self.image.private else 'public-read'

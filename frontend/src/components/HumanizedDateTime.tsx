@@ -11,7 +11,7 @@ const HumanizedDateTime: React.FC<Props> = ({ date }) => {
 
   return (
     <time dateTime={date.toISOString()}>
-      {capitalize(formatDate(zonedDate, 'EEEE, d MMMM yyyy, HH:mm'))}
+      {capitalize(formatDate(zonedDate, 'd MMMM yyyy, EEEE, HH:mm'))}
     </time>
   );
 };

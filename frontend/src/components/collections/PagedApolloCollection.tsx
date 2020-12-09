@@ -1,11 +1,11 @@
-import { AnyFormValues, FormShape } from '~/components/forms/types';
+import { FormShape, ModalPostResult, ShapeToValues } from '~/components/forms/types';
 
 import { Collection } from './';
 import HeadlessConnection from './HeadlessConnection';
 import Pager from './Pager';
-import { AnyViewProps, EntityNames } from './types';
+import { EntityNames } from './types';
 
-interface Props<T, A extends AnyFormValues> {
+interface Props<T, S extends FormShape> {
   connection: {
     pageInfo: {
       // TODO - PageInfoFragment
@@ -27,13 +27,14 @@ interface Props<T, A extends AnyFormValues> {
   }) => Promise<unknown>;
   names: EntityNames;
   add?: {
-    shape: FormShape;
-    cb: (values: A) => Promise<void>;
+    shape: S;
+    cb: (values: ShapeToValues<S>) => Promise<ModalPostResult | void>;
   };
-  view?: React.ElementType<AnyViewProps<T>>;
+  view?: (props: { items: T[] }) => React.ReactNode;
+  controls?: () => React.ReactNode;
 }
 
-function PagedApolloCollection<T, A extends AnyFormValues>(props: Props<T, A>) {
+function PagedApolloCollection<T, S extends FormShape>(props: Props<T, S>) {
   return (
     <HeadlessConnection
       connection={props.connection}
@@ -48,6 +49,7 @@ function PagedApolloCollection<T, A extends AnyFormValues>(props: Props<T, A>) {
             add={props.add}
             refetch={props.fetchPage}
             view={props.view}
+            controls={props.controls}
           />
           <Pager
             pageInfo={props.connection.pageInfo}

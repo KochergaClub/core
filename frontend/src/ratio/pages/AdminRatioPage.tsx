@@ -8,8 +8,8 @@ import { WithNavSidebar } from '~/frontkit';
 import OrderCollectionBlock from '../components/orders/OrderCollectionBlock';
 import TicketCollectionBlock from '../components/tickets/TicketCollectionBlock';
 import TicketView from '../components/tickets/TicketView';
-import TrainingCollectionBlock from '../components/TrainingCollectionBlock';
 import AdminRatioTraining from '../components/trainings/AdminRatioTraining';
+import TrainingCollectionBlock from '../components/trainings/TrainingCollectionBlock';
 
 const tabs = [
   { title: 'Тренинги', name: 'trainings' },

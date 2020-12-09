@@ -10,13 +10,13 @@ os.environ['DB_HOST'] = 'whatever'
 KOCHERGA_WEBSITE = "https://yudkowsky.cult"
 os.environ['KOCHERGA_WEBSITE'] = KOCHERGA_WEBSITE
 
-from .base import *
-
-from .sample_secrets import *
-
+import logging
 import os
 
-import logging
+from .base import *
+
+# You can copy sample_secrets.py to local_secrets.py is local_secrets.py is missing.
+from .local_secrets import *
 
 logging.basicConfig(level=logging.INFO)
 
@@ -32,11 +32,13 @@ DATABASES = {
     }
 }
 
+MEDIA_ROOT = os.path.join(BASE_DIR, 'upload')
+
 # Kocherga settings
 KOCHERGA_WATCHMEN_SPREADSHEET_KEY = "FAKE"
 
-KOCHERGA_MAILCHIMP_MAIN_LIST_ID = "FAKE"
-KOCHERGA_MAILCHIMP_DATACENTER = "FAKE"
+KOCHERGA_MAILCHIMP_MAIN_LIST_ID = "10b92c1fc0"
+KOCHERGA_MAILCHIMP_DATACENTER = "us18"
 
 KOCHERGA_EVENT_MARKUP_SELF_MENTION = "UNSET"
 
@@ -73,11 +75,6 @@ KOCHERGA_VK = {
     "daily_page": "UNSET",
     "client_id": 11111,
     "callback_secret": "11111",
-}
-
-KOCHERGA_TELEGRAM = {
-    "channel": "-111111",
-    "core_api": {"api_id": 11111, "api_hash": "00000"},
 }
 
 KOCHERGA_API_ROOT = "http://localhost:5302/api"

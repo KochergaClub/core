@@ -1,11 +1,10 @@
-import { useCallback } from 'react';
+import React, { useCallback } from 'react';
 
 import { useMutation } from '@apollo/client';
 
-import { AsyncButtonWithConfirm, CopyToClipboardIcon } from '~/components';
+import { CopyToClipboardIcon, MutationButton } from '~/components';
 import Card, { CardHeader } from '~/components/Card';
-import ModalFormButton from '~/components/forms/ModalFormButton';
-import { FormShape } from '~/components/forms/types';
+import { FormShapeModalButton } from '~/components/forms';
 import { Column, Label, Row } from '~/frontkit';
 
 import {
@@ -17,17 +16,13 @@ type ManualSubscribeFormResults = {
   email: string;
 };
 
-const manualSubscribeFormShape: FormShape = [{ name: 'email', type: 'email' }];
+const manualSubscribeFormShape = [{ name: 'email', type: 'email' }] as const;
 
 interface Props {
   subscribeChannel: SubscribeChannelFragment;
 }
 
 const SubscribeChannelCard: React.FC<Props> = ({ subscribeChannel }) => {
-  const [deleteMutation] = useMutation(EmailSubscribeChannelDeleteDocument, {
-    refetchQueries: ['EmailSubscribeChannels'],
-    awaitRefetchQueries: true,
-  });
   const [subscribeMutation] = useMutation(
     EmailSubscribeChannelAddEmailDocument,
     {
@@ -35,14 +30,6 @@ const SubscribeChannelCard: React.FC<Props> = ({ subscribeChannel }) => {
       awaitRefetchQueries: true,
     }
   );
-
-  const deleteCb = useCallback(async () => {
-    await deleteMutation({
-      variables: {
-        slug: subscribeChannel.slug,
-      },
-    });
-  }, [subscribeChannel.slug, deleteMutation]);
 
   const manualSubscribeCb = useCallback(
     async (values: ManualSubscribeFormResults) => {
@@ -65,19 +52,23 @@ const SubscribeChannelCard: React.FC<Props> = ({ subscribeChannel }) => {
         <CardHeader>
           <Row gutter={8}>
             <div>{subscribeChannel.slug}</div>
-            <AsyncButtonWithConfirm
+            <MutationButton
               size="small"
-              act={deleteCb}
               confirmText="Точно удалить?"
+              mutation={EmailSubscribeChannelDeleteDocument}
+              refetchQueries={['EmailSubscribeChannels']}
+              variables={{
+                slug: subscribeChannel.slug,
+              }}
             >
               Удалить
-            </AsyncButtonWithConfirm>
-            <ModalFormButton
+            </MutationButton>
+            <FormShapeModalButton
               shape={manualSubscribeFormShape}
               size="small"
-              buttonName="Подписать вручную"
+              buttonLabel="Подписать вручную"
               modalTitle="Подписать вручную"
-              modalButtonName="Подписать"
+              modalSubmitLabel="Подписать"
               post={manualSubscribeCb}
             />
           </Row>

@@ -2,17 +2,15 @@ import { formatDistanceToNow, parseISO } from 'date-fns';
 import { utcToZonedTime } from 'date-fns-tz';
 import { ru } from 'date-fns/locale';
 import Link from 'next/link';
-import { useCallback } from 'react';
+import React, { useCallback } from 'react';
 import { FaTicketAlt, FaTrash } from 'react-icons/fa';
 import { FiVideo } from 'react-icons/fi';
 import styled from 'styled-components';
 
-import { useMutation } from '@apollo/client';
-
 import { formatDate, timezone } from '~/common/utils';
 import { CopyToClipboardIcon, DropdownMenu } from '~/components';
 import Card from '~/components/Card';
-import { Action } from '~/components/DropdownMenu';
+import { MutationAction } from '~/components/DropdownMenu';
 import { publicEventRoute } from '~/events/routes';
 import { A, Button, colors, Column, fonts, Label, Row } from '~/frontkit';
 
@@ -40,16 +38,6 @@ interface Props {
 }
 
 const TicketCard: React.FC<Props> = ({ ticket, later }) => {
-  const [deleteMutation] = useMutation(MyTicketDeleteDocument);
-
-  const cancel = useCallback(async () => {
-    await deleteMutation({
-      variables: {
-        event_id: ticket.event.id,
-      },
-    });
-  }, [deleteMutation, ticket.event.id]);
-
   const zonedStart = utcToZonedTime(ticket.event.start, timezone);
 
   const joinZoom = useCallback(() => {
@@ -63,7 +51,12 @@ const TicketCard: React.FC<Props> = ({ ticket, later }) => {
     <Card>
       <DropdownContainer>
         <DropdownMenu>
-          <Action act={cancel} title="Отменить регистрацию" icon={FaTrash} />
+          <MutationAction
+            mutation={MyTicketDeleteDocument}
+            variables={{ event_id: ticket.event.id }}
+            title="Отменить регистрацию"
+            icon={FaTrash}
+          />
         </DropdownMenu>
       </DropdownContainer>
       <Row gutter={24} vCentered stretch>

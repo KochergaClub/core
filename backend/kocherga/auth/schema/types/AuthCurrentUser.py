@@ -8,8 +8,8 @@ def resolve_permissions(obj, info):
 
 
 def id_field():
-    def resolve(obj, info):
-        return getattr(obj, 'email', None) or 'anonymous'
+    def resolve(obj, info) -> str:
+        return str(getattr(obj, 'id', None)) or 'anonymous'
 
     return g.Field(g.NN(g.ID), resolve=resolve)
 

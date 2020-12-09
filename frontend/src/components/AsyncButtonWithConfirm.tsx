@@ -1,6 +1,8 @@
 import { useCallback, useState } from 'react';
 
-import { Button, ControlsFooter, Modal, useNotification } from '~/frontkit';
+import { Button } from '~/frontkit';
+
+import { ConfirmModal } from './ConfirmModal';
 
 interface Props {
   act: () => Promise<void>;
@@ -22,10 +24,8 @@ const AsyncButtonWithConfirm = ({
   headerText,
 }: Props) => {
   const [confirming, setConfirming] = useState(false);
-  const [loading, setLoading] = useState(false);
-  const notify = useNotification();
 
-  const askConfirm = useCallback(() => {
+  const openConfirm = useCallback(() => {
     setConfirming(true);
   }, []);
 
@@ -33,50 +33,28 @@ const AsyncButtonWithConfirm = ({
     setConfirming(false);
   }, []);
 
-  const confirm = useCallback(async () => {
-    setLoading(true);
-    try {
-      await act();
-    } catch (e) {
-      notify({ text: String(e), type: 'Error' });
-      setLoading(false);
-      return;
-    }
-    setLoading(false);
-    closeConfirm();
-  }, [act, closeConfirm, notify]);
-
+  // TODO - unify with ButtonWithModal?
   return (
     <>
       <Button
         loading={confirming}
         disabled={confirming}
-        onClick={askConfirm}
+        onClick={openConfirm}
         size={size}
         kind={kind}
       >
         {children}
       </Button>
       {confirming && (
-        <Modal>
-          <Modal.Header close={closeConfirm}>
-            {headerText ?? 'Точно?'}
-          </Modal.Header>
-          <Modal.Body>{confirmText}</Modal.Body>
-          <Modal.Footer>
-            <ControlsFooter>
-              <Button onClick={closeConfirm}>{cancelText || 'Отменить'}</Button>
-              <Button
-                onClick={confirm}
-                loading={loading}
-                disabled={loading}
-                kind="primary"
-              >
-                {children}
-              </Button>
-            </ControlsFooter>
-          </Modal.Footer>
-        </Modal>
+        <ConfirmModal
+          title={headerText}
+          cancelText={cancelText}
+          close={closeConfirm}
+          act={act}
+          submitButton={children}
+        >
+          {confirmText}
+        </ConfirmModal>
       )}
     </>
   );

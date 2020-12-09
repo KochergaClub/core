@@ -1,0 +1,17 @@
+fragment PageInfo on PageInfo {
+  hasNextPage
+  hasPreviousPage
+  startCursor
+  endCursor
+}
+
+fragment GenericError on GenericError {
+  message
+}
+
+fragment ValidationError on ValidationError {
+  errors {
+    name
+    messages
+  }
+}

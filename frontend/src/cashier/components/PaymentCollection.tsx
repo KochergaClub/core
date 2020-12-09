@@ -5,7 +5,7 @@ import { useApolloClient, useMutation, useQuery } from '@apollo/client';
 import { usePermissions } from '~/common/hooks';
 import { ApolloQueryResults } from '~/components';
 import { CustomCardListView, PagedApolloCollection } from '~/components/collections';
-import { FormShape } from '~/components/forms/types';
+import { ShapeToValues } from '~/components/forms/types';
 import { StaffMemberFullFragment, StaffMembersDocument } from '~/staff/queries.generated';
 
 import {
@@ -33,7 +33,7 @@ const PaymentCollection: React.FC = () => {
 
   const [canCreate] = usePermissions(['cashier.create']);
 
-  const paymentShape: FormShape = [
+  const paymentShape = [
     { name: 'amount', type: 'number' },
     { name: 'comment', type: 'string' },
     {
@@ -52,16 +52,12 @@ const PaymentCollection: React.FC = () => {
           return data.staffMembersAll;
         },
         display: (member: StaffMemberFullFragment) => member.full_name,
-        getValue: (member: StaffMemberFullFragment) => parseInt(member.user.id),
+        getValue: (member: StaffMemberFullFragment) => member.user.id,
       },
     },
-  ];
+  ] as const;
 
-  type CreatePaymentParams = {
-    amount: number;
-    comment: string;
-    whom: string;
-  };
+  type CreatePaymentParams = ShapeToValues<typeof paymentShape>;
 
   const renderItem = useCallback(
     (payment: PaymentFragment) => <PaymentCard payment={payment} />,
@@ -70,7 +66,14 @@ const PaymentCollection: React.FC = () => {
 
   const add = useCallback(
     async (values: CreatePaymentParams) => {
-      await createPaymentMutation({ variables: { params: values } });
+      await createPaymentMutation({
+        variables: {
+          params: {
+            ...values,
+            amount: parseInt(values.amount, 10),
+          },
+        },
+      });
     },
     [createPaymentMutation]
   );

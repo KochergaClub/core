@@ -85,6 +85,8 @@ INSTALLED_APPS = [
     'kocherga.openvidu',
     'kocherga.external_services',
     'kocherga.presentations',
+    'kocherga.community',
+    'kocherga.comments',
     'taggit',
     'modelcluster',
     'wagtail.api.v2',

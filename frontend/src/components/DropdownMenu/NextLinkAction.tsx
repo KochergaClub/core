@@ -3,13 +3,12 @@ import { FaArrowRight } from 'react-icons/fa';
 
 import { ActionLayout } from './ActionLayout';
 import { LinkActionA } from './LinkAction';
+import { CommonActionProps } from './types';
 
-type Props = {
+interface Props extends CommonActionProps {
   href: string;
-  title: string;
-  icon?: React.ElementType;
   children?: null;
-};
+}
 
 const NextLinkAction: React.FC<Props> = ({ href, icon, title }) => {
   return (

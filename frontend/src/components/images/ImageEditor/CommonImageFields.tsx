@@ -5,7 +5,7 @@ import Select from 'react-select';
 import { useQuery } from '@apollo/client';
 
 import { ApolloQueryResults } from '~/components';
-import { BasicInputField, FieldContainer } from '~/components/forms2';
+import { BasicInputField, FieldContainer } from '~/components/forms';
 import { Column } from '~/frontkit';
 
 import { WagtailCollectionsForImageUploadDocument } from './queries.generated';

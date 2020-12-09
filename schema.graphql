@@ -1,3 +1,22 @@
+input AddEventToCommunityLeadInput {
+  lead_id: ID!
+  event_id: ID!
+}
+
+union AddEventToCommunityLeadResult = CommunityLead
+
+input AddTelegramChatByInviteLinkInput {
+  invite_link: String!
+}
+
+union AddTelegramChatByInviteLinkResult = TelegramChat | ValidationError | GenericError
+
+input AddTelegramChatInput {
+  username: String
+}
+
+union AddTelegramChatResult = TelegramChat | ValidationError | GenericError
+
 type AnalyticsBovStat {
   date: String!
   count: Int!
@@ -91,7 +110,9 @@ type AuthSetPasswordResult {
 
 type AuthUser {
   id: ID!
-  email: String!
+  first_name: String!
+  last_name: String!
+  email: String
   staff_member: StaffMember
   external_accounts: [ExternalServiceAccount!]!
 }
@@ -119,6 +140,12 @@ type BasicTextBlockValue {
   text: String!
   centered: Boolean!
 }
+
+input BecomeCommunityLeadCuratorInput {
+  id: ID!
+}
+
+union BecomeCommunityLeadCuratorResult = CommunityLead
 
 type BigContactsBlock implements WagtailBlock {
   id: ID!
@@ -219,6 +246,12 @@ type CheckRatioPromocodeResult {
   discounted_price: Int!
 }
 
+input ClearCommunityLeadCuratorInput {
+  id: ID!
+}
+
+union ClearCommunityLeadCuratorResult = CommunityLead
+
 input Cm2CreateCustomerInput {
   card_id: Int!
   first_name: String!
@@ -288,6 +321,69 @@ type ColumnsButtonsBlockValue {
   link: String!
 }
 
+type Comment {
+  id: ID!
+  created: String!
+  text: String!
+  author: AuthUser!
+}
+
+input CommentOnCommunityLeadInput {
+  lead_id: ID!
+  text: String!
+}
+
+union CommentOnCommunityLeadResult = CommunityLead
+
+interface Commentable {
+  comments_count: Int!
+  comments: [Comment!]!
+}
+
+type CommunityLead implements Commentable {
+  id: ID!
+  name: String!
+  description: String!
+  created: String!
+  updated: String!
+  events: [Event!]!
+  created_by: AuthUser
+  curated_by: AuthUser
+  status: CommunityLeadStatus!
+  comments_count: Int!
+  comments: [Comment!]!
+}
+
+type CommunityLeadConnection {
+  pageInfo: PageInfo!
+  nodes: [CommunityLead!]!
+  edges: [CommunityLeadEdge!]!
+}
+
+type CommunityLeadEdge {
+  node: CommunityLead!
+}
+
+enum CommunityLeadStatus {
+  ACTIVE
+  INACTIVE
+}
+
+input CommunityLeadsFilterInput {
+  status: CommunityLeadStatus
+  curated_by_me: Boolean
+  curated_by_empty: Boolean
+  search: String
+}
+
+input CreateCommunityLeadInput {
+  name: String!
+  description: String
+  status: String
+}
+
+union CreateCommunityLeadResult = CommunityLead | ValidationError | GenericError
+
 input CreateRatioPromocodeInput {
   ticket_type_id: ID
   training_id: ID
@@ -306,9 +402,37 @@ input CreateRatioTicketTypeInput {
   discount_percent_by_email: Int
 }
 
+input CreateRatioTrainingInput {
+  name: String!
+  slug: String!
+  date: String
+  telegram_link: String
+  discount_by_email: Int
+  discount_percent_by_email: Int
+}
+
+union CreateRatioTrainingResult = RatioTraining | ValidationError | GenericError
+
+input DeleteCommentInput {
+  id: ID!
+}
+
+union DeleteCommentResult = BasicResult | GenericError
+
+union DeleteCommunityLeadResult = BasicResult
+
 input DeleteRatioTicketTypeInput {
   id: ID!
 }
+
+union DeleteTelegramChatResult = BasicResult
+
+input EditCommentInput {
+  id: ID!
+  text: String!
+}
+
+union EditCommentResult = Comment | GenericError
 
 type EmailMailchimpCategory {
   id: ID!
@@ -1014,8 +1138,8 @@ type Mutation {
   ratioAddTicket(input: RatioAddTicketInput!): RatioTicket!
   updateRatioTicket(input: UpdateRatioTicketInput!): RatioTicket!
   setRatioTicketNotionLink(input: SetRatioTicketNotionLinkInput!): RatioTicket!
-  ratioAddTraining(params: RatioAddTrainingInput!): RatioTraining!
-  updateRatioTraining(input: UpdateRatioTrainingInput!): RatioTraining!
+  createRatioTraining(input: CreateRatioTrainingInput!): CreateRatioTrainingResult!
+  updateRatioTraining(input: UpdateRatioTrainingInput!): UpdateRatioTrainingResult!
   ratioDeleteTraining(input: RatioDeleteTrainingInput!): BasicResult!
   createRatioPromocode(input: CreateRatioPromocodeInput!): CreateRatioPromocodeResult!
   checkRatioPromocode(input: CheckRatioPromocodeInput!): CheckRatioPromocodeResult
@@ -1041,9 +1165,24 @@ type Mutation {
   myEmailUnsubscribe: Boolean
   myEmailSubscribeToInterest(interest_id: ID!): Boolean!
   myEmailUnsubscribeFromInterest(interest_id: ID!): Boolean!
+  addTelegramChat(input: AddTelegramChatInput!): AddTelegramChatResult!
+  addTelegramChatByInviteLink(input: AddTelegramChatByInviteLinkInput!): AddTelegramChatByInviteLinkResult!
+  deleteTelegramChat(id: ID!): DeleteTelegramChatResult!
+  refreshTelegramChatData(id: ID!): RefreshTelegramChatDataResult!
+  postToTelegramChat(input: PostToTelegramChatInput!): PostToTelegramChatResult!
   tildaImportAll: BasicResult
   tildaImport(input: TildaImportInput!): BasicResult
   openviduGenerateRoomToken: OpenviduGenerateRoomTokenResult!
+  createCommunityLead(input: CreateCommunityLeadInput!): CreateCommunityLeadResult!
+  updateCommunityLead(input: UpdateCommunityLeadInput!): UpdateCommunityLeadResult!
+  deleteCommunityLead(id: ID!): DeleteCommunityLeadResult!
+  becomeCommunityLeadCurator(input: BecomeCommunityLeadCuratorInput!): BecomeCommunityLeadCuratorResult!
+  clearCommunityLeadCurator(input: ClearCommunityLeadCuratorInput!): ClearCommunityLeadCuratorResult!
+  addEventToCommunityLead(input: AddEventToCommunityLeadInput!): AddEventToCommunityLeadResult!
+  removeEventFromCommunityLead(input: RemoveEventFromCommunityLeadInput!): RemoveEventFromCommunityLeadResult!
+  commentOnCommunityLead(input: CommentOnCommunityLeadInput!): CommentOnCommunityLeadResult!
+  editComment(input: EditCommentInput!): EditCommentResult!
+  deleteComment(input: DeleteCommentInput!): DeleteCommentResult!
 }
 
 type My {
@@ -1196,6 +1335,13 @@ type PhotoRibbonBlock implements WagtailBlock {
   value(spec: String!): [WagtailImageRendition!]!
 }
 
+input PostToTelegramChatInput {
+  id: ID!
+  message: String!
+}
+
+union PostToTelegramChatResult = BasicResult
+
 type PresentationPage implements WagtailPage {
   title: String!
   id: ID!
@@ -1297,10 +1443,13 @@ type Query {
   emailSubscribeChannelsAll: [EmailSubscribeChannel!]!
   imageTemplatesAll: [ImageTemplate!]!
   imageTemplateBySlug(slug: String!): ImageTemplate!
+  publicTelegramChats: [TelegramChat!]!
   telegramChats: [TelegramChat!]!
+  allTelegramChats: [TelegramChat!]!
   tildaPage(path: String!): TildaPage
   tildaPages: [TildaPage!]!
   externalServices: [ExternalService!]!
+  communityLeads(before: String, after: String, first: Int, last: Int, filter: CommunityLeadsFilterInput): CommunityLeadConnection!
   my: My!
 }
 
@@ -1329,15 +1478,6 @@ input RatioAddTicketInput {
   payment_amount: Int!
   ticket_class: String
   comment: String
-}
-
-input RatioAddTrainingInput {
-  name: String!
-  slug: String!
-  date: String
-  telegram_link: String
-  discount_by_email: Int
-  discount_percent_by_email: Int
 }
 
 type RatioBriefingBlock implements WagtailBlock {
@@ -1722,6 +1862,15 @@ input RatioTrainingsFilterInput {
   eternal: Boolean
 }
 
+union RefreshTelegramChatDataResult = TelegramChat
+
+input RemoveEventFromCommunityLeadInput {
+  lead_id: ID!
+  event_id: ID!
+}
+
+union RemoveEventFromCommunityLeadResult = CommunityLead
+
 input SearchInput {
   query: String!
   limit: Int
@@ -1772,6 +1921,7 @@ type Settings {
   default_events_vk_images_collection: WagtailCollection!
   weekly_digest_images_collection: WagtailCollection!
   telegram_images_collection: WagtailCollection!
+  community_org_team_telegram_chat: TelegramChat
 }
 
 type SlackAccount implements ExternalServiceAccount {
@@ -1853,6 +2003,7 @@ type TelegramChat {
   title: String!
   photo(spec: String!): WagtailImageRendition
   project: ProjectPage
+  link: String!
 }
 
 type TildaAsset {
@@ -1884,6 +2035,15 @@ type TimepadCategory {
   name: String!
 }
 
+input UpdateCommunityLeadInput {
+  id: ID!
+  name: String
+  description: String
+  status: String
+}
+
+union UpdateCommunityLeadResult = CommunityLead | ValidationError | GenericError
+
 input UpdateRatioTicketInput {
   id: ID!
   first_name: String
@@ -1901,7 +2061,7 @@ input UpdateRatioTicketTypeInput {
 
 input UpdateRatioTrainingInput {
   id: ID!
-  name: String!
+  name: String
   date: String
   telegram_link: String
   discount_by_email: Int
@@ -1911,11 +2071,13 @@ input UpdateRatioTrainingInput {
   notion_created_email: String
 }
 
+union UpdateRatioTrainingResult = RatioTraining | ValidationError | GenericError
+
 input UpdateSettingsInput {
   default_events_images_collection: ID
   default_events_vk_images_collection: ID
   weekly_digest_images_collection: ID
-  telegram_images_collection: ID
+  community_org_team_telegram_chat: ID
 }
 
 input UpdateYandexKassaPaymentInput {

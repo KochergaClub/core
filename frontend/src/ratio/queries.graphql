@@ -212,9 +212,11 @@ query RatioTrainingEmailPrototype($training_id: ID!, $type: String!) {
   content: ratioTrainingEmailPrototype(training_id: $training_id, type: $type)
 }
 
-mutation RatioAddTraining($params: RatioAddTrainingInput!) {
-  ratioAddTraining(params: $params) {
+mutation CreateRatioTraining($input: CreateRatioTrainingInput!) {
+  result: createRatioTraining(input: $input) {
     ...RatioTraining
+    ...GenericError
+    ...ValidationError
   }
 }
 

@@ -8,6 +8,7 @@ import { WithNavSidebar } from '~/frontkit';
 import EventPrototypeScreen from './event-prototype/EventPrototypeScreen';
 import EventScreen from './event/EventScreen';
 import GlobalStyle from './GlobalStyle';
+import { LeadScreen } from './lead/LeadScreen';
 import { PREFIX } from './routes';
 import ScheduleScreen from './schedule/ScheduleScreen';
 
@@ -17,6 +18,10 @@ const tabs = [
   {
     title: 'Прототипы событий',
     name: 'EventPrototype',
+  },
+  {
+    title: 'Люди',
+    name: 'Lead',
   },
 ];
 
@@ -33,6 +38,8 @@ const EvenmanApp: NextApolloPage = () => {
       case 'EventPrototype':
         const prototype_id = parseInt(router.query.id as string, 10);
         return <EventPrototypeScreen selected_id={prototype_id} />;
+      case 'Lead':
+        return <LeadScreen />;
       default:
         return <div>Unknown route {name}</div>;
     }
@@ -50,6 +57,8 @@ const EvenmanApp: NextApolloPage = () => {
       return 'EventPrototype';
     } else if (route === `${PREFIX}/event-prototypes/[id]`) {
       return 'EventPrototype';
+    } else if (route === `${PREFIX}/leads`) {
+      return 'Lead';
     } else {
       return '';
     }
@@ -61,6 +70,7 @@ const EvenmanApp: NextApolloPage = () => {
       Schedule: `${PREFIX}/schedule`,
       Event: PREFIX,
       EventPrototype: `${PREFIX}/event-prototypes`,
+      Lead: `${PREFIX}/leads`,
     };
     const path = name2path[name];
     if (path) {
@@ -94,5 +104,4 @@ EvenmanApp.getInitialProps = async (ctx) => {
   return {};
 };
 
-// export default withApollo(EvenmanApp, { ssr: false });
 export default withApollo(EvenmanApp);

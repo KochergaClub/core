@@ -1,13 +1,18 @@
 import inspect
 import types
+from abc import abstractmethod
 from typing import Any, Callable, Dict, List, Tuple, Type, Union
 
+import kocherga.django.schema.types
+from django.core.exceptions import ValidationError
 from django.db import models
 from django.db.models.fields.reverse_related import ForeignObjectRel
-from kocherga.graphql import g
+from kocherga.django.errors import BoxedError, GenericError
 from kocherga.graphql.permissions import check_permissions
 
 import graphql
+
+from . import basic_types, g, helpers
 
 
 def model_field(model: Type[models.Model], field_name: str):
@@ -105,6 +110,7 @@ def DjangoObjectType(
     ] = {},
     method_fields: List[str] = [],
     extra_fields={},
+    interfaces: List[g.InterfaceType] = [],
 ):
     def build_related():
         result = {}
@@ -164,4 +170,183 @@ def DjangoObjectType(
                 **build_extra(),
             }
         ),
+        interfaces=interfaces,
     )
+
+
+class CreateMutation(helpers.UnionFieldMixin, helpers.BaseFieldWithInput):
+    """
+    Example:
+        class createFoo(CreateMutation):
+            model = models.Foo
+            fields = ['first', 'second']
+
+            permissions = [...]
+
+            # note that the actual mutation result will be a union including GenericError and ValidationError
+            result_type = types.Foo
+    """
+
+    def resolve(self, _, info, input):
+        params = {}
+        for field in self.fields:
+            if field in input:
+                params[field] = input[field]
+
+        params = self.prepare_params(params, info)
+        obj = self.model(**params)
+
+        try:
+            obj.full_clean()
+        except ValidationError as e:
+            return BoxedError(e)
+        obj.save()
+        return obj
+
+    def prepare_params(
+        self, params: Dict[str, Any], info: graphql.type.GraphQLResolveInfo
+    ):
+        """Override this method if you need to set additional default params or rewrite input arguments before creating
+        an object."""
+        return params
+
+    @property
+    @abstractmethod
+    def model(self) -> Type[models.Model]:
+        ...
+
+    @property
+    @abstractmethod
+    def fields(self) -> List[str]:
+        ...
+
+    @property
+    @abstractmethod
+    def result_type(self) -> g.ObjectType:
+        ...
+
+    @property
+    def input(self):
+        result: Dict[str, Any] = {}
+        model = self.model
+        for field_name in self.fields:
+            graphql_field = model_field(model, field_name)
+            graphql_type = graphql_field.type
+
+            if isinstance(graphql_type, graphql.GraphQLNonNull):
+                # set nullable is field has a preset default or if it can be blank
+                db_field = model._meta.get_field(field_name)
+                if db_field.has_default() or db_field.blank:
+                    graphql_type = graphql_type.of_type
+
+            result[field_name] = graphql_type
+
+        return result
+
+    @property
+    def result_types(self):
+        return {
+            self.model: self.result_type,
+            BoxedError: kocherga.django.schema.types.ValidationError,
+            GenericError: kocherga.django.schema.types.GenericError,  # unused for now
+        }
+
+
+class UpdateMutation(helpers.UnionFieldMixin, helpers.BaseFieldWithInput):
+    """
+    Example:
+        class updateFoo(UpdateMutation):
+            model = models.Foo
+            fields = ['first', 'second']
+
+            permissions = [...]
+
+            # note that the actual mutation result will be a union including GenericError and ValidationError
+            result_type = types.Foo
+    """
+
+    def resolve(self, _, info, input):
+        # TODO - return generic error if object is not found
+        obj = self.model.objects.get(id=input['id'])
+
+        for field in self.fields:
+            if field in input:
+                setattr(obj, field, input[field])
+
+        try:
+            obj.full_clean()
+        except ValidationError as e:
+            return BoxedError(e)
+        obj.save()
+        return obj
+
+    @property
+    @abstractmethod
+    def model(self) -> Type[models.Model]:
+        ...
+
+    @property
+    @abstractmethod
+    def fields(self) -> List[str]:
+        ...
+
+    @property
+    @abstractmethod
+    def result_type(self) -> g.ObjectType:
+        ...
+
+    @property
+    def input(self):
+        result: Dict[str, Any] = {'id': 'ID!'}
+        model = self.model
+        for field_name in self.fields:
+            if field_name == 'id':
+                raise Exception(
+                    "`id` is forbidden in mutation fields since it's a default lookup field"
+                )
+
+            graphql_field = model_field(model, field_name)
+            graphql_type = graphql_field.type
+
+            # all update input fields must be nullable
+            if isinstance(graphql_type, graphql.GraphQLNonNull):
+                graphql_type = graphql_type.of_type
+
+            result[field_name] = graphql_type
+
+        return result
+
+    @property
+    def result_types(self):
+        return {
+            self.model: self.result_type,
+            BoxedError: kocherga.django.schema.types.ValidationError,
+            GenericError: kocherga.django.schema.types.GenericError,  # unused for now
+        }
+
+
+class DeleteMutation(helpers.UnionFieldMixin, helpers.BaseField):
+    """
+    Example:
+        class deleteFoo(DeleteMutation):
+            model = models.Foo
+            permissions = [...]
+    """
+
+    class Ok:
+        ok = True
+
+    def resolve(self, _, info, id):
+        obj = self.model.objects.get(id=id)
+        obj.delete()
+        return self.Ok()
+
+    @property
+    @abstractmethod
+    def model(self) -> Type[models.Model]:
+        ...
+
+    # TODO - implement lookup_field arg, e.g. for Event.uuid case
+    args = {'id': 'ID!'}
+
+    result_types = {Ok: basic_types.BasicResult}

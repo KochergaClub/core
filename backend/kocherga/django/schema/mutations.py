@@ -29,6 +29,17 @@ class updateSettings(helpers.BaseFieldWithInput):
                 collection = wagtail_models.Collection.objects.get(pk=collection_id)
                 setattr(settings, field, collection)
 
+        from kocherga.telegram import models as telegram_models
+
+        community_org_team_telegram_chat_id = input.get(
+            'community_org_team_telegram_chat'
+        )
+        if community_org_team_telegram_chat_id:
+            chat = telegram_models.Chat.objects.get(
+                pk=community_org_team_telegram_chat_id
+            )
+            settings.community_org_team_telegram_chat = chat
+
         settings.full_clean()
         settings.save()
 
@@ -42,7 +53,7 @@ class updateSettings(helpers.BaseFieldWithInput):
             'default_events_images_collection',
             'default_events_vk_images_collection',
             'weekly_digest_images_collection',
-            'telegram_images_collection',
+            'community_org_team_telegram_chat',
         ]
     }
     result = g.NN(types.Settings)

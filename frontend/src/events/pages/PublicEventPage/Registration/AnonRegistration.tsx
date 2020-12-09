@@ -3,10 +3,10 @@ import { FaCheck, FaHeart } from 'react-icons/fa';
 import styled from 'styled-components';
 
 import { useMutation } from '@apollo/client';
-import { A, Button, Column, Input, Label, Row } from '~/frontkit';
 
 import { HintCard } from '~/components';
 import { trackEvent } from '~/components/analytics';
+import { A, Button, Column, Input, Label, Row } from '~/frontkit';
 
 import { MyEventsTicketRegisterAnonDocument } from '../queries.generated';
 import { CommonProps as Props } from '../types';
@@ -66,7 +66,7 @@ const RegistrationNote: React.FC = () => {
   );
 };
 
-// TODO - formik
+// TODO - components/forms
 const AnonRegistration: React.FC<Props> = ({ event }) => {
   const [acting, setActing] = useState(false);
   const [email, setEmail] = useState('');
@@ -118,7 +118,7 @@ const AnonRegistration: React.FC<Props> = ({ event }) => {
           scale="big"
           style={{ width: '100%' }} // somehow this fixes mobile layout, I'm not sure why
           value={email}
-          onChange={e => setEmail(e.currentTarget.value)}
+          onChange={(e) => setEmail(e.currentTarget.value)}
         />
       </Column>
       <Column>
@@ -128,7 +128,7 @@ const AnonRegistration: React.FC<Props> = ({ event }) => {
             id="subscribed_to_newsletter"
             name="subscribed_to_newsletter"
             checked={subscribedToNewsletter}
-            onChange={e => setSubscribedToNewsletter(e.currentTarget.checked)}
+            onChange={(e) => setSubscribedToNewsletter(e.currentTarget.checked)}
           />
           <CheckboxLabel htmlFor="subscribed_to_newsletter">
             Я хочу получать анонсы событий Кочерги по электронной почте
@@ -140,7 +140,7 @@ const AnonRegistration: React.FC<Props> = ({ event }) => {
             name="agreed_to_terms"
             id="agreed_to_terms"
             checked={agreedToTerms}
-            onChange={e => setAgreedToTerms(e.currentTarget.checked)}
+            onChange={(e) => setAgreedToTerms(e.currentTarget.checked)}
           />
           <CheckboxLabel htmlFor="agreed_to_terms">
             Я даю согласие на обработку моих персональных данных (

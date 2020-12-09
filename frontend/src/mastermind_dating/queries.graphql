@@ -67,14 +67,6 @@ query MastermindDatingCohortById($id: ID!) {
   }
 }
 
-query MastermindDatingSearchEvents($search: String!) {
-  events(search: $search, first: 20) {
-    nodes {
-      ...MastermindDatingEvent
-    }
-  }
-}
-
 mutation MastermindDatingCreateCohort {
   mastermindDatingCreateCohort {
     cohort {

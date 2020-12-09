@@ -2,9 +2,10 @@ import { ErrorMessage, Field, FieldProps, Form, Formik } from 'formik';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { ParsedUrlQuery } from 'querystring';
-import { useCallback } from 'react';
+import React, { useCallback } from 'react';
 import styled from 'styled-components';
 
+import { PaddedBlock } from '~/components';
 import { A, colors, Column, Input, Label, Row } from '~/frontkit';
 
 import { TemplateFragment } from '../queries.generated';
@@ -109,7 +110,7 @@ const ViewingTemplateScreen: React.FC<Props> = ({ template }) => {
   );
 
   return (
-    <div>
+    <PaddedBlock>
       <Link href={imageTemplaterRootRoute()} passHref>
         <A>&larr; все шаблоны</A>
       </Link>
@@ -145,7 +146,7 @@ const ViewingTemplateScreen: React.FC<Props> = ({ template }) => {
           }}
         </Formik>
       </Column>
-    </div>
+    </PaddedBlock>
   );
 };
 

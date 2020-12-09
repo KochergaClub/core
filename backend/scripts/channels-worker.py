@@ -17,6 +17,7 @@ import kocherga.email.channels
 import kocherga.events.channels
 import kocherga.ratio.channels
 import kocherga.slack.channels
+import kocherga.telegram.channels
 from channels.layers import get_channel_layer
 from channels.routing import get_default_application
 from channels.worker import Worker
@@ -25,10 +26,11 @@ from channels.worker import Worker
 def main():
     channel_names = []
     for workers in (
-        kocherga.events.channels.workers,
-        kocherga.slack.channels.workers,
-        kocherga.ratio.channels.workers,
         kocherga.email.channels.workers,
+        kocherga.events.channels.workers,
+        kocherga.telegram.channels.workers,
+        kocherga.ratio.channels.workers,
+        kocherga.slack.channels.workers,
     ):
         channel_names += workers.keys()
 

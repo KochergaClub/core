@@ -5,8 +5,8 @@ import styled from 'styled-components';
 import { Button, Column, Modal } from '~/frontkit';
 import { allBlockComponents, KnownBlockFragment } from '~/wagtail/blocks';
 
+import { BlockFormModal } from '../BlockFormModal';
 import { EditBlocksContext } from '../EditWagtailBlocks';
-import ModalBlockForm from '../ModalBlockForm';
 
 const AddControlsContainer = styled.div`
   position: absolute;
@@ -64,7 +64,7 @@ const AddControls: React.FC<Props> = ({ position }) => {
         <FaPlusCircle size={32} />
       </a>
       {typename ? (
-        <ModalBlockForm
+        <BlockFormModal
           close={closeModal}
           typename={typename}
           post={add}

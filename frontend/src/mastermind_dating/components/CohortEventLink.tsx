@@ -1,32 +1,22 @@
-import { format, parseISO } from 'date-fns';
-import { useCallback, useState } from 'react';
-import { ValueType } from 'react-select';
-import Async from 'react-select/async';
+import React, { useCallback, useState } from 'react';
 
-import { useApolloClient, useMutation } from '@apollo/client';
+import { useMutation } from '@apollo/client';
 
 import { ConfirmModal } from '~/components';
+import { EventPicker } from '~/events/components/EventPicker';
 import { A, AsyncButton, Label, Row } from '~/frontkit';
 
 import {
     MastermindDatingCohortDetailsFragment as Cohort, MastermindDatingEventFragment as Event,
-    MastermindDatingSearchEventsDocument, MastermindDatingSetEventForCohortDocument,
-    MastermindDatingUnsetEventForCohortDocument
+    MastermindDatingSetEventForCohortDocument, MastermindDatingUnsetEventForCohortDocument
 } from '../queries.generated';
 
 interface Props {
   cohort: Cohort;
 }
 
-interface OptionType {
-  value: Event;
-  label: string;
-}
-
 const CohortEventLink: React.FC<Props> = ({ cohort }) => {
   const [confirming, setConfirming] = useState<Event | undefined>(undefined);
-
-  const apolloClient = useApolloClient();
 
   const [unsetEvent] = useMutation(
     MastermindDatingUnsetEventForCohortDocument,
@@ -44,47 +34,6 @@ const CohortEventLink: React.FC<Props> = ({ cohort }) => {
     awaitRefetchQueries: true,
   });
 
-  const loadEvents = useCallback(
-    async (inputValue: string, callback: (options: OptionType[]) => void) => {
-      try {
-        const { data } = await apolloClient.query({
-          query: MastermindDatingSearchEventsDocument,
-          variables: { search: inputValue },
-        });
-        if (!data?.events) {
-          return []; // TODO - proper error handling
-        }
-
-        callback(
-          data.events.nodes.map((event) => {
-            const label = `${event.title} ${format(
-              parseISO(event.start),
-              'yyyy-MM-dd'
-            )}`;
-            return {
-              value: event,
-              label,
-            };
-          })
-        );
-      } catch (e) {
-        console.error(e);
-        throw e;
-      }
-    },
-    [apolloClient]
-  );
-
-  const pickEventForConfirming = useCallback((v: ValueType<OptionType>) => {
-    if (!v) {
-      return;
-    }
-    if (v instanceof Array) {
-      return;
-    }
-    setConfirming((v as OptionType).value);
-  }, []);
-
   const cancelConfirming = useCallback(() => setConfirming(undefined), []);
 
   const setEventCb = useCallback(async () => {
@@ -92,7 +41,7 @@ const CohortEventLink: React.FC<Props> = ({ cohort }) => {
       return; // this shouldn't happen
     }
 
-    setEvent({
+    await setEvent({
       variables: {
         cohort_id: cohort.id,
         event_id: confirming.id,
@@ -119,14 +68,14 @@ const CohortEventLink: React.FC<Props> = ({ cohort }) => {
   return (
     <div>
       <Label>Связать с событием:</Label>
-      <Async loadOptions={loadEvents} onChange={pickEventForConfirming} />
+      <EventPicker onChange={setConfirming} />
       {confirming && (
         <ConfirmModal
-          yes="Выбрать событие"
+          submitButton="Выбрать событие"
           close={cancelConfirming}
           act={setEventCb}
         >
-          Установить событие {confirming.title}
+          Связать событие {confirming.title} с когортой?
         </ConfirmModal>
       )}
     </div>

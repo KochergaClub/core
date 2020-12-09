@@ -22,5 +22,7 @@ query RatioTrainingPromocodesPage(
 mutation UpdateRatioTraining($input: UpdateRatioTrainingInput!) {
   result: updateRatioTraining(input: $input) {
     ...RatioTraining
+    ...GenericError
+    ...ValidationError
   }
 }

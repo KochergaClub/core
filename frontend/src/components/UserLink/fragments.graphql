@@ -1,0 +1,5 @@
+fragment User on AuthUser {
+  id
+  first_name
+  last_name
+}

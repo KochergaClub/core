@@ -4,8 +4,8 @@ import { ButtonWithModal } from '~/components';
 import { isKnownBlock } from '~/wagtail/blocks';
 
 import { AnyBlockFragment } from '../../types';
+import { BlockFormModal } from '../BlockFormModal';
 import { EditBlocksContext } from '../EditWagtailBlocks';
-import ModalBlockForm from '../ModalBlockForm';
 
 interface Props {
   block: AnyBlockFragment;
@@ -34,7 +34,7 @@ const EditButton: React.FC<Props> = ({ block }) => {
   return (
     <ButtonWithModal title="Редактировать" size="small">
       {({ close }) => (
-        <ModalBlockForm
+        <BlockFormModal
           modalTitle={`Редактирование блока ${block.__typename}`}
           post={save}
           typename={block.__typename}

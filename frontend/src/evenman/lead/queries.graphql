@@ -1,0 +1,105 @@
+fragment EvenmanLead on CommunityLead {
+  id
+  created
+  updated
+  name
+  description
+  status
+  created_by {
+    ...User
+  }
+  curated_by {
+    ...User
+  }
+  events {
+    id
+    title
+    start
+    published
+  }
+  ...Commentable
+}
+
+query EvenmanLeads(
+  $before: String
+  $after: String
+  $first: Int
+  $last: Int
+  $filter: CommunityLeadsFilterInput
+) {
+  communityLeads(
+    before: $before
+    after: $after
+    first: $first
+    last: $last
+    filter: $filter
+  ) {
+    pageInfo {
+      hasNextPage
+      hasPreviousPage
+      startCursor
+      endCursor
+    }
+    edges {
+      node {
+        ...EvenmanLead
+      }
+    }
+  }
+}
+
+mutation CreateEvenmanLead($input: CreateCommunityLeadInput!) {
+  result: createCommunityLead(input: $input) {
+    ...EvenmanLead
+    ...GenericError
+    ...ValidationError
+  }
+}
+
+mutation UpdateEvenmanLead($input: UpdateCommunityLeadInput!) {
+  result: updateCommunityLead(input: $input) {
+    ...EvenmanLead
+    ...GenericError
+    ...ValidationError
+  }
+}
+
+mutation DeleteEvenmanLead($id: ID!) {
+  deleteCommunityLead(id: $id) {
+    ... on BasicResult {
+      ok
+    }
+  }
+}
+
+mutation BecomeEvenmanLeadCurator($id: ID!) {
+  becomeCommunityLeadCurator(input: { id: $id }) {
+    ...EvenmanLead
+  }
+}
+
+mutation ClearEvenmanLeadCurator($id: ID!) {
+  clearCommunityLeadCurator(input: { id: $id }) {
+    ...EvenmanLead
+  }
+}
+
+mutation CommentOnCommunityLead($input: CommentOnCommunityLeadInput!) {
+  result: commentOnCommunityLead(input: $input) {
+    ...EvenmanLead
+  }
+}
+
+mutation AddEventToCommunityLead($input: AddEventToCommunityLeadInput!) {
+  result: addEventToCommunityLead(input: $input) {
+    ...EvenmanLead
+  }
+}
+
+mutation RemoveEventFromCommunityLead(
+  $input: RemoveEventFromCommunityLeadInput!
+) {
+  result: removeEventFromCommunityLead(input: $input) {
+    ...EvenmanLead
+  }
+}
