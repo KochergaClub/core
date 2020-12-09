@@ -56,7 +56,8 @@ class ChatManager(models.Manager):
             )
             if not isinstance(result, telethon.tl.types.ChatInviteAlready):
                 raise Exception("Bot must be invited to chat first")
-            return -result.chat.id
+            # based on https://stackoverflow.com/questions/33858927/how-to-obtain-the-chat-id-of-a-private-telegram-channel and empirical observations
+            return -int('100' + str(result.chat.id))
 
         chat_id = async_to_sync(get_chat_id)()
 
@@ -111,7 +112,7 @@ class Chat(Orderable, models.Model):
             return f'https://t.me/{self.username}'
         if self.invite_link:
             return self.invite_link
-        raise Exception("Neither username nor invite_code is set")
+        raise Exception("Neither username nor invite_link is set")
 
     def full_clean(self):
         if not self.username and not self.chat_id:
@@ -126,6 +127,8 @@ class Chat(Orderable, models.Model):
 
         # update always - chat usernames can be changed but we'll keep track of them by chat_id
         self.username = response['result'].get('username', '')
+
+        # TODO - update invite_link if necessary
 
         if not self.chat_id:
             self.chat_id = response['result']['id']
