@@ -35,28 +35,30 @@ const rawConfig = {
       }
     });
 
-    if (
-      process.env.NODE_ENV === 'production' &&
-      process.env.SENTRY_AUTH_TOKEN &&
-      process.env.SENTRY_ORG &&
-      process.env.SENTRY_PROJECT &&
-      process.env.SENTRY_RELEASE
-    ) {
-      console.log('Pushing maps to Sentry');
-      config.plugins.push(
-        new SentryWebpackPlugin({
-          include: '.next',
-          ignore: ['node_modules'],
-          stripPrefix: ['webpack://_N_E/'],
-          urlPrefix: `~/_next`,
-          release: process.env.SENTRY_RELEASE,
-          setCommits: {
-            repo: 'Кочерга / core',
-            commit: process.env.SENTRY_RELEASE,
-          },
-        })
-      );
-    }
+    // disabled because of ENOMEM issue
+    //
+    // if (
+    //   process.env.NODE_ENV === 'production' &&
+    //   process.env.SENTRY_AUTH_TOKEN &&
+    //   process.env.SENTRY_ORG &&
+    //   process.env.SENTRY_PROJECT &&
+    //   process.env.SENTRY_RELEASE
+    // ) {
+    //   console.log('Pushing maps to Sentry');
+    //   config.plugins.push(
+    //     new SentryWebpackPlugin({
+    //       include: '.next',
+    //       ignore: ['node_modules'],
+    //       stripPrefix: ['webpack://_N_E/'],
+    //       urlPrefix: `~/_next`,
+    //       release: process.env.SENTRY_RELEASE,
+    //       setCommits: {
+    //         repo: 'Кочерга / core',
+    //         commit: process.env.SENTRY_RELEASE,
+    //       },
+    //     })
+    //   );
+    // }
 
     return config;
   },
