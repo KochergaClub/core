@@ -56,7 +56,7 @@ class ChatManager(models.Manager):
             )
             if not isinstance(result, telethon.tl.types.ChatInviteAlready):
                 raise Exception("Bot must be invited to chat first")
-            # based on https://stackoverflow.com/questions/33858927/how-to-obtain-the-chat-id-of-a-private-telegram-channel and empirical observations
+            # based on https://stackoverflow.com/a/39943226 and empirical observations
             return -int('100' + str(result.chat.id))
 
         chat_id = async_to_sync(get_chat_id)()
