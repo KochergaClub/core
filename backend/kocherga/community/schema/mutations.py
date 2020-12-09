@@ -1,5 +1,5 @@
 from kocherga.events import models as event_models
-from kocherga.graphql import django_utils, g, helpers
+from kocherga.graphql import django_utils, helpers
 
 from .. import models, permissions
 from . import types
@@ -121,7 +121,7 @@ class commentOnCommunityLead(helpers.UnionFieldMixin, helpers.BaseFieldWithInput
     result_types = {model: types.CommunityLead}
 
 
-## TODO: implement generic Mutation class, e.g.:
+# TODO: implement generic Mutation class, e.g.:
 # @c.class_field
 # class commentOnCommunityLead(comment_utils.CreateCommentMutation):
 #     model = models.Lead

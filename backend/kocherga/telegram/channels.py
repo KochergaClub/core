@@ -6,6 +6,7 @@ from . import models, utils
 
 WORKER_CHANNEL = 'telegram-worker'
 
+
 # note that chat_id is an id in models.Chat, not telegram api chat_id
 def post_to_telegram_chat(chat_id: int, message: str):
     channel_send(

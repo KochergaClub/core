@@ -2,9 +2,6 @@ import logging
 
 logger = logging.getLogger(__name__)
 
-import re
-from typing import Any, Dict
-
 import kocherga.django.schema.types
 from django.core.exceptions import ValidationError
 from kocherga.django.errors import BoxedError, GenericError

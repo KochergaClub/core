@@ -1,3 +1,3 @@
 from .mutations import mutations
 
-__init__ = ['mutations']
+__all__ = ['mutations']

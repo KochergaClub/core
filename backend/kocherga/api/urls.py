@@ -1,7 +1,10 @@
-from django.urls import path, re_path
-from django.views.generic.base import TemplateView
+from django.urls import path
 
 from . import views
+
+# from django.urls import re_path
+# from django.views.generic.base import TemplateView
+
 
 urlpatterns = [
     # path('my/bookings', views.bookings.r_list_my),

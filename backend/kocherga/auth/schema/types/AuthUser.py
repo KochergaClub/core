@@ -1,5 +1,3 @@
-from typing import Optional
-
 from kocherga.external_services import registry as external_services_registry
 from kocherga.external_services.schema.types import ExternalServiceAccount
 from kocherga.graphql import g, helpers
