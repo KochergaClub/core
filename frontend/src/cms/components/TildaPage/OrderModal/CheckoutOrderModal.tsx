@@ -7,14 +7,14 @@ import { RatioOrder_CreatedFragment } from './queries.generated';
 
 // inspired by https://medium.com/better-programming/loading-third-party-scripts-dynamically-in-reactjs-458c41a7013d
 const loadKassaCheckoutUI = () => {
-  return new Promise((resolve, reject) => {
+  return new Promise<void>((resolve, reject) => {
     const id = 'kassaCheckoutUI';
     const existingScript = document.getElementById(id);
     if (existingScript) {
       resolve();
     } else {
       const script = document.createElement('script');
-      script.src = 'https://kassa.yandex.ru/checkout-ui/v2.js';
+      script.src = 'https://yookassa.ru/checkout-widget/v1/checkout-widget.js';
       script.id = id;
       document.body.appendChild(script);
       script.onload = () => {
