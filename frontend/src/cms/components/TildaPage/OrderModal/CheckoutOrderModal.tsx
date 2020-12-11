@@ -1,5 +1,7 @@
 import React, { useEffect, useState } from 'react';
 
+import * as Sentry from '@sentry/node';
+
 import { Modal } from '~/frontkit';
 import { confirmOrderRoute } from '~/ratio/routes';
 
@@ -40,6 +42,7 @@ const CheckoutOrderModal: React.FC<CheckoutProps> = ({ close, order }) => {
         await loadKassaCheckoutUI();
       } catch (e) {
         setFailed('Не удалось загрузить виджет платёжной системы');
+        Sentry.captureException(e);
         return;
       }
       const return_url = `${
@@ -50,8 +53,7 @@ const CheckoutOrderModal: React.FC<CheckoutProps> = ({ close, order }) => {
         confirmation_token: order.confirmation_token, // Токен, который перед проведением оплаты нужно получить от Яндекс.Кассы
         return_url,
         error_callback(error: any) {
-          // Обработка ошибок инициализации
-          // TODO
+          Sentry.captureMessage('Yookassa error: ' + String(error));
         },
       });
       checkout.render('kassa-checkout-form');
