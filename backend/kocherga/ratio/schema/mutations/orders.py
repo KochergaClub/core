@@ -1,15 +1,13 @@
-from typing import Optional
 import enum
+from typing import Optional
 
-from django.core.exceptions import ValidationError
-
-from kocherga.graphql import g, helpers
 import kocherga.django.schema.types
+from django.core.exceptions import ValidationError
+from kocherga.django.errors import BoxedError, GenericError
+from kocherga.graphql import g, helpers
 
-from kocherga.django.errors import GenericError, BoxedError
-
-from .. import types
 from ... import models
+from .. import types
 
 c = helpers.Collection()
 
@@ -27,8 +25,8 @@ class ratioCreateOrder(helpers.UnionFieldMixin, helpers.BaseFieldWithInput):
             order = models.Order.objects.create_order(
                 ticket_type=ticket_type,
                 email=input['email'],
-                first_name=input['first_name'],
-                last_name=input['last_name'],
+                first_name=input.get('first_name', ''),
+                last_name=input.get('last_name', ''),
                 city=input.get('city', ''),
                 promocode=input.get('promocode', ''),
                 payer_email=input.get('payer', {}).get('email', ''),
@@ -62,8 +60,8 @@ class ratioCreateOrder(helpers.UnionFieldMixin, helpers.BaseFieldWithInput):
     input = {
         'ticket_type_id': 'ID!',  # this is uuid, TicketType's pk is hidden
         'email': str,
-        'first_name': str,
-        'last_name': str,
+        'first_name': Optional[str],
+        'last_name': Optional[str],
         'city': Optional[str],
         'promocode': Optional[str],
         'payer': PayerInput,

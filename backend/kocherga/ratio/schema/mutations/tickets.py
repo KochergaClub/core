@@ -3,9 +3,8 @@ from typing import Optional
 from kocherga.graphql import g, helpers
 from kocherga.graphql.permissions import user_perm
 
-from .. import types
 from ... import models
-
+from .. import types
 
 c = helpers.Collection()
 
@@ -26,7 +25,7 @@ class ratioAddTicket(helpers.BaseFieldWithInput):
     input = {
         'training': 'ID!',
         'email': str,
-        'first_name': str,
+        'first_name': Optional[str],
         'last_name': Optional[str],
         'payment_amount': int,
         'ticket_class': Optional[str],

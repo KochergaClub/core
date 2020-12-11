@@ -10,14 +10,15 @@ import CheckoutOrderModal from './CheckoutOrderModal';
 import FormOrderModal from './FormOrderModal';
 import { RatioOrder_CreatedFragment, RatioTicketTypesDocument } from './queries.generated';
 
-export interface OrderParams {
+export type OrderParams = {
   ticketTypeId?: string;
-}
+  showNameFields?: boolean;
+  showPromocodeField?: boolean;
+};
 
-interface Props {
-  ticketTypeId?: string;
+type Props = OrderParams & {
   close: () => void;
-}
+};
 
 const SpinnerContainer = styled.div`
   min-height: 300px;
@@ -27,7 +28,12 @@ const SpinnerContainer = styled.div`
   justify-content: center;
 `;
 
-const OrderModal: React.FC<Props> = ({ ticketTypeId, close }) => {
+const OrderModal: React.FC<Props> = ({
+  ticketTypeId,
+  showNameFields = true,
+  showPromocodeField = true,
+  close,
+}) => {
   const [order, setOrder] = useState<RatioOrder_CreatedFragment | undefined>();
 
   const ticketTypesResults = useQuery(RatioTicketTypesDocument, {
@@ -73,6 +79,8 @@ const OrderModal: React.FC<Props> = ({ ticketTypeId, close }) => {
       <FormOrderModal
         close={close}
         ticketTypes={ticketTypesResults.data?.result}
+        showNameFields={showNameFields}
+        showPromocodeField={showPromocodeField}
         onOrderCreated={onOrderCreated}
       />
     );

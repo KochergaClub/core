@@ -18,6 +18,8 @@ import {
 
 interface Props {
   close: () => void;
+  showNameFields: boolean;
+  showPromocodeField: boolean;
   ticketTypes: RatioTicketType_ForPickerFragment[];
   onOrderCreated: (order: RatioOrder_CreatedFragment) => void;
 }
@@ -46,6 +48,7 @@ const ticketTypeToSelectOption = (
   } as SelectOptionType);
 
 const Container = styled.div`
+  max-width: 490px;
   box-sizing: border-box; // OrderModal is used with tilda which sets box-sizing: content-box;
   input {
     box-sizing: border-box;
@@ -55,6 +58,8 @@ const Container = styled.div`
 const FormOrderModal: React.FC<Props> = ({
   close,
   ticketTypes,
+  showNameFields,
+  showPromocodeField,
   onOrderCreated,
 }) => {
   const form = useForm<FormData>({
@@ -64,6 +69,9 @@ const FormOrderModal: React.FC<Props> = ({
           ? ticketTypeToSelectOption(ticketTypes[0])
           : undefined,
       promocode: '',
+      email: '',
+      first_name: '',
+      last_name: '',
     },
   });
   const watchTicketType = form.watch('ticket_type');
@@ -152,24 +160,30 @@ const FormOrderModal: React.FC<Props> = ({
                 required
                 form={form}
               />
-              <BasicInputField
-                title="Ваше имя"
-                name="first_name"
-                placeholder="Бертран"
-                required
-                form={form}
-              />
-              <BasicInputField
-                title="Ваша фамилия"
-                name="last_name"
-                placeholder="Рассел"
-                required
-                form={form}
-              />
-              <PromocodeField
-                form={form}
-                setDiscountedPrice={setDiscountedPrice}
-              />
+              {showNameFields ? (
+                <>
+                  <BasicInputField
+                    title="Ваше имя"
+                    name="first_name"
+                    placeholder="Бертран"
+                    required
+                    form={form}
+                  />
+                  <BasicInputField
+                    title="Ваша фамилия"
+                    name="last_name"
+                    placeholder="Рассел"
+                    required
+                    form={form}
+                  />
+                </>
+              ) : null}
+              {showPromocodeField ? (
+                <PromocodeField
+                  form={form}
+                  setDiscountedPrice={setDiscountedPrice}
+                />
+              ) : null}
               {/*
             <BasicInputField
               title="Из какого города вы планируете проходить курс?"

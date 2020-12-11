@@ -49,6 +49,12 @@ const TildaPage: React.FC<Props> = (props) => {
           if (key === 'ticket_type') {
             linkOrderParams.ticketTypeId = value;
           }
+          if (key === 'name_fields') {
+            linkOrderParams.showNameFields = value === '1';
+          }
+          if (key === 'promocode_field') {
+            linkOrderParams.showPromocodeField = value === '1';
+          }
         }
       }
       const listener = (event: MouseEvent) => {
