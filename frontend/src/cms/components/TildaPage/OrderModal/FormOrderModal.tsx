@@ -5,7 +5,7 @@ import styled from 'styled-components';
 
 import { useMutation } from '@apollo/client';
 
-import { useCommonHotkeys, useFocusOnFirstModalRender } from '~/common/hooks';
+import { useCommonHotkeys, useFocusOnFirstModalRender, useUser } from '~/common/hooks';
 import {
     BasicInputField, ErrorMessage, FieldContainer, FieldErrorMessage
 } from '~/components/forms';
@@ -62,6 +62,7 @@ const FormOrderModal: React.FC<Props> = ({
   showPromocodeField,
   onOrderCreated,
 }) => {
+  const user = useUser();
   const form = useForm<FormData>({
     defaultValues: {
       ticket_type:
@@ -69,7 +70,7 @@ const FormOrderModal: React.FC<Props> = ({
           ? ticketTypeToSelectOption(ticketTypes[0])
           : undefined,
       promocode: '',
-      email: '',
+      email: user.email || '',
       first_name: '',
       last_name: '',
     },
