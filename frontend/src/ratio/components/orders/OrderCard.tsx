@@ -111,12 +111,16 @@ const OrderCard: React.FC<Props> = ({ order }) => {
       <RowWithIcon icon={MdEmail} hint="E-mail">
         <A href={'mailto:' + order.email}>{order.email}</A>
       </RowWithIcon>
-      <RowWithIcon icon={FaUserAlt} hint="Имя, фамилия">
-        {order.first_name} {order.last_name}
-      </RowWithIcon>
-      <RowWithIcon icon={FaGlobeAfrica} hint="Город">
-        <div>{order.city}</div>
-      </RowWithIcon>
+      {order.first_name !== '' || order.last_name !== '' ? (
+        <RowWithIcon icon={FaUserAlt} hint="Имя, фамилия">
+          {order.first_name} {order.last_name}
+        </RowWithIcon>
+      ) : null}
+      {order.city !== '' ? (
+        <RowWithIcon icon={FaGlobeAfrica} hint="Город">
+          <div>{order.city}</div>
+        </RowWithIcon>
+      ) : null}
       <RowWithIcon icon={FaRegMoneyBillAlt} hint="Платёж">
         <PaymentInfo payment={order.payment} />
       </RowWithIcon>

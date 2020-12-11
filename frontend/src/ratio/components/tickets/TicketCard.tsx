@@ -184,9 +184,11 @@ const TicketCard: React.FC<Props> = ({ ticket }) => {
         <RowWithIcon icon={MdEmail} hint="E-mail">
           <A href={'mailto:' + ticket.email}>{ticket.email}</A>
         </RowWithIcon>
-        <RowWithIcon icon={FaUserAlt} hint="Имя, фамилия">
-          {ticket.first_name} {ticket.last_name}
-        </RowWithIcon>
+        {ticket.first_name !== '' || ticket.last_name !== '' ? (
+          <RowWithIcon icon={FaUserAlt} hint="Имя, фамилия">
+            {ticket.first_name} {ticket.last_name}
+          </RowWithIcon>
+        ) : null}
         <RowWithIcon icon={FaRegMoneyBillAlt} hint="Стоимость">
           <Row>
             <div>{ticket.payment_amount} руб.</div>
