@@ -1,7 +1,6 @@
 import { MutationModalButton } from '~/components/forms';
 
-import { RatioTrainingFragment } from '../components/trainings/queries.generated';
-import { RatioTrainingAddDayDocument } from '../queries.generated';
+import { RatioTrainingAddDayDocument, RatioTrainingFragment } from '../queries.generated';
 
 const shape = [
   {

@@ -2,7 +2,8 @@ import React from 'react';
 
 import { SmartMutationModal } from '~/components/forms/SmartMutationModal';
 
-import { RatioTrainingFragment, UpdateRatioTrainingDocument } from './queries.generated';
+import { RatioTrainingFragment } from '../../queries.generated';
+import { UpdateRatioTrainingDocument } from './queries.generated';
 
 const stringToSelectOption = (s: string): [string, string] => [
   s,

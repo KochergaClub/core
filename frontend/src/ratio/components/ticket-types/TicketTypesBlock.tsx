@@ -1,7 +1,7 @@
 import { PaddedBlock } from '~/components';
 import { Row } from '~/frontkit';
 
-import { RatioTrainingFragment } from '../trainings/queries.generated';
+import { RatioTrainingFragment } from '../../queries.generated';
 import CreateTicketTypeButton from './CreateTicketTypeButton';
 import TicketTypeList from './TicketTypeList';
 
@@ -11,7 +11,7 @@ interface Props {
 
 const TicketTypesBlock: React.FC<Props> = ({ training }) => {
   return (
-    <PaddedBlock width="max">
+    <PaddedBlock>
       <h2>
         <Row gutter={8} vCentered>
           <div>Виды билетов</div>

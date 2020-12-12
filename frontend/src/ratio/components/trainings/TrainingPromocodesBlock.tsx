@@ -4,8 +4,9 @@ import { useLazyQuery } from '@apollo/client';
 
 import { PaddedBlock } from '~/components';
 
+import { RatioTrainingFragment } from '../../queries.generated';
 import PromocodesCollection from '../promocodes/PromocodesCollection';
-import { RatioTrainingFragment, RatioTrainingPromocodesPageDocument } from './queries.generated';
+import { RatioTrainingPromocodesPageDocument } from './queries.generated';
 
 interface Props {
   training: RatioTrainingFragment;
@@ -39,7 +40,7 @@ const TrainingPromocodesBlock: React.FC<Props> = ({ training }) => {
     : training.promocodes;
 
   return (
-    <PaddedBlock width="wide">
+    <PaddedBlock>
       <PromocodesCollection
         connection={connection}
         fetchPage={fetchPage}

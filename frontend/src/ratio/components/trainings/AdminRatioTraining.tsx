@@ -54,7 +54,7 @@ const AdminRatioTraining: React.FC<Props> = ({ slug }) => {
           </Head>
           <Page.Title>{training.name}</Page.Title>
           <Page.Main>
-            <PaddedBlock width="wide">
+            <PaddedBlock>
               <Column>
                 <Row>
                   <div>Управление:</div>
@@ -111,14 +111,14 @@ const AdminRatioTraining: React.FC<Props> = ({ slug }) => {
               </Column>
             </PaddedBlock>
 
-            <PaddedBlock width="wide">
+            <PaddedBlock>
               <EmailDiscount entity={training} entityType="training" />
             </PaddedBlock>
             <TrainingPromocodesBlock training={training} />
             <TrainingTicketTypesBlock training={training} />
             <TrainingTicketsBlock training={training} />
 
-            <PaddedBlock width="wide">
+            <PaddedBlock>
               <h2>Рассылки</h2>
               <Column>
                 <MutationButton

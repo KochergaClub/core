@@ -6,9 +6,8 @@ import { PaddedBlock } from '~/components';
 import { FormShapeModalButton } from '~/components/forms';
 import { Column, Row } from '~/frontkit';
 
-import { RatioAddTicketDocument } from '../queries.generated';
+import { RatioAddTicketDocument, RatioTrainingFragment } from '../queries.generated';
 import TicketList from './tickets/TicketList';
-import { RatioTrainingFragment } from './trainings/queries.generated';
 
 const CreateTicketButton = ({ training_id }: { training_id: string }) => {
   const [addTicketMutation] = useMutation(RatioAddTicketDocument, {
@@ -83,7 +82,7 @@ interface Props {
 
 const TrainingTicketsBlock: React.FC<Props> = ({ training }) => {
   return (
-    <PaddedBlock width="wide">
+    <PaddedBlock>
       <h2>
         <Row vCentered gutter={8}>
           <div>Участники: {training.tickets.length}</div>

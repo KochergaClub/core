@@ -103,6 +103,45 @@ fragment TrainingWithSchedule on RatioTraining {
   }
 }
 
+fragment RatioTraining_Summary on RatioTraining {
+  id
+  slug
+  name
+  date
+  telegram_link
+  tickets_count
+  total_income
+  ticket_types {
+    ...RatioTicketType_Summary
+  }
+}
+
+fragment RatioTraining on RatioTraining {
+  id
+  slug
+  training_type
+  name
+  date
+  telegram_link
+  tickets_count
+  total_income
+  discount_by_email
+  discount_percent_by_email
+  promocode_email
+  new_ticket_email
+  notion_created_email
+  promocodes_count
+  promocodes(first: 5) {
+    ...RatioPromocodeConnection
+  }
+  tickets {
+    ...RatioTicket
+  }
+  ticket_types {
+    ...RatioTicketType
+  }
+}
+
 query RatioTrainingsForPicker(
   $before: String
   $after: String
