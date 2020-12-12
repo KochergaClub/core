@@ -11,7 +11,7 @@ import { ShapeToValues } from '~/components/forms/types';
 
 import {
     CreateRatioTrainingDocument, RatioTraining_SummaryFragment, RatioTrainingsDocument
-} from '../../queries.generated';
+} from './queries.generated';
 import TrainingCard from './TrainingCard';
 
 const trainingShape = [

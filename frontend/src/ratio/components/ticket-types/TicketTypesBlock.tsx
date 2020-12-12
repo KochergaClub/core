@@ -1,7 +1,7 @@
 import { PaddedBlock } from '~/components';
 import { Row } from '~/frontkit';
 
-import { RatioTrainingFragment } from '../../queries.generated';
+import { RatioTrainingFragment } from '../trainings/queries.generated';
 import CreateTicketTypeButton from './CreateTicketTypeButton';
 import TicketTypeList from './TicketTypeList';
 

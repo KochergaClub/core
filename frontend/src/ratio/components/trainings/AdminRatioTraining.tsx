@@ -9,15 +9,14 @@ import { ModalAction } from '~/components/DropdownMenu';
 import { A, colors, Column, Label, Row } from '~/frontkit';
 import { adminTrainingScheduleRoute } from '~/ratio/routes';
 
-import {
-    RatioTrainingBySlugDocument, RatioTrainingSyncParticipantsToMailchimpDocument
-} from '../../queries.generated';
+import { RatioTrainingSyncParticipantsToMailchimpDocument } from '../../queries.generated';
 import CreatePromocodeModal from '../promocodes/CreatePromocodeModal';
 import EmailDiscount from '../promocodes/EmailDiscount';
 import TrainingTicketTypesBlock from '../ticket-types/TicketTypesBlock';
 // import CreateEmailButton from './CreateEmailButton';
 import TrainingTicketsBlock from '../TrainingTicketsBlock';
 import EditTrainingModal from './EditTrainingModal';
+import { RatioTrainingBySlugDocument } from './queries.generated';
 import TrainingPromocodesBlock from './TrainingPromocodesBlock';
 
 const LinkWithIcon = ({

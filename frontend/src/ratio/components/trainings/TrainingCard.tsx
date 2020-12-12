@@ -5,9 +5,8 @@ import { MutationButton } from '~/components';
 import { A, Badge, Label, Row } from '~/frontkit';
 import { adminTrainingRoute } from '~/ratio/routes';
 
-import { RatioTraining_SummaryFragment } from '../../queries.generated';
 import TicketTypeBadge from '../ticket-types/TicketTypeBadge';
-import { DeleteRatioTrainingDocument } from './queries.generated';
+import { DeleteRatioTrainingDocument, RatioTraining_SummaryFragment } from './queries.generated';
 
 interface Props {
   training: RatioTraining_SummaryFragment;

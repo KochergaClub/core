@@ -4,9 +4,8 @@ import { useLazyQuery } from '@apollo/client';
 
 import { PaddedBlock } from '~/components';
 
-import { RatioTrainingFragment } from '../../queries.generated';
 import PromocodesCollection from '../promocodes/PromocodesCollection';
-import { RatioTrainingPromocodesPageDocument } from './queries.generated';
+import { RatioTrainingFragment, RatioTrainingPromocodesPageDocument } from './queries.generated';
 
 interface Props {
   training: RatioTrainingFragment;

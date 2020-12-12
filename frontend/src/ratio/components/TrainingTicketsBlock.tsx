@@ -6,8 +6,9 @@ import { PaddedBlock } from '~/components';
 import { FormShapeModalButton } from '~/components/forms';
 import { Column, Row } from '~/frontkit';
 
-import { RatioAddTicketDocument, RatioTrainingFragment } from '../queries.generated';
+import { RatioAddTicketDocument } from '../queries.generated';
 import TicketList from './tickets/TicketList';
+import { RatioTrainingFragment } from './trainings/queries.generated';
 
 const CreateTicketButton = ({ training_id }: { training_id: string }) => {
   const [addTicketMutation] = useMutation(RatioAddTicketDocument, {

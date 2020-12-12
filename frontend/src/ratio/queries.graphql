@@ -71,44 +71,6 @@ fragment RatioTicketType_Summary on RatioTicketType {
   name
 }
 
-fragment RatioTraining_Summary on RatioTraining {
-  id
-  slug
-  name
-  date
-  telegram_link
-  tickets_count
-  total_income
-  ticket_types {
-    ...RatioTicketType_Summary
-  }
-}
-
-fragment RatioTraining on RatioTraining {
-  id
-  slug
-  name
-  date
-  telegram_link
-  tickets_count
-  total_income
-  discount_by_email
-  discount_percent_by_email
-  promocode_email
-  new_ticket_email
-  notion_created_email
-  promocodes_count
-  promocodes(first: 5) {
-    ...RatioPromocodeConnection
-  }
-  tickets {
-    ...RatioTicket
-  }
-  ticket_types {
-    ...RatioTicketType
-  }
-}
-
 fragment RatioTrainer on RatioTrainer {
   id
   short_name
@@ -141,31 +103,6 @@ fragment TrainingWithSchedule on RatioTraining {
   }
 }
 
-query RatioTrainings(
-  $before: String
-  $after: String
-  $first: Int
-  $last: Int
-  $eternal: Boolean
-) {
-  trainings: ratioTrainings(
-    before: $before
-    after: $after
-    first: $first
-    last: $last
-    filter: { eternal: $eternal }
-  ) {
-    pageInfo {
-      ...PageInfo
-    }
-    edges {
-      node {
-        ...RatioTraining_Summary
-      }
-    }
-  }
-}
-
 query RatioTrainingsForPicker(
   $before: String
   $after: String
@@ -190,12 +127,6 @@ query RatioTrainingsForPicker(
   }
 }
 
-query RatioTrainingBySlug($slug: String!) {
-  training: ratioTrainingBySlug(slug: $slug) {
-    ...RatioTraining
-  }
-}
-
 query RatioTrainingWithSchedule($slug: String!) {
   training: ratioTrainingBySlug(slug: $slug) {
     ...TrainingWithSchedule
@@ -210,14 +141,6 @@ query RatioTrainers {
 
 query RatioTrainingEmailPrototype($training_id: ID!, $type: String!) {
   content: ratioTrainingEmailPrototype(training_id: $training_id, type: $type)
-}
-
-mutation CreateRatioTraining($input: CreateRatioTrainingInput!) {
-  result: createRatioTraining(input: $input) {
-    ...RatioTraining
-    ...GenericError
-    ...ValidationError
-  }
 }
 
 mutation RatioAddTicket($params: RatioAddTicketInput!) {
