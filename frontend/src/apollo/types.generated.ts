@@ -461,6 +461,7 @@ export type CreateRatioTicketTypeInput = {
 export type CreateRatioTrainingInput = {
   name: Scalars['String'];
   slug: Scalars['String'];
+  training_type?: Maybe<Scalars['String']>;
   date?: Maybe<Scalars['String']>;
   telegram_link?: Maybe<Scalars['String']>;
   discount_by_email?: Maybe<Scalars['Int']>;
@@ -2468,7 +2469,7 @@ export type RatioActivity = {
 export type RatioAddTicketInput = {
   training: Scalars['ID'];
   email: Scalars['String'];
-  first_name: Scalars['String'];
+  first_name?: Maybe<Scalars['String']>;
   last_name?: Maybe<Scalars['String']>;
   payment_amount: Scalars['Int'];
   ticket_class?: Maybe<Scalars['String']>;
@@ -2501,8 +2502,8 @@ export type RatioConfirmOrderResult = {
 export type RatioCreateOrderInput = {
   ticket_type_id: Scalars['ID'];
   email: Scalars['String'];
-  first_name: Scalars['String'];
-  last_name: Scalars['String'];
+  first_name?: Maybe<Scalars['String']>;
+  last_name?: Maybe<Scalars['String']>;
   city?: Maybe<Scalars['String']>;
   promocode?: Maybe<Scalars['String']>;
   payer?: Maybe<RatioCreateOrderPayerInput>;
@@ -2722,7 +2723,7 @@ export type RatioTicket = {
   /** Имя */
   first_name: Scalars['String'];
   /** Фамилия */
-  last_name?: Maybe<Scalars['String']>;
+  last_name: Scalars['String'];
   /** Дата регистрации */
   registration_date?: Maybe<Scalars['String']>;
   /** Дата создания */
@@ -2806,6 +2807,7 @@ export type RatioTraining = {
   /** Название */
   name: Scalars['String'];
   slug: Scalars['String'];
+  training_type: Scalars['String'];
   /** Дата начала */
   date?: Maybe<Scalars['String']>;
   /** Телеграм-чат */
@@ -3111,6 +3113,7 @@ export type UpdateRatioTicketTypeInput = {
 export type UpdateRatioTrainingInput = {
   id: Scalars['ID'];
   name?: Maybe<Scalars['String']>;
+  training_type?: Maybe<Scalars['String']>;
   date?: Maybe<Scalars['String']>;
   telegram_link?: Maybe<Scalars['String']>;
   discount_by_email?: Maybe<Scalars['Int']>;

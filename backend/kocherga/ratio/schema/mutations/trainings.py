@@ -15,6 +15,7 @@ class createRatioTraining(django_utils.CreateMutation):
     fields = [
         'name',
         'slug',
+        'training_type',
         'date',
         'telegram_link',
         'discount_by_email',
@@ -37,6 +38,7 @@ class updateRatioTraining(django_utils.UpdateMutation):
     fields = [
         'name',
         # 'slug',
+        'training_type',
         'date',
         'telegram_link',
         'discount_by_email',

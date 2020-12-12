@@ -1,13 +1,13 @@
-from kocherga.graphql import g, helpers, django_utils
+from kocherga.graphql import django_utils, g, helpers
 from kocherga.graphql.permissions import user_perm
 
-from .promocode import RatioPromocodeConnection
 from ... import models
+from .promocode import RatioPromocodeConnection
 
 
 def related_fields():
-    from .ticket import RatioTicket
     from .schedule import RatioTrainingDay
+    from .ticket import RatioTicket
     from .ticket_type import RatioTicketType
 
     return {
@@ -48,6 +48,7 @@ RatioTraining = django_utils.DjangoObjectType(
         'id',
         'name',
         'slug',
+        'training_type',
         'date',
         'telegram_link',
         'salaries_paid',

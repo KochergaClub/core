@@ -405,6 +405,7 @@ input CreateRatioTicketTypeInput {
 input CreateRatioTrainingInput {
   name: String!
   slug: String!
+  training_type: String
   date: String
   telegram_link: String
   discount_by_email: Int
@@ -1473,7 +1474,7 @@ type RatioActivity {
 input RatioAddTicketInput {
   training: ID!
   email: String!
-  first_name: String!
+  first_name: String
   last_name: String
   payment_amount: Int!
   ticket_class: String
@@ -1504,8 +1505,8 @@ type RatioConfirmOrderResult {
 input RatioCreateOrderInput {
   ticket_type_id: ID!
   email: String!
-  first_name: String!
-  last_name: String!
+  first_name: String
+  last_name: String
   city: String
   promocode: String
   payer: RatioCreateOrderPayerInput
@@ -1713,7 +1714,7 @@ type RatioTicket {
   first_name: String!
 
   """Фамилия"""
-  last_name: String
+  last_name: String!
 
   """Дата регистрации"""
   registration_date: String
@@ -1795,6 +1796,7 @@ type RatioTraining {
   """Название"""
   name: String!
   slug: String!
+  training_type: String!
 
   """Дата начала"""
   date: String
@@ -2062,6 +2064,7 @@ input UpdateRatioTicketTypeInput {
 input UpdateRatioTrainingInput {
   id: ID!
   name: String
+  training_type: String
   date: String
   telegram_link: String
   discount_by_email: Int

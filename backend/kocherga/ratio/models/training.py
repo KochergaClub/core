@@ -3,17 +3,15 @@ import logging
 logger = logging.getLogger(__name__)
 
 import re
-from html2text import html2text
-from django.db import models
+
 from django.core.mail import send_mail
-from django.template.loader import render_to_string
 from django.core.validators import MaxValueValidator, MinValueValidator
-
-from kocherga.email.tools import mjml2html
-
-from kocherga.money.cashier.models import Payment
-
+from django.db import models
+from django.template.loader import render_to_string
+from html2text import html2text
 from kocherga.django.managers import RelayQuerySet
+from kocherga.email.tools import mjml2html
+from kocherga.money.cashier.models import Payment
 
 from .promocode import Promocode
 
@@ -33,6 +31,7 @@ def extract_email_title(html: str):
 class Training(models.Model):
     name = models.CharField('Название', max_length=255)
     slug = models.SlugField(unique=True)
+    training_type = models.SlugField(blank=True)
 
     date = models.DateField('Дата начала', blank=True, null=True)
     telegram_link = models.URLField('Телеграм-чат', blank=True)
