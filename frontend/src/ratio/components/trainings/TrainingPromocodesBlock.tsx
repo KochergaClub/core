@@ -3,8 +3,10 @@ import React from 'react';
 import { useLazyQuery } from '@apollo/client';
 
 import { PaddedBlock } from '~/components';
+import { Column } from '~/frontkit';
 
 import { RatioTrainingFragment } from '../../queries.generated';
+import EmailDiscount from '../promocodes/EmailDiscount';
 import PromocodesCollection from '../promocodes/PromocodesCollection';
 import { RatioTrainingPromocodesPageDocument } from './queries.generated';
 
@@ -12,7 +14,7 @@ interface Props {
   training: RatioTrainingFragment;
 }
 
-const TrainingPromocodesBlock: React.FC<Props> = ({ training }) => {
+export const TrainingPromocodesBlock: React.FC<Props> = ({ training }) => {
   const [fetchPromocodes, queryResults] = useLazyQuery(
     RatioTrainingPromocodesPageDocument
   );
@@ -41,13 +43,14 @@ const TrainingPromocodesBlock: React.FC<Props> = ({ training }) => {
 
   return (
     <PaddedBlock>
-      <PromocodesCollection
-        connection={connection}
-        fetchPage={fetchPage}
-        total={training.promocodes_count}
-      />
+      <Column gutter={16}>
+        <EmailDiscount entity={training} entityType="training" />
+        <PromocodesCollection
+          connection={connection}
+          fetchPage={fetchPage}
+          total={training.promocodes_count}
+        />
+      </Column>
     </PaddedBlock>
   );
 };
-
-export default TrainingPromocodesBlock;

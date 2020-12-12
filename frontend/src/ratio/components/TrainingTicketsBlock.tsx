@@ -80,7 +80,7 @@ interface Props {
   training: RatioTrainingFragment;
 }
 
-const TrainingTicketsBlock: React.FC<Props> = ({ training }) => {
+export const TrainingTicketsBlock: React.FC<Props> = ({ training }) => {
   return (
     <PaddedBlock>
       <h2>
@@ -95,5 +95,3 @@ const TrainingTicketsBlock: React.FC<Props> = ({ training }) => {
     </PaddedBlock>
   );
 };
-
-export default TrainingTicketsBlock;
