@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 
 import * as Sentry from '@sentry/node';
 
-import { Modal } from '~/frontkit';
+import { A, Modal } from '~/frontkit';
 import { confirmOrderRoute } from '~/ratio/routes';
 
 import { RatioOrder_CreatedFragment } from './queries.generated';
@@ -23,6 +23,7 @@ const loadKassaCheckoutUI = () => {
         resolve();
       };
       script.onerror = (e: Event | string) => {
+        script.remove();
         reject(e);
       };
     }
@@ -35,13 +36,13 @@ interface CheckoutProps {
 }
 
 const CheckoutOrderModal: React.FC<CheckoutProps> = ({ close, order }) => {
-  const [failed, setFailed] = useState('');
+  const [failed, setFailed] = useState(false);
   useEffect(() => {
     (async () => {
       try {
         await loadKassaCheckoutUI();
       } catch (e) {
-        setFailed('Не удалось загрузить виджет платёжной системы');
+        setFailed(true);
         Sentry.captureException(e);
         return;
       }
@@ -65,7 +66,16 @@ const CheckoutOrderModal: React.FC<CheckoutProps> = ({ close, order }) => {
       <Modal.Header close={close}>Регистрация</Modal.Header>
       <Modal.Body>
         <div id="kassa-checkout-form"></div>
-        {failed ? <div>{failed}</div> : null}
+        {failed ? (
+          <div>
+            Не удалось загрузить виджет платёжной системы.
+            <br />
+            <br />
+            Пожалуйста, напишите нам на почту{' '}
+            <A href="info@kocherga-club.ru">info@kocherga-club.ru</A>, мы
+            поможем разобраться с проблемой.
+          </div>
+        ) : null}
       </Modal.Body>
     </Modal>
   );
