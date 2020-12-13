@@ -18,7 +18,7 @@ const OrderCollectionBlock: React.FC = () => {
   });
 
   return (
-    <PaddedBlock width="wide">
+    <PaddedBlock>
       <ApolloQueryResults {...queryResults} size="block">
         {({ data: { orders } }) => (
           <PagedApolloCollection

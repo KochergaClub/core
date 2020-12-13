@@ -3,8 +3,10 @@ import { useForm } from 'react-hook-form';
 
 import { useMutation } from '@apollo/client';
 
+import { useFocusOnFirstInput } from '~/common/hooks';
+import { CommonModal } from '~/components';
 import { BasicInputField } from '~/components/forms';
-import { Button, Column, ControlsFooter, Modal } from '~/frontkit';
+import { Column } from '~/frontkit';
 
 import { RatioTicketTypeFragment } from '../../queries.generated';
 import { UpdateRatioTicketTypeDocument } from './queries.generated';
@@ -44,61 +46,54 @@ const EditTicketTypeModal: React.FC<Props> = ({ ticketType, close }) => {
     close();
   };
 
+  const formRef = useFocusOnFirstInput();
+
   return (
-    <Modal>
-      <Modal.Header close={close}>Редактирование типа билета</Modal.Header>
-      <form onSubmit={form.handleSubmit(updateCb)}>
-        <Modal.Body>
-          <Column gutter={16} stretch>
-            <small>
-              Якорь для Тильды:{' '}
-              <code>#kocherga_order:ticket_type={ticketType.id}</code>
-            </small>
-            <BasicInputField
-              title="Название"
-              name="name"
-              defaultValue={ticketType.name}
-              form={form}
-              required
-            />
-            <BasicInputField
-              title="Стоимость"
-              name="price"
-              type="number"
-              defaultValue={String(ticketType.price)}
-              form={form}
-              required
-            />
-            <BasicInputField
-              title="Сумма одноразового промокода по e-mail'у"
-              name="discount_by_email"
-              type="number"
-              defaultValue={String(ticketType.discount_by_email)}
-              form={form}
-            />
-            <BasicInputField
-              title="Процент скидки одноразового промокода по e-mail'у"
-              name="discount_percent_by_email"
-              type="number"
-              defaultValue={String(ticketType.discount_percent_by_email)}
-              form={form}
-            />
-          </Column>
-        </Modal.Body>
-        <Modal.Footer>
-          <ControlsFooter>
-            <Button
-              loading={form.formState.isSubmitting}
-              disabled={form.formState.isSubmitting}
-              kind="primary"
-              type="submit"
-            >
-              Сохранить
-            </Button>
-          </ControlsFooter>
-        </Modal.Footer>
+    <CommonModal
+      close={close}
+      title="Редактирование типа билета"
+      submit={form.handleSubmit(updateCb)}
+      submitLabel="Сохранить"
+      loading={form.formState.isSubmitting}
+    >
+      <form onSubmit={form.handleSubmit(updateCb)} ref={formRef}>
+        <Column gutter={16} stretch>
+          <small>
+            Якорь для Тильды:{' '}
+            <code>#kocherga_order:ticket_type={ticketType.id}</code>
+          </small>
+          <BasicInputField
+            title="Название"
+            name="name"
+            defaultValue={ticketType.name}
+            form={form}
+            required
+          />
+          <BasicInputField
+            title="Стоимость"
+            name="price"
+            type="number"
+            defaultValue={String(ticketType.price)}
+            form={form}
+            required
+          />
+          <BasicInputField
+            title="Сумма одноразового промокода по e-mail'у"
+            name="discount_by_email"
+            type="number"
+            defaultValue={String(ticketType.discount_by_email)}
+            form={form}
+          />
+          <BasicInputField
+            title="Процент скидки одноразового промокода по e-mail'у"
+            name="discount_percent_by_email"
+            type="number"
+            defaultValue={String(ticketType.discount_percent_by_email)}
+            form={form}
+          />
+        </Column>
       </form>
-    </Modal>
+    </CommonModal>
   );
 };
 
