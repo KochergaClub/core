@@ -13,7 +13,7 @@ export const TicketTypesSection: React.FC<Props> = ({ training }) => {
     <div>
       <h2>
         <Row gutter={8} vCentered>
-          <div>Виды билетов</div>
+          <div>Типы билетов</div>
           <CreateTicketTypeButton training_id={training.id} />
         </Row>
       </h2>

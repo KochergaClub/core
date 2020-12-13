@@ -2784,6 +2784,7 @@ export type RatioTicketTypeInput = {
 
 export type RatioTicketTypesInput = {
   id?: Maybe<Scalars['ID']>;
+  training_type?: Maybe<Scalars['String']>;
 };
 
 export type RatioTicketsFilterInput = {

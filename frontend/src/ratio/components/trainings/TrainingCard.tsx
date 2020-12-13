@@ -60,7 +60,7 @@ export const TrainingCard: React.FC<Props> = ({ training }) => {
       )}
 
       <Row vCentered>
-        <Label>Виды билетов:</Label>
+        <Label>Типы билетов:</Label>
         {training.ticket_types.length ? (
           <Row>
             {training.ticket_types.map((ticket_type) => (

@@ -27,7 +27,7 @@ export type Tab =
 const TAB_TO_TITLE: { [k in Tab]: string } = {
   info: 'Информация',
   promocodes: 'Промокоды',
-  'ticket-types': 'Виды билетов',
+  'ticket-types': 'Типы билетов',
   tickets: 'Билеты',
   schedule: 'Расписание',
 };

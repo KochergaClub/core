@@ -21,7 +21,7 @@ const CreateTicketButton = ({ training_id }: { training_id: string }) => {
     { name: 'payment_amount', title: 'Стоимость билета', type: 'number' },
     {
       name: 'ticket_class',
-      title: 'Вид билета',
+      title: 'Вид билета (устарело)',
       type: 'choice',
       options: [
         ['normal', 'Обычный'],

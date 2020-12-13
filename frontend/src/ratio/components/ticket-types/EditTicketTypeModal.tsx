@@ -1,13 +1,13 @@
-import React, { useCallback } from 'react';
+import React from 'react';
 import { useForm } from 'react-hook-form';
 
 import { useMutation } from '@apollo/client';
 
 import { BasicInputField } from '~/components/forms';
-import { AsyncButton, Button, Column, ControlsFooter, Modal } from '~/frontkit';
+import { Button, Column, ControlsFooter, Modal } from '~/frontkit';
 
 import { RatioTicketTypeFragment } from '../../queries.generated';
-import { DeleteRatioTicketTypeDocument, UpdateRatioTicketTypeDocument } from './queries.generated';
+import { UpdateRatioTicketTypeDocument } from './queries.generated';
 
 interface Props {
   ticketType: RatioTicketTypeFragment;
@@ -24,23 +24,7 @@ const EditTicketTypeModal: React.FC<Props> = ({ ticketType, close }) => {
 
   const form = useForm<FormData>();
 
-  const [deleteMutation] = useMutation(DeleteRatioTicketTypeDocument, {
-    refetchQueries: ['RatioTrainingBySlug'],
-    awaitRefetchQueries: true,
-  });
-
   const [updateMutation] = useMutation(UpdateRatioTicketTypeDocument);
-
-  const deleteCb = useCallback(async () => {
-    await deleteMutation({
-      variables: {
-        input: {
-          id: ticketType.id,
-        },
-      },
-    });
-    close();
-  }, [deleteMutation, ticketType.id, close]);
 
   const updateCb = async (data: FormData) => {
     await updateMutation({
@@ -62,7 +46,7 @@ const EditTicketTypeModal: React.FC<Props> = ({ ticketType, close }) => {
 
   return (
     <Modal>
-      <Modal.Header close={close}>Редактирование вида билета</Modal.Header>
+      <Modal.Header close={close}>Редактирование типа билета</Modal.Header>
       <form onSubmit={form.handleSubmit(updateCb)}>
         <Modal.Body>
           <Column gutter={16} stretch>
@@ -103,9 +87,6 @@ const EditTicketTypeModal: React.FC<Props> = ({ ticketType, close }) => {
         </Modal.Body>
         <Modal.Footer>
           <ControlsFooter>
-            <AsyncButton act={deleteCb} kind="danger">
-              Удалить
-            </AsyncButton>
             <Button
               loading={form.formState.isSubmitting}
               disabled={form.formState.isSubmitting}
