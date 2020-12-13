@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { MutationButton, PaddedBlock } from '~/components';
+import { MutationButton } from '~/components';
 import { Column } from '~/frontkit';
 
 // import CreateEmailButton from './CreateEmailButton';
@@ -12,9 +12,9 @@ interface Props {
   training: RatioTrainingFragment;
 }
 
-export const TrainingActionsBlock: React.FC<Props> = ({ training }) => {
+export const TrainingActions: React.FC<Props> = ({ training }) => {
   return (
-    <PaddedBlock>
+    <div>
       <h2>Рассылки</h2>
       <Column>
         <MutationButton
@@ -26,6 +26,6 @@ export const TrainingActionsBlock: React.FC<Props> = ({ training }) => {
           Отправить участников в mailchimp
         </MutationButton>
       </Column>
-    </PaddedBlock>
+    </div>
   );
 };

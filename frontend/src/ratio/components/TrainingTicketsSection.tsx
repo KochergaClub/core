@@ -2,7 +2,6 @@ import React, { useCallback } from 'react';
 
 import { useMutation } from '@apollo/client';
 
-import { PaddedBlock } from '~/components';
 import { FormShapeModalButton } from '~/components/forms';
 import { Column, Row } from '~/frontkit';
 
@@ -80,9 +79,9 @@ interface Props {
   training: RatioTrainingFragment;
 }
 
-export const TrainingTicketsBlock: React.FC<Props> = ({ training }) => {
+export const TrainingTicketsSection: React.FC<Props> = ({ training }) => {
   return (
-    <PaddedBlock>
+    <div>
       <h2>
         <Row vCentered gutter={8}>
           <div>Участники: {training.tickets.length}</div>
@@ -92,6 +91,6 @@ export const TrainingTicketsBlock: React.FC<Props> = ({ training }) => {
       <Column stretch>
         <TicketList tickets={training.tickets} />
       </Column>
-    </PaddedBlock>
+    </div>
   );
 };

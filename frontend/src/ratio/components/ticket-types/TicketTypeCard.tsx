@@ -3,7 +3,7 @@ import { FaEdit, FaPlus } from 'react-icons/fa';
 
 import Card from '~/components/Card';
 import DropdownMenu, { ModalAction } from '~/components/DropdownMenu';
-import { Row } from '~/frontkit';
+import { Column, Row } from '~/frontkit';
 
 import { RatioTicketTypeFragment } from '../../queries.generated';
 import CreatePromocodeModal from '../promocodes/CreatePromocodeModal';
@@ -38,9 +38,13 @@ const TicketTypeCard: React.FC<Props> = ({ ticketType }) => {
           </DropdownMenu>
         </Row>
       </header>
-      <div>{ticketType.name}</div>
-      <EmailDiscount entity={ticketType} entityType="ticket_type" />
-      <TicketTypePromocodesCollection ticketType={ticketType} />
+      <Column stretch>
+        <div>
+          <div>{ticketType.name}</div>
+          <EmailDiscount entity={ticketType} entityType="ticket_type" />
+        </div>
+        <TicketTypePromocodesCollection ticketType={ticketType} />
+      </Column>
     </Card>
   );
 };

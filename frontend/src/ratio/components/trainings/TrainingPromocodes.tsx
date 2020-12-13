@@ -2,10 +2,11 @@ import React from 'react';
 
 import { useLazyQuery } from '@apollo/client';
 
-import { PaddedBlock } from '~/components';
+import { ButtonWithModal } from '~/components';
 import { Column } from '~/frontkit';
 
 import { RatioTrainingFragment } from '../../queries.generated';
+import CreatePromocodeModal from '../promocodes/CreatePromocodeModal';
 import EmailDiscount from '../promocodes/EmailDiscount';
 import PromocodesCollection from '../promocodes/PromocodesCollection';
 import { RatioTrainingPromocodesPageDocument } from './queries.generated';
@@ -42,15 +43,18 @@ export const TrainingPromocodesBlock: React.FC<Props> = ({ training }) => {
     : training.promocodes;
 
   return (
-    <PaddedBlock>
-      <Column gutter={16}>
-        <EmailDiscount entity={training} entityType="training" />
-        <PromocodesCollection
-          connection={connection}
-          fetchPage={fetchPage}
-          total={training.promocodes_count}
-        />
-      </Column>
-    </PaddedBlock>
+    <Column gutter={16}>
+      <EmailDiscount entity={training} entityType="training" />
+      <ButtonWithModal title="Создать промокод" kind="primary">
+        {({ close }) => (
+          <CreatePromocodeModal close={close} trainingId={training.id} />
+        )}
+      </ButtonWithModal>
+      <PromocodesCollection
+        connection={connection}
+        fetchPage={fetchPage}
+        total={training.promocodes_count}
+      />
+    </Column>
   );
 };
