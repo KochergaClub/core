@@ -1,7 +1,7 @@
 import { AnimatePresence, motion } from 'framer-motion';
 import React from 'react';
 
-import { CardList } from '~/components/Card';
+import { CardList } from '~/components/cards';
 
 import { RatioTicketTypeFragment } from '../../queries.generated';
 import TicketTypeCard from './TicketTypeCard';

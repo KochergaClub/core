@@ -7,7 +7,7 @@ import { useMutation, useQuery } from '@apollo/client';
 
 import { usePermissions } from '~/common/hooks';
 import { ApolloQueryResults } from '~/components';
-import Card, { CardList } from '~/components/Card';
+import { Card, CardList } from '~/components/cards';
 import { A, AsyncButton, Button, Label, Row } from '~/frontkit';
 import { staffMemberRoute } from '~/staff/routes';
 

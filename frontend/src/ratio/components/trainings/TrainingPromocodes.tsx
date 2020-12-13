@@ -45,7 +45,7 @@ export const TrainingPromocodesBlock: React.FC<Props> = ({ training }) => {
   return (
     <Column gutter={16}>
       <EmailDiscount entity={training} entityType="training" />
-      <ButtonWithModal title="Создать промокод" kind="primary">
+      <ButtonWithModal title="Создать промокод" size="small">
         {({ close }) => (
           <CreatePromocodeModal close={close} trainingId={training.id} />
         )}

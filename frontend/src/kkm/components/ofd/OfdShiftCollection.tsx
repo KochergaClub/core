@@ -3,7 +3,7 @@ import React from 'react';
 import { useQuery } from '@apollo/client';
 
 import { ApolloQueryResults, PaddedBlock } from '~/components';
-import { CardList } from '~/components/Card';
+import { CardList } from '~/components/cards';
 import HeadlessConnection from '~/components/collections/HeadlessConnection';
 import Pager from '~/components/collections/Pager';
 

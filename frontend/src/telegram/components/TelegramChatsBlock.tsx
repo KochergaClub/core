@@ -1,7 +1,7 @@
 import React from 'react';
 
 import { PaddedBlock } from '~/components';
-import Card, { CardList } from '~/components/Card';
+import { Card, CardList } from '~/components/cards';
 
 import { TelegramChatFragment } from '../queries.generated';
 import { TelegramChatCardContents } from './TelegramChatCardContents';

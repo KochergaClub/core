@@ -1,4 +1,4 @@
-import { CardList } from '~/components/Card';
+import { CardList } from '~/components/cards';
 
 import { RatioTicketFragment } from '../../queries.generated';
 import TicketCard from './TicketCard';

@@ -4,7 +4,7 @@ import { FaMinus, FaPlus, FaUser } from 'react-icons/fa';
 import { useMutation } from '@apollo/client';
 
 import { MutationButton } from '~/components';
-import Card from '~/components/Card';
+import { Card } from '~/components/cards';
 import DropdownMenu, { LinkAction, ModalAction } from '~/components/DropdownMenu';
 import WagtailIcon from '~/components/icons/WagtailIcon';
 import { AsyncButton, Badge, Column, Row } from '~/frontkit';

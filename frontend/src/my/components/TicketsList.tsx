@@ -1,13 +1,10 @@
+import { differenceInHours, parseISO } from 'date-fns';
 import { useMemo } from 'react';
 
-import { differenceInHours, parseISO } from 'date-fns';
-
+import { CardList } from '~/components/cards';
 import { Row } from '~/frontkit';
 
-import { CardList } from '~/components/Card';
-
 import { MyTicketsPageFragment } from '../queries.generated';
-
 import TicketCard from './TicketCard';
 
 interface Props {
@@ -31,7 +28,7 @@ const TicketsSublist: React.FC<{
         <h3>{title}:</h3>
       </Row>
       <CardList>
-        {tickets.map(ticket => (
+        {tickets.map((ticket) => (
           <TicketCard key={ticket.event.id} ticket={ticket} later={later} />
         ))}
       </CardList>
@@ -41,7 +38,7 @@ const TicketsSublist: React.FC<{
 
 const TicketsList: React.FC<Props> = ({ my }) => {
   // cancelled tickets stay in the list so we have to filter tickets by status here
-  const tickets = my.tickets.nodes.filter(t => t.status === 'ok');
+  const tickets = my.tickets.nodes.filter((t) => t.status === 'ok');
 
   const LATER_THRESHOLD = 12;
 
@@ -52,7 +49,7 @@ const TicketsList: React.FC<Props> = ({ my }) => {
   const soonTickets = useMemo(() => tickets.filter(condition), [tickets]);
 
   const laterTickets = useMemo(
-    () => tickets.filter(ticket => !condition(ticket)),
+    () => tickets.filter((ticket) => !condition(ticket)),
     [tickets]
   );
 

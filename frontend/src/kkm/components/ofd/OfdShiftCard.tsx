@@ -3,7 +3,7 @@ import React from 'react';
 import { FaRegCreditCard, FaRegMoneyBillAlt } from 'react-icons/fa';
 
 import { HumanizedDateTime, RowWithIcon } from '~/components';
-import Card from '~/components/Card';
+import { Card } from '~/components/cards';
 import { Badge, Column, Row } from '~/frontkit';
 
 import { OfdShiftFragment } from './queries.generated';

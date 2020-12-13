@@ -34,11 +34,7 @@ export const TrainingInfo: React.FC<Props> = ({ training }) => {
   return (
     <Column gutter={16}>
       <Row>
-        <ButtonWithModal
-          title="Редактировать тренинг"
-          kind="primary"
-          size="small"
-        >
+        <ButtonWithModal title="Редактировать тренинг" size="small">
           {({ close }) => (
             <EditTrainingModal close={close} training={training} />
           )}

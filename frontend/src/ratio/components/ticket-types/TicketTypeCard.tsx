@@ -1,7 +1,7 @@
 import React from 'react';
 import { FaEdit, FaPlus } from 'react-icons/fa';
 
-import Card from '~/components/Card';
+import { Card, CardSection } from '~/components/cards';
 import DropdownMenu, { ModalAction } from '~/components/DropdownMenu';
 import { Column, Row } from '~/frontkit';
 
@@ -38,12 +38,17 @@ const TicketTypeCard: React.FC<Props> = ({ ticketType }) => {
           </DropdownMenu>
         </Row>
       </header>
-      <Column stretch>
-        <div>
-          <div>{ticketType.name}</div>
-          <EmailDiscount entity={ticketType} entityType="ticket_type" />
-        </div>
-        <TicketTypePromocodesCollection ticketType={ticketType} />
+      <Column stretch gutter={16}>
+        <div>{ticketType.name}</div>
+        {ticketType.discount_by_email ||
+        ticketType.discount_percent_by_email ? (
+          <CardSection title="Промокоды">
+            <Column stretch>
+              <EmailDiscount entity={ticketType} entityType="ticket_type" />
+              <TicketTypePromocodesCollection ticketType={ticketType} />
+            </Column>
+          </CardSection>
+        ) : null}
       </Column>
     </Card>
   );

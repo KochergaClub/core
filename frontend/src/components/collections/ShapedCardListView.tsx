@@ -1,4 +1,4 @@
-import Card, { CardList } from '~/components/Card';
+import { Card, CardList } from '~/components/cards';
 import { FormShape } from '~/components/forms/types';
 
 import ItemDump from './ItemDump';

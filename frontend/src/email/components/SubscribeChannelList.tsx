@@ -1,8 +1,8 @@
 import { useQuery } from '@apollo/client';
-import { Column } from '~/frontkit';
 
 import { ApolloQueryResults } from '~/components';
-import { CardList } from '~/components/Card';
+import { CardList } from '~/components/cards';
+import { Column } from '~/frontkit';
 
 import { EmailSubscribeChannelsDocument } from '../queries.generated';
 import CreateSubscribeChannelButton from './CreateSubscribeChannelButton';

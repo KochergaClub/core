@@ -1,6 +1,6 @@
 import Link from 'next/link';
 
-import Card from '~/components/Card';
+import { Card } from '~/components/cards';
 import { A } from '~/frontkit';
 
 import { TemplateFragment } from '../queries.generated';

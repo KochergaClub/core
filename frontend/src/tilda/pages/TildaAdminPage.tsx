@@ -3,7 +3,7 @@ import { useMutation, useQuery } from '@apollo/client';
 import { withApollo, withStaff } from '~/apollo';
 import { NextApolloPage } from '~/apollo/types';
 import { ApolloQueryResults, Page } from '~/components';
-import { CardList } from '~/components/Card';
+import { CardList } from '~/components/cards';
 import { FormShapeModalButton } from '~/components/forms';
 import { ShapeToValues } from '~/components/forms/types';
 import { AsyncButton, Column, Row } from '~/frontkit';

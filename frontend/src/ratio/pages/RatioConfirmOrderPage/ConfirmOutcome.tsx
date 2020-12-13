@@ -4,7 +4,7 @@ import styled from 'styled-components';
 
 import { RatioConfirmOrderOutcome } from '~/apollo/types.generated';
 import { PaddedBlock } from '~/components';
-import Card from '~/components/Card';
+import { Card } from '~/components/cards';
 import { A, colors, Column, deviceMediaQueries, fonts, Row } from '~/frontkit';
 
 const BigOutcomeContainer = styled.div`

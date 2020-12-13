@@ -1,7 +1,7 @@
 import { useQuery } from '@apollo/client';
 
 import { ApolloQueryResults } from '~/components';
-import Card from '~/components/Card';
+import { Card } from '~/components/cards';
 
 import { ZadarmaPbxCallDocument } from '../queries.generated';
 import PbxCallCard from './PbxCallCard';
