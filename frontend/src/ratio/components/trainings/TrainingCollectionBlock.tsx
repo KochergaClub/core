@@ -25,6 +25,12 @@ const trainingShape = [
     type: 'string',
   },
   {
+    name: 'training_type',
+    title: 'Тип тренинга (для фильтрации билетов в платёжке)',
+    type: 'string',
+    optional: true,
+  },
+  {
     name: 'date',
     optional: true,
     title: 'Дата начала',

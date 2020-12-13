@@ -15,9 +15,14 @@ interface Props {
 }
 
 const shape = [
-  { name: 'code', type: 'string' },
-  { name: 'discount', type: 'number' },
-  { name: 'uses_max', type: 'number', optional: true },
+  { name: 'code', type: 'string', title: 'Код' },
+  { name: 'discount', type: 'number', title: 'Скидка в рублях' },
+  {
+    name: 'uses_max',
+    type: 'number',
+    title: 'Максимальное количество использований (необязательное поле)',
+    optional: true,
+  },
 ] as const;
 
 type FormValues = ShapeToValues<typeof shape>;

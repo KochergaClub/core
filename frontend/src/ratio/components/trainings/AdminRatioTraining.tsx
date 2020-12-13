@@ -104,9 +104,7 @@ const AdminRatioTraining: React.FC<Props> = ({ slug, tab }) => {
                   </div>
                 </Column>
               </PaddedBlock>
-              {tab === 'schedule' || hasSchedule ? (
-                <TrainingSchedule slug={slug} />
-              ) : null}
+              {tab === 'schedule' ? <TrainingSchedule slug={slug} /> : null}
             </Page.Main>
           </>
         );

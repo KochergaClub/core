@@ -1,7 +1,7 @@
 import React from 'react';
 import { FaComments } from 'react-icons/fa';
 
-import { ButtonWithModal } from '~/components';
+import { ButtonWithModal, CopyToClipboardIcon } from '~/components';
 import { A, colors, Column, Label, Row } from '~/frontkit';
 import { RatioTrainingFragment } from '~/ratio/queries.generated';
 
@@ -51,6 +51,18 @@ export const TrainingInfo: React.FC<Props> = ({ training }) => {
         <Label>Шаблон письма при заполнении notion-ссылки:</Label>
         <div>{training.notion_created_email || '(пусто)'}</div>
       </Row>
+      {training.training_type !== '' ? (
+        <Row vCentered>
+          <Label>
+            Якорь для Tilda (регистрация на тренинги типа{' '}
+            {training.training_type}):
+          </Label>
+          <div>#kocherga_order:training_type={training.training_type}</div>
+          <CopyToClipboardIcon
+            text={`#kocherga_order:training_type=${training.training_type}`}
+          />
+        </Row>
+      ) : null}
 
       {training.telegram_link && (
         <LinkWithIcon
