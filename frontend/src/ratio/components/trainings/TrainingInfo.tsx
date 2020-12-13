@@ -32,6 +32,7 @@ interface Props {
 export const TrainingInfo: React.FC<Props> = ({ training }) => {
   return (
     <Column gutter={16}>
+      <h2>Настройки тренинга</h2>
       <Row>
         <ButtonWithModal title="Редактировать тренинг" size="small">
           {({ close }) => (

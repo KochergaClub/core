@@ -53,14 +53,11 @@ export const EventPicker: React.FC<Props> = ({ onChange }) => {
   );
 
   const onSelectChange = useCallback(
-    (v: ValueType<OptionType>) => {
+    (v: ValueType<OptionType, false>) => {
       if (!v) {
         return;
       }
-      if (v instanceof Array) {
-        return;
-      }
-      onChange((v as OptionType).value);
+      onChange(v.value);
     },
     [onChange]
   );

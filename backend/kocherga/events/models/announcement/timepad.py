@@ -5,14 +5,13 @@ logger = logging.getLogger(__name__)
 import re
 from collections import namedtuple
 
+import kocherga.events.markup
+import reversion
+from annoying.fields import AutoOneToOneField
 from django.conf import settings
 from django.db import models
-from annoying.fields import AutoOneToOneField
-import reversion
-
 from kocherga.dateutils import dts
-import kocherga.events.markup
-from kocherga.timepad.api import api_call, ORGANIZATION_ID
+from kocherga.timepad.api import ORGANIZATION_ID, api_call
 
 from ..event import Event
 
@@ -76,7 +75,10 @@ def timepad_categories():
 
 
 def timepad_category_by_code(code):
-    return next(c for c in timepad_categories() if c.code == code)
+    return next(
+        (c for c in timepad_categories() if c.code == code),
+        TimepadCategory(462, "Другие события", "other_event"),
+    )
 
 
 @reversion.register()
