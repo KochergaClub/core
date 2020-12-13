@@ -23,11 +23,11 @@ interface OptionType {
 
 const WeekdayPicker: React.FC<Props> = ({ value, setValue }) => {
   const onChange = useCallback(
-    (option: ValueType<OptionType>) => {
-      if (!option || Array.isArray(option)) {
-        throw new Error('Code logic error');
+    (option: ValueType<OptionType, false>) => {
+      if (!option) {
+        throw new Error('Deselect is not implemented');
       }
-      setValue((option as OptionType).value);
+      setValue(option.value);
     },
     [setValue]
   );

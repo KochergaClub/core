@@ -23,7 +23,7 @@ const TicketCollectionBlock: React.FC = () => {
   });
 
   return (
-    <PaddedBlock width="wide">
+    <PaddedBlock>
       <Column stretch gutter={16}>
         <h2>
           <Row gutter={8} vCentered>

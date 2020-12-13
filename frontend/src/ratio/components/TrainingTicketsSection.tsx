@@ -2,7 +2,6 @@ import React, { useCallback } from 'react';
 
 import { useMutation } from '@apollo/client';
 
-import { PaddedBlock } from '~/components';
 import { FormShapeModalButton } from '~/components/forms';
 import { Column, Row } from '~/frontkit';
 
@@ -22,7 +21,7 @@ const CreateTicketButton = ({ training_id }: { training_id: string }) => {
     { name: 'payment_amount', title: 'Стоимость билета', type: 'number' },
     {
       name: 'ticket_class',
-      title: 'Вид билета',
+      title: 'Вид билета (устарело)',
       type: 'choice',
       options: [
         ['normal', 'Обычный'],
@@ -80,9 +79,9 @@ interface Props {
   training: RatioTrainingFragment;
 }
 
-const TrainingTicketsBlock: React.FC<Props> = ({ training }) => {
+export const TrainingTicketsSection: React.FC<Props> = ({ training }) => {
   return (
-    <PaddedBlock width="wide">
+    <div>
       <h2>
         <Row vCentered gutter={8}>
           <div>Участники: {training.tickets.length}</div>
@@ -92,8 +91,6 @@ const TrainingTicketsBlock: React.FC<Props> = ({ training }) => {
       <Column stretch>
         <TicketList tickets={training.tickets} />
       </Column>
-    </PaddedBlock>
+    </div>
   );
 };
-
-export default TrainingTicketsBlock;

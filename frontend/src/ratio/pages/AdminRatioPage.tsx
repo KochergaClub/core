@@ -8,8 +8,9 @@ import { WithNavSidebar } from '~/frontkit';
 import OrderCollectionBlock from '../components/orders/OrderCollectionBlock';
 import TicketCollectionBlock from '../components/tickets/TicketCollectionBlock';
 import TicketView from '../components/tickets/TicketView';
-import AdminRatioTraining from '../components/trainings/AdminRatioTraining';
+import AdminRatioTraining, { Tab } from '../components/trainings/AdminRatioTraining';
 import TrainingCollectionBlock from '../components/trainings/TrainingCollectionBlock';
+import { adminTrainingRoute } from '../routes';
 
 const tabs = [
   { title: 'Тренинги', name: 'trainings' },
@@ -21,8 +22,21 @@ const tabs = [
 const AdminRatioPage: NextApolloPage = () => {
   const router = useRouter();
 
+  const singleTrainingPrefix = adminTrainingRoute('[slug]');
+
   const isSingleTraining = () =>
-    router.pathname === '/team/ratio/training/[slug]';
+    router.pathname === singleTrainingPrefix ||
+    router.pathname === singleTrainingPrefix + '/promocodes' ||
+    router.pathname === singleTrainingPrefix + '/ticket-types' ||
+    router.pathname === singleTrainingPrefix + '/tickets' ||
+    router.pathname === singleTrainingPrefix + '/schedule';
+
+  const singleTrainingTab = (): Tab => {
+    if (router.pathname === singleTrainingPrefix) {
+      return 'info';
+    }
+    return router.pathname.split('/').pop() as Tab;
+  };
 
   const isSingleTicket = () => router.pathname === '/team/ratio/ticket/[id]';
 
@@ -30,7 +44,12 @@ const AdminRatioPage: NextApolloPage = () => {
     switch (name) {
       case 'trainings':
         if (isSingleTraining()) {
-          return <AdminRatioTraining slug={router.query.slug as string} />;
+          return (
+            <AdminRatioTraining
+              slug={router.query.slug as string}
+              tab={singleTrainingTab()}
+            />
+          );
         } else {
           return <TrainingCollectionBlock eternal={false} />;
         }

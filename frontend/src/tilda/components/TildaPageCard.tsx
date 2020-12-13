@@ -2,7 +2,7 @@ import { parseISO } from 'date-fns';
 import Link from 'next/link';
 import React from 'react';
 
-import Card from '~/components/Card';
+import { Card } from '~/components/cards';
 import HumanizedDateTime from '~/components/HumanizedDateTime';
 import { A, AsyncButton, Row } from '~/frontkit';
 

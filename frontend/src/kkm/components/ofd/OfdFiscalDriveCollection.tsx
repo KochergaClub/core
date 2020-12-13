@@ -3,7 +3,7 @@ import React from 'react';
 import { useQuery } from '@apollo/client';
 
 import { ApolloQueryResults, PaddedBlock } from '~/components';
-import Card, { CardList } from '~/components/Card';
+import { Card, CardList } from '~/components/cards';
 
 import { OfdFiscalDrivesDocument } from './queries.generated';
 

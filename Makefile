@@ -15,6 +15,18 @@ dev:
 	# FIXME - for some reason neither --force=false nor --no-prune work correctly.
 	skaffold dev --force=false --no-prune
 
+local-dev-back:
+	(cd backend && . ./venv/bin/activate && DJANGO_SETTINGS_MODULE=kocherga.django.settings.local ./manage.py runserver 8001)
+
+local-dev-front:
+	(cd frontend/ && NODE_ENV=development DJANGO_HOST=localhost:8001 node ./dist/index.js --port 8000)
+
+local-dev-channels-worker:
+	(cd backend/ && . ./venv/bin/activate && DJANGO_SETTINGS_MODULE=kocherga.django.settings.local ./scripts/channels-worker.py)
+
+local-dev-redis:
+	sudo redis-server
+
 wait_for_migrate:
 	@echo Waiting for migrate
 	$(K) wait --for=condition=complete job/core-django-migrate --timeout=1h

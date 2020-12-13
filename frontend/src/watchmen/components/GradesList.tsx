@@ -1,8 +1,8 @@
 import { useQuery } from '@apollo/client';
-import { Column } from '~/frontkit';
 
 import { ApolloQueryResults } from '~/components';
-import Card, { CardList } from '~/components/Card';
+import { Card, CardList } from '~/components/cards';
+import { Column } from '~/frontkit';
 
 import { GradeFragment, WatchmenGradesListDocument } from '../queries.generated';
 
@@ -24,7 +24,7 @@ const GradesList = () => {
       <ApolloQueryResults {...gradesQueryResults}>
         {({ data: { grades } }) => (
           <CardList>
-            {grades.map(grade => (
+            {grades.map((grade) => (
               <GradeItem grade={grade} key={grade.id} />
             ))}
           </CardList>

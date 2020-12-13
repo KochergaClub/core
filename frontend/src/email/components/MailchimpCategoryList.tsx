@@ -1,7 +1,7 @@
 import { useQuery } from '@apollo/client';
 
 import { ApolloQueryResults } from '~/components';
-import Card, { CardList } from '~/components/Card';
+import { Card, CardList } from '~/components/cards';
 
 import { EmailMailchimpCategoriesDocument, MailchimpCategoryFragment } from '../queries.generated';
 

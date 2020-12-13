@@ -5,7 +5,7 @@ import { useQuery } from '@apollo/client';
 
 import { NextApolloPage, withApollo, withStaff } from '~/apollo';
 import { ApolloQueryResults, HumanizedDateTime, PaddedBlock, Page } from '~/components';
-import Card, { CardList } from '~/components/Card';
+import { Card, CardList } from '~/components/cards';
 import { Row } from '~/frontkit';
 
 import { ImportersDocument } from '../queries.generated';

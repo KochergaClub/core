@@ -59,20 +59,20 @@ const EmailDiscount: React.FC<Props> = ({ entity, entityType }) => {
 
   return (
     <Row>
+      <FormShapeModalButton
+        shape={shape}
+        size="small"
+        buttonLabel="Сгенерировать промокод"
+        modalTitle="Сгенерировать промокод по e-mail"
+        modalSubmitLabel="Сгенерировать и отправить"
+        post={post}
+      />
       <div>
         Скидка по e-mail&apos;у:{' '}
         {entity.discount_by_email
           ? `${entity.discount_by_email} руб.`
           : `${entity.discount_percent_by_email} %`}
       </div>
-      <FormShapeModalButton
-        shape={shape}
-        size="small"
-        buttonLabel="Сгенерировать"
-        modalTitle="Сгенерировать промокод по e-mail"
-        modalSubmitLabel="Сгенерировать и отправить"
-        post={post}
-      />
     </Row>
   );
 };

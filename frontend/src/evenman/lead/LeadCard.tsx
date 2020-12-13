@@ -2,14 +2,14 @@ import { parseISO } from 'date-fns';
 import Link from 'next/link';
 import React from 'react';
 import { FaEdit, FaLink, FaTrash } from 'react-icons/fa';
-import styled from 'styled-components';
 
 import { CommunityLeadStatus } from '~/apollo/types.generated';
 import { useUser } from '~/common/hooks';
 import { DropdownMenu, HumanizedDateTime, Markdown, MutationButton } from '~/components';
+import { CardSection } from '~/components/cards';
 import { ModalAction, MutationAction } from '~/components/DropdownMenu';
 import { UserLink } from '~/components/UserLink';
-import { A, Badge, Column, Label, Row } from '~/frontkit';
+import { A, Badge, Column, Row } from '~/frontkit';
 
 import { evenmanEventRoute } from '../routes';
 import { AddEventToLeadModal } from './AddEventToLeadModal';
@@ -21,22 +21,6 @@ import {
     RemoveEventFromCommunityLeadDocument
 } from './queries.generated';
 import { statusNames } from './utils';
-
-const SectionHr = styled.hr`
-  margin-top: 4px;
-  margin-bottom: 16px;
-  height: 1px;
-`;
-
-const CardSection: React.FC<{ title: string }> = ({ title, children }) => {
-  return (
-    <section>
-      <Label>{title}</Label>
-      <SectionHr />
-      {children}
-    </section>
-  );
-};
 
 const Status: React.FC<{ status: CommunityLeadStatus }> = ({ status }) => {
   return (

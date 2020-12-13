@@ -5,7 +5,7 @@ import { FaRegCheckCircle, FaRegCreditCard, FaRegMoneyBillAlt } from 'react-icon
 import { useQuery } from '@apollo/client';
 
 import { ApolloQueryResults, HumanizedDateTime, PaddedBlock, RowWithIcon } from '~/components';
-import Card, { CardList } from '~/components/Card';
+import { Card, CardList } from '~/components/cards';
 import HeadlessConnection from '~/components/collections/HeadlessConnection';
 import Pager from '~/components/collections/Pager';
 import { Column, Row } from '~/frontkit';

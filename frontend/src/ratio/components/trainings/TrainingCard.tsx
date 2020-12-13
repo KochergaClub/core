@@ -9,11 +9,11 @@ import { RatioTraining_SummaryFragment } from '../../queries.generated';
 import TicketTypeBadge from '../ticket-types/TicketTypeBadge';
 import { DeleteRatioTrainingDocument } from './queries.generated';
 
-interface Props {
+type Props = {
   training: RatioTraining_SummaryFragment;
-}
+};
 
-const TrainingCard: React.FC<Props> = ({ training }) => {
+export const TrainingCard: React.FC<Props> = ({ training }) => {
   return (
     <div>
       <Row spaced>
@@ -32,6 +32,12 @@ const TrainingCard: React.FC<Props> = ({ training }) => {
           </MutationButton>
         )}
       </Row>
+      {training.training_type && (
+        <Row vCentered>
+          <Label>Тип тренинга:</Label>
+          <div>{training.training_type}</div>
+        </Row>
+      )}
       {training.date && (
         <Row vCentered>
           <Label>Дата:</Label>
@@ -54,7 +60,7 @@ const TrainingCard: React.FC<Props> = ({ training }) => {
       )}
 
       <Row vCentered>
-        <Label>Виды билетов:</Label>
+        <Label>Типы билетов:</Label>
         {training.ticket_types.length ? (
           <Row>
             {training.ticket_types.map((ticket_type) => (
@@ -68,5 +74,3 @@ const TrainingCard: React.FC<Props> = ({ training }) => {
     </div>
   );
 };
-
-export default TrainingCard;

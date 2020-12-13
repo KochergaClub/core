@@ -2,13 +2,13 @@ import logging
 
 logger = logging.getLogger(__name__)
 
-from typing import Dict, Optional, Any
-import json
 import enum
+import json
+from typing import Any, Dict, Optional
 
 import requests
-from django.db import models
 from django.conf import settings
+from django.db import models
 
 
 def api_call(
@@ -28,7 +28,7 @@ def api_call(
         raise NotImplementedError()
 
     r = req(
-        f'https://payment.yandex.net/api/v3/{url}',
+        f'https://api.yookassa.ru/v3/{url}',
         auth=(SHOP_ID, SECRET),
         headers={
             'Idempotence-Key': idempotence_key,

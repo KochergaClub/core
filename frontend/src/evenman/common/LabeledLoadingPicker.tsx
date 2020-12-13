@@ -35,11 +35,8 @@ const LabeledLoadingPicker: React.FC<Props> = (props) => {
       placeholder={props.placeholder}
       options={props.values || { value: '', label: 'Ø' }}
       value={props.value}
-      onChange={(option: ValueType<Option>) => {
-        if (Array.isArray(option)) {
-          throw new Error('Internal code error'); // shouldn't happen
-        }
-        props.setValue((option as Option | undefined) ?? undefined);
+      onChange={(option: ValueType<Option, false>) => {
+        props.setValue(option ?? undefined);
       }}
     />
   );

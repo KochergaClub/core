@@ -59,7 +59,7 @@ export const RowNav = (({ children }: IListProps) => (
   <nav>
     <Ul>{children}</Ul>
   </nav>
-)) as React.SFC & {
+)) as React.FC & {
   Item: React.ComponentType<ItemProps>;
 };
 

@@ -4,7 +4,11 @@
 <mj-section>
   <mj-column>
     <mj-text>
-    Здравствуйте, {{ticket.first_name | safe}} {{ticket.last_name | safe}}!
+    {% if ticket.first_name or ticket.last_name %}
+      Здравствуйте, {{ticket.first_name ~ " " ~ ticket.last_name | trim | safe }}!
+    {% else %}
+      Здравствуйте!
+    {% endif %}
     </mj-text>
     <mj-text>
     Вы зарегистрировались на мероприятие Кочерги. Спасибо, вы прекрасны! ❤️

@@ -3,7 +3,7 @@ import React, { useCallback } from 'react';
 import { useMutation } from '@apollo/client';
 
 import { CopyToClipboardIcon, MutationButton } from '~/components';
-import Card, { CardHeader } from '~/components/Card';
+import { Card, CardHeader } from '~/components/cards';
 import { FormShapeModalButton } from '~/components/forms';
 import { Column, Label, Row } from '~/frontkit';
 

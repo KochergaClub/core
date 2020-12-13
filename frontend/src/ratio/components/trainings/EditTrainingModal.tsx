@@ -17,6 +17,18 @@ const shape = [
     title: 'Название',
   },
   {
+    name: 'training_type',
+    title: 'Тип тренинга (для фильтрации билетов в платёжке)',
+    type: 'string',
+    optional: true,
+  },
+  {
+    name: 'date',
+    optional: true,
+    title: 'Дата начала',
+    type: 'date',
+  },
+  {
     title: "Сумма одноразового промокода по e-mail'у",
     name: 'discount_by_email',
     type: 'number',
@@ -65,6 +77,8 @@ const EditTrainingModal: React.FC<Props> = ({ training, close }) => {
       mutation={UpdateRatioTrainingDocument}
       defaultValues={{
         name: training.name,
+        training_type: training.training_type,
+        date: training.date || undefined,
         discount_by_email: String(training.discount_by_email),
         discount_percent_by_email: String(training.discount_percent_by_email),
         promocode_email: training.promocode_email,
@@ -75,6 +89,8 @@ const EditTrainingModal: React.FC<Props> = ({ training, close }) => {
         input: {
           id: training.id,
           name: values.name,
+          training_type: values.training_type,
+          date: values.date,
           discount_by_email: parseInt(values.discount_by_email, 10),
           discount_percent_by_email: parseInt(
             values.discount_percent_by_email,

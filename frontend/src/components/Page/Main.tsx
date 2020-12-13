@@ -4,8 +4,8 @@ interface Props {
   wide?: boolean;
 }
 
-const Main = styled.main<Props>`
-  max-width: ${props => (props.wide ? '2000px' : '1080px')};
+const Main = styled.div<Props>`
+  max-width: ${(props) => (props.wide ? '2000px' : '1080px')};
   margin-top: 20px;
   margin-left: auto;
   margin-right: auto;

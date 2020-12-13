@@ -6,9 +6,10 @@ type Props = {
   title: string;
   children: ({ close }: { close: () => void }) => React.ReactNode;
   size?: Parameters<typeof Button>[0]['size'];
+  kind?: Parameters<typeof Button>[0]['kind'];
 };
 
-const ButtonWithModal: React.FC<Props> = ({ children, title, size }) => {
+const ButtonWithModal: React.FC<Props> = ({ children, title, size, kind }) => {
   const [isOpen, setIsOpen] = useState(false);
 
   const openModal = useCallback(() => {
@@ -21,7 +22,7 @@ const ButtonWithModal: React.FC<Props> = ({ children, title, size }) => {
 
   return (
     <>
-      <Button onClick={openModal} size={size}>
+      <Button onClick={openModal} size={size} kind={kind}>
         {title}
       </Button>
       {isOpen && children({ close: closeModal })}

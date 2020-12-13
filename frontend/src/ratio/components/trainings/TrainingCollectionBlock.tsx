@@ -9,10 +9,9 @@ import { CustomCardListView, PagedApolloCollection } from '~/components/collecti
 import { useFormModalSmartMutation } from '~/components/forms/hooks';
 import { ShapeToValues } from '~/components/forms/types';
 
-import {
-    CreateRatioTrainingDocument, RatioTraining_SummaryFragment, RatioTrainingsDocument
-} from '../../queries.generated';
-import TrainingCard from './TrainingCard';
+import { RatioTraining_SummaryFragment } from '../../queries.generated';
+import { CreateRatioTrainingDocument, RatioTrainingsDocument } from './queries.generated';
+import { TrainingCard } from './TrainingCard';
 
 const trainingShape = [
   {
@@ -22,8 +21,14 @@ const trainingShape = [
   },
   {
     name: 'slug',
-    title: 'slug',
+    title: 'Slug (имя для урла, только латинские буквы, цифры и дефисы)',
     type: 'string',
+  },
+  {
+    name: 'training_type',
+    title: 'Тип тренинга (для фильтрации билетов в платёжке)',
+    type: 'string',
+    optional: true,
   },
   {
     name: 'date',
@@ -87,7 +92,7 @@ const TrainingCollectionBlock: React.FC<Props> = ({ eternal }) => {
   );
 
   return (
-    <PaddedBlock width="wide">
+    <PaddedBlock>
       <ApolloQueryResults {...queryResults} size="block">
         {({ data: { trainings } }) => (
           <PagedApolloCollection

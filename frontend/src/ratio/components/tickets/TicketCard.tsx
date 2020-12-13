@@ -5,7 +5,7 @@ import { FaRegMoneyBillAlt, FaTicketAlt, FaUserAlt } from 'react-icons/fa';
 import { MdEmail } from 'react-icons/md';
 
 import { HumanizedDateTime } from '~/components';
-import Card from '~/components/Card';
+import { Card, CardSection } from '~/components/cards';
 import { MutationModalButton } from '~/components/forms';
 import NotionIcon from '~/components/icons/NotionIcon';
 import { A, Badge, Column, Row } from '~/frontkit';
@@ -168,7 +168,7 @@ const TicketTrainingAndType: React.FC<Props> = ({ ticket }) => {
 const TicketCard: React.FC<Props> = ({ ticket }) => {
   return (
     <Card>
-      <Column gutter={12}>
+      <Column gutter={12} stretch>
         <Row>
           <Link href={adminTicketRoute(ticket.id)} passHref>
             <A>
@@ -184,9 +184,11 @@ const TicketCard: React.FC<Props> = ({ ticket }) => {
         <RowWithIcon icon={MdEmail} hint="E-mail">
           <A href={'mailto:' + ticket.email}>{ticket.email}</A>
         </RowWithIcon>
-        <RowWithIcon icon={FaUserAlt} hint="Имя, фамилия">
-          {ticket.first_name} {ticket.last_name}
-        </RowWithIcon>
+        {ticket.first_name !== '' || ticket.last_name !== '' ? (
+          <RowWithIcon icon={FaUserAlt} hint="Имя, фамилия">
+            {ticket.first_name} {ticket.last_name}
+          </RowWithIcon>
+        ) : null}
         <RowWithIcon icon={FaRegMoneyBillAlt} hint="Стоимость">
           <Row>
             <div>{ticket.payment_amount} руб.</div>
@@ -195,15 +197,17 @@ const TicketCard: React.FC<Props> = ({ ticket }) => {
         </RowWithIcon>
         <NotionLinkRow ticket={ticket} />
         {ticket.status === 'canceled' && <CanceledBadge />}
-        <Column>
-          <Row vCentered>
-            <strong>Платежи</strong>
-            <CreatePaymentButton ticket_id={ticket.id} />
-          </Row>
-          {ticket.payments.map((payment) => (
-            <PaymentItem payment={payment} key={payment.id} />
-          ))}
-        </Column>
+        <CardSection title="Платежи">
+          <Column stretch>
+            <Row vCentered>
+              {/* <strong>Платежи</strong> */}
+              <CreatePaymentButton ticket_id={ticket.id} />
+            </Row>
+            {ticket.payments.map((payment) => (
+              <PaymentItem payment={payment} key={payment.id} />
+            ))}
+          </Column>
+        </CardSection>
       </Column>
     </Card>
   );

@@ -1,6 +1,6 @@
 import { AnimatePresence, motion } from 'framer-motion';
 
-import Card, { CardList } from '~/components/Card';
+import { Card, CardList } from '~/components/cards';
 import MutedCard from '~/components/MutedCard';
 
 import { AnyViewProps } from './types';

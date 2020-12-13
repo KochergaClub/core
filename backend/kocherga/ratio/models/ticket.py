@@ -53,8 +53,8 @@ class Ticket(models.Model):
     )
 
     email = models.EmailField()
-    first_name = models.CharField('Имя', max_length=255)
-    last_name = models.CharField('Фамилия', max_length=255, null=True, blank=True)
+    first_name = models.CharField('Имя', max_length=255, blank=True)
+    last_name = models.CharField('Фамилия', max_length=255, blank=True)
 
     # deprecated
     registration_date = models.DateField(

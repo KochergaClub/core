@@ -1,4 +1,3 @@
-import { PaddedBlock } from '~/components';
 import { Row } from '~/frontkit';
 
 import { RatioTrainingFragment } from '../../queries.generated';
@@ -9,18 +8,16 @@ interface Props {
   training: RatioTrainingFragment;
 }
 
-const TicketTypesBlock: React.FC<Props> = ({ training }) => {
+export const TicketTypesSection: React.FC<Props> = ({ training }) => {
   return (
-    <PaddedBlock width="max">
+    <div>
       <h2>
         <Row gutter={8} vCentered>
-          <div>Виды билетов</div>
+          <div>Типы билетов</div>
           <CreateTicketTypeButton training_id={training.id} />
         </Row>
       </h2>
       <TicketTypeList ticketTypes={training.ticket_types} />
-    </PaddedBlock>
+    </div>
   );
 };
-
-export default TicketTypesBlock;

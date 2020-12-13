@@ -9,7 +9,7 @@ import styled from 'styled-components';
 
 import { formatDate, timezone } from '~/common/utils';
 import { CopyToClipboardIcon, DropdownMenu } from '~/components';
-import Card from '~/components/Card';
+import { Card } from '~/components/cards';
 import { MutationAction } from '~/components/DropdownMenu';
 import { publicEventRoute } from '~/events/routes';
 import { A, Button, colors, Column, fonts, Label, Row } from '~/frontkit';

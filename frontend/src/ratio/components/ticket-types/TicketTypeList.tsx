@@ -1,7 +1,7 @@
 import { AnimatePresence, motion } from 'framer-motion';
 import React from 'react';
 
-import { Row } from '~/frontkit';
+import { CardList } from '~/components/cards';
 
 import { RatioTicketTypeFragment } from '../../queries.generated';
 import TicketTypeCard from './TicketTypeCard';
@@ -12,7 +12,7 @@ interface Props {
 
 const TicketTypeList: React.FC<Props> = ({ ticketTypes }) => {
   return (
-    <Row gutter={16}>
+    <CardList>
       <AnimatePresence initial={false}>
         {ticketTypes.map((ticketType) => (
           <motion.div
@@ -26,7 +26,7 @@ const TicketTypeList: React.FC<Props> = ({ ticketTypes }) => {
           </motion.div>
         ))}
       </AnimatePresence>
-    </Row>
+    </CardList>
   );
 };
 

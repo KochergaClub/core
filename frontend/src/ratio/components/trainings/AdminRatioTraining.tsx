@@ -1,153 +1,114 @@
 import Head from 'next/head';
+import { useRouter } from 'next/router';
 import React from 'react';
-import { FaComments, FaEdit, FaPlus, FaRegListAlt } from 'react-icons/fa';
 
 import { useQuery } from '@apollo/client';
 
-import { ApolloQueryResults, DropdownMenu, MutationButton, PaddedBlock, Page } from '~/components';
-import { ModalAction } from '~/components/DropdownMenu';
-import { A, colors, Column, Label, Row } from '~/frontkit';
-import { adminTrainingScheduleRoute } from '~/ratio/routes';
+import TL03 from '~/blocks/TL03';
+import { ApolloQueryResults, PaddedBlock, Page } from '~/components';
+import { Column, RowNav } from '~/frontkit';
+import { adminTrainingTabRoute } from '~/ratio/routes';
 
-import {
-    RatioTrainingBySlugDocument, RatioTrainingSyncParticipantsToMailchimpDocument
-} from '../../queries.generated';
-import CreatePromocodeModal from '../promocodes/CreatePromocodeModal';
-import EmailDiscount from '../promocodes/EmailDiscount';
-import TrainingTicketTypesBlock from '../ticket-types/TicketTypesBlock';
-// import CreateEmailButton from './CreateEmailButton';
-import TrainingTicketsBlock from '../TrainingTicketsBlock';
-import EditTrainingModal from './EditTrainingModal';
-import TrainingPromocodesBlock from './TrainingPromocodesBlock';
+import { TicketTypesSection } from '../ticket-types/TicketTypesSection';
+import { TrainingTicketsSection } from '../TrainingTicketsSection';
+import { RatioTrainingBySlugDocument } from './queries.generated';
+import { TrainingActions } from './TrainingActions';
+import { TrainingInfo } from './TrainingInfo';
+import { TrainingPromocodes } from './TrainingPromocodes';
+import { TrainingSchedule } from './TrainingSchedule';
 
-const LinkWithIcon = ({
-  icon,
-  href,
-  text,
-}: {
-  icon: React.ElementType;
-  href: string;
-  text: string;
-}) => {
-  const Icon = icon;
-  return (
-    <div>
-      <Icon style={{ color: colors.grey[500] }} /> <A href={href}>{text}</A>
-    </div>
-  );
+export type Tab =
+  | 'info'
+  | 'promocodes'
+  | 'ticket-types'
+  | 'tickets'
+  | 'schedule';
+
+const TAB_TO_TITLE: { [k in Tab]: string } = {
+  info: 'Информация',
+  promocodes: 'Промокоды',
+  'ticket-types': 'Типы билетов',
+  tickets: 'Билеты',
+  schedule: 'Расписание',
 };
 
-interface Props {
+type Props = {
   slug: string;
-}
+  tab: Tab;
+};
 
-const AdminRatioTraining: React.FC<Props> = ({ slug }) => {
+const AdminRatioTraining: React.FC<Props> = ({ slug, tab }) => {
+  const router = useRouter();
+
   const queryResults = useQuery(RatioTrainingBySlugDocument, {
     variables: { slug },
   });
 
+  const buildSelect = (newTab: Tab) => () => {
+    router.push(adminTrainingTabRoute(slug, newTab));
+  };
+
   return (
     <ApolloQueryResults {...queryResults} size="block">
-      {({ data: { training } }) => (
-        <>
-          <Head>
-            <title key="title">{training.name}</title>
-          </Head>
-          <Page.Title>{training.name}</Page.Title>
-          <Page.Main>
-            <PaddedBlock width="wide">
-              <Column>
-                <Row>
-                  <div>Управление:</div>
-                  <DropdownMenu>
-                    <ModalAction title="Редактировать" icon={FaEdit}>
-                      {({ close }) => (
-                        <EditTrainingModal close={close} training={training} />
-                      )}
-                    </ModalAction>
-                    <ModalAction title="Создать промокод" icon={FaPlus}>
-                      {({ close }) => (
-                        <CreatePromocodeModal
-                          close={close}
-                          trainingId={training.id}
-                        />
-                      )}
-                    </ModalAction>
-                  </DropdownMenu>
-                </Row>
-                <Row vCentered>
-                  <Label>Шаблон письма с промокодом:</Label>
-                  <div>{training.promocode_email || '(пусто)'}</div>
-                </Row>
-                <Row vCentered>
-                  <Label>Шаблон письма при регистрации:</Label>
-                  <div>{training.new_ticket_email || '(пусто)'}</div>
-                </Row>
-                <Row vCentered>
-                  <Label>Шаблон письма при заполнении notion-ссылки:</Label>
-                  <div>{training.notion_created_email || '(пусто)'}</div>
-                </Row>
-                {training.date && (
-                  <Row vCentered>
-                    <Label>Когда:</Label>
-                    <strong>{training.date}</strong>
-                  </Row>
-                )}
+      {({ data: { training } }) => {
+        const hasSchedule = training.schedule.length > 0;
+        let tabNames: Tab[] = Object.keys(TAB_TO_TITLE) as Tab[];
+        if (!hasSchedule) {
+          tabNames = tabNames.filter((t) => t !== 'schedule');
+        }
 
-                {training.date && (
-                  <LinkWithIcon
-                    href={adminTrainingScheduleRoute(training.slug)}
-                    text="Расписание"
-                    icon={FaRegListAlt}
-                  />
-                )}
-
-                {training.telegram_link && (
-                  <LinkWithIcon
-                    href={training.telegram_link}
-                    text="Telegram-чат"
-                    icon={FaComments}
-                  />
-                )}
-              </Column>
-            </PaddedBlock>
-
-            <PaddedBlock width="wide">
-              <EmailDiscount entity={training} entityType="training" />
-            </PaddedBlock>
-            <TrainingPromocodesBlock training={training} />
-            <TrainingTicketTypesBlock training={training} />
-            <TrainingTicketsBlock training={training} />
-
-            <PaddedBlock width="wide">
-              <h2>Рассылки</h2>
-              <Column>
-                <MutationButton
-                  mutation={RatioTrainingSyncParticipantsToMailchimpDocument}
-                  variables={{
-                    training_id: training.id,
-                  }}
-                >
-                  Отправить участников в mailchimp
-                </MutationButton>
-                {/* <CreateEmailButton
-                    prototypes={[
-                      {
-                        title: 'Предрассылка',
-                        type: 'pre',
-                      },
-                      {
-                        title: 'Пострассылка',
-                        type: 'post',
-                      },
-                    ]}
-                    training_id={training.id}
-                  /> */}
-              </Column>
-            </PaddedBlock>
-          </Page.Main>
-        </>
-      )}
+        return (
+          <>
+            <Head>
+              <title key="title">
+                {training.name} | {TAB_TO_TITLE[tab]}
+              </title>
+            </Head>
+            <TL03 title={training.name} grey>
+              {training.date}
+            </TL03>
+            <Page.Main>
+              <PaddedBlock>
+                <Column gutter={32} stretch>
+                  <RowNav>
+                    {tabNames.map((t) => (
+                      <RowNav.Item
+                        key={t}
+                        selected={tab === t}
+                        select={buildSelect(t)}
+                      >
+                        {TAB_TO_TITLE[t]}
+                      </RowNav.Item>
+                    ))}
+                  </RowNav>
+                  <div>
+                    {(() => {
+                      switch (tab) {
+                        case 'info':
+                          return (
+                            <div>
+                              <TrainingInfo training={training} />
+                              <TrainingActions training={training} />
+                            </div>
+                          );
+                        case 'promocodes':
+                          return <TrainingPromocodes training={training} />;
+                        case 'ticket-types':
+                          return <TicketTypesSection training={training} />;
+                        case 'tickets':
+                          return <TrainingTicketsSection training={training} />;
+                        default:
+                          return null;
+                      }
+                    })()}
+                  </div>
+                </Column>
+              </PaddedBlock>
+              {tab === 'schedule' ? <TrainingSchedule slug={slug} /> : null}
+            </Page.Main>
+          </>
+        );
+      }}
     </ApolloQueryResults>
   );
 };
