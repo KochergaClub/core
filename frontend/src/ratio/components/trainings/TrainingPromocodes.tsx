@@ -15,7 +15,7 @@ interface Props {
   training: RatioTrainingFragment;
 }
 
-export const TrainingPromocodesBlock: React.FC<Props> = ({ training }) => {
+export const TrainingPromocodes: React.FC<Props> = ({ training }) => {
   const [fetchPromocodes, queryResults] = useLazyQuery(
     RatioTrainingPromocodesPageDocument
   );
@@ -34,10 +34,6 @@ export const TrainingPromocodesBlock: React.FC<Props> = ({ training }) => {
     });
   };
 
-  if (training.promocodes.edges.length === 0) {
-    return null;
-  }
-
   const connection = queryResults.data
     ? queryResults.data.training.promocodes
     : training.promocodes;
@@ -50,11 +46,13 @@ export const TrainingPromocodesBlock: React.FC<Props> = ({ training }) => {
           <CreatePromocodeModal close={close} trainingId={training.id} />
         )}
       </ButtonWithModal>
-      <PromocodesCollection
-        connection={connection}
-        fetchPage={fetchPage}
-        total={training.promocodes_count}
-      />
+      {training.promocodes.edges.length === 0 ? null : (
+        <PromocodesCollection
+          connection={connection}
+          fetchPage={fetchPage}
+          total={training.promocodes_count}
+        />
+      )}
     </Column>
   );
 };

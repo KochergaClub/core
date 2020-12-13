@@ -1,10 +1,9 @@
 import React from 'react';
-import { FaComments, FaRegListAlt } from 'react-icons/fa';
+import { FaComments } from 'react-icons/fa';
 
 import { ButtonWithModal } from '~/components';
 import { A, colors, Column, Label, Row } from '~/frontkit';
 import { RatioTrainingFragment } from '~/ratio/queries.generated';
-import { adminTrainingScheduleRoute } from '~/ratio/routes';
 
 import EditTrainingModal from './EditTrainingModal';
 
@@ -52,14 +51,6 @@ export const TrainingInfo: React.FC<Props> = ({ training }) => {
         <Label>Шаблон письма при заполнении notion-ссылки:</Label>
         <div>{training.notion_created_email || '(пусто)'}</div>
       </Row>
-
-      {training.date && (
-        <LinkWithIcon
-          href={adminTrainingScheduleRoute(training.slug)}
-          text="Расписание"
-          icon={FaRegListAlt}
-        />
-      )}
 
       {training.telegram_link && (
         <LinkWithIcon

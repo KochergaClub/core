@@ -140,6 +140,9 @@ fragment RatioTraining on RatioTraining {
   ticket_types {
     ...RatioTicketType
   }
+  schedule {
+    id # used to check if training has a schedule
+  }
 }
 
 query RatioTrainingsForPicker(

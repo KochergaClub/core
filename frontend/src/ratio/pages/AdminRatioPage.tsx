@@ -28,7 +28,8 @@ const AdminRatioPage: NextApolloPage = () => {
     router.pathname === singleTrainingPrefix ||
     router.pathname === singleTrainingPrefix + '/promocodes' ||
     router.pathname === singleTrainingPrefix + '/ticket-types' ||
-    router.pathname === singleTrainingPrefix + '/tickets';
+    router.pathname === singleTrainingPrefix + '/tickets' ||
+    router.pathname === singleTrainingPrefix + '/schedule';
 
   const singleTrainingTab = (): Tab => {
     if (router.pathname === singleTrainingPrefix) {

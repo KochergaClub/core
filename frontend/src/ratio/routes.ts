@@ -14,7 +14,4 @@ export const adminTrainingTabRoute = (slug: string, tab: Tab) => {
   }
 };
 
-export const adminTrainingScheduleRoute = (slug: string) =>
-  `/team/ratio/training/${slug}/schedule`;
-
 export const adminTicketRoute = (id: string) => `/team/ratio/ticket/${id}`;
