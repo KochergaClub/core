@@ -1,11 +1,13 @@
 import Head from 'next/head';
-import React, { useState } from 'react';
+import { useRouter } from 'next/router';
+import React from 'react';
 
 import { useQuery } from '@apollo/client';
 
 import TL03 from '~/blocks/TL03';
 import { ApolloQueryResults, PaddedBlock, Page } from '~/components';
 import { Column, RowNav } from '~/frontkit';
+import { adminTrainingTabRoute } from '~/ratio/routes';
 
 import { TicketTypesSection } from '../ticket-types/TicketTypesSection';
 import { TrainingTicketsSection } from '../TrainingTicketsSection';
@@ -14,18 +16,23 @@ import { TrainingActions } from './TrainingActions';
 import { TrainingInfo } from './TrainingInfo';
 import { TrainingPromocodesBlock as TrainingPromocodes } from './TrainingPromocodes';
 
+export type Tab = 'info' | 'promocodes' | 'ticket-types' | 'tickets';
+
 interface Props {
   slug: string;
+  tab: Tab;
 }
 
-const AdminRatioTraining: React.FC<Props> = ({ slug }) => {
+const AdminRatioTraining: React.FC<Props> = ({ slug, tab }) => {
+  const router = useRouter();
+
   const queryResults = useQuery(RatioTrainingBySlugDocument, {
     variables: { slug },
   });
 
-  type Tab = 'info' | 'promocodes' | 'ticket-types' | 'tickets';
-
-  const [tab, setTab] = useState<Tab>('info');
+  const buildSelect = (newTab: Tab) => () => {
+    router.push(adminTrainingTabRoute(slug, newTab));
+  };
 
   return (
     <ApolloQueryResults {...queryResults} size="block">
@@ -43,25 +50,25 @@ const AdminRatioTraining: React.FC<Props> = ({ slug }) => {
                 <RowNav>
                   <RowNav.Item
                     selected={tab === 'info'}
-                    select={() => setTab('info')}
+                    select={buildSelect('info')}
                   >
                     Информация
                   </RowNav.Item>
                   <RowNav.Item
                     selected={tab === 'promocodes'}
-                    select={() => setTab('promocodes')}
+                    select={buildSelect('promocodes')}
                   >
                     Промокоды
                   </RowNav.Item>
                   <RowNav.Item
                     selected={tab === 'ticket-types'}
-                    select={() => setTab('ticket-types')}
+                    select={buildSelect('ticket-types')}
                   >
                     Виды билетов
                   </RowNav.Item>
                   <RowNav.Item
                     selected={tab === 'tickets'}
-                    select={() => setTab('tickets')}
+                    select={buildSelect('tickets')}
                   >
                     Билеты
                   </RowNav.Item>
