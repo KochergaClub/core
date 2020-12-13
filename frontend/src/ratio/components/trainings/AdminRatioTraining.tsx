@@ -18,10 +18,17 @@ import { TrainingPromocodesBlock as TrainingPromocodes } from './TrainingPromoco
 
 export type Tab = 'info' | 'promocodes' | 'ticket-types' | 'tickets';
 
-interface Props {
+const TAB_TO_TITLE: { [k in Tab]: string } = {
+  info: 'Информация',
+  promocodes: 'Промокоды',
+  'ticket-types': 'Виды билетов',
+  tickets: 'Билеты',
+};
+
+type Props = {
   slug: string;
   tab: Tab;
-}
+};
 
 const AdminRatioTraining: React.FC<Props> = ({ slug, tab }) => {
   const router = useRouter();
@@ -39,7 +46,9 @@ const AdminRatioTraining: React.FC<Props> = ({ slug, tab }) => {
       {({ data: { training } }) => (
         <>
           <Head>
-            <title key="title">{training.name}</title>
+            <title key="title">
+              {training.name} | {TAB_TO_TITLE[tab]}
+            </title>
           </Head>
           <TL03 title={training.name} grey>
             {training.date}
@@ -48,30 +57,15 @@ const AdminRatioTraining: React.FC<Props> = ({ slug, tab }) => {
             <PaddedBlock>
               <Column gutter={32} stretch>
                 <RowNav>
-                  <RowNav.Item
-                    selected={tab === 'info'}
-                    select={buildSelect('info')}
-                  >
-                    Информация
-                  </RowNav.Item>
-                  <RowNav.Item
-                    selected={tab === 'promocodes'}
-                    select={buildSelect('promocodes')}
-                  >
-                    Промокоды
-                  </RowNav.Item>
-                  <RowNav.Item
-                    selected={tab === 'ticket-types'}
-                    select={buildSelect('ticket-types')}
-                  >
-                    Виды билетов
-                  </RowNav.Item>
-                  <RowNav.Item
-                    selected={tab === 'tickets'}
-                    select={buildSelect('tickets')}
-                  >
-                    Билеты
-                  </RowNav.Item>
+                  {(Object.keys(TAB_TO_TITLE) as Tab[]).map((t) => (
+                    <RowNav.Item
+                      key={t}
+                      selected={tab === t}
+                      select={buildSelect(t)}
+                    >
+                      {TAB_TO_TITLE[t]}
+                    </RowNav.Item>
+                  ))}
                 </RowNav>
                 <div>
                   {(() => {
