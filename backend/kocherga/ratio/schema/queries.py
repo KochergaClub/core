@@ -1,10 +1,9 @@
 from typing import Optional
+
 from kocherga.graphql import g, helpers
 from kocherga.graphql.permissions import user_perm
 
-from .. import models
-from .. import email
-
+from .. import email, models
 from . import types
 
 c = helpers.Collection()
@@ -74,12 +73,15 @@ class ratioTicketTypes(helpers.BaseFieldWithInput):
         qs = models.TicketType.objects.for_active_trainings()
         if input.get('id'):
             qs = qs.filter(uuid=input['id'])
+        if input.get('training_type'):
+            qs = qs.filter(training__training_type=input['training_type'])
         return qs
 
     # this query is public, it's used in order form
     permissions = []
     input = {
         'id': 'ID',  # get one ticket type by id
+        'training_type': Optional[str],  # filter by training.training_type
     }
     result = g.NNList(types.RatioTicketType)
 

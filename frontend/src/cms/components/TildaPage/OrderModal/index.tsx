@@ -12,6 +12,7 @@ import { RatioOrder_CreatedFragment, RatioTicketTypesDocument } from './queries.
 
 export type OrderParams = {
   ticketTypeId?: string;
+  trainingType?: string;
   showNameFields?: boolean;
   showPromocodeField?: boolean;
 };
@@ -30,6 +31,7 @@ const SpinnerContainer = styled.div`
 
 const OrderModal: React.FC<Props> = ({
   ticketTypeId,
+  trainingType,
   showNameFields = true,
   showPromocodeField = true,
   close,
@@ -40,6 +42,7 @@ const OrderModal: React.FC<Props> = ({
     variables: {
       input: {
         id: ticketTypeId,
+        training_type: trainingType,
       },
     },
   });
