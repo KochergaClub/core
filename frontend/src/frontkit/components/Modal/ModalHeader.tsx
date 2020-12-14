@@ -5,7 +5,7 @@ import styled from 'styled-components';
 import * as colors from '../../colors';
 
 const ModalHeaderEl = styled.header`
-  padding: 6px 10px;
+  padding: 12px 20px;
   border-bottom: 1px solid ${colors.grey[200]};
   font-weight: bold;
   display: flex;

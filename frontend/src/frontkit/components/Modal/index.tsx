@@ -30,9 +30,10 @@ const ModalContent = styled.div`
   transform: translate(-50%, -50%);
   z-index: 1001;
 
-  min-width: 320px;
-  ${deviceMediaQueries.desktop(`
-    min-width: 480px;
+  min-width: 480px;
+  ${deviceMediaQueries.mobile(`
+    min-width: 300px;
+    width: 80%;
   `)}
 
   overflow: auto;

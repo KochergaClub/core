@@ -1,7 +1,7 @@
 import styled from 'styled-components';
 
 const ModalBody = styled.div`
-  padding: 6px 10px;
+  padding: 12px 20px;
   overflow: auto;
 `;
 
