@@ -2,17 +2,17 @@
 
 exports[`Storyshots Components/Modal Basic 1`] = `
 .c4 {
-  padding: 6px 10px;
+  padding: 12px 20px;
   overflow: auto;
 }
 
 .c5 {
-  padding: 6px 10px;
+  padding: 12px 20px;
   border-top: 1px solid hsl(210,12%,92%);
 }
 
 .c2 {
-  padding: 6px 10px;
+  padding: 12px 20px;
   border-bottom: 1px solid hsl(210,12%,92%);
   font-weight: bold;
   display: -webkit-box;
@@ -64,7 +64,7 @@ exports[`Storyshots Components/Modal Basic 1`] = `
   -ms-transform: translate(-50%,-50%);
   transform: translate(-50%,-50%);
   z-index: 1001;
-  min-width: 320px;
+  min-width: 480px;
   overflow: auto;
   max-width: 800px;
   max-height: 100%;
@@ -81,9 +81,10 @@ exports[`Storyshots Components/Modal Basic 1`] = `
   box-shadow: 0 6px 12px rgba(0,0,0,0.3);
 }
 
-@media (min-width:1200px) {
+@media (max-width:639px) {
   .c1 {
-    min-width: 480px;
+    min-width: 300px;
+    width: 80%;
   }
 }
 
@@ -139,17 +140,17 @@ exports[`Storyshots Components/Modal Basic 1`] = `
 
 exports[`Storyshots Components/Modal Large Modal Story 1`] = `
 .c4 {
-  padding: 6px 10px;
+  padding: 12px 20px;
   overflow: auto;
 }
 
 .c5 {
-  padding: 6px 10px;
+  padding: 12px 20px;
   border-top: 1px solid hsl(210,12%,92%);
 }
 
 .c2 {
-  padding: 6px 10px;
+  padding: 12px 20px;
   border-bottom: 1px solid hsl(210,12%,92%);
   font-weight: bold;
   display: -webkit-box;
@@ -201,7 +202,7 @@ exports[`Storyshots Components/Modal Large Modal Story 1`] = `
   -ms-transform: translate(-50%,-50%);
   transform: translate(-50%,-50%);
   z-index: 1001;
-  min-width: 320px;
+  min-width: 480px;
   overflow: auto;
   max-width: 800px;
   max-height: 100%;
@@ -218,9 +219,10 @@ exports[`Storyshots Components/Modal Large Modal Story 1`] = `
   box-shadow: 0 6px 12px rgba(0,0,0,0.3);
 }
 
-@media (min-width:1200px) {
+@media (max-width:639px) {
   .c1 {
-    min-width: 480px;
+    min-width: 300px;
+    width: 80%;
   }
 }
 
