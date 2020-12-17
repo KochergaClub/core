@@ -1,10 +1,14 @@
+fragment AdminTildaPage on TildaPage {
+  page_id
+  title
+  description
+  path
+  imported_dt
+}
+
 query TildaPagesForAdmin {
   tildaPages {
-    page_id
-    title
-    description
-    path
-    imported_dt
+    ...AdminTildaPage
   }
 }
 
@@ -14,8 +18,15 @@ mutation TildaImportAll {
   }
 }
 
-mutation TildaImport($page_id: Int!) {
-  tildaImport(input: { page_id: $page_id }) {
+mutation ImportTildaPage($input: ImportTildaPageInput!) {
+  result: importTildaPage(input: $input) {
+    ...AdminTildaPage
+    ...GenericError
+  }
+}
+
+mutation RemoveTildaPage($input: RemoveTildaPageInput!) {
+  result: removeTildaPage(input: $input) {
     ok
   }
 }

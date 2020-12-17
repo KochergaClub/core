@@ -5,7 +5,7 @@ import { Button } from '~/frontkit';
 import { ConfirmModal } from './ConfirmModal';
 
 interface Props {
-  act: () => Promise<void>;
+  act: () => Promise<unknown>;
   size?: Parameters<typeof Button>[0]['size'];
   kind?: Parameters<typeof Button>[0]['kind'];
   children?: React.ReactNode;

@@ -1,5 +1,7 @@
 export type Maybe<T> = T | null;
 export type Exact<T extends { [key: string]: unknown }> = { [K in keyof T]: T[K] };
+export type MakeOptional<T, K extends keyof T> = Omit<T, K> & { [SubKey in K]?: Maybe<T[SubKey]> };
+export type MakeMaybe<T, K extends keyof T> = Omit<T, K> & { [SubKey in K]: Maybe<T[SubKey]> };
 /** All built-in and custom scalars, mapped to their actual values */
 export type Scalars = {
   ID: string;
@@ -1108,6 +1110,12 @@ export type ImageTemplateSizes = {
   height: Scalars['Int'];
 };
 
+export type ImportTildaPageInput = {
+  page_id: Scalars['Int'];
+};
+
+export type ImportTildaPageResult = TildaPage | GenericError;
+
 export type Importer = {
   __typename?: 'Importer';
   name: Scalars['ID'];
@@ -1315,7 +1323,8 @@ export type Mutation = {
   refreshTelegramChatData: RefreshTelegramChatDataResult;
   postToTelegramChat: PostToTelegramChatResult;
   tildaImportAll?: Maybe<BasicResult>;
-  tildaImport?: Maybe<BasicResult>;
+  importTildaPage: ImportTildaPageResult;
+  removeTildaPage?: Maybe<BasicResult>;
   openviduGenerateRoomToken: OpenviduGenerateRoomTokenResult;
   createCommunityLead: CreateCommunityLeadResult;
   updateCommunityLead: UpdateCommunityLeadResult;
@@ -1844,8 +1853,13 @@ export type MutationPostToTelegramChatArgs = {
 };
 
 
-export type MutationTildaImportArgs = {
-  input: TildaImportInput;
+export type MutationImportTildaPageArgs = {
+  input: ImportTildaPageInput;
+};
+
+
+export type MutationRemoveTildaPageArgs = {
+  input: RemoveTildaPageInput;
 };
 
 
@@ -2892,6 +2906,10 @@ export type RemoveEventFromCommunityLeadInput = {
 
 export type RemoveEventFromCommunityLeadResult = CommunityLead;
 
+export type RemoveTildaPageInput = {
+  page_id: Scalars['Int'];
+};
+
 export type SearchInput = {
   query: Scalars['String'];
   limit?: Maybe<Scalars['Int']>;
@@ -3054,10 +3072,6 @@ export type TildaAsset = {
   __typename?: 'TildaAsset';
   url: Scalars['String'];
   kind: Scalars['String'];
-};
-
-export type TildaImportInput = {
-  page_id: Scalars['Int'];
 };
 
 export type TildaPage = {

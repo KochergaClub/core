@@ -958,6 +958,12 @@ type ImageTemplateSizes {
   height: Int!
 }
 
+input ImportTildaPageInput {
+  page_id: Int!
+}
+
+union ImportTildaPageResult = TildaPage | GenericError
+
 type Importer {
   name: ID!
   last_dt: String
@@ -1172,7 +1178,8 @@ type Mutation {
   refreshTelegramChatData(id: ID!): RefreshTelegramChatDataResult!
   postToTelegramChat(input: PostToTelegramChatInput!): PostToTelegramChatResult!
   tildaImportAll: BasicResult
-  tildaImport(input: TildaImportInput!): BasicResult
+  importTildaPage(input: ImportTildaPageInput!): ImportTildaPageResult!
+  removeTildaPage(input: RemoveTildaPageInput!): BasicResult
   openviduGenerateRoomToken: OpenviduGenerateRoomTokenResult!
   createCommunityLead(input: CreateCommunityLeadInput!): CreateCommunityLeadResult!
   updateCommunityLead(input: UpdateCommunityLeadInput!): UpdateCommunityLeadResult!
@@ -1874,6 +1881,10 @@ input RemoveEventFromCommunityLeadInput {
 
 union RemoveEventFromCommunityLeadResult = CommunityLead
 
+input RemoveTildaPageInput {
+  page_id: Int!
+}
+
 input SearchInput {
   query: String!
   limit: Int
@@ -2012,10 +2023,6 @@ type TelegramChat {
 type TildaAsset {
   url: String!
   kind: String!
-}
-
-input TildaImportInput {
-  page_id: Int!
 }
 
 type TildaPage {

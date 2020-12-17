@@ -72,6 +72,10 @@
       "SlackAccount",
       "WikiAccount"
     ],
+    "ImportTildaPageResult": [
+      "TildaPage",
+      "GenericError"
+    ],
     "KkmRegisterCheckResult": [
       "KkmRegisterCheckOkResult",
       "GenericError"

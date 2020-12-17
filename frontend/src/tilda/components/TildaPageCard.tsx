@@ -1,19 +1,22 @@
 import { parseISO } from 'date-fns';
 import Link from 'next/link';
 import React from 'react';
+import { FaTrash } from 'react-icons/fa';
+import { MdRefresh } from 'react-icons/md';
 
+import { DropdownMenu } from '~/components';
 import { Card } from '~/components/cards';
+import { MutationAction } from '~/components/DropdownMenu';
 import HumanizedDateTime from '~/components/HumanizedDateTime';
-import { A, AsyncButton, Row } from '~/frontkit';
+import { A, Row } from '~/frontkit';
 
-import { useImportMutation } from '../hooks';
-import { TildaPagesForAdminQuery } from '../queries.generated';
+import {
+    ImportTildaPageDocument, RemoveTildaPageDocument, TildaPagesForAdminQuery
+} from '../queries.generated';
 
 const TildaPageCard: React.FC<{
   page: TildaPagesForAdminQuery['tildaPages'][0];
 }> = ({ page }) => {
-  const importMutation = useImportMutation();
-
   return (
     <Card>
       <Row spaced>
@@ -22,17 +25,23 @@ const TildaPageCard: React.FC<{
             <A>{page.title}</A>
           </Link>
           <small>{page.path}</small>
+          <small>#{page.page_id}</small>
         </Row>
-        <AsyncButton
-          act={() =>
-            importMutation({
-              variables: { page_id: page.page_id },
-            })
-          }
-          size="small"
-        >
-          Обновить
-        </AsyncButton>
+        <DropdownMenu>
+          <MutationAction
+            mutation={ImportTildaPageDocument}
+            variables={{ input: { page_id: page.page_id } }}
+            title="Обновить"
+            icon={MdRefresh}
+          />
+          <MutationAction
+            mutation={RemoveTildaPageDocument}
+            variables={{ input: { page_id: page.page_id } }}
+            title="Удалить"
+            icon={FaTrash}
+            refetchQueries={['TildaPagesForAdmin']}
+          />
+        </DropdownMenu>
       </Row>
       <div>{page.description}</div>
       <small>

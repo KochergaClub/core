@@ -1,9 +1,12 @@
+from __future__ import annotations
+
 import logging
+from typing import Optional
 
 logger = logging.getLogger(__name__)
 
-from django.db import models
 from django.conf import settings
+from django.db import models
 from django.utils import timezone
 from wagtail.admin import edit_handlers
 from wagtail.images import edit_handlers as images_edit_handlers
@@ -18,7 +21,7 @@ class TildaPageManager(models.Manager):
         for page in pages:
             self.import_page(page['id'])
 
-    def import_page(self, page_id: int):
+    def import_page(self, page_id: int) -> Optional[TildaPage]:
         # unfortunately, we need both
         page_full_export = api.api_call('getpagefullexport', {'pageid': page_id})
         page_body = api.api_call('getpage', {'pageid': page_id})
@@ -63,6 +66,7 @@ class TildaPageManager(models.Manager):
 
         page.assets.set(assets)
         page.save()
+        return page
 
 
 class Asset(models.Model):

@@ -3,7 +3,7 @@ import React, { useCallback, useState } from 'react';
 import { Button, ControlsFooter, Modal, useNotification } from '~/frontkit';
 
 interface Props {
-  act: () => Promise<void>;
+  act: () => Promise<unknown>;
   close: () => void;
   submitButton: React.ReactNode;
   title?: string;
