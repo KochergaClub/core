@@ -55,6 +55,9 @@ const TildaPage: React.FC<Props> = (props) => {
           if (key === 'name_fields') {
             linkOrderParams.showNameFields = value === '1';
           }
+          if (key === 'city_field') {
+            linkOrderParams.showCityField = value === '1';
+          }
           if (key === 'promocode_field') {
             linkOrderParams.showPromocodeField = value === '1';
           }

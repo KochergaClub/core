@@ -14,6 +14,7 @@ export type OrderParams = {
   ticketTypeId?: string;
   trainingType?: string;
   showNameFields?: boolean;
+  showCityField?: boolean;
   showPromocodeField?: boolean;
 };
 
@@ -34,6 +35,7 @@ const OrderModal: React.FC<Props> = ({
   trainingType,
   showNameFields = true,
   showPromocodeField = true,
+  showCityField = false,
   close,
 }) => {
   const [order, setOrder] = useState<RatioOrder_CreatedFragment | undefined>();
@@ -83,6 +85,7 @@ const OrderModal: React.FC<Props> = ({
         close={close}
         ticketTypes={ticketTypesResults.data?.result}
         showNameFields={showNameFields}
+        showCityField={showCityField}
         showPromocodeField={showPromocodeField}
         onOrderCreated={onOrderCreated}
       />

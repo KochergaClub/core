@@ -20,6 +20,7 @@ interface Props {
   close: () => void;
   showNameFields: boolean;
   showPromocodeField: boolean;
+  showCityField: boolean;
   ticketTypes: RatioTicketType_ForPickerFragment[];
   onOrderCreated: (order: RatioOrder_CreatedFragment) => void;
 }
@@ -34,7 +35,7 @@ export type FormData = {
   email: string;
   first_name: string;
   last_name: string;
-  // city: string;
+  city: string;
   promocode: string;
   terms: boolean;
 };
@@ -60,6 +61,7 @@ const FormOrderModal: React.FC<Props> = ({
   ticketTypes,
   showNameFields,
   showPromocodeField,
+  showCityField,
   onOrderCreated,
 }) => {
   const user = useUser();
@@ -73,6 +75,7 @@ const FormOrderModal: React.FC<Props> = ({
       email: user.email || '',
       first_name: '',
       last_name: '',
+      city: '',
     },
   });
   const watchTicketType = form.watch('ticket_type');
@@ -94,7 +97,7 @@ const FormOrderModal: React.FC<Props> = ({
               first_name: v.first_name,
               last_name: v.last_name,
               promocode: v.promocode,
-              // city: v.city,
+              city: v.city,
               // TODO - payer
             },
           },
@@ -179,21 +182,21 @@ const FormOrderModal: React.FC<Props> = ({
                   />
                 </>
               ) : null}
+              {showCityField ? (
+                <BasicInputField
+                  title="Из какого города вы планируете проходить курс?"
+                  name="city"
+                  placeholder="Вена"
+                  required
+                  form={form}
+                />
+              ) : null}
               {showPromocodeField ? (
                 <PromocodeField
                   form={form}
                   setDiscountedPrice={setDiscountedPrice}
                 />
               ) : null}
-              {/*
-            <BasicInputField
-              title="Из какого города вы планируете проходить курс?"
-              name="city"
-              placeholder="Москва"
-              required
-              form={form}
-            />
-            */}
               <div>
                 <Label>
                   <Row vCentered gutter={8}>
