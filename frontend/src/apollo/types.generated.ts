@@ -2907,7 +2907,7 @@ export type RemoveEventFromCommunityLeadInput = {
 export type RemoveEventFromCommunityLeadResult = CommunityLead;
 
 export type RemoveTildaPageInput = {
-  page_id: Scalars['Int'];
+  id: Scalars['ID'];
 };
 
 export type SearchInput = {
@@ -3076,6 +3076,7 @@ export type TildaAsset = {
 
 export type TildaPage = {
   __typename?: 'TildaPage';
+  id: Scalars['ID'];
   page_id: Scalars['Int'];
   path: Scalars['String'];
   body: Scalars['String'];

@@ -1882,7 +1882,7 @@ input RemoveEventFromCommunityLeadInput {
 union RemoveEventFromCommunityLeadResult = CommunityLead
 
 input RemoveTildaPageInput {
-  page_id: Int!
+  id: ID!
 }
 
 input SearchInput {
@@ -2026,6 +2026,7 @@ type TildaAsset {
 }
 
 type TildaPage {
+  id: ID!
   page_id: Int!
   path: String!
   body: String!

@@ -1,4 +1,4 @@
-from kocherga.graphql import g, helpers, permissions, django_utils
+from kocherga.graphql import django_utils, g, helpers, permissions
 from kocherga.wagtail import graphql_utils as wagtail_utils
 
 from ... import models
@@ -7,6 +7,7 @@ TildaPage = django_utils.DjangoObjectType(
     'TildaPage',
     models.TildaPage,
     db_fields=[
+        'id',
         'page_id',
         'path',
         'body',

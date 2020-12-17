@@ -39,12 +39,12 @@ class importTildaPage(helpers.UnionFieldMixin, helpers.BaseFieldWithInput):
 @c.class_field
 class removeTildaPage(helpers.BaseFieldWithInput):
     def resolve(self, _, info, input):
-        page = models.TildaPage.objects.get(page_id=input['page_id'])
+        page = models.TildaPage.objects.get(id=input['id'])
         page.delete()
         return {'ok': True}
 
     permissions = [permissions.staffonly]
-    input = {'page_id': int}
+    input = {'id': 'ID!'}
     result = basic_types.BasicResult
 
 

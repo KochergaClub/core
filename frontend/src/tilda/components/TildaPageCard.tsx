@@ -36,7 +36,7 @@ const TildaPageCard: React.FC<{
           />
           <MutationAction
             mutation={RemoveTildaPageDocument}
-            variables={{ input: { page_id: page.page_id } }}
+            variables={{ input: { id: page.id } }}
             title="Удалить"
             icon={FaTrash}
             refetchQueries={['TildaPagesForAdmin']}

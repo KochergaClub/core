@@ -14,6 +14,7 @@ query WagtailPageType($path: String, $preview_token: String) {
 
 query TildaPage($path: String!) {
   tildaPage(path: $path) {
+    id
     body
     title
     description
