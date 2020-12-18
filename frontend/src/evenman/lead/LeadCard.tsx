@@ -130,7 +130,7 @@ export const LeadCard: React.FC<Props> = ({ lead }) => {
                 mutation={RemoveEventFromCommunityLeadDocument}
                 variables={{ input: { lead_id: lead.id, event_id: event.id } }}
                 size="small"
-                confirmText="Отвязать событие от лида?"
+                confirmText={`Отвязать событие ${event.title} от лида?`}
               >
                 Отвязать
               </MutationButton>

@@ -5,6 +5,6 @@ export const ControlsFooter = styled.footer`
   flex-direction: row;
   justify-content: flex-end;
   & > * + * {
-    margin-left: 5px;
+    margin-left: 8px;
   }
 `;
