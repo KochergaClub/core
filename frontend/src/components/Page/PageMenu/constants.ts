@@ -48,26 +48,48 @@ const publicMenuItems: Item[] = [
   {
     title: 'Обучение',
     items: [
-      { link: '/rationality', title: 'Рациональность' },
+      {
+        link: '/rationality',
+        title: 'Рациональность',
+        mode: 'external', // this is important! tilda pages can't work with client-side navigation!
+      },
       {
         link: '/rationality/start',
         title: 'Шаблон Смоделируй и начни',
         highlight: true,
-        mode: 'external',
+        mode: 'external', // this is important! tilda pages can't work with client-side navigation!
       },
       {
         link: '/rationality/online',
         title: 'Онлайн-курс Рациональность в деле',
         highlight: true,
+        mode: 'external', // this is important! tilda pages can't work with client-side navigation!
       },
-      { link: '/rationality/corporate', title: 'Для бизнеса' },
-      { link: '/workshop/country', title: 'Выездной воркшоп' },
+      {
+        link: '/rationality/corporate',
+        title: 'Для бизнеса',
+        mode: 'external', // this is important! tilda pages can't work with client-side navigation!
+      },
+      {
+        link: '/workshop/country',
+        title: 'Выездной воркшоп',
+        mode: 'external', // this is important! tilda pages can't work with client-side navigation!
+      },
       {
         link: '/rationality/integration',
         title: 'Интеграция',
+        mode: 'external', // this is important! tilda pages can't work with client-side navigation!
       },
-      { link: '/rationality/dojo', title: 'Додзё' },
-      { link: '/3week', title: 'Трёхнедельный курс' },
+      {
+        link: '/rationality/dojo',
+        title: 'Додзё',
+        mode: 'external', // this is important! tilda pages can't work with client-side navigation!
+      },
+      {
+        link: '/3week',
+        title: 'Трёхнедельный курс',
+        mode: 'external', // this is important! tilda pages can't work with client-side navigation!
+      },
     ],
   },
   {
@@ -86,7 +108,7 @@ const publicMenuItems: Item[] = [
     title: 'Мета',
     items: [
       { link: '/faq', title: 'F.A.Q.' },
-      { link: '/patreon', title: 'Помочь' },
+      { link: '/patreon', title: 'Помочь', mode: 'external' },
       { link: '/#contacts', title: 'Контакты' },
     ],
   },
