@@ -45,6 +45,10 @@ const FullScreenContainerInner = styled.div`
   overflow: auto;
 `;
 
+const BasicContainerInner = styled.div`
+  min-height: 65vh;
+`;
+
 const Whitespace = styled.div`
   height: 80px;
 `;
@@ -73,7 +77,7 @@ const Page: PageType = (props) => {
     return (
       <>
         {menuEl}
-        {props.children}
+        <BasicContainerInner>{props.children}</BasicContainerInner>
         {showWhitespace && <Whitespace />}
         {footerEl}
       </>
