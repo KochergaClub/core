@@ -1,4 +1,5 @@
 import React, { useCallback, useMemo, useState } from 'react';
+import { FaPlus, FaTrash } from 'react-icons/fa';
 import { Path, Transforms } from 'slate';
 import {
     Editable, ReactEditor, RenderElementProps, RenderLeafProps, Slate, useEditor, withReact
@@ -9,6 +10,7 @@ import { DropdownMenu } from '~/components';
 import { Action } from '~/components/DropdownMenu';
 import { Column, fonts, HR } from '~/frontkit';
 
+import { RichEditorContext, useRichEditorReducer } from './contexts';
 import { FloatingToolbar } from './FloatingToolbar';
 import { createKochergaEditor, KochergaEditor, Value } from './model';
 
@@ -50,6 +52,7 @@ const BlockWrapper: React.FC<{ props: RenderElementProps }> = ({
               Transforms.removeNodes(editor, { at: path });
             }}
             title="Удалить"
+            icon={FaTrash}
           />
           <Action
             syncAct={() => {
@@ -67,6 +70,7 @@ const BlockWrapper: React.FC<{ props: RenderElementProps }> = ({
               );
             }}
             title="Черта"
+            icon={FaPlus}
           />
         </DropdownMenu>
       </div>
@@ -107,6 +111,7 @@ const renderLeaf = (props: RenderLeafProps): React.ReactElement => {
 
 export const RichEditor: React.FC = () => {
   const editor = useMemo(() => withReact(createKochergaEditor()), []);
+  const [state, dispatch] = useRichEditorReducer();
 
   const [value, setValue] = useState<Value>([
     {
@@ -134,24 +139,31 @@ export const RichEditor: React.FC = () => {
     [editor]
   );
 
+  const decorate = useCallback(() => {
+    return [];
+  }, [state.lockedSelection]);
+
   return (
     <Column gutter={16} stretch>
-      <Slate
-        editor={editor}
-        value={value}
-        onChange={(v) => {
-          setValue(v as Value);
-        }}
-      >
-        <div>
-          <FloatingToolbar />
-          <Editable
-            renderElement={renderElement}
-            renderLeaf={renderLeaf}
-            onKeyDown={onKeyDown}
-          />
-        </div>
-      </Slate>
+      <RichEditorContext.Provider value={{ state, dispatch }}>
+        <Slate
+          editor={editor}
+          value={value}
+          onChange={(v) => {
+            setValue(v as Value);
+          }}
+        >
+          <div>
+            <FloatingToolbar />
+            <Editable
+              decorate={decorate}
+              renderElement={renderElement}
+              renderLeaf={renderLeaf}
+              onKeyDown={onKeyDown}
+            />
+          </div>
+        </Slate>
+      </RichEditorContext.Provider>
       <pre style={{ fontSize: fonts.sizes.XS }}>
         {JSON.stringify(value, null, 2)}
       </pre>
