@@ -1,4 +1,4 @@
-import React, { useCallback, useState } from 'react';
+import React, { CSSProperties, useCallback, useState } from 'react';
 import { Controller, FieldError, useForm } from 'react-hook-form';
 import Select from 'react-select';
 import styled from 'styled-components';
@@ -152,6 +152,19 @@ const FormOrderModal: React.FC<Props> = ({
                   as={Select}
                   placeholder="Выбрать..."
                   options={ticketTypes.map(ticketTypeToSelectOption)}
+                  menuPortalTarget={
+                    typeof document === 'undefined' ? undefined : document.body // document can be undefined in SSR
+                  }
+                  styles={{
+                    menuPortal: (provided: CSSProperties) => ({
+                      ...provided,
+                      zIndex: 1100,
+                    }),
+                    container: (provided: CSSProperties) => ({
+                      ...provided,
+                      width: '100%',
+                    }),
+                  }}
                   control={form.control}
                   rules={{ required: true }}
                 />
