@@ -62,14 +62,14 @@ const SetNames: React.FC<Props> = ({ user }) => {
 
   return (
     <HeadedFragment title="Настроить имя">
-      <Column centered gutter={16}>
+      <Column gutter={16}>
         <HintCard>
           По умолчанию мы не покажем ваши имя и фамилию никому, пока вы не
           зайдёте в какое-то онлайн-мероприятие или не поучаствуете в прочих
           социальных активностях на платформе Кочерги.
         </HintCard>
-        <Column centered {...hotkeys}>
-          <Column centered>
+        <Column {...hotkeys} gutter={16}>
+          <Column>
             <Label>Имя:</Label>
             <Input
               id="first_name"
@@ -80,7 +80,7 @@ const SetNames: React.FC<Props> = ({ user }) => {
               }}
             />
           </Column>
-          <Column centered>
+          <Column>
             <Label>Фамилия:</Label>
             <Input
               id="last_name"

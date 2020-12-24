@@ -58,13 +58,13 @@ const SetPassword: React.FC = () => {
 
   return (
     <HeadedFragment title="Сменить или установить пароль">
-      <Column centered gutter={16}>
+      <Column gutter={16}>
         <HintCard>
           Если у вас не был настроен пароль, то оставьте поле «Старый пароль»
           пустым.
         </HintCard>
-        <Column centered {...hotkeys}>
-          <Column centered>
+        <Column {...hotkeys} gutter={16}>
+          <Column>
             <Label>Старый пароль (если есть):</Label>
             <Input
               type="password"
@@ -74,7 +74,7 @@ const SetPassword: React.FC = () => {
               onChange={(e) => setOldPassword(e.currentTarget.value)}
             />
           </Column>
-          <Column centered>
+          <Column>
             <Label>Новый пароль:</Label>
             <Input
               type="password"

@@ -65,7 +65,7 @@ const InterestCheckbox: React.FC<InterestProps> = ({ interest }) => {
   ]);
 
   return (
-    <Row spaced>
+    <Row spaced gutter={8}>
       <div>{interest.name}</div>
       <Toggle
         checked={interest.subscribed || false}
@@ -113,7 +113,7 @@ const EmailSettings: React.FC<Props> = ({ email_subscription }) => {
 
   return (
     <HeadedFragment title="Рассылки">
-      <Column centered gutter={20}>
+      <Column gutter={20}>
         {(() => {
           switch (email_subscription.status) {
             case 'unsubscribed':
@@ -141,7 +141,7 @@ const EmailSettings: React.FC<Props> = ({ email_subscription }) => {
               );
             case 'subscribed':
               return (
-                <Column centered gutter={20}>
+                <Column gutter={20}>
                   {email_subscription.interests ? (
                     <InterestList interests={email_subscription.interests} />
                   ) : null}
