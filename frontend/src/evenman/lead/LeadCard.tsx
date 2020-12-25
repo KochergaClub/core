@@ -1,7 +1,11 @@
 import { parseISO } from 'date-fns';
 import Link from 'next/link';
 import React from 'react';
-import { FaEdit, FaLink, FaTrash } from 'react-icons/fa';
+import { FaEdit, FaLink, FaTrash, FaUserCheck, FaUserMinus } from 'react-icons/fa';
+import { MdInfo } from 'react-icons/md';
+import styled from 'styled-components';
+
+import Tippy from '@tippyjs/react';
 
 import { CommunityLeadStatus } from '~/apollo/types.generated';
 import { useUser } from '~/common/hooks';
@@ -9,7 +13,7 @@ import { DropdownMenu, HumanizedDateTime, Markdown, MutationButton } from '~/com
 import { CardSection } from '~/components/cards';
 import { ModalAction, MutationAction } from '~/components/DropdownMenu';
 import { UserLink } from '~/components/UserLink';
-import { A, Badge, Column, Row } from '~/frontkit';
+import { A, Badge, colors, Column, Row } from '~/frontkit';
 
 import { evenmanEventRoute } from '../routes';
 import { AddEventToLeadModal } from './AddEventToLeadModal';
@@ -34,6 +38,50 @@ type Props = {
   lead: EvenmanLeadFragment;
 };
 
+const MoreInfoContainer = styled.div`
+  display: flex;
+  color: ${colors.grey[500]};
+  cursor: pointer;
+  &:hover {
+    color: black;
+  }
+`;
+
+const LeadMoreInfo: React.FC<Props> = ({ lead }) => {
+  return (
+    <Tippy
+      content={
+        <Column>
+          <small>
+            <Row>
+              <div>Создан:</div>
+              <HumanizedDateTime date={parseISO(lead.created)} />
+            </Row>
+          </small>
+          <small>
+            <Row>
+              <div>Последнее обновление:</div>
+              <HumanizedDateTime date={parseISO(lead.updated)} />
+            </Row>
+          </small>
+          {lead.created_by && (
+            <small>
+              <Row>
+                <div>Кем создан:</div>
+                <UserLink user={lead.created_by} />
+              </Row>
+            </small>
+          )}
+        </Column>
+      }
+    >
+      <MoreInfoContainer>
+        <MdInfo />
+      </MoreInfoContainer>
+    </Tippy>
+  );
+};
+
 export const LeadCard: React.FC<Props> = ({ lead }) => {
   const user = useUser();
   return (
@@ -45,17 +93,10 @@ export const LeadCard: React.FC<Props> = ({ lead }) => {
           <ModalAction title="Редактировать" icon={FaEdit}>
             {({ close }) => <EditLeadModal close={close} lead={lead} />}
           </ModalAction>
-          <MutationAction
-            title="Удалить"
-            icon={FaTrash}
-            mutation={DeleteEvenmanLeadDocument}
-            variables={{ id: lead.id }}
-            refetchQueries={['EvenmanLeads']}
-            confirmText={`Удалить ${lead.name}?`}
-          />
           {lead.curated_by?.id !== user.id ? (
             <MutationAction
               title="Стать куратором"
+              icon={FaUserCheck}
               mutation={BecomeEvenmanLeadCuratorDocument}
               refetchQueries={['EvenmanLeads']}
               variables={{ id: lead.id }}
@@ -64,6 +105,7 @@ export const LeadCard: React.FC<Props> = ({ lead }) => {
           {lead.curated_by ? (
             <MutationAction
               title="Очистить куратора"
+              icon={FaUserMinus}
               mutation={ClearEvenmanLeadCuratorDocument}
               refetchQueries={['EvenmanLeads']}
               variables={{ id: lead.id }}
@@ -74,29 +116,18 @@ export const LeadCard: React.FC<Props> = ({ lead }) => {
               {({ close }) => <AddEventToLeadModal close={close} lead={lead} />}
             </ModalAction>
           }
+          <MutationAction
+            title="Удалить"
+            icon={FaTrash}
+            mutation={DeleteEvenmanLeadDocument}
+            variables={{ id: lead.id }}
+            refetchQueries={['EvenmanLeads']}
+            confirmText={`Удалить ${lead.name}?`}
+          />
         </DropdownMenu>
+        <LeadMoreInfo lead={lead} />
       </Row>
       <Column>
-        <small>
-          <Row>
-            <div>Создан:</div>
-            <HumanizedDateTime date={parseISO(lead.created)} />
-          </Row>
-        </small>
-        <small>
-          <Row>
-            <div>Последнее обновление:</div>
-            <HumanizedDateTime date={parseISO(lead.updated)} />
-          </Row>
-        </small>
-        {lead.created_by && (
-          <small>
-            <Row>
-              <div>Кем создан:</div>
-              <UserLink user={lead.created_by} />
-            </Row>
-          </small>
-        )}
         {lead.curated_by || lead.status !== CommunityLeadStatus.Inactive ? (
           <small>
             <Row>
