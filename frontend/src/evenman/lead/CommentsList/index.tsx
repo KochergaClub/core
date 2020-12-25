@@ -1,13 +1,14 @@
 import { parseISO } from 'date-fns';
 import React from 'react';
-import { FaRegComment } from 'react-icons/fa';
+import { FaEdit, FaRegComment, FaTrash } from 'react-icons/fa';
+import styled from 'styled-components';
 
 import { TypedDocumentNode } from '@apollo/client';
 
 import { SmartMutationResult } from '~/common/hooks';
-import { ButtonWithModal, HumanizedDateTime, Markdown } from '~/components';
+import { ButtonWithModal, DropdownMenu, HumanizedDateTime, Markdown } from '~/components';
+import { ModalAction, SmartMutationAction } from '~/components/DropdownMenu';
 import { SmartMutationModal } from '~/components/forms/SmartMutationModal';
-import { SmartMutationButton } from '~/components/SmartMutationButton';
 import { UserLink } from '~/components/UserLink';
 import { colors, Column, Row } from '~/frontkit';
 
@@ -20,67 +21,75 @@ type CommentProps = {
   comment: CommentFragment;
 };
 
+const CommentIcon = styled(FaRegComment)`
+  color: ${colors.grey[500]};
+  margin-top: 4px;
+  flex-shrink: 0;
+`;
+
 const Comment: React.FC<CommentProps> = ({ comment, commentable }) => {
   return (
     <div>
       <Row gutter={8}>
-        <FaRegComment color={colors.grey[500]} />
+        <CommentIcon />
         <div>
           <Row vCentered gutter={8}>
             <strong>
               <UserLink user={comment.author} />
             </strong>
+            <span>·</span>
             <small>
               <em>
-                (<HumanizedDateTime date={parseISO(comment.created)} />)
+                <HumanizedDateTime date={parseISO(comment.created)} />
               </em>
             </small>
-            <SmartMutationButton
-              mutation={DeleteCommentDocument}
-              variables={{ id: comment.id }}
-              expectedTypename="BasicResult"
-              size="small"
-              confirmText="Удалить комментарий?"
-              updateCache={(cache) => {
-                cache.modify({
-                  id: cache.identify(commentable),
-                  fields: {
-                    comments(existingCommentRefs, { readField }) {
-                      return existingCommentRefs.filter(
-                        (commentRef: any) =>
-                          comment.id !== readField('id', commentRef)
-                      );
-                    },
-                  },
-                });
-              }}
-            >
-              Удалить
-            </SmartMutationButton>
-            <ButtonWithModal title="Редактировать" size="small">
-              {({ close }) => (
-                <SmartMutationModal
-                  close={close}
-                  title="Редактирование комментария"
-                  submitLabel="Сохранить"
-                  shape={
-                    [
-                      {
-                        name: 'text',
-                        type: 'markdown',
-                        title: 'Текст',
+            <DropdownMenu>
+              <ModalAction title="Редактировать" icon={FaEdit}>
+                {({ close }) => (
+                  <SmartMutationModal
+                    close={close}
+                    title="Редактирование комментария"
+                    submitLabel="Сохранить"
+                    shape={
+                      [
+                        {
+                          name: 'text',
+                          type: 'markdown',
+                          title: 'Текст',
+                        },
+                      ] as const
+                    }
+                    defaultValues={{ text: comment.text }}
+                    valuesToVariables={(v) => ({
+                      input: { id: comment.id, text: v.text },
+                    })}
+                    expectedTypename="Comment"
+                    mutation={EditCommentDocument}
+                  />
+                )}
+              </ModalAction>
+              <SmartMutationAction
+                mutation={DeleteCommentDocument}
+                variables={{ id: comment.id }}
+                expectedTypename="BasicResult"
+                confirmText="Удалить комментарий?"
+                title="Удалить"
+                icon={FaTrash}
+                updateCache={(cache) => {
+                  cache.modify({
+                    id: cache.identify(commentable),
+                    fields: {
+                      comments(existingCommentRefs, { readField }) {
+                        return existingCommentRefs.filter(
+                          (commentRef: any) =>
+                            comment.id !== readField('id', commentRef)
+                        );
                       },
-                    ] as const
-                  }
-                  defaultValues={{ text: comment.text }}
-                  valuesToVariables={(v) => ({
-                    input: { id: comment.id, text: v.text },
-                  })}
-                  expectedTypename="Comment"
-                  mutation={EditCommentDocument}
-                />
-              )}
-            </ButtonWithModal>
+                    },
+                  });
+                }}
+              />
+            </DropdownMenu>
           </Row>
           <Markdown source={comment.text} />
         </div>

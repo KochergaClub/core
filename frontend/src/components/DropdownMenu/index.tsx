@@ -16,6 +16,7 @@ export { default as LinkAction } from './LinkAction';
 export { default as ModalAction } from './ModalAction';
 export { MutationAction } from './MutationAction';
 export { default as NextLinkAction } from './NextLinkAction';
+export { SmartMutationAction } from './SmartMutationAction';
 
 const Container = styled.div`
   white-space: nowrap;
@@ -68,7 +69,7 @@ interface Props {
 }
 
 const DropdownMenu: React.FC<Props> = ({
-  placement,
+  placement = 'bottom-start',
   title,
   children,
   render,
@@ -104,7 +105,7 @@ const DropdownMenu: React.FC<Props> = ({
     null
   );
   const { styles, attributes } = usePopper(referenceElement, popperElement, {
-    placement: placement || 'bottom-end',
+    placement,
   });
 
   const flipExpandWithPrevent = useCallback(
