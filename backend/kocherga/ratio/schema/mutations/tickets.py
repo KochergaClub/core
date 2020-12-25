@@ -13,17 +13,24 @@ c = helpers.Collection()
 class ratioAddTicket(helpers.BaseFieldWithInput):
     def resolve(self, _, info, input):
         training_id = input.pop('training')
-
         training = models.Training.objects.get(pk=training_id)
+
+        ticket_type_id = input.pop('ticket_type', None)
+        ticket_type = None
+        if ticket_type_id:
+            ticket_type = models.TicketType.objects.get(uuid=ticket_type_id)
+
         ticket = models.Ticket.objects.create(
             **input,
             training=training,
+            ticket_type=ticket_type,
         )
         return ticket
 
     permissions = [user_perm('ratio.manage')]
     input = {
-        'training': 'ID!',
+        'training': 'ID!',  # TODO - remove and derive from ticket_type
+        'ticket_type': 'ID',  # TODO - required
         'email': str,
         'first_name': Optional[str],
         'last_name': Optional[str],
@@ -48,6 +55,11 @@ class updateRatioTicket(helpers.BaseFieldWithInput):
             if input.get(field) is not None:
                 setattr(ticket, field, input[field])
 
+        if input.get('ticket_type') is not None:
+            ticket_type_id = input['ticket_type']
+            ticket_type = models.TicketType.objects.get(uuid=ticket_type_id)
+            ticket.ticket_type = ticket_type
+
         ticket.full_clean()
         ticket.save()
         return ticket
@@ -58,6 +70,7 @@ class updateRatioTicket(helpers.BaseFieldWithInput):
         'first_name': Optional[str],
         'last_name': Optional[str],
         'notion_link': Optional[str],
+        'ticket_type': 'ID',
     }
 
     result = g.NN(types.RatioTicket)

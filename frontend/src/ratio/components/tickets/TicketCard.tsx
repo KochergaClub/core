@@ -1,11 +1,12 @@
 import { parseISO } from 'date-fns';
 import Link from 'next/link';
 import React from 'react';
-import { FaRegMoneyBillAlt, FaTicketAlt, FaUserAlt } from 'react-icons/fa';
+import { FaEdit, FaRegMoneyBillAlt, FaTicketAlt, FaUserAlt } from 'react-icons/fa';
 import { MdEmail } from 'react-icons/md';
 
-import { HumanizedDateTime } from '~/components';
+import { DropdownMenu, HumanizedDateTime } from '~/components';
 import { Card, CardSection } from '~/components/cards';
+import { ModalAction } from '~/components/DropdownMenu';
 import { MutationModalButton } from '~/components/forms';
 import NotionIcon from '~/components/icons/NotionIcon';
 import { A, Badge, Column, Row } from '~/frontkit';
@@ -14,6 +15,7 @@ import { adminTicketRoute, adminTrainingRoute } from '~/ratio/routes';
 import RowWithIcon from '../../../components/RowWithIcon';
 import { RatioPaymentAddDocument, RatioTicketFragment } from '../../queries.generated';
 import PaymentItem from '../PaymentItem';
+import { EditTicketModal } from './EditTicketModal';
 import {
     RatioTicketWithTrainingFragment, SetRatioTicketNotionLinkDocument
 } from './queries.generated';
@@ -177,6 +179,16 @@ const TicketCard: React.FC<Props> = ({ ticket }) => {
               </small>
             </A>
           </Link>
+
+          {'training' in ticket ? (
+            <DropdownMenu>
+              <ModalAction title="Редактировать" icon={FaEdit}>
+                {({ close }) => (
+                  <EditTicketModal close={close} ticket={ticket} />
+                )}
+              </ModalAction>
+            </DropdownMenu>
+          ) : null}
         </Row>
         <RowWithIcon icon={FaTicketAlt} hint="Тип билета">
           <TicketTrainingAndType ticket={ticket} />
@@ -200,7 +212,6 @@ const TicketCard: React.FC<Props> = ({ ticket }) => {
         <CardSection title="Платежи">
           <Column stretch>
             <Row vCentered>
-              {/* <strong>Платежи</strong> */}
               <CreatePaymentButton ticket_id={ticket.id} />
             </Row>
             {ticket.payments.map((payment) => (

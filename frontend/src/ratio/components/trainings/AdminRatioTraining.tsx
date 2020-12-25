@@ -10,7 +10,7 @@ import { Column, RowNav } from '~/frontkit';
 import { adminTrainingTabRoute } from '~/ratio/routes';
 
 import { TicketTypesSection } from '../ticket-types/TicketTypesSection';
-import { TrainingTicketsSection } from '../TrainingTicketsSection';
+import { TrainingTicketsSection } from '../tickets/TrainingTicketsSection';
 import { RatioTrainingBySlugDocument } from './queries.generated';
 import { TrainingActions } from './TrainingActions';
 import { TrainingInfo } from './TrainingInfo';

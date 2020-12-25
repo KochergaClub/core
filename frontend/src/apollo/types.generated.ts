@@ -2482,6 +2482,7 @@ export type RatioActivity = {
 
 export type RatioAddTicketInput = {
   training: Scalars['ID'];
+  ticket_type?: Maybe<Scalars['ID']>;
   email: Scalars['String'];
   first_name?: Maybe<Scalars['String']>;
   last_name?: Maybe<Scalars['String']>;
@@ -3116,6 +3117,7 @@ export type UpdateRatioTicketInput = {
   first_name?: Maybe<Scalars['String']>;
   last_name?: Maybe<Scalars['String']>;
   notion_link?: Maybe<Scalars['String']>;
+  ticket_type?: Maybe<Scalars['ID']>;
 };
 
 export type UpdateRatioTicketTypeInput = {

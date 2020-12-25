@@ -191,6 +191,19 @@ export type RatioAddTicketMutation = (
   ) }
 );
 
+export type UpdateRatioTicketMutationVariables = Types.Exact<{
+  params: Types.UpdateRatioTicketInput;
+}>;
+
+
+export type UpdateRatioTicketMutation = (
+  { __typename: 'Mutation' }
+  & { updateRatioTicket: (
+    { __typename: 'RatioTicket' }
+    & RatioTicketFragment
+  ) }
+);
+
 export type RatioPaymentAddMutationVariables = Types.Exact<{
   input: Types.RatioPaymentAddInput;
 }>;
@@ -327,6 +340,8 @@ export const RatioTrainersDocument: DocumentNode<RatioTrainersQuery, RatioTraine
 export const RatioTrainingEmailPrototypeDocument: DocumentNode<RatioTrainingEmailPrototypeQuery, RatioTrainingEmailPrototypeQueryVariables> = dedupeFragments({ "kind": "Document", "definitions": [{ "kind": "OperationDefinition", "operation": "query", "name": { "kind": "Name", "value": "RatioTrainingEmailPrototype" }, "variableDefinitions": [{ "kind": "VariableDefinition", "variable": { "kind": "Variable", "name": { "kind": "Name", "value": "training_id" } }, "type": { "kind": "NonNullType", "type": { "kind": "NamedType", "name": { "kind": "Name", "value": "ID" } } }, "directives": [] }, { "kind": "VariableDefinition", "variable": { "kind": "Variable", "name": { "kind": "Name", "value": "type" } }, "type": { "kind": "NonNullType", "type": { "kind": "NamedType", "name": { "kind": "Name", "value": "String" } } }, "directives": [] }], "directives": [], "selectionSet": { "kind": "SelectionSet", "selections": [{ "kind": "Field", "alias": { "kind": "Name", "value": "content" }, "name": { "kind": "Name", "value": "ratioTrainingEmailPrototype" }, "arguments": [{ "kind": "Argument", "name": { "kind": "Name", "value": "training_id" }, "value": { "kind": "Variable", "name": { "kind": "Name", "value": "training_id" } } }, { "kind": "Argument", "name": { "kind": "Name", "value": "type" }, "value": { "kind": "Variable", "name": { "kind": "Name", "value": "type" } } }], "directives": [] }] } }] });
 
 export const RatioAddTicketDocument: DocumentNode<RatioAddTicketMutation, RatioAddTicketMutationVariables> = dedupeFragments({ "kind": "Document", "definitions": [{ "kind": "OperationDefinition", "operation": "mutation", "name": { "kind": "Name", "value": "RatioAddTicket" }, "variableDefinitions": [{ "kind": "VariableDefinition", "variable": { "kind": "Variable", "name": { "kind": "Name", "value": "params" } }, "type": { "kind": "NonNullType", "type": { "kind": "NamedType", "name": { "kind": "Name", "value": "RatioAddTicketInput" } } }, "directives": [] }], "directives": [], "selectionSet": { "kind": "SelectionSet", "selections": [{ "kind": "Field", "name": { "kind": "Name", "value": "ratioAddTicket" }, "arguments": [{ "kind": "Argument", "name": { "kind": "Name", "value": "input" }, "value": { "kind": "Variable", "name": { "kind": "Name", "value": "params" } } }], "directives": [], "selectionSet": { "kind": "SelectionSet", "selections": [{ "kind": "FragmentSpread", "name": { "kind": "Name", "value": "RatioTicket" }, "directives": [] }] } }] } }, ...RatioTicketFragmentDoc.definitions] });
+
+export const UpdateRatioTicketDocument: DocumentNode<UpdateRatioTicketMutation, UpdateRatioTicketMutationVariables> = dedupeFragments({ "kind": "Document", "definitions": [{ "kind": "OperationDefinition", "operation": "mutation", "name": { "kind": "Name", "value": "UpdateRatioTicket" }, "variableDefinitions": [{ "kind": "VariableDefinition", "variable": { "kind": "Variable", "name": { "kind": "Name", "value": "params" } }, "type": { "kind": "NonNullType", "type": { "kind": "NamedType", "name": { "kind": "Name", "value": "UpdateRatioTicketInput" } } }, "directives": [] }], "directives": [], "selectionSet": { "kind": "SelectionSet", "selections": [{ "kind": "Field", "name": { "kind": "Name", "value": "updateRatioTicket" }, "arguments": [{ "kind": "Argument", "name": { "kind": "Name", "value": "input" }, "value": { "kind": "Variable", "name": { "kind": "Name", "value": "params" } } }], "directives": [], "selectionSet": { "kind": "SelectionSet", "selections": [{ "kind": "FragmentSpread", "name": { "kind": "Name", "value": "RatioTicket" }, "directives": [] }] } }] } }, ...RatioTicketFragmentDoc.definitions] });
 
 export const RatioPaymentAddDocument: DocumentNode<RatioPaymentAddMutation, RatioPaymentAddMutationVariables> = dedupeFragments({ "kind": "Document", "definitions": [{ "kind": "OperationDefinition", "operation": "mutation", "name": { "kind": "Name", "value": "RatioPaymentAdd" }, "variableDefinitions": [{ "kind": "VariableDefinition", "variable": { "kind": "Variable", "name": { "kind": "Name", "value": "input" } }, "type": { "kind": "NonNullType", "type": { "kind": "NamedType", "name": { "kind": "Name", "value": "RatioPaymentAddInput" } } }, "directives": [] }], "directives": [], "selectionSet": { "kind": "SelectionSet", "selections": [{ "kind": "Field", "name": { "kind": "Name", "value": "ratioPaymentAdd" }, "arguments": [{ "kind": "Argument", "name": { "kind": "Name", "value": "input" }, "value": { "kind": "Variable", "name": { "kind": "Name", "value": "input" } } }], "directives": [], "selectionSet": { "kind": "SelectionSet", "selections": [{ "kind": "Field", "name": { "kind": "Name", "value": "payment" }, "arguments": [], "directives": [], "selectionSet": { "kind": "SelectionSet", "selections": [{ "kind": "FragmentSpread", "name": { "kind": "Name", "value": "RatioPayment" }, "directives": [] }] } }] } }] } }, ...RatioPaymentFragmentDoc.definitions] });
 

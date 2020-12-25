@@ -1480,6 +1480,7 @@ type RatioActivity {
 
 input RatioAddTicketInput {
   training: ID!
+  ticket_type: ID
   email: String!
   first_name: String
   last_name: String
@@ -2060,6 +2061,7 @@ input UpdateRatioTicketInput {
   first_name: String
   last_name: String
   notion_link: String
+  ticket_type: ID
 }
 
 input UpdateRatioTicketTypeInput {

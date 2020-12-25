@@ -192,6 +192,12 @@ mutation RatioAddTicket($params: RatioAddTicketInput!) {
   }
 }
 
+mutation UpdateRatioTicket($params: UpdateRatioTicketInput!) {
+  updateRatioTicket(input: $params) {
+    ...RatioTicket
+  }
+}
+
 mutation RatioPaymentAdd($input: RatioPaymentAddInput!) {
   ratioPaymentAdd(input: $input) {
     payment {
