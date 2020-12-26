@@ -3,8 +3,8 @@ import styled from 'styled-components';
 import { colors, Column, Label } from '~/frontkit';
 
 export const Card = styled.div`
-  border: 1px solid ${colors.grey[200]};
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
+  border-radius: 4px;
   padding: 12px 20px;
 `;
 
