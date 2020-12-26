@@ -1,7 +1,7 @@
 import { useMutation } from '@apollo/client';
-import { Row } from '~/frontkit';
 
 import ImageEditor from '~/components/images/ImageEditor';
+import { Row } from '~/frontkit';
 
 import { EvenmanPrototypeSetImageDocument, EventsPrototypeFragment } from '../queries.generated';
 
@@ -22,7 +22,7 @@ const Image: React.FC<Props> = ({ prototype }) => {
   };
 
   return (
-    <Row centered>
+    <Row>
       <ImageEditor
         onChange={onChange}
         image={prototype.image?.original_image || undefined}

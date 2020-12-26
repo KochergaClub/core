@@ -14,7 +14,7 @@ const EventImageWidgetDefault: React.FC<Props> = ({ event }) => {
   const update = useUpdateMutation(event.id);
 
   return (
-    <Column centered gutter={0}>
+    <Column gutter={2}>
       <header>Основная картинка:</header>
       <ImageEditorWithCollectionFromSettings
         onChange={(image_id) => update({ image_id })}

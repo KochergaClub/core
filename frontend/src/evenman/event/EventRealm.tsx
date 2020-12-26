@@ -38,7 +38,7 @@ const RealmDetails: React.FC<Props> = ({ event }) => {
       );
     case 'online':
       return (
-        <Row>
+        <Row vCentered>
           <EditableLink
             value={event.zoom_link}
             title="Zoom"
@@ -65,7 +65,7 @@ const EventRealm: React.FC<Props> = ({ event }) => {
   const [updateMutation, { loading }] = useMutation(EvenmanUpdateDocument);
 
   return (
-    <Row gutter={20}>
+    <Column gutter={16}>
       <Column>
         {[
           { value: 'offline', title: 'Офлайн' },
@@ -96,7 +96,7 @@ const EventRealm: React.FC<Props> = ({ event }) => {
         ))}
       </Column>
       <RealmDetails event={event} />
-    </Row>
+    </Column>
   );
 };
 

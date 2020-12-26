@@ -1,18 +1,21 @@
 import styled from 'styled-components';
 
-import { colors, RichText } from '~/frontkit';
+import { colors, fonts, RichText } from '~/frontkit';
 
 export const Header = styled.header`
-  font-size: 1.2rem;
-  text-align: center;
-  margin: 12px 0;
-  padding: 4px 8px;
-  background-color: ${colors.grey[100]};
+  /* font-size: ${fonts.sizes.S}; */
+  font-weight: bold;
+  color: ${colors.grey[600]};
+  margin-top: 20px;
+  margin-bottom: 12px;
+  padding: 4px 0;
+  border-bottom: 2px solid ${colors.grey[200]};
 `;
 
 export const IconLink = styled.a`
-  color: ${colors.grey[700]};
-  font-size: 0.9em;
+  display: flex; // helps with vertical positioning
+  color: ${colors.grey[500]};
+  /* font-size: 0.9em; */
   text-decoration: none;
   &:hover {
     color: black;

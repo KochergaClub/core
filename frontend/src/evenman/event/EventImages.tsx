@@ -12,7 +12,7 @@ const EventImages: React.FC<Props> = ({ event }) => {
   if (event.event_type !== 'public') return null;
 
   return (
-    <Row centered gutter={12}>
+    <Row gutter={32}>
       <EventImageWidgetDefault event={event} />
       <EventImageWidgetVk event={event} />
     </Row>

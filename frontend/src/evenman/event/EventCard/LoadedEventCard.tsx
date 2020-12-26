@@ -1,26 +1,22 @@
 import { isAfter } from 'date-fns';
 
-import { Column, Row } from '~/frontkit';
-
-import { Header, MutedSpan } from '../../components/ui';
-import { Card, CardHeader, CardBody } from '../../components/Card';
+import { Column } from '~/frontkit';
 
 import EventShapeDescription from '../../common/EventShapeDescription';
-import EventShapeTimingDescription from '../../common/EventShapeTimingDescription';
 import EventShapeProjectLink from '../../common/EventShapeProjectLink';
-
-import EventImages from '../EventImages';
-import EventVisitors from '../EventVisitors';
+import EventShapeTimingDescription from '../../common/EventShapeTimingDescription';
+import { Card, CardBody, CardHeader } from '../../components/Card';
+import { Header, MutedSpan } from '../../components/ui';
 import EventAnnounce from '../EventAnnounce';
 import EventHeader from '../EventHeader';
-import EventRealm from '../EventRealm';
+import EventImages from '../EventImages';
 import EventPricingType from '../EventPricingType';
-
+import EventRealm from '../EventRealm';
+import EventVisitors from '../EventVisitors';
+import { useUpdateMutation } from '../hooks';
+import { EvenmanEvent_DetailsFragment } from '../queries.generated';
 import Publish from './Publish';
 import TagEditor from './TagEditor';
-
-import { EvenmanEvent_DetailsFragment } from '../queries.generated';
-import { useUpdateMutation } from '../hooks';
 
 interface Props {
   event: EvenmanEvent_DetailsFragment;
@@ -62,7 +58,7 @@ const LoadedEventCard: React.FC<Props> = ({ event }) => {
             <Header>Проект</Header>
             <EventShapeProjectLink
               selected={event.project?.meta.slug}
-              select={project_slug => update({ project_slug })}
+              select={(project_slug) => update({ project_slug })}
             />
           </section>
 
@@ -70,8 +66,8 @@ const LoadedEventCard: React.FC<Props> = ({ event }) => {
             <EventShapeDescription
               summary={event.summary}
               description={event.description}
-              setSummary={v => update({ summary: v })}
-              setDescription={v => update({ description: v })}
+              setSummary={(v) => update({ summary: v })}
+              setDescription={(v) => update({ description: v })}
             />
           </section>
 
@@ -79,7 +75,9 @@ const LoadedEventCard: React.FC<Props> = ({ event }) => {
             <Header>Описание расписания</Header>
             <EventShapeTimingDescription
               value={event.timing_description_override}
-              setValue={value => update({ timing_description_override: value })}
+              setValue={(value) =>
+                update({ timing_description_override: value })
+              }
             />
           </section>
 
@@ -96,27 +94,24 @@ const LoadedEventCard: React.FC<Props> = ({ event }) => {
           )}
 
           {isPublic && (
-            <section>
-              <hr />
-              <Row centered>
-                <Publish event={event} />
-              </Row>
-
-              {event.published ? (
-                <div>
-                  <hr />
-                  <EventAnnounce event={event} />
-                </div>
-              ) : (
-                <Column centered>
-                  <br />
-                  <MutedSpan>
-                    Включите опцию выше, чтобы опубликовать событие на сайте.
-                  </MutedSpan>
-                  <br />
+            <>
+              <section>
+                <Header>Публикация</Header>
+                <Column>
+                  <Publish event={event} />
+                  {event.published ? null : (
+                    <>
+                      <MutedSpan>
+                        Включите опцию выше, чтобы опубликовать событие на
+                        сайте.
+                      </MutedSpan>
+                      <div style={{ height: 40 }} />
+                    </>
+                  )}
                 </Column>
-              )}
-            </section>
+              </section>
+              {event.published ? <EventAnnounce event={event} /> : null}
+            </>
           )}
         </Column>
       </CardBody>

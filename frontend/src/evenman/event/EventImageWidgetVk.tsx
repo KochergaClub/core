@@ -32,13 +32,13 @@ const EventImageWidgetVk: React.FC<Props> = ({ event }) => {
   );
 
   return (
-    <Column centered gutter={0}>
+    <Column gutter={2}>
       <header>
         <Row>
           <span>Картинка для ВК:</span>
           <Button
             size="small"
-            kind="primary"
+            kind={event.announcements.vk.image ? 'default' : 'primary'}
             onClick={(e) => {
               e.preventDefault();
               toggleModal();

@@ -15,6 +15,8 @@ export const CardHeader = styled.header`
 
 export const CardBody = styled.div`
   padding: 12px;
+  max-width: 800px;
+  margin: 0 auto;
 `;
 
 export const EmptyCard = styled(Card)`

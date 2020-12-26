@@ -4,13 +4,14 @@ import { FaEdit } from 'react-icons/fa';
 import styled from 'styled-components';
 
 import { Markdown } from '~/components';
-import { AsyncButton, Button, Column, ControlsFooter } from '~/frontkit';
+import { AsyncButton, Button, Column, ControlsFooter, Row } from '~/frontkit';
 
 import { Header, IconLink, UserText } from './ui';
 
 const Textarea = styled.textarea`
   width: 100%;
   background-color: #ffffdd;
+  padding: 2px 4px;
 `;
 
 interface Props {
@@ -137,16 +138,18 @@ const EditableText: React.FC<Props> = ({ title, text, save, empty }) => {
   return (
     <section>
       <Header>
-        {title}{' '}
-        <IconLink
-          href=""
-          onClick={(e: React.SyntheticEvent<EventTarget>) => {
-            e.preventDefault();
-            startEditing();
-          }}
-        >
-          <FaEdit />
-        </IconLink>
+        <Row vCentered>
+          <span>{title}</span>
+          <IconLink
+            href=""
+            onClick={(e: React.SyntheticEvent<EventTarget>) => {
+              e.preventDefault();
+              startEditing();
+            }}
+          >
+            <FaEdit />
+          </IconLink>
+        </Row>
       </Header>
       {editing ? renderEditing() : renderPreview()}
     </section>
