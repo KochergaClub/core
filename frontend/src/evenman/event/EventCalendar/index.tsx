@@ -69,22 +69,16 @@ const EventCalendar: React.FC<Props> = ({ selected_id }) => {
 
   const rawEvents = queryResults.data?.events?.nodes;
 
-  const filteredEvents = useMemo(
-    () =>
-      rawEvents
-        ? rawEvents.filter(
-            (event) =>
-              (filters.eventType === undefined ||
-                filters.eventType === event.event_type) &&
-              (!filters.hideAnnounced ||
-                (event.published &&
-                  event.announcements.fb.link &&
-                  event.announcements.vk.link &&
-                  event.announcements.timepad.link))
-          )
-        : [],
-    [rawEvents, filters]
-  );
+  const filteredEvents = useMemo(() => {
+    let result = rawEvents || [];
+    if (filters.eventType) {
+      result = result.filter((event) => filters.eventType === event.event_type);
+    }
+    if (filters.hideAnnounced) {
+      result = result.filter((event) => !event.published);
+    }
+    return result;
+  }, [rawEvents, filters]);
 
   const renderCell = useCallback(
     (date: Date) => {
