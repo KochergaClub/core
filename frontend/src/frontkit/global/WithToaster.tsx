@@ -1,3 +1,4 @@
+import { motion } from 'framer-motion';
 import React, { useCallback, useContext, useReducer } from 'react';
 import styled from 'styled-components';
 
@@ -56,17 +57,18 @@ const ToastContainer = styled.div`
   left: 20px;
   bottom: 20px;
   z-index: 1500;
+  max-width: 300px;
 
   > * + * {
     margin-top: 8px;
   }
 `;
 
-const ToastBox = styled.div`
-  border: 1px solid ${colors.accent[500]};
+const ToastBox = styled(motion.div)`
   background-color: ${colors.accent[100]};
-  padding: 8px;
+  padding: 8px 16px;
   cursor: pointer;
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3);
 `;
 
 const Toast: React.FC<{ id: string }> = ({ id, children }) => {
@@ -79,7 +81,15 @@ const Toast: React.FC<{ id: string }> = ({ id, children }) => {
     });
   }, [dispatch, id]);
 
-  return <ToastBox onClick={dismissCb}>{children}</ToastBox>;
+  return (
+    <ToastBox
+      initial={{ scale: 0.5 }}
+      animate={{ scale: 1 }}
+      onClick={dismissCb}
+    >
+      {children}
+    </ToastBox>
+  );
 };
 
 const ToastList = ({ toasts }: { toasts: Notification[] }) => {
