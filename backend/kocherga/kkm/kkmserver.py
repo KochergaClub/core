@@ -18,7 +18,11 @@ def execute(data):
         json=data,
     )
     r.raise_for_status()
-    return r.json()
+    result = r.json()
+    if result['Status'] == 0:
+        return result
+
+    raise Exception("Ошибка " + result.get('Status', -1) + ": " + result.get('Error', 'Неизвестная ошибка'))
 
 
 def _check_settings():
