@@ -1,19 +1,19 @@
 import datetime
+
+from django.core.validators import MaxValueValidator, MinValueValidator
 from django.db import models
 from django.db.models import Q
-from django.core.validators import MaxValueValidator, MinValueValidator
-
 from kocherga.django.fields import ShortUUIDField
 
-from .training import Training
 from .promocode import Promocode
+from .training import Training
 
 
 class TicketTypeQuerySet(models.QuerySet):
     def for_active_trainings(self):
         # TODO - flag `registration_open` on training object or something
         return self.filter(
-            Q(training__date__gt=datetime.datetime.today())
+            Q(training__date__gte=datetime.datetime.today())
             | Q(training__date__isnull=True)
         )
 
