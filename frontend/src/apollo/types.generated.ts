@@ -1290,6 +1290,7 @@ export type Mutation = {
   ratioAddTicket: RatioTicket;
   updateRatioTicket: RatioTicket;
   setRatioTicketNotionLink: RatioTicket;
+  replaceRatioTicketNotionLink: RatioTicket;
   createRatioTraining: CreateRatioTrainingResult;
   updateRatioTraining: UpdateRatioTrainingResult;
   ratioDeleteTraining: BasicResult;
@@ -1701,6 +1702,11 @@ export type MutationUpdateRatioTicketArgs = {
 
 export type MutationSetRatioTicketNotionLinkArgs = {
   input: SetRatioTicketNotionLinkInput;
+};
+
+
+export type MutationReplaceRatioTicketNotionLinkArgs = {
+  input: ReplaceRatioTicketNotionLinkInput;
 };
 
 
@@ -2909,6 +2915,12 @@ export type RemoveEventFromCommunityLeadResult = CommunityLead;
 
 export type RemoveTildaPageInput = {
   id: Scalars['ID'];
+};
+
+export type ReplaceRatioTicketNotionLinkInput = {
+  id: Scalars['ID'];
+  notion_link: Scalars['String'];
+  send_email: Scalars['Boolean'];
 };
 
 export type SearchInput = {

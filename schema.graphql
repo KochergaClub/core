@@ -1145,6 +1145,7 @@ type Mutation {
   ratioAddTicket(input: RatioAddTicketInput!): RatioTicket!
   updateRatioTicket(input: UpdateRatioTicketInput!): RatioTicket!
   setRatioTicketNotionLink(input: SetRatioTicketNotionLinkInput!): RatioTicket!
+  replaceRatioTicketNotionLink(input: ReplaceRatioTicketNotionLinkInput!): RatioTicket!
   createRatioTraining(input: CreateRatioTrainingInput!): CreateRatioTrainingResult!
   updateRatioTraining(input: UpdateRatioTrainingInput!): UpdateRatioTrainingResult!
   ratioDeleteTraining(input: RatioDeleteTrainingInput!): BasicResult!
@@ -1884,6 +1885,12 @@ union RemoveEventFromCommunityLeadResult = CommunityLead
 
 input RemoveTildaPageInput {
   id: ID!
+}
+
+input ReplaceRatioTicketNotionLinkInput {
+  id: ID!
+  notion_link: String!
+  send_email: Boolean!
 }
 
 input SearchInput {

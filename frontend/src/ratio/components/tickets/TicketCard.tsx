@@ -17,7 +17,8 @@ import { RatioPaymentAddDocument, RatioTicketFragment } from '../../queries.gene
 import PaymentItem from '../PaymentItem';
 import { EditTicketModal } from './EditTicketModal';
 import {
-    RatioTicketWithTrainingFragment, SetRatioTicketNotionLinkDocument
+    RatioTicketWithTrainingFragment, ReplaceRatioTicketNotionLinkDocument,
+    SetRatioTicketNotionLinkDocument
 } from './queries.generated';
 
 const CanceledBadge = () => <Badge>ОТКАЗ</Badge>;
@@ -108,8 +109,42 @@ const NotionLinkRow: React.FC<Props> = ({ ticket }) => {
   return (
     <RowWithIcon icon={NotionIcon} hint="Notion">
       <Row>
-        <A href={ticket.notion_link}>{ticket.notion_link}</A>
-        {ticket.notion_link ? null : (
+        {ticket.notion_link ? (
+          <>
+            <A href={ticket.notion_link}>{ticket.notion_link}</A>
+            <MutationModalButton
+              mutation={ReplaceRatioTicketNotionLinkDocument}
+              size="small"
+              shape={
+                [
+                  {
+                    name: 'id',
+                    type: 'string',
+                    readonly: true,
+                    default: ticket.id,
+                  },
+                  {
+                    name: 'notion_link',
+                    type: 'string',
+                    title: 'Ссылка на Notion',
+                  },
+                  {
+                    name: 'send_email',
+                    title: 'Отправить письмо',
+                    type: 'boolean',
+                  },
+                ] as const
+              }
+              defaultValues={{
+                id: ticket.id,
+                send_email: true,
+              }}
+              modalTitle="Заменить Notion-ссылку"
+              modalSubmitLabel="Заменить"
+              buttonLabel="Заменить"
+            />
+          </>
+        ) : (
           <MutationModalButton
             mutation={SetRatioTicketNotionLinkDocument}
             size="small"

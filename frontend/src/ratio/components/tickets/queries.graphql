@@ -43,3 +43,11 @@ mutation SetRatioTicketNotionLink($input: SetRatioTicketNotionLinkInput!) {
     ...RatioTicket
   }
 }
+
+mutation ReplaceRatioTicketNotionLink(
+  $input: ReplaceRatioTicketNotionLinkInput!
+) {
+  replaceRatioTicketNotionLink(input: $input) {
+    ...RatioTicket
+  }
+}

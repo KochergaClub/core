@@ -93,4 +93,22 @@ class setRatioTicketNotionLink(helpers.BaseFieldWithInput):
     result = g.NN(types.RatioTicket)
 
 
+@c.class_field
+class replaceRatioTicketNotionLink(helpers.BaseFieldWithInput):
+    def resolve(self, _, info, input):
+        ticket = models.Ticket.objects.get(pk=input['id'])
+
+        ticket.replace_notion_link(input['notion_link'], input['send_email'])
+        return ticket
+
+    permissions = [user_perm('ratio.manage')]
+    input = {
+        'id': 'ID!',
+        'notion_link': str,
+        'send_email': bool,
+    }
+
+    result = g.NN(types.RatioTicket)
+
+
 mutations = c.as_dict()

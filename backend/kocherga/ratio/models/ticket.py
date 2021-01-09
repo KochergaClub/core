@@ -140,6 +140,20 @@ class Ticket(models.Model):
         self.training.send_notion_created_email(self)
         self.save()
 
+    def replace_notion_link(self, link: str, send_email: bool):
+        if not self.notion_link:
+            raise ValidationError({'notion_link': ['Ссылка на Notion ещё не заполнена']})
+        if not self.training.notion_created_email:
+            raise ValidationError(
+                {'notion_link': ['Для этого тренинга не нужны Notion-ссылки в билетах']}
+            )
+
+        self.notion_link = link
+        self.full_clean()
+        if send_email:
+            self.training.send_notion_created_email(self)
+        self.save()
+
     # UID is used for sharing anonymised data with third-party,
     # e.g. with academy crowd when we collect data from rationality tests.
     def uid(self):
