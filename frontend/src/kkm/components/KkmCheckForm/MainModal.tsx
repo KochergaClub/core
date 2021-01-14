@@ -16,7 +16,8 @@ export default function MainModal({ values, submit, close }: Props) {
   const wrappedSubmit = useCallback(async () => {
     setLoading(true);
     await submit();
-  }, [submit]);
+    close();
+  }, [submit, close]);
 
   return (
     <Modal>
