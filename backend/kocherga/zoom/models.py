@@ -2,13 +2,13 @@ import logging
 
 logger = logging.getLogger(__name__)
 
-from random import randint
 import urllib.parse
-import requests
-import dateutil.parser
+from random import randint
 
-from django.db import models
+import dateutil.parser
+import requests
 from django.conf import settings
+from django.db import models
 
 from .api import api_call
 
@@ -114,26 +114,36 @@ class MeetingInstance(models.Model):
         uuid = self.escaped_zoom_uuid()
 
         logger.info(f'fetching participants for {uuid}')
-        result = api_call(
-            'GET', f'report/meetings/{uuid}/participants', {'page_size': 300}
-        )
+        next_page_token = None
 
-        if result['page_count'] != 1:
-            raise Exception("Can't fetch multi-page report")
-
-        for item in result['participants']:
-            Participant.objects.get_or_create(
-                meeting_instance=self,
-                zoom_user_id=item['user_id'],
-                defaults={
-                    'zoom_id': item['id'],
-                    'name': item['name'],
-                    'user_email': item['user_email'],
-                    'join_time': dateutil.parser.isoparse(item['join_time']),
-                    'leave_time': dateutil.parser.isoparse(item['leave_time']),
-                    'duration': item['duration'],
+        while True:
+            result = api_call(
+                'GET',
+                f'report/meetings/{uuid}/participants',
+                {
+                    'page_size': 300,
+                    'next_page_token': next_page_token,
                 },
             )
+
+            for item in result['participants']:
+                Participant.objects.get_or_create(
+                    meeting_instance=self,
+                    zoom_user_id=item['user_id'],
+                    defaults={
+                        'zoom_id': item['id'],
+                        'name': item['name'],
+                        'user_email': item['user_email'],
+                        'join_time': dateutil.parser.isoparse(item['join_time']),
+                        'leave_time': dateutil.parser.isoparse(item['leave_time']),
+                        'duration': item['duration'],
+                    },
+                )
+
+            if result.get('next_page_token'):
+                next_page_token = result['next_page_token']
+            else:
+                break
 
 
 class Participant(models.Model):
