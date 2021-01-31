@@ -1,3 +1,5 @@
+import kocherga.slack.channels
+from django.conf import settings
 from kocherga.events import models as event_models
 from kocherga.graphql import django_utils, helpers
 
@@ -109,9 +111,36 @@ class commentOnCommunityLead(helpers.UnionFieldMixin, helpers.BaseFieldWithInput
     model = models.Lead
 
     def resolve(self, _, info, input):
-        obj = self.model.objects.get(id=input['lead_id'])
-        obj.create_comment(info.context.user, input['text'])
-        return obj
+        lead = self.model.objects.get(id=input['lead_id'])
+        comment_text = input['text']
+        lead.create_comment(info.context.user, comment_text)
+        kocherga.slack.channels.notify(
+            channel="#community_crm",
+            text=f'Новый комментарий: {settings.KOCHERGA_WEBSITE}/events/manage/leads',
+            blocks=[
+                {
+                    "type": "section",
+                    "text": {
+                        "type": "mrkdwn",
+                        "text": comment_text,
+                    },
+                },
+                {
+                    "type": "context",
+                    "elements": [
+                        {
+                            "type": "mrkdwn",
+                            "text": f"*Лид:* {lead.name}",
+                        },
+                        {
+                            "type": "mrkdwn",
+                            "text": f"*Комментарий от:* {info.context.user.get_full_name()}",
+                        },
+                    ],
+                },
+            ],
+        )
+        return lead
 
     permissions = [permissions.manage_crm]
     input = {
