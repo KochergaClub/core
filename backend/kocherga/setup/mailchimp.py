@@ -2,13 +2,17 @@ import logging
 
 logger = logging.getLogger(__name__)
 
-import kocherga.mailchimp
 import kocherga.events.models.weekly_digest
+import kocherga.mailchimp
 import kocherga.ratio.users
+from django.conf import settings
 
 
 def create_mailchimp_file_folder(name):
-    folders = kocherga.mailchimp.api_call('GET', '/campaign-folders',)['folders']
+    folders = kocherga.mailchimp.api_call(
+        'GET',
+        '/campaign-folders',
+    )['folders']
 
     if name in [f['name'] for f in folders]:
         # already exists
@@ -41,6 +45,46 @@ def create_mailchimp_interest(category_name, name):
             f'lists/{kocherga.mailchimp.MAIN_LIST_ID}/interest-categories/{category_id}/interests',
             {'name': name},
         )
+
+
+def create_webhook():
+    list_result = kocherga.mailchimp.api_call(
+        'GET', f'lists/{kocherga.mailchimp.MAIN_LIST_ID}/webhooks'
+    )
+    urls = [webhook['url'] for webhook in list_result['webhooks']]
+    for url in urls:
+        if url.startswith(settings.KOCHERGA_WEBSITE):
+            logger.info('Webhook already exists')
+            return
+
+    if 'localhost' in settings.KOCHERGA_WEBSITE:
+        logger.warning("Website is localhost, can't create webhook")
+        return
+
+    if not settings.KOCHERGA_MAILCHIMP_WEBHOOK_SECRET:
+        logger.warning(
+            "KOCHERGA_MAILCHIMP_WEBHOOK_SECRET is not configured, can't create webhook"
+        )
+        return
+
+    webhook_url = f'{settings.KOCHERGA_WEBSITE}/api/hooks/mailchimp?secret={settings.KOCHERGA_MAILCHIMP_WEBHOOK_SECRET}'
+    kocherga.mailchimp.api_call(
+        'POST',
+        f'lists/{kocherga.mailchimp.MAIN_LIST_ID}/webhooks',
+        {
+            'url': webhook_url,
+            'events': {
+                'subscribe': True,
+                'unsubscribe': True,
+                'campaign': True,
+            },
+            'sources': {
+                'user': True,
+                'admin': True,
+                'api': True,
+            },
+        },
+    )
 
 
 def setup_mailchimp():
@@ -82,3 +126,5 @@ def setup_mailchimp():
             },
         },
     )
+
+    create_webhook()

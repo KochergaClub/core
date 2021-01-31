@@ -157,3 +157,16 @@ def r_create_community_lead_webhook(request):
         )
 
     return HttpResponse('ok')
+
+
+@api_view(['POST'])
+@permission_classes([permissions.AllowAny])
+def r_mailchimp_webhook(request):
+    assert (
+        request.query_params.get('secret', '')
+        == settings.KOCHERGA_MAILCHIMP_WEBHOOK_SECRET
+    )
+
+    logger.info(request.data)
+
+    return HttpResponse('ok')

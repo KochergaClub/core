@@ -29,7 +29,9 @@ KOCHERGA_FB_ANNOUNCER_PASSWORD = None  # real FB password, not a token
 KOCHERGA_FB_MARKETING = {
     "access_token": "",  # Marketing API token (with ads_management permission)
     "account_id": "",  # Primary ads account id
-    "audiences": {"ratio_tickets": "",},  # custom audience id which can be uploaded
+    "audiences": {
+        "ratio_tickets": "",
+    },  # custom audience id which can be uploaded
 }
 
 KOCHERGA_GOOGLE_CREDENTIALS = {
@@ -46,6 +48,7 @@ KOCHERGA_GOOGLE_CREDENTIALS = {
 }
 
 KOCHERGA_MAILCHIMP_API_KEY = None
+KOCHERGA_MAILCHIMP_WEBHOOK_SECRET = None
 
 KOCHERGA_MONEY_OFD_YA_TOKEN = None
 

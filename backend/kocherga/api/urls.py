@@ -20,6 +20,7 @@ urlpatterns = [
     path('hooks/tilda_webhook', views.hooks.r_tilda_webhook),
     path('hooks/generate_promocode', views.hooks.r_generate_promocode_webhook),
     path('hooks/create_community_lead', views.hooks.r_create_community_lead_webhook),
+    path('hooks/mailchimp', views.hooks.r_mailchimp_webhook),
     path('auth/google', views.auth.r_google),
     path('auth/check', views.auth.r_check),
     path('fb/token', views.fb.TokenView.as_view()),
