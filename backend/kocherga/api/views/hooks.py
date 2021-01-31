@@ -5,6 +5,7 @@ logger = logging.getLogger(__name__)
 import kocherga.community.models
 import kocherga.django.models
 import kocherga.ratio.models
+import kocherga.slack.channels
 import kocherga.slack.client
 import kocherga.telegram.channels
 import kocherga.tilda.models
@@ -159,7 +160,7 @@ def r_create_community_lead_webhook(request):
     return HttpResponse('ok')
 
 
-@api_view(['POST'])
+@api_view(['GET', 'POST'])
 @permission_classes([permissions.AllowAny])
 def r_mailchimp_webhook(request):
     assert (
@@ -167,6 +168,27 @@ def r_mailchimp_webhook(request):
         == settings.KOCHERGA_MAILCHIMP_WEBHOOK_SECRET
     )
 
+    if request.method != 'POST':
+        return HttpResponse('ok')
+
     logger.info(request.data)
+
+    # CHANNEL = '#mailchimp'
+    # LIST = 'Kocherga Newsletter'
+    # if ...:
+    #     kocherga.slack.channels.notify(
+    #         channel=CHANNEL,
+    #         text=f'{email} subscribed to {LIST}',
+    #     )
+    # elif ...:
+    #     kocherga.slack.channels.notify(
+    #         channel=CHANNEL,
+    #         text=f'{email} unsubscribed to {LIST}',
+    #     )
+    # elif ...:
+    #     kocherga.slack.channels.notify(
+    #         channel=CHANNEL,
+    #         text=f'{title} was sent to {LIST}',
+    #     )
 
     return HttpResponse('ok')
