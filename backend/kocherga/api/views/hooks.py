@@ -2,6 +2,8 @@ import logging
 
 logger = logging.getLogger(__name__)
 
+import json
+
 import kocherga.community.models
 import kocherga.django.models
 import kocherga.ratio.models
@@ -173,22 +175,24 @@ def r_mailchimp_webhook(request):
 
     logger.info(request.data)
 
-    # CHANNEL = '#mailchimp'
-    # LIST = 'Kocherga Newsletter'
-    # if ...:
-    #     kocherga.slack.channels.notify(
-    #         channel=CHANNEL,
-    #         text=f'{email} subscribed to {LIST}',
-    #     )
-    # elif ...:
-    #     kocherga.slack.channels.notify(
-    #         channel=CHANNEL,
-    #         text=f'{email} unsubscribed to {LIST}',
-    #     )
-    # elif ...:
-    #     kocherga.slack.channels.notify(
-    #         channel=CHANNEL,
-    #         text=f'{title} was sent to {LIST}',
-    #     )
+    CHANNEL = '#mailchimp'
+    event_type = request.data['type']
+    if event_type == 'subscribe':
+        email = request.data['data[email]']
+        kocherga.slack.channels.notify(
+            channel=CHANNEL,
+            text=f'{email} подписался',
+        )
+    elif event_type == 'unsubscribe':
+        email = request.data['data[email]']
+        kocherga.slack.channels.notify(
+            channel=CHANNEL,
+            text=f'{email} отписался',
+        )
+    elif event_type == 'campaign':
+        kocherga.slack.channels.notify(
+            channel=CHANNEL,
+            text=f'Рассылка: {json.dumps(request.data)}',
+        )
 
     return HttpResponse('ok')
