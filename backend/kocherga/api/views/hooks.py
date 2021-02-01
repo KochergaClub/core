@@ -190,9 +190,11 @@ def r_mailchimp_webhook(request):
             text=f'{email} отписался',
         )
     elif event_type == 'campaign':
+        campaign_name = request.data['data[subject]']
+        campaigns_url = f'https://{settings.KOCHERGA_MAILCHIMP_DATACENTER}.admin.mailchimp.com/campaigns'
         kocherga.slack.channels.notify(
             channel=CHANNEL,
-            text=f'Рассылка: {json.dumps(request.data)}',
+            text=f'Рассылка [{campaign_name}]({campaigns_url}) отправлена',
         )
 
     return HttpResponse('ok')
