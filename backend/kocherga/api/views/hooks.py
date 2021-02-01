@@ -2,8 +2,6 @@ import logging
 
 logger = logging.getLogger(__name__)
 
-import json
-
 import kocherga.community.models
 import kocherga.django.models
 import kocherga.ratio.models
