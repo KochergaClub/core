@@ -15,13 +15,18 @@ from .training import Training
 
 class TicketQuerySet(models.QuerySet, RelayQuerySetMixin):
     def with_missing_payments(self):
-        return self.annotate(payments_sum=models.Sum('payments__amount')).exclude(
-            payments_sum=models.F('payment_amount')
+        qb = self.annotate(payments_sum=models.Sum('payments__amount'))
+
+        # both tickets for which there are missing payments
+        return qb.exclude(payments_sum=models.F('payment_amount')).union(
+            # and tickets for which we have non-paid payments
+            qb.filter(payments__status='todo')
         )
 
     def with_unfiscalized_checks(self):
         return self.filter(
-            payments__fiscalization_status__in=['todo', 'in_progress']
+            payments__fiscalization_status__in=['todo', 'in_progress'],
+            payments__status='paid',
         ).distinct()
 
     def without_notion_link(self):
@@ -142,7 +147,9 @@ class Ticket(models.Model):
 
     def replace_notion_link(self, link: str, send_email: bool):
         if not self.notion_link:
-            raise ValidationError({'notion_link': ['Ссылка на Notion ещё не заполнена']})
+            raise ValidationError(
+                {'notion_link': ['Ссылка на Notion ещё не заполнена']}
+            )
         if not self.training.notion_created_email:
             raise ValidationError(
                 {'notion_link': ['Для этого тренинга не нужны Notion-ссылки в билетах']}
