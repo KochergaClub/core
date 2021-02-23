@@ -15,10 +15,6 @@ class publicTelegramChats(helpers.BaseField):
     result = g.NNList(TelegramChat)
 
 
-# legacy name, TODO - remove
-c.fields['telegramChats'] = c.fields['publicTelegramChats']
-
-
 @c.class_field
 class allTelegramChats(helpers.BaseField):
     def resolve(self, _, info):
