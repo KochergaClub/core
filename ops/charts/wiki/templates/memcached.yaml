@@ -27,3 +27,8 @@ spec:
           image: memcached
           ports:
             - containerPort: 11211
+          resources:
+            requests:
+              memory: "64Mi"
+            limits:
+              memory: "256Mi"

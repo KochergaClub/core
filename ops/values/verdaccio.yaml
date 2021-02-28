@@ -1,3 +1,9 @@
+resources:
+  requests:
+    memory: 64Mi
+  limits:
+    memory: 512Mi
+
 configMap: |
   storage: /verdaccio/storage/data
 

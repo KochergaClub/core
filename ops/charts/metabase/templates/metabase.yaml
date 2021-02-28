@@ -74,6 +74,6 @@ spec:
             periodSeconds: 5
           resources:
             requests:
-              memory: "512Mi"
+              memory: "700Mi"
             limits:
               memory: "2048Mi"

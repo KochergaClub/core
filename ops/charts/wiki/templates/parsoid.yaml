@@ -33,3 +33,8 @@ spec:
           env:
             - name: PARSOID_DOMAIN_wiki
               value: https://{{ required "domain must be set" .Values.domain }}/api.php
+          resources:
+            requests:
+              memory: "32Mi"
+            limits:
+              memory: "1024Mi"
