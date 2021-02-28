@@ -13,7 +13,7 @@ import { useFormModalSmartMutation } from '~/components/forms/hooks';
 import { MutationModal } from '~/components/forms/MutationModal';
 import { SmartMutationModal } from '~/components/forms/SmartMutationModal';
 import { ShapeToValues } from '~/components/forms/types';
-import { A } from '~/frontkit';
+import { A, Column } from '~/frontkit';
 
 import { TelegramChatCardContents } from '../components/TelegramChatCardContents';
 import {
@@ -60,12 +60,12 @@ const AdminTelegramChatsPage: NextApolloPage = () => {
       <Page.Main>
         <TL02 title="Чаты сообщества Кочерги" />
         <PaddedBlock>
-          <div>
+          <Column>
             <A href="/wagtail/telegram/chat/">
-              Управление порядком чатов и провязка с проектами доступны через
-              Wagtail.
+              Управление порядком чатов доступно через Wagtail
             </A>
-          </div>
+            <A href="/community/chats">Список всех публичных чатов</A>
+          </Column>
           <ApolloQueryResults {...queryResults} size="block">
             {({ data: { chats } }) => (
               <Collection
@@ -123,6 +123,7 @@ const AdminTelegramChatsPage: NextApolloPage = () => {
                                   submitLabel="Сохранить"
                                   defaultValues={{
                                     force_public: chat.force_public,
+                                    delisted: chat.delisted,
                                     project_slug: chat.project?.meta.slug,
                                   }}
                                   shape={
@@ -131,6 +132,12 @@ const AdminTelegramChatsPage: NextApolloPage = () => {
                                         name: 'force_public',
                                         type: 'boolean',
                                         title: 'Сделать публичным',
+                                      },
+                                      {
+                                        name: 'delisted',
+                                        type: 'boolean',
+                                        title:
+                                          'Скрыть из списка публичных чатов',
                                       },
                                       {
                                         name: 'project_slug',
@@ -144,6 +151,7 @@ const AdminTelegramChatsPage: NextApolloPage = () => {
                                     input: {
                                       id: chat.id,
                                       force_public: v.force_public,
+                                      delisted: v.delisted,
                                       project_slug: v.project_slug,
                                     },
                                   })}

@@ -4,6 +4,7 @@ fragment TelegramChat on TelegramChat {
   link
   title
   force_public
+  delisted
   photo(spec: "fill-50x50") {
     id
     url

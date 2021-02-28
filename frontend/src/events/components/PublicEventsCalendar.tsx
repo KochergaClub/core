@@ -1,23 +1,20 @@
-import { isPast, parseISO } from 'date-fns';
-import Router from 'next/router';
-import { useCallback, useEffect, useRef, useState } from 'react';
-import styled from 'styled-components';
-
-import '@fullcalendar/react'; // side effects!
 import { useApolloClient, useQuery } from '@apollo/client';
 import { EventClickArg } from '@fullcalendar/core';
 import ruLocale from '@fullcalendar/core/locales/ru';
 import dayGridPlugin from '@fullcalendar/daygrid';
 import listPlugin from '@fullcalendar/list';
+import '@fullcalendar/react'; // side effects!
 import FullCalendar from '@fullcalendar/react';
-import { A, colors, deviceMediaQueries } from '~/frontkit';
-
+import { isPast, parseISO } from 'date-fns';
+import Router from 'next/router';
+import { useCallback, useEffect, useRef, useState } from 'react';
+import styled from 'styled-components';
 import { formatDate } from '~/common/utils';
 import { AlertCard, ApolloQueryResults, PaddedBlock } from '~/components';
-
+import { A, colors, deviceMediaQueries } from '~/frontkit';
 import {
-  PublicEventsForCalendarDocument,
   EventsPublicGoogleCalendarDocument,
+  PublicEventsForCalendarDocument,
 } from '../queries.generated';
 import { publicEventRoute } from '../routes';
 
@@ -93,7 +90,8 @@ const PublicEventsCalendar = () => {
           classNames.push('fc-kocherga-past');
         }
         if (event.public_tags.includes('ratio')) {
-          classNames.push('fc-kocherga-ratio');
+          //// disabled for now: colors are ugly and semantics is unclear to end users
+          // classNames.push('fc-kocherga-ratio');
         }
 
         return {

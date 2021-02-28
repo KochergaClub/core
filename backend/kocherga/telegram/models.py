@@ -36,7 +36,9 @@ class ChatQuerySet(models.QuerySet):
         """Get public chats, e.g. for /community/chats page.
 
         This method should match Chat.is_public() condition."""
-        return self.filter(~models.Q(username='') | models.Q(force_public=True))
+        return self.filter(
+            ~models.Q(username='') | models.Q(force_public=True)
+        ).exclude(delisted=True)
 
 
 class ChatManager(models.Manager):
@@ -83,6 +85,10 @@ class Chat(Orderable, models.Model):
     # if true then chat is public even if it doesn't have username
     force_public = models.BooleanField(default=False)
 
+    # if true then chat will not be returned in publicTelegramChats list and /community/chats page
+    # (but might still be displayed on other pages, e.g. inactive project's page)
+    delisted = models.BooleanField(default=False)
+
     # will be populated by update_from_api()
     title = models.CharField(max_length=255, editable=False, blank=True)
     photo = models.ForeignKey(
@@ -108,6 +114,7 @@ class Chat(Orderable, models.Model):
     panels = [
         edit_handlers.FieldPanel('username'),
         edit_handlers.FieldPanel('force_public'),
+        edit_handlers.FieldPanel('delisted'),
         edit_handlers.PageChooserPanel('project', 'projects.ProjectPage'),
     ]
 
@@ -125,7 +132,7 @@ class Chat(Orderable, models.Model):
     def is_public(self):
         """Check whether chat should be listed publically, e.g. on /community/chats page.
 
-        This method should match ChatQuerySet.public_only() query."""
+        This method should match ChatQuerySet.public_only() query (except for `delisted` condition)."""
         return bool(self.username or self.force_public)
 
     def clean(self):
@@ -135,11 +142,11 @@ class Chat(Orderable, models.Model):
             raise Exception(
                 "`force_public` makes sense only for chats without `username`"
             )
+        if not self.is_public and self.delisted:
+            raise Exception("`delisted` doesn't make sense for non-public chats")
         if not self.is_public and self.project:
             # Because project.telegram_chats doesn't filter out non-public chats, at least for now.
-            raise Exception(
-                "Non-public chats can't be linked with projects"
-            )
+            raise Exception("Non-public chats can't be linked with projects")
 
     def update_from_api(self):
         chat_id = self.chat_id if self.chat_id else '@' + self.username

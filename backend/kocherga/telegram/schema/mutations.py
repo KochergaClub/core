@@ -60,6 +60,8 @@ class updateTelegramChat(helpers.UnionFieldMixin, helpers.BaseFieldWithInput):
 
         if 'force_public' in input:
             obj.force_public = input['force_public']
+        if 'delisted' in input:
+            obj.delisted = input['delisted']
         if 'project_slug' in input:
             if not input['project_slug']:
                 obj.project = None
@@ -80,6 +82,7 @@ class updateTelegramChat(helpers.UnionFieldMixin, helpers.BaseFieldWithInput):
     input = {
         'id': 'ID!',
         'force_public': Optional[bool],
+        'delisted': Optional[bool],
         'project_slug': Optional[str],
     }
     permissions = [permissions.manage_telegram_chats]

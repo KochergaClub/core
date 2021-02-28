@@ -2024,6 +2024,7 @@ type TelegramChat {
   username: String!
   title: String!
   force_public: Boolean!
+  delisted: Boolean!
   photo(spec: String!): WagtailImageRendition
   project: ProjectPage
   link: String!
@@ -2105,6 +2106,7 @@ input UpdateSettingsInput {
 input UpdateTelegramChatInput {
   id: ID!
   force_public: Boolean
+  delisted: Boolean
   project_slug: String
 }
 

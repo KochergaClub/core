@@ -3077,6 +3077,7 @@ export type TelegramChat = {
   username: Scalars['String'];
   title: Scalars['String'];
   force_public: Scalars['Boolean'];
+  delisted: Scalars['Boolean'];
   photo?: Maybe<WagtailImageRendition>;
   project?: Maybe<ProjectPage>;
   link: Scalars['String'];
@@ -3171,6 +3172,7 @@ export type UpdateSettingsInput = {
 export type UpdateTelegramChatInput = {
   id: Scalars['ID'];
   force_public?: Maybe<Scalars['Boolean']>;
+  delisted?: Maybe<Scalars['Boolean']>;
   project_slug?: Maybe<Scalars['String']>;
 };
 
