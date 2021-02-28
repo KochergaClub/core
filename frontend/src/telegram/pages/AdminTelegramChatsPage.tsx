@@ -1,5 +1,6 @@
 import React, { useCallback } from 'react';
 import { FaTrash } from 'react-icons/fa';
+import { MdRefresh } from 'react-icons/md';
 
 import { useQuery } from '@apollo/client';
 
@@ -17,7 +18,8 @@ import { A } from '~/frontkit';
 import { TelegramChatCardContents } from '../components/TelegramChatCardContents';
 import {
     AddTelegramChatByInviteLinkDocument, AddTelegramChatDocument, AllTelegramChatsDocument,
-    DeleteTelegramChatDocument, PostToTelegramChatDocument, RefreshTelegramChatDataDocument
+    DeleteTelegramChatDocument, PostToTelegramChatDocument, RefreshTelegramChatDataDocument,
+    UpdateTelegramChatDocument
 } from '../queries.generated';
 
 const addShape = [
@@ -79,7 +81,7 @@ const AdminTelegramChatsPage: NextApolloPage = () => {
                           submitLabel="Добавить"
                           shape={inviteAddShape}
                           expectedTypename="TelegramChat"
-                          refetchQueries={['TelegramChats']}
+                          refetchQueries={['AllTelegramChats']}
                           mutation={AddTelegramChatByInviteLinkDocument}
                         />
                       )}
@@ -104,20 +106,51 @@ const AdminTelegramChatsPage: NextApolloPage = () => {
                         renderControls={() => (
                           <DropdownMenu>
                             <MutationAction
-                              title="Удалить"
-                              icon={FaTrash}
-                              mutation={DeleteTelegramChatDocument}
-                              variables={{ id: chat.id }}
-                              refetchQueries={['TelegramChats']}
-                              confirmText={`Удалить ${
-                                chat.title || chat.username
-                              }?`}
-                            />
-                            <MutationAction
                               title="Обновить"
+                              icon={MdRefresh}
                               mutation={RefreshTelegramChatDataDocument}
+                              refetchQueries={['AllTelegramChats']}
                               variables={{ id: chat.id }}
                             />
+                            <ModalAction title="Редактировать">
+                              {({ close }) => (
+                                <SmartMutationModal
+                                  close={close}
+                                  expectedTypename="TelegramChat"
+                                  title={`Редактировать чат ${
+                                    chat.title || chat.username
+                                  }`}
+                                  submitLabel="Сохранить"
+                                  defaultValues={{
+                                    force_public: chat.force_public,
+                                    project_slug: chat.project?.meta.slug,
+                                  }}
+                                  shape={
+                                    [
+                                      {
+                                        name: 'force_public',
+                                        type: 'boolean',
+                                        title: 'Сделать публичным',
+                                      },
+                                      {
+                                        name: 'project_slug',
+                                        type: 'string',
+                                        title: 'Проект (slug)',
+                                        optional: true,
+                                      },
+                                    ] as const
+                                  }
+                                  valuesToVariables={(v) => ({
+                                    input: {
+                                      id: chat.id,
+                                      force_public: v.force_public,
+                                      project_slug: v.project_slug,
+                                    },
+                                  })}
+                                  mutation={UpdateTelegramChatDocument}
+                                />
+                              )}
+                            </ModalAction>
                             <ModalAction title="Отправить сообщение">
                               {({ close }) => (
                                 <MutationModal
@@ -143,6 +176,16 @@ const AdminTelegramChatsPage: NextApolloPage = () => {
                                 />
                               )}
                             </ModalAction>
+                            <MutationAction
+                              title="Удалить"
+                              icon={FaTrash}
+                              mutation={DeleteTelegramChatDocument}
+                              variables={{ id: chat.id }}
+                              refetchQueries={['AllTelegramChats']}
+                              confirmText={`Удалить ${
+                                chat.title || chat.username
+                              }?`}
+                            />
                           </DropdownMenu>
                         )}
                       />

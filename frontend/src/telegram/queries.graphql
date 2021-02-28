@@ -3,6 +3,7 @@ fragment TelegramChat on TelegramChat {
   username
   link
   title
+  force_public
   photo(spec: "fill-50x50") {
     id
     url
@@ -47,6 +48,13 @@ mutation AddTelegramChatByInviteLink(
     ...TelegramChat
     ...ValidationError
     ...GenericError
+  }
+}
+
+mutation UpdateTelegramChat($input: UpdateTelegramChatInput!) {
+  result: updateTelegramChat(input: $input) {
+    ...TelegramChat
+    ...ValidationError
   }
 }
 

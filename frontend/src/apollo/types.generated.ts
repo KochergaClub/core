@@ -1321,6 +1321,7 @@ export type Mutation = {
   addTelegramChat: AddTelegramChatResult;
   addTelegramChatByInviteLink: AddTelegramChatByInviteLinkResult;
   deleteTelegramChat: DeleteTelegramChatResult;
+  updateTelegramChat: UpdateTelegramChatResult;
   refreshTelegramChatData: RefreshTelegramChatDataResult;
   postToTelegramChat: PostToTelegramChatResult;
   tildaImportAll?: Maybe<BasicResult>;
@@ -1849,6 +1850,11 @@ export type MutationDeleteTelegramChatArgs = {
 };
 
 
+export type MutationUpdateTelegramChatArgs = {
+  input: UpdateTelegramChatInput;
+};
+
+
 export type MutationRefreshTelegramChatDataArgs = {
   id: Scalars['ID'];
 };
@@ -2220,7 +2226,6 @@ export type Query = {
   imageTemplatesAll: Array<ImageTemplate>;
   imageTemplateBySlug: ImageTemplate;
   publicTelegramChats: Array<TelegramChat>;
-  telegramChats: Array<TelegramChat>;
   allTelegramChats: Array<TelegramChat>;
   tildaPage?: Maybe<TildaPage>;
   tildaPages: Array<TildaPage>;
@@ -3071,6 +3076,7 @@ export type TelegramChat = {
   id: Scalars['ID'];
   username: Scalars['String'];
   title: Scalars['String'];
+  force_public: Scalars['Boolean'];
   photo?: Maybe<WagtailImageRendition>;
   project?: Maybe<ProjectPage>;
   link: Scalars['String'];
@@ -3161,6 +3167,14 @@ export type UpdateSettingsInput = {
   weekly_digest_images_collection?: Maybe<Scalars['ID']>;
   community_org_team_telegram_chat?: Maybe<Scalars['ID']>;
 };
+
+export type UpdateTelegramChatInput = {
+  id: Scalars['ID'];
+  force_public?: Maybe<Scalars['Boolean']>;
+  project_slug?: Maybe<Scalars['String']>;
+};
+
+export type UpdateTelegramChatResult = TelegramChat | ValidationError;
 
 export type UpdateYandexKassaPaymentInput = {
   id: Scalars['ID'];

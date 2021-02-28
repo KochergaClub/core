@@ -116,6 +116,10 @@
       "ValidationError",
       "GenericError"
     ],
+    "UpdateTelegramChatResult": [
+      "TelegramChat",
+      "ValidationError"
+    ],
     "UpdateYandexKassaPaymentResult": [
       "YandexKassaPayment",
       "GenericError"

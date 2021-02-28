@@ -1176,6 +1176,7 @@ type Mutation {
   addTelegramChat(input: AddTelegramChatInput!): AddTelegramChatResult!
   addTelegramChatByInviteLink(input: AddTelegramChatByInviteLinkInput!): AddTelegramChatByInviteLinkResult!
   deleteTelegramChat(id: ID!): DeleteTelegramChatResult!
+  updateTelegramChat(input: UpdateTelegramChatInput!): UpdateTelegramChatResult!
   refreshTelegramChatData(id: ID!): RefreshTelegramChatDataResult!
   postToTelegramChat(input: PostToTelegramChatInput!): PostToTelegramChatResult!
   tildaImportAll: BasicResult
@@ -1453,7 +1454,6 @@ type Query {
   imageTemplatesAll: [ImageTemplate!]!
   imageTemplateBySlug(slug: String!): ImageTemplate!
   publicTelegramChats: [TelegramChat!]!
-  telegramChats: [TelegramChat!]!
   allTelegramChats: [TelegramChat!]!
   tildaPage(path: String!): TildaPage
   tildaPages: [TildaPage!]!
@@ -2023,6 +2023,7 @@ type TelegramChat {
   id: ID!
   username: String!
   title: String!
+  force_public: Boolean!
   photo(spec: String!): WagtailImageRendition
   project: ProjectPage
   link: String!
@@ -2100,6 +2101,14 @@ input UpdateSettingsInput {
   weekly_digest_images_collection: ID
   community_org_team_telegram_chat: ID
 }
+
+input UpdateTelegramChatInput {
+  id: ID!
+  force_public: Boolean
+  project_slug: String
+}
+
+union UpdateTelegramChatResult = TelegramChat | ValidationError
 
 input UpdateYandexKassaPaymentInput {
   id: ID!

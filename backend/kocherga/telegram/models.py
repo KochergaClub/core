@@ -33,6 +33,9 @@ class Permissions(models.Model):
 
 class ChatQuerySet(models.QuerySet):
     def public_only(self):
+        """Get public chats, e.g. for /community/chats page.
+
+        This method should match Chat.is_public() condition."""
         return self.filter(~models.Q(username='') | models.Q(force_public=True))
 
 
@@ -118,12 +121,24 @@ class Chat(Orderable, models.Model):
             return self.invite_link
         raise Exception("Neither username nor invite_link is set")
 
+    @property
+    def is_public(self):
+        """Check whether chat should be listed publically, e.g. on /community/chats page.
+
+        This method should match ChatQuerySet.public_only() query."""
+        return bool(self.username or self.force_public)
+
     def clean(self):
         if not self.username and not self.chat_id:
             raise Exception("One of `username` and `chat_id` must be set")
         if self.force_public and self.username:
             raise Exception(
                 "`force_public` makes sense only for chats without `username`"
+            )
+        if not self.is_public and self.project:
+            # Because project.telegram_chats doesn't filter out non-public chats, at least for now.
+            raise Exception(
+                "Non-public chats can't be linked with projects"
             )
 
     def update_from_api(self):

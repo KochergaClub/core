@@ -17,6 +17,6 @@ def TelegramChat_extra_fields():
 TelegramChat = django_utils.DjangoObjectType(
     'TelegramChat',
     model=models.Chat,
-    db_fields=['id', 'username', 'title'],
+    db_fields=['id', 'username', 'title', 'force_public'],
     extra_fields=TelegramChat_extra_fields,
 )
