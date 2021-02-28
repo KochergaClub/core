@@ -33,7 +33,7 @@ class Permissions(models.Model):
 
 class ChatQuerySet(models.QuerySet):
     def public_only(self):
-        return self.filter(models.Q(username='') | models.Q(force_public=True))
+        return self.filter(~models.Q(username='') | models.Q(force_public=True))
 
 
 class ChatManager(models.Manager):
