@@ -33,7 +33,7 @@ class Permissions(models.Model):
 
 class ChatQuerySet(models.QuerySet):
     def public_only(self):
-        return self.exclude(username='')
+        return self.filter(models.Q(username='') | models.Q(force_public=True))
 
 
 class ChatManager(models.Manager):
@@ -43,7 +43,7 @@ class ChatManager(models.Manager):
     def get_queryset(self):
         return ChatQuerySet(self.model, using=self._db)
 
-    def create_by_invite_link(self, invite_link: str):
+    def create_by_invite_link(self, invite_link: str, force_public: bool = False):
         match = re.match(r'^https://t.me/joinchat/(\S+)$', invite_link)
         if not match:
             raise self.BadInviteLinkFormatError()
@@ -61,7 +61,7 @@ class ChatManager(models.Manager):
 
         chat_id = async_to_sync(get_chat_id)()
 
-        chat = Chat(chat_id=chat_id, invite_link=invite_link)
+        chat = Chat(chat_id=chat_id, invite_link=invite_link, force_public=force_public)
         chat.full_clean()
         chat.update_from_api()
         chat.save()
@@ -76,6 +76,9 @@ class Chat(Orderable, models.Model):
 
     # URL in https://t.me/joinchat/xxxx form, if username is missing
     invite_link = models.URLField(max_length=200, blank=True)
+
+    # if true then chat is public even if it doesn't have username
+    force_public = models.BooleanField(default=False)
 
     # will be populated by update_from_api()
     title = models.CharField(max_length=255, editable=False, blank=True)
@@ -114,9 +117,13 @@ class Chat(Orderable, models.Model):
             return self.invite_link
         raise Exception("Neither username nor invite_link is set")
 
-    def full_clean(self):
+    def clean(self):
         if not self.username and not self.chat_id:
             raise Exception("One of `username` and `chat_id` must be set")
+        if self.force_public and self.username:
+            raise Exception(
+                "`force_public` makes sense only for chats without `username`"
+            )
 
     def update_from_api(self):
         chat_id = self.chat_id if self.chat_id else '@' + self.username
