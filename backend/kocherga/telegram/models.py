@@ -104,6 +104,7 @@ class Chat(Orderable, models.Model):
 
     panels = [
         edit_handlers.FieldPanel('username'),
+        edit_handlers.FieldPanel('force_public'),
         edit_handlers.PageChooserPanel('project', 'projects.ProjectPage'),
     ]
 
