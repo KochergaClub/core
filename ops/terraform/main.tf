@@ -25,7 +25,7 @@ module "k3s-prod" {
   cluster_name = "k3s-prod"
   master_type  = "cx11"
   node_type    = "cx31"
-  node_count   = 2
+  node_count   = 3
 }
 
 # module "openvidu" {
