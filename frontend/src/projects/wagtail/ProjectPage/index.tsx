@@ -1,13 +1,11 @@
 import React from 'react';
 
 import RichTextBlock from '~/blocks/RichTextBlock';
-import TL03 from '~/blocks/TL03';
 import { Page } from '~/components';
-import TelegramChatsBlock from '~/telegram/components/TelegramChatsBlock';
 import { NextWagtailPage } from '~/wagtail/types';
 
 import { ProjectPageFragment, ProjectPageFragmentDoc } from './fragments.generated';
-import ProjectHeroBlock from './ProjectHeroBlock';
+import { ProjectHeroBlock } from './ProjectHeroBlock';
 import UpcomingEventsBlock from './UpcomingEventsBlock';
 
 const ProjectPage: NextWagtailPage<ProjectPageFragment> = ({
@@ -21,7 +19,7 @@ const ProjectPage: NextWagtailPage<ProjectPageFragment> = ({
     >
       <ProjectHeroBlock project={project} />
       <RichTextBlock html={project.body} />
-      {project.telegram_chats.length ? (
+      {/* {project.telegram_chats.length ? (
         <div>
           <TL03
             title={`Чат${project.telegram_chats.length > 1 ? 'ы' : ''} проекта`}
@@ -32,7 +30,7 @@ const ProjectPage: NextWagtailPage<ProjectPageFragment> = ({
             hideProjectLink={true}
           />
         </div>
-      ) : null}
+      ) : null} */}
       <UpcomingEventsBlock project={project} />
     </Page>
   );

@@ -1,5 +1,7 @@
 import { css } from 'styled-components';
 
+import * as colors from './colors';
+
 export const sizes = {
   XXXL: '64px',
   XXL: '48px',
@@ -11,7 +13,8 @@ export const sizes = {
 };
 
 export const label = css`
-  font-size: ${sizes.XS};
-  text-transform: uppercase;
-  letter-spacing: 0.4px;
+  font-size: ${sizes.S};
+  font-weight: 500;
+  line-height: 1.2;
+  color: ${colors.grey[600]};
 `;

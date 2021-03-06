@@ -38,7 +38,9 @@ const DropdownButtonContainer = styled.div`
   align-items: center;
 
   > div {
-    ${fonts.label};
+    font-size: ${fonts.sizes.XS};
+    text-transform: uppercase;
+    letter-spacing: 0.4px;
     font-weight: 500;
     color: ${colors.grey[700]};
   }

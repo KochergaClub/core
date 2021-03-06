@@ -1,6 +1,8 @@
+import Link from 'next/link';
 import styled from 'styled-components';
 
-import { deviceMediaQueries, fonts, Label } from '~/frontkit';
+import { A, colors, Column, deviceMediaQueries, fonts, LabelDiv } from '~/frontkit';
+import { projectsListRoute } from '~/projects/routes';
 
 import { ProjectPageFragment } from './fragments.generated';
 
@@ -13,20 +15,27 @@ const Container = styled.div<{ image: string }>`
 
   display: flex;
   flex-direction: column;
+  align-items: center;
+`;
+
+const InnerContainer = styled.div`
+  flex: 1;
+  display: flex;
+  flex-direction: column;
   justify-content: space-between;
+
+  margin: 40px;
+  max-width: 900px;
 `;
 
 const Header = styled.h1`
   margin: 0;
-  padding-top: 48px;
-  padding-bottom: 48px;
 
   line-height: 1.2;
   font-size: ${fonts.sizes.XXL};
   font-family: Intro;
 
   color: white;
-  text-align: center;
 
   ${deviceMediaQueries.mobile(`
     font-size: ${fonts.sizes.L};
@@ -37,9 +46,7 @@ const Header = styled.h1`
 `;
 
 const Summary = styled.div`
-  margin: 0 20px;
   color: white;
-  text-align: center;
   ${deviceMediaQueries.tablet(`
     font-size: ${fonts.sizes.L};
   `)}
@@ -51,27 +58,35 @@ const Summary = styled.div`
   `)}
 `;
 
-const ActivitySummary = styled(Label)`
+const ActivitySummary = styled(LabelDiv)`
   color: white;
-  text-align: center;
-  margin-top: 64px;
-  margin-bottom: 24px;
+`;
+
+const GreyA = styled(A)`
+  ${fonts.label}
+  color: ${colors.grey[300]};
 `;
 
 interface Props {
   project: ProjectPageFragment;
 }
 
-const ProjectHeroBlock: React.FC<Props> = ({ project }) => (
+export const ProjectHeroBlock: React.FC<Props> = ({ project }) => (
   <Container image={project.image.url}>
-    <div>
+    <InnerContainer>
+      <Link href={projectsListRoute()} passHref>
+        <GreyA>&larr; Все проекты</GreyA>
+      </Link>
       <Header>{project.title}</Header>
       <Summary>{project.summary}</Summary>
-    </div>
-    <ActivitySummary>
-      {project.is_active ? project.activity_summary : 'Неактивный проект'}
-    </ActivitySummary>
+      <Column gutter={10}>
+        <ActivitySummary>
+          {project.is_active ? project.activity_summary : 'Неактивный проект'}
+        </ActivitySummary>
+        {project.telegram_chats.length ? (
+          <GreyA href={project.telegram_chats[0].link}>Чат проекта</GreyA>
+        ) : null}
+      </Column>
+    </InnerContainer>
   </Container>
 );
-
-export default ProjectHeroBlock;
