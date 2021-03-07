@@ -25,7 +25,7 @@ def test_default_event_type():
         end=dt + timedelta(hours=1),
         title='test event',
     )
-    assert event.event_type == "unknown"
+    assert event.event_type == "public"
 
 
 class TestGetEvent:
