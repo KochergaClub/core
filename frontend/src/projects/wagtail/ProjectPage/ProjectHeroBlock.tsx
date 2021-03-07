@@ -66,7 +66,6 @@ const ActivitySummary = styled(LabelDiv)`
 
 const GreyA = styled(A)`
   ${fonts.label}
-  /* color: ${colors.grey[300]}; */
   color: ${colors.primary[300]};
 `;
 

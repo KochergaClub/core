@@ -28,6 +28,10 @@ const LoadedEventCard: React.FC<Props> = ({ event }) => {
   const isPublic = event.event_type === 'public';
 
   const renderVisitors = () => {
+    if (event.realm === 'online') {
+      return null; // we get statistics from zoom so we don't need to enter visitors manually
+    }
+
     if (isAfter(new Date(event.start), new Date())) {
       return;
     }
@@ -45,14 +49,19 @@ const LoadedEventCard: React.FC<Props> = ({ event }) => {
           {renderVisitors()}
 
           <section>
-            <Header>Формат</Header>
+            <Header>Площадка</Header>
             <EventRealm event={event} />
           </section>
 
-          <section>
-            <Header>Стоимость</Header>
-            <EventPricingType event={event} />
-          </section>
+          {
+            // online events are always free, no need to show extra controls
+            event.realm === 'online' && event.pricing_type === 'free' ? null : (
+              <section>
+                <Header>Стоимость</Header>
+                <EventPricingType event={event} />
+              </section>
+            )
+          }
 
           <section>
             <Header>Проект</Header>

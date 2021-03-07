@@ -68,8 +68,8 @@ const EventRealm: React.FC<Props> = ({ event }) => {
     <Column gutter={16}>
       <Column>
         {[
-          { value: 'offline', title: 'Офлайн' },
-          { value: 'online', title: 'Онлайн' },
+          { value: 'offline', title: 'Антикафе' },
+          { value: 'online', title: 'Zoom' },
         ].map((item) => (
           <Row key={item.value} vCentered>
             <input
