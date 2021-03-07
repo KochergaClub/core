@@ -1,75 +1,105 @@
-import { useCallback } from 'react';
-
+import {
+    differenceInCalendarDays, differenceInCalendarWeeks, getDate, isSameYear, parseISO
+} from 'date-fns';
+import { utcToZonedTime } from 'date-fns-tz';
+import Link from 'next/link';
+import React, { useCallback } from 'react';
 import styled from 'styled-components';
 
-import {
-  differenceInCalendarDays,
-  differenceInCalendarWeeks,
-  parseISO,
-} from 'date-fns';
-
-import { Button, Label, fonts, deviceMediaQueries } from '~/frontkit';
-
+import { formatDate, timezone } from '~/common/utils';
 import { trackEvent } from '~/components/analytics';
-
-import HumanizedDateTime from '~/components/HumanizedDateTime';
 import HeroWithImage from '~/components/HeroWithImage';
-import HeroHeader from '~/components/HeroHeader';
+import CalendarIcon from '~/components/icons/CalendarIcon';
+import { publicEventsRootRoute } from '~/events/routes';
+import { A, Button, colors, Column, deviceMediaQueries, fonts, LabelDiv, Row } from '~/frontkit';
+import { projectRoute } from '~/projects/routes';
 
+import { Event_DetailsFragment } from './queries.generated';
 import { CommonProps } from './types';
 
-// TODO - redo with grid layout
 const Container = styled.div`
-  min-height: inherit;
+  flex: 1;
+  max-width: 900px;
+  margin: 40px;
   display: flex;
   flex-direction: column;
-  align-items: center;
   justify-content: space-between;
-
-  padding: 24px;
-`;
-
-const HeroTopLink = styled.a`
-  text-decoration: none;
-`;
-
-const HeroLabel = styled(Label)`
   color: white;
-  cursor: pointer;
 `;
 
-const BottomRowContainer = styled.div`
+const Header = styled.h1`
+  font-weight: bold;
+  font-size: ${fonts.sizes.XXL};
+  line-height: 1.1;
+  ${deviceMediaQueries.mobile(`
+    font-size: ${fonts.sizes.L};
+  `)}
+  ${deviceMediaQueries.tablet(`
+    font-size: ${fonts.sizes.XL};
+  `)}
+`;
+
+// copy-pasted from ProjectHeroBlock
+const GreyA = styled(A)`
+  ${fonts.label}
+  color: ${colors.primary[300]};
+`;
+
+const getDaysUntil = (event: Event_DetailsFragment) =>
+  differenceInCalendarDays(parseISO(event.start), new Date());
+
+const DateInfoContainer = styled.time`
   display: flex;
-  flex-direction: column;
+  flex-direction: row;
+  align-items: flex-end;
 
-  justify-content: center;
-  width: 100%;
-
-  color: white;
-
-  ${deviceMediaQueries.desktop(`
-      flex-direction: row;
-      flex-wrap: wrap;
-      align-items: center;
-      font-size: ${fonts.sizes.L};
-    `)}
-
-  > :first-child,
-  > :last-child {
-    flex: 1;
-    text-align: center;
+  & > * + * {
+    margin-left: 16px;
   }
 `;
 
-interface ExtraProps {
-  registrationRef: React.MutableRefObject<HTMLElement | null>;
-}
+const CalendarIconWithDateContainer = styled.div`
+  position: relative;
+  > svg {
+    display: block;
+  }
+`;
 
-const BottomRow: React.FC<CommonProps & ExtraProps> = ({
-  event,
-  registrationRef,
-}) => {
-  const daysUntil = differenceInCalendarDays(parseISO(event.start), new Date());
+const CalendarIconWithDate: React.FC<{ day: number }> = ({ day }) => {
+  return (
+    <CalendarIconWithDateContainer>
+      <CalendarIcon size={80} color={colors.grey[300]} />
+      <div
+        style={{
+          position: 'absolute',
+          width: 80,
+          textAlign: 'center',
+          left: 0,
+          top: 22,
+          fontSize: '48px',
+          fontWeight: 'bold',
+          lineHeight: 1,
+        }}
+      >
+        {day}
+      </div>
+    </CalendarIconWithDateContainer>
+  );
+};
+
+const DateInfoText = styled.div`
+  font-size: ${fonts.sizes.L};
+  text-transform: uppercase;
+  font-weight: bold;
+
+  ${deviceMediaQueries.mobile(`
+    font-size: ${fonts.sizes.N};
+  `)}
+`;
+
+const DateInfo: React.FC<CommonProps> = ({ event }) => {
+  const daysUntil = getDaysUntil(event);
+  const date = parseISO(event.start);
 
   let daysText = '';
 
@@ -91,13 +121,9 @@ const BottomRow: React.FC<CommonProps & ExtraProps> = ({
     daysText = 'Через 6 дней';
   } else {
     // more than 6 days
-    const weeksUntil = differenceInCalendarWeeks(
-      parseISO(event.start),
-      new Date(),
-      {
-        weekStartsOn: 1,
-      }
-    );
+    const weeksUntil = differenceInCalendarWeeks(date, new Date(), {
+      weekStartsOn: 1,
+    });
 
     if (weeksUntil === 1) {
       daysText = 'На следующей неделе';
@@ -106,6 +132,31 @@ const BottomRow: React.FC<CommonProps & ExtraProps> = ({
     }
   }
 
+  const zonedDate = utcToZonedTime(date, timezone);
+
+  const format = `MMMM${
+    isSameYear(date, new Date()) ? '' : ' yyyy'
+  }, EEEE, HH:mm`;
+
+  return (
+    <DateInfoContainer dateTime={date.toISOString()}>
+      <CalendarIconWithDate day={getDate(zonedDate)} />
+      <Column gutter={4}>
+        <DateInfoText>{formatDate(zonedDate, format)}</DateInfoText>
+        <div style={{ fontSize: fonts.sizes.S }}>{daysText}</div>
+      </Column>
+    </DateInfoContainer>
+  );
+};
+
+interface ExtraProps {
+  registrationRef: React.MutableRefObject<HTMLElement | null>;
+}
+
+const Bottom: React.FC<CommonProps & ExtraProps> = ({
+  event,
+  registrationRef,
+}) => {
   const registerCb = useCallback(() => {
     trackEvent('top_register_button', {
       category: 'events',
@@ -122,16 +173,17 @@ const BottomRow: React.FC<CommonProps & ExtraProps> = ({
     });
   }, [registrationRef, event.title]);
 
+  const daysUntil = getDaysUntil(event);
+
   return (
-    <BottomRowContainer>
-      <HumanizedDateTime date={parseISO(event.start)} />
+    <Column gutter={20}>
+      <DateInfo event={event} />
       {daysUntil >= 0 && (
-        <Button kind="primary" size="big" onClick={registerCb}>
+        <Button kind="primary" onClick={registerCb}>
           К регистрации
         </Button>
       )}
-      <div>{daysText}</div>
-    </BottomRowContainer>
+    </Column>
   );
 };
 
@@ -143,13 +195,19 @@ const EventHeroBlock: React.FC<CommonProps & ExtraProps> = (props) => {
   return (
     <HeroWithImage image={imageUrl}>
       <Container>
-        <HeroTopLink href="/events">
-          <HeroLabel>
-            {event.realm === 'offline' ? 'Событие в Кочерге' : 'Онлайн-событие'}
-          </HeroLabel>
-        </HeroTopLink>
-        <HeroHeader>{event.title}</HeroHeader>
-        <BottomRow {...props} />
+        <Link href={publicEventsRootRoute()} passHref>
+          <GreyA>&larr; Все события</GreyA>
+        </Link>
+        {event.project ? (
+          <Row style={{ marginTop: '4px' }}>
+            <LabelDiv style={{ color: 'white' }}>Событие проекта</LabelDiv>
+            <Link href={projectRoute(event.project.meta.slug)} passHref>
+              <GreyA>{event.project.title}</GreyA>
+            </Link>
+          </Row>
+        ) : null}
+        <Header>{event.title}</Header>
+        <Bottom {...props} />
       </Container>
     </HeroWithImage>
   );

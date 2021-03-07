@@ -2,6 +2,7 @@ import Link from 'next/link';
 import React from 'react';
 import styled from 'styled-components';
 
+import HeroHeader from '~/components/HeroHeader';
 import TelegramIcon from '~/components/icons/TelegramIcon';
 import { A, colors, Column, deviceMediaQueries, fonts, LabelDiv, Row } from '~/frontkit';
 import { projectsListRoute } from '~/projects/routes';
@@ -28,23 +29,6 @@ const InnerContainer = styled.div`
 
   margin: 40px;
   max-width: 900px;
-`;
-
-const Header = styled.h1`
-  margin: 0;
-
-  line-height: 1.2;
-  font-size: ${fonts.sizes.XXL};
-  font-family: Intro;
-
-  color: white;
-
-  ${deviceMediaQueries.mobile(`
-    font-size: ${fonts.sizes.L};
-  `)}
-  ${deviceMediaQueries.tablet(`
-    font-size: ${fonts.sizes.XL};
-  `)}
 `;
 
 const Summary = styled.div`
@@ -79,7 +63,7 @@ export const ProjectHeroBlock: React.FC<Props> = ({ project }) => (
       <Link href={projectsListRoute()} passHref>
         <GreyA>&larr; Все проекты</GreyA>
       </Link>
-      <Header>{project.title}</Header>
+      <HeroHeader>{project.title}</HeroHeader>
       <Summary>{project.summary}</Summary>
       <Column gutter={10}>
         <ActivitySummary>
