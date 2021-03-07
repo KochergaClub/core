@@ -20,7 +20,11 @@ import { CommonProps } from './types';
 const Container = styled.div`
   flex: 1;
   max-width: 900px;
-  margin: 40px;
+  width: 100%;
+  ${deviceMediaQueries.desktop(`
+    width: 900px;
+  `)}
+  padding: 40px;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
