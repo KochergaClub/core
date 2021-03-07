@@ -1,14 +1,16 @@
 import Link from 'next/link';
+import React from 'react';
 import styled from 'styled-components';
 
-import { A, colors, Column, deviceMediaQueries, fonts, LabelDiv } from '~/frontkit';
+import TelegramIcon from '~/components/icons/TelegramIcon';
+import { A, colors, Column, deviceMediaQueries, fonts, LabelDiv, Row } from '~/frontkit';
 import { projectsListRoute } from '~/projects/routes';
 
 import { ProjectPageFragment } from './fragments.generated';
 
 const Container = styled.div<{ image: string }>`
   min-height: 400px;
-  background-image: linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6)),
+  background-image: linear-gradient(rgba(0, 0, 0, 0.65), rgba(0, 0, 0, 0.65)),
     url(${(props) => props.image});
   background-size: cover;
   background-position: center;
@@ -64,7 +66,8 @@ const ActivitySummary = styled(LabelDiv)`
 
 const GreyA = styled(A)`
   ${fonts.label}
-  color: ${colors.grey[300]};
+  /* color: ${colors.grey[300]}; */
+  color: ${colors.primary[300]};
 `;
 
 interface Props {
@@ -84,7 +87,12 @@ export const ProjectHeroBlock: React.FC<Props> = ({ project }) => (
           {project.is_active ? project.activity_summary : 'Неактивный проект'}
         </ActivitySummary>
         {project.telegram_chats.length ? (
-          <GreyA href={project.telegram_chats[0].link}>Чат проекта</GreyA>
+          <GreyA href={project.telegram_chats[0].link}>
+            <Row vCentered>
+              <TelegramIcon size={16} color={colors.primary[300]} />
+              <span>Чат проекта</span>
+            </Row>
+          </GreyA>
         ) : null}
       </Column>
     </InnerContainer>
