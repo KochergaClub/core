@@ -143,7 +143,7 @@ class Event(wagtail.search.index.Indexed, models.Model):
     event_type = models.CharField(
         max_length=40,
         choices=[(x, x) for x in ('public', 'private', 'unknown')],
-        default="unknown",
+        default="public",
     )
 
     registration_type = models.CharField(
