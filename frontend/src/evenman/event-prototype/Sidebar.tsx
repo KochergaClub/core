@@ -4,7 +4,7 @@ import EventPrototypeAdd from './EventPrototypeAdd';
 import EventPrototypeList from './EventPrototypeList';
 
 interface Props {
-  selected_id?: number;
+  selected_id?: string;
 }
 
 const Container = styled.div`
@@ -26,7 +26,7 @@ const Sidebar: React.FC<Props> = ({ selected_id }) => {
       <AddContainer>
         <EventPrototypeAdd />
       </AddContainer>
-      <EventPrototypeList selectedId={String(selected_id)} />
+      <EventPrototypeList selectedId={selected_id} />
     </Container>
   );
 };

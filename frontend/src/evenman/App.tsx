@@ -37,13 +37,14 @@ const EvenmanApp: NextApolloPage = () => {
       case 'Schedule':
         return <ScheduleScreen />;
       case 'EventPrototype':
-        const prototype_id = parseInt(router.query.id as string, 10);
-        return <EventPrototypeScreen selected_id={prototype_id} />;
+        const selected_id = router.query.id
+          ? String(router.query.id)
+          : undefined;
+        return <EventPrototypeScreen selected_id={selected_id} />;
       case 'Lead':
         return <LeadScreen />;
       case 'LeadDetails':
-        const lead_id = parseInt(router.query.id as string, 10);
-        return <LeadDetailsScreen id={lead_id} />;
+        return <LeadDetailsScreen id={String(router.query.id)} />;
       default:
         return <div>Unknown route {name}</div>;
     }
