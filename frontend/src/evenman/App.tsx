@@ -8,6 +8,7 @@ import { WithNavSidebar } from '~/frontkit';
 import EventPrototypeScreen from './event-prototype/EventPrototypeScreen';
 import EventScreen from './event/EventScreen';
 import GlobalStyle from './GlobalStyle';
+import { LeadDetailsScreen } from './lead/LeadDetailsScreen';
 import { LeadScreen } from './lead/LeadScreen';
 import { PREFIX } from './routes';
 import ScheduleScreen from './schedule/ScheduleScreen';
@@ -40,6 +41,9 @@ const EvenmanApp: NextApolloPage = () => {
         return <EventPrototypeScreen selected_id={prototype_id} />;
       case 'Lead':
         return <LeadScreen />;
+      case 'LeadDetails':
+        const lead_id = parseInt(router.query.id as string, 10);
+        return <LeadDetailsScreen id={lead_id} />;
       default:
         return <div>Unknown route {name}</div>;
     }
@@ -59,6 +63,8 @@ const EvenmanApp: NextApolloPage = () => {
       return 'EventPrototype';
     } else if (route === `${PREFIX}/leads`) {
       return 'Lead';
+    } else if (route === `${PREFIX}/leads/[id]`) {
+      return 'LeadDetails';
     } else {
       return '';
     }

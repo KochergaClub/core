@@ -15,7 +15,7 @@ import { ModalAction, MutationAction } from '~/components/DropdownMenu';
 import { UserLink } from '~/components/UserLink';
 import { A, Badge, colors, Column, Row } from '~/frontkit';
 
-import { evenmanEventRoute } from '../routes';
+import { evenmanEventRoute, leadDetailsRoute } from '../routes';
 import { AddEventToLeadModal } from './AddEventToLeadModal';
 import { CommentsList } from './CommentsList';
 import { EditLeadModal } from './EditLeadModal';
@@ -87,7 +87,9 @@ export const LeadCard: React.FC<Props> = ({ lead }) => {
   return (
     <Column stretch gutter={16}>
       <Row vCentered>
-        <span>#{lead.id}</span>
+        <Link href={leadDetailsRoute(lead.id)} passHref>
+          <A>#{lead.id}</A>
+        </Link>
         <strong>{lead.name}</strong>
         <DropdownMenu>
           <ModalAction title="Редактировать" icon={FaEdit}>

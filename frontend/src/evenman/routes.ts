@@ -6,3 +6,6 @@ export const evenmanEventRoute = (id: string) => `${PREFIX}/event/${id}`;
 
 export const prototypeRoute = (id: string) =>
   `${PREFIX}/event-prototypes/${id}`;
+
+export const leadsRoute = () => `${PREFIX}/leads`;
+export const leadDetailsRoute = (id: string) => `${PREFIX}/leads/${id}`;

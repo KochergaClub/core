@@ -422,6 +422,10 @@ export type CommunityLeadEdge = {
   node: CommunityLead;
 };
 
+export type CommunityLeadInput = {
+  id: Scalars['ID'];
+};
+
 export enum CommunityLeadStatus {
   Active = 'ACTIVE',
   Inactive = 'INACTIVE'
@@ -2231,6 +2235,7 @@ export type Query = {
   tildaPages: Array<TildaPage>;
   externalServices: Array<ExternalService>;
   communityLeads: CommunityLeadConnection;
+  communityLead: CommunityLead;
   my: My;
 };
 
@@ -2475,6 +2480,11 @@ export type QueryCommunityLeadsArgs = {
   first?: Maybe<Scalars['Int']>;
   last?: Maybe<Scalars['Int']>;
   filter?: Maybe<CommunityLeadsFilterInput>;
+};
+
+
+export type QueryCommunityLeadArgs = {
+  input: CommunityLeadInput;
 };
 
 export type RatioActivity = {

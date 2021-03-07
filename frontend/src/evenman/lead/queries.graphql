@@ -48,6 +48,12 @@ query EvenmanLeads(
   }
 }
 
+query EvenmanLeadDetails($id: ID!) {
+  communityLead(input: { id: $id }) {
+    ...EvenmanLead
+  }
+}
+
 mutation CreateEvenmanLead($input: CreateCommunityLeadInput!) {
   result: createCommunityLead(input: $input) {
     ...EvenmanLead

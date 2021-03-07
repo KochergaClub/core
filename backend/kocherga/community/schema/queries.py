@@ -55,4 +55,16 @@ class communityLeads(helpers.BaseField):
     result = g.NN(types.CommunityLeadConnection)
 
 
+@c.class_field
+class communityLead(helpers.BaseFieldWithInput):
+    def resolve(self, _, info, input):
+        lead = models.Lead.objects.get(pk=input['id'])
+        return lead
+
+    permissions = [permissions.manage_crm]
+
+    input = {'id': 'ID!'}
+    result = g.NN(types.CommunityLead)
+
+
 queries = c.as_dict()

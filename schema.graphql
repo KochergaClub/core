@@ -364,6 +364,10 @@ type CommunityLeadEdge {
   node: CommunityLead!
 }
 
+input CommunityLeadInput {
+  id: ID!
+}
+
 enum CommunityLeadStatus {
   ACTIVE
   INACTIVE
@@ -1459,6 +1463,7 @@ type Query {
   tildaPages: [TildaPage!]!
   externalServices: [ExternalService!]!
   communityLeads(before: String, after: String, first: Int, last: Int, filter: CommunityLeadsFilterInput): CommunityLeadConnection!
+  communityLead(input: CommunityLeadInput!): CommunityLead!
   my: My!
 }
 
