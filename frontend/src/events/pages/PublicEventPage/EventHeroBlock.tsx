@@ -179,9 +179,21 @@ const Bottom: React.FC<CommonProps & ExtraProps> = ({
     <Column gutter={20}>
       <DateInfo event={event} />
       {daysUntil >= 0 && (
-        <Button kind="primary" onClick={registerCb}>
-          К регистрации
-        </Button>
+        <Row vCentered gutter={16}>
+          <Button kind="primary" onClick={registerCb} style={{ flexShrink: 0 }}>
+            К регистрации
+          </Button>
+          {event.realm === 'online' ? (
+            <div
+              style={{
+                color: colors.grey[300],
+                fontSize: fonts.sizes.XS,
+              }}
+            >
+              Мероприятие проходит в Zoom. Участие бесплатно.
+            </div>
+          ) : null}
+        </Row>
       )}
     </Column>
   );
