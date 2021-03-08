@@ -2,10 +2,18 @@ import styled from 'styled-components';
 
 import { colors, Column, Label } from '~/frontkit';
 
-export const Card = styled.div`
+interface CardProps {
+  space?: 'default' | 'large';
+}
+
+export const Card = styled.div<CardProps>`
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
   border-radius: 4px;
-  padding: 12px 20px;
+  padding: ${({ space = 'default' }) =>
+    ({
+      default: '12px 20px',
+      large: '20px 32px',
+    }[space])};
 `;
 
 export const CardHeader: React.FC = ({ children }) => (

@@ -1449,6 +1449,7 @@ type Query {
   ratioOrders(before: String, after: String, first: Int, last: Int): RatioOrderConnection!
   ratioTickets(before: String, after: String, first: Int, last: Int, filter: RatioTicketsFilterInput): RatioTicketConnection!
   ratioTicket(id: ID!): RatioTicket!
+  ratioTestimonials(before: String, after: String, first: Int, last: Int): RatioTestimonialConnection!
   mastermindDatingCohorts: [MastermindDatingCohort!]!
   mastermindDatingCohortById(id: ID!): MastermindDatingCohort!
   projects: [ProjectPage!]!
@@ -1718,6 +1719,24 @@ type RatioSectionPage implements WagtailPage {
   id: ID!
   meta: WagtailPageMeta!
   body: [WagtailBlock!]!
+}
+
+type RatioTestimonial {
+  id: ID!
+  author_name: String!
+  author_description: String!
+  author_image(spec: String!): WagtailImageRendition
+  text: String!
+}
+
+type RatioTestimonialConnection {
+  pageInfo: PageInfo!
+  nodes: [RatioTestimonial!]!
+  edges: [RatioTestimonialEdge!]!
+}
+
+type RatioTestimonialEdge {
+  node: RatioTestimonial!
 }
 
 type RatioTicket {

@@ -1,12 +1,7 @@
-from wagtail.contrib.modeladmin.options import (
-    ModelAdmin,
-    ModelAdminGroup,
-    modeladmin_register,
-)
-
-from django.utils.html import format_html
 from django.templatetags.static import static
-
+from django.utils.html import format_html
+from wagtail.contrib.modeladmin.options import (ModelAdmin, ModelAdminGroup,
+                                                modeladmin_register)
 from wagtail.core import hooks
 
 from . import models
@@ -30,9 +25,13 @@ def global_admin_css():
     )
 
 
-class TrainingAdmin(ModelAdmin):
-    model = models.Training
-    # broken until we fix Training's pk
+# class TrainingAdmin(ModelAdmin):
+#     model = models.Training
+#     # broken until we fix Training's pk
+#     # (and unnecessary anyway, /team/raito should be enough)
+
+class TestimonialAdmin(ModelAdmin):
+    model = models.Testimonial
 
 
 class SectionAdmin(ModelAdmin):
@@ -55,7 +54,8 @@ class RatioGroup(ModelAdminGroup):
     menu_icon = 'group'
     menu_label = 'Рацио'
     items = (
-        TrainingAdmin,
+        # TrainingAdmin,
+        TestimonialAdmin,
         SectionAdmin,
         NotebookAdmin,
     )

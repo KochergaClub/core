@@ -2221,6 +2221,7 @@ export type Query = {
   ratioOrders: RatioOrderConnection;
   ratioTickets: RatioTicketConnection;
   ratioTicket: RatioTicket;
+  ratioTestimonials: RatioTestimonialConnection;
   mastermindDatingCohorts: Array<MastermindDatingCohort>;
   mastermindDatingCohortById: MastermindDatingCohort;
   projects: Array<ProjectPage>;
@@ -2456,6 +2457,14 @@ export type QueryRatioTicketsArgs = {
 
 export type QueryRatioTicketArgs = {
   id: Scalars['ID'];
+};
+
+
+export type QueryRatioTestimonialsArgs = {
+  before?: Maybe<Scalars['String']>;
+  after?: Maybe<Scalars['String']>;
+  first?: Maybe<Scalars['Int']>;
+  last?: Maybe<Scalars['Int']>;
 };
 
 
@@ -2750,6 +2759,32 @@ export type RatioSectionPage = WagtailPage & {
   id: Scalars['ID'];
   meta: WagtailPageMeta;
   body: Array<WagtailBlock>;
+};
+
+export type RatioTestimonial = {
+  __typename?: 'RatioTestimonial';
+  id: Scalars['ID'];
+  author_name: Scalars['String'];
+  author_description: Scalars['String'];
+  author_image?: Maybe<WagtailImageRendition>;
+  text: Scalars['String'];
+};
+
+
+export type RatioTestimonialAuthor_ImageArgs = {
+  spec: Scalars['String'];
+};
+
+export type RatioTestimonialConnection = {
+  __typename?: 'RatioTestimonialConnection';
+  pageInfo: PageInfo;
+  nodes: Array<RatioTestimonial>;
+  edges: Array<RatioTestimonialEdge>;
+};
+
+export type RatioTestimonialEdge = {
+  __typename?: 'RatioTestimonialEdge';
+  node: RatioTestimonial;
 };
 
 export type RatioTicket = {

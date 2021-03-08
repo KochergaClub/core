@@ -13844,6 +13844,11 @@ react-resize-aware@^3.0.1:
   resolved "https://npm.team.kocherga.club/react-resize-aware/-/react-resize-aware-3.1.0.tgz#fa1da751d1d72f90c3b79969d05c2c577dfabd92"
   integrity sha512-bIhHlxVTX7xKUz14ksXMEHjzCZPTpQZKZISY3nbTD273pDKPABGFNFBP6Tr42KECxzC5YQiKpMchjTVJCqaxpA==
 
+react-responsive-masonry@^2.1.1:
+  version "2.1.1"
+  resolved "https://npm.team.kocherga.club/react-responsive-masonry/-/react-responsive-masonry-2.1.1.tgz#f3793177d11e4df751122ac9acf88a157c6e0943"
+  integrity sha512-ec39c5Ot/p8tcjOIBn6pORybHD3870hXZ332Xk1dK5Ky+lNAj7S8giRWSDr5PLaCKQvaf+4Xje3hIQH3D0By1Q==
+
 react-select@^3.1.0:
   version "3.1.1"
   resolved "https://registry.yarnpkg.com/react-select/-/react-select-3.1.1.tgz#156a5b4a6c22b1e3d62a919cb1fd827adb4060bc"

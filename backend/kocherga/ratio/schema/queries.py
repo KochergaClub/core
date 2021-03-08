@@ -146,4 +146,14 @@ class ratioTicket(helpers.BaseField):
     result = g.NN(types.RatioTicket)
 
 
+@c.class_field
+class ratioTestimonials(helpers.BaseField):
+    def resolve(self, _, info, **pager):
+        return models.Testimonial.objects.relay_page(**pager)
+
+    permissions = []
+    args = helpers.connection_args()
+    result = g.NN(types.RatioTestimonialConnection)
+
+
 queries = c.as_dict()
