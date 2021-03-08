@@ -6,7 +6,7 @@ import { useQuery } from '@apollo/client';
 
 import { ApolloQueryResults } from '~/components';
 import { Card } from '~/components/cards';
-import { colors, Column, fonts, RichText, Row } from '~/frontkit';
+import { Badge, colors, Column, fonts, RichText, Row } from '~/frontkit';
 
 import { RatioTestimonial_CardFragment, RatioTestimonialsDocument } from './queries.generated';
 
@@ -45,6 +45,11 @@ const TestimonialText = styled(RichText)`
   font-size: ${fonts.sizes.S};
 `;
 
+const ProductLink = styled.a`
+  color: black;
+  text-decoration: none;
+`;
+
 const TestimonialCardContents: React.FC<{
   testimonial: RatioTestimonial_CardFragment;
 }> = ({ testimonial }) => {
@@ -59,11 +64,18 @@ const TestimonialCardContents: React.FC<{
         ) : (
           <AuthorImagePlaceholder />
         )}
-        <Column gutter={10}>
+        <Column gutter={0}>
           <AuthorName>{testimonial.author_name}</AuthorName>
           <AuthorDescription>
             {testimonial.author_description}
           </AuthorDescription>
+          {testimonial.product ? (
+            <ProductLink href={testimonial.product.link}>
+              <Badge color={testimonial.product.color}>
+                {testimonial.product.title}
+              </Badge>
+            </ProductLink>
+          ) : null}
         </Column>
       </Row>
       <TestimonialText dangerouslySetInnerHTML={{ __html: testimonial.text }} />

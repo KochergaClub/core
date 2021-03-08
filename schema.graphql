@@ -1727,6 +1727,7 @@ type RatioTestimonial {
   author_description: String!
   author_image(spec: String!): WagtailImageRendition
   text: String!
+  product: RatioTestimonialProduct
 }
 
 type RatioTestimonialConnection {
@@ -1737,6 +1738,13 @@ type RatioTestimonialConnection {
 
 type RatioTestimonialEdge {
   node: RatioTestimonial!
+}
+
+type RatioTestimonialProduct {
+  id: ID!
+  title: String!
+  color: String!
+  link: String!
 }
 
 type RatioTicket {

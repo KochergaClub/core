@@ -149,7 +149,7 @@ class ratioTicket(helpers.BaseField):
 @c.class_field
 class ratioTestimonials(helpers.BaseField):
     def resolve(self, _, info, **pager):
-        return models.Testimonial.objects.relay_page(**pager)
+        return models.Testimonial.objects.select_related('product').relay_page(**pager)
 
     permissions = []
     args = helpers.connection_args()

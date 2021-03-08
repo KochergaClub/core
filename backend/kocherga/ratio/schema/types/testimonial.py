@@ -4,6 +4,17 @@ from kocherga.wagtail import graphql_utils as wagtail_utils
 
 from ... import models
 
+RatioTestimonialProduct = DjangoObjectType(
+    'RatioTestimonialProduct',
+    model=models.TestimonialProduct,
+    db_fields=[
+        'id',
+        'title',
+        'color',
+        'link',
+    ],
+)
+
 RatioTestimonial = DjangoObjectType(
     'RatioTestimonial',
     model=models.Testimonial,
@@ -17,6 +28,7 @@ RatioTestimonial = DjangoObjectType(
             models.Testimonial, 'author_image'
         ),
         'text': wagtail_utils.richtext_field(models.Testimonial, 'text'),
+        'product': RatioTestimonialProduct,
     },
 )
 

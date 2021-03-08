@@ -9,6 +9,7 @@ import * as fonts from '../fonts';
 
 interface InnerProps {
   type?: 'accent' | 'default' | 'good';
+  color?: string;
 }
 
 interface Props extends InnerProps {
@@ -21,10 +22,11 @@ const type2color = {
   good: colors.good[300],
 };
 
-export const InnerBadge = styled.div<Props>`
+export const InnerBadge = styled.div<InnerProps>`
   display: inline-block;
 
-  background-color: ${(props) => type2color[props.type || 'default']};
+  background-color: ${(props) =>
+    props.color || type2color[props.type || 'default']};
   border-radius: 10px;
   min-width: 20px;
   padding: 2px 8px;
@@ -33,8 +35,8 @@ export const InnerBadge = styled.div<Props>`
   white-space: nowrap;
 `;
 
-export const Badge: React.FC<Props> = ({ type, hint, children }) => {
-  const inner = <InnerBadge type={type}>{children}</InnerBadge>;
+export const Badge: React.FC<Props> = ({ children, hint, ...innerProps }) => {
+  const inner = <InnerBadge {...innerProps}>{children}</InnerBadge>;
 
   return hint ? <Tippy content={hint}>{inner}</Tippy> : inner;
 };

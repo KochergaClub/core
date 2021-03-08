@@ -10,6 +10,11 @@ fragment RatioTestimonial_Card on RatioTestimonial {
     id
     url
   }
+  product {
+    title
+    color
+    link
+  }
   text
 }
 

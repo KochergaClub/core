@@ -5,7 +5,7 @@ from .payment import Payment
 from .presentation import PresentationIndexPage
 from .promocode import Promocode
 from .section_page import SectionIndexPage, SectionPage
-from .testimonial import Testimonial
+from .testimonial import Testimonial, TestimonialProduct
 from .ticket import Ticket
 from .ticket_type import TicketType
 from .trainer import Trainer
@@ -28,4 +28,5 @@ __all__ = [
     'NotebookPage',
     'PresentationIndexPage',
     'Testimonial',
+    'TestimonialProduct',
 ]

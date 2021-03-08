@@ -2768,6 +2768,7 @@ export type RatioTestimonial = {
   author_description: Scalars['String'];
   author_image?: Maybe<WagtailImageRendition>;
   text: Scalars['String'];
+  product?: Maybe<RatioTestimonialProduct>;
 };
 
 
@@ -2785,6 +2786,14 @@ export type RatioTestimonialConnection = {
 export type RatioTestimonialEdge = {
   __typename?: 'RatioTestimonialEdge';
   node: RatioTestimonial;
+};
+
+export type RatioTestimonialProduct = {
+  __typename?: 'RatioTestimonialProduct';
+  id: Scalars['ID'];
+  title: Scalars['String'];
+  color: Scalars['String'];
+  link: Scalars['String'];
 };
 
 export type RatioTicket = {
