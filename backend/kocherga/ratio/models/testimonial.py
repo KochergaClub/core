@@ -16,7 +16,7 @@ class Testimonial(Orderable, models.Model):
     )
 
     author_name = models.CharField(max_length=80)
-    author_description = models.CharField(max_length=80, blank=True)
+    author_description = models.CharField(max_length=1024, blank=True)
 
     text = RichTextField()
 
