@@ -80,9 +80,10 @@ def test_send_reminders(frozen_time, user1, user2, tomorrow_event, future_event)
     Ticket.objects.send_reminders()
     assert len(mail.outbox) == initial_reminders + 2
 
-    assert mail.outbox[initial_reminders - 1].subject.startswith(
-        'Регистрация на событие'
-    )
+    if initial_reminders > 0:
+        assert mail.outbox[initial_reminders - 1].subject.startswith(
+            'Регистрация на событие'
+        )
     assert (
         mail.outbox[initial_reminders].subject
         == f'Напоминание о событии: {future_event.title}'
