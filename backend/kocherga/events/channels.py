@@ -2,6 +2,8 @@ import logging
 
 logger = logging.getLogger(__name__)
 
+from typing import Optional
+
 import kocherga.slack.channels
 from django.core.exceptions import ObjectDoesNotExist
 from django.utils import timezone
@@ -11,12 +13,24 @@ from reversion.models import Version
 
 from channels.consumer import SyncConsumer
 
-from .models import Event, GoogleCalendar
+from .models import Event, GoogleCalendar, Ticket
 
 WORKER_CHANNEL = 'events-worker'
 
 
 update_group = ChannelsGroup('event_updates')
+
+
+# TODO - having a prefix for "push job to worker" would be nice; this is a first attempt for such naming
+def job_send_ticket_confirmation_email(ticket_id: int, signed_in: Optional[bool]):
+    channel_send(
+        WORKER_CHANNEL,
+        {
+            "type": "send_ticket_confirmation_email",
+            "ticket_id": ticket_id,
+            "signed_in": signed_in,
+        },
+    )
 
 
 def notify_slack_by_event_version(version_id: int):
@@ -92,6 +106,12 @@ class EventsWorker(SyncConsumer):
         for google_calendar in GoogleCalendar.objects.all():
             # TODO - try/catch?
             google_calendar.export_event(event)
+
+    def send_ticket_confirmation_email(self, message):
+        ticket_id = message['ticket_id']
+        signed_in = message['signed_in']
+        ticket = Ticket.objects.get(pk=ticket_id)
+        ticket.send_confirmation_email(signed_in=signed_in)
 
 
 workers = {

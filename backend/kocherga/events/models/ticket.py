@@ -44,10 +44,13 @@ class TicketManager(models.Manager):
             },
         )
 
-        ticket.send_confirmation_email(
-            signed_in=signed_in
-        )  # `signed_in` might be useful in email templates
-        ticket.subscribe_to_newsletter_if_necessary()  # TODO - do asynchronously for faster response
+        from ..channels import job_send_ticket_confirmation_email
+
+        job_send_ticket_confirmation_email(ticket_id=ticket.pk, signed_in=signed_in)
+
+        # this call is scheduled through channels, so it's fast enough
+        ticket.subscribe_to_newsletter_if_necessary()
+
         return ticket
 
     def unregister(self, user, event) -> 'Ticket':
@@ -143,6 +146,7 @@ class Ticket(models.Model):
             render_to_string('events/email/registered.mjml', template_vars)
         )
 
+        logger.info(f'Sending confirmation email for {self.pk}')
         send_mail(
             subject=f'Регистрация на событие: {self.event.title}',
             from_email='Кочерга <info@kocherga-club.ru>',
@@ -150,6 +154,7 @@ class Ticket(models.Model):
             html_message=html_body,
             recipient_list=[self.user.email],
         )
+        logger.info(f'Confirmation email for {self.pk} sent')
 
     def should_send_reminder(self) -> bool:
         if self.day_before_notification_sent:
