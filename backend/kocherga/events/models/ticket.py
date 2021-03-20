@@ -135,6 +135,7 @@ class Ticket(models.Model):
             'address_text': 'Москва, ул. Большая Дорогомиловская, д.5к2',  # TODO - move to config
         }
 
+    # slow, should be called from background workers only
     def send_confirmation_email(self, signed_in: Optional[bool] = None) -> None:
         if self.from_timepad:
             return
@@ -181,6 +182,7 @@ class Ticket(models.Model):
 
         return True
 
+    # slow, should be called from background workers only
     def send_day_before_reminder(self) -> None:
         if not self.should_send_reminder():
             return
