@@ -39,7 +39,7 @@ alertmanager:
       - name: "slack"
         slack_configs:
           - channel: "#infra_alerts"
-            send_resolved: false
+            send_resolved: true
             # via: https://gist.github.com/l13t/d432b63641b6972b1f58d7c037eec88f
             title: '[{{ .Status | toUpper }}{{ if eq .Status "firing" }}:{{ .Alerts.Firing | len }}{{ end }}] Monitoring Event Notification'
             text: >-
