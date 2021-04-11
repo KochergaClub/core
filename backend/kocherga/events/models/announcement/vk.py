@@ -74,6 +74,8 @@ class Manager(models.Manager):
 
         events = self.upcoming_events()
         logger.info(f"Schedule includes {len(events)} events")
+        if len(events) == 0:
+            return  # wiki page content becomes irreversible if we update it with 0 events
 
         result = "=== Лента всех мероприятий: [https://vk.com/kocherga_daily] ===\n\n-----\n<br>\n"
 
