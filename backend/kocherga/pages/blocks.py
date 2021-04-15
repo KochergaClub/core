@@ -1,9 +1,7 @@
+from kocherga.wagtail.blocks import SafeRichTextBlock, URLOrAbsolutePathBlock, registry
 from wagtail.core import blocks
 from wagtail.images.blocks import ImageChooserBlock
-
 from wagtailgeowidget.blocks import GeoBlock
-
-from kocherga.wagtail.blocks import URLOrAbsolutePathBlock, SafeRichTextBlock, registry
 
 registry.register_list(
     tag='basic',
@@ -16,13 +14,17 @@ registry.register_list(
                     ('text', SafeRichTextBlock(required=False)),
                 ],
                 group='basic',
-                label='Заголовок секции',
+                label='Заголовок секции (deprecated)',
                 icon='title',
             ),
         ),
         (
             'basic_lead',  # deprecated in favor of basic_grey and basic_card
-            SafeRichTextBlock(group='basic', label='Крупный текст', icon='bold'),
+            SafeRichTextBlock(
+                group='basic',
+                label='Крупный текст (deprecated)',
+                icon='bold',
+            ),
         ),
         (
             'basic_text',
