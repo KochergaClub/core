@@ -122,11 +122,6 @@ type BasicCardBlock implements WagtailBlock {
   value: String!
 }
 
-type BasicLeadBlock implements WagtailBlock {
-  id: ID!
-  value: String!
-}
-
 type BasicResult {
   ok: Boolean
 }
@@ -909,16 +904,6 @@ type FrontSocialLinksBlock implements WagtailBlock {
 
 type GenericError {
   message: String!
-}
-
-type GreyBlock implements WagtailBlock {
-  id: ID!
-  value: GreyBlockValue!
-}
-
-type GreyBlockValue {
-  header: String!
-  text: String!
 }
 
 type HeroFrontBlock implements WagtailBlock {

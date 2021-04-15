@@ -145,12 +145,6 @@ export type BasicCardBlock = WagtailBlock & {
   value: Scalars['String'];
 };
 
-export type BasicLeadBlock = WagtailBlock & {
-  __typename?: 'BasicLeadBlock';
-  id: Scalars['ID'];
-  value: Scalars['String'];
-};
-
 export type BasicResult = {
   __typename?: 'BasicResult';
   ok?: Maybe<Scalars['Boolean']>;
@@ -1051,18 +1045,6 @@ export type FrontSocialLinksBlock = WagtailBlock & {
 export type GenericError = {
   __typename?: 'GenericError';
   message: Scalars['String'];
-};
-
-export type GreyBlock = WagtailBlock & {
-  __typename?: 'GreyBlock';
-  id: Scalars['ID'];
-  value: GreyBlockValue;
-};
-
-export type GreyBlockValue = {
-  __typename?: 'GreyBlockValue';
-  header: Scalars['String'];
-  text: Scalars['String'];
 };
 
 export type HeroFrontBlock = WagtailBlock & {

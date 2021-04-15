@@ -47,9 +47,6 @@ export type PresentationPageFragment = (
     { __typename: 'BasicCardBlock' }
     & Pick<Types.BasicCardBlock, 'id'>
   ) | (
-    { __typename: 'BasicLeadBlock' }
-    & Pick<Types.BasicLeadBlock, 'id'>
-  ) | (
     { __typename: 'BasicTextBlock' }
     & Pick<Types.BasicTextBlock, 'id'>
   ) | (
@@ -70,9 +67,6 @@ export type PresentationPageFragment = (
   ) | (
     { __typename: 'FrontSocialLinksBlock' }
     & Pick<Types.FrontSocialLinksBlock, 'id'>
-  ) | (
-    { __typename: 'GreyBlock' }
-    & Pick<Types.GreyBlock, 'id'>
   ) | (
     { __typename: 'HeroFrontBlock' }
     & Pick<Types.HeroFrontBlock, 'id'>

@@ -126,7 +126,6 @@
     ],
     "WagtailBlock": [
       "BasicCardBlock",
-      "BasicLeadBlock",
       "BasicTextBlock",
       "BigContactsBlock",
       "ColumnsBasicBlock",
@@ -134,7 +133,6 @@
       "EventsListBlock",
       "FrontPartnersBlock",
       "FrontSocialLinksBlock",
-      "GreyBlock",
       "HeroFrontBlock",
       "HrBlock",
       "MailchimpSubscribeBlock",

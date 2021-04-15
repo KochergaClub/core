@@ -22,11 +22,9 @@ export const rawFragment = gql`
     body {
       __typename
       id
-      ...BasicLeadBlock
       ...BasicTextBlock
       ...SectionHeaderBlock
       ...BasicCardBlock
-      ...GreyBlock
       ...ColumnsBasicBlock
       ...ColumnsButtonsBlock
       ...EventsListBlock

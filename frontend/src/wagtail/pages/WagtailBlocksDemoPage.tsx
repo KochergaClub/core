@@ -8,11 +8,6 @@ const WagtailBlocksDemoPage: NextApolloPage = () => {
   const blocks: AnyBlockFragment[] = [
     {
       id: '',
-      __typename: 'BasicLeadBlock',
-      value: 'Базовый заголовок (BasicLeadBlock)',
-    },
-    {
-      id: '',
       __typename: 'BasicTextBlock',
       basic_text: {
         __typename: 'BasicTextBlockValue',
@@ -29,16 +24,6 @@ const WagtailBlocksDemoPage: NextApolloPage = () => {
         text:
           'Обычный текст (BasicTextBlock) с центрированием. Поддерживает html-форматирование: <b>bold</b>, <i>italic</i>. При проставленной настройке "centered" выравнивается по центру.',
         centered: true,
-      },
-    },
-    {
-      id: '',
-      __typename: 'GreyBlock',
-      grey_value: {
-        __typename: 'GreyBlockValue',
-        header: 'Серый блок',
-        text:
-          'Текст поддерживает html-форматирование: <b>bold</b>, <i>italic</i>.',
       },
     },
     {
