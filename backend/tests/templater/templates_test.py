@@ -12,6 +12,7 @@ from kocherga.templater.models import Template
                 'date': '2018-04-01',
                 'time': '12:00',
                 'background_image': 'https://example.com/image.png',
+                'realm': 'online',
             },
         },
         {
