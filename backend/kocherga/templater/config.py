@@ -34,18 +34,41 @@ name2schema['vk-image'] = Schema(
 )
 
 name2schema['mailchimp'] = Schema(
-    [Field('start_date', 'date'), Field('end_date', 'date')]
+    [
+        Field('start_date', 'date'),
+        Field('end_date', 'date'),
+    ]
 )
 
-name2schema['workshop-badge'] = Schema([Field('date_text')])
+name2schema['workshop-badge'] = Schema(
+    [
+        Field('date_text'),
+    ]
+)
 
-name2schema['workshop-thin'] = Schema([Field('date_text')])
+name2schema['workshop-thin'] = Schema(
+    [
+        Field('date_text'),
+    ]
+)
 
-name2schema['vk-cover'] = Schema([Field('now_total', 'int')])
+name2schema['vk-cover'] = Schema(
+    [
+        Field('now_total', 'int', default=0),
+    ]
+)
 
-name2schema['integration'] = Schema([Field('date_text')])
+name2schema['integration'] = Schema(
+    [
+        Field('date_text'),
+    ]
+)
 
-name2schema['integration-fb'] = Schema([Field('date_text')])
+name2schema['integration-fb'] = Schema(
+    [
+        Field('date_text'),
+    ]
+)
 
 name2schema['og-image'] = Schema([])
 

@@ -124,10 +124,10 @@ const ViewingTemplateScreen: React.FC<Props> = ({ template }) => {
           {({ values, isValid }) => {
             return (
               <Form>
-                <Column>
+                <Column gutter={16}>
                   <Fields template={template} />
                   {(isValid || !template.schema.fields.length) && (
-                    <Column centered>
+                    <Column>
                       <Preview state={values} template={template} />
                       <A
                         href={state2link({

@@ -1,12 +1,14 @@
 import logging
 
+from django.http.response import HttpResponseBadRequest
+
 logger = logging.getLogger(__name__)
 
-from django.views.decorators.http import require_safe
+import asyncio
+
 from django.http import HttpResponse
 from django.views.decorators.clickjacking import xframe_options_exempt
-
-import asyncio
+from django.views.decorators.http import require_safe
 
 from . import models
 
@@ -25,7 +27,13 @@ def get_args(args):
 def r_html(request, name):
     template = models.Template.by_name(name)
     args = get_args(request.GET)
-    return HttpResponse(template.generate_html(args))
+
+    try:
+        html = template.generate_html(args)
+        return HttpResponse(html)
+    except models.Template.GenerateError as e:
+        logger.warning(str(e))
+        return HttpResponseBadRequest(template.generate_error_html())
 
 
 @require_safe

@@ -15,7 +15,7 @@ export const TemplateListBlock: React.FC = () => {
     <PaddedBlock>
       <ApolloQueryResults {...queryResults} size="block">
         {({ data: { templates } }) => (
-          <Column stretch>
+          <Column stretch gutter={8}>
             {templates.map((template) => (
               <TemplateCard key={template.name} template={template} />
             ))}

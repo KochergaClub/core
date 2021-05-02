@@ -41,20 +41,48 @@ class Template:
     def template(self):
         return django.template.loader.get_template(self.template_file)
 
+    class GenerateError(Exception):
+        pass
+
+    def generate_error_html(self):
+        (width, height) = self.sizes
+        return django.template.loader.get_template('templater/_error.html').render(
+            {
+                'width': width,
+                'height': height,
+            }
+        )
+
     def generate_html(self, args):
         props = {}
         for field in self.schema.fields:
-            if field.name in args:
-                value = str(args[field.name])
-                if field.value_type == 'int':
+            if args.get(field.name, '') == '':
+                if field.default is None:
+                    raise self.GenerateError(
+                        f"Field {field.name} is not set and has no default value"
+                    )
+                props[field.name] = field.default
+                continue
+
+            value = str(args[field.name])
+            if field.value_type == 'int':
+                try:
                     value = int(value)
-                elif field.value_type == 'number':
+                except ValueError:
+                    raise self.GenerateError("Can't parse int value")
+            elif field.value_type == 'number':
+                try:
                     value = float(value)
-                props[field.name] = value
+                except ValueError:
+                    raise self.GenerateError("Can't parse float value")
+            props[field.name] = value
 
         props['url_root'] = settings.KOCHERGA_WEBSITE
 
-        return self.template.render(props)
+        try:
+            return self.template.render(props)
+        except Exception as e:
+            raise self.GenerateError(f"Failed to render: {e}")
 
     async def generate_png(self, props) -> bytes:
         html = self.generate_html(props)
