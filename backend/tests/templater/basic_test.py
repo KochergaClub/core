@@ -1,5 +1,4 @@
 import pytest
-
 from kocherga.templater.models import Template, list_templates
 
 
@@ -15,6 +14,8 @@ def props():
         'title': 'Foo Bar',
         'date': '2018-04-01',
         'time': '12:00',
+        'background_image': 'https://example.com/image.png',
+        'realm': 'online',
     }
 
 

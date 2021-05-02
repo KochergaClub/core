@@ -1,5 +1,15 @@
+import enum
+
+
+class ValueType(enum.Enum):
+    STRING = 1
+    INT = 2
+    FLOAT = 3
+    DATE = 4
+
+
 class Field:
-    def __init__(self, name, value_type='str', default=None):
+    def __init__(self, name, value_type: ValueType = ValueType.STRING, default=None):
         self.name = name
         self.value_type = value_type
         self.default = default
@@ -26,7 +36,7 @@ name2schema['vk-image'] = Schema(
     [
         Field('header'),
         Field('title'),
-        Field('date', 'date'),
+        Field('date', value_type=ValueType.DATE),
         Field('time'),
         Field('background_image'),
         Field('realm'),
@@ -35,8 +45,8 @@ name2schema['vk-image'] = Schema(
 
 name2schema['mailchimp'] = Schema(
     [
-        Field('start_date', 'date'),
-        Field('end_date', 'date'),
+        Field('start_date', value_type=ValueType.DATE),
+        Field('end_date', value_type=ValueType.DATE),
     ]
 )
 
@@ -54,7 +64,7 @@ name2schema['workshop-thin'] = Schema(
 
 name2schema['vk-cover'] = Schema(
     [
-        Field('now_total', 'int', default=0),
+        Field('now_total', value_type=ValueType.INT, default=0),
     ]
 )
 
@@ -76,7 +86,7 @@ name2schema['training'] = Schema(
     [
         Field('date_text'),
         Field('title'),
-        Field('title_scale', value_type='number', default=1),
+        Field('title_scale', value_type=ValueType.FLOAT, default=1),
         Field('subtitle'),
         Field('background_url'),
     ],

@@ -5,6 +5,7 @@ import { ParsedUrlQuery } from 'querystring';
 import React, { useCallback } from 'react';
 import styled from 'styled-components';
 
+import { ImageTemplateValueType } from '~/apollo/types.generated';
 import { PaddedBlock } from '~/components';
 import { A, colors, Column, Input, Label, Row } from '~/frontkit';
 
@@ -32,24 +33,24 @@ const template2initialValues = (
 const validateValues = (template: TemplateFragment, values: FormState) => {
   const errors: { [k: string]: string } = {};
   for (const field of template.schema.fields) {
-    switch (field.value_type) {
-      case 'str':
+    switch (field.type) {
+      case ImageTemplateValueType.String:
         break;
-      case 'int':
+      case ImageTemplateValueType.Int:
         if (!String(values[field.name]).length) {
           errors[field.name] = 'Обязательное поле';
         } else if (!String(values[field.name]).match(/^\d+$/)) {
           errors[field.name] = 'Должно быть целым числом';
         }
         break;
-      case 'number':
+      case ImageTemplateValueType.Float:
         if (!String(values[field.name]).length) {
           errors[field.name] = 'Обязательное поле';
         } else if (!String(values[field.name]).match(/^\d+(?:\.\d+)?$/)) {
           errors[field.name] = 'Должно быть числом';
         }
         break;
-      case 'date':
+      case ImageTemplateValueType.Date:
         if (!values[field.name].match(/^\d{4}-\d{2}-\d{2}$/)) {
           errors[field.name] = 'Нужна дата в формате YYYY-MM-DD';
         }

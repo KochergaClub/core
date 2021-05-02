@@ -1086,7 +1086,9 @@ export type ImageTemplateSchema = {
 export type ImageTemplateSchemaField = {
   __typename?: 'ImageTemplateSchemaField';
   name: Scalars['String'];
+  /** @deprecated Use `type` enum field instead */
   value_type: Scalars['String'];
+  type: ImageTemplateValueType;
   default?: Maybe<Scalars['String']>;
 };
 
@@ -1095,6 +1097,13 @@ export type ImageTemplateSizes = {
   width: Scalars['Int'];
   height: Scalars['Int'];
 };
+
+export enum ImageTemplateValueType {
+  String = 'STRING',
+  Int = 'INT',
+  Float = 'FLOAT',
+  Date = 'DATE'
+}
 
 export type ImportTildaPageInput = {
   page_id: Scalars['Int'];

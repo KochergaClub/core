@@ -8,7 +8,7 @@ import django.template.loader
 from django.conf import settings
 from kocherga.chrome import get_browser
 
-from .config import name2schema
+from .config import ValueType, name2schema
 
 
 class Template:
@@ -65,12 +65,12 @@ class Template:
                 continue
 
             value = str(args[field.name])
-            if field.value_type == 'int':
+            if field.value_type == ValueType.INT:
                 try:
                     value = int(value)
                 except ValueError:
                     raise self.GenerateError("Can't parse int value")
-            elif field.value_type == 'number':
+            if field.value_type == ValueType.FLOAT:
                 try:
                     value = float(value)
                 except ValueError:
