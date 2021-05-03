@@ -1,5 +1,5 @@
 import { format, parseISO } from 'date-fns';
-import React, { CSSProperties, useCallback } from 'react';
+import React, { useCallback } from 'react';
 import { ValueType } from 'react-select';
 import Async from 'react-select/async';
 
@@ -22,7 +22,10 @@ export const EventPicker: React.FC<Props> = ({ onChange }) => {
   const apolloClient = useApolloClient();
 
   const loadEvents = useCallback(
-    async (inputValue: string, callback: (options: OptionType[]) => void) => {
+    async (
+      inputValue: string,
+      callback: (options: ReadonlyArray<OptionType>) => void
+    ) => {
       try {
         const { data } = await apolloClient.query({
           query: SearchEventsForPickerDocument,
@@ -32,18 +35,16 @@ export const EventPicker: React.FC<Props> = ({ onChange }) => {
           return []; // TODO - proper error handling
         }
 
-        callback(
-          data.events.nodes.map((event) => {
-            const label = `${event.title} ${format(
-              parseISO(event.start),
-              'yyyy-MM-dd'
-            )}`;
-            return {
-              value: event,
-              label,
-            };
-          })
-        );
+        return data.events.nodes.map((event) => {
+          const label = `${event.title} ${format(
+            parseISO(event.start),
+            'yyyy-MM-dd'
+          )}`;
+          return {
+            value: event,
+            label,
+          };
+        });
       } catch (e) {
         console.error(e);
         throw e;
@@ -70,11 +71,11 @@ export const EventPicker: React.FC<Props> = ({ onChange }) => {
         typeof document === 'undefined' ? undefined : document.body // document can be undefined in SSR
       }
       styles={{
-        menuPortal: (provided: CSSProperties) => ({
+        menuPortal: (provided) => ({
           ...provided,
           zIndex: 1100,
         }),
-        container: (provided: CSSProperties) => ({
+        container: (provided) => ({
           ...provided,
           width: '100%',
         }),

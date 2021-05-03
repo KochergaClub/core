@@ -1,5 +1,5 @@
 import Select from 'react-select';
-import { ActionTypes } from 'react-select/src/types';
+import { ActionMeta } from 'react-select/src/types';
 
 import { useQuery } from '@apollo/client';
 
@@ -7,10 +7,15 @@ import { ApolloQueryResults } from '~/components';
 
 import { EvenmanProjectsListDocument } from './queries.generated';
 
-interface Props {
+type OptionType = {
+  value: string;
+  label: string;
+};
+
+type Props = {
   selected?: string;
   select: (slug: string) => Promise<unknown>;
-}
+};
 
 const EventShapeProjectLink = ({ selected, select }: Props) => {
   const projectsResult = useQuery(EvenmanProjectsListDocument);
@@ -26,10 +31,10 @@ const EventShapeProjectLink = ({ selected, select }: Props) => {
         const currentProject = options.find((p) => p.value === selected);
 
         const pickProject = async (
-          v: any,
-          { action }: { action: ActionTypes }
+          v: OptionType | null,
+          { action }: ActionMeta<OptionType>
         ) => {
-          if (action === 'clear') {
+          if (action === 'clear' || v === null) {
             await select('');
           } else {
             await select(v.value);

@@ -14,9 +14,7 @@ module.exports = {
     'plugin:@typescript-eslint/recommended',
     'plugin:react/recommended',
     'prettier',
-    'prettier/@typescript-eslint',
     //    'plugin:prettier/recommended',
-    //    'prettier/@typescript-eslint',
   ],
   plugins: ['react-hooks'],
   rules: {

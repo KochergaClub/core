@@ -39,7 +39,7 @@ export type AnalyticsBovStat = {
 
 /**
  * Describes the current user.
- * 
+ *
  * If user is not signed in, `is_authenticated` field will be false and all other fields will be empty.
  */
 export type AuthCurrentUser = {

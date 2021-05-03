@@ -1,5 +1,5 @@
 import get from 'lodash/get';
-import React, { CSSProperties, useCallback } from 'react';
+import React, { useCallback } from 'react';
 import { Controller, FieldError, UseFormMethods } from 'react-hook-form';
 import AsyncSelect from 'react-select/async';
 
@@ -60,11 +60,11 @@ export const AsyncSelectField = <T extends Record<string, unknown>, I>({
                 typeof document === 'undefined' ? undefined : document.body // document can be undefined in SSR
               }
               styles={{
-                menuPortal: (provided: CSSProperties) => ({
+                menuPortal: (provided) => ({
                   ...provided,
                   zIndex: 1100,
                 }),
-                container: (provided: CSSProperties) => ({
+                container: (provided) => ({
                   ...provided,
                   width: '100%',
                 }),

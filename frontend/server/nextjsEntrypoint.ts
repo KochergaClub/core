@@ -1,8 +1,8 @@
 import * as express from 'express';
-import Server from 'next/dist/next-server/server/next-server';
+import { NextServer } from 'next/dist/server/next';
 import { parse } from 'url';
 
-export default (nextApp: Server) => async (
+export default (nextApp: NextServer) => async (
   req: express.Request,
   res: express.Response
 ) => {

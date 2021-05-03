@@ -6,4 +6,4 @@ export type BasicCardBlockFragment = (
   & Pick<Types.BasicCardBlock, 'id' | 'value'>
 );
 
-export const BasicCardBlockFragmentDoc: DocumentNode<BasicCardBlockFragment, unknown> = {"kind":"Document","definitions":[{"kind":"FragmentDefinition","name":{"kind":"Name","value":"BasicCardBlock"},"typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"BasicCardBlock"}},"directives":[],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"},"arguments":[],"directives":[]},{"kind":"Field","name":{"kind":"Name","value":"value"},"arguments":[],"directives":[]}]}}]};
+export const BasicCardBlockFragmentDoc: DocumentNode<BasicCardBlockFragment, unknown> = {"kind":"Document","definitions":[{"kind":"FragmentDefinition","name":{"kind":"Name","value":"BasicCardBlock"},"typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"BasicCardBlock"}},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"value"}}]}}]};

@@ -1,5 +1,5 @@
 import get from 'lodash/get';
-import React, { CSSProperties } from 'react';
+import React from 'react';
 import { Controller, FieldError, UseFormMethods } from 'react-hook-form';
 import Select from 'react-select';
 
@@ -55,11 +55,11 @@ export const SelectField = <T extends Record<string, unknown>>({
                 typeof document === 'undefined' ? undefined : document.body // document can be undefined in SSR
               }
               styles={{
-                menuPortal: (provided: CSSProperties) => ({
+                menuPortal: (provided) => ({
                   ...provided,
                   zIndex: 1100,
                 }),
-                container: (provided: CSSProperties) => ({
+                container: (provided) => ({
                   ...provided,
                   width: '100%',
                 }),
