@@ -1,9 +1,5 @@
 import React from 'react';
-
-/// <reference path="../../@types/react-big-calendar/lib/utils/constants.d.ts" />
-import { navigate } from 'react-big-calendar/lib/utils/constants';
-
-import { ToolbarProps, NavigateAction, View } from 'react-big-calendar';
+import { NavigateAction, ToolbarProps, View } from 'react-big-calendar';
 
 class Toolbar extends React.Component<ToolbarProps> {
   render() {
@@ -12,22 +8,13 @@ class Toolbar extends React.Component<ToolbarProps> {
     return (
       <div className="rbc-toolbar">
         <span className="rbc-btn-group">
-          <button
-            type="button"
-            onClick={this.navigate.bind(null, navigate.TODAY)}
-          >
+          <button type="button" onClick={this.navigate.bind(null, 'TODAY')}>
             Сегодня
           </button>
-          <button
-            type="button"
-            onClick={this.navigate.bind(null, navigate.PREVIOUS)}
-          >
+          <button type="button" onClick={this.navigate.bind(null, 'PREV')}>
             Назад
           </button>
-          <button
-            type="button"
-            onClick={this.navigate.bind(null, navigate.NEXT)}
-          >
+          <button type="button" onClick={this.navigate.bind(null, 'NEXT')}>
             Вперёд
           </button>
         </span>
@@ -59,7 +46,7 @@ class Toolbar extends React.Component<ToolbarProps> {
     };
 
     if (viewNames.length > 1) {
-      return viewNames.map(name => (
+      return viewNames.map((name) => (
         <button
           type="button"
           key={name}

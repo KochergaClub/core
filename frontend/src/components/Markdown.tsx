@@ -11,7 +11,7 @@ type Props = {
 export const Markdown: React.FC<Props> = ({ source }) => {
   return (
     <RichText>
-      <ReactMarkdown source={source} plugins={[breaks]} />
+      <ReactMarkdown plugins={[breaks]}>{source}</ReactMarkdown>
     </RichText>
   );
 };

@@ -10,7 +10,7 @@ import { CalendarDndStyle, CalendarStyle } from './CalendarStyle';
 import { localizer } from './localizer';
 import Toolbar from './Toolbar';
 
-const DragAndDropCalendar = withDragAndDrop(Calendar);
+const DragAndDropCalendar = withDragAndDrop<any, any>(Calendar);
 
 // copied from dragAndDrop.d.ts because it's not exported
 interface WithDragAndDropProps<TEvent> {
@@ -18,13 +18,13 @@ interface WithDragAndDropProps<TEvent> {
     event: TEvent;
     start: stringOrDate;
     end: stringOrDate;
-    allDay: boolean;
+    isAllDay: boolean;
   }) => void;
   onEventResize?: (args: {
     event: TEvent;
     start: stringOrDate;
     end: stringOrDate;
-    allDay: boolean;
+    isAllDay: boolean;
   }) => void;
   resizable?: boolean;
 }
