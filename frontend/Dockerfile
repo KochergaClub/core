@@ -1,5 +1,5 @@
 # syntax=docker/dockerfile:experimental
-FROM node:14.5 as base
+FROM node:14.16.1 as base
 
 RUN apt-get update && apt-get install -y locales \
     && sed -i -e 's/# en_US.UTF-8 UTF-8/en_US.UTF-8 UTF-8/' /etc/locale.gen \
@@ -31,4 +31,3 @@ FROM base as production
 RUN --mount=id=webpack-cache,sharing=locked,type=cache,target=/code/.next/cache/webpack \
     NODE_ENV=production NODE_OPTIONS='--max_old_space_size=4096' npx next build && \
     NODE_ENV=production npx webpack --config webpack.server.js
-

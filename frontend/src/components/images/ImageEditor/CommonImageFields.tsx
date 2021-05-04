@@ -1,5 +1,5 @@
 import React from 'react';
-import { Controller, FieldError, UseFormMethods } from 'react-hook-form';
+import { Controller, FieldError, UseFormReturn } from 'react-hook-form';
 import Select from 'react-select';
 
 import { useQuery } from '@apollo/client';
@@ -27,7 +27,7 @@ const collectionToSelectOption = (c: { id: string; name: string }) => ({
 });
 
 type Props = {
-  form: UseFormMethods<any>; // sorry :( we can't use UseFormFields<CommonFormData> here
+  form: UseFormReturn<any>; // sorry :( we can't use UseFormFields<CommonFormData> here
   defaultCollectionId?: string;
 };
 
@@ -59,23 +59,27 @@ export const CommonImageFields: React.FC<Props> = ({
           return (
             <FieldContainer
               title="Коллекция"
-              error={form.errors.collection as FieldError | undefined}
+              error={form.formState.errors.collection as FieldError | undefined}
             >
               <Controller
                 name="collection"
-                as={Select}
-                placeholder="Выбрать..."
-                menuPortalTarget={document.body}
-                styles={{
-                  menuPortal: (base: any) => ({
-                    ...base,
-                    zIndex: 1500,
-                  }),
-                }}
-                options={collections.map(collectionToSelectOption)}
                 defaultValue={defaultValue}
                 control={form.control}
                 rules={{ required: true }}
+                render={({ field }) => (
+                  <Select
+                    options={collections.map(collectionToSelectOption)}
+                    placeholder="Выбрать..."
+                    menuPortalTarget={document.body}
+                    styles={{
+                      menuPortal: (base) => ({
+                        ...base,
+                        zIndex: 1500,
+                      }),
+                    }}
+                    {...field}
+                  />
+                )}
               />
             </FieldContainer>
           );

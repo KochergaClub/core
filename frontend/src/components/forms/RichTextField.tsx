@@ -3,27 +3,27 @@ import 'react-quill/dist/quill.snow.css';
 import get from 'lodash/get';
 import dynamic from 'next/dynamic';
 import React, { useEffect, useRef, useState } from 'react';
-import { Controller, FieldError, UseFormMethods } from 'react-hook-form';
+import { Controller, FieldError, FieldPath, FieldValues, UseFormReturn } from 'react-hook-form';
 
 import { FieldContainer } from './FieldContainer';
 
 const ReactQuill = dynamic(() => import('react-quill'), { ssr: false });
 
-interface Props<T extends Record<string, unknown>> {
-  name: keyof T;
+interface Props<TFieldValues extends FieldValues> {
+  name: FieldPath<TFieldValues>;
   title: string;
-  form: UseFormMethods<T>;
+  form: UseFormReturn<TFieldValues>;
   required?: boolean;
   defaultValue?: string;
 }
 
-export const RichTextField = <T extends Record<string, unknown>>({
+export const RichTextField = <TFieldValues extends FieldValues>({
   name,
   title,
   defaultValue,
   form,
   required = false,
-}: Props<T>): React.ReactElement | null => {
+}: Props<TFieldValues>): React.ReactElement | null => {
   const ref = useRef<HTMLDivElement>(null);
 
   // This is a hack for https://github.com/quilljs/quill/issues/2190
@@ -53,23 +53,21 @@ export const RichTextField = <T extends Record<string, unknown>>({
     <div ref={ref}>
       <FieldContainer
         title={title}
-        error={get(form.errors, name) as FieldError}
+        error={get(form.formState.errors, name) as FieldError}
       >
         <Controller
-          control={
-            form.control as any /* there's something wrong with react-hook-form types, don't know what exactly */
-          }
-          name={name as string}
+          control={form.control}
+          name={name}
           rules={{ required }}
           defaultValue={defaultValue}
-          render={({ onChange, value }) => (
+          render={({ field: { onChange, value } }) => (
             // This is actually an uncontrolled mode, even though we use render prop from react-hook-prop controller.
             // The reason for this is that we need to override onChange.
             // TODO - switch to the new `setValueAs` feature from react-hook-form, see https://github.com/react-hook-form/react-hook-form/releases/tag/v6.12.0 for details.
             <ReactQuill
               theme="snow"
               style={{ backgroundColor: 'white' }} // prevent grey on hover in some cases, e.g. when using ShapeListFieldShapeBox
-              defaultValue={value}
+              defaultValue={value as string}
               onKeyDown={(e) => {
                 if (e.keyCode === 13 && !e.metaKey) {
                   e.stopPropagation(); // prevent accidental modal form submission

@@ -1,16 +1,16 @@
 import { format, parseISO } from 'date-fns';
 import get from 'lodash/get';
 import React from 'react';
-import { Controller, FieldError, UseFormMethods } from 'react-hook-form';
+import { Controller, FieldError, FieldPath, FieldValues, UseFormReturn } from 'react-hook-form';
 
 import { DatePicker } from '~/components/DatePicker';
 
 import { FieldContainer } from './FieldContainer';
 
-interface Props<T extends Record<string, unknown>> {
-  name: keyof T;
+interface Props<TFieldValues extends FieldValues> {
+  name: FieldPath<TFieldValues>;
   title: string;
-  form: UseFormMethods<T>;
+  form: UseFormReturn<TFieldValues>;
   defaultValue?: string;
   required?: boolean;
 }
@@ -25,20 +25,18 @@ export const DateField = <T extends Record<string, unknown>>({
   return (
     <FieldContainer
       title={title}
-      error={get(form.errors, name) as FieldError}
+      error={get(form.formState.errors, name) as FieldError}
       stretch={false}
     >
       <Controller
-        control={
-          form.control as any /* there's something wrong with react-hook-form types, don't know what exactly */
-        }
-        name={name as string}
+        control={form.control}
+        name={name}
         rules={{ required }}
         defaultValue={defaultValue}
-        render={({ onChange, value }) => {
+        render={({ field: { onChange, value } }) => {
           return (
             <DatePicker
-              value={value ? parseISO(value) : undefined}
+              value={value ? parseISO(String(value)) : undefined}
               onChange={(date: Date | null) => {
                 onChange(date ? format(date, 'yyyy-MM-dd') : undefined);
               }}

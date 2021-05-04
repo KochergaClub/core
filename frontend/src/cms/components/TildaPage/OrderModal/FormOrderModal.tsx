@@ -1,4 +1,4 @@
-import React, { CSSProperties, useCallback, useState } from 'react';
+import React, { useCallback, useState } from 'react';
 import { Controller, FieldError, useForm } from 'react-hook-form';
 import Select from 'react-select';
 import styled from 'styled-components';
@@ -112,7 +112,7 @@ const FormOrderModal: React.FC<Props> = ({
             break;
           case 'ValidationError':
             for (const error of data.result.errors) {
-              form.setError(error.name, {
+              form.setError(error.name as any, {
                 type: 'manual',
                 message: error.messages.join('. '),
               });
@@ -145,28 +145,36 @@ const FormOrderModal: React.FC<Props> = ({
             <Column stretch gutter={16}>
               <FieldContainer
                 title="Выберите вид билета"
-                error={form.errors.ticket_type as FieldError | undefined}
+                error={
+                  form.formState.errors.ticket_type as FieldError | undefined
+                }
               >
                 <Controller
                   name="ticket_type"
-                  as={Select}
-                  placeholder="Выбрать..."
-                  options={ticketTypes.map(ticketTypeToSelectOption)}
-                  menuPortalTarget={
-                    typeof document === 'undefined' ? undefined : document.body // document can be undefined in SSR
-                  }
-                  styles={{
-                    menuPortal: (provided: CSSProperties) => ({
-                      ...provided,
-                      zIndex: 1100,
-                    }),
-                    container: (provided: CSSProperties) => ({
-                      ...provided,
-                      width: '100%',
-                    }),
-                  }}
                   control={form.control}
                   rules={{ required: true }}
+                  render={({ field }) => (
+                    <Select
+                      placeholder="Выбрать..."
+                      options={ticketTypes.map(ticketTypeToSelectOption)}
+                      menuPortalTarget={
+                        typeof document === 'undefined'
+                          ? undefined
+                          : document.body // document can be undefined in SSR
+                      }
+                      styles={{
+                        menuPortal: (provided) => ({
+                          ...provided,
+                          zIndex: 1100,
+                        }),
+                        container: (provided) => ({
+                          ...provided,
+                          width: '100%',
+                        }),
+                      }}
+                      {...field}
+                    />
+                  )}
                 />
               </FieldContainer>
               <BasicInputField
@@ -215,9 +223,8 @@ const FormOrderModal: React.FC<Props> = ({
                   <Row vCentered gutter={8}>
                     <input
                       type="checkbox"
-                      name="terms"
                       defaultChecked={true}
-                      ref={form.register({ required: true })}
+                      {...form.register('terms', { required: true })}
                     />
                     <div>
                       Ознакомлен и согласен с условиями{' '}
@@ -228,7 +235,7 @@ const FormOrderModal: React.FC<Props> = ({
                     </div>
                   </Row>
                 </Label>
-                <FieldErrorMessage error={form.errors.terms} />
+                <FieldErrorMessage error={form.formState.errors.terms} />
               </div>
             </Column>
           </Container>

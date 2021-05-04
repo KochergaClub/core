@@ -1,6 +1,6 @@
 import get from 'lodash/get';
 import React, { useEffect } from 'react';
-import { Controller, FieldError, UseFormMethods } from 'react-hook-form';
+import { Controller, FieldError, FieldPath, FieldValues, UseFormReturn } from 'react-hook-form';
 
 import { useLazyQuery } from '@apollo/client';
 
@@ -44,16 +44,16 @@ const ImageEditorById: React.FC<EditorProps> = ({ id, onChange }) => {
   );
 };
 
-interface Props<T extends Record<string, unknown>> {
-  name: keyof T;
+interface Props<TFieldValues extends FieldValues> {
+  name: FieldPath<TFieldValues>;
   title: string;
-  form: UseFormMethods<T>;
+  form: UseFormReturn<TFieldValues>;
   defaultValue?: string;
   required?: boolean;
   valueAsNumber?: boolean;
 }
 
-export const ImageField = <T extends Record<string, unknown>>({
+export const ImageField = <T extends FieldValues>({
   name,
   title,
   form,
@@ -62,21 +62,24 @@ export const ImageField = <T extends Record<string, unknown>>({
   valueAsNumber,
 }: Props<T>): React.ReactElement | null => {
   return (
-    <FieldContainer title={title} error={get(form.errors, name) as FieldError}>
+    <FieldContainer
+      title={title}
+      error={get(form.formState.errors, name) as FieldError}
+    >
       <Controller
-        control={
-          form.control as any /* there's something wrong with react-hook-form types, don't know what exactly */
-        }
-        name={name as string}
-        rules={{ required, valueAsNumber }}
+        control={form.control}
+        name={name}
+        rules={{ required }}
         defaultValue={defaultValue}
-        render={({ value, onChange }) => {
+        render={({ field: { value, onChange } }) => {
           // wrapped in Row because form fields are stretched by default and ImageEditor doesn't handle it well
           return (
             <Row>
               <ImageEditorById
-                id={value}
-                onChange={async (id) => onChange(id)}
+                id={value as string | undefined}
+                onChange={async (id) =>
+                  onChange(valueAsNumber ? parseInt(id, 10) : id)
+                }
               />
             </Row>
           );

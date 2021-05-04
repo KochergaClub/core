@@ -29,15 +29,17 @@ const AdminModalUserPicker: React.FC<Props> = ({ close, pick }) => {
   const focus = useFocusOnFirstModalRender();
   const hotkeys = useCommonHotkeys({ onEscape: close });
 
-  const inputRef = useCallback(
+  const { ref: inputRef, ...inputRest } = register('query');
+
+  const inputRefWithFocus = useCallback(
     (el: HTMLInputElement | null) => {
       if (!el) {
         return;
       }
       focus(el);
-      register(el);
+      inputRef(el);
     },
-    [focus, register]
+    [focus, inputRef]
   );
 
   return (
@@ -52,9 +54,9 @@ const AdminModalUserPicker: React.FC<Props> = ({ close, pick }) => {
           >
             <WideInput
               type="text"
-              name="query"
               placeholder="Найти..."
-              ref={inputRef}
+              ref={inputRefWithFocus}
+              {...inputRest}
             />
           </form>
           <ApolloQueryResults {...queryResults}>

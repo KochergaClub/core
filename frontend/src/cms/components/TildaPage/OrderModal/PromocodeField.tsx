@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { UseFormMethods } from 'react-hook-form';
+import { UseFormReturn } from 'react-hook-form';
 import { FaCheck } from 'react-icons/fa';
 import styled from 'styled-components';
 
@@ -12,7 +12,7 @@ import { FormData } from './FormOrderModal';
 import { CheckRatioPromocodeDocument } from './queries.generated';
 
 interface Props {
-  form: UseFormMethods<FormData>;
+  form: UseFormReturn<FormData>;
   setDiscountedPrice: (v: number | undefined) => void;
 }
 
@@ -86,14 +86,16 @@ const PromocodeField: React.FC<Props> = ({ form, setDiscountedPrice }) => {
   };
 
   return (
-    <FieldContainer title="Промокод, если есть" error={form.errors.promocode}>
+    <FieldContainer
+      title="Промокод, если есть"
+      error={form.formState.errors.promocode}
+    >
       <Container>
         <Row vCentered>
           <Input
             type="string"
-            name="promocode"
             placeholder="Промокод"
-            ref={form.register}
+            {...form.register('promocode')}
             readOnly={status.type === 'ok'} // prevent weird UI states when promocode is applied and then changed
             onKeyDown={(e) => {
               if (e.keyCode === 13) {
@@ -130,4 +132,3 @@ const PromocodeField: React.FC<Props> = ({ form, setDiscountedPrice }) => {
 };
 
 export default PromocodeField;
-0;

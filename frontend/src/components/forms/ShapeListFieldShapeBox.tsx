@@ -1,6 +1,6 @@
 import React from 'react';
 import FlipMove from 'react-flip-move';
-import { useFieldArray, UseFormMethods } from 'react-hook-form';
+import { FieldPath, FieldValues, useFieldArray, UseFormReturn } from 'react-hook-form';
 import styled from 'styled-components';
 
 import { Button, colors, Column, fonts, Label, Row } from '~/frontkit';
@@ -54,20 +54,20 @@ const buildInitialValues = (shape: FormShape): AnyFormValues => {
   return result;
 };
 
-interface Props<T extends Record<string, unknown>> {
-  name: string;
-  form: UseFormMethods<T>;
+interface Props<TFieldValues extends FieldValues> {
+  name: FieldPath<TFieldValues>;
+  form: UseFormReturn<TFieldValues>;
   field: ShapeListFieldShape;
 }
 
-export const ShapeListFieldShapeBox = <T extends Record<string, unknown>>({
+export const ShapeListFieldShapeBox = <T extends FieldValues>({
   name,
   form,
   field,
 }: Props<T>): React.ReactElement => {
   const { fields: hookFields, append, swap, remove } = useFieldArray({
-    control: form.control as any,
-    name,
+    control: form.control,
+    name: (name as string) as any,
   });
 
   return (
@@ -117,10 +117,10 @@ export const ShapeListFieldShapeBox = <T extends Record<string, unknown>>({
                 {field.shape.map((subfield) => (
                   <FieldShapeBox
                     key={subfield.name}
-                    name={`${name}[${i}].${subfield.name}`}
+                    name={`${name}[${i}].${subfield.name}` as FieldPath<T>}
                     field={subfield}
                     form={form}
-                    defaultValue={hookField[subfield.name]}
+                    defaultValue={(hookField as any)[subfield.name]}
                   />
                 ))}
               </div>
@@ -133,7 +133,7 @@ export const ShapeListFieldShapeBox = <T extends Record<string, unknown>>({
         type="button"
         onClick={() => {
           const result = buildInitialValues(field.shape);
-          append(result);
+          append(result as any);
         }}
       >
         добавить

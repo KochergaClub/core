@@ -1,5 +1,5 @@
 import React from 'react';
-import { UseFormMethods } from 'react-hook-form';
+import { FieldPath, FieldValues, UseFormReturn } from 'react-hook-form';
 
 import { AsyncSelectField } from './AsyncSelectField';
 import { BasicInputField } from './BasicInputField';
@@ -14,10 +14,10 @@ import { ShapeFieldShapeBox } from './ShapeFieldShapeBox';
 import { ShapeListFieldShapeBox } from './ShapeListFieldShapeBox';
 import { FieldShape, FieldToValue } from './types';
 
-type Props<V extends Record<string, unknown>, F extends FieldShape> = {
-  name: string;
+type Props<V extends FieldValues, F extends FieldShape> = {
+  name: FieldPath<V>;
   field: F;
-  form: UseFormMethods<V>;
+  form: UseFormReturn<V>;
   // We _mostly_ don't need this prop since `defaultValues` argument to useForm() is usually better.
   // But we still need it because fields built by useFieldArray require an explicit defaultValue,
   // and ShapeListFieldShapeBox children can include any fields (even nested).
@@ -25,10 +25,7 @@ type Props<V extends Record<string, unknown>, F extends FieldShape> = {
   defaultValue?: FieldToValue<F>;
 };
 
-export const FieldShapeBox = <
-  V extends Record<string, unknown>,
-  F extends FieldShape
->({
+export const FieldShapeBox = <V extends FieldValues, F extends FieldShape>({
   name,
   field: _field,
   defaultValue,

@@ -1,17 +1,17 @@
 import get from 'lodash/get';
 import React from 'react';
-import { FieldError, UseFormMethods } from 'react-hook-form';
+import { FieldError, FieldPath, FieldValues, UseFormReturn } from 'react-hook-form';
 
 import { WideInput } from '~/components';
 
 import { FieldContainer } from './FieldContainer';
 
-interface Props<T extends Record<string, unknown>> {
-  name: keyof T;
+interface Props<TFieldValues extends FieldValues> {
+  name: FieldPath<TFieldValues>;
   title: string;
   type?: 'string' | 'email' | 'number' | 'url' | 'password';
   placeholder?: string;
-  form: UseFormMethods<T>;
+  form: UseFormReturn<TFieldValues>;
   required?: boolean;
   defaultValue?: string;
 }
@@ -26,13 +26,15 @@ export const BasicInputField = <T extends Record<string, unknown>>({
   required = false,
 }: Props<T>): React.ReactElement => {
   return (
-    <FieldContainer title={title} error={get(form.errors, name) as FieldError}>
+    <FieldContainer
+      title={title}
+      error={get(form.formState.errors, name) as FieldError}
+    >
       <WideInput
         type={type}
-        name={name as string}
         placeholder={placeholder}
         defaultValue={defaultValue}
-        ref={form.register({
+        {...form.register(name, {
           required,
           pattern: type === 'email' ? /^\S+@\S+$/i : undefined,
         })}

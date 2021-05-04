@@ -1,16 +1,16 @@
 import autosize from 'autosize';
 import get from 'lodash/get';
 import React from 'react';
-import { FieldError, UseFormMethods } from 'react-hook-form';
+import { FieldError, FieldPath, FieldValues, UseFormReturn } from 'react-hook-form';
 import styled from 'styled-components';
 
 import { FieldContainer } from './FieldContainer';
 
-interface Props<T extends Record<string, unknown>> {
-  name: keyof T;
+interface Props<TFieldValues extends FieldValues> {
+  name: FieldPath<TFieldValues>;
   title: string;
   placeholder?: string;
-  form: UseFormMethods<T>;
+  form: UseFormReturn<TFieldValues>;
   required?: boolean;
   defaultValue?: string;
 }
@@ -19,7 +19,7 @@ const Textarea = styled.textarea`
   padding: 8px;
 `;
 
-export const MarkdownField = <T extends Record<string, unknown>>({
+export const MarkdownField = <T extends FieldValues>({
   name,
   title,
   placeholder,
@@ -28,10 +28,14 @@ export const MarkdownField = <T extends Record<string, unknown>>({
   required = false,
 }: Props<T>): React.ReactElement => {
   // TODO - preview
+
+  const { ref, ...rest } = form.register(name, { required });
   return (
-    <FieldContainer title={title} error={get(form.errors, name) as FieldError}>
+    <FieldContainer
+      title={title}
+      error={get(form.formState.errors, name) as FieldError}
+    >
       <Textarea
-        name={name as string}
         placeholder={placeholder}
         defaultValue={defaultValue}
         onKeyDown={(e) => {
@@ -40,16 +44,15 @@ export const MarkdownField = <T extends Record<string, unknown>>({
           }
         }}
         ref={(e) => {
+          ref(e);
           if (!e) {
             return;
           }
-          form.register(e, {
-            required,
-          });
           // Forms are usually modals, so just calling autosize(e) won't be enough.
-          // See "Initial height is incorrect" in http://www.jacklmoore.com/autosize/ and useEffect above.
+          // See "Initial height is incorrect" in http://www.jacklmoore.com/autosize/.
           e.addEventListener('focus', () => autosize(e));
         }}
+        {...rest}
       />
     </FieldContainer>
   );

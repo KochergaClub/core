@@ -1,6 +1,6 @@
 import get from 'lodash/get';
 import React from 'react';
-import { Controller, FieldError, UseFormMethods } from 'react-hook-form';
+import { Controller, FieldError, FieldPath, FieldValues, UseFormReturn } from 'react-hook-form';
 import Select from 'react-select';
 
 import { FieldContainer } from './FieldContainer';
@@ -10,16 +10,16 @@ const tupleToSelectOption = (t: readonly [string, string]) => ({
   label: t[1],
 });
 
-interface Props<T extends Record<string, unknown>> {
-  name: keyof T;
+interface Props<TFieldValues extends FieldValues> {
+  name: FieldPath<TFieldValues>;
   title: string;
   options: readonly (readonly [string, string])[];
-  form: UseFormMethods<T>;
+  form: UseFormReturn<TFieldValues>;
   defaultValue?: string;
   required?: boolean;
 }
 
-export const SelectField = <T extends Record<string, unknown>>({
+export const SelectField = <T extends FieldValues>({
   name,
   title,
   options,
@@ -28,13 +28,16 @@ export const SelectField = <T extends Record<string, unknown>>({
   required = false,
 }: Props<T>): React.ReactElement => {
   return (
-    <FieldContainer title={title} error={get(form.errors, name) as FieldError}>
+    <FieldContainer
+      title={title}
+      error={get(form.formState.errors, name) as FieldError}
+    >
       <Controller
-        name={name as string}
-        control={form.control as any}
+        name={name}
+        control={form.control}
         rules={{ required }}
         defaultValue={defaultValue}
-        render={({ onChange, value }) => {
+        render={({ field: { onChange, value } }) => {
           const option = options.find((option) => option[0] === value);
           return (
             <Select

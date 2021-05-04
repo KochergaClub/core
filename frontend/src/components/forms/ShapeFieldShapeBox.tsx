@@ -1,19 +1,19 @@
 import React from 'react';
-import { UseFormMethods } from 'react-hook-form';
+import { FieldPath, FieldValues, UseFormReturn } from 'react-hook-form';
 
 import { FieldContainer } from './FieldContainer';
 import { FieldShapeBox } from './FieldShapeBox';
 import { FieldToValue, ShapeFieldShape, ShapeToValues } from './types';
 
-interface Props<T extends Record<string, unknown>, F extends ShapeFieldShape> {
-  name: keyof T;
-  form: UseFormMethods<T>;
+interface Props<TFieldValues extends FieldValues, F extends ShapeFieldShape> {
+  name: FieldPath<TFieldValues>;
+  form: UseFormReturn<TFieldValues>;
   field: F;
   defaultValue?: ShapeToValues<F['shape']>;
 }
 
 export const ShapeFieldShapeBox = <
-  T extends Record<string, unknown>,
+  T extends FieldValues,
   F extends ShapeFieldShape
 >({
   name,
@@ -26,7 +26,7 @@ export const ShapeFieldShapeBox = <
       {field.shape.map((subfield, i) => (
         <FieldShapeBox
           key={i}
-          name={name + '.' + subfield.name}
+          name={`${name}.${subfield.name}` as FieldPath<T>}
           field={subfield}
           defaultValue={
             defaultValue

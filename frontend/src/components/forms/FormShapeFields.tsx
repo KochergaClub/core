@@ -1,5 +1,5 @@
 import React from 'react';
-import { UseFormMethods } from 'react-hook-form';
+import { FieldPath, UseFormReturn } from 'react-hook-form';
 
 import { Column } from '~/frontkit';
 
@@ -8,7 +8,7 @@ import { FormShape, ShapeToValues } from './types';
 
 type Props<S extends FormShape> = {
   shape: S;
-  form: UseFormMethods<ShapeToValues<S>>;
+  form: UseFormReturn<ShapeToValues<S>>;
 };
 
 export const FormShapeFields = <S extends FormShape>({
@@ -20,7 +20,7 @@ export const FormShapeFields = <S extends FormShape>({
       {shape.map((field) => (
         <FieldShapeBox
           key={field.name}
-          name={field.name}
+          name={field.name as FieldPath<ShapeToValues<S>>}
           field={field}
           form={form}
         />

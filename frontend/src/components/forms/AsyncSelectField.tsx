@@ -1,21 +1,21 @@
 import get from 'lodash/get';
 import React, { useCallback } from 'react';
-import { Controller, FieldError, UseFormMethods } from 'react-hook-form';
+import { Controller, FieldError, FieldPath, FieldValues, UseFormReturn } from 'react-hook-form';
 import AsyncSelect from 'react-select/async';
 
 import { FieldContainer } from './FieldContainer';
 
-interface Props<T extends Record<string, unknown>, I> {
-  name: keyof T;
+interface Props<TFieldValues extends FieldValues, I> {
+  name: FieldPath<TFieldValues>;
   title: string;
-  form: UseFormMethods<T>;
+  form: UseFormReturn<TFieldValues>;
   display: (item: I) => string;
   load: (inputValue: string) => Promise<I[]>;
   getValue: (item: I) => string;
   required?: boolean;
 }
 
-export const AsyncSelectField = <T extends Record<string, unknown>, I>({
+export const AsyncSelectField = <T extends FieldValues, I>({
   name,
   title,
   form,
@@ -37,12 +37,15 @@ export const AsyncSelectField = <T extends Record<string, unknown>, I>({
   );
 
   return (
-    <FieldContainer title={title} error={get(form.errors, name) as FieldError}>
+    <FieldContainer
+      title={title}
+      error={get(form.formState.errors, name) as FieldError}
+    >
       <Controller
-        name={name as string}
-        control={form.control as any}
+        name={name}
+        control={form.control}
         rules={{ required }}
-        render={({ onChange, value }) => {
+        render={({ field: { onChange } }) => {
           return (
             <AsyncSelect
               loadOptions={loadOptions}
