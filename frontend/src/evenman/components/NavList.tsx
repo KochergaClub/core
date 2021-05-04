@@ -1,10 +1,10 @@
+import { AnimatePresence, motion } from 'framer-motion';
 import React from 'react';
-import FlipMove from 'react-flip-move';
 import styled from 'styled-components';
 
 import { colors, fonts } from '~/frontkit';
 
-const NavListUl = (styled(FlipMove)`
+const NavListUl = styled.ul`
   border-bottom: 1px solid ${colors.grey[300]};
   background-color: white;
   list-style-type: none;
@@ -17,7 +17,7 @@ const NavListUl = (styled(FlipMove)`
     font-size: ${fonts.sizes.XS};
     border-top: 1px solid ${colors.grey[300]};
   }
-` as unknown) as typeof FlipMove; // weird fix for typescript + styled + react-flip-move
+`;
 
 const Header = styled.header`
   padding: 4px 16px;
@@ -31,8 +31,8 @@ interface ListProps {
 export const NavList: React.FC<ListProps> = ({ children, title }) => (
   <nav>
     {title && <Header>{title}</Header>}
-    <NavListUl typeName="ul" enterAnimation="fade" leaveAnimation="fade">
-      {children}
+    <NavListUl>
+      <AnimatePresence initial={false}>{children}</AnimatePresence>
     </NavListUl>
   </nav>
 );
@@ -43,11 +43,11 @@ interface ItemProps {
   select: () => void;
 }
 
-const NavListItemLi = styled('li')<ItemProps>`
+const NavListItemLi = styled(motion.li)<Omit<ItemProps, 'select'>>`
   cursor: pointer;
 
   background-color: ${(props) =>
-    props.selected ? '#ffffb3' : props.blur ? '#f0f0f0' : ''};
+    props.selected ? '#ffffb3' : props.blur ? '#f0f0f0' : 'white'};
 
   &:hover {
     background-color: ${(props) =>
@@ -55,11 +55,15 @@ const NavListItemLi = styled('li')<ItemProps>`
   }
 `;
 
-// FlipMove fails on SFC, so we have to use React.Component here.
-export class NavListItem extends React.Component<ItemProps> {
-  render() {
-    return (
-      <NavListItemLi {...this.props} onClick={() => this.props.select()} />
-    );
-  }
-}
+export const NavListItem: React.FC<ItemProps> = ({ select, ...rest }) => {
+  return (
+    <NavListItemLi
+      onClick={() => select()}
+      {...rest}
+      layout
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      exit={{ opacity: 0 }}
+    />
+  );
+};

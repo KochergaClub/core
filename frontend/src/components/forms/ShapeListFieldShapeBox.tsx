@@ -1,5 +1,5 @@
+import { AnimatePresence, motion } from 'framer-motion';
 import React from 'react';
-import FlipMove from 'react-flip-move';
 import { FieldPath, FieldValues, useFieldArray, UseFormReturn } from 'react-hook-form';
 import styled from 'styled-components';
 
@@ -21,7 +21,7 @@ const ItemNumber = styled.div`
   font-size: ${fonts.sizes.XS};
 `;
 
-const ItemContainer = styled.div`
+const ItemContainer = styled(motion.div)`
   border: 1px dotted ${colors.grey[300]};
   padding: 4px;
   margin-bottom: 4px;
@@ -73,9 +73,15 @@ export const ShapeListFieldShapeBox = <T extends FieldValues>({
   return (
     <ListContainer>
       <Label>{field.title || field.name}</Label>
-      <FlipMove>
+      <AnimatePresence initial={false}>
         {hookFields.map((hookField, i) => (
-          <ItemContainer key={hookField.id}>
+          <ItemContainer
+            key={hookField.id}
+            layout
+            initial={{ opacity: 0, scale: 0.5 }}
+            animate={{ opacity: 1, scale: 1 }}
+            exit={{ opacity: 0, scale: 0.5 }}
+          >
             <Column stretch>
               <Row spaced vCentered>
                 <ItemNumber>{i + 1}</ItemNumber>
@@ -127,7 +133,7 @@ export const ShapeListFieldShapeBox = <T extends FieldValues>({
             </Column>
           </ItemContainer>
         ))}
-      </FlipMove>
+      </AnimatePresence>
       <Button
         size="small"
         type="button"

@@ -1,5 +1,5 @@
+import { AnimatePresence, motion } from 'framer-motion';
 import React, { useEffect, useReducer } from 'react';
-import FlipMove from 'react-flip-move';
 
 import { AnyBlockFragment } from '../types';
 import AnyBlock from './AnyBlock';
@@ -150,17 +150,19 @@ const EditWagtailBlocks: React.FC<Props> = ({ blocks }) => {
     <EditBlocksContext.Provider value={{ dispatch }}>
       <div>
         <EditControls blocks={state.blocks} />
-        <FlipMove
-          appearAnimation={false}
-          enterAnimation="fade"
-          leaveAnimation="fade"
-        >
+        <AnimatePresence initial={false}>
           {state.blocks.map((block, i) => {
             const block_validation_error =
               state.validation_error?.block_errors.find((e) => e.block_id === i)
                 ?.error || undefined;
             return (
-              <div key={block.id}>
+              <motion.div
+                initial={{ opacity: 0, scale: 0.5 }}
+                animate={{ opacity: 1, scale: 1 }}
+                exit={{ opacity: 0, scale: 0.5 }}
+                layout
+                key={block.id}
+              >
                 <EditBlockWrapper
                   block={block}
                   validation_error={block_validation_error}
@@ -169,10 +171,10 @@ const EditWagtailBlocks: React.FC<Props> = ({ blocks }) => {
                 >
                   <AnyBlock {...block} />
                 </EditBlockWrapper>
-              </div>
+              </motion.div>
             );
           })}
-        </FlipMove>
+        </AnimatePresence>
       </div>
     </EditBlocksContext.Provider>
   );
