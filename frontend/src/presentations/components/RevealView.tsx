@@ -81,7 +81,6 @@ const RevealView: React.FC<{
       embedded: true,
       plugins: [
         RevealChart,
-        // RevealMarkdown,
         // RevealNotes,
       ],
     });
