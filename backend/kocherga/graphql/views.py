@@ -6,9 +6,10 @@ from timeit import default_timer
 
 from ariadne.contrib.django.views import GraphQLView
 from ariadne.contrib.tracing.apollotracing import ApolloTracingExtensionSync
-from ariadne.types import GraphQLResult
+from ariadne.types import GraphQLError, GraphQLResult
 from django.conf import settings
 from django.http import HttpRequest
+from kocherga.error import PublicError
 from kocherga.graphql.schema import schema
 from prometheus_client import Counter, Histogram
 
@@ -22,6 +23,21 @@ failures_counter = Counter(
 
 
 class WrappedGraphQLView(GraphQLView):
+    def error_formatter(self, error: GraphQLError, debug: bool = False) -> dict:
+        formatted = error.formatted
+
+        inner_error = error
+        while isinstance(inner_error, GraphQLError):
+            inner_error = inner_error.original_error
+
+        if isinstance(inner_error, PublicError):
+            formatted["message"] = str(inner_error)
+        else:
+            # leaking all strigified exceptions is unsafe
+            formatted["message"] = "Internal server error"
+
+        return formatted
+
     def execute_query(self, request: HttpRequest, data: dict) -> GraphQLResult:
         operation = data.get('operationName', None) or 'UNKNOWN'
 
