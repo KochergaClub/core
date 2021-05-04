@@ -14,7 +14,7 @@
  * Reveal Plugin
  * https://revealjs.com/creating-plugins/
  */
-import Chart from 'chart.js';
+import Chart from 'chart.js/auto';
 
 export default {
   id: 'RevealChart',
