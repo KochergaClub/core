@@ -12,7 +12,7 @@ import kocherga.email.channels
 import reversion
 from django.conf import settings
 from django.core.mail import send_mail
-from django.db import models
+from django.db import models, transaction
 from django.template.loader import render_to_string
 from django.utils import timezone
 from kocherga.dateutils import TZ
@@ -44,12 +44,11 @@ class TicketManager(models.Manager):
             },
         )
 
-        from ..channels import job_send_ticket_confirmation_email
+        def on_commit():
+            ticket.job_send_confirmation_email(signed_in=signed_in)
+            ticket.job_subscribe_to_newsletter_if_necessary()
 
-        job_send_ticket_confirmation_email(ticket_id=ticket.pk, signed_in=signed_in)
-
-        # this call is scheduled through channels, so it's fast enough
-        ticket.subscribe_to_newsletter_if_necessary()
+        transaction.on_commit(on_commit)
 
         return ticket
 
@@ -147,7 +146,9 @@ class Ticket(models.Model):
             render_to_string('events/email/registered.mjml', template_vars)
         )
 
-        logger.info(f'Sending confirmation email for {self.pk}')
+        logger.info(
+            f'Sending confirmation email to {self.user.email} for event {self.event.uuid} ({self.event.title})'
+        )
         send_mail(
             subject=f'Регистрация на событие: {self.event.title}',
             from_email='Кочерга <info@kocherga-club.ru>',
@@ -155,7 +156,7 @@ class Ticket(models.Model):
             html_message=html_body,
             recipient_list=[self.user.email],
         )
-        logger.info(f'Confirmation email for {self.pk} sent')
+        logger.info(f'Confirmation email sent to {self.user.email}')
 
     def should_send_reminder(self) -> bool:
         if self.day_before_notification_sent:
@@ -211,7 +212,7 @@ class Ticket(models.Model):
             recipient_list=[self.user.email],
         )
 
-    def subscribe_to_newsletter_if_necessary(self) -> None:
+    def job_subscribe_to_newsletter_if_necessary(self) -> None:
         if not self.subscribed_to_newsletter:
             logger.info('Not necessary to subscribe')
             return
@@ -220,6 +221,11 @@ class Ticket(models.Model):
 
         kocherga.email.channels.subscribe_to_main_list(email=email)
         logger.info(f'Scheduled subscription of {email}')
+
+    def job_send_confirmation_email(self, signed_in: bool):
+        from ..channels import job_send_ticket_confirmation_email
+
+        job_send_ticket_confirmation_email(self.pk, signed_in=signed_in)
 
     @property
     def zoom_link(self):

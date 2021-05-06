@@ -10,7 +10,6 @@ from ..types import MyEventsTicket
 c = helpers.Collection()
 
 
-# myEventsTicketUnregister(event_id: ID!): MyEventsTicket! @auth(authenticated: true)
 @c.class_field
 class myEventsTicketUnregister(helpers.BaseField):
     permissions = [authenticated]
@@ -23,7 +22,6 @@ class myEventsTicketUnregister(helpers.BaseField):
         return ticket
 
 
-# myEventsTicketRegister(event_id: ID!): MyEventsTicket! @auth(authenticated: true)
 @c.class_field
 class myEventsTicketRegister(helpers.BaseField):
     permissions = [authenticated]
@@ -38,11 +36,17 @@ class myEventsTicketRegister(helpers.BaseField):
         return ticket
 
 
-# myEventsTicketRegisterAnon(
-#   input: MyEventsTicketRegisterAnonInput!
-# ): MyEventsTicket!
 @c.class_field
 class myEventsTicketRegisterAnon(helpers.BaseFieldWithInput):
+    permissions = []
+    input = {
+        'event_id': 'ID!',
+        'email': str,
+        'subscribed_to_newsletter': Optional[bool],
+    }
+
+    result = g.NN(MyEventsTicket)
+
     def resolve(self, _, info, input):
         event_id = input['event_id']
         email = input['email']
@@ -62,15 +66,6 @@ class myEventsTicketRegisterAnon(helpers.BaseFieldWithInput):
             signed_in=False,
         )
         return ticket
-
-    permissions = []
-    input = {
-        'event_id': 'ID!',
-        'email': str,
-        'subscribed_to_newsletter': Optional[bool],
-    }
-
-    result = g.NN(MyEventsTicket)
 
 
 mutations = c.as_dict()
