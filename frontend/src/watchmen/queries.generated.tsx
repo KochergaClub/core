@@ -1,7 +1,9 @@
 import * as Types from '../apollo/types.generated';
 
+import { ValidationErrorFragment, GenericErrorFragment } from '../apollo/common-fragments.generated';
 import { dedupeFragments } from '~/common/dedupeFragments';
 import { TypedDocumentNode as DocumentNode } from '@graphql-typed-document-node/core';
+import { ValidationErrorFragmentDoc, GenericErrorFragmentDoc } from '../apollo/common-fragments.generated';
 export type WatchmanFragment = (
   { __typename: 'WatchmenWatchman' }
   & Pick<Types.WatchmenWatchman, 'id' | 'priority'>
@@ -121,9 +123,12 @@ export type WatchmenUpdateShiftMutationVariables = Types.Exact<{
 
 export type WatchmenUpdateShiftMutation = (
   { __typename: 'Mutation' }
-  & { shift: (
+  & { result: (
     { __typename: 'WatchmenShift' }
     & ShiftFragment
+  ) | (
+    { __typename: 'ValidationError' }
+    & ValidationErrorFragment
   ) }
 );
 
@@ -156,6 +161,6 @@ export const WatchmenSetWatchmanGradeDocument: DocumentNode<WatchmenSetWatchmanG
 
 export const WatchmenCreateWatchmanDocument: DocumentNode<WatchmenCreateWatchmanMutation, WatchmenCreateWatchmanMutationVariables> = dedupeFragments({ "kind": "Document", "definitions": [{ "kind": "OperationDefinition", "operation": "mutation", "name": { "kind": "Name", "value": "WatchmenCreateWatchman" }, "variableDefinitions": [{ "kind": "VariableDefinition", "variable": { "kind": "Variable", "name": { "kind": "Name", "value": "input" } }, "type": { "kind": "NonNullType", "type": { "kind": "NamedType", "name": { "kind": "Name", "value": "WatchmenCreateWatchmanInput" } } } }], "selectionSet": { "kind": "SelectionSet", "selections": [{ "kind": "Field", "name": { "kind": "Name", "value": "watchmenCreateWatchman" }, "arguments": [{ "kind": "Argument", "name": { "kind": "Name", "value": "params" }, "value": { "kind": "Variable", "name": { "kind": "Name", "value": "input" } } }] }] } }] });
 
-export const WatchmenUpdateShiftDocument: DocumentNode<WatchmenUpdateShiftMutation, WatchmenUpdateShiftMutationVariables> = dedupeFragments({ "kind": "Document", "definitions": [{ "kind": "OperationDefinition", "operation": "mutation", "name": { "kind": "Name", "value": "WatchmenUpdateShift" }, "variableDefinitions": [{ "kind": "VariableDefinition", "variable": { "kind": "Variable", "name": { "kind": "Name", "value": "params" } }, "type": { "kind": "NonNullType", "type": { "kind": "NamedType", "name": { "kind": "Name", "value": "WatchmenUpdateShiftInput" } } } }], "selectionSet": { "kind": "SelectionSet", "selections": [{ "kind": "Field", "alias": { "kind": "Name", "value": "shift" }, "name": { "kind": "Name", "value": "watchmenUpdateShift" }, "arguments": [{ "kind": "Argument", "name": { "kind": "Name", "value": "params" }, "value": { "kind": "Variable", "name": { "kind": "Name", "value": "params" } } }], "selectionSet": { "kind": "SelectionSet", "selections": [{ "kind": "FragmentSpread", "name": { "kind": "Name", "value": "Shift" } }] } }] } }, ...ShiftFragmentDoc.definitions] });
+export const WatchmenUpdateShiftDocument: DocumentNode<WatchmenUpdateShiftMutation, WatchmenUpdateShiftMutationVariables> = dedupeFragments({ "kind": "Document", "definitions": [{ "kind": "OperationDefinition", "operation": "mutation", "name": { "kind": "Name", "value": "WatchmenUpdateShift" }, "variableDefinitions": [{ "kind": "VariableDefinition", "variable": { "kind": "Variable", "name": { "kind": "Name", "value": "params" } }, "type": { "kind": "NonNullType", "type": { "kind": "NamedType", "name": { "kind": "Name", "value": "WatchmenUpdateShiftInput" } } } }], "selectionSet": { "kind": "SelectionSet", "selections": [{ "kind": "Field", "alias": { "kind": "Name", "value": "result" }, "name": { "kind": "Name", "value": "watchmenUpdateShift" }, "arguments": [{ "kind": "Argument", "name": { "kind": "Name", "value": "params" }, "value": { "kind": "Variable", "name": { "kind": "Name", "value": "params" } } }], "selectionSet": { "kind": "SelectionSet", "selections": [{ "kind": "FragmentSpread", "name": { "kind": "Name", "value": "Shift" } }, { "kind": "FragmentSpread", "name": { "kind": "Name", "value": "ValidationError" } }] } }] } }, ...ShiftFragmentDoc.definitions, ...ValidationErrorFragmentDoc.definitions] });
 
 export const OnWatchmenScheduleUpdatesDocument: DocumentNode<OnWatchmenScheduleUpdatesSubscription, OnWatchmenScheduleUpdatesSubscriptionVariables> = dedupeFragments({ "kind": "Document", "definitions": [{ "kind": "OperationDefinition", "operation": "subscription", "name": { "kind": "Name", "value": "onWatchmenScheduleUpdates" }, "selectionSet": { "kind": "SelectionSet", "selections": [{ "kind": "Field", "name": { "kind": "Name", "value": "watchmenScheduleUpdates" }, "selectionSet": { "kind": "SelectionSet", "selections": [{ "kind": "Field", "name": { "kind": "Name", "value": "updated" } }] } }] } }] });

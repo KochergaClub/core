@@ -1084,7 +1084,7 @@ type Mutation {
   cm2CreateCustomer(input: Cm2CreateCustomerInput!): Cm2Customer!
   cm2CloseOrder(id: ID!): Boolean!
   watchmenCreateWatchman(params: WatchmenCreateWatchmanInput!): Boolean!
-  watchmenUpdateShift(params: WatchmenUpdateShiftInput!): WatchmenShift!
+  watchmenUpdateShift(params: WatchmenUpdateShiftInput!): WatchmenUpdateShiftResult!
   watchmenSetWatchmanPriority(params: WatchmenSetWatchmanPriorityInput!): Boolean!
   watchmenSetWatchmanGrade(params: WatchmenSetWatchmanGradeInput!): Boolean!
   kkmRegisterCheck(input: KkmRegisterCheckInput!): KkmRegisterCheckResult!
@@ -2433,6 +2433,8 @@ input WatchmenUpdateShiftInput {
   watchman_id: ID
   is_night: Boolean
 }
+
+union WatchmenUpdateShiftResult = WatchmenShift | ValidationError
 
 type WatchmenWatchman {
   id: ID!

@@ -1,15 +1,19 @@
 import logging
 
+import kocherga.django.schema.types
+from django.core.exceptions import ValidationError
+from kocherga.django.errors import BoxedError
+
 logger = logging.getLogger(__name__)
 
 from typing import Optional
-from kocherga.graphql import g, helpers
 
 import channels.layers
-from django.db import transaction
-
 import kocherga.staff.tools
-from .. import models, permissions, channels
+from django.db import transaction
+from kocherga.graphql import g, helpers
+
+from .. import channels, models, permissions
 from . import types
 
 c = helpers.Collection()
@@ -39,7 +43,21 @@ class watchmenCreateWatchman(helpers.BaseFieldWithInput):
 
 
 @c.class_field
-class watchmenUpdateShift(helpers.BaseFieldWithInput):
+class watchmenUpdateShift(helpers.UnionFieldMixin, helpers.BaseFieldWithInput):
+    permissions = [permissions.manage_watchmen]
+    input = {
+        'date': str,
+        'shift': str,
+        'watchman_id': 'ID',
+        'is_night': Optional[bool],
+    }
+    input_argument_name = 'params'
+
+    result_types = {
+        models.Shift: types.WatchmenShift,
+        BoxedError: kocherga.django.schema.types.ValidationError,
+    }
+
     def resolve(self, _, info, params):
         # TODO - move to model
         (shift, _) = models.Shift.objects.get_or_create(
@@ -52,7 +70,11 @@ class watchmenUpdateShift(helpers.BaseFieldWithInput):
         else:
             shift.watchman = None
 
-        shift.full_clean()
+        try:
+            shift.full_clean()
+        except ValidationError as e:
+            return BoxedError(e)
+
         shift.save()
 
         def on_commit():
@@ -61,17 +83,6 @@ class watchmenUpdateShift(helpers.BaseFieldWithInput):
 
         transaction.on_commit(on_commit)
         return shift
-
-    permissions = [permissions.manage_watchmen]
-    input = {
-        'date': str,
-        'shift': str,
-        'watchman_id': 'ID',
-        'is_night': Optional[bool],
-    }
-    input_argument_name = 'params'
-
-    result = g.NN(types.WatchmenShift)
 
 
 @c.class_field

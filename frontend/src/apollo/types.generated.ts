@@ -1227,7 +1227,7 @@ export type Mutation = {
   cm2CreateCustomer: Cm2Customer;
   cm2CloseOrder: Scalars['Boolean'];
   watchmenCreateWatchman: Scalars['Boolean'];
-  watchmenUpdateShift: WatchmenShift;
+  watchmenUpdateShift: WatchmenUpdateShiftResult;
   watchmenSetWatchmanPriority: Scalars['Boolean'];
   watchmenSetWatchmanGrade: Scalars['Boolean'];
   kkmRegisterCheck: KkmRegisterCheckResult;
@@ -3565,6 +3565,8 @@ export type WatchmenUpdateShiftInput = {
   watchman_id?: Maybe<Scalars['ID']>;
   is_night?: Maybe<Scalars['Boolean']>;
 };
+
+export type WatchmenUpdateShiftResult = WatchmenShift | ValidationError;
 
 export type WatchmenWatchman = {
   __typename?: 'WatchmenWatchman';

@@ -190,6 +190,10 @@
     "WagtailPagePermission": [
       "WagtailRootPagePermission",
       "WagtailSpecificPagePermission"
+    ],
+    "WatchmenUpdateShiftResult": [
+      "WatchmenShift",
+      "ValidationError"
     ]
   }
 };

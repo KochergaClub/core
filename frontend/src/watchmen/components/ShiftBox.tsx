@@ -1,9 +1,7 @@
 import { useContext } from 'react';
 import styled from 'styled-components';
 
-import { useMutation } from '@apollo/client';
-
-import { useExpandable } from '~/common/hooks';
+import { useExpandable, useSmartMutation } from '~/common/hooks';
 import { colors } from '~/frontkit';
 import { staffMemberRoute } from '~/staff/routes';
 
@@ -78,12 +76,17 @@ interface Props {
 
 const ShiftBox = (props: Props) => {
   const { editing } = useContext(EditingContext);
-  const [updateMutation] = useMutation(WatchmenUpdateShiftDocument, {
+  const updateMutation = useSmartMutation(WatchmenUpdateShiftDocument, {
+    expectedTypename: 'WatchmenShift',
     update(cache, { data }) {
       if (!data) {
         return;
       }
-      const shift = data.shift;
+      if (data.result.__typename !== 'WatchmenShift') {
+        return;
+      }
+      // TODO - smarter useSmartMutation with generic over result type would fix this
+      const shift = data.result as ShiftFragment;
 
       cache.writeFragment({
         id: 'WatchmenShift:' + shift.date + '/' + shift.shift, // should match dataIdFromObject
