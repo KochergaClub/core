@@ -45,7 +45,7 @@ mutation UpdateShift($is_night: Boolean, $watchman_id: ID) {
         is_night: $is_night
         watchman_id: $watchman_id
     }) {
-        ... on WatchmanShift {
+        ... on WatchmenShift {
             is_night
             watchman {
                 id
