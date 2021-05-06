@@ -1,9 +1,15 @@
+fragment ProjectPage_ForPicker on ProjectPage {
+  id
+  meta {
+    slug
+    url
+  }
+  title
+}
+
 query EvenmanProjectsList {
   projects {
-    id
-    meta {
-      slug
-    }
+    ...ProjectPage_ForPicker
   }
 }
 

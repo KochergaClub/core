@@ -1,34 +1,41 @@
-import Select from 'react-select';
+import Link from 'next/link';
+import React from 'react';
+import Select, { components, OptionProps } from 'react-select';
 import { ActionMeta } from 'react-select/src/types';
 
 import { useQuery } from '@apollo/client';
 
 import { ApolloQueryResults } from '~/components';
+import { A, Column } from '~/frontkit';
 
-import { EvenmanProjectsListDocument } from './queries.generated';
+import { EvenmanProjectsListDocument, ProjectPage_ForPickerFragment } from './queries.generated';
 
-type OptionType = {
-  value: string;
-  label: string;
-};
+type OptionType = ProjectPage_ForPickerFragment;
 
 type Props = {
   selected?: string;
   select: (slug: string) => Promise<unknown>;
 };
 
-const EventShapeProjectLink = ({ selected, select }: Props) => {
+const Option: React.FC<OptionProps<OptionType, false>> = (props) => {
+  return (
+    <components.Option {...props}>
+      <small>{props.data.meta.slug}</small>
+      <br />
+      {props.data.title}
+    </components.Option>
+  );
+};
+
+const EventShapeProjectLink: React.FC<Props> = ({ selected, select }) => {
   const projectsResult = useQuery(EvenmanProjectsListDocument);
 
   return (
     <ApolloQueryResults {...projectsResult}>
       {({ data: { projects } }) => {
-        const options = projects.map((p) => ({
-          value: p.meta.slug,
-          label: p.meta.slug,
-        }));
+        const options = projects;
 
-        const currentProject = options.find((p) => p.value === selected);
+        const currentProject = projects.find((p) => p.meta.slug === selected);
 
         const pickProject = async (
           v: OptionType | null,
@@ -37,21 +44,33 @@ const EventShapeProjectLink = ({ selected, select }: Props) => {
           if (action === 'clear' || v === null) {
             await select('');
           } else {
-            await select(v.value);
+            await select(v.meta.slug);
           }
         };
 
         return (
-          <div>
+          <Column stretch>
             <Select
               value={currentProject || null}
               options={options}
+              components={{
+                Option,
+              }}
+              getOptionLabel={(p) => p.title}
+              getOptionValue={(p) => p.meta.slug}
               noOptionsMessage={() => 'Нет проектов'}
               placeholder="Выбрать..."
               isClearable={true}
               onChange={pickProject}
             />
-          </div>
+            {currentProject ? (
+              <Link href={currentProject.meta.url} passHref>
+                <A>
+                  <small>Открыть страницу проекта</small>
+                </A>
+              </Link>
+            ) : null}
+          </Column>
         );
       }}
     </ApolloQueryResults>
