@@ -4,10 +4,12 @@ logger = logging.getLogger(__name__)
 
 from functools import wraps
 
+from kocherga.error import PublicError
+
 import graphql
 
 
-class PermissionException(Exception):
+class PermissionException(PublicError):
     pass
 
 
