@@ -46,21 +46,13 @@ const LogoLink = styled.a`
 `;
 
 const Logo = ({ kind }: Props) => {
-  if (kind === 'team') {
-    return (
-      <Link href="/team" passHref>
-        <LogoLink>
-          <LogoImage />
-        </LogoLink>
-      </Link>
-    );
-  }
+  const href = kind === 'team' ? '/team' : '/';
 
   return (
-    <Link href="/" passHref>
-      <a>
+    <Link href={href} passHref>
+      <LogoLink>
         <LogoImage />
-      </a>
+      </LogoLink>
     </Link>
   );
 };
