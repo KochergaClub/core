@@ -11,7 +11,7 @@ from typing import Optional
 import channels.layers
 import kocherga.staff.tools
 from django.db import transaction
-from kocherga.graphql import g, helpers
+from kocherga.graphql import helpers
 
 from .. import channels, models, permissions
 from . import types
