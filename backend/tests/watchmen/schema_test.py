@@ -109,8 +109,8 @@ def test_update_invalid(client, manager_user):
         {'watchman_id': watchman.id, 'is_night': True},
     )
 
-    assert res['watchmenUpdateShift']['__typename'] == 'BoxedError'
+    assert res['watchmenUpdateShift']['__typename'] == 'ValidationError'
     assert (
         "watchman can't be set when is_night is set"
-        in res['watchmenUpdateShift']['message']
+        in res['watchmenUpdateShift']['errors'][0]['messages'][0]
     )
