@@ -55,6 +55,11 @@ mutation UpdateShift($is_night: Boolean, $watchman_id: ID) {
         ... on GenericError {
             message
         }
+        ... on ValidationError {
+            errors {
+                messages
+            }
+        }
     }
 }
 """
