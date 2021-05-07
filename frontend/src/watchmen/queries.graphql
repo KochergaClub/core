@@ -78,6 +78,7 @@ mutation WatchmenUpdateShift($params: WatchmenUpdateShiftInput!) {
   result: watchmenUpdateShift(params: $params) {
     ...Shift
     ...ValidationError
+    ...GenericError
   }
 }
 

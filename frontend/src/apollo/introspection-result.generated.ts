@@ -193,7 +193,8 @@
     ],
     "WatchmenUpdateShiftResult": [
       "WatchmenShift",
-      "ValidationError"
+      "ValidationError",
+      "GenericError"
     ]
   }
 };

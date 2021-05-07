@@ -45,11 +45,15 @@ mutation UpdateShift($is_night: Boolean, $watchman_id: ID) {
         is_night: $is_night
         watchman_id: $watchman_id
     }) {
+        __typename
         ... on WatchmenShift {
             is_night
             watchman {
                 id
             }
+        }
+        ... on GenericError {
+            message
         }
     }
 }
@@ -70,12 +74,10 @@ def test_update_by_staff(client, staff_user):
 def test_update_unknown_watchman(client, manager_user):
     client.force_login(manager_user)
 
-    with pytest.raises(QueryException) as excinfo:
-        run_query(client, UPDATE_SHIFT_MUTATION, {'watchman_id': 123})
+    res = run_query(client, UPDATE_SHIFT_MUTATION, {'watchman_id': 123})
 
-    assert (
-        'Watchman matching query does not exist' in excinfo.value.errors[0]['message']
-    )
+    assert res['watchmenUpdateShift']['__typename'] == 'GenericError'
+    assert res['watchmenUpdateShift']['message'] == 'Watchman does not exist'
 
 
 def test_update_normal(client, manager_user):
@@ -101,14 +103,14 @@ def test_update_invalid(client, manager_user):
     )
     watchman = Watchman.objects.create(member=member)
 
-    with pytest.raises(QueryException) as excinfo:
-        run_query(
-            client,
-            UPDATE_SHIFT_MUTATION,
-            {'watchman_id': watchman.id, 'is_night': True},
-        )
+    res = run_query(
+        client,
+        UPDATE_SHIFT_MUTATION,
+        {'watchman_id': watchman.id, 'is_night': True},
+    )
 
+    assert res['watchmenUpdateShift']['__typename'] == 'BoxedError'
     assert (
         "watchman can't be set when is_night is set"
-        in excinfo.value.errors[0]['message']
+        in res['watchmenUpdateShift']['message']
     )

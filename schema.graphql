@@ -2434,7 +2434,7 @@ input WatchmenUpdateShiftInput {
   is_night: Boolean
 }
 
-union WatchmenUpdateShiftResult = WatchmenShift | ValidationError
+union WatchmenUpdateShiftResult = WatchmenShift | ValidationError | GenericError
 
 type WatchmenWatchman {
   id: ID!

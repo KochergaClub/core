@@ -3566,7 +3566,7 @@ export type WatchmenUpdateShiftInput = {
   is_night?: Maybe<Scalars['Boolean']>;
 };
 
-export type WatchmenUpdateShiftResult = WatchmenShift | ValidationError;
+export type WatchmenUpdateShiftResult = WatchmenShift | ValidationError | GenericError;
 
 export type WatchmenWatchman = {
   __typename?: 'WatchmenWatchman';

@@ -2,7 +2,7 @@ import logging
 
 import kocherga.django.schema.types
 from django.core.exceptions import ValidationError
-from kocherga.django.errors import BoxedError
+from kocherga.django.errors import BoxedError, GenericError
 
 logger = logging.getLogger(__name__)
 
@@ -56,6 +56,7 @@ class watchmenUpdateShift(helpers.UnionFieldMixin, helpers.BaseFieldWithInput):
     result_types = {
         models.Shift: types.WatchmenShift,
         BoxedError: kocherga.django.schema.types.ValidationError,
+        GenericError: kocherga.django.schema.types.GenericError,
     }
 
     def resolve(self, _, info, params):
@@ -66,7 +67,10 @@ class watchmenUpdateShift(helpers.UnionFieldMixin, helpers.BaseFieldWithInput):
         )
         shift.is_night = params.get('is_night', False)
         if 'watchman_id' in params:
-            shift.watchman = models.Watchman.objects.get(pk=params['watchman_id'])
+            try:
+                shift.watchman = models.Watchman.objects.get(pk=params['watchman_id'])
+            except models.Watchman.DoesNotExist:
+                return GenericError("Watchman does not exist")
         else:
             shift.watchman = None
 
