@@ -6,19 +6,20 @@ import { useQuery, useSubscription } from '@apollo/client';
 
 import { Column } from '~/frontkit';
 
-import MonthCalendar from '../../common/MonthCalendar';
+import { MonthCalendar } from '../../common/MonthCalendar';
 import {
-    EvenmanEventDocument, EvenmanEventsDocument, OnEventsDocument
+    EvenmanEventDocument, EvenmanEventsCalendarDocument, OnEventsDocument
 } from '../queries.generated';
-import CalendarCell from './CalendarCell';
-import CalendarCellHeader from './CalendarCellHeader';
+import { CalendarCell } from './CalendarCell';
+import { CalendarCellHeader } from './CalendarCellHeader';
 import { reducer } from './filters';
 import FiltersBar from './FiltersBar';
+import { Projection } from './projection';
 import Toolbar from './Toolbar';
 
-interface Props {
+type Props = {
   selected_id?: string;
-}
+};
 
 const WEEKS = 3;
 
@@ -38,7 +39,7 @@ const EventCalendar: React.FC<Props> = ({ selected_id }) => {
     setStart(startOfWeek(newDate, { locale: ru }));
   }, []);
 
-  const queryResults = useQuery(EvenmanEventsDocument, {
+  const queryResults = useQuery(EvenmanEventsCalendarDocument, {
     variables: {
       start: format(start, 'yyyy-MM-dd'),
       end: format(end, 'yyyy-MM-dd'),
@@ -68,6 +69,7 @@ const EventCalendar: React.FC<Props> = ({ selected_id }) => {
   });
 
   const rawEvents = queryResults.data?.events?.nodes;
+  const prototypes = queryResults.data?.prototypes;
 
   const filteredEvents = useMemo(() => {
     let result = rawEvents || [];
@@ -80,16 +82,39 @@ const EventCalendar: React.FC<Props> = ({ selected_id }) => {
     return result;
   }, [rawEvents, filters]);
 
+  const dateToProjections = useMemo(() => {
+    const result: { [k: string]: Projection[] } = {};
+    for (const prototype of prototypes || []) {
+      for (const suggested of prototype.suggested_dates) {
+        const date = parseISO(suggested);
+        const dateStr = format(date, 'yyyy-MM-dd');
+        if (!result[dateStr]) {
+          result[dateStr] = [];
+        }
+        result[dateStr].push({ prototype, date });
+      }
+    }
+    return result;
+  }, [prototypes]);
+
   const renderCell = useCallback(
     (date: Date) => {
       const dayEvents =
         filteredEvents.filter((event) =>
           isEqual(startOfDay(parseISO(event.start)), startOfDay(date))
         ) || [];
+      const dateStr = format(date, 'yyyy-MM-dd');
+      const projections = dateToProjections[dateStr] || [];
 
-      return <CalendarCell events={dayEvents} selected_id={selected_id} />;
+      return (
+        <CalendarCell
+          events={dayEvents}
+          projections={projections}
+          selected_id={selected_id}
+        />
+      );
     },
-    [selected_id, filteredEvents]
+    [selected_id, filteredEvents, dateToProjections]
   );
 
   const renderHeader = useCallback((date: Date) => {

@@ -21,7 +21,7 @@ type Props = {
   date: Date;
 };
 
-const CalendarCellHeader: React.FC<Props> = ({ date }) => {
+export const CalendarCellHeader: React.FC<Props> = ({ date }) => {
   const [isNewEventModalOpen, setNewEventModalOpen] = useState(false);
 
   const openNewEventModal = useCallback((e: React.SyntheticEvent) => {
@@ -50,5 +50,3 @@ const CalendarCellHeader: React.FC<Props> = ({ date }) => {
     </Container>
   );
 };
-
-export default CalendarCellHeader;

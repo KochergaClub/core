@@ -46,14 +46,29 @@ EventsPrototype = g.ObjectType(
 
 
 def suggested_dates_field():
-    def resolve(obj, info, limit, until_ts=None):
-        if until_ts:
-            until_ts = datetime.fromtimestamp(until_ts, tz=TZ)
-        return obj.suggested_dates(until=until_ts, limit=limit)
+    def resolve(obj, info, limit, until_ts=None, from_date=None, to_date=None):
+        from_date_parsed = None
+        to_date_parsed = None
+        if from_date:
+            from_date_parsed = datetime.strptime(from_date, '%Y-%m-%d').date()
+        if to_date:
+            to_date_parsed = datetime.strptime(to_date, '%Y-%m-%d').date()
+        elif until_ts:
+            to_date_parsed = datetime.fromtimestamp(until_ts, tz=TZ).date()
+        return obj.suggested_dates(
+            from_date=from_date_parsed, to_date=to_date_parsed, limit=limit
+        )
 
     return g.Field(
         g.NNList(g.String),
-        args=g.arguments({'until_ts': Optional[int], 'limit': int}),
+        args=g.arguments(
+            {
+                'limit': int,
+                'from_date': Optional[str],
+                'to_date': Optional[str],
+                'until_ts': Optional[int],  # deprecated
+            }
+        ),
         resolve=resolve,
     )
 

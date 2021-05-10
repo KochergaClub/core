@@ -27,7 +27,7 @@ const WeeksContainer = styled.div<{ weeks: number; weekHeight: number }>`
   overflow: hidden;
 `;
 
-const MonthCalendar = (props: Props) => {
+export const MonthCalendar = (props: Props) => {
   const [weeks, setWeeks] = useState<Date[]>([]);
 
   useEffect(() => {
@@ -86,5 +86,3 @@ const MonthCalendar = (props: Props) => {
     </div>
   );
 };
-
-export default MonthCalendar;

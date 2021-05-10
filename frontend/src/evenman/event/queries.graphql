@@ -17,11 +17,24 @@ fragment EventsEvent_Summary on Event {
   }
 }
 
-query EvenmanEvents($start: String!, $end: String!) {
+fragment EventsPrototype_Projections on EventsPrototype {
+  id
+  title
+  active
+  weekday
+  hour
+  minute
+  suggested_dates(from_date: $start, to_date: $end, limit: 100)
+}
+
+query EvenmanEventsCalendar($start: String!, $end: String!) {
   events(after: $start, before: $end, first: 100) {
     nodes {
       ...EventsEvent_Summary
     }
+  }
+  prototypes: eventsPrototypes {
+    ...EventsPrototype_Projections
   }
 }
 

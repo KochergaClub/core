@@ -1,6 +1,8 @@
+import React from 'react';
 import { FaGlobeAfrica, FaLock } from 'react-icons/fa';
 import styled from 'styled-components';
 
+import { CalendarItemContainer, CalendarItemIcon, CalendarItemTitle } from './calendar-helpers';
 import { EventsEvent_SummaryFragment } from './queries.generated';
 
 interface ProgressProps {
@@ -9,21 +11,6 @@ interface ProgressProps {
   max: number;
   value: number;
 }
-
-const Container = styled.div`
-  cursor: pointer;
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  position: relative;
-`;
-
-const Icon = styled.div`
-  line-height: 1;
-  z-index: 1;
-  margin-right: 2px;
-  margin-left: 2px;
-`;
 
 const ProgressBack = styled.div<ProgressProps>`
   position: absolute;
@@ -59,20 +46,11 @@ const Progress = (props: ProgressProps) => (
   </ProgressBack>
 );
 
-const TitleContainer = styled.div`
-  flex: 1;
-  position: relative;
-  overflow: hidden;
-  z-index: 1;
-  line-height: 1;
-  font-size: 11px;
-`;
-
-interface Props {
+type Props = {
   event: EventsEvent_SummaryFragment;
   selected: boolean;
   onSelect: (id: string) => void;
-}
+};
 
 const EventCalendarItem: React.FC<Props> = (props) => {
   const { event } = props;
@@ -114,19 +92,17 @@ const EventCalendarItem: React.FC<Props> = (props) => {
   };
 
   return (
-    <Container onClick={onSelect}>
+    <CalendarItemContainer onClick={onSelect}>
       {renderProgress()}
-      <Icon>
+      <CalendarItemIcon>
         {event.event_type === 'public' ? (
           <FaGlobeAfrica color="green" size="11" />
         ) : (
           <FaLock color="black" size="11" />
         )}
-      </Icon>
-      <TitleContainer>
-        <div>{event.title}</div>
-      </TitleContainer>
-    </Container>
+      </CalendarItemIcon>
+      <CalendarItemTitle>{event.title}</CalendarItemTitle>
+    </CalendarItemContainer>
   );
 };
 

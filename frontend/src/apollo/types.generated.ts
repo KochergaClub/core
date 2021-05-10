@@ -917,8 +917,10 @@ export type EventsPrototypeImageArgs = {
 
 
 export type EventsPrototypeSuggested_DatesArgs = {
-  until_ts?: Maybe<Scalars['Int']>;
   limit: Scalars['Int'];
+  from_date?: Maybe<Scalars['String']>;
+  to_date?: Maybe<Scalars['String']>;
+  until_ts?: Maybe<Scalars['Int']>;
 };
 
 

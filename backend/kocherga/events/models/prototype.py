@@ -2,8 +2,8 @@ import logging
 
 logger = logging.getLogger(__name__)
 
-from datetime import datetime, timedelta
-from typing import List
+from datetime import date, datetime, time, timedelta
+from typing import List, Optional
 
 import reversion
 from django.db import models
@@ -83,29 +83,37 @@ class EventPrototype(models.Model):
         events = query.all()
         return events
 
-    def suggested_dates(self, until=None, limit=5):
+    def suggested_dates(
+        self,
+        from_date: Optional[date] = None,
+        to_date: Optional[date] = None,
+        limit=5,
+    ):
         if not self.active:
             return []
-        now = datetime.now(tz=TZ)
+        today = datetime.now(tz=TZ).date()
 
-        dt = now - timedelta(days=now.weekday())
-        dt += timedelta(days=self.weekday)
-        dt = dt.replace(hour=self.hour, minute=self.minute, second=0, microsecond=0)
+        d = from_date or today - timedelta(days=today.weekday())
+        d += timedelta(days=self.weekday)
 
-        if dt < now:
-            dt += timedelta(weeks=1)
+        if d < today:
+            d += timedelta(weeks=1)
 
-        existing_dts = set(e.start for e in self.instances())
+        existing_dates = set(e.start.date() for e in self.instances())
 
         result: List[datetime] = []
         while len(result) < limit:
-            if until and dt > until:
+            if to_date and d > to_date:
                 break
 
-            if dt not in existing_dts and dt.date() not in self.canceled_dates_list:
-                result.append(dt)
+            if d not in existing_dates and d not in self.canceled_dates_list:
+                result.append(
+                    datetime.combine(
+                        d, time(hour=self.hour, minute=self.minute), tzinfo=TZ
+                    )
+                )
 
-            dt += timedelta(weeks=1)
+            d += timedelta(weeks=1)
 
         return result
 

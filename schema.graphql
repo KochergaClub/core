@@ -799,7 +799,7 @@ type EventsPrototype {
   project: ProjectPage
   tags: [String!]!
   image(spec: String!): WagtailImageRendition
-  suggested_dates(until_ts: Int, limit: Int!): [String!]!
+  suggested_dates(limit: Int!, from_date: String, to_date: String, until_ts: Int): [String!]!
   instances(limit: Int): [Event!]!
   vk_group: VkGroup
   timepad_category: TimepadCategory
