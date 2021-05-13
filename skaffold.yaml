@@ -1,109 +1,102 @@
-apiVersion: skaffold/v2beta5
+apiVersion: skaffold/v2beta16
 kind: Config
 build:
-  local:
-    useBuildkit: true
   artifacts:
-    - image: registry.gitlab.com/kocherga/core/backend
-      context: backend
-      sync:
-        manual:
-          - src: scripts/**
-            dest: .
-          - src: kocherga/**
-            dest: .
-          - src: tests/**
-            dest: .
-        # infer:
-        #   - scripts/**
-        #   - kocherga/**
-        #   - tests/**
-    - image: registry.gitlab.com/kocherga/core/frontend
-      context: frontend
-      docker:
-        buildArgs:
-          # see: https://skaffold.dev/docs/environment/templating/
-          SENTRY_RELEASE: "{{.CI_COMMIT_SHORT_SHA}}"
-          SENTRY_AUTH_TOKEN: "{{.SENTRY_AUTH_TOKEN}}"
-      sync:
-        # frontend Dockerfile is multi-stage and skaffold can't figure out infer syncs, so we use manual instead
-        manual:
-          - src: src/**
-            dest: .
-          - src: server/**
-            dest: .
-          - src: public/**
-            dest: .
-    - image: registry.gitlab.com/kocherga/core/chrome
-      context: ops/images/chrome
-    - image: registry.gitlab.com/kocherga/core/mysql-backup
-      context: ops/images/mysql-backup
+  - image: registry.gitlab.com/kocherga/core/backend
+    context: backend
+    sync:
+      manual:
+      - src: scripts/**
+        dest: .
+      - src: kocherga/**
+        dest: .
+      - src: tests/**
+        dest: .
+  - image: registry.gitlab.com/kocherga/core/frontend
+    context: frontend
+    sync:
+      # frontend Dockerfile is multi-stage and skaffold can't figure out infer syncs, so we use manual instead
+      manual:
+      - src: src/**
+        dest: .
+      - src: server/**
+        dest: .
+      - src: public/**
+        dest: .
+    docker:
+      buildArgs:
+        # see: https://skaffold.dev/docs/environment/templating/
+        SENTRY_AUTH_TOKEN: '{{.SENTRY_AUTH_TOKEN}}'
+        SENTRY_RELEASE: '{{.CI_COMMIT_SHORT_SHA}}'
+  - image: registry.gitlab.com/kocherga/core/chrome
+    context: ops/images/chrome
+  - image: registry.gitlab.com/kocherga/core/mysql-backup
+    context: ops/images/mysql-backup
   tagPolicy:
     gitCommit:
       variant: AbbrevCommitSha
+  local:
+    useBuildkit: true
 portForward:
-  - resourceType: service
-    resourceName: core-frontend
-    port: 80
-    localPort: 8000
-  - resourceType: service
-    resourceName: core-backend
-    port: 80
-    localPort: 8001
+- resourceType: service
+  resourceName: core-frontend
+  port: 80
+  localPort: 8000
+- resourceType: service
+  resourceName: core-backend
+  port: 80
+  localPort: 8001
 profiles:
-  - name: dev
-    activation:
-      - command: dev
-    patches:
-      - op: add
-        path: /build/artifacts/1/docker/target
-        value: base # avoid slow `next build`
-      - op: add
-        path: /build/local/push
-        value: false # don't need to push images in dev
-    deploy:
-      helm:
-        releases:
-          - name: core
-            chartPath: ops/charts/core
-            valuesFiles:
-              - ops/values/core/dev/main.yaml
-              - ops/secrets/core/dev/main.yaml
-            artifactOverrides:
-              image.backend: registry.gitlab.com/kocherga/core/backend
-              image.chrome: registry.gitlab.com/kocherga/core/chrome
-              image.frontend: registry.gitlab.com/kocherga/core/frontend
-              image.mysql_backup: registry.gitlab.com/kocherga/core/mysql-backup
-            setFiles:
-              config.main_py: ops/values/core/dev/main.py
-              config.secrets_py: ops/secrets/core/dev/secrets.py
-        # flags:
-        #   upgrade:
-        #     - --install
-      statusCheckDeadlineSeconds: 600
-      kubeContext: dev
-  - name: prod
-    activation:
-      - command: run
-      - command: deploy
-    deploy:
-      helm:
-        releases:
-          - name: core
-            chartPath: ops/charts/core
-            valuesFiles:
-              - ops/values/core/prod/main.yaml
-              - ops/secrets/core/prod/main.yaml
-            artifactOverrides:
-              image.backend: registry.gitlab.com/kocherga/core/backend
-              image.chrome: registry.gitlab.com/kocherga/core/chrome
-              image.frontend: registry.gitlab.com/kocherga/core/frontend
-              image.mysql_backup: registry.gitlab.com/kocherga/core/mysql-backup
-            setFiles:
-              config.main_py: ops/values/core/prod/main.py
-              config.secrets_py: ops/secrets/core/prod/secrets.py
-        flags:
-          upgrade:
-            - --install
-      statusCheckDeadlineSeconds: 1200
-      kubeContext: prod
+- name: dev
+  activation:
+  - command: dev
+  patches:
+  - op: add
+    path: /build/artifacts/1/docker/target
+    value: base # avoid slow `next build`
+  - op: add
+    path: /build/local/push
+    value: false # don't need to push images in dev
+  deploy:
+    helm:
+      releases:
+      - name: core
+        chartPath: ops/charts/core
+        valuesFiles:
+        - ops/values/core/dev/main.yaml
+        - ops/secrets/core/dev/main.yaml
+        artifactOverrides:
+          image.backend: registry.gitlab.com/kocherga/core/backend
+          image.chrome: registry.gitlab.com/kocherga/core/chrome
+          image.frontend: registry.gitlab.com/kocherga/core/frontend
+          image.mysql_backup: registry.gitlab.com/kocherga/core/mysql-backup
+        setFiles:
+          config.main_py: ops/values/core/dev/main.py
+          config.secrets_py: ops/secrets/core/dev/secrets.py
+    statusCheckDeadlineSeconds: 600
+    kubeContext: dev
+- name: prod
+  activation:
+  - command: run
+  - command: deploy
+  deploy:
+    helm:
+      releases:
+      - name: core
+        chartPath: ops/charts/core
+        valuesFiles:
+        - ops/values/core/prod/main.yaml
+        - ops/secrets/core/prod/main.yaml
+        artifactOverrides:
+          image.backend: registry.gitlab.com/kocherga/core/backend
+          image.chrome: registry.gitlab.com/kocherga/core/chrome
+          image.frontend: registry.gitlab.com/kocherga/core/frontend
+          image.mysql_backup: registry.gitlab.com/kocherga/core/mysql-backup
+        setFiles:
+          config.main_py: ops/values/core/prod/main.py
+          config.secrets_py: ops/secrets/core/prod/secrets.py
+      flags:
+        upgrade:
+        - --install
+    statusCheckDeadlineSeconds: 1200
+    kubeContext: prod

@@ -1,14 +1,13 @@
-apiVersion: skaffold/v2beta5
+apiVersion: skaffold/v2beta16
 kind: Config
 deploy:
   helm:
     releases:
     - name: verdaccio
-      chartPath: stable/verdaccio
+      remoteChart: stable/verdaccio
       valuesFiles:
       - ops/values/verdaccio.yaml
       wait: true
-      remote: true
     flags:
       upgrade:
       - --install
