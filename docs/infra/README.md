@@ -1,19 +1,22 @@
 # Инфраструктура
 
 Инфраструктура Кочерги состоит из:
+
 - кастомного core-приложения, обеспечивающего сайт (публичную и приватную часть) и главной базы данных
 - приватного инстанса mediawiki
-- инфраструктурных сервисов: metabase, grafana, prometheus
+- инфраструктурных сервисов: metabase, grafana, prometheus, elasticsearch (список может дополняться со временем)
 
 Всё это деплоится на kubernetes-кластер.
 
 ## Используемые технологии
 
 Для разработки:
+
 - docker
 - skaffold
 
 Для деплоя:
+
 - terraform
 - k3s (устанавливаемый пока что через ansible, конфиги в deploy-репозитории)
 - helm
@@ -24,18 +27,20 @@
 ### Шаг 0. Локальный софт для выкладки
 
 Вам понадобятся:
-* Terraform CLI
-* Ansible
-* kubectl
-* skaffold
-* helm
+
+- Terraform CLI
+- Ansible
+- kubectl
+- skaffold
+- helm
 
 И доступы:
-* AWS
-* Hetzner
-* к репозиторию `kocherga/code/deploy`
-* к GitLab'у (к container registry в этом репозитории)
-* пароль от ansible vault в deploy-репозитории
+
+- AWS
+- Hetzner
+- к репозиторию `kocherga/code/deploy`
+- к GitLab'у (к container registry в этом репозитории)
+- пароль от ansible vault в deploy-репозитории
 
 ### Шаг 1. Terraform
 
@@ -52,21 +57,18 @@
 ### Шаг 3. Установка внешних helm charts
 
 На кластере должны работать общие сервисы:
-* metabase
-* prometheus и grafana
-* verdaccio
+
+- metabase
+- prometheus и grafana
+- verdaccio
+- elasticsearch
 
 Для их устновки используем skaffold и helm.
 
-Сначала установить helm и skaffold.
+Как установить:
 
-Затем запустить
-- `skaffold run -f ./ops/skaffold/base.yaml`
-- `skaffold run -f ./ops/skaffold/monitor.yaml`
-- `skaffold run -f ./ops/skaffold/metabase.yaml`
-- `skaffold run -f ./ops/skaffold/verdaccio.yaml`
-
-Добавочно: `skaffold run -f ./ops/skaffold/wiki.yaml` (установит kocherga-wiki и berekuk-wiki).
+- положить нужные секреты в `./ops/secrets` (список нужных конфигов можно найти через `grep -R ops/secrets ./ops/skaffold/*`)
+- запустить `skaffold run -f ./ops/skaffold/FILE.yaml` для всех файлов в `./ops/skaffold` поочерёдно (начиная с `base.yaml`)
 
 ### Шаг 4. Установка core-софта
 
