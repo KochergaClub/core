@@ -4,6 +4,7 @@ deploy:
   helm:
     releases:
     - name: monitor
+      # https://github.com/prometheus-community/helm-charts
       remoteChart: prometheus-community/kube-prometheus-stack
       valuesFiles:
       - ops/values/prometheus.yaml
