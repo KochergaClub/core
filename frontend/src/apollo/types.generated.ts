@@ -222,6 +222,8 @@ export type BlogPostPage = WagtailPage & {
   authors: Array<BlogPostAuthor>;
 };
 
+export type CancelWeeklyDigestMailchimpResult = GenericError | EventsWeeklyDigest;
+
 export type CancelYandexKassaPaymentInput = {
   id: Scalars['ID'];
 };
@@ -954,10 +956,12 @@ export type EventsWeeklyDigestImageArgs = {
 export type EventsWeeklyDigestMailchimp = {
   __typename?: 'EventsWeeklyDigestMailchimp';
   link?: Maybe<Scalars['String']>;
+  is_sent: Scalars['Boolean'];
 };
 
 export type EventsWeeklyDigestPostMailchimpInput = {
-  text?: Maybe<Scalars['String']>;
+  text_before?: Maybe<Scalars['String']>;
+  text_after?: Maybe<Scalars['String']>;
 };
 
 export type EventsWeeklyDigestTelegram = {
@@ -1259,6 +1263,8 @@ export type Mutation = {
   eventsWeeklyDigestPostVk: EventsWeeklyDigestUpdateResult;
   eventsWeeklyDigestPostTelegram: EventsWeeklyDigestUpdateResult;
   eventsWeeklyDigestPostMailchimp: EventsWeeklyDigestUpdateResult;
+  cancelWeeklyDigestMailchimp: CancelWeeklyDigestMailchimpResult;
+  sendWeeklyDigestMailchimp: SendWeeklyDigestMailchimpResult;
   vkWikiScheduleUpdate?: Maybe<BasicResult>;
   eventTimepadAnnouncementUpdate?: Maybe<EventUpdateResult>;
   eventVkAnnouncementUpdate?: Maybe<EventUpdateResult>;
@@ -3018,6 +3024,8 @@ export type SendUniqueRatioPromocodeInput = {
 };
 
 export type SendUniqueRatioPromocodeResult = BasicResult | GenericError;
+
+export type SendWeeklyDigestMailchimpResult = GenericError | EventsWeeklyDigest;
 
 export type SetRatioTicketNotionLinkInput = {
   id: Scalars['ID'];

@@ -192,6 +192,8 @@ type BlogPostPage implements WagtailPage {
   authors: [BlogPostAuthor!]!
 }
 
+union CancelWeeklyDigestMailchimpResult = GenericError | EventsWeeklyDigest
+
 input CancelYandexKassaPaymentInput {
   id: ID!
 }
@@ -824,10 +826,12 @@ type EventsWeeklyDigest {
 
 type EventsWeeklyDigestMailchimp {
   link: String
+  is_sent: Boolean!
 }
 
 input EventsWeeklyDigestPostMailchimpInput {
-  text: String
+  text_before: String
+  text_after: String
 }
 
 type EventsWeeklyDigestTelegram {
@@ -1114,6 +1118,8 @@ type Mutation {
   eventsWeeklyDigestPostVk: EventsWeeklyDigestUpdateResult!
   eventsWeeklyDigestPostTelegram: EventsWeeklyDigestUpdateResult!
   eventsWeeklyDigestPostMailchimp(input: EventsWeeklyDigestPostMailchimpInput!): EventsWeeklyDigestUpdateResult!
+  cancelWeeklyDigestMailchimp: CancelWeeklyDigestMailchimpResult!
+  sendWeeklyDigestMailchimp: SendWeeklyDigestMailchimpResult!
   vkWikiScheduleUpdate: BasicResult
   eventTimepadAnnouncementUpdate(input: EventTimepadAnnouncementUpdateInput!): EventUpdateResult
   eventVkAnnouncementUpdate(input: EventVkAnnouncementUpdateInput!): EventUpdateResult
@@ -1957,6 +1963,8 @@ input SendUniqueRatioPromocodeInput {
 }
 
 union SendUniqueRatioPromocodeResult = BasicResult | GenericError
+
+union SendWeeklyDigestMailchimpResult = GenericError | EventsWeeklyDigest
 
 input SetRatioTicketNotionLinkInput {
   id: ID!

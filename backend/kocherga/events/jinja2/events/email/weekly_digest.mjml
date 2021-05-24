@@ -19,6 +19,20 @@ border-radius: 4px;
     <mj-image href="{{ utmify("https://kocherga-club.ru") | e }}&amp;utm_content=image" src="{{ image_url | e }}" />
   </mj-column>
 </mj-section>
+{% if text_before %}
+<mj-section>
+  <mj-column width="100%">
+    <mj-divider border-width="1px" border-color="#E0E0E0" />
+  </mj-column>
+</mj-section>
+<mj-section padding-top="30px">
+  <mj-column width="100%">
+    <mj-text>
+      {{ text_before | safe }}
+    </mj-text>
+  </mj-column>
+</mj-section>
+{% endif %}
 <mj-section>
   <mj-column width="100%">
     <mj-divider border-width="1px" border-color="#E0E0E0" />
@@ -50,6 +64,7 @@ border-radius: 4px;
   </mj-column>
 </mj-section>
 {% endfor %}
+{% if text_after %}
 <mj-section>
   <mj-column width="100%">
     <mj-divider border-width="1px" border-color="#E0E0E0" />
@@ -58,8 +73,9 @@ border-radius: 4px;
 <mj-section padding-top="30px">
   <mj-column width="100%">
     <mj-text>
-      {{ text | safe }}
+      {{ text_after | safe }}
     </mj-text>
   </mj-column>
 </mj-section>
+{% endif %}
 {% endblock %}

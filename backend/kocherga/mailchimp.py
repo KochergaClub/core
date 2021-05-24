@@ -2,12 +2,13 @@ import logging
 
 logger = logging.getLogger(__name__)
 
-from django.conf import settings
-
-import time
-import json
-import requests
 import hashlib
+import json
+import time
+
+import requests
+
+from django.conf import settings
 
 MAILCHIMP_API = (
     f"https://{settings.KOCHERGA_MAILCHIMP_DATACENTER}.api.mailchimp.com/3.0"
@@ -27,43 +28,33 @@ class MailchimpException(Exception):
 
 
 def api_call(method, url, data={}):
-    if method == "GET":
-        r = requests.get(
-            f"{MAILCHIMP_API}/{url}",
-            params=data,
-            headers={"Authorization": f"apikey {MAILCHIMP_API_KEY}"},
-        )
-    elif method == "POST":
-        r = requests.post(
-            f"{MAILCHIMP_API}/{url}",
-            headers={
-                "Authorization": f"apikey {MAILCHIMP_API_KEY}",
-                "Content-Type": "application/json",
-            },
-            data=json.dumps(data),
-        )
-    elif method == "PUT":
-        # copy-pasted!
-        r = requests.put(
-            f"{MAILCHIMP_API}/{url}",
-            headers={
-                "Authorization": f"apikey {MAILCHIMP_API_KEY}",
-                "Content-Type": "application/json",
-            },
-            data=json.dumps(data),
-        )
-    elif method == "PATCH":
-        # copy-pasted!
-        r = requests.patch(
-            f"{MAILCHIMP_API}/{url}",
-            headers={
-                "Authorization": f"apikey {MAILCHIMP_API_KEY}",
-                "Content-Type": "application/json",
-            },
-            data=json.dumps(data),
-        )
+    method2fn = {
+        'GET': requests.get,
+        'POST': requests.post,
+        'DELETE': requests.delete,
+        'PUT': requests.put,
+        'PATCH': requests.patch,
+    }
+    extra_params = {}
+    if method == 'GET':
+        extra_params['params'] = data
     else:
+        extra_params['data'] = json.dumps(data)
+
+    headers = {
+        "Authorization": f"apikey {MAILCHIMP_API_KEY}",
+    }
+    if method != 'GET':
+        headers['Content-Type'] = 'application/json'
+
+    if method not in method2fn:
         raise Exception(f"Unknown method {method}")
+
+    r = method2fn[method](
+        f"{MAILCHIMP_API}/{url}",
+        headers=headers,
+        **extra_params,
+    )
 
     if r.status_code >= 400:
         raise MailchimpException(
@@ -71,6 +62,8 @@ def api_call(method, url, data={}):
         )
     r.raise_for_status()
 
+    if method == 'DELETE':
+        return  # no json for delete calls
     return r.json()
 
 

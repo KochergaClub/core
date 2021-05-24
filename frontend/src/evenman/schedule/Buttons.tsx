@@ -1,57 +1,21 @@
-import { useCallback, useState } from 'react';
+import React from 'react';
 import styled from 'styled-components';
 
 import { useMutation } from '@apollo/client';
 
-import { A, AsyncButton, Button, Column } from '~/frontkit';
+import { MutationModalButton } from '~/components/forms';
+import { SmartMutationButton } from '~/components/SmartMutationButton';
+import { A, AsyncButton, Column, Row } from '~/frontkit';
 
-import DigestEmailModal from './DigestEmailModal';
 import {
-    EvenmanDigestToMailchimpDocument, EvenmanDigestToTelegramDocument, EvenmanDigestToVkDocument,
+    EvenmanCancelMailchimpDocument, EvenmanDigestToMailchimpDocument,
+    EvenmanDigestToTelegramDocument, EvenmanDigestToVkDocument, EvenmanSendMailchimpDocument,
     EvenmanVkWikiScheduleUpdateDocument, EvenmanWeeklyDigestFragment
 } from './queries.generated';
 
 const WideAsyncButton = styled(AsyncButton)`
   width: 100%;
 `;
-
-const EmailDigestButton: React.FC = ({ children }) => {
-  const [mutation, { loading: acting }] = useMutation(
-    EvenmanDigestToMailchimpDocument
-  );
-
-  const [showModal, setShowModal] = useState(false);
-
-  const toggleModal = useCallback(() => {
-    setShowModal(!showModal);
-  }, [showModal]);
-
-  const post = useCallback(
-    async (text: string) => {
-      await mutation({
-        variables: {
-          text,
-        },
-      });
-      setShowModal(false);
-    },
-    [mutation]
-  );
-
-  return (
-    <>
-      <Button
-        onClick={toggleModal}
-        loading={acting}
-        style={{ width: '100%' }}
-        kind="primary"
-      >
-        {children}
-      </Button>
-      {showModal && <DigestEmailModal close={toggleModal} save={post} />}
-    </>
-  );
-};
 
 interface Props {
   digest: EvenmanWeeklyDigestFragment;
@@ -100,11 +64,55 @@ const Buttons: React.FC<Props> = ({ digest }) => {
       <section>
         <h3>Почта</h3>
         {digest.mailchimp?.link ? (
-          <A href={digest.mailchimp.link} target="_blank">
-            Рассылка в Mailchimp
-          </A>
+          <div>
+            <A href={digest.mailchimp.link} target="_blank">
+              Рассылка в Mailchimp
+            </A>
+            {digest.mailchimp.is_sent ? null : (
+              <Row>
+                <SmartMutationButton
+                  mutation={EvenmanCancelMailchimpDocument}
+                  variables={{}}
+                  expectedTypename="EventsWeeklyDigest"
+                  size="small"
+                >
+                  Отменить
+                </SmartMutationButton>
+                <SmartMutationButton
+                  mutation={EvenmanSendMailchimpDocument}
+                  variables={{}}
+                  expectedTypename="EventsWeeklyDigest"
+                  size="small"
+                  kind="primary"
+                  confirmText="Вы уверены? Письмо будет отправлено всем подписчикам."
+                >
+                  Отправить
+                </SmartMutationButton>
+              </Row>
+            )}
+          </div>
         ) : (
-          <EmailDigestButton>Создать черновик рассылки</EmailDigestButton>
+          <MutationModalButton
+            mutation={EvenmanDigestToMailchimpDocument}
+            buttonLabel="Создать черновик рассылки"
+            shape={[
+              {
+                type: 'markdown',
+                name: 'text_before',
+                title: 'Текст в начале',
+                optional: true,
+              },
+              {
+                type: 'markdown',
+                name: 'text_after',
+                title: 'Текст в конце',
+                optional: true,
+              },
+            ]}
+            modalSubmitLabel="Создать"
+            modalTitle="Создать черновик рассылки"
+            kind="primary"
+          />
         )}
       </section>
     </div>

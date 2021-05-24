@@ -15,6 +15,7 @@ fragment EvenmanWeeklyDigest on EventsWeeklyDigest {
   }
   mailchimp {
     link
+    is_sent
   }
   telegram {
     link
@@ -48,12 +49,28 @@ mutation EvenmanDigestToTelegram {
   }
 }
 
-mutation EvenmanDigestToMailchimp($text: String!) {
-  result: eventsWeeklyDigestPostMailchimp(input: { text: $text }) {
+mutation EvenmanDigestToMailchimp(
+  $input: EventsWeeklyDigestPostMailchimpInput!
+) {
+  result: eventsWeeklyDigestPostMailchimp(input: $input) {
     ok
     digest {
       ...EvenmanWeeklyDigest
     }
+  }
+}
+
+mutation EvenmanCancelMailchimp {
+  result: cancelWeeklyDigestMailchimp {
+    ...EvenmanWeeklyDigest
+    ...GenericError
+  }
+}
+
+mutation EvenmanSendMailchimp {
+  result: sendWeeklyDigestMailchimp {
+    ...EvenmanWeeklyDigest
+    ...GenericError
   }
 }
 

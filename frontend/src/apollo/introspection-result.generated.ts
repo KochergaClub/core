@@ -22,6 +22,10 @@
     "BecomeCommunityLeadCuratorResult": [
       "CommunityLead"
     ],
+    "CancelWeeklyDigestMailchimpResult": [
+      "GenericError",
+      "EventsWeeklyDigest"
+    ],
     "CancelYandexKassaPaymentResult": [
       "YandexKassaPayment",
       "GenericError"
@@ -101,6 +105,10 @@
     "SendUniqueRatioPromocodeResult": [
       "BasicResult",
       "GenericError"
+    ],
+    "SendWeeklyDigestMailchimpResult": [
+      "GenericError",
+      "EventsWeeklyDigest"
     ],
     "SlideFragmentsBlockValues": [
       "SlideFragmentsBlock_RichTextBlock",

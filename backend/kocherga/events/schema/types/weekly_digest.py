@@ -1,10 +1,9 @@
 from typing import Optional
 
-from kocherga.graphql import g, helpers, django_utils
+from kocherga.graphql import django_utils, g, helpers
 from kocherga.wagtail import graphql_utils as wagtail_utils
 
 from ... import models
-
 
 EventsWeeklyDigest = g.ObjectType(
     'EventsWeeklyDigest',
@@ -24,11 +23,20 @@ class mailchimp_field(helpers.BaseField):
     def resolve(self, obj, info):
         return {
             'link': obj.mailchimp_campaign_link(),
+            'is_sent': obj.mailchimp_sent,
         }
 
     permissions = []
     result = g.NN(
-        g.ObjectType('EventsWeeklyDigestMailchimp', g.fields({'link': Optional[str]}))
+        g.ObjectType(
+            'EventsWeeklyDigestMailchimp',
+            g.fields(
+                {
+                    'link': Optional[str],
+                    'is_sent': bool,
+                }
+            ),
+        )
     )
 
 

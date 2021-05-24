@@ -12,6 +12,7 @@ type Props<S extends FormShape, Variables> = PropsForModal<S, Variables> & {
   modalSubmitLabel: string;
   modalTitle: string;
   size?: Parameters<typeof ButtonWithModal>[0]['size'];
+  kind?: Parameters<typeof ButtonWithModal>[0]['kind'];
 };
 
 export function MutationModalButton<
@@ -22,10 +23,11 @@ export function MutationModalButton<
   modalTitle,
   modalSubmitLabel,
   size,
+  kind,
   ...otherProps
 }: Props<S, Variables>) {
   return (
-    <ButtonWithModal title={buttonLabel} size={size}>
+    <ButtonWithModal title={buttonLabel} size={size} kind={kind}>
       {({ close }) => (
         <MutationModal
           close={close}

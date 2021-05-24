@@ -1,5 +1,7 @@
 import logging
 
+from kocherga.error import PublicError
+
 logger = logging.getLogger(__name__)
 
 import asyncio
@@ -82,7 +84,7 @@ class WeeklyDigest(models.Model):
         logger.info(f"Schedule includes {len(result)} events")
         return result
 
-    def get_mailchimp_content(self, text, image_url):
+    def get_mailchimp_content(self, text_before, text_after, image_url):
         events = self.events()
 
         date2events = {}
@@ -114,8 +116,11 @@ class WeeklyDigest(models.Model):
         mjml = render_to_string(
             'events/email/weekly_digest.mjml',
             {
-                'text': markdown.markdown(
-                    text, extensions=['markdown.extensions.nl2br']
+                'text_before': markdown.markdown(
+                    text_before, extensions=['markdown.extensions.nl2br']
+                ),
+                'text_after': markdown.markdown(
+                    text_after, extensions=['markdown.extensions.nl2br']
                 ),
                 'image_url': image_url,
                 'title_dates': title_dates,
@@ -179,14 +184,16 @@ class WeeklyDigest(models.Model):
 
         return result['full_size_url']
 
-    def post_mailchimp_draft(self, text=''):
+    def post_mailchimp_draft(self, text_before='', text_after=''):
         if self.mailchimp_id:
             raise Exception("Mailchimp draft already exists")
 
         image_url = self.upload_mailchimp_image()
 
         logger.info('Generating html content')
-        content = self.get_mailchimp_content(text, image_url)
+        content = self.get_mailchimp_content(
+            text_before=text_before, text_after=text_after, image_url=image_url
+        )
 
         logger.info('Creating campaign draft')
         campaign = kocherga.mailchimp.api_call(
@@ -225,15 +232,50 @@ class WeeklyDigest(models.Model):
             'PUT', f'campaigns/{campaign_id}/content', {'html': content['html']}
         )
         self.mailchimp_id = campaign_id
+        self.full_clean()
+        self.save()
+
+    def cancel_mailchimp_draft(self):
+        if not self.mailchimp_id:
+            raise PublicError("Mailchimp draft doesn't exist")
+        if self.mailchimp_sent:
+            raise PublicError("Mailchimp campaign is sent and can't be canceled")
+
+        kocherga.mailchimp.api_call(
+            'DELETE',
+            f'campaigns/{self.mailchimp_id}',
+        )
+        self.mailchimp_id = ''
+        self.full_clean()
+        self.save()
+
+    def send_mailchimp(self):
+        if not self.mailchimp_id:
+            raise PublicError("Mailchimp draft doesn't exist")
+        if self.mailchimp_sent:
+            raise PublicError("Mailchimp campaign is already sent")
+
+        kocherga.mailchimp.api_call(
+            'POST',
+            f'campaigns/{self.mailchimp_id}/actions/send',
+        )
+        self.mailchimp_sent = True
+        self.full_clean()
         self.save()
 
     def mailchimp_campaign_link(self) -> Optional[str]:
         if not self.mailchimp_id:
             return None
 
-        response = kocherga.mailchimp.api_call(
-            'GET', f'campaigns/{self.mailchimp_id}', {'fields': 'web_id'}
-        )
+        try:
+            response = kocherga.mailchimp.api_call(
+                'GET', f'campaigns/{self.mailchimp_id}', {'fields': 'web_id'}
+            )
+        except kocherga.mailchimp.MailchimpException as e:
+            if e.status_code == 404:
+                # TODO - reset setf.mailchimp_id? implement a `fix_mailchimp` method?
+                raise PublicError("Mailchimp campaign should exist but doesn't")
+            raise e
 
         return kocherga.mailchimp.campaign_web_link(response['web_id'])
 
@@ -258,11 +300,12 @@ class WeeklyDigest(models.Model):
 
     def post_telegram(self):
         if self.telegram_id:
-            raise Exception("Telegram message is already sent")
+            raise PublicError("Telegram message is already sent")
 
         text = self._telegram_message()
         posted_messages = kocherga.telegram.utils.post_to_channel(text)
         self.telegram_id = posted_messages[0]['result']['message_id']
+        self.full_clean()
         self.save()
 
     def telegram_link(self) -> Optional[str]:
@@ -273,7 +316,7 @@ class WeeklyDigest(models.Model):
 
     def post_vk(self, prefix_text):
         if self.vk_id:
-            raise Exception("VK digest already posted")
+            raise PublicError("VK digest already posted")
 
         message = f"#{VK_HASHTAG}\n"
         message += prefix_text
@@ -315,6 +358,7 @@ class WeeklyDigest(models.Model):
         )
 
         self.vk_id = response['post_id']
+        self.full_clean()
         self.save()
 
     def vk_link(self) -> Optional[str]:
