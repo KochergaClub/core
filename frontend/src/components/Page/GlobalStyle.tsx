@@ -1,9 +1,8 @@
 import Head from 'next/head';
 import { createGlobalStyle } from 'styled-components';
 
-import { GlobalStyle as FrontkitGlobalStyle } from '~/frontkit';
-
 import { staticUrl } from '~/common/utils';
+import { GlobalStyle as FrontkitGlobalStyle } from '~/frontkit';
 
 // normalize.css 8.0.1 without IE sections
 const NormalizeStyle = createGlobalStyle`
