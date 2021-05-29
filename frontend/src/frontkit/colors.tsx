@@ -7,6 +7,7 @@ export const hues = {
   red: 0,
 };
 
+// matches primary color from tailwind config
 export const primary = {
   100: `hsl(${hues.blue}, 80%, 95%)`,
   300: `hsl(${hues.blue}, 55%, 80%)`,
