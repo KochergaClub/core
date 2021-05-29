@@ -10,6 +10,7 @@ export { ColumnNav } from './components/ColumnNav';
 export { HR } from './components/HR';
 export { Input } from './components/Input';
 export { Label } from './components/Label';
+export { LabelA } from './components/LabelA';
 export { LabelDiv } from './components/LabelDiv';
 export { Modal } from './components/Modal';
 export { RadioButtonGroup } from './components/RadioButtonGroup';
@@ -25,7 +26,7 @@ export { GlobalStyle } from './global/GlobalStyle';
 export {
   ToasterContext,
   useNotification,
-  WithToaster
+  WithToaster,
 } from './global/WithToaster';
 export { Column } from './layout/Column';
 export { ColumnsBlock } from './layout/ColumnsBlock';
@@ -35,4 +36,3 @@ export { ResponsivePadding } from './layout/ResponsivePadding';
 export { Row } from './layout/Row';
 export { breakpoints, deviceMediaQueries } from './sizes';
 export { colors, fonts };
-

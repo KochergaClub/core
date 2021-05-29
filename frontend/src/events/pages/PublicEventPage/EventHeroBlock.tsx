@@ -4,102 +4,34 @@ import {
 import { utcToZonedTime } from 'date-fns-tz';
 import Link from 'next/link';
 import React, { useCallback } from 'react';
-import styled from 'styled-components';
 
 import { formatDate, timezone } from '~/common/utils';
 import { trackEvent } from '~/components/analytics';
-import HeroWithImage from '~/components/HeroWithImage';
+import { HeroWithImage } from '~/components/HeroWithImage';
 import CalendarIcon from '~/components/icons/CalendarIcon';
 import { publicEventsRootRoute } from '~/events/routes';
-import { A, Button, colors, Column, deviceMediaQueries, fonts, LabelDiv, Row } from '~/frontkit';
+import { Button, colors, Column, fonts, LabelA, Row } from '~/frontkit';
 import { projectRoute } from '~/projects/routes';
 
 import { Event_DetailsFragment } from './queries.generated';
 import { CommonProps } from './types';
 
-const Container = styled.div`
-  flex: 1;
-  max-width: 900px;
-  width: 100%;
-  ${deviceMediaQueries.desktop(`
-    width: 900px;
-  `)}
-  padding: 40px;
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-  color: white;
-`;
-
-const Header = styled.h1`
-  font-weight: bold;
-  font-size: ${fonts.sizes.XL5};
-  line-height: 1.1;
-  ${deviceMediaQueries.mobile(`
-    font-size: ${fonts.sizes.XL2};
-  `)}
-  ${deviceMediaQueries.tablet(`
-    font-size: ${fonts.sizes.XL3};
-  `)}
-`;
-
-// copy-pasted from ProjectHeroBlock
-const GreyA = styled(A)`
-  ${fonts.label}
-  color: ${colors.primary[300]};
-`;
-
 const getDaysUntil = (event: Event_DetailsFragment) =>
   differenceInCalendarDays(parseISO(event.start), new Date());
 
-const DateInfoContainer = styled.time`
-  display: flex;
-  flex-direction: row;
-  align-items: flex-end;
-
-  & > * + * {
-    margin-left: 16px;
-  }
-`;
-
-const CalendarIconWithDateContainer = styled.div`
-  position: relative;
-  > svg {
-    display: block;
-  }
-`;
-
 const CalendarIconWithDate: React.FC<{ day: number }> = ({ day }) => {
   return (
-    <CalendarIconWithDateContainer>
+    <div className="relative">
       <CalendarIcon size={80} color={colors.grey[300]} />
       <div
-        style={{
-          position: 'absolute',
-          width: 80,
-          textAlign: 'center',
-          left: 0,
-          top: 22,
-          fontSize: '48px',
-          fontWeight: 'bold',
-          lineHeight: 1,
-        }}
+        className="absolute text-5xl font-bold w-full text-center"
+        style={{ top: 22 }}
       >
         {day}
       </div>
-    </CalendarIconWithDateContainer>
+    </div>
   );
 };
-
-const DateInfoText = styled.div`
-  font-size: ${fonts.sizes.XL2};
-  text-transform: uppercase;
-  font-weight: bold;
-
-  ${deviceMediaQueries.mobile(`
-    font-size: ${fonts.sizes.BASE};
-  `)}
-`;
 
 const DateInfo: React.FC<CommonProps> = ({ event }) => {
   const daysUntil = getDaysUntil(event);
@@ -143,13 +75,15 @@ const DateInfo: React.FC<CommonProps> = ({ event }) => {
   }, EEEE, HH:mm`;
 
   return (
-    <DateInfoContainer dateTime={date.toISOString()}>
+    <time dateTime={date.toISOString()} className="flex items-end space-x-4">
       <CalendarIconWithDate day={getDate(zonedDate)} />
       <Column gutter={4}>
-        <DateInfoText>{formatDate(zonedDate, format)}</DateInfoText>
-        <div style={{ fontSize: fonts.sizes.SM }}>{daysText}</div>
+        <div className="uppercase font-bold sm:text-2xl">
+          {formatDate(zonedDate, format)}
+        </div>
+        <div className="text-sm">{daysText}</div>
       </Column>
-    </DateInfoContainer>
+    </time>
   );
 };
 
@@ -210,21 +144,25 @@ const EventHeroBlock: React.FC<CommonProps & ExtraProps> = (props) => {
 
   return (
     <HeroWithImage image={imageUrl}>
-      <Container>
+      <div className="text-white p-10 mx-auto max-w-screen-lg">
         <Link href={publicEventsRootRoute()} passHref>
-          <GreyA>&larr; Все события</GreyA>
+          <LabelA>&larr; Все события</LabelA>
         </Link>
         {event.project ? (
-          <Row style={{ marginTop: '4px' }}>
-            <LabelDiv style={{ color: 'white' }}>Событие проекта</LabelDiv>
+          <div className="flex gap-1 mt-1">
+            <div className="text-sm font-medium text-white">
+              Событие проекта
+            </div>
             <Link href={projectRoute(event.project.meta.slug)} passHref>
-              <GreyA>{event.project.title}</GreyA>
+              <LabelA>{event.project.title}</LabelA>
             </Link>
-          </Row>
+          </div>
         ) : null}
-        <Header>{event.title}</Header>
+        <h1 className="font-bold text-2xl sm:text-3xl md:text-5xl">
+          {event.title}
+        </h1>
         <Bottom {...props} />
-      </Container>
+      </div>
     </HeroWithImage>
   );
 };

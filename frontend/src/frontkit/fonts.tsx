@@ -18,6 +18,6 @@ export const sizes = {
 export const label = css`
   font-size: ${sizes.SM};
   font-weight: 500;
-  line-height: 1.2;
+  /* line-height: 1.2; */
   color: ${colors.grey[500]};
 `;
