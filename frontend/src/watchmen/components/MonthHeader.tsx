@@ -1,30 +1,12 @@
-import styled from 'styled-components';
-
-import { colors, fonts } from '~/frontkit';
-
-const Container = styled.div`
-  display: flex;
-  width: 100%;
-  border: 1px solid ${colors.grey[200]};
-
-  & > div {
-    flex: 1;
-    text-align: center;
-    font-size: ${fonts.sizes.XS};
-    letter-spacing: 0.08em;
-    font-weight: bold;
-  }
-  & > div + div {
-    border-left: 1px solid ${colors.grey[200]};
-  }
-`;
-
-const MonthHeader = () => (
-  <Container>
+export const MonthHeader: React.FC = () => (
+  <div className="w-full flex border border-solid border-gray-200 text-center font-bold text-sm tracking-wider">
     {['ПН', 'ВТ', 'СР', 'ЧТ', 'ПТ', 'СБ', 'ВС'].map((weekday) => (
-      <div key={weekday}>{weekday}</div>
+      <div
+        key={weekday}
+        className="flex-1 border-0 border-r border-solid border-gray-200 last:border-r-0"
+      >
+        {weekday}
+      </div>
     ))}
-  </Container>
+  </div>
 );
-
-export default MonthHeader;

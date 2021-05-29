@@ -1,40 +1,25 @@
 import { parseISO } from 'date-fns';
-import styled from 'styled-components';
 
-import ItemPageHeader from '~/blocks/ItemPageHeader';
+import { ItemPageHeader } from '~/blocks/ItemPageHeader';
 import { formatDate } from '~/common/utils';
 import { Page } from '~/components';
-import { colors, RichText } from '~/frontkit';
+import { RichText } from '~/frontkit';
 import { NextWagtailPage } from '~/wagtail/types';
 
 import {
     BlogPostAuthorFragment, BlogPostPageFragment, BlogPostPageFragmentDoc
 } from '../fragments.generated';
-import Author from './Author';
+import { Author } from './Author';
 
 const AuthorsList = ({ authors }: { authors: BlogPostAuthorFragment[] }) => {
   return (
-    <div>
+    <div className="m-4 space-y-8">
       {authors.map((author, i) => (
         <Author key={i} {...author} />
       ))}
     </div>
   );
 };
-
-const Container = styled.div`
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
-  margin-bottom: 40px;
-  margin-top: 20px;
-`;
-
-const TextContainer = styled(RichText)`
-  max-width: 660px;
-  padding: 0 20px;
-  margin-bottom: 40px;
-`;
 
 const TextWithAuthors = ({
   text,
@@ -44,18 +29,15 @@ const TextWithAuthors = ({
   authors: BlogPostAuthorFragment[];
 }) => {
   return (
-    <Container>
-      <main>
-        <TextContainer dangerouslySetInnerHTML={{ __html: text }} />
-      </main>
+    <div className="flex flex-wrap justify-center my-10">
+      <RichText
+        className="max-w-2xl px-5 mb-10"
+        dangerouslySetInnerHTML={{ __html: text }}
+      />
       <AuthorsList authors={authors} />
-    </Container>
+    </div>
   );
 };
-
-const HeaderDate = styled.div`
-  color: ${colors.grey[400]};
-`;
 
 const BlogPostPage: NextWagtailPage<BlogPostPageFragment> = ({ page }) => {
   return (
@@ -65,9 +47,9 @@ const BlogPostPage: NextWagtailPage<BlogPostPageFragment> = ({ page }) => {
         sectionTitle="Блог Кочерги"
         sectionLink="/blog"
       >
-        <HeaderDate>
+        <div className="text-gray-400">
           {formatDate(parseISO(page.date), 'd MMMM yyyy')}
-        </HeaderDate>
+        </div>
       </ItemPageHeader>
       <TextWithAuthors text={page.body} authors={page.authors} />
     </Page>

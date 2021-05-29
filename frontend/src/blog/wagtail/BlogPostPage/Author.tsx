@@ -1,49 +1,20 @@
-import styled from 'styled-components';
-
-import { colors, fonts } from '~/frontkit';
-
 import { BlogPostAuthorFragment } from '../fragments.generated';
 
-const AuthorContainer = styled.div`
-  margin: 16px;
-  display: flex;
-  flex-direction: column;
-  max-width: 128px;
-  align-items: center;
-`;
-
-const AuthorImage = styled.img`
-  border-radius: 50%;
-  width: 100px;
-  height: 100px;
-`;
-
-const AuthorName = styled.div`
-  margin-top: 8px;
-
-  text-align: center;
-
-  font-weight: 500;
-`;
-
-const AuthorDescription = styled.div`
-  margin-top: 4px;
-
-  text-align: center;
-
-  color: ${colors.grey[600]};
-  font-size: ${fonts.sizes.XS};
-  line-height: 1.35;
-`;
-
-const Author = ({ name, description, image }: BlogPostAuthorFragment) => {
+export const Author = ({
+  name,
+  description,
+  image,
+  image_2x,
+}: BlogPostAuthorFragment) => {
   return (
-    <AuthorContainer>
-      <AuthorImage src={image.url} />
-      <AuthorName>{name}</AuthorName>
-      <AuthorDescription>{description}</AuthorDescription>
-    </AuthorContainer>
+    <div className="flex flex-col items-center w-32 space-y-2 text-center">
+      <img
+        className="rounded-full mb-2"
+        src={image.url}
+        srcSet={`${image.url}, ${image_2x.url} 2x`}
+      />
+      <div className="font-medium leading-tight">{name}</div>
+      <div className="text-gray-600 text-xs leading-tight">{description}</div>
+    </div>
   );
 };
-
-export default Author;

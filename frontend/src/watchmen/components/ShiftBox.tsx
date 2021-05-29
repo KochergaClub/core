@@ -74,7 +74,7 @@ interface Props {
   shift: ShiftFragment;
 }
 
-const ShiftBox = (props: Props) => {
+export const ShiftBox: React.FC<Props> = (props) => {
   const { editing } = useContext(EditingContext);
   const updateMutation = useSmartMutation(WatchmenUpdateShiftDocument, {
     expectedTypename: 'WatchmenShift',
@@ -144,5 +144,3 @@ const ShiftBox = (props: Props) => {
     </Container>
   );
 };
-
-export default ShiftBox;

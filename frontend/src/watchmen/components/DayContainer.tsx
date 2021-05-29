@@ -1,6 +1,5 @@
 import { ShiftFragment } from '../queries.generated';
-
-import ShiftBox from './ShiftBox';
+import { ShiftBox } from './ShiftBox';
 
 interface Props {
   shifts: ShiftFragment[];
@@ -9,7 +8,7 @@ interface Props {
 const DayContainer: React.FC<Props> = ({ shifts }) => {
   return (
     <div>
-      {shifts.map(shift => (
+      {shifts.map((shift) => (
         <ShiftBox key={shift.shift} shift={shift} />
       ))}
     </div>

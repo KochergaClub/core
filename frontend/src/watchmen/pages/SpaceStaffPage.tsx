@@ -5,7 +5,7 @@ import { Page } from '~/components';
 import { A } from '~/frontkit';
 
 import GradesList from '../components/GradesList';
-import WatchmenList from '../components/WatchmenList';
+import { WatchmenList } from '../components/WatchmenList';
 import { watchmenShiftsRoute } from '../routes';
 
 const SpaceStaffPage: NextApolloPage = () => {

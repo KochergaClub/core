@@ -1,17 +1,9 @@
+import { addDays, addWeeks, format, getDate, isAfter, startOfWeek } from 'date-fns';
 import React from 'react';
 
-import {
-  startOfWeek,
-  addWeeks,
-  addDays,
-  getDate,
-  isAfter,
-  format,
-} from 'date-fns';
-
-import MonthHeader from './MonthHeader';
+import { MonthHeader } from './MonthHeader';
 import Week from './Week';
-import WeekHeader from './WeekHeader';
+import { WeekHeader } from './WeekHeader';
 
 interface Props {
   fromDate: Date;

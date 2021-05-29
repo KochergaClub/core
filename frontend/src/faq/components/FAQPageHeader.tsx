@@ -1,4 +1,4 @@
-import PageHeader from '~/blocks/PageHeader';
+import { PageHeader } from '~/blocks/PageHeader';
 import { ParentLinkInHeader } from '~/components';
 
 import { FaqPageFragment } from '../fragments.generated';

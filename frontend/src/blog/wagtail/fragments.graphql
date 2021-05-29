@@ -1,7 +1,12 @@
 fragment BlogPostAuthor on BlogPostAuthor {
   name
   description
-  image(spec: "fill-200x200") {
+  image(spec: "fill-100x100") {
+    id
+    url
+  }
+  image_2x: image(spec: "fill-200x200") {
+    id
     url
   }
 }

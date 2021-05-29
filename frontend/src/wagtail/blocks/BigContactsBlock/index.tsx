@@ -2,7 +2,7 @@ import styled from 'styled-components';
 
 import { gql } from '@apollo/client';
 
-import SocialIcons from '~/components/Page/PageMenu/SocialIcons';
+import { SocialIcons } from '~/components/Page/PageMenu/SocialIcons';
 import { colors, fonts } from '~/frontkit';
 
 import { BlockComponent } from '../../types';

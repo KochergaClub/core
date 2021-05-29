@@ -1,14 +1,8 @@
-import { Page, PaddedBlock } from '~/components';
-
-import PageHeader from '~/blocks/PageHeader';
-
+import { PageHeader } from '~/blocks/PageHeader';
+import { PaddedBlock, Page } from '~/components';
 import { NextWagtailPage } from '~/wagtail/types';
 
-import {
-  BlogIndexPageFragment,
-  BlogIndexPageFragmentDoc,
-} from '../fragments.generated';
-
+import { BlogIndexPageFragment, BlogIndexPageFragmentDoc } from '../fragments.generated';
 import Summary from './Summary';
 
 const BlogIndexPage: NextWagtailPage<BlogIndexPageFragment> = ({ page }) => {

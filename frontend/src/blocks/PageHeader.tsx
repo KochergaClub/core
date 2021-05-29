@@ -1,50 +1,15 @@
-import styled from 'styled-components';
-
-import { colors, deviceMediaQueries, fonts } from '~/frontkit';
-
-const Container = styled.div`
-  background-color: ${colors.grey[100]};
-  text-align: center;
-`;
-
-const Top = styled.div`
-  display: block;
-  padding-top: 24px;
-  text-align: center;
-`;
-
-const Bottom = styled.div`
-  display: block;
-  padding-bottom: 24px;
-  text-align: center;
-`;
-
-const Title = styled.h1`
-  margin: 24px 0;
-  line-height: 1.2;
-
-  font-size: ${fonts.sizes.XL5};
-
-  ${deviceMediaQueries.mobile(`
-    font-size: ${fonts.sizes.XL2};
-  `)}
-  ${deviceMediaQueries.tablet(`
-    font-size: ${fonts.sizes.XL3};
-  `)}
-`;
-
 interface Props {
   title: string;
   top?: React.ReactNode;
   bottom?: React.ReactNode;
 }
 
-export default function PageHeader({ title, top, bottom }: Props) {
+export const PageHeader: React.FC<Props> = ({ title, top, bottom }) => {
   return (
-    <Container>
-      <Top>{top}</Top>
-      <Title>{title}</Title>
-      <Bottom>{bottom}</Bottom>
-    </Container>
+    <div className="text-center bg-gray-100">
+      <div className="pt-8">{top}</div>
+      <h1 className="my-6 text-2xl sm:text-3xl md:text-5xl">{title}</h1>
+      <div className="pb-8">{bottom}</div>
+    </div>
   );
-}
+};

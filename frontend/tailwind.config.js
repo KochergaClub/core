@@ -4,10 +4,16 @@ module.exports = {
   mode: 'jit',
   purge: ['./src/**/*.{ts,tsx}'],
   theme: {
+    extend: {
+      screens: {
+        print: { raw: 'print' },
+      },
+    },
     colors: {
       transparent: 'transparent',
       current: 'currentColor',
       gray: colors.coolGray,
+      white: colors.white,
       // matches primary color from frontkit colors config
       primary: {
         100: `hsl(210, 80%, 95%)`,

@@ -1,6 +1,6 @@
 import { ParentLinkInHeader } from '~/components';
 
-import PageHeader from './PageHeader';
+import { PageHeader } from './PageHeader';
 
 interface Props {
   title: string;
@@ -9,14 +9,14 @@ interface Props {
   children?: React.ReactNode;
 }
 
-export default function ItemPageHeader({
+export const ItemPageHeader: React.FC<Props> = ({
   title,
   sectionTitle,
   sectionLink,
   children,
-}: Props) {
+}) => {
   const top = (
     <ParentLinkInHeader href={sectionLink}>{sectionTitle}</ParentLinkInHeader>
   );
   return <PageHeader top={top} bottom={children} title={title} />;
-}
+};

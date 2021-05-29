@@ -186,7 +186,7 @@ const WatchmenListResults: React.FC<{ watchmen: WatchmanFragment[] }> = ({
   );
 };
 
-const WatchmenList = () => {
+export const WatchmenList: React.FC = () => {
   const queryResults = useQuery(WatchmenWatchmenListDocument, {
     fetchPolicy: 'network-only',
   });
@@ -207,5 +207,3 @@ const WatchmenList = () => {
     </div>
   );
 };
-
-export default WatchmenList;
