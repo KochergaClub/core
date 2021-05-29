@@ -4,7 +4,7 @@ import styled, { css } from 'styled-components';
 
 import HumanizedDateTime from '~/components/HumanizedDateTime';
 import { publicEventRoute } from '~/events/routes';
-import { Button, colors, Column } from '~/frontkit';
+import { Button, colors, Column, fonts } from '~/frontkit';
 
 import { Event_SummaryFragment } from '../../queries.generated';
 
@@ -51,7 +51,7 @@ const BackgroundLink = styled.a`
 const Header = styled.header`
   color: white;
   font-weight: bold;
-  font-size: 24px;
+  font-size: ${fonts.sizes.XL2};
   transition: color 0.2s;
 `;
 

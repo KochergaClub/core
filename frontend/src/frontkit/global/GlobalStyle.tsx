@@ -18,7 +18,7 @@ export const GlobalStyle = createGlobalStyle`
 
   body {
     font-family: 'Roboto', Arial, sans-serif;
-    font-size: ${fonts.sizes.N};
+    font-size: ${fonts.sizes.BASE};
     line-height: 1.5;
     -webkit-font-smoothing: antialiased;
   }

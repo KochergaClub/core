@@ -1,6 +1,7 @@
 import * as React from 'react';
 import styled, { ThemeProvider } from 'styled-components';
 
+import { fonts } from '../';
 import * as colors from '../colors';
 
 export type Props = {
@@ -50,24 +51,24 @@ const KIND_THEMES = {
 
 const SIZE_THEMES = {
   tiny: {
-    fontSize: '11px',
+    fontSize: fonts.sizes.XS,
     fontWeight: 500,
-    lineHeight: 1,
-    padding: '4px 8px',
+    lineHeight: '20px',
+    padding: '0 8px',
   },
   small: {
-    fontSize: '12px',
+    fontSize: fonts.sizes.XS,
     fontWeight: 500,
     padding: '0 8px',
   },
   normal: {
-    fontSize: '14px',
+    fontSize: fonts.sizes.SM,
     fontWeight: 500,
     padding: '4px 16px',
     shadow: '0 1px 2px',
   },
   big: {
-    fontSize: '20px',
+    fontSize: fonts.sizes.XL,
     fontWeight: 'bold',
     padding: '20px 32px',
   },

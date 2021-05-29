@@ -4,15 +4,15 @@ import styled from 'styled-components';
 import { useMutation } from '@apollo/client';
 
 import { useCommonHotkeys } from '~/common/hooks';
-import { Button, Column, Input, useNotification } from '~/frontkit';
+import { Button, Column, fonts, Input, useNotification } from '~/frontkit';
 
 import { LoginDocument, SendMagicLinkDocument } from '../queries.generated';
 import AuthContainer from './AuthContainer';
 
 const SmallNote = styled.small`
-  font-size: 0.6rem;
+  font-size: ${fonts.sizes.XS};
   line-height: 1.3;
-  margin-bottom: 8px;
+  margin-top: 2px;
 `;
 
 interface Props {
@@ -126,10 +126,6 @@ const AuthForm: React.FC<Props> = (props) => {
         </Column>
         <Column stretch gutter={0}>
           <label htmlFor="id_password">Пароль:</label>
-          <SmallNote>
-            (если вы оставите это поле пустым, ссылка для логина придёт на
-            почту)
-          </SmallNote>
           <Input
             type="password"
             name="password"
@@ -139,6 +135,10 @@ const AuthForm: React.FC<Props> = (props) => {
             value={password}
             onChange={(e) => setPassword(e.currentTarget.value)}
           />
+          <SmallNote>
+            (если вы оставите это поле пустым, ссылка для логина придёт на
+            почту)
+          </SmallNote>
         </Column>
         <Button
           type="submit"

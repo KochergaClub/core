@@ -54,7 +54,7 @@ const CommonControlsContainer = styled.div`
   justify-content: center;
   cursor: pointer;
   color: ${colors.primary[700]};
-  font-size: ${fonts.sizes.S};
+  font-size: ${fonts.sizes.SM};
 
   &:hover {
     background-color: ${colors.grey[200]};

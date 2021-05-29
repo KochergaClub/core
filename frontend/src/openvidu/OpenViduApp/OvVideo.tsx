@@ -24,7 +24,7 @@ const Name = styled.div`
   z-index: 1;
   background: white;
   padding: 0 4px;
-  font-size: ${fonts.sizes.S};
+  font-size: ${fonts.sizes.SM};
 `;
 
 const OvVideo: React.FC<Props> = ({ streamManager }) => {

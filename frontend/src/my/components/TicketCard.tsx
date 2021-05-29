@@ -18,13 +18,13 @@ import { MyTicketDeleteDocument, MyTicketFragment } from '../queries.generated';
 
 const EventLink = styled(A)`
   color: black;
-  font-size: ${fonts.sizes.L};
+  font-size: ${fonts.sizes.XL2};
   line-height: 1.2;
 `;
 
 const DistanceLabel = styled.div`
   color: ${colors.grey[700]};
-  font-size: ${fonts.sizes.S};
+  font-size: ${fonts.sizes.SM};
 `;
 
 const DropdownContainer = styled.div`

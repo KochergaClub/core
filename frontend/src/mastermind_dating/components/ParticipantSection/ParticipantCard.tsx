@@ -21,7 +21,7 @@ const EmptyPhotoContainer = styled.div`
   height: 200px;
   border: 1px solid ${colors.grey[300]};
   text-align: center;
-  font-size: ${fonts.sizes.XL};
+  font-size: ${fonts.sizes.XL3};
   color: ${colors.grey[700]};
   display: flex;
   align-items: center;

@@ -32,7 +32,7 @@ const AuthorImagePlaceholder = styled.div`
 `;
 
 const AuthorName = styled.div`
-  font-size: ${fonts.sizes.S};
+  font-size: ${fonts.sizes.SM};
   font-weight: bold;
 `;
 
@@ -42,7 +42,7 @@ const AuthorDescription = styled.div`
 `;
 
 const TestimonialText = styled(RichText)`
-  font-size: ${fonts.sizes.S};
+  font-size: ${fonts.sizes.SM};
 `;
 
 const ProductLink = styled.a`

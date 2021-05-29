@@ -15,10 +15,10 @@ const BigOutcomeContainer = styled.div`
 `;
 
 const BigOutcomeHeader = styled.h1`
-  font-size: ${fonts.sizes.XL};
+  font-size: ${fonts.sizes.XL3};
   line-height: 1;
   ${deviceMediaQueries.mobile(`
-  font-size: ${fonts.sizes.L};
+  font-size: ${fonts.sizes.XL2};
   `)}
 `;
 

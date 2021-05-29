@@ -1,6 +1,7 @@
 import styled from 'styled-components';
 
 import { gql } from '@apollo/client';
+
 import { ColumnsBlock, fonts, ResponsivePadding, RichText } from '~/frontkit';
 
 import { BlockComponent } from '../../types';
@@ -11,7 +12,7 @@ const VerticalPadding = styled.div`
 `;
 
 const Header = styled.h2`
-  font-size: ${fonts.sizes.L};
+  font-size: ${fonts.sizes.XL2};
   text-align: center;
 `;
 

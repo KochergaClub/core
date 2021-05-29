@@ -2,13 +2,14 @@ import { useCallback } from 'react';
 import styled from 'styled-components';
 
 import { gql } from '@apollo/client';
+
 import { Button, Column, ColumnsBlock, fonts, ResponsivePadding } from '~/frontkit';
 
 import { BlockComponent } from '../../types';
 import { ColumnsButtonsBlockFragment as Props } from './index.generated';
 
 const Header = styled.div`
-  font-size: ${fonts.sizes.L};
+  font-size: ${fonts.sizes.XL2};
   font-weight: bold;
 `;
 

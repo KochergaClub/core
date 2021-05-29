@@ -1,6 +1,6 @@
 import styled from 'styled-components';
 
-import { colors } from '~/frontkit';
+import { colors, fonts } from '~/frontkit';
 
 const Container = styled.div`
   display: flex;
@@ -10,7 +10,7 @@ const Container = styled.div`
   & > div {
     flex: 1;
     text-align: center;
-    font-size: 0.8em;
+    font-size: ${fonts.sizes.XS};
     letter-spacing: 0.08em;
     font-weight: bold;
   }

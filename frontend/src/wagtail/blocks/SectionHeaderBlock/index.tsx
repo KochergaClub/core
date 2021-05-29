@@ -1,6 +1,7 @@
 import styled from 'styled-components';
 
 import { gql } from '@apollo/client';
+
 import { colors, fonts, RichText } from '~/frontkit';
 
 import { BlockComponent } from '../../types';
@@ -12,7 +13,7 @@ const Container = styled(RichText)`
 `;
 
 const Header = styled.h2`
-  font-size: ${fonts.sizes.XL};
+  font-size: ${fonts.sizes.XL3};
   font-weight: 700;
   text-align: center;
   margin: 0;

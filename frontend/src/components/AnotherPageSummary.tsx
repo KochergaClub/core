@@ -1,6 +1,6 @@
 import styled from 'styled-components';
 
-import { A, colors } from '~/frontkit';
+import { A, colors, fonts } from '~/frontkit';
 
 const Container = styled.section`
   border-bottom: 1px solid ${colors.grey[200]};
@@ -12,7 +12,7 @@ const Header = styled.header`
 `;
 
 const Link = styled(A)`
-  font-size: 24px;
+  font-size: ${fonts.sizes.XL2};
 `;
 
 const Text = styled.div`

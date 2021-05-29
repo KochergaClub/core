@@ -14,7 +14,7 @@ const Day = styled.div<{ selected?: boolean; today?: boolean }>`
   text-align: center;
   padding: 4px;
   border-radius: 4px;
-  font-size: ${fonts.sizes.S};
+  font-size: ${fonts.sizes.SM};
   font-weight: ${(props) => (props.today ? 'bold' : 'normal')};
   cursor: pointer;
   ${(props) =>

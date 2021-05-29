@@ -1,9 +1,8 @@
 import styled from 'styled-components';
 
-import { HR } from '~/frontkit';
+import { fonts, HR } from '~/frontkit';
 
 import { ActivityFragment } from '../../queries.generated';
-
 import EditableTrainer from './EditableTrainer';
 
 const ActivitySection = styled.section`
@@ -11,11 +10,11 @@ const ActivitySection = styled.section`
 
   & > time {
     font-style: italic;
-    font-size: 24px;
+    font-size: ${fonts.sizes.XL2};
   }
 
   & > header {
-    font-size: 24px;
+    font-size: ${fonts.sizes.XL2};
     font-weight: 600;
     margin: 8px 0;
   }
@@ -29,7 +28,7 @@ const ActivityBreak = styled.section`
 `;
 
 const ActivityBonus = styled.section`
-  font-size: 24px;
+  font-size: ${fonts.sizes.XL2};
 `;
 
 const formatTime = (time: string) => time.substr(0, 5);

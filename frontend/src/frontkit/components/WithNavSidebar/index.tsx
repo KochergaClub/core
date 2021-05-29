@@ -26,7 +26,7 @@ interface Props {
 const LogoLink = styled.a`
   display: block;
   color: ${colors.grey[700]};
-  font-size: ${fonts.sizes.N};
+  font-size: ${fonts.sizes.BASE};
   font-weight: bolder;
   padding: 10px 20px;
   min-width: 180px;

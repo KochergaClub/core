@@ -3,6 +3,7 @@ import { MdClose } from 'react-icons/md';
 import styled from 'styled-components';
 
 import { gql, useQuery } from '@apollo/client';
+
 import { colors, deviceMediaQueries, fonts } from '~/frontkit';
 
 import { SpecialOfferDocument } from './SpecialOffer.generated';
@@ -48,14 +49,14 @@ const Button = styled.a`
   background-color: white;
   text-decoration: none;
   color: ${mainColor};
-  font-size: ${fonts.sizes.S};
+  font-size: ${fonts.sizes.SM};
   text-transform: uppercase;
 `;
 
 const Text = styled.div`
   font-size: ${fonts.sizes.XS};
   ${deviceMediaQueries.desktop(`
-    font-size: ${fonts.sizes.S};
+    font-size: ${fonts.sizes.SM};
   `)}
   text-align: center;
   font-weight: bold;

@@ -1,9 +1,9 @@
 import styled from 'styled-components';
 
 import { gql } from '@apollo/client';
-import { colors, deviceMediaQueries, fonts } from '~/frontkit';
 
 import { staticUrl } from '~/common/utils';
+import { colors, deviceMediaQueries, fonts } from '~/frontkit';
 
 import { BlockComponent } from '../../types';
 import HeroButtons from './HeroButtons';
@@ -32,14 +32,14 @@ const Container = styled.div`
 `;
 
 const Header = styled.h1`
-  font-size: ${fonts.sizes.XXXL};
+  font-size: ${fonts.sizes.XL6};
   line-height: 1.2;
   ${deviceMediaQueries.mobile(`
-    font-size: ${fonts.sizes.XL};
+    font-size: ${fonts.sizes.XL3};
     text-align: center;
   `)}
   ${deviceMediaQueries.tablet(`
-    font-size: ${fonts.sizes.XXL};
+    font-size: ${fonts.sizes.XL5};
   `)}
   color: white;
 `;

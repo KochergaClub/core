@@ -5,7 +5,7 @@ import { colors, fonts } from '~/frontkit';
 const HintCard = styled.div`
   border: 1px solid ${colors.grey[300]};
   background-color: ${colors.grey[100]};
-  font-size: ${fonts.sizes.S};
+  font-size: ${fonts.sizes.SM};
   max-width: 660px;
   padding: 10px 16px;
 `;

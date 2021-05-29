@@ -2,13 +2,14 @@ import { getDate, isEqual, startOfDay } from 'date-fns';
 import styled from 'styled-components';
 
 import { formatDate } from '~/common/utils';
+import { fonts } from '~/frontkit';
 
 const Container = styled.header<{ today: boolean }>`
   text-align: center;
   font-weight: ${(props) => (props.today ? 'bold' : 'normal')};
   padding: 2px 4px;
   color: black;
-  font-size: 0.8em;
+  font-size: ${fonts.sizes.XS};
 `;
 
 interface Props {

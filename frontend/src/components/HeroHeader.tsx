@@ -6,16 +6,16 @@ const HeroHeader = styled.h1`
   margin: 0;
 
   line-height: 1.2;
-  font-size: ${fonts.sizes.XXL};
+  font-size: ${fonts.sizes.XL5};
   font-family: Intro;
 
   color: white;
 
   ${deviceMediaQueries.mobile(`
-    font-size: ${fonts.sizes.L};
+    font-size: ${fonts.sizes.XL2};
   `)}
   ${deviceMediaQueries.tablet(`
-    font-size: ${fonts.sizes.XL};
+    font-size: ${fonts.sizes.XL3};
   `)}
 `;
 

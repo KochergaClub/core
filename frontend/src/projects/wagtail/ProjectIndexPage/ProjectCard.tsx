@@ -1,7 +1,7 @@
 import Link from 'next/link';
 import styled from 'styled-components';
 
-import { Label } from '~/frontkit';
+import { fonts, Label } from '~/frontkit';
 import { projectRoute } from '~/projects/routes';
 
 import { ProjectPage_SummaryFragment } from './fragments.generated';
@@ -29,13 +29,13 @@ const Inner = styled.div`
 `;
 
 const Header = styled.header`
-  font-size: 1.3rem;
+  font-size: ${fonts.sizes.XL};
   line-height: 1.3;
   font-weight: 600;
 `;
 
 const Summary = styled.div`
-  font-size: 0.9rem;
+  font-size: ${fonts.sizes.SM};
   line-height: 1.5;
   color: #333;
 `;

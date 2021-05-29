@@ -1,6 +1,6 @@
 import styled from 'styled-components';
 
-import { colors } from '~/frontkit';
+import { colors, fonts } from '~/frontkit';
 
 import { BlogPostAuthorFragment } from '../fragments.generated';
 
@@ -32,7 +32,7 @@ const AuthorDescription = styled.div`
   text-align: center;
 
   color: ${colors.grey[700]};
-  font-size: 12px;
+  font-size: ${fonts.sizes.XS};
   line-height: 1.35;
 `;
 

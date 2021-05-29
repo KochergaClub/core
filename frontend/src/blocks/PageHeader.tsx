@@ -1,6 +1,6 @@
 import styled from 'styled-components';
 
-import { colors, fonts, deviceMediaQueries } from '~/frontkit';
+import { colors, deviceMediaQueries, fonts } from '~/frontkit';
 
 const Container = styled.div`
   background-color: ${colors.grey[100]};
@@ -23,14 +23,14 @@ const Title = styled.h1`
   margin: 24px 0;
   line-height: 1.2;
 
-  font-size: ${fonts.sizes.XXL};
+  font-size: ${fonts.sizes.XL5};
 
   ${deviceMediaQueries.mobile(`
-font-size: ${fonts.sizes.L};
-`)}
+    font-size: ${fonts.sizes.XL2};
+  `)}
   ${deviceMediaQueries.tablet(`
-font-size: ${fonts.sizes.XL};
-`)}
+    font-size: ${fonts.sizes.XL3};
+  `)}
 `;
 
 interface Props {

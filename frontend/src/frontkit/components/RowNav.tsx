@@ -6,7 +6,7 @@ import * as fonts from '../fonts';
 
 const Li = styled.li<{ selected?: boolean }>`
   font-weight: bold;
-  font-size: ${fonts.sizes.S};
+  font-size: ${fonts.sizes.SM};
   line-height: 20px;
   text-transform: uppercase;
 

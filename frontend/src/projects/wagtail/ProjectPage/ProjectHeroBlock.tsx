@@ -34,13 +34,13 @@ const InnerContainer = styled.div`
 const Summary = styled.div`
   color: white;
   ${deviceMediaQueries.tablet(`
-    font-size: ${fonts.sizes.L};
+    font-size: ${fonts.sizes.XL2};
   `)}
   ${deviceMediaQueries.laptop(`
-    font-size: ${fonts.sizes.L};
+    font-size: ${fonts.sizes.XL2};
   `)}
   ${deviceMediaQueries.desktop(`
-    font-size: ${fonts.sizes.L};
+    font-size: ${fonts.sizes.XL2};
   `)}
 `;
 

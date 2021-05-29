@@ -1,9 +1,9 @@
 import styled from 'styled-components';
 
 import { gql } from '@apollo/client';
-import { colors, fonts } from '~/frontkit';
 
 import SocialIcons from '~/components/Page/PageMenu/SocialIcons';
+import { colors, fonts } from '~/frontkit';
 
 import { BlockComponent } from '../../types';
 import { BigContactsBlockFragment as Props } from './index.generated';
@@ -24,7 +24,7 @@ const MapIFrame = styled.iframe`
 `;
 
 const BigText = styled.div`
-  font-size: ${fonts.sizes.L};
+  font-size: ${fonts.sizes.XL2};
 `;
 
 const RightColumn = styled.div`

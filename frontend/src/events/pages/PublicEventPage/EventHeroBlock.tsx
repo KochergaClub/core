@@ -33,13 +33,13 @@ const Container = styled.div`
 
 const Header = styled.h1`
   font-weight: bold;
-  font-size: ${fonts.sizes.XXL};
+  font-size: ${fonts.sizes.XL5};
   line-height: 1.1;
   ${deviceMediaQueries.mobile(`
-    font-size: ${fonts.sizes.L};
+    font-size: ${fonts.sizes.XL2};
   `)}
   ${deviceMediaQueries.tablet(`
-    font-size: ${fonts.sizes.XL};
+    font-size: ${fonts.sizes.XL3};
   `)}
 `;
 
@@ -92,12 +92,12 @@ const CalendarIconWithDate: React.FC<{ day: number }> = ({ day }) => {
 };
 
 const DateInfoText = styled.div`
-  font-size: ${fonts.sizes.L};
+  font-size: ${fonts.sizes.XL2};
   text-transform: uppercase;
   font-weight: bold;
 
   ${deviceMediaQueries.mobile(`
-    font-size: ${fonts.sizes.N};
+    font-size: ${fonts.sizes.BASE};
   `)}
 `;
 
@@ -147,7 +147,7 @@ const DateInfo: React.FC<CommonProps> = ({ event }) => {
       <CalendarIconWithDate day={getDate(zonedDate)} />
       <Column gutter={4}>
         <DateInfoText>{formatDate(zonedDate, format)}</DateInfoText>
-        <div style={{ fontSize: fonts.sizes.S }}>{daysText}</div>
+        <div style={{ fontSize: fonts.sizes.SM }}>{daysText}</div>
       </Column>
     </DateInfoContainer>
   );

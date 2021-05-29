@@ -1,9 +1,8 @@
 import styled from 'styled-components';
 
-import { colors, fonts, RichText } from '~/frontkit';
+import { colors, RichText } from '~/frontkit';
 
 export const Header = styled.header`
-  /* font-size: ${fonts.sizes.S}; */
   font-weight: bold;
   color: ${colors.grey[600]};
   margin-top: 20px;

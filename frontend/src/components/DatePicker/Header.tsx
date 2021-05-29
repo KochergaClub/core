@@ -29,7 +29,7 @@ const IconContainer = styled.div`
 const Weekday = styled.div`
   width: 32px;
   text-align: center;
-  font-size: ${fonts.sizes.S};
+  font-size: ${fonts.sizes.SM};
 `;
 
 type Props = {
