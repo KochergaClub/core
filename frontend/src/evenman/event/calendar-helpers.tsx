@@ -8,19 +8,17 @@ export const CalendarItemContainer = styled.div`
   position: relative;
   height: 16px;
   font-size: 11px;
+  z-index: 0; // force stacking context to make Progress z-index safe
 `;
 
 export const CalendarItemTitle = styled.div`
   flex: 1;
-  position: relative;
   overflow: hidden;
-  z-index: 1;
   line-height: 1;
 `;
 
 export const CalendarItemIcon = styled.div`
   line-height: 1;
-  z-index: 1;
   margin-right: 2px;
   margin-left: 2px;
 `;

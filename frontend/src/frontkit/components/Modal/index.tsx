@@ -11,17 +11,9 @@ import ModalHeader from './ModalHeader';
 
 // Styling tips: https://css-tricks.com/considerations-styling-modal/
 
-const Overlay = styled.div`
-  position: fixed;
-  left: 0;
-  top: 0;
-  width: 100%;
-  height: 100%;
-  z-index: 1000;
-
-  opacity: 0.3;
-  background-color: black;
-`;
+const Overlay: React.FC = () => (
+  <div className="fixed inset-0 z-40 opacity-30 bg-black" />
+);
 
 const ModalContent = styled.div`
   position: fixed;
@@ -72,7 +64,7 @@ export const Modal: ModalType = ({ children }) => {
     return (
       <div>
         <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }}>
-          <Overlay id="modal-overlay" />
+          <Overlay />
         </motion.div>
         <ModalContent>{children}</ModalContent>
       </div>

@@ -1,6 +1,5 @@
 import React from 'react';
 import { FaGlobeAfrica, FaLock } from 'react-icons/fa';
-import styled from 'styled-components';
 
 import { CalendarItemContainer, CalendarItemIcon, CalendarItemTitle } from './calendar-helpers';
 import { EventsEvent_SummaryFragment } from './queries.generated';
@@ -12,45 +11,36 @@ interface ProgressProps {
   value: number;
 }
 
-const ProgressBack = styled.div<ProgressProps>`
-  position: absolute;
-  left: 0;
-  top: 0;
-  width: 100%;
-  height: 100%;
-
-  background-color: ${(props) =>
-    props.selected
-      ? props.private
-        ? 'hsl(180, 100%, 80%)'
-        : 'hsl(0, 80%, 70%)'
-      : props.private
-      ? 'transparent'
-      : 'hsl(0, 45%, 90%)'};
-`;
-
-const ProgressBar = styled.div<ProgressProps>`
-  position: absolute;
-  left: 0;
-  top: 0;
-  width: ${(props) => (100 * props.value) / props.max}%;
-  height: 100%;
-
-  background-color: ${(props) =>
-    props.selected ? 'hsl(120, 60%, 70%)' : 'hsl(120, 40%, 90%)'};
-`;
-
-const Progress = (props: ProgressProps) => (
-  <ProgressBack {...props}>
-    <ProgressBar {...props} />
-  </ProgressBack>
+const Progress: React.FC<ProgressProps> = (props) => (
+  <div
+    className="absolute inset-0 -z-10"
+    style={{
+      backgroundColor: props.selected
+        ? props.private
+          ? 'hsl(180, 100%, 80%)' // TODO - replace with tailwind colors/classes
+          : 'hsl(0, 80%, 70%)'
+        : props.private
+        ? 'transparent'
+        : 'hsl(0, 45%, 90%)',
+    }}
+  >
+    <div
+      className="absolute inset-y-0 left-0"
+      style={{
+        backgroundColor: props.selected
+          ? 'hsl(120, 60%, 70%)'
+          : 'hsl(120, 40%, 90%)',
+        width: `${(100 * props.value) / props.max}%`,
+      }}
+    />
+  </div>
 );
 
-type Props = {
+interface Props {
   event: EventsEvent_SummaryFragment;
   selected: boolean;
   onSelect: (id: string) => void;
-};
+}
 
 const EventCalendarItem: React.FC<Props> = (props) => {
   const { event } = props;
