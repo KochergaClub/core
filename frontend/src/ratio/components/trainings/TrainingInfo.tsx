@@ -1,7 +1,7 @@
 import React from 'react';
 import { FaComments } from 'react-icons/fa';
 
-import { ButtonWithModal } from '~/components';
+import { ButtonWithModal, CopyToClipboardIcon } from '~/components';
 import { A, colors, Column, Label, Row } from '~/frontkit';
 import { RatioTrainingFragment } from '~/ratio/queries.generated';
 
@@ -59,7 +59,7 @@ export const TrainingInfo: React.FC<Props> = ({ training }) => {
             {training.training_type}):
           </Label>
           <div>#kocherga_order:training_type={training.training_type}</div>
-          <CopyToCl4pboardIcon
+          <CopyToClipboardIcon
             text={`#kocherga_order:training_type=${training.training_type}`}
           />
         </Row>

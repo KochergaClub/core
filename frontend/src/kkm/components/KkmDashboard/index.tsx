@@ -31,7 +31,7 @@ const DateReport: React.FC<DateReportProps> = ({
       {diffMinutes && diffMinutes < maxMinutesAge ? (
         <MdCheckCircle size={32} color={colors.grey[600]} />
       ) : (
-        <MdError size={32} color={colors.accent[600]} />
+        <MdError size={32} color={colors.accent[700]} />
       )}
       <div>
         <small>{label}</small>

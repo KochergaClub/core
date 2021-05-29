@@ -58,7 +58,7 @@ const DropdownButton: React.FC<{ title: string | null }> = ({ title }) => {
   return (
     <DropdownButtonContainer>
       {title ? <div>{title}</div> : null}
-      6 <FaEllipsisH color={colors.grey[500]} />
+      <FaEllipsisH color={colors.grey[500]} />
     </DropdownButtonContainer>
   );
 };
