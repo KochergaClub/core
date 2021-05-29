@@ -1,23 +1,13 @@
-import styled from 'styled-components';
-
-import { Row } from '~/frontkit';
-
 import TelegramIcon from '../../icons/TelegramIcon';
 import VkIcon from '../../icons/VkIcon';
 
-const NarrowA = styled.a`
-  line-height: 0;
-`;
-
-const SocialIcons = () => (
-  <Row gutter={10}>
-    <NarrowA href="https://vk.com/kocherga_club">
+export const SocialIcons = () => (
+  <div className="flex space-x-2">
+    <a className="block" href="https://vk.com/kocherga_club">
       <VkIcon />
-    </NarrowA>
-    <NarrowA href="https://teleg.run/kocherga_club">
+    </a>
+    <a className="block" href="https://t.me/kocherga_club">
       <TelegramIcon />
-    </NarrowA>
-  </Row>
+    </a>
+  </div>
 );
-
-export default SocialIcons;

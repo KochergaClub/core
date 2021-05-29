@@ -10,6 +10,7 @@ const CalendarIcon: React.FC<Props> = ({ color, size = 30 }) => {
       height={`${size}px`}
       viewBox="0 0 80 80"
       fill="none"
+      className="block"
     >
       <desc>Calendar</desc>
       <path

@@ -1,24 +1,14 @@
-import styled from 'styled-components';
-
 interface Props {
   title: string;
 }
 
-const Header = styled.header`
-  text-transform: uppercase;
-  color: #525252;
-  letter-spacing: 1px;
-  margin-bottom: 8px;
-  font-weight: 600;
-`;
-
-const FooterGroup: React.FC<Props> = ({ title, children }) => {
+export const FooterGroup: React.FC<Props> = ({ title, children }) => {
   return (
-    <div>
-      <Header>{title}</Header>
+    <div className="flex-1">
+      <header className="uppercase text-gray-500 tracking-wider mb-2 font-semibold">
+        {title}
+      </header>
       {children}
     </div>
   );
 };
-
-export default FooterGroup;

@@ -13,6 +13,7 @@ const YoutubeIcon: React.FC<Props> = ({ color, size = 30 }) => {
       height={`${size}px`}
       viewBox="0 0 48 48"
       enableBackground="new 0 0 48 48"
+      className="block"
     >
       <desc>Youtube</desc>
       <path

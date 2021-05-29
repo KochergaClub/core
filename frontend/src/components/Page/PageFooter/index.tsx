@@ -1,80 +1,28 @@
-import styled from 'styled-components';
-
-import { Column } from '~/frontkit';
-
-import SocialIcons from '../PageMenu/SocialIcons';
+import { SocialIcons } from '../PageMenu/SocialIcons';
 import { footerParts } from './constants';
-import FooterGroup from './FooterGroup';
+import { FooterGroup } from './FooterGroup';
 import Mailchimp from './Mailchimp';
-import PartLinks from './PartLinks';
-
-const Footer = styled.footer`
-  background-color: #111111;
-  padding: 40px 60px;
-
-  @media print {
-    display: none;
-  }
-`;
-
-const Layout = styled.div`
-  display: flex;
-  flex-direction: row;
-  flex-wrap: wrap;
-  justify-content: space-between;
-  margin-bottom: 40px;
-
-  > * {
-    margin-top: 40px;
-    margin-right: 20px;
-  }
-  > *:last-child {
-    margin-right: 0;
-  }
-
-  @media screen and (max-width: 600px) {
-    flex-direction: column;
-
-    > * {
-      margin: 0;
-      margin-bottom: 40px;
-    }
-  }
-`;
-
-const Copyright = styled.small`
-  font-size: 0.7em;
-  color: #555;
-  max-width: 300px;
-`;
-
-const GroupContainer = styled.div`
-  flex: 1;
-`;
-
-const WrappedGroup: React.FC<{ title: string }> = ({ title, children }) => (
-  <GroupContainer>
-    <FooterGroup title={title}>{children}</FooterGroup>
-  </GroupContainer>
-);
+import { PartLinks } from './PartLinks';
 
 export const PageFooter: React.FC = () => {
   return (
-    <Footer>
-      <Layout>
+    <footer className="bg-gray-900 py-10 px-10 sm:px-16 print:hidden">
+      <div className="flex flex-wrap flex-col justify-between my-10 gap-8 sm:flex-row sm:gap-4">
         {footerParts.map((part, i) => (
-          <WrappedGroup title={part.title} key={i}>
+          <FooterGroup title={part.title} key={i}>
             <PartLinks items={part.items} />
-          </WrappedGroup>
+          </FooterGroup>
         ))}
-        <WrappedGroup title="Подпишитесь">
-          <Column gutter={16}>
+        <FooterGroup title="Подпишитесь">
+          <div className="space-y-4">
             {false && <Mailchimp />}
             <SocialIcons />
-          </Column>
-        </WrappedGroup>
-      </Layout>
-      <Copyright>© 2015–2020 Центр рациональности Кочерга</Copyright>
-    </Footer>
+          </div>
+        </FooterGroup>
+      </div>
+      <small className="text-xs leading-tight text-gray-500">
+        © 2015–2021 Центр рациональности Кочерга
+      </small>
+    </footer>
   );
 };

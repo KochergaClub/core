@@ -12,6 +12,7 @@ const TelegramIcon: React.FC<Props> = ({ color, size = 30 }) => {
       width={`${size}px`}
       height={`${size}px`}
       viewBox="0 0 60 60"
+      className="block"
     >
       <desc>Telegram</desc>
       <path

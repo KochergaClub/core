@@ -10,6 +10,7 @@ const WagtailIcon: React.FC<Props> = ({ color, size = 16 }) => {
       height={`${size}px`}
       viewBox="0 0 256 316"
       preserveAspectRatio="xMidYMid"
+      className="block"
     >
       <g>
         <desc>Wagtail</desc>

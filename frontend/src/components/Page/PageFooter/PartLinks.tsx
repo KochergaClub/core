@@ -1,5 +1,3 @@
-import styled from 'styled-components';
-
 interface Props {
   items: {
     link: string;
@@ -7,31 +5,16 @@ interface Props {
   }[];
 }
 
-const UL = styled.ul`
-  list-style-type: none;
-  padding: 0;
-
-  a {
-    color: #ddd;
-    text-decoration: none;
-    font-size: 14px;
-  }
-
-  li {
-    margin-bottom: 5px;
-  }
-`;
-
-const PartLinks = ({ items }: Props) => {
+export const PartLinks = ({ items }: Props) => {
   return (
-    <UL>
+    <ul className="list-none p-0">
       {items.map((item, i) => (
-        <li key={i}>
-          <a href={item.link}>{item.title}</a>
+        <li key={i} className="mb-1">
+          <a className="no-underline text-sm text-gray-200" href={item.link}>
+            {item.title}
+          </a>
         </li>
       ))}
-    </UL>
+    </ul>
   );
 };
-
-export default PartLinks;

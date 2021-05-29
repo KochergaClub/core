@@ -10,6 +10,7 @@ const NotionIcon: React.FC<Props> = ({ color, size = 30 }) => {
       width={`${size}px`}
       height={`${size}px`}
       viewBox="0 0 48 48"
+      className="block"
     >
       <desc>Notion</desc>
       <path
