@@ -22,7 +22,7 @@ type CommentProps = {
 };
 
 const CommentIcon = styled(FaRegComment)`
-  color: ${colors.grey[500]};
+  color: ${colors.grey[400]};
   margin-top: 4px;
   flex-shrink: 0;
 `;

@@ -1,3 +1,3 @@
 import { colors } from '~/frontkit';
 
-export const nightColor = colors.grey[900];
+export const nightColor = colors.grey[700];

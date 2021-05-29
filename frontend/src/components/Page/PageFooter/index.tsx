@@ -58,7 +58,7 @@ const WrappedGroup: React.FC<{ title: string }> = ({ title, children }) => (
   </GroupContainer>
 );
 
-const PageFooter: React.FC = () => {
+export const PageFooter: React.FC = () => {
   return (
     <Footer>
       <Layout>
@@ -78,5 +78,3 @@ const PageFooter: React.FC = () => {
     </Footer>
   );
 };
-
-export default PageFooter;

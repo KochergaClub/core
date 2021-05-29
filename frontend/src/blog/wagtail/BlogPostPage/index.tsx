@@ -1,20 +1,15 @@
-import styled from 'styled-components';
 import { parseISO } from 'date-fns';
+import styled from 'styled-components';
 
-import { RichText, colors } from '~/frontkit';
-
-import { Page } from '~/components';
 import ItemPageHeader from '~/blocks/ItemPageHeader';
 import { formatDate } from '~/common/utils';
-
+import { Page } from '~/components';
+import { colors, RichText } from '~/frontkit';
 import { NextWagtailPage } from '~/wagtail/types';
 
 import {
-  BlogPostPageFragment,
-  BlogPostPageFragmentDoc,
-  BlogPostAuthorFragment,
+    BlogPostAuthorFragment, BlogPostPageFragment, BlogPostPageFragmentDoc
 } from '../fragments.generated';
-
 import Author from './Author';
 
 const AuthorsList = ({ authors }: { authors: BlogPostAuthorFragment[] }) => {
@@ -59,7 +54,7 @@ const TextWithAuthors = ({
 };
 
 const HeaderDate = styled.div`
-  color: ${colors.grey[500]};
+  color: ${colors.grey[400]};
 `;
 
 const BlogPostPage: NextWagtailPage<BlogPostPageFragment> = ({ page }) => {

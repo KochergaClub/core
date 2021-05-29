@@ -36,7 +36,7 @@ const EventRealm: React.FC<Props> = ({ event }) => {
           />
           <label
             htmlFor={'pricing_type--' + item.value}
-            style={mutating ? { color: colors.grey[500] } : {}}
+            style={mutating ? { color: colors.grey[400] } : {}}
           >
             {item.title}
           </label>

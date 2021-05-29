@@ -1,5 +1,4 @@
 import { useContext } from 'react';
-
 import styled from 'styled-components';
 
 import { colors } from '~/frontkit';
@@ -16,10 +15,10 @@ const Container = styled.div`
 const Footer = styled.footer<{ align: string }>`
   position: absolute;
   width: 100%;
-  text-align: ${props => props.align};
+  text-align: ${(props) => props.align};
   padding-right: 10mm;
   padding-left: 10mm;
-  color: ${colors.grey[500]};
+  color: ${colors.grey[400]};
 `;
 
 // this is actually a header

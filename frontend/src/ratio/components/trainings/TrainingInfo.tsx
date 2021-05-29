@@ -1,7 +1,7 @@
 import React from 'react';
 import { FaComments } from 'react-icons/fa';
 
-import { ButtonWithModal, CopyToClipboardIcon } from '~/components';
+import { ButtonWithModal } from '~/components';
 import { A, colors, Column, Label, Row } from '~/frontkit';
 import { RatioTrainingFragment } from '~/ratio/queries.generated';
 
@@ -19,7 +19,7 @@ const LinkWithIcon = ({
   const Icon = icon;
   return (
     <Row vCentered>
-      <Icon style={{ color: colors.grey[500] }} />
+      <Icon style={{ color: colors.grey[400] }} />
       <A href={href}>{text}</A>
     </Row>
   );
@@ -59,7 +59,7 @@ export const TrainingInfo: React.FC<Props> = ({ training }) => {
             {training.training_type}):
           </Label>
           <div>#kocherga_order:training_type={training.training_type}</div>
-          <CopyToClipboardIcon
+          <CopyToCl4pboardIcon
             text={`#kocherga_order:training_type=${training.training_type}`}
           />
         </Row>

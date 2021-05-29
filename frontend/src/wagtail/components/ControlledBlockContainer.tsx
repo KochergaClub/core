@@ -14,7 +14,7 @@ const Container = styled.div`
 
   &:hover {
     z-index: 10; /* outline on top of neighbor blocks */
-    outline: 1px dashed ${colors.grey[500]};
+    outline: 1px dashed ${colors.grey[400]};
     > .controls {
       display: block;
     }

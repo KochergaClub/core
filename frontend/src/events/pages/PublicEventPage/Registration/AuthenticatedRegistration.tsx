@@ -71,7 +71,7 @@ export default function Registration({ event }: CommonProps) {
     <Column stretch gutter={16}>
       <Column centered gutter={0}>
         <Row vCentered>
-          <FaUser color={colors.grey[500]} />
+          <FaUser color={colors.grey[400]} />
           <Link href="/my" passHref>
             <A>{user.email}</A>
           </Link>

@@ -17,5 +17,5 @@ export const TableHeaderCell = styled.th`
   font-size: 10px;
   text-transform: uppercase;
   letter-spacing: 0.4px;
-  color: ${colors.grey[700]};
+  color: ${colors.grey[600]};
 `;

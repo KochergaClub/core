@@ -5,10 +5,10 @@ import styled from 'styled-components';
 import { colors } from '~/frontkit';
 
 const ClipboardIcon = styled(FaRegCopy)`
-  color: ${colors.grey[500]};
+  color: ${colors.grey[400]};
   cursor: pointer;
   &:hover {
-    color: black;
+    color: ${colors.grey[600]};
   }
 `;
 

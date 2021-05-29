@@ -17,16 +17,17 @@ export const primary = {
 
 export const link = `hsl(${hues.blue}, 80%, 50%)`;
 
+// matches tailwind coolGray
 export const grey = {
-  100: `hsl(${hues.blue}, 20%, 97%)`,
-  200: `hsl(${hues.blue}, 12%, 92%)`,
-  300: `hsl(${hues.blue}, 12%, 80%)`,
-  400: `hsl(${hues.blue}, 12%, 70%)`,
-  500: `hsl(${hues.blue}, 12%, 58%)`,
-  600: `hsl(${hues.blue}, 12%, 43%)`,
-  700: `hsl(${hues.blue}, 12%, 38%)`,
-  800: `hsl(${hues.blue}, 12%, 33%)`,
-  900: `hsl(${hues.blue}, 12%, 28%)`,
+  100: '#F3F4F6',
+  200: '#E5E7EB',
+  300: '#D1D5DB',
+  400: '#9CA3AF',
+  500: '#6B7280',
+  600: '#4B5563',
+  700: '#374151',
+  800: '#1F2937',
+  900: '#111827',
 };
 
 export const accent = {

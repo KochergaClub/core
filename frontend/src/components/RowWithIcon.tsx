@@ -32,7 +32,7 @@ const RowWithIcon: React.FC<Props> = ({ icon, hint, children }) => {
     <RowWithIconContainer>
       <Tippy content={hint}>
         <IconContainer>
-          <Icon size={24} color={colors.grey[500]} />
+          <Icon size={24} color={colors.grey[400]} />
         </IconContainer>
       </Tippy>
       <div>{children}</div>

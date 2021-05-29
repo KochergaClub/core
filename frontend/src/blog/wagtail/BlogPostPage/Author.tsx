@@ -31,7 +31,7 @@ const AuthorDescription = styled.div`
 
   text-align: center;
 
-  color: ${colors.grey[700]};
+  color: ${colors.grey[600]};
   font-size: ${fonts.sizes.XS};
   line-height: 1.35;
 `;

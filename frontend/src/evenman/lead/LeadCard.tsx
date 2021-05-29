@@ -40,7 +40,7 @@ type Props = {
 
 const MoreInfoContainer = styled.div`
   display: flex;
-  color: ${colors.grey[500]};
+  color: ${colors.grey[400]};
   cursor: pointer;
   &:hover {
     color: black;

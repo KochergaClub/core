@@ -5,7 +5,7 @@ import { colors } from '~/frontkit';
 import { Card } from './cards';
 
 const MutedCard = styled(Card)`
-  color: ${colors.grey[700]};
+  color: ${colors.grey[600]};
   background-color: ${colors.grey[100]};
 `;
 

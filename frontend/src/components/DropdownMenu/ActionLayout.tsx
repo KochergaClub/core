@@ -15,7 +15,7 @@ export const ActionLayout: React.FC<Props> = ({ title, icon, onClick }) => {
   return (
     <ActionContainer onClick={onClick}>
       <Row vCentered gutter={6}>
-        <Icon color={colors.grey[500]} />
+        <Icon color={colors.grey[400]} />
         <span>{title}</span>
       </Row>
     </ActionContainer>

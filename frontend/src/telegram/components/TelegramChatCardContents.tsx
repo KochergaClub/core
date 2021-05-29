@@ -46,7 +46,7 @@ export const TelegramChatCardContents: React.FC<Props> = ({
               srcSet={`${chat.photo.url}, ${chat.photo_x2.url} 2x`}
             />
           ) : (
-            <TelegramIcon size={50} color={colors.grey[500]} />
+            <TelegramIcon size={50} color={colors.grey[400]} />
           )}
         </ImgContainer>
       </ChatLink>

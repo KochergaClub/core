@@ -19,7 +19,7 @@ const KIND_THEMES = {
     borderColor: colors.primary[100],
     hoverBackgroundColor: colors.primary[300],
     outlineColor: colors.primary[500],
-    blur: colors.grey[800],
+    blur: colors.grey[600],
     stripes: {
       light: colors.primary[300],
       dark: colors.primary[100],
@@ -30,7 +30,7 @@ const KIND_THEMES = {
     background: colors.primary[500],
     hoverBackgroundColor: colors.primary[700],
     outlineColor: colors.primary[900],
-    blur: colors.grey[800],
+    blur: colors.grey[600],
     stripes: {
       light: colors.primary[300],
       dark: colors.primary[100],
@@ -41,7 +41,7 @@ const KIND_THEMES = {
     background: colors.accent[900],
     hoverBackgroundColor: colors.accent[700],
     outlineColor: colors.accent[500],
-    blur: colors.grey[800],
+    blur: colors.grey[600],
     stripes: {
       light: colors.accent[300],
       dark: colors.accent[100],
@@ -109,7 +109,7 @@ const ButtonFrame = styled.button<FrameProps>`
   }
 
   &:disabled {
-    color: ${colors.grey[500]};
+    color: ${colors.grey[400]};
     background: ${colors.grey[100]};
     box-shadow: inset 0 0px 2px ${(props) => props.theme.blur};
   }

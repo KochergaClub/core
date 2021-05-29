@@ -10,7 +10,7 @@ import GlobalStyle from './GlobalStyle';
 import HtmlHead from './HtmlHead';
 import Main from './Main';
 import NProgressStyle from './NProgressStyle';
-import PageFooter from './PageFooter';
+import { PageFooter } from './PageFooter';
 import PageMenu from './PageMenu';
 import PageTitle from './PageTitle';
 import { MenuKind, OpenGraph } from './types';

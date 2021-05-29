@@ -42,7 +42,7 @@ const DropdownButtonContainer = styled.div`
     text-transform: uppercase;
     letter-spacing: 0.4px;
     font-weight: 500;
-    color: ${colors.grey[700]};
+    color: ${colors.grey[600]};
   }
 
   > * + * {
@@ -58,7 +58,7 @@ const DropdownButton: React.FC<{ title: string | null }> = ({ title }) => {
   return (
     <DropdownButtonContainer>
       {title ? <div>{title}</div> : null}
-      <FaEllipsisH color={colors.grey[600]} />
+      6 <FaEllipsisH color={colors.grey[500]} />
     </DropdownButtonContainer>
   );
 };

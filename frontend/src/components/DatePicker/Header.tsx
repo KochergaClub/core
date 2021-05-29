@@ -20,9 +20,9 @@ const IconContainer = styled.div`
   font-size: 20px;
   line-height: 1;
   cursor: pointer;
-  color: ${colors.grey[500]};
+  color: ${colors.grey[400]};
   &:hover {
-    color: ${colors.grey[900]};
+    color: ${colors.grey[600]};
   }
 `;
 

@@ -39,7 +39,7 @@ const Cell = styled.div<{ today: boolean }>`
   & > header {
     text-align: right;
     background-color: ${(props) =>
-      props.today ? colors.grey[700] : colors.grey[400]};
+      props.today ? colors.grey[600] : colors.grey[400]};
     font-weight: ${(props) => (props.today ? 'bold' : 'normal')};
     padding: 2px 4px;
     color: white;

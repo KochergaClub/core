@@ -11,7 +11,7 @@ const Li = styled.li<{ selected?: boolean }>`
   text-transform: uppercase;
 
   border-bottom: ${(props) =>
-    props.selected ? `4px solid ${colors.grey[500]}` : 'none'};
+    props.selected ? `4px solid ${colors.grey[400]}` : 'none'};
 
   &:hover {
     ${(props) =>

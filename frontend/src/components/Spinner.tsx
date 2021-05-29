@@ -15,7 +15,7 @@ const Fish: React.FC<{ className: string }> = ({ className }) => (
 );
 
 const animatedCss = `
-  fill: ${colors.grey[500]};
+  fill: ${colors.grey[400]};
   animation: icon-spin 2s infinite linear;
 
   @keyframes icon-spin {

@@ -88,7 +88,7 @@ const EventRealm: React.FC<Props> = ({ event }) => {
             />
             <label
               htmlFor={'realm--' + item.value}
-              style={loading ? { color: colors.grey[500] } : {}}
+              style={loading ? { color: colors.grey[400] } : {}}
             >
               {item.title}
             </label>

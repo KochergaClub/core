@@ -1,16 +1,12 @@
-import styled from 'styled-components';
 import { parseISO } from 'date-fns';
+import styled from 'styled-components';
 
+import { formatDate, staticUrl } from '~/common/utils';
 import { colors, Column } from '~/frontkit';
 
-import { staticUrl } from '~/common/utils';
-
 import { ActivityFragment, TrainingDayFragment } from '../../queries.generated';
-
 import EditDayInAdmin from '../EditDayInAdmin';
 import Activity from './Activity';
-
-import { formatDate } from '~/common/utils';
 
 interface Props {
   day_schedule: TrainingDayFragment;
@@ -29,7 +25,7 @@ const Header = styled.div`
   }
   font-family: 'Intro Book';
   font-weight: bold;
-  color: ${colors.grey[600]};
+  color: ${colors.grey[500]};
 `;
 
 const HeaderFirstLine = styled.div`
@@ -92,7 +88,7 @@ const ActivitiesList: React.FC<Props> = ({ day_schedule }) => {
   );
 };
 
-const DaySchedule: React.FC<Props> = props => {
+const DaySchedule: React.FC<Props> = (props) => {
   return (
     <Column stretch gutter={24}>
       <Header>

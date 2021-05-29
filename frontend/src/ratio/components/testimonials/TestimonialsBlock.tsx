@@ -38,11 +38,11 @@ const AuthorName = styled.div`
 
 const AuthorDescription = styled.div`
   font-size: ${fonts.sizes.XS};
-  color: ${colors.grey[700]};
+  color: ${colors.grey[600]};
 `;
 
 const TestimonialText = styled(RichText)`
-  font-size: ${fonts.sizes.SM};
+6 font-size: ${fonts.sizes.SM};
 `;
 
 const ProductLink = styled.a`

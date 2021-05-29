@@ -50,7 +50,7 @@ const SearchIcon = styled(FaSearch)<{ active?: boolean }>`
   left: 6px;
   top: 6px;
 
-  color: ${(props) => (props.active ? colors.grey[500] : 'white')};
+  color: ${(props) => (props.active ? colors.grey[400] : 'white')};
   cursor: pointer;
 `;
 

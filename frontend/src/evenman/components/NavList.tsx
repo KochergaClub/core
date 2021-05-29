@@ -21,7 +21,7 @@ const NavListUl = styled.ul`
 
 const Header = styled.header`
   padding: 4px 16px;
-  color: ${colors.grey[700]};
+  color: ${colors.grey[600]};
 `;
 
 interface ListProps {

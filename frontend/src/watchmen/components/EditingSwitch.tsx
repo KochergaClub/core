@@ -1,5 +1,4 @@
 import { useCallback } from 'react';
-
 import styled from 'styled-components';
 
 import { colors, Row } from '~/frontkit';
@@ -7,8 +6,8 @@ import { colors, Row } from '~/frontkit';
 const ItemContainer = styled.a<{ active: boolean }>`
   text-decoration: none;
   color: hsl(${colors.hues.blue}, 80%, 50%); // FIXME - replace with colors.link
-  border-bottom: ${props =>
-    props.active ? `1px dashed ${colors.grey[700]}` : 'none'};
+  border-bottom: ${(props) =>
+    props.active ? `1px dashed ${colors.grey[600]}` : 'none'};
 `;
 
 const Item = ({

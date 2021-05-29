@@ -11,10 +11,10 @@ import ControlledBlockContainer from './ControlledBlockContainer';
 // is this necessary?
 const ControlsContainer = styled.div`
   > * {
-    color: ${colors.grey[500]};
+    color: ${colors.grey[400]};
 
     &:hover {
-      color: ${colors.grey[800]};
+      color: ${colors.grey[600]};
     }
   }
 `;

@@ -69,7 +69,7 @@ const OrderCard: React.FC<Props> = ({ order }) => {
         <small>
           <HumanizedDateTime date={parseISO(order.created)} />
         </small>
-        <small style={{ color: colors.grey[500] }}>{order.id}</small>
+        <small style={{ color: colors.grey[400] }}>{order.id}</small>
         <Row vCentered>
           {order.fulfilled ? (
             <Badge hint="Участник успешно зарегистрирован">
