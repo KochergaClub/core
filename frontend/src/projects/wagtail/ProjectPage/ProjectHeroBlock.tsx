@@ -44,10 +44,6 @@ const Summary = styled.div`
   `)}
 `;
 
-const ActivitySummary = styled(LabelDiv)`
-  color: white;
-`;
-
 interface Props {
   project: ProjectPageFragment;
 }
@@ -61,9 +57,9 @@ export const ProjectHeroBlock: React.FC<Props> = ({ project }) => (
       <HeroHeader>{project.title}</HeroHeader>
       <Summary>{project.summary}</Summary>
       <Column gutter={10}>
-        <ActivitySummary>
+        <LabelDiv className="text-white">
           {project.is_active ? project.activity_summary : 'Неактивный проект'}
-        </ActivitySummary>
+        </LabelDiv>
         {project.telegram_chats.length ? (
           <LabelA href={project.telegram_chats[0].link}>
             <Row vCentered>
