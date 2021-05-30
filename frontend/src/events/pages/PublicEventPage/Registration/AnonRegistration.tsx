@@ -1,6 +1,5 @@
 import { useCallback, useState } from 'react';
 import { FaCheck, FaHeart } from 'react-icons/fa';
-import styled from 'styled-components';
 
 import { useMutation } from '@apollo/client';
 
@@ -11,9 +10,14 @@ import { A, Button, Column, Input, Label, Row } from '~/frontkit';
 import { MyEventsTicketRegisterAnonDocument } from '../queries.generated';
 import { CommonProps as Props } from '../types';
 
-const CheckboxLabel = styled(Label)`
-  cursor: pointer;
-`;
+const CheckboxLabel: React.FC<{ htmlFor: string }> = ({
+  children,
+  htmlFor,
+}) => (
+  <Label className="cursor-pointer" htmlFor={htmlFor}>
+    {children}
+  </Label>
+);
 
 const Success: React.FC<{
   email: string;

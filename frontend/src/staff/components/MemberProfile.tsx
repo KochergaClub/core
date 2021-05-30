@@ -126,33 +126,37 @@ const MemberProfile: React.FC<Props> = ({ member }) => {
   ]);
 
   return (
-    <Column centered gutter={20} style={{ marginBottom: 100 }}>
-      <Column centered gutter={0}>
-        <h1>{member.full_name}</h1>
-        <h2 style={{ color: member.color || 'black' }}>{member.short_name}</h2>
-        <div>{member.user.email}</div>
-        {member.is_current || <Ex>Бывший сотрудник</Ex>}
-      </Column>
-      <Column centered>
-        {member.slack_user && <Image src={member.slack_user.image_url} />}
-        {member.slack_user && (
-          <A
-            href={`https://kocherga.slack.com/messages/${member.slack_user.slack_id}/`}
-          >
-            Написать в Slack
-          </A>
-        )}
-        {member.vk && <A href={member.vk}>Профиль VK</A>}
-      </Column>
-      {current_user_is_manager && (
-        <Column centered>
-          <ManagerControls member={member} />
+    <div className="mb-24">
+      <Column centered gutter={20}>
+        <Column centered gutter={0}>
+          <h1>{member.full_name}</h1>
+          <h2 style={{ color: member.color || 'black' }}>
+            {member.short_name}
+          </h2>
+          <div>{member.user.email}</div>
+          {member.is_current || <Ex>Бывший сотрудник</Ex>}
         </Column>
-      )}
-      {current_user_can_view_external_services && (
-        <ExternalServices member_id={member.id} />
-      )}
-    </Column>
+        <Column centered>
+          {member.slack_user && <Image src={member.slack_user.image_url} />}
+          {member.slack_user && (
+            <A
+              href={`https://kocherga.slack.com/messages/${member.slack_user.slack_id}/`}
+            >
+              Написать в Slack
+            </A>
+          )}
+          {member.vk && <A href={member.vk}>Профиль VK</A>}
+        </Column>
+        {current_user_is_manager && (
+          <Column centered>
+            <ManagerControls member={member} />
+          </Column>
+        )}
+        {current_user_can_view_external_services && (
+          <ExternalServices member_id={member.id} />
+        )}
+      </Column>
+    </div>
   );
 };
 

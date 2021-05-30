@@ -31,7 +31,7 @@ const Container = styled.div`
   border-top: 2px solid red;
   background-color: white;
   padding: 20px;
-  z-index: 50;
+  z-index: 30;
 `;
 
 interface Props {

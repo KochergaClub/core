@@ -31,7 +31,6 @@ export {
 export { Column } from './layout/Column';
 export { ColumnsBlock } from './layout/ColumnsBlock';
 export { ControlsFooter } from './layout/ControlsFooter';
-export { Main } from './layout/Main';
 export { ResponsivePadding } from './layout/ResponsivePadding';
 export { Row } from './layout/Row';
 export { breakpoints, deviceMediaQueries } from './sizes';

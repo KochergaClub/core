@@ -1,7 +1,6 @@
 import Link from 'next/link';
 import { useCallback, useState } from 'react';
 import { FaEdit } from 'react-icons/fa';
-import styled from 'styled-components';
 
 import { useMutation, useQuery } from '@apollo/client';
 
@@ -23,10 +22,6 @@ const priority2name: { [k: number]: string } = {
   2: 'Эпизодический админ',
   3: 'Не админ',
 };
-
-const FixedRow = styled(Row)`
-  align-items: center;
-`;
 
 const WatchmanPriorityButton: React.FC<{
   watchman: WatchmanFragment;
@@ -103,10 +98,10 @@ const WatchmanItem = ({ watchman }: { watchman: WatchmanFragment }) => {
         </Link>
       </strong>
       <Row>
-        <FixedRow>
+        <Row vCentered>
           <Label>Грейд:</Label>{' '}
           <strong>{watchman.grade ? watchman.grade.code : 'нет'}</strong>
-        </FixedRow>
+        </Row>
         {canManage && (
           <>
             <Button size="small" onClick={askForGrade}>
@@ -123,10 +118,10 @@ const WatchmanItem = ({ watchman }: { watchman: WatchmanFragment }) => {
         )}
       </Row>
       <Row>
-        <FixedRow gutter={8}>
+        <Row gutter={8} vCentered>
           <Label>Приоритет:</Label>
           <div>{priority2name[watchman.priority]}</div>
-        </FixedRow>
+        </Row>
         {canManage && (
           <Row>
             <WatchmanPriorityButton watchman={watchman} priority={1}>

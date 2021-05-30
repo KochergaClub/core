@@ -13,9 +13,7 @@ const Header = styled.div`
   font-weight: bold;
 `;
 
-const Text = styled.div``;
-
-const ColumnContainer = styled(Column)`
+const Text = styled.div`
   text-align: center;
 `;
 
@@ -35,7 +33,7 @@ const OneColumn = (column: Props['button_columns'][0]) => {
   }, [column.link]);
   return (
     <div>
-      <ColumnContainer gutter={16} centered>
+      <Column gutter={16} centered>
         {column.image && (
           <Image
             src={column.image.url}
@@ -45,7 +43,7 @@ const OneColumn = (column: Props['button_columns'][0]) => {
         <Header>{column.title}</Header>
         <Text>{column.text}</Text>
         <Button onClick={navigate}>{column.caption}</Button>
-      </ColumnContainer>
+      </Column>
     </div>
   );
 };

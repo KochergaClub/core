@@ -18,7 +18,7 @@ import { MyTicketDeleteDocument, MyTicketFragment } from '../queries.generated';
 
 const EventLink = styled(A)`
   color: black;
-6 font-size: ${fonts.sizes.XL2};
+  font-size: ${fonts.sizes.XL2};
   line-height: 1.2;
 `;
 
@@ -61,7 +61,7 @@ const TicketCard: React.FC<Props> = ({ ticket, later }) => {
       </DropdownContainer>
       <Row gutter={24} vCentered stretch>
         <FaTicketAlt size={64} color={colors.primary[300]} />
-        <Column stretch gutter={16} style={{ flex: 1 }}>
+        <div className="space-y-4 flex-1">
           <Column stretch gutter={16}>
             <Row spaced gutter={8}>
               <Link href={publicEventRoute(ticket.event.id)} passHref>
@@ -90,7 +90,7 @@ const TicketCard: React.FC<Props> = ({ ticket, later }) => {
               <CopyToClipboardIcon text={ticket.zoom_link} />
             </Row>
           )}
-        </Column>
+        </div>
       </Row>
     </Card>
   );

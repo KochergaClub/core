@@ -62,10 +62,6 @@ const validateValues = (template: TemplateFragment, values: FormState) => {
   return errors;
 };
 
-const CenteredRow = styled(Row)`
-  align-items: center;
-`;
-
 const ErrorLabel = styled.div`
   color: ${colors.accent[900]};
 `;
@@ -76,12 +72,12 @@ const Fields = ({ template }: { template: TemplateFragment }) => {
       {template.schema.fields.map((field) => (
         <div key={field.name}>
           <Label>{field.name}</Label>
-          <CenteredRow gutter={16}>
+          <Row gutter={16} vCentered>
             <Field name={field.name}>
               {({ field }: FieldProps<any>) => <Input {...field} type="text" />}
             </Field>
             <ErrorMessage name={field.name} component={ErrorLabel} />
-          </CenteredRow>
+          </Row>
         </div>
       ))}
     </div>

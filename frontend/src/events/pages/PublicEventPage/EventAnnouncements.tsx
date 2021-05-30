@@ -1,5 +1,3 @@
-// import styled from 'styled-components';
-
 // import { A } from '~/frontkit';
 
 import { CommonProps } from './types';

@@ -1,10 +1,3 @@
-import styled from 'styled-components';
-
-export const ControlsFooter = styled.footer`
-  display: flex;
-  flex-direction: row;
-  justify-content: flex-end;
-  & > * + * {
-    margin-left: 8px;
-  }
-`;
+export const ControlsFooter: React.FC = ({ children }) => (
+  <footer className="flex justify-end space-x-2">{children}</footer>
+);

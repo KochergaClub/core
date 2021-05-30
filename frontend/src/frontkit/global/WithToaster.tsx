@@ -1,8 +1,5 @@
 import { motion } from 'framer-motion';
 import React, { useCallback, useContext, useReducer } from 'react';
-import styled from 'styled-components';
-
-import * as colors from '../colors';
 
 type NotificationType = 'Error';
 
@@ -52,25 +49,6 @@ const reducer = (state: State, action: Action): State => {
   }
 };
 
-const ToastContainer = styled.div`
-  position: fixed;
-  left: 20px;
-  bottom: 20px;
-  z-index: 1500;
-  max-width: 300px;
-
-  > * + * {
-    margin-top: 8px;
-  }
-`;
-
-const ToastBox = styled(motion.div)`
-  background-color: ${colors.accent[100]};
-  padding: 8px 16px;
-  cursor: pointer;
-  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3);
-`;
-
 const Toast: React.FC<{ id: string }> = ({ id, children }) => {
   const dispatch = useContext(ToasterContext);
 
@@ -82,13 +60,14 @@ const Toast: React.FC<{ id: string }> = ({ id, children }) => {
   }, [dispatch, id]);
 
   return (
-    <ToastBox
+    <motion.div
+      className="bg-accent-100 py-2 px-4 cursor-pointer shadow-2xl rounded break-words"
       initial={{ scale: 0.5 }}
       animate={{ scale: 1 }}
       onClick={dismissCb}
     >
       {children}
-    </ToastBox>
+    </motion.div>
   );
 };
 
@@ -98,13 +77,13 @@ const ToastList = ({ toasts }: { toasts: Notification[] }) => {
   }
 
   return (
-    <ToastContainer>
+    <div className="fixed left-5 bottom-5 z-50 max-w-xs space-y-2">
       {toasts.map((toast, i) => (
         <Toast key={i} id={toast.id}>
           {toast.text}
         </Toast>
       ))}
-    </ToastContainer>
+    </div>
   );
 };
 

@@ -1,7 +1,6 @@
 import { differenceInCalendarDays, parseISO } from 'date-fns';
 import { utcToZonedTime } from 'date-fns-tz';
 import React, { useRef } from 'react';
-import styled from 'styled-components';
 
 import { useQuery } from '@apollo/client';
 
@@ -18,15 +17,6 @@ import EventToCalendar from './EventToCalendar';
 import Map from './Map';
 import ProjectInfo from './ProjectInfo';
 import { GetPublicEventDocument } from './queries.generated';
-
-const Container = styled.div`
-  scroll-behavior: smooth;
-  margin-bottom: 120px;
-`;
-
-const RegistrationSection = styled.section`
-  margin-bottom: 120px;
-`;
 
 interface Props {
   event_id: string;
@@ -71,7 +61,7 @@ export const PublicEventPage: NextApolloPage<Props> = ({ event_id }) => {
           const inFuture = daysUntil >= 0;
 
           return (
-            <Container>
+            <div style={{ scrollBehavior: 'smooth' }}>
               <EventHeroBlock event={event} registrationRef={registrationRef} />
 
               <ProjectInfo event={event} />
@@ -83,21 +73,21 @@ export const PublicEventPage: NextApolloPage<Props> = ({ event_id }) => {
               {inFuture ? (
                 <div>
                   <a id="register" />
-                  <RegistrationSection ref={registrationRef}>
+                  <section className="mb-32" ref={registrationRef}>
                     <TL03 title="Регистрация" grey />
                     <PaddedBlock>
                       <AnyRegistration event={event} />
                     </PaddedBlock>
-                  </RegistrationSection>
+                  </section>
                   {event.realm === 'offline' ? (
-                    <section>
+                    <section className="mb-32">
                       <TL03 title="Как добраться" grey />
                       <Map />
                     </section>
                   ) : null}
                 </div>
               ) : null}
-            </Container>
+            </div>
           );
         }}
       </ApolloQueryResults>

@@ -4,7 +4,7 @@ import { AnyViewProps } from './types';
 
 interface Props<I> extends AnyViewProps<I> {
   renderItem: (item: I) => React.ReactElement;
-  gutter?: number;
+  gutter?: React.ComponentProps<typeof Column>['gutter'];
 }
 
 function ListView<I>(props: Props<I>) {

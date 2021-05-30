@@ -1,55 +1,25 @@
-import * as React from 'react';
-import styled from 'styled-components';
-
-import * as colors from '../colors';
-import * as fonts from '../fonts';
-
-const Li = styled.li<{ selected?: boolean }>`
-  font-weight: bold;
-  font-size: ${fonts.sizes.SM};
-  line-height: 20px;
-  text-transform: uppercase;
-
-  border-bottom: ${(props) =>
-    props.selected ? `4px solid ${colors.grey[400]}` : 'none'};
-
-  &:hover {
-    ${(props) =>
-      props.selected ? '' : `border-bottom: 4px solid ${colors.grey[300]};`};
-  }
-`;
+import clsx from 'clsx';
 
 interface ItemProps {
   selected?: boolean;
   select: () => void;
-  children?: React.ReactNode;
 }
 
 const Item: React.FC<ItemProps> = ({ select, selected, children }) => {
-  const onClick = React.useCallback(() => {
-    select();
-  }, [select]);
   return (
-    <Li selected={selected} onClick={onClick}>
+    <li
+      className={clsx(
+        'cursor-pointer px-2.5 py-2 font-bold text-sm uppercase border-0 border-solid',
+        selected
+          ? 'border-b-4 border-gray-400'
+          : 'hover:border-b-4 hover:border-gray-300'
+      )}
+      onClick={select}
+    >
       {children}
-    </Li>
+    </li>
   );
 };
-
-const Ul = styled.ul`
-  list-style-type: none;
-  padding: 0;
-  margin: 0;
-  position: relative;
-
-  display: flex;
-  flex-direction: row;
-
-  & > li {
-    padding: 8px 10px;
-    cursor: pointer;
-  }
-`;
 
 interface IListProps {
   children: React.ReactNode;
@@ -57,7 +27,7 @@ interface IListProps {
 
 export const RowNav = (({ children }: IListProps) => (
   <nav>
-    <Ul>{children}</Ul>
+    <ul className="list-none p-0 flex">{children}</ul>
   </nav>
 )) as React.FC & {
   Item: React.ComponentType<ItemProps>;
