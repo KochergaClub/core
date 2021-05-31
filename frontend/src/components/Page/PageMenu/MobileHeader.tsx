@@ -1,47 +1,36 @@
-import React from 'react';
+import clsx from 'clsx';
+import React, { useCallback } from 'react';
 
 import { Burger } from '~/frontkit';
 
-import { kind2color, styled } from './constants';
+import { MenuKind } from '../types';
+import { kind2color } from './constants';
 
 interface Props {
   expanded: boolean;
   setExpand: (flag: boolean) => void;
+  kind: MenuKind;
 }
 
-const MobileHeaderComponent = styled.div`
-  display: none;
-  @media screen and (max-width: 980px) {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
+export const MobileHeader: React.FC<Props> = ({
+  expanded,
+  setExpand,
+  kind,
+}) => {
+  const switchExpand = useCallback(() => {
+    setExpand(!expanded);
+  }, [setExpand, expanded]);
 
-    width: 100%;
-    height: 72px;
-    padding: 0 20px;
-
-    background: ${(props) => kind2color[props.theme.kind]};
-    color: white;
-    font-size: 24px;
-    font-weight: 300;
-  }
-`;
-
-export default class MobileHeader extends React.Component<Props> {
-  switchExpand = () => {
-    this.props.setExpand(!this.props.expanded);
-  };
-
-  render() {
-    return (
-      <MobileHeaderComponent onClick={this.switchExpand}>
-        <div>Кочерга</div>
-        <Burger
-          color="white"
-          opened={this.props.expanded}
-          flip={this.switchExpand}
-        />
-      </MobileHeaderComponent>
-    );
-  }
-}
+  return (
+    <div
+      className={clsx(
+        'h-14 px-5 flex justify-between items-center',
+        kind2color[kind]
+      )}
+      onClick={switchExpand}
+    >
+      <div className="text-2xl text-white">Кочерга</div>
+      <Burger color="white" opened={expanded} flip={switchExpand} />
+    </div>
+  );
+};

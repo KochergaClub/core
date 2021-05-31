@@ -1,38 +1,15 @@
+import clsx from 'clsx';
 import Link from 'next/link';
-import React, { useState } from 'react';
-import { ThemeProvider } from 'styled-components';
+import React, { useContext, useState } from 'react';
 
 import { staticUrl } from '~/common/utils';
 
-import Search from '../Search';
+import { Search } from '../Search';
 import { MenuKind } from '../types';
-import { kind2color, styled } from './constants';
-import MenuItems from './MenuItems';
-import MobileHeader from './MobileHeader';
+import { kind2color, MenuContext } from './constants';
+import { MenuItems } from './MenuItems';
+import { MobileHeader } from './MobileHeader';
 import UserButtons from './UserButtons';
-
-const Container = styled.div<{ hideOnMobile: boolean }>`
-  width: 100%;
-  height: 60px;
-  padding: 0 40px;
-
-  background-color: ${(props) => kind2color[props.theme.kind]};
-
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-
-  @media screen and (max-width: 980px) {
-    display: ${(props) => (props.hideOnMobile ? 'none' : 'flex')};
-    flex-direction: column;
-    height: auto;
-    padding: 20px 0;
-  }
-
-  @media print {
-    display: none;
-  }
-`;
 
 const LOGO_HEIGHT = 50;
 
@@ -40,62 +17,80 @@ const LogoImage = () => (
   <img src={staticUrl('menu-logo.png')} width="190" height={LOGO_HEIGHT} />
 );
 
-const LogoLink = styled.a`
-  display: block;
-  height: ${LOGO_HEIGHT}px;
-`;
-
-const Logo = ({ kind }: Props) => {
+const Logo: React.FC<Props> = ({ kind }) => {
   const href = kind === 'team' ? '/team' : '/';
 
   return (
     <Link href={href} passHref>
-      <LogoLink>
+      <a className="block" style={{ height: LOGO_HEIGHT }}>
         <LogoImage />
-      </LogoLink>
+      </a>
     </Link>
   );
 };
 
-const Line = styled.div`
-  display: flex;
-  align-items: center;
-  @media screen and (max-width: 980px) {
-    flex-direction: column;
-    margin-bottom: 20px;
-  }
-`;
+const DesktopMenu: React.FC = () => {
+  const { kind } = useContext(MenuContext);
+  return (
+    <div
+      className={clsx(
+        'h-14 px-10 flex justify-between items-center',
+        kind2color[kind]
+      )}
+    >
+      <div className="flex items-center space-x-12">
+        <Logo kind={kind} />
+        <MenuItems kind={kind} />
+        <Search />
+      </div>
+      <UserButtons kind={kind} />
+    </div>
+  );
+};
 
-const MaybePaddedSearch = styled.div`
-  margin-left: 16px;
-  @media screen and (max-width: 980px) {
-    margin-left: 0;
-  }
-`;
+const MobileExpandedMenu: React.FC = () => {
+  const { kind } = useContext(MenuContext);
+
+  return (
+    <div className={clsx('flex flex-col items-center py-5', kind2color[kind])}>
+      <div className="flex flex-col mb-5 items-center space-y-4">
+        <Logo kind={kind} />
+        <MenuItems kind={kind} />
+        <Search />
+      </div>
+      <UserButtons kind={kind} />
+    </div>
+  );
+};
+
+const MobileMenu: React.FC = () => {
+  const { kind } = useContext(MenuContext);
+  const [expanded, setExpanded] = useState(false);
+
+  return (
+    <div>
+      <MobileHeader expanded={expanded} setExpand={setExpanded} kind={kind} />
+      {expanded && <MobileExpandedMenu />}
+    </div>
+  );
+};
 
 interface Props {
   kind: MenuKind;
 }
 
-const PageMenu = ({ kind }: Props) => {
-  const [expanded, setExpanded] = useState(false);
-
+const PageMenu: React.FC<Props> = ({ kind }) => {
   return (
-    <ThemeProvider theme={{ kind }}>
-      <div>
-        <MobileHeader expanded={expanded} setExpand={setExpanded} />
-        <Container hideOnMobile={!expanded}>
-          <Line>
-            <Logo kind={kind} />
-            <MenuItems kind={kind} />
-            <MaybePaddedSearch>
-              <Search />
-            </MaybePaddedSearch>
-          </Line>
-          <UserButtons kind={kind} />
-        </Container>
+    <MenuContext.Provider value={{ kind }}>
+      <div className="print:hidden">
+        <div className="hidden lg:block">
+          <DesktopMenu />
+        </div>
+        <div className="lg:hidden">
+          <MobileMenu />
+        </div>
       </div>
-    </ThemeProvider>
+    </MenuContext.Provider>
   );
 };
 

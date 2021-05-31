@@ -1,13 +1,11 @@
-import baseStyled, { ThemedBaseStyledInterface } from 'styled-components';
-
-import { colors } from '~/frontkit';
+import { createContext } from 'react';
 
 import { MenuKind } from '../types';
 
 export const kind2color = {
-  team: '#417690',
-  public: 'black',
-  my: colors.primary[900],
+  team: 'bg-team-menu',
+  public: 'bg-black',
+  my: 'bg-primary-900',
 };
 
 export interface SingleItem {
@@ -24,12 +22,6 @@ export interface ExpandableItem {
 }
 
 export type Item = SingleItem | ExpandableItem;
-
-export interface ThemeProps {
-  kind: MenuKind;
-}
-
-export const styled = baseStyled as ThemedBaseStyledInterface<ThemeProps>; // used for strongly typed `theme.kind`
 
 const publicMenuItems: Item[] = [
   {
@@ -207,3 +199,9 @@ export const kind2items: { [k: string]: Item[] } = {
   team: teamMenuItems,
   my: myMenuItems,
 };
+
+interface MenuContextShape {
+  kind: MenuKind;
+}
+
+export const MenuContext = createContext<MenuContextShape>({ kind: 'public' });

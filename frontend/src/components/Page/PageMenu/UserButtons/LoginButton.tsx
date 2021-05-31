@@ -1,22 +1,11 @@
-import styled from 'styled-components';
 import Link from 'next/link';
-
-const Button = styled.button`
-  border-radius: 20px;
-  border: none;
-  color: black;
-  background-color: white;
-  height: 40px;
-  font-weight: bold;
-  font-size: 14px;
-  padding: 0 24px;
-  cursor: pointer;
-`;
 
 const LoginButton: React.FC = () => (
   <Link href="/my" passHref>
-    <a style={{ textDecoration: 'none' }}>
-      <Button>Войти</Button>
+    <a className="no-underline">
+      <button className="border-0 text-black bg-white rounded-full h-10 font-bold text-sm px-6 cursor-pointer">
+        Войти
+      </button>
     </a>
   </Link>
 );

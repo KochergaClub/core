@@ -8,7 +8,7 @@ export { ConfirmModal } from './ConfirmModal';
 export { default as CopyToClipboardIcon } from './CopyToClipboardIcon';
 export { default as DropdownMenu } from './DropdownMenu';
 export { default as FloatingList } from './FloatingList';
-export { default as HintCard } from './HintCard';
+export { HintCard } from './HintCard';
 export { default as HumanizedDateTime } from './HumanizedDateTime';
 export { Markdown } from './Markdown';
 export { default as MutationButton } from './MutationButton';

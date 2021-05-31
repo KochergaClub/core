@@ -2,7 +2,6 @@ import Link from 'next/link';
 import { useCallback, useContext, useEffect } from 'react';
 import { FaEdit, FaUser, FaUserCircle, FaUserTie } from 'react-icons/fa';
 import { GoGear, GoSignOut } from 'react-icons/go';
-import styled from 'styled-components';
 
 import { useLazyQuery, useMutation } from '@apollo/client';
 
@@ -10,18 +9,12 @@ import { CurrentUserDocument } from '~/auth/queries.generated';
 import { WagtailPageContext } from '~/cms/contexts';
 import { ApolloQueryResults, DropdownMenu } from '~/components';
 import { Action, NextLinkAction } from '~/components/DropdownMenu';
-import { fonts, useNotification } from '~/frontkit';
+import { useNotification } from '~/frontkit';
 import { LogoutDocument } from '~/my/queries.generated';
 
 import { MenuKind } from '../../types';
 import LoginButton from './LoginButton';
 import { WagtailEditablePageDocument } from './queries.generated';
-
-const Email = styled.div`
-  padding: 4px 12px;
-  text-align: center;
-  font-size: ${fonts.sizes.XS};
-`;
 
 const LogoutAction: React.FC = () => {
   const [logoutMutation] = useMutation(LogoutDocument);
@@ -119,7 +112,7 @@ const UserButtons: React.FC<Props> = (
             )}
           >
             <Link href="/my">
-              <Email>{user.email}</Email>
+              <div className="text-xs text-center px-3 py-1">{user.email}</div>
             </Link>
             <NextLinkAction href="/my" icon={FaUser} title="Личный кабинет" />
             {user.is_staff ? (

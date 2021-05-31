@@ -1,8 +1,7 @@
 import { useEffect, useState } from 'react';
 import { FaSpinner } from 'react-icons/fa';
-import styled from 'styled-components';
 
-import { colors, Row } from '~/frontkit';
+import { Row } from '~/frontkit';
 
 export type Size = 'block' | 'div' | 'span';
 
@@ -14,33 +13,13 @@ const Fish: React.FC<{ className: string }> = ({ className }) => (
   </svg>
 );
 
-const animatedCss = `
-  fill: ${colors.grey[400]};
-  animation: icon-spin 2s infinite linear;
+export const FishSpinner: React.FC = () => (
+  <Fish className="animate-spin-slow text-gray-400 fill-current" />
+);
 
-  @keyframes icon-spin {
-    0% {
-      transform: rotate(0deg);
-    }
-    100% {
-      transform: rotate(359deg);
-    }
-  }
-`;
-
-export const FishSpinner = styled(Fish)`
-  ${animatedCss}
-`;
-
-export const BasicSpinner = styled(FaSpinner)`
-  ${animatedCss}
-`;
-
-const BlockContainer = styled.div`
-  min-height: 80vh;
-  padding-top: 20vh;
-  font-size: 2em;
-`;
+export const BasicSpinner: React.FC = () => (
+  <FaSpinner className="animate-spin-slow text-gray-400" />
+);
 
 const Spinner: React.FC<{ size: Size; delay?: number }> = ({
   size,
@@ -54,14 +33,13 @@ const Spinner: React.FC<{ size: Size; delay?: number }> = ({
     return () => clearTimeout(timer);
   }, [delay]);
 
-  const SpinnerComponent: React.ComponentType =
-    size === 'block' ? FishSpinner : BasicSpinner;
+  const SpinnerComponent = size === 'block' ? FishSpinner : BasicSpinner;
 
   if (size === 'block') {
     return (
-      <BlockContainer>
+      <div className="h-96 pt-32 text-3xl">
         <Row centered>{appear && <SpinnerComponent />}</Row>
-      </BlockContainer>
+      </div>
     );
   } else if (size === 'div') {
     return <Row centered>{appear && <SpinnerComponent />}</Row>;

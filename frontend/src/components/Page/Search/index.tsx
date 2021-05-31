@@ -12,7 +12,7 @@ import SearchResults from './SearchResults';
 
 const isRunnableQuery = (query: string) => query !== '';
 
-const Search: React.FC = () => {
+export const Search: React.FC = () => {
   const [query, setQuery] = useState('');
 
   const [runSearchQuery, queryResults] = useLazyQuery(SearchDocument, {
@@ -86,5 +86,3 @@ const Search: React.FC = () => {
     </div>
   );
 };
-
-export default Search;

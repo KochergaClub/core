@@ -1,13 +1,5 @@
-import styled from 'styled-components';
-
-import { colors, fonts } from '~/frontkit';
-
-const HintCard = styled.div`
-  border: 1px solid ${colors.grey[300]};
-  background-color: ${colors.grey[100]};
-  font-size: ${fonts.sizes.SM};
-  max-width: 660px;
-  padding: 10px 16px;
-`;
-
-export default HintCard;
+export const HintCard: React.FC = ({ children }) => (
+  <div className="border border-solid border-gray-300 bg-gray-100 text-sm max-w-screen-sm px-4 py-2.5">
+    {children}
+  </div>
+);

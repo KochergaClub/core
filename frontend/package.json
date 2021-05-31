@@ -49,6 +49,7 @@
     "apollo-link-ws": "^1.0.20",
     "autosize": "^4.0.2",
     "chart.js": "^3.2.1",
+    "clsx": "^1.1.1",
     "cookie": "^0.4.0",
     "date-fns": "^2.21.1",
     "date-fns-tz": "^1.1.4",

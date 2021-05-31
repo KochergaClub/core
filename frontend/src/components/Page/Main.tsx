@@ -1,16 +1,18 @@
-import styled from 'styled-components';
+import clsx from 'clsx';
 
 interface Props {
   wide?: boolean;
 }
 
-const Main = styled.div<Props>`
-  max-width: ${(props) => (props.wide ? '2000px' : '1080px')};
-  margin-top: 20px;
-  margin-left: auto;
-  margin-right: auto;
-  margin-bottom: 40px;
-  min-height: 600px;
-`;
+export const Main: React.FC<Props> = ({ wide, children }) => (
+  <div
+    className={clsx(
+      'mt-5 mb-10 mx-auto min-h-screen',
+      wide ? 'max-w-screen-2xl' : 'max-w-screen-lg'
+    )}
+  >
+    {children}
+  </div>
+);
 
 export default Main;

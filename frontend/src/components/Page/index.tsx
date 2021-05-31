@@ -1,5 +1,3 @@
-import styled from 'styled-components';
-
 import {
     FacebookPixelScript, GoogleAnalyticsScript, VkRetargetingScript, YandexMetrikaScript
 } from '~/components/analytics';
@@ -8,11 +6,11 @@ import { WithToaster } from '~/frontkit';
 import ErrorBoundary from './ErrorBoundary';
 import GlobalStyle from './GlobalStyle';
 import HtmlHead from './HtmlHead';
-import Main from './Main';
+import { Main } from './Main';
 import NProgressStyle from './NProgressStyle';
 import { PageFooter } from './PageFooter';
 import PageMenu from './PageMenu';
-import PageTitle from './PageTitle';
+import { PageTitle } from './PageTitle';
 import { MenuKind, OpenGraph } from './types';
 import VkMessagesWidget from './VkMessagesWidget';
 
@@ -34,21 +32,6 @@ type PageType = React.FC<Props> & {
   Main: typeof Main;
 };
 
-const FullScreenContainer = styled.div`
-  height: 100vh;
-  display: flex;
-  flex-direction: column;
-`;
-
-const FullScreenContainerInner = styled.div`
-  flex: 1;
-  overflow: auto;
-`;
-
-const Whitespace = styled.div`
-  height: 80px;
-`;
-
 const Page: PageType = (props) => {
   const renderContent = () => {
     const chrome = props.chrome || 'default';
@@ -63,10 +46,10 @@ const Page: PageType = (props) => {
 
     if (chrome === 'fullscreen') {
       return (
-        <FullScreenContainer>
+        <div className="h-screen flex flex-col">
           {menuEl}
-          <FullScreenContainerInner>{props.children}</FullScreenContainerInner>
-        </FullScreenContainer>
+          <div className="flex-1 overflow-auto">{props.children}</div>
+        </div>
       );
     }
 
@@ -74,7 +57,7 @@ const Page: PageType = (props) => {
       <>
         {menuEl}
         {props.children}
-        {showWhitespace && <Whitespace />}
+        {showWhitespace && <div className="h-20" />}
         {footerEl}
       </>
     );
