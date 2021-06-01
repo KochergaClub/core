@@ -1,73 +1,63 @@
+import clsx from 'clsx';
 import { useContext } from 'react';
-import styled from 'styled-components';
 
 import { useExpandable, useSmartMutation } from '~/common/hooks';
 import { colors } from '~/frontkit';
 import { staffMemberRoute } from '~/staff/routes';
 
-import { nightColor } from '../constants';
 import { EditingContext } from '../contexts';
 import {
     ShiftFragment, ShiftFragmentDoc, WatchmanForPickerFragment, WatchmenUpdateShiftDocument
 } from '../queries.generated';
 import WatchmanPicker from './WatchmanPicker';
 
-const Container = styled.div<{ editing: boolean }>`
-  position: relative;
-  cursor: ${(props) => (props.editing ? 'pointer' : 'auto')};
-`;
+export const nightColor = colors.grey[700];
 
-const Box = styled.div`
-  height: 2em;
-  line-height: 2em;
-  text-align: center;
-  border: 1px solid white;
-`;
+const Box: React.FC<{ className?: string; bgColor?: string }> = ({
+  className = '',
+  bgColor,
+  children,
+}) => (
+  <div
+    className={clsx('h-8 leading-8 text-center border border-white', className)}
+    style={{
+      ...({ backgroundColor: bgColor } || {}),
+    }}
+  >
+    {children}
+  </div>
+);
 
-const EmptyBox = styled(Box)`
-  background-color: ${colors.grey[100]};
-`;
-
-const NightBoxContainer = styled(Box)`
-  background-color: ${nightColor};
-  color: white;
-`;
-
-const NightBox = () => <NightBoxContainer>Ночь</NightBoxContainer>;
-
-const WatchmanLink = styled.a`
-  color: black;
-  text-decoration: none;
-`;
-
-const InnerShiftBox = ({
-  shift,
-  editing,
-}: {
+interface InnerProps {
   shift: ShiftFragment;
   editing: boolean;
-}) => {
+}
+
+const InnerShiftBox: React.FC<InnerProps> = ({ shift, editing }) => {
   if (shift.is_night) {
-    return <NightBox />;
+    return (
+      <Box className="text-white" bgColor={nightColor}>
+        Ночь
+      </Box>
+    );
   }
   if (!shift.watchman) {
-    return <EmptyBox />;
+    return <Box className="bg-gray-100" />;
   }
 
   let content = <>{shift.watchman.member.short_name}</>;
   if (!editing) {
     content = (
-      <WatchmanLink href={staffMemberRoute(shift.watchman.member.id)}>
+      <a
+        className="text-black no-underline"
+        href={staffMemberRoute(shift.watchman.member.id)}
+      >
         {content}
-      </WatchmanLink>
+      </a>
     );
   }
 
-  return (
-    <Box style={{ backgroundColor: shift.watchman.member.color || 'white' }}>
-      {content}
-    </Box>
-  );
+  return <Box bgColor={shift.watchman.member.color || 'white'}>{content}</Box>;
 };
 
 interface Props {
@@ -127,7 +117,7 @@ export const ShiftBox: React.FC<Props> = (props) => {
   };
 
   return (
-    <Container ref={ref} editing={editing}>
+    <div className={clsx('relative', editing && 'cursor-pointer')} ref={ref}>
       <div onClick={editing ? flipExpand : undefined}>
         <InnerShiftBox shift={props.shift} editing={editing} />
       </div>
@@ -141,6 +131,6 @@ export const ShiftBox: React.FC<Props> = (props) => {
           ]}
         />
       )}
-    </Container>
+    </div>
   );
 };

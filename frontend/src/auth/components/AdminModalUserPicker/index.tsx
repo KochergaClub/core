@@ -4,8 +4,8 @@ import { useForm } from 'react-hook-form';
 import { useQuery } from '@apollo/client';
 
 import { useCommonHotkeys, useFocusOnFirstModalRender } from '~/common/hooks';
-import { ApolloQueryResults, WideInput } from '~/components';
-import { AsyncButton, Column, Modal, Row } from '~/frontkit';
+import { ApolloQueryResults } from '~/components';
+import { AsyncButton, Column, Input, Modal, Row } from '~/frontkit';
 
 import { SearchUsersForPickerDocument, UserForPickerFragment } from './queries.generated';
 
@@ -52,9 +52,10 @@ const AdminModalUserPicker: React.FC<Props> = ({ close, pick }) => {
               e.preventDefault();
             }}
           >
-            <WideInput
+            <Input
               type="text"
               placeholder="Найти..."
+              wide
               ref={inputRefWithFocus}
               {...inputRest}
             />

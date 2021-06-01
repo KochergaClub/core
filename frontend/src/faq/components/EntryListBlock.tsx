@@ -1,8 +1,5 @@
-import styled from 'styled-components';
-
-import { RichText } from '~/frontkit';
-
 import { PaddedBlock } from '~/components';
+import { RichText } from '~/frontkit';
 
 import { FaqEntryFragment } from '../fragments.generated';
 
@@ -10,34 +7,24 @@ interface Props {
   entries: FaqEntryFragment[];
 }
 
-const Header = styled.header`
-  font-weight: bold;
-`;
-
-const DivWithFixedMargins = styled.div`
-  ul {
-    margin-bottom: 16px;
-  }
-`;
-
 const EntryCard: React.FC<{ entry: FaqEntryFragment }> = ({ entry }) => (
-  <DivWithFixedMargins id={`entry${entry.id}`}>
-    <Header>{entry.question}</Header>
+  <div className="mb-4" id={`entry${entry.id}`}>
+    <header className="font-bold">{entry.question}</header>
     <RichText dangerouslySetInnerHTML={{ __html: entry.answer }} />
-  </DivWithFixedMargins>
+  </div>
 );
 
 const EntryList: React.FC<Props> = ({ entries }) => {
   return (
     <div>
-      {entries.map(entry => (
+      {entries.map((entry) => (
         <EntryCard key={entry.id} entry={entry} />
       ))}
     </div>
   );
 };
 
-const EntryListBlock: React.FC<Props> = props => {
+const EntryListBlock: React.FC<Props> = (props) => {
   return (
     <PaddedBlock>
       <EntryList {...props} />

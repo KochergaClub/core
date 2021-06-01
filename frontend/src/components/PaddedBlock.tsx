@@ -1,20 +1,19 @@
-import styled from 'styled-components';
+import clsx from 'clsx';
 
 interface Props {
   width?: 'small' | 'normal' | 'wide' | 'max';
 }
 
 const WIDTHS = {
-  small: '640px',
-  normal: '800px',
-  wide: '1200px',
-  max: '100%',
+  small: 'max-w-2xl', // 672px, previously 640px
+  normal: 'max-w-3xl', // 768px, previously 800px
+  wide: 'max-w-7xl', // 1280px, previously 1200px
+  max: 'max-w-full', // 100%
 };
 
-const PaddedBlock = styled.div<Props>`
-  padding: 40px 20px;
-  margin: 0 auto;
-  max-width: ${(props) => WIDTHS[props.width || 'normal']};
-`;
-
-export default PaddedBlock;
+export const PaddedBlock: React.FC<Props> = ({
+  width = 'normal',
+  children,
+}) => (
+  <div className={clsx('px-5 py-10 mx-auto', WIDTHS[width])}>{children}</div>
+);

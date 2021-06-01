@@ -1,58 +1,30 @@
-import { useEffect, useRef } from 'react';
+import clsx from 'clsx';
+import { useCallback, useEffect, useRef } from 'react';
 import { FaSearch } from 'react-icons/fa';
-import styled, { css } from 'styled-components';
 
-import { colors } from '~/frontkit';
+const placeholderClasses = 'uppercase tracking-widest text-xs';
+const paddings = 'py-1 pl-7 pr-2'; // positions main content after SearchIcon
 
-const Container = styled.div`
-  position: relative;
-`;
+const Placeholder: React.FC = ({ children }) => (
+  <div
+    className={clsx(
+      paddings,
+      placeholderClasses,
+      'leading-5 text-white cursor-pointer'
+    )}
+  >
+    {children}
+  </div>
+);
 
-const placeholderStyles = css`
-  text-transform: uppercase;
-  letter-spacing: 1.3px;
-  font-size: 12px;
-`;
-
-const Placeholder = styled.div`
-  padding: 4px 8px;
-  padding-left: 28px;
-  color: white;
-  cursor: pointer;
-
-  ${placeholderStyles}
-`;
-
-const Input = styled.input`
-  border-radius: 4px;
-  padding: 4px 8px;
-  padding-left: 28px;
-
-  background-color: transparent;
-  border: 1px solid transparent;
-  width: 80px;
-  transition: width 0.15s;
-
-  &::placeholder {
-    ${placeholderStyles}
-  }
-
-  &:focus {
-    outline: none;
-    border: 1px solid ${colors.accent[500]};
-    background-color: white;
-    width: 200px;
-  }
-`;
-
-const SearchIcon = styled(FaSearch)<{ active?: boolean }>`
-  position: absolute;
-  left: 6px;
-  top: 6px;
-
-  color: ${(props) => (props.active ? colors.grey[400] : 'white')};
-  cursor: pointer;
-`;
+const SearchIcon: React.FC<{ active?: boolean }> = ({ active }) => (
+  <FaSearch
+    className={clsx(
+      'absolute left-1.5 top-1.5 cursor-pointer',
+      active ? 'text-gray-400' : 'text-white'
+    )}
+  />
+);
 
 interface Props {
   active: boolean;
@@ -62,7 +34,12 @@ interface Props {
   setQuery: (query: string) => void;
 }
 
-const SearchInput: React.FC<Props> = ({ active, start, query, setQuery }) => {
+export const SearchInput: React.FC<Props> = ({
+  active,
+  start,
+  query,
+  setQuery,
+}) => {
   const inputRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
@@ -71,27 +48,33 @@ const SearchInput: React.FC<Props> = ({ active, start, query, setQuery }) => {
     }
   }, [active]);
 
-  if (!active) {
-    return (
-      <Container onClick={start}>
-        <SearchIcon active={active || undefined} />
-        <Placeholder>Поиск</Placeholder>
-      </Container>
-    );
-  }
+  const onChange = useCallback(
+    (e: React.FormEvent<HTMLInputElement>) => setQuery(e.currentTarget.value),
+    [setQuery]
+  );
+
+  const placeholderText = 'Поиск';
 
   return (
-    <Container>
+    <div className="relative" onClick={active ? undefined : start}>
       <SearchIcon active={active || undefined} />
-      <Input
-        type="text"
-        value={query}
-        placeholder="Поиск"
-        onChange={(e) => setQuery(e.currentTarget.value)}
-        ref={inputRef}
-      />
-    </Container>
+      {active ? (
+        <input
+          type="text"
+          className={clsx(
+            'rounded',
+            'border border-transparent bg-transparent w-20 transition-width',
+            'focus:outline-none focus:border-accent-500 focus:bg-white focus:w-48',
+            paddings
+          )}
+          value={query}
+          placeholder={placeholderText}
+          onChange={onChange}
+          ref={inputRef}
+        />
+      ) : (
+        <Placeholder>{placeholderText}</Placeholder>
+      )}
+    </div>
   );
 };
-
-export default SearchInput;

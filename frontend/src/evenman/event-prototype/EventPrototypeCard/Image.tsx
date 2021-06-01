@@ -1,6 +1,6 @@
 import { useMutation } from '@apollo/client';
 
-import ImageEditor from '~/components/images/ImageEditor';
+import { ImageEditor } from '~/components/images/ImageEditor';
 import { Row } from '~/frontkit';
 
 import { EvenmanPrototypeSetImageDocument, EventsPrototypeFragment } from '../queries.generated';

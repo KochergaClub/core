@@ -1,7 +1,7 @@
-import { withApollo, NextApolloPage } from '~/apollo';
+import { NextApolloPage, withApollo } from '~/apollo';
+import { AuthContainer } from '~/auth/components/AuthContainer';
+import { CenteredLayout } from '~/auth/components/CenteredLayout';
 import { Page } from '~/components';
-import AuthContainer from '~/auth/components/AuthContainer';
-import CenteredLayout from '~/auth/components/CenteredLayout';
 
 const CheckYourEmailPage: NextApolloPage = () => (
   <Page title="Логин">

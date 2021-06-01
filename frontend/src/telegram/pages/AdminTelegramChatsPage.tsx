@@ -5,7 +5,7 @@ import { MdRefresh } from 'react-icons/md';
 import { useQuery } from '@apollo/client';
 
 import { NextApolloPage, withApollo, withStaff } from '~/apollo';
-import TL02 from '~/blocks/TL02';
+import { TL02 } from '~/blocks/TL02';
 import { ApolloQueryResults, ButtonWithModal, DropdownMenu, PaddedBlock, Page } from '~/components';
 import { Collection, CustomCardListView } from '~/components/collections';
 import { ModalAction, MutationAction } from '~/components/DropdownMenu';

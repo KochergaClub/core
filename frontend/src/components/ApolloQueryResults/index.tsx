@@ -1,7 +1,7 @@
 import { ApolloError } from '@apollo/client';
 
 import Spinner, { Size } from '../Spinner';
-import ErrorCard from './ErrorCard';
+import { ErrorCard } from './ErrorCard';
 
 interface Props<D> {
   loading: boolean;

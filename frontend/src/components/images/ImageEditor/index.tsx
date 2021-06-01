@@ -1,48 +1,22 @@
+import clsx from 'clsx';
 import React, { useCallback, useRef, useState } from 'react';
 import { useDropzone } from 'react-dropzone';
-import styled from 'styled-components';
 
-import ImageBox from '../helpers/ImageBox';
+import { ImageBox } from '../helpers/ImageBox';
 import ViewOverlay from '../helpers/ViewOverlay';
 import Controls from './Controls';
 import { WagtailImage_ForEditorFragment as ImageFragment } from './fragments.generated';
 import { Defaults } from './types';
 import { UploadFromFileModal } from './UploadFromFileModal';
 
-const Placeholder = styled.div`
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  min-width: 240px;
-  min-height: 50px;
-  background-color: #f8f8f8;
-  font-size: 0.7rem;
-`;
-
-const Container = styled.div<{ active: boolean }>`
-  position: relative; /* important for inner z-index elements, e.g. dropdowns */
-  border-width: 2px;
-  border-color: #666;
-  border-style: dashed;
-  border-radius: 5px;
-
-  ${(props) =>
-    props.active
-      ? `
-      border-style: solid;
-      border-color: #6c6;
-      background-color: #eee;
-    `
-      : ''}
-`;
-
-const ControlsContainer = styled.div`
-  position: absolute;
-  bottom: 5px;
-  left: 50%;
-  transform: translate(-50%, 0);
-  z-index: 1; /* transform creates a new stacking context, so this is necessary for inner Dropdown */
-`;
+const Placeholder: React.FC = ({ children }) => (
+  <div
+    className="flex justify-center items-center bg-gray-100 text-xs"
+    style={{ minWidth: 240, minHeight: 50 }} // FIXME
+  >
+    {children}
+  </div>
+);
 
 // via https://gist.github.com/gragland/a32d08580b7e0604ff02cb069826ca2f
 const useHover = (): [(node: HTMLDivElement) => void, boolean] => {
@@ -86,7 +60,11 @@ export type Props = {
   onChange: (id: string) => Promise<unknown>;
 };
 
-const ImageEditor: React.FC<Props> = ({ image, onChange, defaults = {} }) => {
+export const ImageEditor: React.FC<Props> = ({
+  image,
+  onChange,
+  defaults = {},
+}) => {
   const [dropFile, setDropFile] = useState<File | undefined>(undefined);
 
   const closeDropModal = () => {
@@ -109,7 +87,15 @@ const ImageEditor: React.FC<Props> = ({ image, onChange, defaults = {} }) => {
   const showControls = isHovered || controlsExpanded;
 
   return (
-    <Container {...getRootProps()} active={isDragActive} ref={hoverRef}>
+    <div
+      className={clsx(
+        'relative' /* important for inner z-index elements, e.g. dropdowns */,
+        'border-2 rounded',
+        isDragActive ? 'border-primary-500' : 'border-dashed border-gray-500'
+      )}
+      {...getRootProps()}
+      ref={hoverRef}
+    >
       <ImageBox
         src={image?.rendition.url}
         src_x2={image?.rendition_x2.url}
@@ -118,14 +104,19 @@ const ImageEditor: React.FC<Props> = ({ image, onChange, defaults = {} }) => {
       >
         {image && <ViewOverlay link={`/wagtail/images/${image.id}/`} />}
         <input {...getInputProps()} />
-        <ControlsContainer className="controls-container">
+        <div
+          className={clsx(
+            'absolute bottom-1 left-1/2 transform -translate-x-1/2',
+            'z-10' /* transform creates a new stacking context, so this is necessary for inner Dropdown */
+          )}
+        >
           <Controls
             openFilePicker={open}
             setImageId={onChange}
             defaults={defaults}
             onExpandChange={setControlsExpanded}
           />
-        </ControlsContainer>
+        </div>
       </ImageBox>
       {dropFile && (
         <UploadFromFileModal
@@ -135,8 +126,6 @@ const ImageEditor: React.FC<Props> = ({ image, onChange, defaults = {} }) => {
           defaults={defaults}
         />
       )}
-    </Container>
+    </div>
   );
 };
-
-export default ImageEditor;

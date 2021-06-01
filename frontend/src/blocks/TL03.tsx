@@ -5,13 +5,11 @@ interface Props {
   grey?: boolean;
 }
 
-const TL03: React.FC<Props> = ({ title, grey, children }) => {
+export const TL03: React.FC<Props> = ({ title, grey, children }) => {
   return (
     <Container grey={grey}>
-      <TLHeader size="36px">{title}</TLHeader>
+      <TLHeader size="normal">{title}</TLHeader>
       {children && <TLDescription>{children}</TLDescription>}
     </Container>
   );
 };
-
-export default TL03;

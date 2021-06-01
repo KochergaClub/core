@@ -1,8 +1,8 @@
 import * as React from 'react';
 import styled, { ThemeProvider } from 'styled-components';
 
-import { fonts } from '../';
-import * as colors from '../colors';
+import { fonts } from '../..';
+import * as colors from '../../colors';
 
 export type Props = {
   size?: 'tiny' | 'small' | 'normal' | 'big';

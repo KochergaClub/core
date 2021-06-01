@@ -1,16 +1,8 @@
-import styled, { css } from 'styled-components';
+import clsx from 'clsx';
+import { forwardRef } from 'react';
 
-import * as colors from '../colors';
-
-export const A_css = css`
-  color: ${colors.link};
-  text-decoration: none;
-
-  &:hover {
-    text-decoration: underline;
+export const A = forwardRef<HTMLAnchorElement, JSX.IntrinsicElements['a']>(
+  function A({ className, ...rest }, ref) {
+    return <a ref={ref} className={clsx('link', className)} {...rest} />;
   }
-`;
-
-export const A = styled.a`
-  ${A_css};
-`;
+);

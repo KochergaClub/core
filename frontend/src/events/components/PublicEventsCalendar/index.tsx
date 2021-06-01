@@ -1,6 +1,8 @@
-import { useCallback, useEffect, useRef, useState } from 'react';
-import styled from 'styled-components';
 import '@fullcalendar/react'; // side effects! please be careful with auto-sorting imports
+
+import { isPast, parseISO } from 'date-fns';
+import Router from 'next/router';
+import { useCallback, useEffect, useRef, useState } from 'react';
 
 import { useApolloClient, useQuery } from '@apollo/client';
 import { EventClickArg } from '@fullcalendar/core';
@@ -8,63 +10,19 @@ import ruLocale from '@fullcalendar/core/locales/ru';
 import dayGridPlugin from '@fullcalendar/daygrid';
 import listPlugin from '@fullcalendar/list';
 import FullCalendar from '@fullcalendar/react';
-import { isPast, parseISO } from 'date-fns';
-import Router from 'next/router';
+
 import { formatDate } from '~/common/utils';
 import { AlertCard, ApolloQueryResults, PaddedBlock } from '~/components';
-import { A, colors, deviceMediaQueries } from '~/frontkit';
+import { A } from '~/frontkit';
+
 import {
   EventsPublicGoogleCalendarDocument,
   PublicEventsForCalendarDocument,
-} from '../queries.generated';
-import { publicEventRoute } from '../routes';
+} from '../../queries.generated';
+import { publicEventRoute } from '../../routes';
+import styles from './index.module.scss';
 
-const Container = styled.div`
-  &&& {
-    .fc-event {
-      font-size: 12px;
-      cursor: pointer;
-      background-color: ${colors.primary[500]};
-      padding: 0 1px;
-      color: white;
-    }
-    .fc-event-time {
-      font-weight: bold;
-    }
-    .fc-event-title {
-      font-weight: normal;
-    }
-
-    .fc-kocherga-ratio {
-      background-color: ${colors.accent[500]};
-    }
-    .fc-kocherga-past {
-      background-color: ${colors.primary[300]};
-    }
-    .fc-kocherga-past.fc-kocherga-ratio {
-      background-color: ${colors.accent[300]};
-    }
-
-    .fc-daygrid-event-dot {
-      display: none;
-    }
-    .fc-list-event-dot {
-      display: none;
-    }
-
-    .fc-toolbar-title {
-      font-size: 1.2em;
-    }
-
-    ${deviceMediaQueries.mobile(`
-    .fc-toolbar {
-      flex-direction: column;
-    }
-    `)}
-  }
-`;
-
-const PublicEventsCalendar = () => {
+const PublicEventsCalendar: React.FC = () => {
   const googleCalendarQueryResults = useQuery(
     EventsPublicGoogleCalendarDocument
   );
@@ -143,7 +101,7 @@ const PublicEventsCalendar = () => {
 
   return (
     <PaddedBlock width="max">
-      <Container>
+      <div className={styles.calendar}>
         <FullCalendar
           ref={calendarRef}
           height="auto"
@@ -166,7 +124,7 @@ const PublicEventsCalendar = () => {
           }}
           eventClick={navigate}
         />
-      </Container>
+      </div>
       <ApolloQueryResults {...googleCalendarQueryResults}>
         {({ data: { eventsPublicGoogleCalendar: gCalendar } }) => {
           if (!gCalendar) {

@@ -1,7 +1,6 @@
 import React, { useCallback, useState } from 'react';
 import { Controller, FieldError, useForm } from 'react-hook-form';
 import Select from 'react-select';
-import styled from 'styled-components';
 
 import { useMutation } from '@apollo/client';
 
@@ -11,7 +10,7 @@ import {
 } from '~/components/forms';
 import { A, Button, Column, ControlsFooter, Label, Modal, Row } from '~/frontkit';
 
-import PromocodeField from './PromocodeField';
+import { PromocodeField } from './PromocodeField';
 import {
     RatioCreateOrderDocument, RatioOrder_CreatedFragment, RatioTicketType_ForPickerFragment
 } from './queries.generated';
@@ -47,14 +46,6 @@ const ticketTypeToSelectOption = (
     value: ticketType,
     label: ticketType.name,
   } as SelectOptionType);
-
-const Container = styled.div`
-  max-width: 490px;
-  box-sizing: border-box; // OrderModal is used with tilda which sets box-sizing: content-box;
-  input {
-    box-sizing: border-box;
-  }
-`;
 
 const FormOrderModal: React.FC<Props> = ({
   close,
@@ -141,7 +132,7 @@ const FormOrderModal: React.FC<Props> = ({
       <Modal.Header close={close}>Регистрация</Modal.Header>
       <form onSubmit={form.handleSubmit(postForm)}>
         <Modal.Body {...hotkeys} ref={focus}>
-          <Container>
+          <div className="max-w-lg revert-tilda-box-sizing">
             <Column stretch gutter={16}>
               <FieldContainer
                 title="Выберите вид билета"
@@ -238,7 +229,7 @@ const FormOrderModal: React.FC<Props> = ({
                 <FieldErrorMessage error={form.formState.errors.terms} />
               </div>
             </Column>
-          </Container>
+          </div>
         </Modal.Body>
         <Modal.Footer>
           <ControlsFooter>

@@ -1,65 +1,31 @@
 import { useCallback, useEffect, useState } from 'react';
 import { FaEllipsisH } from 'react-icons/fa';
 import { usePopper } from 'react-popper';
-import styled from 'styled-components';
 
 import { Placement } from '@popperjs/core';
 
 import { useExpandable } from '~/common/hooks';
 import { FloatingList } from '~/components';
-import { colors, fonts } from '~/frontkit';
 
 import { DropdownMenuContext, ModalCreator } from './contexts';
 
-export { default as Action } from './Action';
-export { default as LinkAction } from './LinkAction';
-export { default as ModalAction } from './ModalAction';
+export { Action } from './Action';
+export { LinkAction } from './LinkAction';
+export { ModalAction } from './ModalAction';
 export { MutationAction } from './MutationAction';
-export { default as NextLinkAction } from './NextLinkAction';
+export { NextLinkAction } from './NextLinkAction';
 export { SmartMutationAction } from './SmartMutationAction';
-
-const Container = styled.div`
-  white-space: nowrap;
-`;
-
-const OuterWrapper = styled.div`
-  cursor: pointer;
-`;
-
-const DropdownButtonContainer = styled.div`
-  border: 1px solid ${colors.grey[200]};
-  border-radius: 4px;
-  padding: 4px;
-  line-height: 0;
-  background-color: white;
-
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-
-  > div {
-    font-size: ${fonts.sizes.XS};
-    text-transform: uppercase;
-    letter-spacing: 0.4px;
-    font-weight: 500;
-    color: ${colors.grey[600]};
-  }
-
-  > * + * {
-    margin-left: 8px;
-  }
-
-  &:hover {
-    border-color: ${colors.grey[300]};
-  }
-`;
 
 const DropdownButton: React.FC<{ title: string | null }> = ({ title }) => {
   return (
-    <DropdownButtonContainer>
-      {title ? <div>{title}</div> : null}
-      <FaEllipsisH color={colors.grey[500]} />
-    </DropdownButtonContainer>
+    <div className="flex items-center border border-gray-200 hover:border-gray-300 rounded p-1 bg-white">
+      {title ? (
+        <div className="text-xs uppercase tracking-wide font-medium text-gray-500 mr-2">
+          {title}
+        </div>
+      ) : null}
+      <FaEllipsisH className="text-gray-500" />
+    </div>
   );
 };
 
@@ -122,8 +88,9 @@ const DropdownMenu: React.FC<Props> = ({
     <>
       {modalWrapper ? modalWrapper.modal({ close: closeModal }) : null}
       <DropdownMenuContext.Provider value={{ close: unexpand, setModal }}>
-        <Container ref={ref}>
-          <OuterWrapper
+        <div className="whitespace-nowrap" ref={ref}>
+          <div
+            className="cursor-pointer"
             onClick={flipExpandWithPrevent}
             ref={setReferenceElement}
           >
@@ -132,7 +99,7 @@ const DropdownMenu: React.FC<Props> = ({
             ) : (
               <DropdownButton title={title || null} />
             )}
-          </OuterWrapper>
+          </div>
           <FloatingList
             expanded={expanded}
             ref={setPopperElement}
@@ -141,7 +108,7 @@ const DropdownMenu: React.FC<Props> = ({
           >
             {children}
           </FloatingList>
-        </Container>
+        </div>
       </DropdownMenuContext.Provider>
     </>
   );

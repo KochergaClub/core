@@ -1,19 +1,13 @@
-import { useCallback, useEffect, useRef, useState } from 'react';
-import styled from 'styled-components';
+import React, { useCallback, useEffect, useRef, useState } from 'react';
 
 import { useMutation } from '@apollo/client';
 
 import { useCommonHotkeys } from '~/common/hooks';
-import { Button, Column, fonts, Input, useNotification } from '~/frontkit';
+import { FieldContainer } from '~/components/forms';
+import { Button, Input, useNotification } from '~/frontkit';
 
 import { LoginDocument, SendMagicLinkDocument } from '../queries.generated';
-import AuthContainer from './AuthContainer';
-
-const SmallNote = styled.small`
-  font-size: ${fonts.sizes.XS};
-  line-height: 1.3;
-  margin-top: 2px;
-`;
+import { AuthContainer } from './AuthContainer';
 
 interface Props {
   onLogin: () => void;
@@ -108,38 +102,38 @@ const AuthForm: React.FC<Props> = (props) => {
     onEnter: submit,
   });
   return (
-    <AuthContainer {...hotkeys}>
-      <Column stretch gutter={16}>
-        <Column stretch gutter={0}>
-          <label htmlFor="id_email">Email:</label>
+    <AuthContainer>
+      <div className="flex flex-col items-stretch space-y-4" {...hotkeys}>
+        <FieldContainer title="Email:">
           <Input
             type="email"
             name="email"
+            scale="big"
             maxLength={255}
             required
-            id="id_email"
             ref={emailRef}
             disabled={acting}
             value={email}
             onChange={(e) => setEmail(e.currentTarget.value)}
           />
-        </Column>
-        <Column stretch gutter={0}>
-          <label htmlFor="id_password">Пароль:</label>
-          <Input
-            type="password"
-            name="password"
-            maxLength={255}
-            id="id_password"
-            disabled={acting}
-            value={password}
-            onChange={(e) => setPassword(e.currentTarget.value)}
-          />
-          <SmallNote>
+        </FieldContainer>
+        <div>
+          <FieldContainer title="Пароль:">
+            <Input
+              type="password"
+              name="password"
+              scale="big"
+              maxLength={255}
+              disabled={acting}
+              value={password}
+              onChange={(e) => setPassword(e.currentTarget.value)}
+            />
+          </FieldContainer>
+          <small className="text-xs mt-0.5">
             (если вы оставите это поле пустым, ссылка для логина придёт на
             почту)
-          </SmallNote>
-        </Column>
+          </small>
+        </div>
         <Button
           type="submit"
           kind="primary"
@@ -149,7 +143,7 @@ const AuthForm: React.FC<Props> = (props) => {
         >
           Войти
         </Button>
-      </Column>
+      </div>
     </AuthContainer>
   );
 };

@@ -1,17 +1,4 @@
-import styled from 'styled-components';
-
-const Container = styled.div`
-  max-width: 1200px;
-  margin: 0 auto;
-`;
-
-const MapIFrame = styled.iframe`
-  width: 100%;
-  height: 90vh;
-  border: none;
-`;
-
-const Map: React.FC = () => {
+export const Map: React.FC = () => {
   // could be moved to config but doesn't change often anyway
   const contacts = {
     map: {
@@ -22,13 +9,12 @@ const Map: React.FC = () => {
   };
 
   return (
-    <Container>
-      <MapIFrame
+    <div className="max-w-7xl mx-auto">
+      <iframe
+        className="w-full h-screen border-0"
         src={`https://www.google.com/maps/embed/v1/place?center=${contacts.map.lat},${contacts.map.lng}&zoom=16&key=${process.env.NEXT_PUBLIC_GOOGLE_MAPS_KEY}&q=place_id:${contacts.googlePlaceId}`}
         allowFullScreen
       />
-    </Container>
+    </div>
   );
 };
-
-export default Map;

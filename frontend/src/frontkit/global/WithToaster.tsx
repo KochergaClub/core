@@ -61,7 +61,7 @@ const Toast: React.FC<{ id: string }> = ({ id, children }) => {
 
   return (
     <motion.div
-      className="bg-accent-100 py-2 px-4 cursor-pointer shadow-2xl rounded break-words"
+      className="bg-accent-100 py-2 px-4 cursor-pointer shadow-toast rounded break-words"
       initial={{ scale: 0.5 }}
       animate={{ scale: 1 }}
       onClick={dismissCb}

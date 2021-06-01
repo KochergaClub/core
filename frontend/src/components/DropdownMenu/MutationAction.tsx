@@ -3,8 +3,8 @@ import React, { useCallback } from 'react';
 import { TypedDocumentNode, useMutation } from '@apollo/client';
 
 import { ConfirmModal } from '../ConfirmModal';
-import Action from './Action';
-import ModalAction from './ModalAction';
+import { Action } from './Action';
+import { ModalAction } from './ModalAction';
 import { CommonActionProps } from './types';
 
 interface Props<V extends Record<string, unknown>> extends CommonActionProps {

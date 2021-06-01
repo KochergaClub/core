@@ -9,7 +9,7 @@ const Item: React.FC<ItemProps> = ({ select, selected, children }) => {
   return (
     <li
       className={clsx(
-        'cursor-pointer px-2.5 py-2 font-bold text-sm uppercase border-0 border-solid',
+        'cursor-pointer px-2.5 py-2 font-bold text-sm uppercase',
         selected
           ? 'border-b-4 border-gray-400'
           : 'hover:border-b-4 hover:border-gray-300'

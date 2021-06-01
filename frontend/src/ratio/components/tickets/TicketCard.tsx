@@ -4,7 +4,7 @@ import React from 'react';
 import { FaEdit, FaRegMoneyBillAlt, FaTicketAlt, FaUserAlt } from 'react-icons/fa';
 import { MdEmail } from 'react-icons/md';
 
-import { DropdownMenu, HumanizedDateTime } from '~/components';
+import { DropdownMenu, HumanizedDateTime, RowWithIcon } from '~/components';
 import { Card, CardSection } from '~/components/cards';
 import { ModalAction } from '~/components/DropdownMenu';
 import { MutationModalButton } from '~/components/forms';
@@ -12,7 +12,6 @@ import NotionIcon from '~/components/icons/NotionIcon';
 import { A, Badge, Column, Row } from '~/frontkit';
 import { adminTicketRoute, adminTrainingRoute } from '~/ratio/routes';
 
-import RowWithIcon from '../../../components/RowWithIcon';
 import { RatioPaymentAddDocument, RatioTicketFragment } from '../../queries.generated';
 import PaymentItem from '../PaymentItem';
 import { EditTicketModal } from './EditTicketModal';

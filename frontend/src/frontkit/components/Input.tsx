@@ -5,6 +5,7 @@ import * as fonts from '../fonts';
 
 export interface Props {
   scale?: 'normal' | 'big'; // not `size` because `size` is a native <input> attribute
+  wide?: boolean;
 }
 
 export const Input = styled.input<Props>`
@@ -14,6 +15,8 @@ export const Input = styled.input<Props>`
   line-height: 1;
   font-size: ${(props) =>
     props.scale === 'big' ? fonts.sizes.XL2 : fonts.sizes.BASE};
+
+  ${(props) => (props.wide ? 'width: 100%;' : '')}
 
   &:focus {
     border: solid 2px ${colors.primary[500]};

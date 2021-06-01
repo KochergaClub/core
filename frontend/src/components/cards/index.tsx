@@ -1,20 +1,30 @@
-import styled from 'styled-components';
+import clsx from 'clsx';
 
-import { colors, Column, Label } from '~/frontkit';
+import { Column, Label } from '~/frontkit';
 
 interface CardProps {
   space?: 'default' | 'large';
+  muted?: boolean;
 }
 
-export const Card = styled.div<CardProps>`
-  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
-  border-radius: 4px;
-  padding: ${({ space = 'default' }) =>
-    ({
-      default: '12px 20px',
-      large: '20px 32px',
-    }[space])};
-`;
+export const Card: React.FC<CardProps> = ({
+  space = 'default',
+  muted,
+  children,
+}) => (
+  <div
+    className={clsx(
+      'shadow-card rounded',
+      {
+        default: 'py-3 px-5',
+        large: 'py-5 px-8',
+      }[space],
+      muted && 'text-gray-600 bg-gray-100'
+    )}
+  >
+    {children}
+  </div>
+);
 
 export const CardHeader: React.FC = ({ children }) => (
   <header>
@@ -28,16 +38,6 @@ export const CardList: React.FC = ({ children }) => (
   </Column>
 );
 
-const SectionHr = styled.hr`
-  border: 0;
-  width: 100%;
-  background: ${colors.grey[200]};
-
-  margin-top: 4px;
-  margin-bottom: 16px;
-  height: 1px;
-`;
-
 export const CardSection: React.FC<{ title: string }> = ({
   title,
   children,
@@ -45,7 +45,7 @@ export const CardSection: React.FC<{ title: string }> = ({
   return (
     <section>
       <Label>{title}</Label>
-      <SectionHr />
+      <hr className="hr mt-1 mb-4" />
       {children}
     </section>
   );

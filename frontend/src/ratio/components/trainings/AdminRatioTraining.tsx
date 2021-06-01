@@ -4,7 +4,7 @@ import React from 'react';
 
 import { useQuery } from '@apollo/client';
 
-import TL03 from '~/blocks/TL03';
+import { TL03 } from '~/blocks/TL03';
 import { ApolloQueryResults, PaddedBlock, Page } from '~/components';
 import { Column, RowNav } from '~/frontkit';
 import { adminTrainingTabRoute } from '~/ratio/routes';

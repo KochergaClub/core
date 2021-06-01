@@ -1,5 +1,4 @@
 import React, { useCallback, useState } from 'react';
-import styled from 'styled-components';
 
 import { useQuery } from '@apollo/client';
 
@@ -22,15 +21,13 @@ type Props = OrderParams & {
   close: () => void;
 };
 
-const SpinnerContainer = styled.div`
-  min-height: 300px;
-  text-align: center;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-`;
+const SpinnerContainer: React.FC = ({ children }) => (
+  <div className="flex text-center justify-center items-center min-h-80">
+    {children}
+  </div>
+);
 
-const OrderModal: React.FC<Props> = ({
+export const OrderModal: React.FC<Props> = ({
   ticketTypeId,
   trainingType,
   showNameFields = true,
@@ -92,5 +89,3 @@ const OrderModal: React.FC<Props> = ({
     );
   }
 };
-
-export default OrderModal;

@@ -2,7 +2,7 @@ import Link from 'next/link';
 import React from 'react';
 import styled from 'styled-components';
 
-import HeroHeader from '~/components/HeroHeader';
+import { HeroHeader } from '~/components/HeroHeader';
 import TelegramIcon from '~/components/icons/TelegramIcon';
 import { colors, Column, deviceMediaQueries, fonts, LabelA, LabelDiv, Row } from '~/frontkit';
 import { projectsListRoute } from '~/projects/routes';

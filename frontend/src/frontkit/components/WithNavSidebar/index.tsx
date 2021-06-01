@@ -40,7 +40,7 @@ const Sidebar: React.FC<Props> = (props) => {
     <div>
       <header>
         <a
-          className="block px-6 py-4 border-0 border-b border-solid border-gray-300 font-bold no-underline text-gray-600 hover:text-primary-500"
+          className="block px-6 py-4 border-b border-gray-300 font-bold no-underline text-gray-600 hover:text-primary-500"
           href={header.href}
           onClick={(e: React.SyntheticEvent) => {
             e.preventDefault();

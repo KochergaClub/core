@@ -1,6 +1,6 @@
 import styled from 'styled-components';
 
-import { colors, RichText } from '~/frontkit';
+import { colors } from '~/frontkit';
 
 export const Header = styled.header`
   font-weight: bold;
@@ -14,24 +14,23 @@ export const Header = styled.header`
 export const IconLink = styled.a`
   display: flex; // helps with vertical positioning
   color: ${colors.grey[400]};
-  /* font-size: 0.9em; */
   text-decoration: none;
   &:hover {
     color: black;
   }
 `;
 
-export const UserText = styled(RichText)`
-  font-family: 'Courier New', Courier, monospace;
-`;
+export const UserText: React.FC = ({ children }) => (
+  <div className="font-mono">{children}</div>
+);
 
-export const UserSpan = styled.span`
-  font-family: 'Courier New', Courier, monospace;
-`;
+export const UserSpan: React.FC = ({ children }) => (
+  <span className="font-mono">{children}</span>
+);
 
-export const MutedSpan = styled.span`
-  color: ${colors.grey[600]};
-`;
+export const MutedSpan: React.FC = ({ children }) => (
+  <span className="text-gray-400">{children}</span>
+);
 
 export const NumberBadge = styled.div`
   background-color: ${colors.primary[300]};

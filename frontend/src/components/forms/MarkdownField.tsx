@@ -2,7 +2,6 @@ import autosize from 'autosize';
 import get from 'lodash/get';
 import React from 'react';
 import { FieldError, FieldPath, FieldValues, UseFormReturn } from 'react-hook-form';
-import styled from 'styled-components';
 
 import { FieldContainer } from './FieldContainer';
 
@@ -14,10 +13,6 @@ interface Props<TFieldValues extends FieldValues> {
   required?: boolean;
   defaultValue?: string;
 }
-
-const Textarea = styled.textarea`
-  padding: 8px;
-`;
 
 export const MarkdownField = <T extends FieldValues>({
   name,
@@ -35,7 +30,8 @@ export const MarkdownField = <T extends FieldValues>({
       title={title}
       error={get(form.formState.errors, name) as FieldError}
     >
-      <Textarea
+      <textarea
+        className="p-2"
         placeholder={placeholder}
         defaultValue={defaultValue}
         onKeyDown={(e) => {

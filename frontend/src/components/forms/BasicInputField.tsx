@@ -2,7 +2,7 @@ import get from 'lodash/get';
 import React from 'react';
 import { FieldError, FieldPath, FieldValues, UseFormReturn } from 'react-hook-form';
 
-import { WideInput } from '~/components';
+import { Input } from '~/frontkit';
 
 import { FieldContainer } from './FieldContainer';
 
@@ -30,9 +30,10 @@ export const BasicInputField = <T extends Record<string, unknown>>({
       title={title}
       error={get(form.formState.errors, name) as FieldError}
     >
-      <WideInput
+      <Input
         type={type}
         placeholder={placeholder}
+        wide
         defaultValue={defaultValue}
         {...form.register(name, {
           required,

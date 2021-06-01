@@ -10,7 +10,7 @@ interface Props extends CommonActionProps {
   children?: null;
 }
 
-const NextLinkAction: React.FC<Props> = ({ href, icon, title }) => {
+export const NextLinkAction: React.FC<Props> = ({ href, icon, title }) => {
   return (
     <Link href={href} passHref>
       <LinkActionA>
@@ -19,5 +19,3 @@ const NextLinkAction: React.FC<Props> = ({ href, icon, title }) => {
     </Link>
   );
 };
-
-export default NextLinkAction;

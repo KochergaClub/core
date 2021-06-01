@@ -1,8 +1,6 @@
-import styled from 'styled-components';
 import { SearchQuery } from '../queries.generated';
-
-import PageResult from './PageResult';
 import EventResult from './EventResult';
+import PageResult from './PageResult';
 
 const AnyResult: React.FC<{
   item: SearchQuery['search']['results'][0];
@@ -17,26 +15,20 @@ const AnyResult: React.FC<{
   }
 };
 
-const Container = styled.div`
-  min-width: 200px;
-`;
-
 interface Props {
   results?: SearchQuery;
 }
 
-const SearchResults: React.FC<Props> = ({ results }) => {
+export const SearchResults: React.FC<Props> = ({ results }) => {
   if (!results) {
     return null;
   }
 
   return (
-    <Container>
+    <div className="min-w-64">
       {results.search.results.map((item, i) => (
         <AnyResult key={i} item={item} />
       ))}
-    </Container>
+    </div>
   );
 };
-
-export default SearchResults;

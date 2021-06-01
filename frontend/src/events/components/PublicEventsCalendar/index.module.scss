@@ -1,0 +1,56 @@
+.calendar.calendar.calendar {
+  :global {
+    .fc-event {
+      font-size: 12px;
+      cursor: pointer;
+      padding: 0 1px;
+      color: white;
+    }
+    .fc-event-time {
+      font-weight: bold;
+    }
+    .fc-event-title {
+      font-weight: normal;
+    }
+
+    .fc-event {
+      @apply bg-primary-500;
+      &:hover td {
+        @apply bg-primary-700;
+      }
+    }
+    .fc-kocherga-ratio {
+      @apply bg-accent-500;
+      &:hover td {
+        @apply bg-accent-700;
+      }
+    }
+    .fc-kocherga-past {
+      @apply bg-primary-300;
+      &:hover td {
+        @apply bg-primary-500;
+      }
+    }
+    .fc-kocherga-past.fc-kocherga-ratio {
+      @apply bg-accent-300;
+      &:hover td {
+        @apply bg-accent-500;
+      }
+    }
+
+    .fc-daygrid-event-dot {
+      display: none;
+    }
+    .fc-list-event-dot {
+      display: none;
+    }
+
+    .fc-toolbar-title {
+      font-size: 1.2em;
+    }
+
+    .fc-toolbar {
+      @apply flex-col items-start sm:flex-row sm:items-center;
+    }
+  }
+}

@@ -1,17 +1,10 @@
-import styled from 'styled-components';
-
-import { RatioSectionPageFragment as Props } from '../fragments.generated';
-
 import RatioWagtailBlocks from '../../components/RatioWagtailBlocks';
-
-const Header = styled.h1`
-  text-align: center;
-`;
+import { RatioSectionPageFragment as Props } from '../fragments.generated';
 
 export default function Main(props: Props) {
   return (
     <div>
-      <Header>{props.title}</Header>
+      <h1 className="text-center">{props.title}</h1>
       <RatioWagtailBlocks blocks={props.body} />
     </div>
   );

@@ -1,7 +1,6 @@
 import { AnimatePresence, motion } from 'framer-motion';
 
 import { Card, CardList } from '~/components/cards';
-import MutedCard from '~/components/MutedCard';
 
 import { AnyViewProps } from './types';
 
@@ -16,12 +15,6 @@ function CardListView<I>(props: Props<I>) {
     <CardList>
       <AnimatePresence initial={false}>
         {props.items.map((item, i) => {
-          const Wrapper = props.isMuted
-            ? props.isMuted(item)
-              ? MutedCard
-              : Card
-            : Card;
-
           return (
             <motion.div
               initial={{ opacity: 0, scale: 0.5 }}
@@ -30,7 +23,9 @@ function CardListView<I>(props: Props<I>) {
               layout
               key={props.item2key ? props.item2key(item) : i}
             >
-              <Wrapper>{props.renderItem(item)}</Wrapper>
+              <Card muted={props.isMuted?.(item)}>
+                {props.renderItem(item)}
+              </Card>
             </motion.div>
           );
         })}

@@ -1,6 +1,5 @@
+import { PaddedBlock } from '~/components';
 import { RichText } from '~/frontkit';
-
-import PaddedBlock from '~/components/PaddedBlock';
 
 interface Props {
   html: string;

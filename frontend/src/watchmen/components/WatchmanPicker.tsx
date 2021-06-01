@@ -2,7 +2,7 @@ import { useCallback, useMemo } from 'react';
 
 import { useQuery } from '@apollo/client';
 
-import Picker from '~/components/Picker';
+import { Picker } from '~/components/Picker';
 
 import {
     WatchmanForPickerFragment, WatchmenWatchmenListForPickerDocument
@@ -51,15 +51,15 @@ const WatchmanPicker: React.FC<Props> = ({
     const { watchmen } = queryResults.data;
 
     const watchmanItems: WatchmanItem[] = watchmen
-      .filter(w => w.priority <= 2)
+      .filter((w) => w.priority <= 2)
       .sort((a, b) => a.priority - b.priority)
-      .map(watchman => ({
+      .map((watchman) => ({
         type: 'watchman' as const,
         watchman,
       }));
 
     const extraItems: ExtraItem[] = extra
-      ? extra.map(value => ({
+      ? extra.map((value) => ({
           type: 'extra' as const,
           extra: value,
         }))

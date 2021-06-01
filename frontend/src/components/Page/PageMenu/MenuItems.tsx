@@ -96,7 +96,7 @@ const MenuExpandableItem: React.FC<{ item: ExpandableItem }> = ({ item }) => {
         {revealed && (
           <motion.ul
             className={clsx(
-              'absolute list-none px-0 py-1 z-50 overflow-hidden border border-solid border-white',
+              'absolute list-none px-0 py-1 z-50 overflow-hidden border border-white',
               kind2color[kind]
             )}
             initial={{ opacity: 0 }}

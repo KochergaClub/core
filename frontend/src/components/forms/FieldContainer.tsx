@@ -6,7 +6,7 @@ import { Column, LabelDiv, Row } from '~/frontkit';
 import { FieldErrorMessage } from './FieldErrorMessage';
 
 interface Props {
-  error: FieldError | undefined;
+  error?: FieldError | undefined;
   title: string;
   stretch?: boolean;
 }

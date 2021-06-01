@@ -1,11 +1,9 @@
 import { differenceInCalendarDays, parseISO } from 'date-fns';
 
+import { AlertCard } from '~/components';
 import { RichText } from '~/frontkit';
 
-import AlertCard from '~/components/AlertCard';
-
 import { ProjectPage_SummaryForEventFragment } from './queries.generated';
-
 import { CommonProps } from './types';
 
 const Wrapper: React.FC = ({ children }) => (

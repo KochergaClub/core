@@ -1,15 +1,12 @@
-import styled from 'styled-components';
-
 import { Button, Row } from '~/frontkit';
-
-const Input = styled.input`
-  padding: 12px 16px;
-  border: none;
-`;
 
 const Mailchimp = () => (
   <Row stretch gutter={12}>
-    <Input type="email" placeholder="Ваш E-mail" />
+    <input
+      className="px-4 py-3 border-0"
+      type="email"
+      placeholder="Ваш E-mail"
+    />
     <Button>Send</Button>
   </Row>
 );

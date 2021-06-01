@@ -3,10 +3,10 @@ import { useEffect } from 'react';
 import { useMutation } from '@apollo/client';
 
 import { NextApolloPage, withApollo } from '~/apollo';
-import AuthContainer from '~/auth/components/AuthContainer';
+import { AuthContainer } from '~/auth/components/AuthContainer';
 import { Page } from '~/components';
 
-import CenteredLayout from '../components/CenteredLayout';
+import { CenteredLayout } from '../components/CenteredLayout';
 import { TokenLoginDocument } from '../queries.generated';
 
 interface Props {

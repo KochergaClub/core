@@ -1,31 +1,3 @@
-import styled from 'styled-components';
-
-const PickerContainer = styled.div`
-  position: absolute;
-  top: 2em;
-  border: 1px solid #888;
-
-  box-shadow: 2px 2px 2px rgba(0, 0, 0, 0.3);
-  user-select: none;
-
-  margin-left: 4px;
-  min-width: 100%;
-  z-index: 10;
-  background-color: white;
-`;
-
-const PickerItemContainer = styled.div`
-  cursor: pointer;
-  color: ${props => (props.theme.color === 'dark' ? 'white' : 'black')};
-
-  > div {
-    padding: 0 4px;
-    &:hover {
-      background-color: rgba(0, 0, 0, 0.3);
-    }
-  }
-`;
-
 interface Props<T> {
   loading?: boolean;
   picked: (item: T) => void;
@@ -42,16 +14,20 @@ interface ItemProps {
 
 const PickerItem = ({ text, color, picked }: ItemProps) => {
   return (
-    <PickerItemContainer style={{ backgroundColor: color }} onClick={picked}>
-      <div>{text}</div>
-    </PickerItemContainer>
+    <div
+      className="cursor-pointer px-4 hover:filter hover:brightness-90"
+      style={{ backgroundColor: color }}
+      onClick={picked}
+    >
+      {text}
+    </div>
   );
 };
 
-function Picker<T>(props: Props<T>) {
+export function Picker<T>(props: Props<T>) {
   const { loading, items, item2text, item2color } = props;
   return (
-    <PickerContainer>
+    <div className="absolute t-8 ml-1 min-w-full z-10 shadow-floating select-none">
       {loading ? (
         <div>loading...</div>
       ) : (
@@ -64,8 +40,6 @@ function Picker<T>(props: Props<T>) {
           />
         ))
       )}
-    </PickerContainer>
+    </div>
   );
 }
-
-export default Picker;

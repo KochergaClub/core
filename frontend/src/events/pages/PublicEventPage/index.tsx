@@ -5,7 +5,7 @@ import React, { useRef } from 'react';
 import { useQuery } from '@apollo/client';
 
 import { NextApolloPage, withApollo } from '~/apollo';
-import TL03 from '~/blocks/TL03';
+import { TL03 } from '~/blocks/TL03';
 import { formatDate, timezone } from '~/common/utils';
 import { ApolloQueryResults, Markdown, PaddedBlock, Page } from '~/components';
 import ErrorBlock from '~/error-pages/ErrorBlock';
@@ -14,7 +14,7 @@ import AnyRegistration from './AnyRegistration';
 import EventAnnouncements from './EventAnnouncements';
 import EventHeroBlock from './EventHeroBlock';
 import EventToCalendar from './EventToCalendar';
-import Map from './Map';
+import { Map } from './Map';
 import ProjectInfo from './ProjectInfo';
 import { GetPublicEventDocument } from './queries.generated';
 

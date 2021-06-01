@@ -5,7 +5,7 @@ import { Controller, FieldError, FieldPath, FieldValues, UseFormReturn } from 'r
 import { useLazyQuery } from '@apollo/client';
 
 import { ApolloQueryResults } from '~/components';
-import ImageEditor from '~/components/images/ImageEditor';
+import { ImageEditor } from '~/components/images/ImageEditor';
 import { Row } from '~/frontkit';
 
 import { FieldContainer } from '../FieldContainer';

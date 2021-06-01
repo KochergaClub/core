@@ -1,4 +1,4 @@
-import ImageBox from './helpers/ImageBox';
+import { ImageBox } from './helpers/ImageBox';
 import ViewOverlay from './helpers/ViewOverlay';
 
 interface Props {

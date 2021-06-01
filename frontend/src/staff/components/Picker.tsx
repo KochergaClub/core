@@ -1,6 +1,6 @@
 import { useCallback, useMemo } from 'react';
 
-import BasicPicker from '~/components/Picker';
+import { Picker as BasicPicker } from '~/components/Picker';
 
 import { StaffMemberForPickerFragment as Member } from '../queries.generated';
 
@@ -38,12 +38,12 @@ export function Picker({
   pickedExtra,
 }: Props) {
   const items = useMemo(() => {
-    const memberItems: MemberItem[] = members.map(member => ({
+    const memberItems: MemberItem[] = members.map((member) => ({
       type: 'member' as const,
       member,
     }));
     const extraItems: ExtraItem[] = extra
-      ? extra.map(value => ({
+      ? extra.map((value) => ({
           type: 'extra' as const,
           extra: value,
         }))

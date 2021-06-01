@@ -16,12 +16,12 @@ const Header = styled.h2`
   text-align: center;
 `;
 
-const Text = styled(RichText)``;
-
 const OneColumn = (column: Props['basic_columns'][0]) => (
   <div>
     <Header>{column.header}</Header>
-    {column.text && <Text dangerouslySetInnerHTML={{ __html: column.text }} />}
+    {column.text && (
+      <RichText dangerouslySetInnerHTML={{ __html: column.text }} />
+    )}
   </div>
 );
 

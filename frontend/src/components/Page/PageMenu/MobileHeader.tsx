@@ -30,7 +30,7 @@ export const MobileHeader: React.FC<Props> = ({
       onClick={switchExpand}
     >
       <div className="text-2xl text-white">Кочерга</div>
-      <Burger color="white" opened={expanded} flip={switchExpand} />
+      <Burger colorClass="bg-white" opened={expanded} flip={switchExpand} />
     </div>
   );
 };

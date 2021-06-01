@@ -1,4 +1,4 @@
-import TL03 from '~/blocks/TL03';
+import { TL03 } from '~/blocks/TL03';
 import EventsListBlock from '~/events/components/EventsListBlock';
 
 import { ProjectPageFragment } from './fragments.generated';

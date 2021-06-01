@@ -41,10 +41,6 @@ const AuthorDescription = styled.div`
   color: ${colors.grey[600]};
 `;
 
-const TestimonialText = styled(RichText)`
-6 font-size: ${fonts.sizes.SM};
-`;
-
 const ProductLink = styled.a`
   color: black;
   text-decoration: none;
@@ -78,7 +74,10 @@ const TestimonialCardContents: React.FC<{
           ) : null}
         </Column>
       </Row>
-      <TestimonialText dangerouslySetInnerHTML={{ __html: testimonial.text }} />
+      <RichText
+        className="text-sm"
+        dangerouslySetInnerHTML={{ __html: testimonial.text }}
+      />
     </Column>
   );
 };

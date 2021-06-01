@@ -1,14 +1,7 @@
-import styled from 'styled-components';
+import React from 'react';
 
-const Wrapper = styled.div`
-  max-width: 400px;
-  padding: 10px;
-  border: 1px solid #ddd;
-  border-radius: 4px;
-  box-shadow: 0px 2px 4px 0 #bbb;
-`;
+import { Card } from '~/components/cards';
 
-const AuthContainer: React.FC = ({ children, ...props }) => (
-  <Wrapper {...props}>{children}</Wrapper>
+export const AuthContainer: React.FC = ({ children }) => (
+  <Card>{children}</Card>
 );
-export default AuthContainer;

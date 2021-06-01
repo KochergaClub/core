@@ -7,7 +7,6 @@ import ErrorBoundary from './ErrorBoundary';
 import GlobalStyle from './GlobalStyle';
 import HtmlHead from './HtmlHead';
 import { Main } from './Main';
-import NProgressStyle from './NProgressStyle';
 import { PageFooter } from './PageFooter';
 import PageMenu from './PageMenu';
 import { PageTitle } from './PageTitle';
@@ -81,7 +80,6 @@ const Page: PageType = (props) => {
         </>
       )}
       <GlobalStyle />
-      <NProgressStyle />
       <ErrorBoundary>
         <WithToaster>{renderContent()}</WithToaster>
       </ErrorBoundary>

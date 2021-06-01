@@ -1,11 +1,8 @@
 import 'tippy.js/dist/tippy.css';
 
-import styled from 'styled-components';
+import clsx from 'clsx';
 
 import Tippy from '@tippyjs/react';
-
-import * as colors from '../colors';
-import * as fonts from '../fonts';
 
 interface InnerProps {
   type?: 'accent' | 'default' | 'good';
@@ -16,24 +13,27 @@ interface Props extends InnerProps {
   hint?: string;
 }
 
-const type2color = {
-  accent: colors.accent[500],
-  default: colors.primary[300],
-  good: colors.good[300],
-};
-
-export const InnerBadge = styled.div<InnerProps>`
-  display: inline-block;
-
-  background-color: ${(props) =>
-    props.color || type2color[props.type || 'default']};
-  border-radius: 10px;
-  min-width: 20px;
-  padding: 2px 8px;
-
-  font-size: ${fonts.sizes.XS};
-  white-space: nowrap;
-`;
+export const InnerBadge: React.FC<InnerProps> = ({
+  type = 'default',
+  color,
+  children,
+}) => (
+  <div
+    className={clsx(
+      'inline-block rounded-xl px-2 py-0.5 text-xs whitespace-nowrap',
+      {
+        accent: 'bg-accent-500',
+        default: 'bg-primary-300',
+        good: 'bg-green-300',
+      }[type]
+    )}
+    style={{
+      ...(color && { backgroundColor: color }),
+    }}
+  >
+    {children}
+  </div>
+);
 
 export const Badge: React.FC<Props> = ({ children, hint, ...innerProps }) => {
   const inner = <InnerBadge {...innerProps}>{children}</InnerBadge>;

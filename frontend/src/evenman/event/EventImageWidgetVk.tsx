@@ -3,7 +3,7 @@ import React, { useCallback, useState } from 'react';
 import { useMutation } from '@apollo/client';
 
 import { ApolloQueryResults } from '~/components';
-import ImageEditor from '~/components/images/ImageEditor';
+import { ImageEditor } from '~/components/images/ImageEditor';
 import { Button, Column, Row } from '~/frontkit';
 
 import { useEvenmanSettingsQuery } from './hooks';

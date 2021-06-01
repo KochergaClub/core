@@ -12,7 +12,7 @@ interface Props extends CommonActionProps {
   children?: null;
 }
 
-const Action: React.FC<Props> = ({ act, syncAct, title, icon }) => {
+export const Action: React.FC<Props> = ({ act, syncAct, title, icon }) => {
   const { close } = useContext(DropdownMenuContext);
   const [acting, setActing] = useState(false);
 
@@ -36,5 +36,3 @@ const Action: React.FC<Props> = ({ act, syncAct, title, icon }) => {
     />
   );
 };
-
-export default Action;

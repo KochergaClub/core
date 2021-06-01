@@ -1,15 +1,5 @@
-import styled from 'styled-components';
-
-const CenteredLayout = styled.div`
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  margin-top: 100px;
-  margin-bottom: 100px;
-
-  > * + * {
-    margin-top: 100px;
-  }
-`;
-
-export default CenteredLayout;
+export const CenteredLayout: React.FC = ({ children }) => (
+  <div className="flex flex-col items-center mt-24 mb-24 space-y-8 sm:space-y-24">
+    {children}
+  </div>
+);

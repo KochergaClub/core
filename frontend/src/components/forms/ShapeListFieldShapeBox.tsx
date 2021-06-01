@@ -1,35 +1,29 @@
 import { AnimatePresence, motion } from 'framer-motion';
 import React from 'react';
 import { FieldPath, FieldValues, useFieldArray, UseFormReturn } from 'react-hook-form';
-import styled from 'styled-components';
 
-import { Button, colors, Column, fonts, Label, Row } from '~/frontkit';
+import { Button, Label, Row } from '~/frontkit';
 
 import { FieldShapeBox } from './FieldShapeBox';
 import { AnyFormValues, FormShape, ShapeListFieldShape } from './types';
 
-const ListContainer = styled.div`
-  border: 1px dotted ${colors.grey[300]};
-  padding: 4px;
-`;
+const ItemNumber: React.FC = ({ children }) => (
+  <div className="rounded-full px-2 bg-primary-700 text-white text-xs">
+    {children}
+  </div>
+);
 
-const ItemNumber = styled.div`
-  border-radius: 20px;
-  padding: 0 8px;
-  background-color: ${colors.primary[700]};
-  color: white;
-  font-size: ${fonts.sizes.XS};
-`;
-
-const ItemContainer = styled(motion.div)`
-  border: 1px dotted ${colors.grey[300]};
-  padding: 4px;
-  margin-bottom: 4px;
-
-  &:hover {
-    background-color: ${colors.grey[100]};
-  }
-`;
+const ItemContainer: React.FC = ({ children }) => (
+  <motion.div
+    className="border border-dotted border-gray-300 p-1 mb-1 hover:bg-gray-100"
+    layout
+    initial={{ opacity: 0, scale: 0.5 }}
+    animate={{ opacity: 1, scale: 1 }}
+    exit={{ opacity: 0, scale: 0.5 }}
+  >
+    {children}
+  </motion.div>
+);
 
 // TODO - move back to utils.ts?
 const buildInitialValues = (shape: FormShape): AnyFormValues => {
@@ -71,21 +65,15 @@ export const ShapeListFieldShapeBox = <T extends FieldValues>({
   });
 
   return (
-    <ListContainer>
+    <div className="p-1 border border-dotted border-gray-300">
       <Label>{field.title || field.name}</Label>
       <AnimatePresence initial={false}>
         {hookFields.map((hookField, i) => (
-          <ItemContainer
-            key={hookField.id}
-            layout
-            initial={{ opacity: 0, scale: 0.5 }}
-            animate={{ opacity: 1, scale: 1 }}
-            exit={{ opacity: 0, scale: 0.5 }}
-          >
-            <Column stretch>
+          <ItemContainer key={hookField.id}>
+            <div className="space-y-1">
               <Row spaced vCentered>
                 <ItemNumber>{i + 1}</ItemNumber>
-                <Row>
+                <div className="flex space-x-1">
                   <Button
                     size="small"
                     type="button"
@@ -117,7 +105,7 @@ export const ShapeListFieldShapeBox = <T extends FieldValues>({
                       &darr;
                     </Button>
                   )}
-                </Row>
+                </div>
               </Row>
               <div>
                 {field.shape.map((subfield) => (
@@ -130,7 +118,7 @@ export const ShapeListFieldShapeBox = <T extends FieldValues>({
                   />
                 ))}
               </div>
-            </Column>
+            </div>
           </ItemContainer>
         ))}
       </AnimatePresence>
@@ -144,6 +132,6 @@ export const ShapeListFieldShapeBox = <T extends FieldValues>({
       >
         добавить
       </Button>
-    </ListContainer>
+    </div>
   );
 };

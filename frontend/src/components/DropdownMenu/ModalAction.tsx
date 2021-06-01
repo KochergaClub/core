@@ -9,7 +9,7 @@ interface Props extends CommonActionProps {
   children: ModalCreator;
 }
 
-const ModalAction: React.FC<Props> = ({ children, title, icon }) => {
+export const ModalAction: React.FC<Props> = ({ children, title, icon }) => {
   const { close, setModal } = useContext(DropdownMenuContext);
 
   const openModal = useCallback(() => {
@@ -21,5 +21,3 @@ const ModalAction: React.FC<Props> = ({ children, title, icon }) => {
     <ActionLayout onClick={openModal} title={title} icon={icon || VscWindow} />
   );
 };
-
-export default ModalAction;

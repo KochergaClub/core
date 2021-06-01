@@ -1,22 +1,11 @@
 import { useCallback, useRef } from 'react';
 import { FaRegCopy } from 'react-icons/fa';
-import styled from 'styled-components';
-
-import { colors } from '~/frontkit';
-
-const ClipboardIcon = styled(FaRegCopy)`
-  color: ${colors.grey[400]};
-  cursor: pointer;
-  &:hover {
-    color: ${colors.grey[600]};
-  }
-`;
 
 interface Props {
   text: string;
 }
 
-const CopyToClipboardIcon: React.FC<Props> = ({ text }) => {
+export const CopyToClipboardIcon: React.FC<Props> = ({ text }) => {
   const textRef = useRef<HTMLTextAreaElement>(null);
   const copy = useCallback(() => {
     if (!textRef.current) {
@@ -33,9 +22,10 @@ const CopyToClipboardIcon: React.FC<Props> = ({ text }) => {
         ref={textRef}
         value={text}
       />
-      <ClipboardIcon onClick={copy} />
+      <FaRegCopy
+        className="text-gray-400 hover:text-gray-600 cursor-pointer"
+        onClick={copy}
+      />
     </>
   );
 };
-
-export default CopyToClipboardIcon;

@@ -7,8 +7,8 @@ import { useLazyQuery } from '@apollo/client';
 import { FloatingList } from '~/components';
 
 import { SearchDocument } from './queries.generated';
-import SearchInput from './SearchInput';
-import SearchResults from './SearchResults';
+import { SearchInput } from './SearchInput';
+import { SearchResults } from './SearchResults';
 
 const isRunnableQuery = (query: string) => query !== '';
 

@@ -1,8 +1,6 @@
 import React from 'react';
 
-import { colors, Row } from '~/frontkit';
-
-import { ActionContainer } from './ActionContainer';
+import { Row } from '~/frontkit';
 
 type Props = {
   title: string;
@@ -13,11 +11,11 @@ type Props = {
 export const ActionLayout: React.FC<Props> = ({ title, icon, onClick }) => {
   const Icon = icon;
   return (
-    <ActionContainer onClick={onClick}>
+    <div className="px-3 py-2 text-sm hover:bg-gray-100" onClick={onClick}>
       <Row vCentered gutter={6}>
-        <Icon color={colors.grey[400]} />
+        <Icon className="text-gray-400" />
         <span>{title}</span>
       </Row>
-    </ActionContainer>
+    </div>
   );
 };

@@ -1,17 +1,12 @@
 import Head from 'next/head';
 import { useEffect, useMemo, useState } from 'react';
-import styled from 'styled-components';
 
 import { Page } from '~/components';
 
 import { TildaPageQuery } from '../../queries.generated';
-import OrderModal, { OrderParams } from './OrderModal';
+import { OrderModal, OrderParams } from './OrderModal';
 
 type Props = TildaPageQuery['tildaPage'];
-
-const Container = styled.div`
-  box-sizing: content-box;
-`;
 
 const TildaPage: React.FC<Props> = (props) => {
   // will show order modal if orderParams is set
@@ -95,7 +90,10 @@ const TildaPage: React.FC<Props> = (props) => {
         vkImage={props.vk_image?.url}
         noWhitespace
       >
-        <Container dangerouslySetInnerHTML={{ __html: patchedBody }} />
+        <div
+          className="box-content"
+          dangerouslySetInnerHTML={{ __html: patchedBody }}
+        />
         {orderParams ? (
           <OrderModal
             {...orderParams}

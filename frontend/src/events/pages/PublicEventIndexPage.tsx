@@ -3,7 +3,7 @@ import dynamic from 'next/dynamic';
 
 import { NextApolloPage, withApollo } from '~/apollo';
 import { apolloClientForDataFetching } from '~/apollo/client';
-import TL03 from '~/blocks/TL03';
+import { TL03 } from '~/blocks/TL03';
 import { formatDate } from '~/common/utils';
 import { Page, Spinner } from '~/components';
 

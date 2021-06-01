@@ -1,23 +1,4 @@
-import styled from 'styled-components';
-
-import { A, colors, fonts } from '~/frontkit';
-
-const Container = styled.section`
-  border-bottom: 1px solid ${colors.grey[200]};
-  margin-bottom: 40px;
-`;
-
-const Header = styled.header`
-  margin-bottom: 4px;
-`;
-
-const Link = styled(A)`
-  font-size: ${fonts.sizes.XL2};
-`;
-
-const Text = styled.div`
-  margin-bottom: 32px;
-`;
+import { A } from '~/frontkit';
 
 interface Props {
   href: string;
@@ -25,13 +6,17 @@ interface Props {
   description?: string;
 }
 
-const AnotherPageSummary: React.FC<Props> = ({ href, title, description }) => (
-  <Container>
-    <Header>
-      <Link href={href}>{title}</Link>
-    </Header>
-    <Text>{description}</Text>
-  </Container>
+export const AnotherPageSummary: React.FC<Props> = ({
+  href,
+  title,
+  description,
+}) => (
+  <section className="border-b border-gray-200 mb-10">
+    <header className="mb-1">
+      <A className="text-2xl" href={href}>
+        {title}
+      </A>
+    </header>
+    <div className="mb-8">{description}</div>
+  </section>
 );
-
-export default AnotherPageSummary;

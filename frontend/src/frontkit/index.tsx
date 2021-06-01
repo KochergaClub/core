@@ -22,7 +22,6 @@ export { WithSidebar } from './components/WithSidebar';
 export { WithSmartSidebar } from './components/WithSmartSidebar';
 export { GlobalFonts } from './global/GlobalFonts';
 export { GlobalFontsString } from './global/GlobalFontsString';
-export { GlobalStyle } from './global/GlobalStyle';
 export {
   ToasterContext,
   useNotification,

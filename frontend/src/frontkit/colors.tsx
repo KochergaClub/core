@@ -16,6 +16,7 @@ export const primary = {
   900: `hsl(${hues.blue}, 55%, 20%)`,
 };
 
+// matches primary.link in tailwind config
 export const link = `hsl(${hues.blue}, 80%, 50%)`;
 
 // matches tailwind coolGray

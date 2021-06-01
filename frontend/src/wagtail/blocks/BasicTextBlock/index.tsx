@@ -1,7 +1,7 @@
 import { gql } from '@apollo/client';
-import { RichText } from '~/frontkit';
 
 import { PaddedBlock } from '~/components';
+import { RichText } from '~/frontkit';
 import { BlockComponent } from '~/wagtail/types';
 
 import { BasicTextBlockFragment as Props } from './index.generated';
@@ -11,7 +11,7 @@ const BasicTextBlock: BlockComponent<Props> = (block) => {
     <PaddedBlock>
       <RichText
         dangerouslySetInnerHTML={{ __html: block.basic_text.text }}
-        style={{ textAlign: block.basic_text.centered ? 'center' : 'left' }}
+        className={block.basic_text.centered ? 'text-center' : ''}
       />
     </PaddedBlock>
   );

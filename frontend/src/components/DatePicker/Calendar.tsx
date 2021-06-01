@@ -1,34 +1,27 @@
+import clsx from 'clsx';
 import { addDays, eachWeekOfInterval, isSameDay } from 'date-fns';
 import React from 'react';
-import styled from 'styled-components';
 
 import { range } from '~/common/utils';
-import { colors, Column, fonts, Row } from '~/frontkit';
 
-const Container = styled.div`
-  padding: 8px;
-`;
-
-const Day = styled.div<{ selected?: boolean; today?: boolean }>`
-  width: 32px;
-  text-align: center;
-  padding: 4px;
-  border-radius: 4px;
-  font-size: ${fonts.sizes.SM};
-  font-weight: ${(props) => (props.today ? 'bold' : 'normal')};
-  cursor: pointer;
-  ${(props) =>
-    props.selected
-      ? `
-        color: white;
-        background-color: ${colors.primary[500]};
-    `
-      : ''}
-  &:hover {
-    background-color: ${(props) =>
-      props.selected ? colors.primary[700] : colors.grey[300]};
-  }
-`;
+const Day: React.FC<{
+  selected?: boolean;
+  today?: boolean;
+  onClick: () => void;
+}> = ({ selected, today, onClick, children }) => (
+  <div
+    className={clsx(
+      'w-8 text-center p-1 rounded text-sm cursor-pointer',
+      today && 'font-bold',
+      selected
+        ? 'text-white bg-primary-500 hover:bg-primary-700'
+        : 'hover:bg-gray-300'
+    )}
+    onClick={onClick}
+  >
+    {children}
+  </div>
+);
 
 type Props = {
   start: Date;
@@ -44,8 +37,8 @@ export const Calendar: React.FC<Props> = ({
   onChange,
 }) => {
   return (
-    <Container>
-      <Column>
+    <div className="p-2">
+      <div className="space-y-1">
         {eachWeekOfInterval(
           {
             start,
@@ -53,7 +46,7 @@ export const Calendar: React.FC<Props> = ({
           },
           { weekStartsOn: 1 }
         ).map((weekStart, i) => (
-          <Row key={i}>
+          <div className="flex space-x-1" key={i}>
             {range(7).map((n) => {
               const date = addDays(weekStart, n);
               return (
@@ -67,9 +60,9 @@ export const Calendar: React.FC<Props> = ({
                 </Day>
               );
             })}
-          </Row>
+          </div>
         ))}
-      </Column>
-    </Container>
+      </div>
+    </div>
   );
 };

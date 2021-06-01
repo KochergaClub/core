@@ -15,10 +15,10 @@ const Overlay: React.FC = () => (
 
 const ModalHeader: React.FC<{ close: () => void }> = ({ children, close }) => {
   return (
-    <header className="px-5 py-3 border-0 border-b border-solid border-gray-200 font-bold flex items-center justify-between">
+    <header className="px-5 py-3 border-b border-gray-200 font-bold flex items-center justify-between">
       <div>{children}</div>
       <button
-        className="px-1 border-0 bg-transparent cursor-pointer text-gray-700 hover:text-accent-500"
+        className="px-1 bg-transparent cursor-pointer text-gray-700 hover:text-accent-500"
         type="button"
         onClick={close}
       >
@@ -37,13 +37,11 @@ const ModalBody = React.forwardRef<
 });
 
 const ModalFooter: React.FC = ({ children }) => (
-  <div className="px-5 py-3 border-0 border-t border-solid border-gray-200">
-    {children}
-  </div>
+  <div className="px-5 py-3 border-t border-gray-200">{children}</div>
 );
 
 const ModalWindow: React.FC = ({ children }) => (
-  <div className="bg-white rounded shadow-2xl max-h-full overflow-auto flex flex-col mx-2 min-w-xs sm:min-w-lg">
+  <div className="bg-white rounded shadow-toast max-h-full overflow-auto flex flex-col mx-2 min-w-xs sm:min-w-lg">
     {children}
   </div>
 );

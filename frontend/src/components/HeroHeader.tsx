@@ -1,22 +1,7 @@
-import styled from 'styled-components';
-
-import { deviceMediaQueries, fonts } from '~/frontkit';
-
-const HeroHeader = styled.h1`
-  margin: 0;
-
-  line-height: 1.2;
-  font-size: ${fonts.sizes.XL5};
-  font-family: Intro;
-
-  color: white;
-
-  ${deviceMediaQueries.mobile(`
-    font-size: ${fonts.sizes.XL2};
-  `)}
-  ${deviceMediaQueries.tablet(`
-    font-size: ${fonts.sizes.XL3};
-  `)}
-`;
-
-export default HeroHeader;
+export const HeroHeader: React.FC = ({ children }) => (
+  // previously:
+  // font-family: Intro;
+  <h1 className="m-0 text-white text-2xl sm:text-3xl md:text-5xl">
+    {children}
+  </h1>
+);

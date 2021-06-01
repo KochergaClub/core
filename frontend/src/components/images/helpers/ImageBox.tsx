@@ -1,55 +1,13 @@
-import styled from 'styled-components';
-
-const Container = styled.div<{ displayOverlay?: boolean }>`
-  position: relative; /* allows overlay positioning */
-
-  > .image-container > img {
-    display: block;
-  }
-
-  > .image-container {
-    background-color: white; /* allows to darken transparent images on hover */
-  }
-
-  &:hover {
-    > .image-container {
-      filter: brightness(50%);
-      transition: filter 0.3s;
-    }
-  }
-
-  ${(props) =>
-    props.displayOverlay
-      ? ''
-      : `
-  > .overlay {
-    display: none;
-  }
-
-  &:hover {
-    > .overlay {
-      display: block;
-    }
-  }
-  `}
-`;
-
-const Overlay = styled.div.attrs(() => ({ className: 'overlay' }))`
-  position: absolute;
-  left: 0;
-  top: 0;
-  width: 100%;
-  height: 100%;
-`;
+import clsx from 'clsx';
 
 interface Props {
   src?: string;
   src_x2?: string;
   empty: () => JSX.Element;
-  displayOverlay?: boolean; // sometimes we want to show overlay even if the ImageBox is not hovered, e.g. if there's an open DropdownMenu (see ImageEditor)
+  displayOverlay?: boolean;
 }
 
-const ImageBox: React.FC<Props> = ({
+export const ImageBox: React.FC<Props> = ({
   src,
   src_x2,
   empty,
@@ -57,17 +15,27 @@ const ImageBox: React.FC<Props> = ({
   children,
 }) => {
   return (
-    <Container displayOverlay={displayOverlay}>
-      <div className="image-container">
+    <div className="relative">
+      <div
+        className={clsx(
+          'bg-white', // allows to darken transparent images on hover
+          'transition duration-300',
+          displayOverlay && 'filter brightness-50'
+        )}
+      >
         {src ? (
-          <img src={src} srcSet={src_x2 ? `${src}, ${src_x2} 2x` : undefined} />
+          <img
+            className="block"
+            src={src}
+            srcSet={src_x2 ? `${src}, ${src_x2} 2x` : undefined}
+          />
         ) : (
           empty()
         )}
       </div>
-      <Overlay>{children}</Overlay>
-    </Container>
+      <div className={clsx('absolute inset-0', displayOverlay || 'opacity-0')}>
+        {children}
+      </div>
+    </div>
   );
 };
-
-export default ImageBox;

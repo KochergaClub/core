@@ -1,5 +1,5 @@
 import { ApolloQueryResults } from '~/components';
-import ImageEditor, { Props as ImageEditorProps } from '~/components/images/ImageEditor';
+import { ImageEditor, Props as ImageEditorProps } from '~/components/images/ImageEditor';
 
 import { useEvenmanSettingsQuery } from './hooks';
 

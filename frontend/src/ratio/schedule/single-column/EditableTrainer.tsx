@@ -3,7 +3,7 @@ import styled from 'styled-components';
 import { useQuery } from '@apollo/client';
 
 import { useExpandable } from '~/common/hooks';
-import Picker from '~/components/Picker';
+import { Picker } from '~/components/Picker';
 
 import { RatioTrainerFragment, RatioTrainersDocument } from '../../queries.generated';
 

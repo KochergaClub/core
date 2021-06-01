@@ -1,12 +1,11 @@
 import React, { useEffect, useState } from 'react';
 import { UseFormReturn } from 'react-hook-form';
 import { FaCheck } from 'react-icons/fa';
-import styled from 'styled-components';
 
 import { useMutation } from '@apollo/client';
 
 import { ErrorMessage, FieldContainer } from '~/components/forms';
-import { AsyncButton, colors, deviceMediaQueries, Input, Row } from '~/frontkit';
+import { AsyncButton, colors, Input, Row } from '~/frontkit';
 
 import { FormData } from './FormOrderModal';
 import { CheckRatioPromocodeDocument } from './queries.generated';
@@ -16,28 +15,6 @@ interface Props {
   setDiscountedPrice: (v: number | undefined) => void;
 }
 
-const Container = styled.div`
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-
-  input {
-    width: 140px;
-  }
-
-  > * + * {
-    margin-left: 8px;
-  }
-
-  ${deviceMediaQueries.mobile(`
-    > * + * {
-      margin-left: 0;
-    }
-    flex-direction: column;
-    align-items: start;
-  `)}
-`;
-
 type Status =
   | {
       type: 'unchecked';
@@ -45,7 +22,10 @@ type Status =
   | { type: 'failed' }
   | { type: 'ok'; discounted_price: number };
 
-const PromocodeField: React.FC<Props> = ({ form, setDiscountedPrice }) => {
+export const PromocodeField: React.FC<Props> = ({
+  form,
+  setDiscountedPrice,
+}) => {
   const watchTicketType = form.watch('ticket_type');
   const watchCode = form.watch('promocode');
   const [checkMutation] = useMutation(CheckRatioPromocodeDocument);
@@ -90,10 +70,11 @@ const PromocodeField: React.FC<Props> = ({ form, setDiscountedPrice }) => {
       title="Промокод, если есть"
       error={form.formState.errors.promocode}
     >
-      <Container>
+      <div className="flex flex-col sm:flex-row sm:items-center sm:space-x-2">
         <Row vCentered>
           <Input
             type="string"
+            className="w-32"
             placeholder="Промокод"
             {...form.register('promocode')}
             readOnly={status.type === 'ok'} // prevent weird UI states when promocode is applied and then changed
@@ -126,9 +107,7 @@ const PromocodeField: React.FC<Props> = ({ form, setDiscountedPrice }) => {
             </Row>
           )}
         </div>
-      </Container>
+      </div>
     </FieldContainer>
   );
 };
-
-export default PromocodeField;

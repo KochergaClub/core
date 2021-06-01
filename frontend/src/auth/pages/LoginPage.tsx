@@ -4,7 +4,7 @@ import { HintCard, Page } from '~/components';
 import { redirect } from '~/components/RedirectPage';
 
 import AuthForm from '../components/AuthForm';
-import CenteredLayout from '../components/CenteredLayout';
+import { CenteredLayout } from '../components/CenteredLayout';
 import { CurrentUserDocument } from '../queries.generated';
 import { checkYourEmailRoute } from '../routes';
 
@@ -16,22 +16,24 @@ const LoginPage: NextApolloPage<Props> = (props) => {
   return (
     <Page title="Войти в Кочергу">
       <Page.Title>Войти или зарегистрироваться</Page.Title>
-      <CenteredLayout>
-        <AuthForm
-          onLogin={() => (window.location.href = props.next)}
-          onMagicLinkSent={() => {
-            window.location.href = checkYourEmailRoute();
-          }}
-          next={props.next}
-        />
-        <HintCard>
-          Через эту страницу можно войти в личный кабинет Кочерги.
-          <br />
-          Если вы тут впервые, просто введите свой email, и ссылка для входа
-          придёт вам на почту. Пароль можно будет задать в настройках после
-          логина.
-        </HintCard>
-      </CenteredLayout>
+      <div className="px-2">
+        <CenteredLayout>
+          <AuthForm
+            onLogin={() => (window.location.href = props.next)}
+            onMagicLinkSent={() => {
+              window.location.href = checkYourEmailRoute();
+            }}
+            next={props.next}
+          />
+          <HintCard>
+            Через эту страницу можно войти в личный кабинет Кочерги.
+            <br />
+            Если вы тут впервые, просто введите свой email, и ссылка для входа
+            придёт вам на почту. Пароль можно будет задать в настройках после
+            логина.
+          </HintCard>
+        </CenteredLayout>
+      </div>
     </Page>
   );
 };

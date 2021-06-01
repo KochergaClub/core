@@ -1,10 +1,9 @@
 import { useState } from 'react';
 import styled from 'styled-components';
 
-import { A, deviceMediaQueries, RichText } from '~/frontkit';
-
-import TL02 from '~/blocks/TL02';
+import { TL02 } from '~/blocks/TL02';
 import { Page } from '~/components';
+import { A, deviceMediaQueries, RichText } from '~/frontkit';
 import { NextWagtailPage } from '~/wagtail/types';
 
 import {

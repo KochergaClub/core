@@ -1,19 +1,8 @@
 import { endOfMonth, endOfWeek, startOfMonth, startOfWeek } from 'date-fns';
 import React, { useEffect, useState } from 'react';
-import styled from 'styled-components';
-
-import { colors } from '~/frontkit';
 
 import { Calendar } from './Calendar';
 import { Header } from './Header';
-
-const Container = styled.div`
-  display: flex;
-  flex-direction: column;
-  width: auto;
-  border-radius: 4px;
-  border: 1px solid ${colors.grey[300]};
-`;
 
 type Props = {
   value: Date | undefined;
@@ -34,7 +23,7 @@ export const DatePicker: React.FC<Props> = ({ value, onChange }) => {
   const endDate = endOfWeek(monthEndDate, { weekStartsOn: 1 });
 
   return (
-    <Container>
+    <div className="flex flex-col rounded border border-gray-300">
       <Header date={monthStartDate} onViewChange={setViewDate} />
       <Calendar
         start={startDate}
@@ -42,6 +31,6 @@ export const DatePicker: React.FC<Props> = ({ value, onChange }) => {
         selected={value}
         onChange={onChange}
       />
-    </Container>
+    </div>
   );
 };
