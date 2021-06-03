@@ -3,7 +3,6 @@ import Link from 'next/link';
 import React from 'react';
 import { FaEdit, FaLink, FaTrash, FaUserCheck, FaUserMinus } from 'react-icons/fa';
 import { MdInfo } from 'react-icons/md';
-import styled from 'styled-components';
 
 import Tippy from '@tippyjs/react';
 
@@ -13,7 +12,7 @@ import { DropdownMenu, HumanizedDateTime, Markdown, MutationButton } from '~/com
 import { CardSection } from '~/components/cards';
 import { ModalAction, MutationAction } from '~/components/DropdownMenu';
 import { UserLink } from '~/components/UserLink';
-import { A, Badge, colors, Column, Row } from '~/frontkit';
+import { A, Badge, Column, Row } from '~/frontkit';
 
 import { evenmanEventRoute, leadDetailsRoute } from '../routes';
 import { AddEventToLeadModal } from './AddEventToLeadModal';
@@ -37,15 +36,6 @@ const Status: React.FC<{ status: CommunityLeadStatus }> = ({ status }) => {
 type Props = {
   lead: EvenmanLeadFragment;
 };
-
-const MoreInfoContainer = styled.div`
-  display: flex;
-  color: ${colors.grey[400]};
-  cursor: pointer;
-  &:hover {
-    color: black;
-  }
-`;
 
 const LeadMoreInfo: React.FC<Props> = ({ lead }) => {
   return (
@@ -75,9 +65,9 @@ const LeadMoreInfo: React.FC<Props> = ({ lead }) => {
         </Column>
       }
     >
-      <MoreInfoContainer>
+      <div className="flex cursor-pointer text-gray-400 hover:text-gray-600">
         <MdInfo />
-      </MoreInfoContainer>
+      </div>
     </Tippy>
   );
 };

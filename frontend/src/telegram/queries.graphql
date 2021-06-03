@@ -5,11 +5,11 @@ fragment TelegramChat on TelegramChat {
   title
   force_public
   delisted
-  photo(spec: "fill-50x50") {
+  photo(spec: "fill-48x48") {
     id
     url
   }
-  photo_x2: photo(spec: "fill-100x100") {
+  photo_x2: photo(spec: "fill-96x96") {
     id
     url
   }

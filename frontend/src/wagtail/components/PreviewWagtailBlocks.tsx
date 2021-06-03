@@ -1,6 +1,6 @@
 import { AnyBlockFragment } from '../types';
 import AnyBlock from './AnyBlock';
-import PreviewBlockWrapper from './PreviewBlockWrapper';
+import { PreviewBlockWrapper } from './PreviewBlockWrapper';
 
 interface Props {
   blocks: AnyBlockFragment[];

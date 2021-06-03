@@ -1,26 +1,10 @@
-import styled from 'styled-components';
-
+import { addDays, endOfWeek, startOfWeek, subDays } from 'date-fns';
 import { format } from 'date-fns-tz';
-import { addDays, subDays, startOfWeek, endOfWeek } from 'date-fns';
 
 import { withApollo, withStaff } from '~/apollo';
 import { NextPage } from '~/common/types';
-
 import { Page } from '~/components';
-
 import EventCalendar from '~/events/components/EventCalendar';
-
-const OuterContainer = styled.div`
-  display: flex;
-  flex-direction: column;
-  height: 100%;
-  align-items: stretch;
-`;
-
-const Container = styled.div`
-  flex: 1;
-  overflow: auto;
-`;
 
 interface Props {
   range: { start: string; end: string };
@@ -29,12 +13,12 @@ interface Props {
 const TeamCalendarPage: NextPage<Props> = ({ range }) => {
   return (
     <Page title="Календарь событий" menu="team" chrome="fullscreen">
-      <OuterContainer>
+      <div className="flex flex-col h-full">
         <Page.Title>Календарь событий</Page.Title>
-        <Container>
+        <div className="flex-1 overflow-auto">
           <EventCalendar range={range} />
-        </Container>
-      </OuterContainer>
+        </div>
+      </div>
     </Page>
   );
 };

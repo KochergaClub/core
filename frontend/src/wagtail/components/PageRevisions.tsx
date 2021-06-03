@@ -1,9 +1,9 @@
+import clsx from 'clsx';
 import { differenceInCalendarDays, formatRelative } from 'date-fns';
 import { ru } from 'date-fns/locale';
 import { FragmentDefinitionNode } from 'graphql';
 import { useContext } from 'react';
 import { FaHistory } from 'react-icons/fa';
-import styled from 'styled-components';
 
 import { gql, TypedDocumentNode, useApolloClient, useQuery } from '@apollo/client';
 
@@ -17,12 +17,6 @@ import { ApolloQueryResults, DropdownMenu } from '~/components';
 import { Action } from '~/components/DropdownMenu';
 
 import { WagtailPageRevisionsDocument } from './queries.generated';
-
-const ScrollableDropdownArea = styled.div`
-  overflow-x: hidden; /* vertical scroll covers some part of area children, but we compensate for it with margin-right */
-  overflow-y: auto;
-  max-height: 80vh;
-`;
 
 const formatRelativeWrapped = (date: Date) => {
   const now = new Date();
@@ -89,7 +83,7 @@ const buildWagtailPageRevisionDocument = (
   );
 };
 
-const PageRevisions: React.FC = () => {
+export const PageRevisions: React.FC = () => {
   const {
     state: { page },
     dispatch: pageDispatch,
@@ -142,7 +136,13 @@ const PageRevisions: React.FC = () => {
         const { revisions } = result.meta;
         return (
           <DropdownMenu title="История" placement="top">
-            <ScrollableDropdownArea>
+            <div
+              className={clsx(
+                'overflow-x-hidden' /* vertical scroll covers some part of area children, but we compensate for it with margin-right */,
+                'overflow-y-auto',
+                'max-h-80'
+              )}
+            >
               {revisions.map((revision) => (
                 <Action
                   act={async () => {
@@ -153,12 +153,10 @@ const PageRevisions: React.FC = () => {
                   icon={FaHistory}
                 />
               ))}
-            </ScrollableDropdownArea>
+            </div>
           </DropdownMenu>
         );
       }}
     </ApolloQueryResults>
   );
 };
-
-export default PageRevisions;

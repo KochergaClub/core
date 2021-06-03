@@ -1,5 +1,3 @@
-import styled from 'styled-components';
-
 import { useQuery } from '@apollo/client';
 
 import { ApolloQueryResults } from '~/components';
@@ -10,12 +8,6 @@ import LoadedEventCard from './LoadedEventCard';
 interface Props {
   id: string;
 }
-
-const NotFound = styled.div`
-  text-align: center;
-  font-size: 2em;
-  color: #888;
-`;
 
 const EventCard: React.FC<Props> = ({ id }) => {
   const queryResults = useQuery(EvenmanEventDocument, {
@@ -28,7 +20,11 @@ const EventCard: React.FC<Props> = ({ id }) => {
     <ApolloQueryResults {...queryResults} size="block">
       {({ data: { event } }) => {
         if (!event) {
-          return <NotFound>Событие не найдено</NotFound>;
+          return (
+            <div className="text-center text-3xl text-gray-400 mt-20">
+              Событие не найдено
+            </div>
+          );
         }
         return <LoadedEventCard event={event} />;
       }}

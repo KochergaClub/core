@@ -1,24 +1,15 @@
 import { Field, FieldProps, Form, Formik, FormikErrors } from 'formik';
 import { useCallback, useState } from 'react';
-import styled from 'styled-components';
 
 import { useMutation } from '@apollo/client';
 
 import { KkmSignMethodCalculation } from '~/apollo/types.generated';
-import { A, Button, Column, Input, Label } from '~/frontkit';
+import { A, Button, Input, Label } from '~/frontkit';
 
 import { KkmRegisterCheckDocument, KkmRegisterCheckMutation } from '../../queries.generated';
 import { FormValues, signMethodCalculationLabels } from '../../types';
 import MainModal from './MainModal';
 import Suggestions from './Suggestions';
-
-const FormSection = styled.section`
-  width: 100%;
-`;
-
-const WideInput = styled(Input)`
-  width: 100%;
-`;
 
 type DataOutcome = {
   result: KkmRegisterCheckMutation['result'];
@@ -138,12 +129,12 @@ const MainForm: React.FC = () => {
     <Formik initialValues={initialValues} onSubmit={submit} validate={validate}>
       {({ isValid, isSubmitting, values, setFieldValue }) => (
         <Form>
-          <Column gutter={16}>
-            <FormSection>
+          <div className="space-y-4">
+            <section>
               <Label>Название:</Label>
               <Field name="title">
                 {({ field }: FieldProps<string>) => (
-                  <WideInput {...field} type="text" />
+                  <Input {...field} type="text" wide />
                 )}
               </Field>
               <Suggestions
@@ -151,8 +142,8 @@ const MainForm: React.FC = () => {
                 current={values.title}
                 setValue={(value) => setFieldValue('title', value)}
               />
-            </FormSection>
-            <FormSection>
+            </section>
+            <section>
               <Label>Сумма:</Label>
               <Field name="amount">
                 {({ field }: FieldProps<number>) => (
@@ -164,8 +155,8 @@ const MainForm: React.FC = () => {
                 current={values.amount}
                 setValue={(value) => setFieldValue('amount', value)}
               />
-            </FormSection>
-            <FormSection>
+            </section>
+            <section>
               <Label>
                 <A href="http://www.consultant.ru/document/cons_doc_LAW_214339/731d2f8d127e3614422af34b4ac197612bd2f64d/">
                   Тип чека
@@ -178,15 +169,15 @@ const MainForm: React.FC = () => {
                 current={values.method}
                 setValue={(value) => setFieldValue('method', value)}
               />
-            </FormSection>
-            <FormSection>
+            </section>
+            <section>
               <Label>e-mail:</Label>
               <Field name="email">
                 {({ field }: FieldProps<string>) => (
                   <Input {...field} type="email" />
                 )}
               </Field>
-            </FormSection>
+            </section>
             <Button
               type="submit"
               disabled={!isValid || isSubmitting}
@@ -202,7 +193,7 @@ const MainForm: React.FC = () => {
               />
             )}
             {outcome && <OutcomeComponent outcome={outcome} />}
-          </Column>
+          </div>
         </Form>
       )}
     </Formik>

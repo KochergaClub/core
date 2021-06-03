@@ -1,6 +1,5 @@
 import { useCallback, useState } from 'react';
 import { FaSpinner } from 'react-icons/fa';
-import styled from 'styled-components';
 
 import { useMutation } from '@apollo/client';
 
@@ -18,19 +17,9 @@ interface InterestProps {
   interest: EmailSubscriptionInterestFragment;
 }
 
-// FIXME - mostly copy-pasted from ~/components/Spinner, can't use BasicSpinner because it's grey
-export const SpinnerForToggle = styled(FaSpinner)`
-  animation: icon-spin 2s infinite linear;
-
-  @keyframes icon-spin {
-    0% {
-      transform: rotate(0deg);
-    }
-    100% {
-      transform: rotate(359deg);
-    }
-  }
-`;
+export const SpinnerForToggle: React.FC = () => (
+  <FaSpinner className="animate-spin-slow text-white" size={12} />
+);
 
 const InterestCheckbox: React.FC<InterestProps> = ({ interest }) => {
   const [subscribeMutation] = useMutation(MyEmailSubscribeToInterestDocument, {
@@ -73,8 +62,8 @@ const InterestCheckbox: React.FC<InterestProps> = ({ interest }) => {
         icons={
           acting
             ? {
-                checked: <SpinnerForToggle size={12} color="white" />,
-                unchecked: <SpinnerForToggle size={12} color="white" />,
+                checked: <SpinnerForToggle />,
+                unchecked: <SpinnerForToggle />,
               }
             : undefined
         }
@@ -89,11 +78,11 @@ interface InterestListProps {
 
 const InterestList: React.FC<InterestListProps> = ({ interests }) => {
   return (
-    <Column>
+    <div className="space-y-1">
       {interests.map((interest) => (
         <InterestCheckbox key={interest.id} interest={interest} />
       ))}
-    </Column>
+    </div>
   );
 };
 
@@ -113,55 +102,53 @@ const EmailSettings: React.FC<Props> = ({ email_subscription }) => {
 
   return (
     <HeadedFragment title="Рассылки">
-      <Column gutter={20}>
-        {(() => {
-          switch (email_subscription.status) {
-            case 'unsubscribed':
-              return (
-                <>
-                  <div>Вы отписаны от всех рассылок Кочерги.</div>
-                  <AsyncButton
-                    kind="primary"
-                    act={async () => {
-                      await resubscribeCb();
-                    }}
-                  >
-                    Подписаться
-                  </AsyncButton>
-                </>
-              );
-            case 'pending':
-              return (
-                <HintCard>
-                  Вы отписаны от всех отсылок Кочерги, но передумали и запросили
-                  переподписку. Чтобы подтвердить эту операцию, найдите входящее
-                  письмо с запросом подтверждения переподписки и нажмите кнопку
-                  в нём.
-                </HintCard>
-              );
-            case 'subscribed':
-              return (
-                <Column gutter={20}>
-                  {email_subscription.interests ? (
-                    <InterestList interests={email_subscription.interests} />
-                  ) : null}
-                  <AsyncButton
-                    kind="primary"
-                    act={async () => {
-                      await unsubscribeCb();
-                    }}
-                  >
-                    Отписаться от всех писем
-                  </AsyncButton>
-                </Column>
-              );
-            default:
-              return (
-                <Badge>Неизвестный статус: {email_subscription.status}</Badge>
-              );
-          }
-        })()}
-      </Column>
+      {(() => {
+        switch (email_subscription.status) {
+          case 'unsubscribed':
+            return (
+              <Column gutter={20}>
+                <div>Вы отписаны от всех рассылок Кочерги.</div>
+                <AsyncButton
+                  kind="primary"
+                  act={async () => {
+                    await resubscribeCb();
+                  }}
+                >
+                  Подписаться
+                </AsyncButton>
+              </Column>
+            );
+          case 'pending':
+            return (
+              <HintCard>
+                Вы отписаны от всех отсылок Кочерги, но передумали и запросили
+                переподписку. Чтобы подтвердить эту операцию, найдите входящее
+                письмо с запросом подтверждения переподписки и нажмите кнопку в
+                нём.
+              </HintCard>
+            );
+          case 'subscribed':
+            return (
+              <Column gutter={20}>
+                {email_subscription.interests ? (
+                  <InterestList interests={email_subscription.interests} />
+                ) : null}
+                <AsyncButton
+                  kind="primary"
+                  act={async () => {
+                    await unsubscribeCb();
+                  }}
+                >
+                  Отписаться от всех писем
+                </AsyncButton>
+              </Column>
+            );
+          default:
+            return (
+              <Badge>Неизвестный статус: {email_subscription.status}</Badge>
+            );
+        }
+      })()}
     </HeadedFragment>
   );
 };

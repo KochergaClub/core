@@ -1,37 +1,17 @@
 import { parseISO } from 'date-fns';
-import styled from 'styled-components';
 
-import { formatDate, staticUrl } from '~/common/utils';
-import { colors, Column } from '~/frontkit';
+import { formatDate } from '~/common/utils';
+import { Column } from '~/frontkit';
 
 import { ActivityFragment, TrainingDayFragment } from '../../queries.generated';
 import EditDayInAdmin from '../EditDayInAdmin';
-import Activity from './Activity';
+import { Activity } from './Activity';
 
 interface Props {
   day_schedule: TrainingDayFragment;
   index: number;
   long_name: string;
 }
-
-const Container = styled.div`
-  position: relative;
-`;
-
-const Header = styled.div`
-  @font-face {
-    font-family: 'Intro Book';
-    src: url('${staticUrl('fonts/intro-pack/Intro-book.otf')}');
-  }
-  font-family: 'Intro Book';
-  font-weight: bold;
-  color: ${colors.grey[500]};
-`;
-
-const HeaderFirstLine = styled.div`
-  font-size: 1.3em;
-  line-height: 1.2;
-`;
 
 const time2minute = (time: string): number => {
   const match = time.match(/^(\d+):(\d+)/);
@@ -54,7 +34,9 @@ const Positioner: React.FC<PositionerProps> = ({
   const top = ((time2minute(activity.time) - time2minute(minTime)) * 36) / 30;
 
   return (
-    <div style={{ position: 'absolute', width: '100%', top }}>{children}</div>
+    <div className="absolute w-full" style={{ top }}>
+      {children}
+    </div>
   );
 };
 
@@ -91,14 +73,14 @@ const ActivitiesList: React.FC<Props> = ({ day_schedule }) => {
 const DaySchedule: React.FC<Props> = (props) => {
   return (
     <Column stretch gutter={24}>
-      <Header>
-        <HeaderFirstLine>День {props.index}</HeaderFirstLine>
+      <div className="font-bold text-gray-500">
+        <div className="text-xl">День {props.index}</div>
         <div>{formatDate(parseISO(props.day_schedule.date), 'd MMMM')}</div>
         <EditDayInAdmin day_schedule={props.day_schedule} />
-      </Header>
-      <Container>
+      </div>
+      <div className="relative">
         <ActivitiesList {...props} />
-      </Container>
+      </div>
     </Column>
   );
 };

@@ -77,6 +77,13 @@ export const useSmartMutation = <V>(
 
       switch (data.result.__typename) {
         case 'ValidationError':
+          if (!(data.result as ValidationErrorFragment).errors) {
+            // `...ValidationError` fragment is probably missing from query definition
+            return {
+              ok: false,
+              error: 'Неизвестная ошибка',
+            };
+          }
           return {
             ok: false,
             fieldErrors: Object.fromEntries(

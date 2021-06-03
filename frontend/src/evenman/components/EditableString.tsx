@@ -1,19 +1,9 @@
 import { RefObject, useCallback, useRef, useState } from 'react';
 import { FaEdit, FaSpinner } from 'react-icons/fa';
-import styled from 'styled-components';
 
 import { Input } from '~/frontkit';
 
 import { IconLink } from './ui';
-
-const Container = styled.div`
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  > * + * {
-    margin-left: 4px;
-  }
-`;
 
 type Props = {
   value: string | undefined;
@@ -127,10 +117,10 @@ export const EditableString: React.FC<Props> = ({
   };
 
   return (
-    <Container>
+    <div className="flex items-center space-x-1">
       {renderPrefix && renderPrefix()}
       <div>{renderValueOrInput()}</div>
       {renderEditIcon()}
-    </Container>
+    </div>
   );
 };

@@ -1,23 +1,10 @@
-import styled from 'styled-components';
-
 import { parseISO } from 'date-fns';
 import { utcToZonedTime } from 'date-fns-tz';
 
-import { timezone, formatDate } from '~/common/utils';
-
-import DispositionLabel from './DispositionLabel';
+import { formatDate, timezone } from '~/common/utils';
 
 import { CommonZadarmaPbxCallFragment } from '../queries.generated';
-
-const Container = styled.div`
-  display: flex;
-  align-items: center;
-  height: 60px;
-
-  & > * + * {
-    margin-left: 8px;
-  }
-`;
+import DispositionLabel from './DispositionLabel';
 
 type Call = CommonZadarmaPbxCallFragment['calls'][0];
 
@@ -25,12 +12,12 @@ const CallInfo = ({ call }: { call: Call }) => {
   const zonedDate = utcToZonedTime(parseISO(call.ts), timezone);
 
   return (
-    <Container>
+    <div className="flex items-center h-16 space-x-2">
       <time dateTime={call.ts}>{formatDate(zonedDate, 'HH:mm:ss')}</time>
       <DispositionLabel>{call.disposition}</DispositionLabel>
       <div>{call.sip}</div>
       {call.record && <audio controls src={call.record} />}
-    </Container>
+    </div>
   );
 };
 

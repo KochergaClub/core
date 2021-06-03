@@ -40,7 +40,7 @@ const PrototypePicker: React.FC<Props> = ({ selectedId, select }) => {
             styles={{
               menuPortal: (base) => ({
                 ...base,
-                zIndex: 1500,
+                zIndex: 5000,
               }),
             }}
             options={options}

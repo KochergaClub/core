@@ -1,26 +1,19 @@
-import { useCallback, useState } from 'react';
+import React, { useCallback, useState } from 'react';
 import { FaCheck } from 'react-icons/fa';
-import styled from 'styled-components';
 
-import { useMutation } from '@apollo/client';
-
-import { useCommonHotkeys } from '~/common/hooks';
+import { useCommonHotkeys, useSmartMutation } from '~/common/hooks';
 import { HintCard } from '~/components';
-import { Button, colors, Column, Input, Label, Row } from '~/frontkit';
+import { ErrorMessage } from '~/components/forms';
+import { Button, Column, Input, Label, Row } from '~/frontkit';
 
 import { MySettingsPageFragment, SetMyNamesDocument } from '../queries.generated';
 import HeadedFragment from './HeadedFragment';
-
-// TODO - consolidate with ErrorMessage from ~/components/forms
-const ErrorMessage = styled(Label)`
-  color: ${colors.accent[500]};
-`;
 
 interface Props {
   user: MySettingsPageFragment['user'];
 }
 
-const SetNames: React.FC<Props> = ({ user }) => {
+export const SetNames: React.FC<Props> = ({ user }) => {
   const [firstName, setFirstName] = useState(user.first_name || '');
   const [lastName, setLastName] = useState(user.last_name || '');
 
@@ -28,30 +21,29 @@ const SetNames: React.FC<Props> = ({ user }) => {
   const [saved, setSaved] = useState(false);
   const [error, setError] = useState<string | undefined>(undefined);
 
-  const [setNamesMutation] = useMutation(SetMyNamesDocument);
+  const setNamesMutation = useSmartMutation(SetMyNamesDocument, {
+    expectedTypename: 'AuthCurrentUser',
+  });
 
   const act = useCallback(async () => {
     setActing(true);
 
-    const { data } = await setNamesMutation({
+    const { ok, error } = await setNamesMutation({
       variables: {
-        first_name: firstName,
-        last_name: lastName,
+        input: {
+          first_name: firstName,
+          last_name: lastName,
+        },
       },
     });
 
-    if (data?.result.error) {
-      setError(data.result.error);
+    if (!ok) {
+      setError(error || 'Неизвестная ошибка');
       setActing(false);
       return;
     }
 
-    if (!data?.result?.ok) {
-      setError('Неизвестная ошибка');
-      setActing(false);
-      return;
-    }
-
+    setError(undefined);
     setActing(false);
     setSaved(true);
   }, [setNamesMutation, firstName, lastName]);
@@ -91,22 +83,22 @@ const SetNames: React.FC<Props> = ({ user }) => {
               }}
             />
           </Column>
-          <Button
-            kind="primary"
-            loading={acting}
-            disabled={acting || saved}
-            onClick={act}
-          >
-            <Row vCentered>
-              {saved ? <FaCheck /> : null}
-              <span>{saved ? 'Сохранено' : 'Сохранить'}</span>
-            </Row>
-          </Button>
-          {error ? <ErrorMessage>{error}</ErrorMessage> : null}
+          <div className="flex items-center space-x-2">
+            <Button
+              kind="primary"
+              loading={acting}
+              disabled={acting || saved}
+              onClick={act}
+            >
+              <Row vCentered>
+                {saved ? <FaCheck /> : null}
+                <span>{saved ? 'Сохранено' : 'Сохранить'}</span>
+              </Row>
+            </Button>
+            {error ? <ErrorMessage>{error}</ErrorMessage> : null}
+          </div>
         </Column>
       </Column>
     </HeadedFragment>
   );
 };
-
-export default SetNames;

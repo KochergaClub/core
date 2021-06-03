@@ -1,0 +1,23 @@
+.kch {
+  &:global(.react-toggle--checked) {
+    :global {
+      .react-toggle-track {
+        @apply bg-green-500;
+      }
+      .react-toggle-thumb {
+        @apply border-green-500;
+      }
+    }
+
+    &:hover {
+      :global {
+        .react-toggle-track {
+          @apply bg-green-700;
+        }
+        .react-toggle-thumb {
+          @apply border-green-700;
+        }
+      }
+    }
+  }
+}

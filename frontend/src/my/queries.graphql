@@ -1,3 +1,9 @@
+fragment ExtendedCurrentUser on AuthCurrentUser {
+  ...AuthCurrentUser
+  first_name
+  last_name
+}
+
 fragment Membership on MyCmCustomer {
   card_id
   orders_count
@@ -47,9 +53,7 @@ fragment MyTicketsPage on My {
 
 fragment MySettingsPage on My {
   user {
-    ...AuthCurrentUser
-    first_name
-    last_name
+    ...ExtendedCurrentUser
   }
   email_subscription {
     ...EmailSubscription
@@ -136,11 +140,10 @@ mutation EventGenerateOpenViduToken($event_id: ID!) {
     token
   }
 }
-mutation SetMyNames($first_name: String!, $last_name: String!) {
-  result: authSetMyNames(
-    input: { first_name: $first_name, last_name: $last_name }
-  ) {
-    ok
-    error
+mutation SetMyNames($input: AuthSetMyNamesInput!) {
+  result: authSetMyNames(input: $input) {
+    ...ExtendedCurrentUser
+    ...GenericError
+    ...ValidationError
   }
 }

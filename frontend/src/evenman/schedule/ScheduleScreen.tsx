@@ -1,5 +1,3 @@
-import styled from 'styled-components';
-
 import { useQuery } from '@apollo/client';
 
 import { ApolloQueryResults } from '~/components';
@@ -9,15 +7,11 @@ import { Column } from '~/frontkit';
 import Buttons from './Buttons';
 import { EvenmanWeeklyDigestDocument } from './queries.generated';
 
-const Container = styled.main`
-  margin-top: 10px;
-`;
-
 const ScheduleScreen: React.FC = () => {
   const queryResults = useQuery(EvenmanWeeklyDigestDocument);
 
   return (
-    <Container>
+    <div className="mt-4">
       <Column centered>
         <ApolloQueryResults {...queryResults} size="block">
           {({ data: { digest } }) => (
@@ -34,7 +28,7 @@ const ScheduleScreen: React.FC = () => {
           )}
         </ApolloQueryResults>
       </Column>
-    </Container>
+    </div>
   );
 };
 

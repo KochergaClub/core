@@ -2,7 +2,7 @@ import { useQuery } from '@apollo/client';
 
 import { NextApolloPage, withApollo, withStaff } from '~/apollo';
 import { ApolloQueryResults, Page } from '~/components';
-import MemberProfile from '~/staff/components/MemberProfile';
+import { MemberProfile } from '~/staff/components/MemberProfile';
 
 import { StaffMemberDocument } from '../queries.generated';
 

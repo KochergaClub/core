@@ -1,5 +1,3 @@
-import styled from 'styled-components';
-
 import { useQuery } from '@apollo/client';
 
 import { useExpandable } from '~/common/hooks';
@@ -13,27 +11,12 @@ interface Props {
   unpicked: () => Promise<void>;
 }
 
-const OuterContainer = styled.div`
-  justify-content: center;
-  display: flex;
-`;
-
-const Container = styled.div`
-  position: relative;
-  cursor: pointer;
-  white-space: nowrap;
-`;
-
-const NonPrintableDiv = styled.div`
-  @media print {
-    display: none;
-  }
-`;
-
-const TrainerName = ({ name }: { name: string }) => <div>[{name}]</div>;
+const TrainerName: React.FC<{ name: string }> = ({ name }) => (
+  <div>[{name}]</div>
+);
 
 const EmptyTrainerName = () => (
-  <NonPrintableDiv>[Выбрать тренера]</NonPrintableDiv>
+  <div className="print:hidden">[Выбрать тренера]</div>
 );
 
 export default function EditableTrainer({
@@ -46,8 +29,8 @@ export default function EditableTrainer({
   const queryResults = useQuery(RatioTrainersDocument);
 
   return (
-    <OuterContainer>
-      <Container ref={ref}>
+    <div className="flex justify-center">
+      <div className="relative cursor-pointer whitespace-nowrap" ref={ref}>
         <div onClick={flipExpand}>
           {trainer_name ? (
             <TrainerName name={trainer_name} />
@@ -59,7 +42,7 @@ export default function EditableTrainer({
           <Picker
             loading={queryResults.loading}
             items={queryResults.data ? queryResults.data.trainers : []}
-            item2text={maybeTrainer =>
+            item2text={(maybeTrainer) =>
               maybeTrainer ? maybeTrainer.long_name : 'Очистить'
             }
             picked={async (t?: RatioTrainerFragment) => {
@@ -72,7 +55,7 @@ export default function EditableTrainer({
             }}
           />
         )}
-      </Container>
-    </OuterContainer>
+      </div>
+    </div>
   );
 }

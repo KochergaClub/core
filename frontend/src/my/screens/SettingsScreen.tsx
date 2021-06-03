@@ -6,7 +6,7 @@ import { ApolloQueryResults, PaddedBlock, Page } from '~/components';
 import { HR } from '~/frontkit';
 
 import EmailSettings from '../components/EmailSettings';
-import SetNames from '../components/SetNames';
+import { SetNames } from '../components/SetNames';
 import SetPassword from '../components/SetPassword';
 import { MySettingsPageDocument } from '../queries.generated';
 

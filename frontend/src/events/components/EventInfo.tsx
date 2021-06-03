@@ -1,6 +1,5 @@
 import { utcToZonedTime } from 'date-fns-tz';
 import React from 'react';
-import styled from 'styled-components';
 
 import { formatDate, timezone } from '~/common/utils';
 import { Markdown } from '~/components';
@@ -11,12 +10,6 @@ import { TeamCalendarEventFragment } from '../queries.generated';
 interface Props {
   event: TeamCalendarEventFragment;
 }
-
-const EventDescription = styled.div`
-  border-top: 1px solid #ddd;
-  margin-top: 20px;
-  overflow: auto;
-`;
 
 const EventAnnouncements: React.FC<Props> = ({ event }) => {
   const posted_vk = event.announcements.vk && event.announcements.vk.link;
@@ -61,9 +54,9 @@ export const EventInfo: React.FC<Props> = ({ event }) => {
         <div>{event.creator || 'неизвестно'}</div>
       </Row>
       {event.description && (
-        <EventDescription>
+        <div className="border-t border-gray-300 mt-5 overflow-auto">
           <Markdown source={event.description} />
-        </EventDescription>
+        </div>
       )}
       <EventAnnouncements event={event} />
     </div>

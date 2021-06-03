@@ -1,11 +1,9 @@
-import styled from 'styled-components';
-
-import { colors } from '~/frontkit';
+import { useHover } from '~/common/hooks';
 
 import { AnyBlockFragment } from '../../types';
-import ControlledBlockContainer from '../ControlledBlockContainer';
+import { BlockWithControls } from '../BlockWithControls';
 import { WagtailStreamFieldValidationErrorFragment } from '../queries.generated';
-import AddControls from './AddControls';
+import { AddControls } from './AddControls';
 import Controls from './Controls';
 
 type BlockValidationError = NonNullable<
@@ -14,48 +12,46 @@ type BlockValidationError = NonNullable<
 
 interface Props {
   block: AnyBlockFragment;
-  position?: number;
+  position: number;
   total?: number;
   validation_error?: BlockValidationError;
 }
-
-const ValidationErrorContainer = styled.div`
-  position: absolute;
-  top: 5px;
-  right: 5px;
-  background-color: ${colors.accent[700]};
-  color: black;
-  /* color: ${colors.accent[700]}; */
-  padding: 4px 8px;
-`;
 
 const ValidationError: React.FC<{
   error: BlockValidationError;
 }> = ({ error }) => {
   return (
-    <ValidationErrorContainer>{error.error_message}</ValidationErrorContainer>
+    <div className="absolute bottom-1 right-1 bg-accent-500 rounded px-4 py-2">
+      {error.error_message}
+    </div>
   );
 };
 
-const EditBlockWrapper: React.FC<Props> = ({
+export const EditBlockWrapper: React.FC<Props> = ({
   block,
   position,
   total,
   validation_error,
   children,
 }) => {
+  const [hoverRef, isHovered] = useHover();
+
   return (
-    <ControlledBlockContainer
-      controls={Controls}
-      block={block}
-      position={position}
-      total={total}
-    >
-      {children}
-      {validation_error ? <ValidationError error={validation_error} /> : null}
-      {position !== undefined ? <AddControls position={position + 1} /> : null}
-    </ControlledBlockContainer>
+    <div ref={hoverRef}>
+      <BlockWithControls
+        renderControls={() => (
+          <Controls
+            block={block}
+            position={position}
+            total={total}
+            showControls={isHovered}
+          />
+        )}
+      >
+        {children}
+        {validation_error ? <ValidationError error={validation_error} /> : null}
+        <AddControls show={isHovered} position={position + 1} />
+      </BlockWithControls>
+    </div>
   );
 };
-
-export default EditBlockWrapper;

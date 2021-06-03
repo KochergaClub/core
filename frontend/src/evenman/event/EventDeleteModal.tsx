@@ -1,7 +1,6 @@
 import Router from 'next/router';
 import { useCallback, useState } from 'react';
 import { FaTrash } from 'react-icons/fa';
-import styled from 'styled-components';
 
 import { useMutation } from '@apollo/client';
 
@@ -14,17 +13,6 @@ interface Props {
   event: EvenmanEvent_DetailsFragment;
   close: () => void;
 }
-
-const CenteredLine = styled.div`
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  justify-items: center;
-
-  > * + * {
-    margin-left: 2px;
-  }
-`;
 
 const EventDeleteModal: React.FC<Props> = ({ event, close }) => {
   const [deleted, setDeleted] = useState(false);
@@ -52,10 +40,10 @@ const EventDeleteModal: React.FC<Props> = ({ event, close }) => {
         <ControlsFooter>
           <Button onClick={close}>Отменить</Button>
           <AsyncButton act={act} kind="primary">
-            <CenteredLine>
+            <div className="flex items-center space-x-1">
               <FaTrash />
               <span>Удалить</span>
-            </CenteredLine>
+            </div>
           </AsyncButton>
         </ControlsFooter>
       </Modal.Footer>

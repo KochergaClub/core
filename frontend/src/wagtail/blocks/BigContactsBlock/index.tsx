@@ -1,65 +1,33 @@
-import styled from 'styled-components';
-
 import { gql } from '@apollo/client';
 
 import { SocialIcons } from '~/components/Page/PageMenu/SocialIcons';
-import { colors, fonts } from '~/frontkit';
+import { kochergaConfig } from '~/config';
 
 import { BlockComponent } from '../../types';
 import { BigContactsBlockFragment as Props } from './index.generated';
 
-const TwoColumns = styled.div`
-  display: flex;
-  flex-direction: row;
+const BigText: React.FC = ({ children }) => (
+  <div className="text-2xl">{children}</div>
+);
 
-  > * {
-    flex-basis: 0;
-    flex-grow: 1;
-  }
-`;
+const Link: React.FC<{ href: string }> = ({ href, children }) => (
+  <a className="no-underline text-accent-500" href={href}>
+    {children}
+  </a>
+);
 
-const MapIFrame = styled.iframe`
-  height: 90vh;
-  border: none;
-`;
-
-const BigText = styled.div`
-  font-size: ${fonts.sizes.XL2};
-`;
-
-const RightColumn = styled.div`
-  background-color: black;
-  color: white;
-
-  display: flex;
-  align-items: center;
-  justify-content: center;
-`;
-
-const RightContent = styled.div`
-  max-width: 480px;
-`;
-
-const Text = styled.div`
-  margin: 32px 0;
-`;
-
-const Link = styled.a`
-  text-decoration: none;
-  color: ${colors.accent[500]};
-`;
-
-const KEY = 'AIzaSyDTpyJfFT0Taz2DuiTJl5ng64Dn3st02TI'; // FIXME
+const KEY = kochergaConfig.googleMapsKey;
 
 const BigContactsBlock: BlockComponent<Props> = (props) => {
   return (
-    <TwoColumns>
-      <MapIFrame
+    <div className="flex flex-col md:h-screen md:flex-row">
+      <iframe
+        className="flex-1 min-h-80"
         src={`https://www.google.com/maps/embed/v1/view?center=${props.contacts.map.lat},${props.contacts.map.lng}&zoom=16&key=${KEY}`}
         allowFullScreen
       />
-      <RightColumn>
-        <RightContent>
+      <div className="flex-1 py-10 bg-black text-white flex justify-center items-center">
+        <div className="max-w-md">
           <BigText>{props.contacts.address}</BigText>
           <BigText>
             Телефон:{' '}
@@ -73,11 +41,11 @@ const BigContactsBlock: BlockComponent<Props> = (props) => {
               {props.contacts.email}
             </Link>
           </BigText>
-          <Text>{props.contacts.text}</Text>
+          <div className="my-8">{props.contacts.text}</div>
           <SocialIcons />
-        </RightContent>
-      </RightColumn>
-    </TwoColumns>
+        </div>
+      </div>
+    </div>
   );
 };
 

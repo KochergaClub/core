@@ -1,28 +1,17 @@
-import styled from 'styled-components';
+export const Card: React.FC = ({ children }) => <div>{children}</div>;
 
-import { colors } from '~/frontkit';
+export const CardHeader: React.FC = ({ children }) => (
+  <header className="bg-gray-100 border-b border-gray-200 p-3">
+    {children}
+  </header>
+);
 
-export const Card = styled.div`
-  border-top: 1px solid ${colors.grey[200]};
-  min-height: 50vh;
-`;
+export const CardBody: React.FC = ({ children }) => (
+  <div className="p-3 max-w-3xl mx-auto">{children}</div>
+);
 
-export const CardHeader = styled.header`
-  background-color: ${colors.grey[100]};
-  border-bottom: 1px solid ${colors.grey[200]};
-  padding: 12px;
-`;
-
-export const CardBody = styled.div`
-  padding: 12px;
-  max-width: 800px;
-  margin: 0 auto;
-`;
-
-export const EmptyCard = styled(Card)`
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 2em;
-  color: #888;
-`;
+export const EmptyCard: React.FC = ({ children }) => (
+  <div className="flex justify-center text-3xl text-gray-400 pt-32">
+    {children}
+  </div>
+);

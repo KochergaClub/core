@@ -1,0 +1,19 @@
+.core {
+  @apply border-2 border-primary-300 py-0 leading-none;
+
+  &:focus {
+    @apply border-2 border-primary-500 bg-primary-100 outline-none;
+  }
+
+  &::placeholder {
+    @apply text-gray-400;
+  }
+}
+
+.big {
+  @apply text-2xl px-2.5 h-12;
+}
+
+.normal {
+  @apply text-base px-1.5 h-8;
+}

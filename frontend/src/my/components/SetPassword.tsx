@@ -1,19 +1,14 @@
-import { useCallback, useState } from 'react';
-import styled from 'styled-components';
+import React, { useCallback, useState } from 'react';
 
 import { useMutation } from '@apollo/client';
 
 import { useCommonHotkeys } from '~/common/hooks';
 import { HintCard } from '~/components';
-import { Button, colors, Column, Input, Label } from '~/frontkit';
+import { ErrorMessage } from '~/components/forms';
+import { Button, Column, Input, Label } from '~/frontkit';
 
 import { SetPasswordDocument } from '../queries.generated';
 import HeadedFragment from './HeadedFragment';
-
-// TODO - consolidate with ErrorMessage from ~/components/forms
-const ErrorMessage = styled(Label)`
-  color: ${colors.accent[500]};
-`;
 
 const SetPassword: React.FC = () => {
   const [oldPassword, setOldPassword] = useState('');

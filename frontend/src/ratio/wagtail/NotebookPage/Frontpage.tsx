@@ -1,71 +1,11 @@
+import clsx from 'clsx';
 import { useContext } from 'react';
-
-import styled from 'styled-components';
 
 import { staticUrl } from '~/common/utils';
 
-import PrintContext from './PrintContext';
-
 import { RatioNotebookPageFragment } from '../fragments.generated';
-
-interface ContainerProps {
-  height: number;
-}
-
-const Container = styled.header<ContainerProps>`
-  max-width: 800px;
-  position: relative;
-  break-after: page;
-  height: ${props => props.height}mm;
-  display: flex;
-  flex-direction: column;
-  @media screen {
-    border-bottom: 1px solid #eee;
-    margin-bottom: 20px;
-    height: 100vh;
-  }
-`;
-
-const MainArea = styled.div`
-  flex: 1;
-
-  display: flex;
-  justify-content: center;
-  align-items: center;
-`;
-
-const Header = styled.div`
-  margin-left: 50px;
-  margin-right: 50px;
-
-  font-size: 4em;
-  font-weight: bold;
-  font-variant: small-caps;
-  line-height: 1.1;
-`;
-
-const Training = styled.footer`
-  width: 100%;
-`;
-
-const EventTitle = styled.div`
-  text-align: center;
-  color: #666;
-  margin-bottom: 10px;
-`;
-
-const BrandLine = styled.div`
-  display: flex;
-  align-items: center;
-  font-family: Intro;
-  justify-content: center;
-  margin-bottom: 10px;
-
-  img {
-    height: 32px;
-    margin-right: 8px;
-  }
-`;
+import PrintContext from './PrintContext';
+import styles from './styles.module.scss';
 
 interface Props {
   wagtailPage: RatioNotebookPageFragment;
@@ -74,23 +14,35 @@ interface Props {
 export default function Frontpage(props: Props) {
   const printContext = useContext(PrintContext);
   return (
-    <Container
-      height={
-        printContext.page.height - printContext.page.bottomMargin * 2 - 10
-      }
+    <div
+      className={clsx(
+        'flex flex-col h-screen print:h-auto border-b border-gray-200 print:border-0 mb-5 print:mb-0',
+        styles['break-after-page']
+      )}
+      style={{
+        height: `${
+          printContext.page.height - printContext.page.bottomMargin * 2 - 10
+        }mm`,
+      }}
     >
-      <MainArea>
-        <Header>{props.wagtailPage.title}</Header>
-      </MainArea>
-      <Training>
+      <div className="flex-1 flex justify-center items-center">
+        <div className={styles['frontpage-header']}>
+          {props.wagtailPage.title}
+        </div>
+      </div>
+      <footer className="w-full">
         {/* TODO - add event date line, or maybe picker of a ratio event */}
-        {false && <EventTitle>Выездной воркшоп по рациональности</EventTitle>}
+        {false && (
+          <div className="text-center text-gray-500 mb-3">
+            Выездной воркшоп по рациональности
+          </div>
+        )}
 
-        <BrandLine>
-          <img src={staticUrl('logo.png')} />
-          <div>Кочерга</div>
-        </BrandLine>
-      </Training>
-    </Container>
+        <div className="flex justify-center items-center mb-3">
+          <img className="h-8 mr-2" src={staticUrl('logo.png')} />
+          <div style={{ fontFamily: 'Intro' }}>Кочерга</div>
+        </div>
+      </footer>
+    </div>
   );
 }

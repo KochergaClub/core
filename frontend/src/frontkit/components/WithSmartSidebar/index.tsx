@@ -1,23 +1,8 @@
 import { useEffect, useState } from 'react';
 import useResizeAware from 'react-resize-aware';
-import styled from 'styled-components';
 
 import { Sidebar } from './Sidebar';
-import { SidebarControls } from './types';
-
-const Container = styled.div`
-  display: flex;
-  flex-direction: row;
-  width: 100%;
-  height: 100%;
-  position: relative;
-`;
-
-const Main = styled.div`
-  flex: 1;
-  overflow: auto;
-  position: relative;
-`;
+import { SidebarStatus } from './types';
 
 const useIsMobile = () => {
   const [resizeListener, sizes] = useResizeAware();
@@ -34,8 +19,8 @@ const useIsMobile = () => {
 };
 
 interface Props {
-  renderSidebar: (sidebar: SidebarControls) => React.ReactNode;
-  renderContent: (sidebar: SidebarControls) => React.ReactNode;
+  renderSidebar: (status: SidebarStatus) => React.ReactNode;
+  renderContent: (status: SidebarStatus) => React.ReactNode;
 }
 
 export const WithSmartSidebar: React.FC<Props> = ({
@@ -55,10 +40,11 @@ export const WithSmartSidebar: React.FC<Props> = ({
     } else if (!isMobile && !showSidebar) {
       setShowSidebar(true);
     }
+    // this is not a bug with missing dep! we actually want to toggle sidebar on isMobile changes only
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [isMobile]); // this is not a bug with missing dep! we actually want to toggle sidebar on isMobile changes only
+  }, [isMobile]);
 
-  const sidebar: SidebarControls = {
+  const status: SidebarStatus = {
     toggle: () => {
       setShowSidebar(!showSidebar);
     },
@@ -67,10 +53,12 @@ export const WithSmartSidebar: React.FC<Props> = ({
   };
 
   return (
-    <Container>
+    <div className="flex h-full relative">
       {resizeListener}
-      <Sidebar sidebar={sidebar} render={renderSidebar} />
-      <Main>{renderContent(sidebar)}</Main>
-    </Container>
+      <Sidebar status={status} render={renderSidebar} />
+      <div className="flex-1 overflow-auto relative">
+        {renderContent(status)}
+      </div>
+    </div>
   );
 };

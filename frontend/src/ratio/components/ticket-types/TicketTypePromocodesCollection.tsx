@@ -1,17 +1,8 @@
-import styled from 'styled-components';
-
 import { useLazyQuery } from '@apollo/client';
-
-import { colors } from '~/frontkit';
 
 import { RatioTicketTypeFragment } from '../../queries.generated';
 import PromocodesCollection from '../promocodes/PromocodesCollection';
 import { RatioTicketTypePromocodesPageDocument } from './queries.generated';
-
-const Container = styled.div`
-  padding: 8px;
-  border: 1px solid ${colors.grey[200]};
-`;
 
 interface Props {
   ticketType: RatioTicketTypeFragment;
@@ -45,13 +36,13 @@ const TicketTypePromocodesCollection: React.FC<Props> = ({ ticketType }) => {
     : ticketType.promocodes;
 
   return (
-    <Container>
+    <div className="p-2 border border-gray-200">
       <PromocodesCollection
         connection={connection}
         fetchPage={fetchPage}
         total={ticketType.promocodes_count}
       />
-    </Container>
+    </div>
   );
 };
 

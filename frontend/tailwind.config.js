@@ -37,6 +37,10 @@ module.exports = {
       transitionProperty: {
         width: 'width',
       },
+      outline: {
+        primary: ['1px solid hsl(210, 55%, 55%)', '1px'], // primary.500
+        accent: ['1px solid hsl(0, 100%, 74%)', '1px'], // accent.500
+      },
     },
     colors: {
       transparent: 'transparent',

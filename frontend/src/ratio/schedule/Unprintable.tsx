@@ -1,9 +1,5 @@
-import styled from 'styled-components';
-
-const Unprintable = styled.div`
-  @media print {
-    display: none;
-  }
-`;
+const Unprintable: React.FC = ({ children }) => (
+  <div className="print:hidden">{children}</div>
+);
 
 export default Unprintable;

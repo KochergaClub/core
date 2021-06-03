@@ -1,18 +1,11 @@
 import autosize from 'autosize';
 import React, { useCallback, useReducer, useRef } from 'react';
 import { FaEdit } from 'react-icons/fa';
-import styled from 'styled-components';
 
 import { Markdown } from '~/components';
 import { AsyncButton, Button, Column, ControlsFooter, Row } from '~/frontkit';
 
 import { Header, IconLink, UserText } from './ui';
-
-const Textarea = styled.textarea`
-  width: 100%;
-  background-color: #ffffdd;
-  padding: 2px 4px;
-`;
 
 interface Props {
   title: string;
@@ -98,7 +91,8 @@ const EditableText: React.FC<Props> = ({ title, text, save, empty }) => {
   const renderEditing = () => {
     return (
       <Column stretch>
-        <Textarea
+        <textarea
+          className="px-1 py-0.5 bg-primary-100"
           ref={setTextarea}
           onKeyDown={editText}
           defaultValue={text}

@@ -1,5 +1,4 @@
 import Link from 'next/link';
-import styled from 'styled-components';
 
 import TelegramIcon from '~/components/icons/TelegramIcon';
 import { A, colors, LabelDiv, Row } from '~/frontkit';
@@ -7,22 +6,11 @@ import { projectRoute } from '~/projects/routes';
 
 import { TelegramChatFragment } from '../queries.generated';
 
-const ImgContainer = styled.div`
-  width: 50px;
-  height: 50px;
-  > img {
-    border-radius: 25px;
-  }
-`;
-
-const ChatLink = styled.a`
-  text-decoration: none;
-  color: black;
-`;
-
-const Header = styled.header`
-  font-weight: bold;
-`;
+const ChatLink: React.FC<{ href: string }> = ({ href, children }) => (
+  <a href={href} className="no-underline text-black">
+    {children}
+  </a>
+);
 
 interface Props {
   chat: TelegramChatFragment;
@@ -39,20 +27,21 @@ export const TelegramChatCardContents: React.FC<Props> = ({
   return (
     <Row gutter={16}>
       <ChatLink href={href}>
-        <ImgContainer>
+        <div className="w-12 h-12">
           {chat.photo && chat.photo_x2 ? (
             <img
+              className="rounded-full"
               src={chat.photo.url}
               srcSet={`${chat.photo.url}, ${chat.photo_x2.url} 2x`}
             />
           ) : (
-            <TelegramIcon size={50} color={colors.grey[400]} />
+            <TelegramIcon size={48} color={colors.grey[400]} />
           )}
-        </ImgContainer>
+        </div>
       </ChatLink>
       <div>
         <ChatLink href={href}>
-          <Header>{chat.title}</Header>
+          <header className="font-bold">{chat.title}</header>
         </ChatLink>
         <Row vCentered>
           <ChatLink href={href}>
@@ -60,7 +49,7 @@ export const TelegramChatCardContents: React.FC<Props> = ({
               {chat.username ? `@${chat.username}` : chat.link}
             </LabelDiv>
           </ChatLink>
-          {renderControls ? renderControls() : null}
+          {renderControls?.()}
         </Row>
         {chat.project && !hideProjectLink ? (
           <small>

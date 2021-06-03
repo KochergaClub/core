@@ -1,28 +1,6 @@
+import clsx from 'clsx';
 import { AnimatePresence, motion } from 'framer-motion';
 import React from 'react';
-import styled from 'styled-components';
-
-import { colors, fonts } from '~/frontkit';
-
-const NavListUl = styled.ul`
-  border-bottom: 1px solid ${colors.grey[300]};
-  background-color: white;
-  list-style-type: none;
-  padding: 0;
-  margin: 0;
-  position: relative;
-
-  & > li {
-    padding: 4px 16px;
-    font-size: ${fonts.sizes.XS};
-    border-top: 1px solid ${colors.grey[300]};
-  }
-`;
-
-const Header = styled.header`
-  padding: 4px 16px;
-  color: ${colors.grey[600]};
-`;
 
 interface ListProps {
   title?: string;
@@ -30,40 +8,36 @@ interface ListProps {
 
 export const NavList: React.FC<ListProps> = ({ children, title }) => (
   <nav>
-    {title && <Header>{title}</Header>}
-    <NavListUl>
+    {title && <header className="px-4 py-1 text-gray-600">{title}</header>}
+    <ul className="bg-white list-none p-0 m-0 border-b border-gray-300 relative">
       <AnimatePresence initial={false}>{children}</AnimatePresence>
-    </NavListUl>
+    </ul>
   </nav>
 );
 
 interface ItemProps {
   selected?: boolean;
-  blur?: boolean;
   select: () => void;
 }
 
-const NavListItemLi = styled(motion.li)<Omit<ItemProps, 'select'>>`
-  cursor: pointer;
-
-  background-color: ${(props) =>
-    props.selected ? '#ffffb3' : props.blur ? '#f0f0f0' : 'white'};
-
-  &:hover {
-    background-color: ${(props) =>
-      props.selected ? '#ffffb3' : props.blur ? '#e8e8e8' : '#e8e8e8'};
-  }
-`;
-
-export const NavListItem: React.FC<ItemProps> = ({ select, ...rest }) => {
+export const NavListItem: React.FC<ItemProps> = ({
+  select,
+  selected,
+  children,
+}) => {
   return (
-    <NavListItemLi
+    <motion.li
+      className={clsx(
+        'px-4 py-1 text-xs border-t border-gray-300 cursor-pointer',
+        selected ? 'bg-highlight' : 'bg-white hover:bg-gray-100'
+      )}
       onClick={() => select()}
-      {...rest}
       layout
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       exit={{ opacity: 0 }}
-    />
+    >
+      {children}
+    </motion.li>
   );
 };

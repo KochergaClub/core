@@ -1,26 +1,21 @@
+import clsx from 'clsx';
 import { getDate, isEqual, startOfDay } from 'date-fns';
-import styled from 'styled-components';
 
 import { formatDate } from '~/common/utils';
-import { fonts } from '~/frontkit';
-
-const Container = styled.header<{ today: boolean }>`
-  text-align: center;
-  font-weight: ${(props) => (props.today ? 'bold' : 'normal')};
-  padding: 2px 4px;
-  color: black;
-  font-size: ${fonts.sizes.XS};
-`;
 
 interface Props {
   day: Date;
 }
 
-const DayHeader: React.FC<Props> = ({ day }) => {
+export const DayHeader: React.FC<Props> = ({ day }) => {
   const today = isEqual(startOfDay(day), startOfDay(new Date()));
 
   const format = today || getDate(day) === 1 ? 'd MMMM' : 'd';
-  return <Container today={today}>{formatDate(day, format)}</Container>;
+  return (
+    <header
+      className={clsx('text-center text-xs px-1 py-0.5', today && 'font-bold')}
+    >
+      {formatDate(day, format)}
+    </header>
+  );
 };
-
-export default DayHeader;

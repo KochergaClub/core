@@ -1,25 +1,15 @@
 import { useState } from 'react';
-import styled from 'styled-components';
+
 import { Column } from '~/frontkit';
 
-import { useOpenViduSession } from './hooks';
-import OvVideo from './OvVideo';
 import Controls from './Controls';
+import { useOpenViduSession } from './hooks';
 import JoinSettings from './JoinSettings';
+import OvVideo from './OvVideo';
 
 interface Props {
   getToken: () => Promise<string>;
 }
-
-const Grid = styled.div`
-  width: 100%;
-  display: grid;
-  gap: 8px;
-  padding: 8px;
-  grid-template-columns: repeat(auto-fill, minmax(400px, 1fr));
-  grid-auto-flow: row;
-  place-items: center;
-`;
 
 const OpenViduApp: React.FC<Props> = ({ getToken }) => {
   const {
@@ -48,7 +38,7 @@ const OpenViduApp: React.FC<Props> = ({ getToken }) => {
       <Column centered>
         <Controls
           addFake={() => {
-            setFakeStreams(fakeStreams => fakeStreams + 1);
+            setFakeStreams((fakeStreams) => fakeStreams + 1);
           }}
           publisher={publisher}
           session={session}
@@ -58,14 +48,19 @@ const OpenViduApp: React.FC<Props> = ({ getToken }) => {
           }}
         />
       </Column>
-      <Grid>
-        {allSubscribers.map(subscriber => (
+      <div
+        className="grid w-full gap-1 p-2 grid-flow-row place-items-center"
+        style={{
+          gridTemplateColumns: 'repeat(auto-fill, minmax(400px, 1fr))',
+        }}
+      >
+        {allSubscribers.map((subscriber) => (
           <OvVideo
             key={subscriber.stream.streamId}
             streamManager={subscriber}
           />
         ))}
-      </Grid>
+      </div>
       {subscribers.length ? null : (
         <Column centered>
           <h1>Других участников пока нет :(</h1>

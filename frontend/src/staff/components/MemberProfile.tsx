@@ -1,5 +1,4 @@
 import { useCallback } from 'react';
-import styled from 'styled-components';
 
 import { useMutation, useQuery } from '@apollo/client';
 
@@ -12,18 +11,6 @@ import {
     StaffMemberExternalAccountsDocument, StaffMemberFullFragment, StaffUnfireMemberDocument
 } from '../queries.generated';
 
-const Ex = styled.div`
-  background-color: #ddd;
-  padding: 4px 8px;
-  border-radius: 4px;
-  font-size: 0.8em;
-`;
-
-const Image = styled.img`
-  width: 300px;
-  height: auto;
-`;
-
 interface Props {
   member: StaffMemberFullFragment;
 }
@@ -34,6 +21,7 @@ const ExternalServices: React.FC<{ member_id: string }> = ({ member_id }) => {
       id: member_id,
     },
   });
+
   return (
     <ApolloQueryResults {...queryResults}>
       {({ data: { staffMember } }) => (
@@ -119,7 +107,7 @@ const ManagerControls: React.FC<Props> = ({ member }) => {
   );
 };
 
-const MemberProfile: React.FC<Props> = ({ member }) => {
+export const MemberProfile: React.FC<Props> = ({ member }) => {
   const [current_user_is_manager] = usePermissions(['staff.manage']);
   const [current_user_can_view_external_services] = usePermissions([
     'external_services.view_access',
@@ -134,10 +122,16 @@ const MemberProfile: React.FC<Props> = ({ member }) => {
             {member.short_name}
           </h2>
           <div>{member.user.email}</div>
-          {member.is_current || <Ex>Бывший сотрудник</Ex>}
+          {member.is_current || (
+            <div className="bg-gray-600 px-2 py-1 rounded text-sm">
+              Бывший сотрудник
+            </div>
+          )}
         </Column>
         <Column centered>
-          {member.slack_user && <Image src={member.slack_user.image_url} />}
+          {member.slack_user && (
+            <img className="w-72" src={member.slack_user.image_url} />
+          )}
           {member.slack_user && (
             <A
               href={`https://kocherga.slack.com/messages/${member.slack_user.slack_id}/`}
@@ -159,5 +153,3 @@ const MemberProfile: React.FC<Props> = ({ member }) => {
     </div>
   );
 };
-
-export default MemberProfile;

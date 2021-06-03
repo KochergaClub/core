@@ -1,53 +1,9 @@
-import styled from 'styled-components';
-
+import { staticUrl } from '~/common/utils';
 import { HR } from '~/frontkit';
 
-import { staticUrl } from '~/common/utils';
-
 import { TrainingDayFragment } from '../../queries.generated';
-
-import Activity from './Activity';
 import EditDayInAdmin from '../EditDayInAdmin';
-
-const DayFooter = styled.footer`
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-
-  color: #666;
-
-  @media print {
-    position: fixed;
-    bottom: 0;
-    width: 100%;
-  }
-`;
-
-const DayFooterBranding = styled.div`
-  display: flex;
-  align-items: center;
-  font-family: Intro;
-
-  img {
-    height: 32px;
-    margin-right: 8px;
-  }
-`;
-
-const DayContainer = styled.section`
-  page-break-after: always;
-  text-align: center;
-
-  @media screen {
-    margin-top: 40px;
-    margin-bottom: 40px;
-  }
-`;
-
-const DayHeader = styled.header`
-  font-size: 32px;
-  font-weight: bold;
-`;
+import Activity from './Activity';
 
 interface Props {
   index: number;
@@ -56,8 +12,11 @@ interface Props {
 }
 
 const DaySchedule: React.FC<Props> = ({ day_schedule, long_name, index }) => (
-  <DayContainer>
-    <DayHeader>День {index}</DayHeader>
+  <section
+    className="text-center my-10 print:my-0"
+    style={{ pageBreakAfter: 'always' }}
+  >
+    <header className="text-3xl">День {index}</header>
     <EditDayInAdmin day_schedule={day_schedule} />
     <HR />
 
@@ -65,14 +24,14 @@ const DaySchedule: React.FC<Props> = ({ day_schedule, long_name, index }) => (
       <Activity key={i} activity={activity} />
     ))}
 
-    <DayFooter>
-      <DayFooterBranding>
-        <img src={staticUrl('logo.png')} />
-        <div>Кочерга</div>
-      </DayFooterBranding>
+    <footer className="flex justify-between items-center text-gray-500 print:fixed print:bottom-0 print:w-full">
+      <div className="flex items-center">
+        <img className="h-8 mr-2" src={staticUrl('logo.png')} />
+        <div style={{ fontFamily: 'Intro' }}>Кочерга</div>
+      </div>
       <div>{long_name}</div>
-    </DayFooter>
-  </DayContainer>
+    </footer>
+  </section>
 );
 
 export default DaySchedule;

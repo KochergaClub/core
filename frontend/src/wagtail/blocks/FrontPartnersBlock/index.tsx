@@ -1,25 +1,16 @@
-import styled from 'styled-components';
-
 import { gql } from '@apollo/client';
-import { Row } from '~/frontkit';
 
 import { PaddedBlock } from '~/components';
+import { Row } from '~/frontkit';
 
 import { BlockComponent } from '../../types';
 import { FrontPartnersBlockFragment as Props } from './index.generated';
 
-const Image = styled.img`
-  filter: grayscale(100%);
-
-  &:hover {
-    filter: none;
-  }
-`;
-
 const Partner: React.FC<{ partner: Props['partners'][0] }> = ({ partner }) => {
   return (
     <a href={partner.link}>
-      <Image
+      <img
+        className="filter grayscale hover:filter-none"
         src={partner.image.url}
         srcSet={`${partner.image.url}, ${partner.image_x2.url} 2x`}
       />

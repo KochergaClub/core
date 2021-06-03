@@ -1,7 +1,6 @@
 import { FragmentDefinitionNode } from 'graphql';
 import { useCallback, useContext, useState } from 'react';
 import { FaExternalLinkAlt } from 'react-icons/fa';
-import styled from 'styled-components';
 
 import { gql, TypedDocumentNode, useApolloClient } from '@apollo/client';
 
@@ -19,20 +18,10 @@ import { wagtailAdminPageEditLink } from '../routes';
 import { AnyBlockFragment } from '../types';
 import { blockToParams, typenameToBackendBlockName } from '../utils';
 import { EditBlocksContext } from './EditWagtailBlocks';
-import PageRevisions from './PageRevisions';
+import { PageRevisions } from './PageRevisions';
 import {
     WagtailStreamFieldValidationErrorFragment, WagtailStreamFieldValidationErrorFragmentDoc
 } from './queries.generated';
-
-const Container = styled.div`
-  position: fixed;
-  bottom: 0;
-  width: 100%;
-  border-top: 2px solid red;
-  background-color: white;
-  padding: 20px;
-  z-index: 30;
-`;
 
 interface Props {
   blocks: AnyBlockFragment[];
@@ -160,17 +149,21 @@ const EditControls: React.FC<Props> = ({ blocks }) => {
         text: errorText,
         type: 'Error',
       });
-    } else {
-      const page = mutationResults.data?.result.page;
-      if (page) {
-        setSavedPage(page);
-      } else {
-        notify({
-          text: 'No page in save results',
-          type: 'Error',
-        });
-      }
+      return;
     }
+
+    const savedPage = mutationResults.data?.result.page;
+    if (!savedPage) {
+      notify({
+        text: 'No page in save results',
+        type: 'Error',
+      });
+      return;
+    }
+    editDispatch({
+      type: 'CLEAR_VALIDATION_ERROR',
+    });
+    setSavedPage(savedPage);
   }, [apolloClient, blocks, page, notify, editDispatch, serializeBlocks]);
 
   const stopEditing = useCallback(async () => {
@@ -186,7 +179,7 @@ const EditControls: React.FC<Props> = ({ blocks }) => {
   }
 
   return (
-    <Container>
+    <div className="fixed bottom-0 w-full border-t-2 border-accent-700 bg-white p-5 z-30">
       <Row spaced vCentered wrap>
         <A href={wagtailAdminPageEditLink(page.id)} target="_blank">
           <small>
@@ -210,7 +203,7 @@ const EditControls: React.FC<Props> = ({ blocks }) => {
           </AsyncButton>
         </Row>
       </Row>
-    </Container>
+    </div>
   );
 };
 

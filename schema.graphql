@@ -93,10 +93,7 @@ input AuthSetMyNamesInput {
   last_name: String!
 }
 
-type AuthSetMyNamesResult {
-  error: String
-  ok: Boolean
-}
+union AuthSetMyNamesResult = AuthCurrentUser | GenericError | ValidationError
 
 input AuthSetPasswordInput {
   old_password: String

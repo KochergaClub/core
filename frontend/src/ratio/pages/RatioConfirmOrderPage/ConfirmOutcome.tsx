@@ -1,26 +1,10 @@
 import { FaCheck } from 'react-icons/fa';
 import { MdError } from 'react-icons/md';
-import styled from 'styled-components';
 
 import { RatioConfirmOrderOutcome } from '~/apollo/types.generated';
 import { PaddedBlock } from '~/components';
 import { Card } from '~/components/cards';
-import { A, colors, Column, deviceMediaQueries, fonts, Row } from '~/frontkit';
-
-const BigOutcomeContainer = styled.div`
-  padding: 0px 40px; // default HintCard padding is not enough since we use a big header
-  ${deviceMediaQueries.mobile(`
-    padding: 0;
-  `)}
-`;
-
-const BigOutcomeHeader = styled.h1`
-  font-size: ${fonts.sizes.XL3};
-  line-height: 1;
-  ${deviceMediaQueries.mobile(`
-  font-size: ${fonts.sizes.XL2};
-  `)}
-`;
+import { A, colors, Column, Row } from '~/frontkit';
 
 const BigOutcome: React.FC<{
   title: string;
@@ -32,13 +16,13 @@ const BigOutcome: React.FC<{
     <PaddedBlock>
       <Column centered>
         <Card>
-          <BigOutcomeContainer>
+          <div className="p-0 sm:px-10">
             <Row gutter={16} vCentered>
               <Icon style={{ color }} size={32} />
-              <BigOutcomeHeader>{title}</BigOutcomeHeader>
+              <h1 className="text-2xl sm:text-3xl leading-none">{title}</h1>
             </Row>
             <div>{children}</div>
-          </BigOutcomeContainer>
+          </div>
         </Card>
       </Column>
     </PaddedBlock>

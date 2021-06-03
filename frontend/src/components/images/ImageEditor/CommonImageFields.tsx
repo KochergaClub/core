@@ -74,7 +74,7 @@ export const CommonImageFields: React.FC<Props> = ({
                     styles={{
                       menuPortal: (base) => ({
                         ...base,
-                        zIndex: 1500,
+                        zIndex: 5000,
                       }),
                     }}
                     {...field}

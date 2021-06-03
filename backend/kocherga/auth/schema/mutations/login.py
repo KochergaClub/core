@@ -12,7 +12,7 @@ from django.core.mail import send_mail
 from django.core.validators import validate_email
 from django.template.loader import render_to_string
 from kocherga.email.tools import mjml2html
-from kocherga.graphql import g, helpers
+from kocherga.graphql import django_utils, g, helpers
 from kocherga.graphql.permissions import authenticated
 
 from ...utils import get_magic_token
@@ -201,17 +201,12 @@ class authSendMagicLink(helpers.BaseFieldWithInput):
 
 
 @c.class_field
-class authSetMyNames(helpers.BaseFieldWithInput):
+class authSetMyNames(django_utils.SmartMutationField):
     permissions = [authenticated]
     input = {'first_name': str, 'last_name': str}
-    result = g.NN(
-        g.ObjectType(
-            'AuthSetMyNamesResult',
-            g.fields({'error': Optional[str], 'ok': Optional[bool]}),
-        )
-    )
+    ok_result = types.AuthCurrentUser
 
-    def resolve(self, _, info, input):
+    def smart_resolve(self, _, info, input):
         first_name = input['first_name']
         last_name = input['last_name']
 
@@ -221,7 +216,7 @@ class authSetMyNames(helpers.BaseFieldWithInput):
         user.full_clean()
         user.save()
 
-        return {'ok': True}
+        return user
 
 
 mutations = c.as_dict()

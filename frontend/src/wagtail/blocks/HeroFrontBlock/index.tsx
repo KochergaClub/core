@@ -1,65 +1,20 @@
-import styled from 'styled-components';
+import clsx from 'clsx';
 
 import { gql } from '@apollo/client';
 
-import { staticUrl } from '~/common/utils';
-import { colors, deviceMediaQueries, fonts } from '~/frontkit';
-
 import { BlockComponent } from '../../types';
-import HeroButtons from './HeroButtons';
+import { HeroButtons } from './HeroButtons';
 import { HeroFrontBlockFragment as Props } from './index.generated';
-
-const Container = styled.div`
-  display: flex;
-  flex-direction: column;
-  min-height: calc(100vh - 60px);
-
-  padding-left: 60px;
-  padding-right: 40px;
-  justify-content: center;
-  ${deviceMediaQueries.mobile(`
-    padding-left: 40px;
-  `)}
-
-  background: right 100px center / 400px no-repeat url("${staticUrl(
-    'logo/logo.svg'
-  )}"),
-    radial-gradient(
-      circle at center left,
-      ${colors.primary[500]},
-      ${colors.accent[500]}
-    );
-`;
-
-const Header = styled.h1`
-  font-size: ${fonts.sizes.XL6};
-  line-height: 1.2;
-  ${deviceMediaQueries.mobile(`
-    font-size: ${fonts.sizes.XL3};
-    text-align: center;
-  `)}
-  ${deviceMediaQueries.tablet(`
-    font-size: ${fonts.sizes.XL5};
-  `)}
-  color: white;
-`;
-
-const ContentContainer = styled.div`
-  max-width: 600px;
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-  min-height: calc(60vh - 60px);
-`;
+import styles from './index.module.css';
 
 const HeroFrontBlock: BlockComponent<Props> = (props) => {
   return (
-    <Container>
-      <ContentContainer>
-        <Header>{props.hero.title}</Header>
+    <div className={clsx('flex items-center p-10 sm:p-16', styles.background)}>
+      <div className="max-w-screen-sm flex flex-col justify-between">
+        <h1 className={styles.header}>{props.hero.title}</h1>
         <HeroButtons buttons={props.hero.buttons} />
-      </ContentContainer>
-    </Container>
+      </div>
+    </div>
   );
 };
 

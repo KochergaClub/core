@@ -2,11 +2,11 @@ fragment RatioTestimonial_Card on RatioTestimonial {
   id
   author_name
   author_description
-  author_image(spec: "fill-60x60") {
+  author_image(spec: "fill-64x64") {
     id
     url
   }
-  author_image_2x: author_image(spec: "fill-120x120") {
+  author_image_2x: author_image(spec: "fill-128x128") {
     id
     url
   }

@@ -2,9 +2,9 @@ import React from 'react';
 
 import { Story } from '@storybook/react';
 
-import { Column } from '../layout/Column';
-import { Row } from '../layout/Row';
-import { Button, Props } from './Button';
+import { Column } from '../../layout/Column';
+import { Row } from '../../layout/Row';
+import { Button, Props } from './';
 
 export default {
   title: 'Components/Button',

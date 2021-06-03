@@ -1,25 +1,14 @@
-import styled from 'styled-components';
-
 import { Page } from '~/components';
-
 import { NextWagtailPage } from '~/wagtail/types';
 
+import { RatioNotebookPageFragment, RatioNotebookPageFragmentDoc } from '../fragments.generated';
 import RatioSection_Main from '../SectionPage/Main';
-
-import {
-  RatioNotebookPageFragment,
-  RatioNotebookPageFragmentDoc,
-} from '../fragments.generated';
-
-import SectionTOC from './SectionTOC';
-import PrintDocument from './PrintDocument';
-import Frontpage from './Frontpage';
 import Emptypage from './Emptypage';
+import Frontpage from './Frontpage';
+import { PrintDocument } from './PrintDocument';
 import PrintFooter from './PrintFooter';
-
-const SectionContainer = styled.section`
-  break-before: page;
-`;
+import SectionTOC from './SectionTOC';
+import styles from './styles.module.scss';
 
 const NotebookPage: NextWagtailPage<RatioNotebookPageFragment> = ({ page }) => {
   const footer = <PrintFooter />;
@@ -31,12 +20,12 @@ const NotebookPage: NextWagtailPage<RatioNotebookPageFragment> = ({ page }) => {
         <SectionTOC page={page} />
         <Emptypage />
         <div>
-          {page.sections.map(section => {
+          {page.sections.map((section) => {
             return (
-              <SectionContainer key={section.id}>
+              <section className={styles['break-before-page']} key={section.id}>
                 <a id={`section-${section.value.meta.slug}`} />
                 <RatioSection_Main {...section.value} />
-              </SectionContainer>
+              </section>
             );
           })}
         </div>

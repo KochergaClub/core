@@ -1,4 +1,4 @@
-import { useCallback } from 'react';
+import React, { useCallback } from 'react';
 import Select, { ValueType } from 'react-select';
 
 interface Props {
@@ -37,7 +37,7 @@ const WeekdayPicker: React.FC<Props> = ({ value, setValue }) => {
       placeholder="Выбрать..."
       menuPortalTarget={document.body}
       styles={{
-        menuPortal: (base) => ({ ...base, zIndex: 1500 }),
+        menuPortal: (base) => ({ ...base, zIndex: 5000 }),
       }}
       options={[0, 1, 2, 3, 4, 5, 6].map((n) => ({
         value: n,

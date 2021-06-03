@@ -65,7 +65,7 @@ export const AsyncSelectField = <T extends FieldValues, I>({
               styles={{
                 menuPortal: (provided) => ({
                   ...provided,
-                  zIndex: 1100,
+                  zIndex: 5000,
                 }),
                 container: (provided) => ({
                   ...provided,

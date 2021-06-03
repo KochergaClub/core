@@ -1,29 +1,12 @@
-import styled from 'styled-components';
-
 import { parseISO } from 'date-fns';
 import { utcToZonedTime } from 'date-fns-tz';
-import { timezone, formatDate } from '~/common/utils';
 
+import { formatDate, timezone } from '~/common/utils';
 import { A } from '~/frontkit';
 
 import { CommonZadarmaPbxCallFragment } from '../queries.generated';
-
 import CallInfo from './CallInfo';
 import PbxCallData from './PbxCallData';
-
-const Container = styled.div`
-  display: flex;
-  > * + * {
-    margin-left: 40px;
-  }
-  > * {
-    flex: 1;
-  }
-`;
-
-const DateDiv = styled.div`
-  font-weight: bold;
-`;
 
 interface Props {
   pbx_call: CommonZadarmaPbxCallFragment;
@@ -48,18 +31,20 @@ const PbxCallCard: React.FC<Props> = ({ pbx_call }) => {
 
   return (
     <div>
-      <Container>
-        <div>
+      <div className="flex space-x-10">
+        <div className="flex-1">
           <header>
-            <DateDiv>{formatDate(zonedDate, 'd MMMM')}</DateDiv>
+            <div className="font-bold">{formatDate(zonedDate, 'd MMMM')}</div>
             <A href={`/team/zadarma/pbx_call/${pbx_call.id}`}>{title}</A>
           </header>
-          {pbx_call.calls.map(call => (
+          {pbx_call.calls.map((call) => (
             <CallInfo key={call.id} call={call} />
           ))}
         </div>
-        <PbxCallData pbx_call={pbx_call} />
-      </Container>
+        <div className="flex-1">
+          <PbxCallData pbx_call={pbx_call} />
+        </div>
+      </div>
     </div>
   );
 };

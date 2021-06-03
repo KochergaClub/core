@@ -1,168 +1,104 @@
 import { AnimatePresence, motion } from 'framer-motion';
 import { useRef } from 'react';
 import { BiChevronsLeft, BiChevronsRight } from 'react-icons/bi';
-import styled from 'styled-components';
 
-import * as colors from '../../colors';
-import * as fonts from '../../fonts';
-import { Row } from '../../layout/Row';
-import { SidebarControls } from './types';
+import { SidebarStatus } from './types';
 
-const DesktopContainer = styled.div`
-  background-color: ${colors.grey[100]};
-  height: 100%;
-  border-right: 1px solid ${colors.grey[300]};
-`;
-
-const MobileContainerInner = styled(DesktopContainer)`
-  border: none;
-  cursor: auto;
-`;
-
-const MobileOverlay = styled.div`
-  width: 100%;
-  height: 100%;
-  // MobileSidebarInner needs to be positioned identically to Sidebar inside Container
-  display: flex;
-  flex-direction: row;
-
-  cursor: pointer;
-  background-color: rgba(0, 0, 0, 50%);
-`;
-
-const MobileContainer: React.FC<{ sidebar: SidebarControls }> = ({
-  sidebar,
+const MobileContainer: React.FC<{ status: SidebarStatus }> = ({
+  status,
   children,
 }) => {
   const overlayRef = useRef<HTMLDivElement | null>(null);
   const handleOverlayClick = (e: React.SyntheticEvent) => {
     if (e.target === overlayRef.current) {
-      sidebar.toggle();
+      status.toggle();
     }
   };
   return (
-    <MobileOverlay onClick={handleOverlayClick} ref={overlayRef}>
-      <MobileContainerInner>{children}</MobileContainerInner>
-    </MobileOverlay>
-  );
-};
-
-const CommonControlsContainer = styled.div`
-  height: 32px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  cursor: pointer;
-  color: ${colors.primary[700]};
-  font-size: ${fonts.sizes.SM};
-
-  &:hover {
-    background-color: ${colors.grey[200]};
-  }
-`;
-
-const BottomControlsContainer = styled(CommonControlsContainer)`
-  border-top: 1px solid ${colors.grey[300]};
-`;
-
-const BottomControls: React.FC<{ sidebar: SidebarControls }> = ({
-  sidebar,
-}) => {
-  return (
-    <BottomControlsContainer onClick={sidebar.toggle}>
-      <Row vCentered gutter={0}>
-        <BiChevronsLeft size={16} />
-        <div>Скрыть</div>
-      </Row>
-    </BottomControlsContainer>
-  );
-};
-
-const SidebarWithControls: React.FC<{ sidebar: SidebarControls }> = ({
-  sidebar,
-  children,
-}) => {
-  return (
     <div
-      style={{
-        height: '100%',
-        display: 'flex',
-        flexDirection: 'column',
-        justifyContent: 'space-between',
-      }}
+      className="h-full flex cursor-pointer bg-black bg-opacity-50"
+      onClick={handleOverlayClick}
+      ref={overlayRef}
     >
-      <div>{children}</div>
-      <BottomControls sidebar={sidebar} />
+      <div className="bg-gray-100 cursor-auto">{children}</div>
     </div>
   );
 };
 
-interface CornerProps {
-  corner: 'left' | 'right';
-}
+const DesktopContainer: React.FC = ({ children }) => (
+  <div className="bg-gray-100 h-full border-r border-gray-300">{children}</div>
+);
 
-const FloatingControlsContainer = styled(CommonControlsContainer)<CornerProps>`
-  position: fixed;
-  bottom: 0;
-  ${(props) => (props.corner === 'right' ? 'right: -32px;' : 'left: 0;')}
-  width: 32px;
-  border-right: 1px solid ${colors.grey[300]};
-  border-top: 1px solid ${colors.grey[300]};
-  z-index: 1;
-  background-color: ${colors.grey[100]};
-`;
+const ControlsContainer: React.FC = ({ children }) => (
+  <div className="flex justify-center items-center h-8 cursor-pointer bg-gray-100 hover:bg-gray-200 text-primary-700 text-sm">
+    {children}
+  </div>
+);
 
-const FloatingControls: React.FC<
-  { sidebar: SidebarControls } & CornerProps
-> = ({ sidebar, corner }) => {
+const SidebarWithControls: React.FC<{ status: SidebarStatus }> = ({
+  status,
+  children,
+}) => {
   return (
-    <FloatingControlsContainer onClick={sidebar.toggle} corner={corner}>
-      <BiChevronsRight size={16} />
-    </FloatingControlsContainer>
+    <div className="h-full flex flex-col justify-between">
+      <div>{children}</div>
+      <div className="border-t border-gray-300" onClick={status.toggle}>
+        <ControlsContainer>
+          <div className="flex items-center">
+            <BiChevronsLeft size={16} />
+            <div>Скрыть</div>
+          </div>
+        </ControlsContainer>
+      </div>
+    </div>
+  );
+};
+
+const FloatingControls: React.FC<{ status: SidebarStatus }> = ({ status }) => {
+  return (
+    <div
+      className="fixed left-0 bottom-0 w-8 border-r border-t border-gray-300 z-10"
+      onClick={status.toggle}
+    >
+      <ControlsContainer>
+        <BiChevronsRight size={16} />
+      </ControlsContainer>
+    </div>
   );
 };
 
 interface Props {
-  sidebar: SidebarControls;
-  render: (sidebar: SidebarControls) => React.ReactNode;
+  status: SidebarStatus;
+  render: (status: SidebarStatus) => React.ReactNode;
 }
 
-export const Sidebar: React.FC<Props> = ({ sidebar, render }) => {
+export const Sidebar: React.FC<Props> = ({ status, render }) => {
   const withControls = (
-    <SidebarWithControls sidebar={sidebar}>
-      {render(sidebar)}
-    </SidebarWithControls>
+    <SidebarWithControls status={status}>{render(status)}</SidebarWithControls>
   );
 
-  if (sidebar.isMobile === undefined) {
+  if (status.isMobile === undefined) {
     return null; // still detecting screen width
   }
 
   return (
     <>
-      {sidebar.isMobile ? (
+      {status.isMobile ? (
         <AnimatePresence initial={false} key="mobile">
-          {sidebar.visible && (
+          {status.visible && (
             <motion.div
-              style={{
-                position: 'fixed',
-                width: '100%',
-                height: '100%',
-                zIndex: 1,
-              }}
+              className="fixed w-full h-full z-10"
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
             >
-              <MobileContainer sidebar={sidebar}>
-                {withControls}
-              </MobileContainer>
+              <MobileContainer status={status}>{withControls}</MobileContainer>
             </motion.div>
           )}
         </AnimatePresence>
       ) : (
         <AnimatePresence initial={false} key="desktop">
-          {sidebar.visible && (
+          {status.visible && (
             <motion.div
               initial={{ x: '-100%' }}
               animate={{ x: 0 }}
@@ -173,9 +109,7 @@ export const Sidebar: React.FC<Props> = ({ sidebar, render }) => {
           )}
         </AnimatePresence>
       )}
-      {!sidebar.visible && (
-        <FloatingControls sidebar={sidebar} corner="left" key="controls" />
-      )}
+      {!status.visible && <FloatingControls status={status} key="controls" />}
     </>
   );
 };

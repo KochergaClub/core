@@ -1,31 +1,9 @@
-import styled from 'styled-components';
-
-import { grey } from '../colors';
-
-const Container = styled.div`
-  display: flex;
-  flex-direction: row;
-  width: 100%;
-  height: 100%;
-`;
-
-const Sidebar = styled.div`
-  background-color: ${grey[100]};
-  border-right: 1px solid ${grey[300]};
-  align-self: stretch;
-`;
-
-const Main = styled.div`
-  flex: 1;
-  overflow: auto;
-`;
-
 export const WithSidebar: React.FC<{ sidebar: React.ReactNode }> = ({
   children,
   sidebar,
 }) => (
-  <Container>
-    <Sidebar>{sidebar}</Sidebar>
-    <Main>{children}</Main>
-  </Container>
+  <div className="flex h-full">
+    <div className="bg-gray-100 border-r border-gray-300">{sidebar}</div>
+    <div className="overflow-auto flex-1">{children}</div>
+  </div>
 );

@@ -1,32 +1,14 @@
+import clsx from 'clsx';
 import { useContext } from 'react';
-import styled from 'styled-components';
-
-import { colors } from '~/frontkit';
 
 import PrintContext from './PrintContext';
-
-const Container = styled.div`
-  display: none;
-  @media print {
-    display: block;
-  }
-`;
-
-const Footer = styled.footer<{ align: string }>`
-  position: absolute;
-  width: 100%;
-  text-align: ${(props) => props.align};
-  padding-right: 10mm;
-  padding-left: 10mm;
-  color: ${colors.grey[400]};
-`;
 
 // this is actually a header
 export default function PrintFooter() {
   const printContext = useContext(PrintContext);
 
   return (
-    <Container>
+    <div className="hidden print:block">
       {Array.from(new Array(printContext.page.count)).map((_, i) => {
         const pageNumber = i + 1;
         const pageHeight =
@@ -37,17 +19,22 @@ export default function PrintFooter() {
           return null;
         }
         return (
-          <Footer
+          <footer
             key={pageNumber}
+            className={clsx(
+              'absolute w-full text-gray-400',
+              pageNumber % 2 ? 'text-right' : 'text-left'
+            )}
             style={{
               top: `${top}mm`,
+              paddingLeft: '10mm',
+              paddingRight: '10mm',
             }}
-            align={pageNumber % 2 ? 'right' : 'left'}
           >
             {pageNumber}
-          </Footer>
+          </footer>
         );
       })}
-    </Container>
+    </div>
   );
 }

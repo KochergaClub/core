@@ -16,4 +16,4 @@ export { PaddedBlock } from './PaddedBlock';
 export { default as Page } from './Page';
 export { ParentLinkInHeader } from './ParentLinkInHeader';
 export { RowWithIcon } from './RowWithIcon';
-export { default as Spinner } from './Spinner';
+export { Spinner } from './Spinner';

@@ -1,10 +1,10 @@
+import '../fonts.css';
+
 import { useCallback, useState } from 'react';
-import styled from 'styled-components';
 
 import { useMutation } from '@apollo/client';
 
-import { staticUrl } from '~/common/utils';
-import { A, Column, Row } from '~/frontkit';
+import { Column, Row } from '~/frontkit';
 
 import {
     RatioTrainingCopyScheduleFromDocument, TrainingForPickerFragment, TrainingWithScheduleFragment
@@ -15,32 +15,6 @@ import CreateDayButton from './CreateDayButton';
 import MultiColumnSchedule from './MultiColumnSchedule';
 import SingleColumnSchedule from './SingleColumnSchedule';
 import Unprintable from './Unprintable';
-
-const Header = styled.header``;
-
-const HeaderTexts = styled.div`
-  @font-face {
-    font-family: 'Intro Book';
-    src: url('${staticUrl('fonts/intro-pack/Intro-book.otf')}');
-  }
-  font-family: 'Intro Book';
-  letter-spacing: 0.08em;
-
-  a {
-    @media print {
-      color: black;
-    }
-  }
-
-  h1 {
-    line-height: 1.2;
-    margin: 0;
-  }
-  h2 {
-    margin: 0;
-    margin-bottom: 16px;
-  }
-`;
 
 interface Props {
   training: TrainingWithScheduleFragment;
@@ -76,14 +50,19 @@ const SchedulePage: React.FC<Props> = ({ training }) => {
 
   return (
     <Column stretch gutter={32}>
-      <Header>
+      <header>
         <Row spaced>
-          <HeaderTexts>
-            <h1>
-              <A href={adminTrainingRoute(training.slug)}>{training.name}</A>
+          <div className="intro-book tracking-wider">
+            <h1 className="m-0">
+              <a
+                className="link print:text-black"
+                href={adminTrainingRoute(training.slug)}
+              >
+                {training.name}
+              </a>
             </h1>
-            <h2>Расписание занятий</h2>
-          </HeaderTexts>
+            <h2 className="m-0 mb-4">Расписание занятий</h2>
+          </div>
           <Unprintable>
             <Column centered>
               <CreateDayButton training={training} />
@@ -98,7 +77,7 @@ const SchedulePage: React.FC<Props> = ({ training }) => {
             </Column>
           </Unprintable>
         </Row>
-      </Header>
+      </header>
 
       {schedule.length ? (
         <Component schedule={schedule} long_name={training.name} />

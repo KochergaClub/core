@@ -1,6 +1,5 @@
 import { useCallback, useContext } from 'react';
 import { FaExternalLinkAlt } from 'react-icons/fa';
-import styled from 'styled-components';
 
 import { useQuery } from '@apollo/client';
 
@@ -14,12 +13,6 @@ import EventInfo from './EventInfo';
 interface Props {
   event_id: string;
 }
-
-const EventTitle = styled.header`
-  font-size: 1.6em;
-  line-height: 1;
-  margin-bottom: 10px;
-`;
 
 const ExpandLink: React.FC<{ href: string }> = ({ href }) => (
   <A href={href} target="_blank">
@@ -57,7 +50,7 @@ const ViewEventModal: React.FC<Props> = ({ event_id }) => {
     <Modal>
       <Modal.Header close={closeCb}>&nbsp;</Modal.Header>
       <Modal.Body ref={focus} {...hotkeys}>
-        <EventTitle>{event.title}</EventTitle>
+        <header className="text-2xl mb-2">{event.title}</header>
         <EventInfo event={event} />
       </Modal.Body>
       <Modal.Footer>

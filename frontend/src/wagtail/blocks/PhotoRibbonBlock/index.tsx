@@ -1,32 +1,19 @@
-import styled from 'styled-components';
-
 import { gql } from '@apollo/client';
 
 import { BlockComponent } from '../../types';
 import { PhotoRibbonBlockFragment as Props } from './index.generated';
 
-const Container = styled.div`
-  display: flex;
-  overflow: hidden;
-  height: 160px;
-`;
-
-const Image = styled.img`
-  height: 160px;
-  width: auto;
-  object-fit: cover;
-`;
-
 const PhotoRibbonBlock: BlockComponent<Props> = (props) => {
   return (
-    <Container>
+    <div className="flex overflow-hidden">
       {props.photos.map((photo, i) => (
-        <Image key={i} src={photo.url} />
+        <img key={i} src={photo.url} className="h-40 object-cover" />
       ))}
-    </Container>
+    </div>
   );
 };
 
+// TODO - retina
 PhotoRibbonBlock.fragment = gql`
   fragment PhotoRibbonBlock on PhotoRibbonBlock {
     id

@@ -1,10 +1,9 @@
 import { useCallback } from 'react';
-import styled from 'styled-components';
 
 import { useMutation } from '@apollo/client';
-import { Label } from '~/frontkit';
 
 import { useExpandable, usePermissions } from '~/common/hooks';
+import { Label } from '~/frontkit';
 import WatchmanPicker from '~/watchmen/components/WatchmanPicker';
 import { WatchmanForPickerFragment } from '~/watchmen/queries.generated';
 
@@ -16,23 +15,24 @@ interface Props {
   pbx_call: CommonZadarmaPbxCallFragment;
 }
 
-const Container = styled.div`
-  position: relative;
-  cursor: pointer;
-`;
-
-const NameContainer = styled.div`
-  display: inline;
-  width: auto;
-  padding: 4px;
-`;
+const NameContainer: React.FC<{ bgColor?: string }> = ({
+  children,
+  bgColor,
+}) => (
+  <div
+    className="inline w-auto p-1"
+    style={{
+      backgroundColor: bgColor || 'white',
+    }}
+  >
+    {children}
+  </div>
+);
 
 const StaffMemberName: React.FC<Props> = ({ pbx_call }) => {
   if (pbx_call.data && pbx_call.data.staff_member) {
     return (
-      <NameContainer
-        style={{ backgroundColor: pbx_call.data.staff_member.color || 'white' }}
-      >
+      <NameContainer bgColor={pbx_call.data.staff_member.color}>
         {pbx_call.data.staff_member.short_name}
       </NameContainer>
     );
@@ -46,10 +46,13 @@ const StaffMemberName: React.FC<Props> = ({ pbx_call }) => {
 
 const StaffMember: React.FC<Props> = ({ pbx_call }) => {
   const [isZadarmaAdmin] = usePermissions(['zadarma.admin']);
-  const [setStaffMemberMutation] = useMutation(ZadarmaSetMemberForPbxCallDocument, {
-    refetchQueries: ['ZadarmaPbxCalls', 'ZadarmaPbxCall'],
-    awaitRefetchQueries: true,
-  });
+  const [setStaffMemberMutation] = useMutation(
+    ZadarmaSetMemberForPbxCallDocument,
+    {
+      refetchQueries: ['ZadarmaPbxCalls', 'ZadarmaPbxCall'],
+      awaitRefetchQueries: true,
+    }
+  );
 
   const { ref, flipExpand, unexpand, expanded } = useExpandable();
 
@@ -72,10 +75,10 @@ const StaffMember: React.FC<Props> = ({ pbx_call }) => {
   }
 
   return (
-    <Container ref={ref}>
+    <div className="relative cursor-pointer" ref={ref}>
       <div onClick={flipExpand}>{nameEl}</div>
       {expanded && <WatchmanPicker pickedWatchman={setWatchman} />}
-    </Container>
+    </div>
   );
 };
 

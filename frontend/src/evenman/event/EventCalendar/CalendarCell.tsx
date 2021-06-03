@@ -1,17 +1,11 @@
 import Router from 'next/router';
 import React, { useCallback } from 'react';
-import styled from 'styled-components';
 
 import { evenmanEventRoute } from '../../routes';
 import EventCalendarItem from '../EventCalendarItem';
 import { ProjectionCalendarItem } from '../ProjectionCalendarItem';
 import { EventsEvent_SummaryFragment } from '../queries.generated';
 import { Projection } from './projection';
-
-const CalendarCellContainer = styled.div`
-  width: 100%;
-  overflow: auto;
-`;
 
 type Props = {
   events: EventsEvent_SummaryFragment[];
@@ -29,7 +23,7 @@ export const CalendarCell: React.FC<Props> = ({
   }, []);
 
   return (
-    <CalendarCellContainer>
+    <div className="w-full overflow-auto">
       {events.map((event) => (
         <EventCalendarItem
           key={event.id}
@@ -44,6 +38,6 @@ export const CalendarCell: React.FC<Props> = ({
           projection={projection}
         />
       ))}
-    </CalendarCellContainer>
+    </div>
   );
 };

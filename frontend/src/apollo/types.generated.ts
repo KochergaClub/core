@@ -112,11 +112,7 @@ export type AuthSetMyNamesInput = {
   last_name: Scalars['String'];
 };
 
-export type AuthSetMyNamesResult = {
-  __typename?: 'AuthSetMyNamesResult';
-  error?: Maybe<Scalars['String']>;
-  ok?: Maybe<Scalars['Boolean']>;
-};
+export type AuthSetMyNamesResult = AuthCurrentUser | GenericError | ValidationError;
 
 export type AuthSetPasswordInput = {
   old_password?: Maybe<Scalars['String']>;

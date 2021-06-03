@@ -1,23 +1,11 @@
 import { useCallback, useState } from 'react';
 import { GoGear } from 'react-icons/go';
-import styled from 'styled-components';
 
-import { useCommonHotkeys, useFocusOnFirstModalRender } from '~/common/hooks';
-import { Button, colors, ControlsFooter, Modal, Row } from '~/frontkit';
+import { useCommonHotkeys, useFocusOnFirstModalRender, useHover } from '~/common/hooks';
+import { Button, ControlsFooter, Modal, Row } from '~/frontkit';
 
 import { AnyBlockFragment } from '../types';
-import ControlledBlockContainer from './ControlledBlockContainer';
-
-// is this necessary?
-const ControlsContainer = styled.div`
-  > * {
-    color: ${colors.grey[400]};
-
-    &:hover {
-      color: ${colors.grey[600]};
-    }
-  }
-`;
+import { BlockWithControls } from './BlockWithControls';
 
 interface Props {
   block: AnyBlockFragment;
@@ -50,7 +38,10 @@ const Dump: React.FC<DumpProps> = ({ block, close }) => {
   );
 };
 
-const Controls: React.FC<Props> = ({ block }) => {
+const Controls: React.FC<Props & { showControls: boolean }> = ({
+  block,
+  showControls,
+}) => {
   const [dumping, setDumping] = useState(false);
 
   const dump = useCallback(() => {
@@ -62,25 +53,32 @@ const Controls: React.FC<Props> = ({ block }) => {
   }, []);
 
   return (
-    <ControlsContainer className="preview-block-controls">
-      <Button size="small" onClick={dump}>
-        <Row vCentered>
-          <GoGear />
-          <span>Параметры</span>
-        </Row>
-      </Button>
+    <div>
+      {showControls ? (
+        <Button size="small" onClick={dump}>
+          <Row vCentered>
+            <GoGear />
+            <span>Параметры</span>
+          </Row>
+        </Button>
+      ) : null}
       {dumping && <Dump block={block} close={undump} />}
-    </ControlsContainer>
+    </div>
   );
 };
 
-const PreviewBlockWrapper: React.FC<Props> = ({ block, children }) => {
+export const PreviewBlockWrapper: React.FC<Props> = ({ block, children }) => {
+  const [hoverRef, isHovered] = useHover();
   // TODO - extract preview-specific stuff into dynamically loaded component, to reduce JS bundle size?
   return (
-    <ControlledBlockContainer controls={Controls} block={block}>
-      {children}
-    </ControlledBlockContainer>
+    <div ref={hoverRef}>
+      <BlockWithControls
+        renderControls={() => (
+          <Controls block={block} showControls={isHovered} />
+        )}
+      >
+        {children}
+      </BlockWithControls>
+    </div>
   );
 };
-
-export default PreviewBlockWrapper;

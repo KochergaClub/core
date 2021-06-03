@@ -1,9 +1,7 @@
-import styled from 'styled-components';
+import styles from './styles.module.scss';
 
-const Container = styled.div`
-  break-after: page;
-`;
-
-const Emptypage = () => <Container>&nbsp;</Container>;
+const Emptypage = () => (
+  <div className={styles['break-after-page']}>&nbsp;</div>
+);
 
 export default Emptypage;

@@ -1,5 +1,4 @@
 import React from 'react';
-import styled from 'styled-components';
 
 import { useMutation } from '@apollo/client';
 
@@ -12,10 +11,6 @@ import {
     EvenmanDigestToTelegramDocument, EvenmanDigestToVkDocument, EvenmanSendMailchimpDocument,
     EvenmanVkWikiScheduleUpdateDocument, EvenmanWeeklyDigestFragment
 } from './queries.generated';
-
-const WideAsyncButton = styled(AsyncButton)`
-  width: 100%;
-`;
 
 interface Props {
   digest: EvenmanWeeklyDigestFragment;
@@ -35,17 +30,17 @@ const Buttons: React.FC<Props> = ({ digest }) => {
         <Column gutter={8}>
           {/* FIXME - should be customizable */}
           <A href="https://vk.com/page-99973027_50473877">ВК-расписание</A>{' '}
-          <WideAsyncButton act={updateVkWikiSchedule}>
+          <AsyncButton act={updateVkWikiSchedule}>
             Обновить вики-расписание
-          </WideAsyncButton>
+          </AsyncButton>
           {digest.vk?.link ? (
             <A href={digest.vk.link} target="_blank">
               Анонс в VK
             </A>
           ) : (
-            <WideAsyncButton act={postToVk} kind="primary">
+            <AsyncButton act={postToVk} kind="primary">
               Создать пост с расписанием
-            </WideAsyncButton>
+            </AsyncButton>
           )}
         </Column>
       </section>
@@ -56,9 +51,9 @@ const Buttons: React.FC<Props> = ({ digest }) => {
             Анонс в Telegram
           </A>
         ) : (
-          <WideAsyncButton act={postToTelegram} kind="primary">
+          <AsyncButton act={postToTelegram} kind="primary">
             Запостить расписание
-          </WideAsyncButton>
+          </AsyncButton>
         )}
       </section>
       <section>

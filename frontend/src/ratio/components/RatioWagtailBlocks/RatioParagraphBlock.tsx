@@ -18,7 +18,6 @@ const Paragraph = styled.div`
     }
   }
 `;
-// test
 
 export default function RatioParagraphBlock(block: Props) {
   return <Paragraph dangerouslySetInnerHTML={{ __html: block.value }} />;

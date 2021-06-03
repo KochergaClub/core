@@ -1,6 +1,5 @@
 import { format, parseISO } from 'date-fns';
 import { useCallback, useMemo, useState } from 'react';
-import styled from 'styled-components';
 
 import { useAPI, useCommonHotkeys, useFocusOnFirstModalRender } from '~/common/hooks';
 import { Button, Column, ControlsFooter, Input, Label, Modal } from '~/frontkit';
@@ -8,10 +7,6 @@ import { state2link } from '~/image-templater/utils';
 
 import { useEvenmanSettingsQuery } from './hooks';
 import { EvenmanEvent_DetailsFragment } from './queries.generated';
-
-const WideInput = styled(Input)`
-  width: 100%;
-`;
 
 interface Props {
   event: EvenmanEvent_DetailsFragment;
@@ -117,8 +112,9 @@ const VkImageModal: React.FC<Props> = ({ event, close, onSave }) => {
         <Column stretch>
           <div>
             <Label>Заголовок</Label>
-            <WideInput
+            <Input
               type="text"
+              wide
               value={header}
               onChange={updateHeader}
               disabled={saving}
@@ -126,8 +122,9 @@ const VkImageModal: React.FC<Props> = ({ event, close, onSave }) => {
           </div>
           <div>
             <Label>Название</Label>
-            <WideInput
+            <Input
               type="text"
+              wide
               value={title}
               onChange={updateTitle}
               ref={focus}

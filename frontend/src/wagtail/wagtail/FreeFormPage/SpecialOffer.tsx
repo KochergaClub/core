@@ -1,95 +1,21 @@
 import { useState } from 'react';
 import { MdClose } from 'react-icons/md';
-import styled from 'styled-components';
 
 import { gql, useQuery } from '@apollo/client';
 
-import { colors, deviceMediaQueries, fonts } from '~/frontkit';
-
 import { SpecialOfferDocument } from './SpecialOffer.generated';
 
-const mainColor = colors.primary[500];
-
-const Container = styled.div`
-  position: relative;
-  ${deviceMediaQueries.desktop(`
-    position: fixed;
-    bottom: 0;
-  `)}
-  width: 100%;
-  background-color: ${mainColor};
-  color: white;
-  padding: 12px 40px;
-  z-index: 8;
-`;
-
-const ContentContainer = styled.div`
-  display: flex;
-  flex-direction: column;
-  > * + * {
-    margin-top: 8px;
-  }
-  ${deviceMediaQueries.desktop(`
-    flex-direction: row;
-    > * + * {
-      margin-left: 12px;
-      margin-top: 0;
-    }
-  `)};
-  justify-content: center;
-  align-items: center;
-`;
-
-const Button = styled.a`
-  padding: 6px 20px;
-  border-radius: 100px;
-  border: none;
-  font-weight: bold;
-  text-align: center;
-  background-color: white;
-  text-decoration: none;
-  color: ${mainColor};
-  font-size: ${fonts.sizes.SM};
-  text-transform: uppercase;
-`;
-
-const Text = styled.div`
-  font-size: ${fonts.sizes.XS};
-  ${deviceMediaQueries.desktop(`
-    font-size: ${fonts.sizes.SM};
-  `)}
-  text-align: center;
-  font-weight: bold;
-`;
-
-const CLOSE_SIZE = 24;
-
-const CloseContainer = styled.div`
-  position: absolute;
-  right: 10px;
-  top: 10px;
-  ${deviceMediaQueries.desktop(`
-    right: 20px;
-    top: 0;
-    bottom: 0;
-  `)}
-  height: ${CLOSE_SIZE}px;
-  margin: auto;
-  cursor: pointer;
-  transition: opacity ease-in-out 0.2s;
-
-  &:hover {
-    opacity: 0.7;
-  }
-`;
-
 const Close: React.FC<{ onClick: () => void }> = ({ onClick }) => {
-  return <MdClose size={CLOSE_SIZE} onClick={onClick} />;
+  return (
+    <div className="absolute h-6 right-2 top-2 md:top-1/2 md:transform md:-translate-y-1/2 cursor-pointer hover:opacity-75 transition-opacity">
+      <MdClose size={24} onClick={onClick} />
+    </div>
+  );
 };
 
 const LOCAL_STORAGE_KEY = 'specialOfferClosedTimestamp';
 
-const SpecialOffer: React.FC = () => {
+export const SpecialOffer: React.FC = () => {
   const [closedTimestamp, setClosedTimestamp] = useState(() => {
     if (typeof window === 'undefined') {
       return; // do nothing on server side
@@ -126,15 +52,20 @@ const SpecialOffer: React.FC = () => {
   };
 
   return (
-    <Container>
-      <ContentContainer>
-        <Text>{specialOffer.text}</Text>
-        <Button href={specialOffer.link}>{specialOffer.button_text}</Button>
-      </ContentContainer>
-      <CloseContainer>
-        <Close onClick={onClose} />
-      </CloseContainer>
-    </Container>
+    <div className="relative md:fixed md:bottom-0 w-full bg-primary-500 text-white px-10 py-3 z-10">
+      <div className="flex flex-col justify-center items-center space-y-2 md:flex-row md:space-y-0 md:space-x-3">
+        <div className="text-xs md:text-sm text-center font-bold">
+          {specialOffer.text}
+        </div>
+        <a
+          className="px-5 py-1.5 rounded-full bg-white text-primary-500 no-underline font-bold text-sm uppercase"
+          href={specialOffer.link}
+        >
+          {specialOffer.button_text}
+        </a>
+      </div>
+      <Close onClick={onClose} />
+    </div>
   );
 };
 

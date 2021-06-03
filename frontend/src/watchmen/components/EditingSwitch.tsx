@@ -1,23 +1,12 @@
+import clsx from 'clsx';
 import { useCallback } from 'react';
-import styled from 'styled-components';
 
-import { colors, Row } from '~/frontkit';
+import { Row } from '~/frontkit';
 
-const ItemContainer = styled.a<{ active: boolean }>`
-  text-decoration: none;
-  color: hsl(${colors.hues.blue}, 80%, 50%); // FIXME - replace with colors.link
-  border-bottom: ${(props) =>
-    props.active ? `1px dashed ${colors.grey[600]}` : 'none'};
-`;
-
-const Item = ({
+const Item: React.FC<{ active: boolean; action: () => void }> = ({
   active,
   action,
   children,
-}: {
-  active: boolean;
-  action: () => void;
-  children: React.ReactNode;
 }) => {
   const cb = useCallback(
     (e: React.MouseEvent) => {
@@ -27,9 +16,16 @@ const Item = ({
     [action]
   );
   return (
-    <ItemContainer active={active} href="#" onClick={cb}>
+    <a
+      className={clsx(
+        'text-primary-link no-underline',
+        active && 'border-b border-dashed border-gray-600'
+      )}
+      href="#"
+      onClick={cb}
+    >
       {children}
-    </ItemContainer>
+    </a>
   );
 };
 
@@ -38,7 +34,7 @@ interface Props {
   set: (v: boolean) => void;
 }
 
-const EditingSwitch: React.FC<Props> = ({ value, set }) => {
+export const EditingSwitch: React.FC<Props> = ({ value, set }) => {
   return (
     <Row>
       <Item active={!value} action={() => set(false)}>
@@ -50,5 +46,3 @@ const EditingSwitch: React.FC<Props> = ({ value, set }) => {
     </Row>
   );
 };
-
-export default EditingSwitch;

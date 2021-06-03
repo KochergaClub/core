@@ -1,14 +1,7 @@
-import styled from 'styled-components';
-
-import { fonts } from '~/frontkit';
-
-const DispositionLabel = styled.div`
-  background-color: #ddd;
-  border: 1px solid #ddd;
-  padding: 2px 8px;
-  border-radius: 10px;
-  font-size: ${fonts.sizes.XS};
-  text-align: center;
-`;
+const DispositionLabel: React.FC = ({ children }) => (
+  <div className="bg-gray-500 border border-gray-500 rounded-full px-2 py-0.5 text-xs text-center">
+    {children}
+  </div>
+);
 
 export default DispositionLabel;

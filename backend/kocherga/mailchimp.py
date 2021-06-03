@@ -62,8 +62,8 @@ def api_call(method, url, data={}):
         )
     r.raise_for_status()
 
-    if method == 'DELETE':
-        return  # no json for delete calls
+    if r.status_code == 204:
+        return  # empty response, no json
     return r.json()
 
 

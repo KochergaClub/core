@@ -1,45 +1,17 @@
-import styled from 'styled-components';
-
 import { gql } from '@apollo/client';
-import { A, Button, Column, deviceMediaQueries, Input } from '~/frontkit';
 
 import { PaddedBlock } from '~/components';
+import { kochergaConfig } from '~/config';
+import { A, Button, Column, Input } from '~/frontkit';
 
 import { BlockComponent } from '../../types';
 import { MailchimpSubscribeBlockFragment as Props } from './index.generated';
 
-// FIXME - move to config
-const GROUP_ID = 21289;
-const MAILCHIMP_CODE = 'b_275ee3f3bd1fdc7e05496a122_d73cd4de36';
-const MAILCHIMP_ACTION =
-  'https://kocherga-club.us11.list-manage.com/subscribe/post?u=275ee3f3bd1fdc7e05496a122&id=d73cd4de36';
+const GROUP_ID = kochergaConfig.mailchimp.groupId;
+const MAILCHIMP_CODE = kochergaConfig.mailchimp.code;
+const MAILCHIMP_ACTION = kochergaConfig.mailchimp.action;
 
-const SubscribeButton = styled(Button)`
-  padding: 10px 40px;
-`;
-
-const InputContainer = styled.div`
-  display: flex;
-  flex-direction: column;
-  align-items: stretch;
-  width: 100%;
-  > * + * {
-    margin-top: 16px;
-  }
-
-  ${deviceMediaQueries.desktop(`
-    width: auto;
-    flex-direction: row;
-    > input {
-      min-width: 500px;
-    }
-    > * + * {
-      margin-left: 16px;
-      margin-top: 0;
-    }
-  `)}
-`;
-
+// TODO - move to config
 const INTEREST_IDS: { [k: string]: number } = {
   news: 2,
   events: 4,
@@ -70,7 +42,7 @@ const MailchimpSubscribeBlock: BlockComponent<Props> = (props) => {
   return (
     <PaddedBlock>
       <form action={MAILCHIMP_ACTION} method="post" target="_blank">
-        <div style={{ display: 'none' }}>
+        <div className="hidden">
           <InterestCheckbox interest="news" value={props.mailchimp.news} />
           <InterestCheckbox interest="events" value={props.mailchimp.events} />
           <InterestCheckbox
@@ -90,18 +62,19 @@ const MailchimpSubscribeBlock: BlockComponent<Props> = (props) => {
         </div>
 
         <Column centered gutter={16}>
-          <InputContainer>
+          <div className="flex flex-col space-y-4 md:flex-row md:space-y-0 md:space-x-4">
             <Input
               type="text"
               name="EMAIL"
               placeholder="Ваш E-mail"
               scale="big"
+              size={20}
             />
 
-            <SubscribeButton type="submit" kind="primary">
+            <Button type="submit" kind="primary">
               Подписаться
-            </SubscribeButton>
-          </InputContainer>
+            </Button>
+          </div>
           <small>
             Заполняя форму, вы даёте согласие на{' '}
             <A href="/terms">обработку персональных данных</A>.

@@ -1,8 +1,13 @@
 import get from 'lodash/get';
 import React from 'react';
-import { Controller, FieldError, FieldPath, FieldValues, UseFormReturn } from 'react-hook-form';
+import {
+  Controller,
+  FieldError,
+  FieldPath,
+  FieldValues,
+  UseFormReturn,
+} from 'react-hook-form';
 import Select from 'react-select';
-
 import { FieldContainer } from './FieldContainer';
 
 const tupleToSelectOption = (t: readonly [string, string]) => ({
@@ -60,7 +65,7 @@ export const SelectField = <T extends FieldValues>({
               styles={{
                 menuPortal: (provided) => ({
                   ...provided,
-                  zIndex: 1100,
+                  zIndex: 5000,
                 }),
                 container: (provided) => ({
                   ...provided,

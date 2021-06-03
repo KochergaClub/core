@@ -4,7 +4,6 @@ import withDragAndDrop from 'react-big-calendar/lib/addons/dragAndDrop';
 // FIXME - some some reason `import { Views } from 'react-big-calendar'` imports type, not constant.
 // This is a workaround.
 import { views } from 'react-big-calendar/lib/utils/constants';
-import styled from 'styled-components';
 
 import { CalendarDndStyle, CalendarStyle } from './CalendarStyle';
 import { localizer } from './localizer';
@@ -29,14 +28,6 @@ interface WithDragAndDropProps<TEvent> {
   resizable?: boolean;
 }
 
-const Container = styled.div`
-  height: 100%;
-  max-width: 2000px;
-  padding-top: 10px;
-  margin-left: auto;
-  margin-right: auto;
-`;
-
 type Props<TEvent extends object, TResource extends object> = Omit<
   CalendarProps<TEvent, TResource> & WithDragAndDropProps<TEvent>,
   'localizer'
@@ -46,7 +37,7 @@ const BigCalendarConfigured = <TEvent extends object, TResource extends object>(
   props: Props<TEvent, TResource>
 ) => {
   return (
-    <Container>
+    <div className="mx-auto pt-2">
       <CalendarStyle />
       <CalendarDndStyle />
       <DragAndDropCalendar
@@ -64,7 +55,7 @@ const BigCalendarConfigured = <TEvent extends object, TResource extends object>(
           toolbar: Toolbar,
         }}
       />
-    </Container>
+    </div>
   );
 };
 

@@ -1,35 +1,7 @@
-import styled from 'styled-components';
-
-import { fonts, HR } from '~/frontkit';
+import { HR } from '~/frontkit';
 
 import { ActivityFragment } from '../../queries.generated';
 import EditableTrainer from './EditableTrainer';
-
-const ActivitySection = styled.section`
-  margin-bottom: 32px;
-
-  & > time {
-    font-style: italic;
-    font-size: ${fonts.sizes.XL2};
-  }
-
-  & > header {
-    font-size: ${fonts.sizes.XL2};
-    font-weight: 600;
-    margin: 8px 0;
-  }
-`;
-
-const ActivityBreak = styled.section`
-  font-style: italic;
-  color: #666;
-  margin-top: 32px;
-  margin-bottom: 32px;
-`;
-
-const ActivityBonus = styled.section`
-  font-size: ${fonts.sizes.XL2};
-`;
 
 const formatTime = (time: string) => time.substr(0, 5);
 
@@ -41,25 +13,27 @@ const Activity = ({ activity }: Props) => {
   switch (activity.activity_type) {
     case 'section':
       return (
-        <ActivitySection>
-          <time>{formatTime(activity.time)}</time>
-          <header>{activity.name}</header>
+        <section className="mb-8">
+          <time className="italic text-2xl">{formatTime(activity.time)}</time>
+          <header className="text-2xl font-semibold my-2">
+            {activity.name}
+          </header>
           <EditableTrainer
             trainer_name={activity.trainer?.long_name}
             picked={async () => window.alert('not implemented')}
             unpicked={async () => window.alert('not implemented')}
           />
-        </ActivitySection>
+        </section>
       );
     case 'break':
       return (
-        <ActivityBreak>
+        <section className="italic text-gray-500 my-8">
           <HR />(<time>{formatTime(activity.time)}</time> {activity.name})
           <HR />
-        </ActivityBreak>
+        </section>
       );
     case 'bonus':
-      return <ActivityBonus>Бонус. {activity.name}</ActivityBonus>;
+      return <section className="text-2xl">Бонус. {activity.name}</section>;
     default:
       return <div>НЕОПОЗНАННАЯ СЕКЦИЯ</div>;
   }

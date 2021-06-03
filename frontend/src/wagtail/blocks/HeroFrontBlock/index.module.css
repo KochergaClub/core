@@ -1,0 +1,14 @@
+.header {
+  @apply text-3xl sm:text-5xl md:text-6xl text-white text-center sm:text-left;
+  line-height: 1.2;
+}
+
+.background {
+  min-height: calc(100vh - 56px);
+  background: right 100px center / 400px no-repeat url('/static/logo/logo.svg'),
+    radial-gradient(
+      circle at center left,
+      hsl(210, 55%, 55%),
+      hsl(0, 100%, 74%)
+    );
+}

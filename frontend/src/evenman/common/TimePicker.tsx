@@ -1,6 +1,4 @@
-import styled from 'styled-components';
-
-import { Button, colors, Column, Row } from '~/frontkit';
+import { Button } from '~/frontkit';
 
 type Time = { hour: number; minute: number };
 
@@ -8,16 +6,6 @@ type Props = {
   time: Time | undefined;
   setTime: (time: Time) => void;
 };
-
-const Container = styled.div`
-  display: flex;
-  flex-direction: row;
-  > * + * {
-    padding-left: 8px;
-    margin-left: 8px;
-    border-left: 1px solid ${colors.grey[200]};
-  }
-`;
 
 const padToTwoDigits = (value: number) =>
   value < 10 ? `0${value}` : `${value}`;
@@ -45,26 +33,26 @@ const HoursColumn: React.FC<{ from: number; n: number } & Props> = ({
   ...rest
 }) => {
   return (
-    <Column centered gutter={8}>
+    <div className="space-y-2 border-l border-gray-200 pl-4 first:border-0 first:pl-0">
       {Array.from(Array(n).keys())
         .map((i) => i + from)
         .map((i) => (
-          <Row key={i} gutter={8}>
+          <div className="flex space-x-2" key={i}>
             <PickButton hour={i} minute={0} {...rest} />
             <PickButton hour={i} minute={30} {...rest} />
-          </Row>
+          </div>
         ))}
-    </Column>
+    </div>
   );
 };
 
 const TimePicker: React.FC<Props> = (props) => {
   return (
-    <Container>
+    <div className="flex space-x-4">
       <HoursColumn from={9} n={5} {...props} />
       <HoursColumn from={14} n={5} {...props} />
       <HoursColumn from={19} n={5} {...props} />
-    </Container>
+    </div>
   );
 };
 

@@ -1,9 +1,17 @@
 import * as Types from '../apollo/types.generated';
 
 import { AuthCurrentUserFragment } from '../auth/queries.generated';
+import { GenericErrorFragment, ValidationErrorFragment } from '../apollo/common-fragments.generated';
 import { dedupeFragments } from '~/common/dedupeFragments';
 import { TypedDocumentNode as DocumentNode } from '@graphql-typed-document-node/core';
 import { AuthCurrentUserFragmentDoc } from '../auth/queries.generated';
+import { GenericErrorFragmentDoc, ValidationErrorFragmentDoc } from '../apollo/common-fragments.generated';
+export type ExtendedCurrentUserFragment = (
+  { __typename: 'AuthCurrentUser' }
+  & Pick<Types.AuthCurrentUser, 'first_name' | 'last_name'>
+  & AuthCurrentUserFragment
+);
+
 export type MembershipFragment = (
   { __typename: 'MyCmCustomer' }
   & Pick<Types.MyCmCustomer, 'card_id' | 'orders_count' | 'subscription_until'>
@@ -59,8 +67,7 @@ export type MySettingsPageFragment = (
   { __typename: 'My' }
   & { user: (
     { __typename: 'AuthCurrentUser' }
-    & Pick<Types.AuthCurrentUser, 'first_name' | 'last_name'>
-    & AuthCurrentUserFragment
+    & ExtendedCurrentUserFragment
   ), email_subscription: (
     { __typename: 'MyEmailSubscription' }
     & EmailSubscriptionFragment
@@ -218,16 +225,21 @@ export type EventGenerateOpenViduTokenMutation = (
 );
 
 export type SetMyNamesMutationVariables = Types.Exact<{
-  first_name: Types.Scalars['String'];
-  last_name: Types.Scalars['String'];
+  input: Types.AuthSetMyNamesInput;
 }>;
 
 
 export type SetMyNamesMutation = (
   { __typename: 'Mutation' }
   & { result: (
-    { __typename: 'AuthSetMyNamesResult' }
-    & Pick<Types.AuthSetMyNamesResult, 'ok' | 'error'>
+    { __typename: 'AuthCurrentUser' }
+    & ExtendedCurrentUserFragment
+  ) | (
+    { __typename: 'GenericError' }
+    & GenericErrorFragment
+  ) | (
+    { __typename: 'ValidationError' }
+    & ValidationErrorFragment
   ) }
 );
 
@@ -235,9 +247,10 @@ export const MembershipFragmentDoc: DocumentNode<MembershipFragment, unknown> = 
 export const MyVisitsPageFragmentDoc: DocumentNode<MyVisitsPageFragment, unknown> = {"kind":"Document","definitions":[{"kind":"FragmentDefinition","name":{"kind":"Name","value":"MyVisitsPage"},"typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"My"}},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"membership"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"FragmentSpread","name":{"kind":"Name","value":"Membership"}}]}}]}},...MembershipFragmentDoc.definitions]};
 export const MyTicketFragmentDoc: DocumentNode<MyTicketFragment, unknown> = {"kind":"Document","definitions":[{"kind":"FragmentDefinition","name":{"kind":"Name","value":"MyTicket"},"typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"MyEventsTicket"}},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"status"}},{"kind":"Field","name":{"kind":"Name","value":"zoom_link"}},{"kind":"Field","name":{"kind":"Name","value":"event"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"start"}},{"kind":"Field","name":{"kind":"Name","value":"title"}}]}}]}}]};
 export const MyTicketsPageFragmentDoc: DocumentNode<MyTicketsPageFragment, unknown> = {"kind":"Document","definitions":[{"kind":"FragmentDefinition","name":{"kind":"Name","value":"MyTicketsPage"},"typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"My"}},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"tickets"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"first"},"value":{"kind":"IntValue","value":"100"}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"nodes"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"FragmentSpread","name":{"kind":"Name","value":"MyTicket"}}]}}]}}]}},...MyTicketFragmentDoc.definitions]};
+export const ExtendedCurrentUserFragmentDoc: DocumentNode<ExtendedCurrentUserFragment, unknown> = {"kind":"Document","definitions":[{"kind":"FragmentDefinition","name":{"kind":"Name","value":"ExtendedCurrentUser"},"typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"AuthCurrentUser"}},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"FragmentSpread","name":{"kind":"Name","value":"AuthCurrentUser"}},{"kind":"Field","name":{"kind":"Name","value":"first_name"}},{"kind":"Field","name":{"kind":"Name","value":"last_name"}}]}},...AuthCurrentUserFragmentDoc.definitions]};
 export const EmailSubscriptionInterestFragmentDoc: DocumentNode<EmailSubscriptionInterestFragment, unknown> = {"kind":"Document","definitions":[{"kind":"FragmentDefinition","name":{"kind":"Name","value":"EmailSubscriptionInterest"},"typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"MyEmailSubscriptionInterest"}},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"name"}},{"kind":"Field","name":{"kind":"Name","value":"subscribed"}}]}}]};
 export const EmailSubscriptionFragmentDoc: DocumentNode<EmailSubscriptionFragment, unknown> = {"kind":"Document","definitions":[{"kind":"FragmentDefinition","name":{"kind":"Name","value":"EmailSubscription"},"typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"MyEmailSubscription"}},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"status"}},{"kind":"Field","name":{"kind":"Name","value":"interests"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"FragmentSpread","name":{"kind":"Name","value":"EmailSubscriptionInterest"}}]}}]}},...EmailSubscriptionInterestFragmentDoc.definitions]};
-export const MySettingsPageFragmentDoc: DocumentNode<MySettingsPageFragment, unknown> = {"kind":"Document","definitions":[{"kind":"FragmentDefinition","name":{"kind":"Name","value":"MySettingsPage"},"typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"My"}},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"user"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"FragmentSpread","name":{"kind":"Name","value":"AuthCurrentUser"}},{"kind":"Field","name":{"kind":"Name","value":"first_name"}},{"kind":"Field","name":{"kind":"Name","value":"last_name"}}]}},{"kind":"Field","name":{"kind":"Name","value":"email_subscription"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"FragmentSpread","name":{"kind":"Name","value":"EmailSubscription"}}]}},{"kind":"Field","name":{"kind":"Name","value":"membership"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"privacy_mode"}}]}}]}},...AuthCurrentUserFragmentDoc.definitions,...EmailSubscriptionFragmentDoc.definitions]};
+export const MySettingsPageFragmentDoc: DocumentNode<MySettingsPageFragment, unknown> = {"kind":"Document","definitions":[{"kind":"FragmentDefinition","name":{"kind":"Name","value":"MySettingsPage"},"typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"My"}},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"user"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"FragmentSpread","name":{"kind":"Name","value":"ExtendedCurrentUser"}}]}},{"kind":"Field","name":{"kind":"Name","value":"email_subscription"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"FragmentSpread","name":{"kind":"Name","value":"EmailSubscription"}}]}},{"kind":"Field","name":{"kind":"Name","value":"membership"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"privacy_mode"}}]}}]}},...ExtendedCurrentUserFragmentDoc.definitions,...EmailSubscriptionFragmentDoc.definitions]};
 export const MyVisitsPageDocument: DocumentNode<MyVisitsPageQuery, MyVisitsPageQueryVariables> = dedupeFragments({ "kind": "Document", "definitions": [{ "kind": "OperationDefinition", "operation": "query", "name": { "kind": "Name", "value": "MyVisitsPage" }, "selectionSet": { "kind": "SelectionSet", "selections": [{ "kind": "Field", "name": { "kind": "Name", "value": "my" }, "selectionSet": { "kind": "SelectionSet", "selections": [{ "kind": "FragmentSpread", "name": { "kind": "Name", "value": "MyVisitsPage" } }] } }] } }, ...MyVisitsPageFragmentDoc.definitions] });
 
 export const MyTicketsPageDocument: DocumentNode<MyTicketsPageQuery, MyTicketsPageQueryVariables> = dedupeFragments({ "kind": "Document", "definitions": [{ "kind": "OperationDefinition", "operation": "query", "name": { "kind": "Name", "value": "MyTicketsPage" }, "selectionSet": { "kind": "SelectionSet", "selections": [{ "kind": "Field", "name": { "kind": "Name", "value": "my" }, "selectionSet": { "kind": "SelectionSet", "selections": [{ "kind": "FragmentSpread", "name": { "kind": "Name", "value": "MyTicketsPage" } }] } }] } }, ...MyTicketsPageFragmentDoc.definitions] });
@@ -264,4 +277,4 @@ export const MyEventPageDocument: DocumentNode<MyEventPageQuery, MyEventPageQuer
 
 export const EventGenerateOpenViduTokenDocument: DocumentNode<EventGenerateOpenViduTokenMutation, EventGenerateOpenViduTokenMutationVariables> = dedupeFragments({ "kind": "Document", "definitions": [{ "kind": "OperationDefinition", "operation": "mutation", "name": { "kind": "Name", "value": "EventGenerateOpenViduToken" }, "variableDefinitions": [{ "kind": "VariableDefinition", "variable": { "kind": "Variable", "name": { "kind": "Name", "value": "event_id" } }, "type": { "kind": "NonNullType", "type": { "kind": "NamedType", "name": { "kind": "Name", "value": "ID" } } } }], "selectionSet": { "kind": "SelectionSet", "selections": [{ "kind": "Field", "alias": { "kind": "Name", "value": "result" }, "name": { "kind": "Name", "value": "eventGenerateOpenViduToken" }, "arguments": [{ "kind": "Argument", "name": { "kind": "Name", "value": "input" }, "value": { "kind": "ObjectValue", "fields": [{ "kind": "ObjectField", "name": { "kind": "Name", "value": "event_id" }, "value": { "kind": "Variable", "name": { "kind": "Name", "value": "event_id" } } }] } }], "selectionSet": { "kind": "SelectionSet", "selections": [{ "kind": "Field", "name": { "kind": "Name", "value": "token" } }] } }] } }] });
 
-export const SetMyNamesDocument: DocumentNode<SetMyNamesMutation, SetMyNamesMutationVariables> = dedupeFragments({ "kind": "Document", "definitions": [{ "kind": "OperationDefinition", "operation": "mutation", "name": { "kind": "Name", "value": "SetMyNames" }, "variableDefinitions": [{ "kind": "VariableDefinition", "variable": { "kind": "Variable", "name": { "kind": "Name", "value": "first_name" } }, "type": { "kind": "NonNullType", "type": { "kind": "NamedType", "name": { "kind": "Name", "value": "String" } } } }, { "kind": "VariableDefinition", "variable": { "kind": "Variable", "name": { "kind": "Name", "value": "last_name" } }, "type": { "kind": "NonNullType", "type": { "kind": "NamedType", "name": { "kind": "Name", "value": "String" } } } }], "selectionSet": { "kind": "SelectionSet", "selections": [{ "kind": "Field", "alias": { "kind": "Name", "value": "result" }, "name": { "kind": "Name", "value": "authSetMyNames" }, "arguments": [{ "kind": "Argument", "name": { "kind": "Name", "value": "input" }, "value": { "kind": "ObjectValue", "fields": [{ "kind": "ObjectField", "name": { "kind": "Name", "value": "first_name" }, "value": { "kind": "Variable", "name": { "kind": "Name", "value": "first_name" } } }, { "kind": "ObjectField", "name": { "kind": "Name", "value": "last_name" }, "value": { "kind": "Variable", "name": { "kind": "Name", "value": "last_name" } } }] } }], "selectionSet": { "kind": "SelectionSet", "selections": [{ "kind": "Field", "name": { "kind": "Name", "value": "ok" } }, { "kind": "Field", "name": { "kind": "Name", "value": "error" } }] } }] } }] });
+export const SetMyNamesDocument: DocumentNode<SetMyNamesMutation, SetMyNamesMutationVariables> = dedupeFragments({ "kind": "Document", "definitions": [{ "kind": "OperationDefinition", "operation": "mutation", "name": { "kind": "Name", "value": "SetMyNames" }, "variableDefinitions": [{ "kind": "VariableDefinition", "variable": { "kind": "Variable", "name": { "kind": "Name", "value": "input" } }, "type": { "kind": "NonNullType", "type": { "kind": "NamedType", "name": { "kind": "Name", "value": "AuthSetMyNamesInput" } } } }], "selectionSet": { "kind": "SelectionSet", "selections": [{ "kind": "Field", "alias": { "kind": "Name", "value": "result" }, "name": { "kind": "Name", "value": "authSetMyNames" }, "arguments": [{ "kind": "Argument", "name": { "kind": "Name", "value": "input" }, "value": { "kind": "Variable", "name": { "kind": "Name", "value": "input" } } }], "selectionSet": { "kind": "SelectionSet", "selections": [{ "kind": "FragmentSpread", "name": { "kind": "Name", "value": "ExtendedCurrentUser" } }, { "kind": "FragmentSpread", "name": { "kind": "Name", "value": "GenericError" } }, { "kind": "FragmentSpread", "name": { "kind": "Name", "value": "ValidationError" } }] } }] } }, ...ExtendedCurrentUserFragmentDoc.definitions, ...GenericErrorFragmentDoc.definitions, ...ValidationErrorFragmentDoc.definitions] });

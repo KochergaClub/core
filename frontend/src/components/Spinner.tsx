@@ -21,7 +21,7 @@ export const BasicSpinner: React.FC = () => (
   <FaSpinner className="animate-spin-slow text-gray-400" />
 );
 
-const Spinner: React.FC<{ size: Size; delay?: number }> = ({
+export const Spinner: React.FC<{ size: Size; delay?: number }> = ({
   size,
   delay = 500,
 }) => {
@@ -47,5 +47,3 @@ const Spinner: React.FC<{ size: Size; delay?: number }> = ({
     return <>{appear && <SpinnerComponent />}</>;
   }
 };
-
-export default Spinner;

@@ -156,7 +156,7 @@ const FormOrderModal: React.FC<Props> = ({
                       styles={{
                         menuPortal: (provided) => ({
                           ...provided,
-                          zIndex: 1100,
+                          zIndex: 5000,
                         }),
                         container: (provided) => ({
                           ...provided,

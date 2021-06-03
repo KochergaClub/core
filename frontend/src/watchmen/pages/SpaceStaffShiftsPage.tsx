@@ -8,7 +8,7 @@ import { usePermissions } from '~/common/hooks';
 import { ApolloQueryResults, Page } from '~/components';
 import { Column } from '~/frontkit';
 
-import EditingSwitch from '../components/EditingSwitch';
+import { EditingSwitch } from '../components/EditingSwitch';
 import Pager from '../components/Pager';
 import ShiftsCalendar from '../components/ShiftsCalendar';
 import { EditingContext } from '../contexts';

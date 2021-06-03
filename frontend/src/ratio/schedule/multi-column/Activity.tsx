@@ -1,8 +1,6 @@
-import styled from 'styled-components';
+import clsx from 'clsx';
 
 import { Row } from '~/frontkit';
-
-import { staticUrl } from '~/common/utils';
 
 import { ActivityFragment } from '../../queries.generated';
 
@@ -18,48 +16,26 @@ const timeWithoutSections = (time: string) => {
   return match[0];
 };
 
-const Container = styled.div<{ outline: boolean }>`
-  @font-face {
-    font-family: 'Intro Book';
-    src: url('${staticUrl('fonts/intro-pack/Intro-book.otf')}');
-  }
-  font-family: 'Intro Book';
-
-  width: 100%;
-  ${props => props.outline && 'background-color: #eee;'};
-
-  line-height: 1.2;
-`;
-
-const Time = styled.time`
-  font-size: 0.9em;
-`;
-
-const Name = styled.div`
-  font-weight: bold;
-  font-size: 0.9em;
-`;
-
-const Trainer = styled.div`
-  font-size: 0.75em;
-`;
-
-const Location = styled.div`
-  font-style: italic;
-  font-size: 0.9em;
-`;
-
-export default function Activity({ activity }: Props) {
+export const Activity: React.FC<Props> = ({ activity }) => {
   const time = timeWithoutSections(activity.time);
   const outline = activity.activity_type === 'break';
   return (
-    <Container outline={outline}>
+    <div
+      className={clsx(
+        'intro-book w-full leading-tight',
+        outline && 'bg-gray-100'
+      )}
+    >
       <Row>
-        <Time>{time}</Time>
-        {activity.location ? <Location>{activity.location}</Location> : null}
+        <time className="text-sm">{time}</time>
+        {activity.location ? (
+          <div className="italic text-sm">{activity.location}</div>
+        ) : null}
       </Row>
-      <Name>{activity.name}</Name>
-      {activity.trainer && <Trainer>{activity.trainer.long_name}</Trainer>}
-    </Container>
+      <div className="font-bold text-sm">{activity.name}</div>
+      {activity.trainer && (
+        <div className="text-xs">{activity.trainer.long_name}</div>
+      )}
+    </div>
   );
-}
+};

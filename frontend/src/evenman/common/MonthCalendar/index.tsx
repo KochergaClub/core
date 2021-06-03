@@ -2,7 +2,6 @@ import { addWeeks, startOfWeek } from 'date-fns';
 import { ru } from 'date-fns/locale';
 import { AnimatePresence, motion } from 'framer-motion';
 import { useEffect, useState } from 'react';
-import styled from 'styled-components';
 
 import MonthHeader from './MonthHeader';
 import Week from './Week';
@@ -15,17 +14,6 @@ interface Props {
 }
 
 const WEEK_HEIGHT = 80;
-
-const WeeksContainer = styled.div<{ weeks: number; weekHeight: number }>`
-  display: flex;
-  flex-direction: column;
-  > * {
-    flex: 1;
-    height: ${(props) => props.weekHeight}px;
-  }
-  height: ${(props) => props.weekHeight * props.weeks}px;
-  overflow: hidden;
-`;
 
 export const MonthCalendar = (props: Props) => {
   const [weeks, setWeeks] = useState<Date[]>([]);
@@ -47,12 +35,21 @@ export const MonthCalendar = (props: Props) => {
     <div>
       <MonthHeader />
 
-      <WeeksContainer weekHeight={WEEK_HEIGHT} weeks={props.weeks}>
+      <div
+        className="flex flex-col overflow-hidden"
+        style={{
+          height: WEEK_HEIGHT * props.weeks,
+        }}
+      >
         <AnimatePresence initial={false}>
           {weeks.map((week, i) => (
             <motion.div
               layout="position"
               key={String(week)}
+              style={{
+                flex: 1,
+                height: WEEK_HEIGHT,
+              }}
               initial={{
                 opacity: 0,
                 y:
@@ -82,7 +79,7 @@ export const MonthCalendar = (props: Props) => {
             </motion.div>
           ))}
         </AnimatePresence>
-      </WeeksContainer>
+      </div>
     </div>
   );
 };

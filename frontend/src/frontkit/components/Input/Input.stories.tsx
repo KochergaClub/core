@@ -2,12 +2,12 @@ import React from 'react';
 
 import { Story } from '@storybook/react';
 
-import { Column } from '../layout/Column';
-import { Input, Props } from './Input';
-import { Label } from './Label';
+import { Column } from '../../layout/Column';
+import { Label } from '../Label';
+import { Input, Props } from './';
 
 export default {
-  title: "Components/Input",
+  title: 'Components/Input',
   component: Input,
   argTypes: {
     ref: {
@@ -29,14 +29,14 @@ const Template: Story<Props> = (args) => <Input {...args} />;
 
 export const Basic = Template.bind({});
 Basic.args = {
-  type: "text",
-  placeholder: "Введите текст",
+  type: 'text',
+  placeholder: 'Введите текст',
 };
 
 export const BigInputStory = () => (
   <Input type="text" scale="big" placeholder="Введите важный текст" />
 );
-BigInputStory.storyName = "Большое текстовое поле";
+BigInputStory.storyName = 'Большое текстовое поле';
 
 export const LabeledInputStory = () => (
   <div>
@@ -44,7 +44,7 @@ export const LabeledInputStory = () => (
     <Input type="text" placeholder="Введите текст" />
   </div>
 );
-LabeledInputStory.storyName = "Текстовое поле с меткой";
+LabeledInputStory.storyName = 'Текстовое поле с меткой';
 
 export const MultipleInputsStory = () => (
   <Column>
@@ -53,4 +53,4 @@ export const MultipleInputsStory = () => (
   </Column>
 );
 
-MultipleInputsStory.storyName = "Несколько полей";
+MultipleInputsStory.storyName = 'Несколько полей';

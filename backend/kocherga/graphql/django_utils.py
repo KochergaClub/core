@@ -8,6 +8,8 @@ from django.core.exceptions import ValidationError
 from django.db import models
 from django.db.models.fields.reverse_related import ForeignObjectRel
 from kocherga.django.errors import BoxedError, GenericError
+from kocherga.error import PublicError
+from kocherga.events.models.announcement.fb import error_screenshot_path
 from kocherga.graphql.permissions import check_permissions
 
 import graphql
@@ -350,3 +352,54 @@ class DeleteMutation(helpers.UnionFieldMixin, helpers.BaseField):
     args = {'id': 'ID!'}
 
     result_types = {Ok: basic_types.BasicResult}
+
+
+# Less flexible but more convenient variation of UnionFieldMixin.
+# Catches common exceptions and turns them into GraphQL error types.
+class SmartMutationField(helpers.BaseFieldWithInput):
+    @abstractmethod
+    def smart_resolve(self, obj, info, input):
+        ...
+
+    @property
+    @abstractmethod
+    def ok_result(self) -> g.ObjectType:
+        ...
+
+    # TODO - make customizable through class-level flags (e.g. `catch_validation_errors = True`)
+    error_class_to_graphql_type = {
+        GenericError: kocherga.django.schema.types.GenericError,
+        BoxedError: kocherga.django.schema.types.ValidationError,
+    }
+
+    def resolve(self, obj, info, input):
+        try:
+            return self.smart_resolve(obj, info, input)
+        except Exception as e:
+            if isinstance(e, PublicError):
+                return GenericError(e.message)
+            if isinstance(e, ValidationError):
+                return BoxedError(e)
+
+            raise Exception("Internal error")
+
+    @property
+    def result(self):
+        def resolve_type(obj, info, *_):
+            for (error_class, graphql_type) in self.error_class_to_graphql_type.items():
+                if isinstance(obj, error_class):
+                    return graphql_type
+
+            return self.ok_result
+            # raise Exception(f"Can't recognize {obj} as allowed return type")
+
+        return g.NN(
+            g.UnionType(
+                self.result_object_name(),
+                types=[
+                    self.ok_result,
+                    *self.error_class_to_graphql_type.values(),
+                ],
+                resolve_type=resolve_type,
+            )
+        )

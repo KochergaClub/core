@@ -1,0 +1,56 @@
+// Table is needed for footer which doesn't overlap with the content
+// See: https://medium.com/@Idan_Co/the-ultimate-print-html-template-with-header-footer-568f415f6d2a
+
+.container {
+  max-width: 800px;
+  margin: 0 auto;
+  background-color: white;
+  @media screen {
+    max-width: 840px;
+    padding: 0 20px;
+  }
+
+  font-family: 'Intro Book';
+
+  @media print {
+    font-size: 0.9em;
+    thead {
+      display: table-header-group;
+    }
+    tfoot {
+      display: table-footer-group;
+    }
+
+    padding: 0 25.4mm;
+  }
+
+  @page {
+    size: A4;
+    margin-top: 0;
+    margin-left: 0;
+    margin-right: 0;
+    margin-bottom: 25.4mm;
+  }
+}
+
+.header-placeholder {
+  height: 25.4mm;
+}
+
+.break-after-page {
+  break-after: page;
+}
+
+.break-before-page {
+  break-before: page;
+}
+
+.frontpage-header {
+  margin-left: 50px;
+  margin-right: 50px;
+
+  font-size: 4em;
+  font-weight: bold;
+  font-variant: small-caps;
+  line-height: 1.1;
+}

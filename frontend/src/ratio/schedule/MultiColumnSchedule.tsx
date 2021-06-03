@@ -1,7 +1,4 @@
-import styled from 'styled-components';
-
 import { TrainingDayFragment } from '../queries.generated';
-
 import DaySchedule from './multi-column/DaySchedule';
 
 interface Props {
@@ -9,29 +6,14 @@ interface Props {
   schedule: TrainingDayFragment[];
 }
 
-const Columns = styled.div`
-  display: flex;
-
-  & > * {
-    flex: 1;
-  }
-
-  & > * + * {
-    margin-left: 20px;
-  }
-`;
-
 export default function MultiColumnSchedule({ schedule, long_name }: Props) {
   return (
-    <Columns>
+    <div className="flex space-x-5">
       {schedule.map((day, i) => (
-        <DaySchedule
-          day_schedule={day}
-          long_name={long_name}
-          key={i}
-          index={i + 1}
-        />
+        <div key={day.id} className="flex-1">
+          <DaySchedule day_schedule={day} long_name={long_name} index={i + 1} />
+        </div>
       ))}
-    </Columns>
+    </div>
   );
 }

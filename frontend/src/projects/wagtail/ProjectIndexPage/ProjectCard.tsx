@@ -6,11 +6,6 @@ import { projectRoute } from '~/projects/routes';
 
 import { ProjectPage_SummaryFragment } from './fragments.generated';
 
-const ProjectA = styled.a`
-  text-decoration: none;
-  color: black;
-`;
-
 const Card = styled.div`
   background-color: white;
   height: 100%;
@@ -57,7 +52,7 @@ const ProjectCard = (props: ProjectPage_SummaryFragment) => {
 
   return (
     <Link href={url} passHref>
-      <ProjectA>
+      <a className="no-underline text-black">
         <Card>
           <Image src={props.image.url} />
           <Inner>
@@ -68,7 +63,7 @@ const ProjectCard = (props: ProjectPage_SummaryFragment) => {
             <Summary>{props.summary}</Summary>
           </Inner>
         </Card>
-      </ProjectA>
+      </a>
     </Link>
   );
 };

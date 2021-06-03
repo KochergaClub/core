@@ -1,0 +1,15 @@
+@font-face {
+  font-family: 'Intro Book';
+  src: url('/static/fonts/intro-pack/Intro-Book.otf');
+  font-weight: normal;
+}
+
+@font-face {
+  font-family: 'Intro Book';
+  src: url('/static/fonts/intro-pack/Intro-Bold.otf');
+  font-weight: bold;
+}
+
+.intro-book {
+  font-family: 'Intro Book';
+}

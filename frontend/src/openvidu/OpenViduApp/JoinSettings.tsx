@@ -1,18 +1,12 @@
 import { Device, OpenVidu, PublisherProperties } from 'openvidu-browser';
 import { useCallback, useEffect, useRef, useState } from 'react';
 import Select from 'react-select';
-import styled from 'styled-components';
 
 import { PaddedBlock, Spinner } from '~/components';
 import { AsyncButton, Column, Label, Row } from '~/frontkit';
 
 import MuteAudioButton from './MuteAudioButton';
 import MuteVideoButton from './MuteVideoButton';
-
-const PreviewVideo = styled.video`
-  height: 300px;
-  width: auto;
-`;
 
 interface LimitedPublisherProperties {
   videoSource?: string;
@@ -71,9 +65,10 @@ const JoinSettings: React.FC<Props> = ({ ov, joinSession }) => {
   const [error, setError] = useState<DOMException | undefined>(undefined);
   const previewRef = useRef<HTMLVideoElement | null>();
 
-  const [publisherProperties, setPublisherProperties] = useState<
-    LimitedPublisherProperties
-  >({
+  const [
+    publisherProperties,
+    setPublisherProperties,
+  ] = useState<LimitedPublisherProperties>({
     audioSource: undefined,
     videoSource: undefined,
     publishAudio: true,
@@ -205,10 +200,14 @@ const JoinSettings: React.FC<Props> = ({ ov, joinSession }) => {
         <Column stretch>
           <h2>Превью и настройки</h2>
           <Row gutter={20} vCentered wrap>
-            <div style={{ flex: 1 }}>
-              <PreviewVideo ref={setPreviewRef} autoPlay={true} />
+            <div className="flex-1">
+              <video
+                className="h-80 w-auto"
+                ref={setPreviewRef}
+                autoPlay={true}
+              />
             </div>
-            <div style={{ flex: 1 }}>
+            <div className="flex-1">
               <Column stretch>
                 <div>
                   <Label>Видео</Label>

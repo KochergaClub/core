@@ -1,45 +1,21 @@
-import styled from 'styled-components';
+import clsx from 'clsx';
+import { addDays, isEqual, startOfWeek } from 'date-fns';
 
-import { addDays, isEqual, startOfWeek, startOfDay } from 'date-fns';
-
-import DayHeader from './DayHeader';
+import { DayHeader } from './DayHeader';
 
 const weekDays = (firstDay: Date) =>
-  [0, 1, 2, 3, 4, 5, 6].map(i => addDays(firstDay, i));
+  [0, 1, 2, 3, 4, 5, 6].map((i) => addDays(firstDay, i));
 
 interface Props {
   firstDay: Date;
   renderDay: (date: Date) => React.ReactNode;
 }
 
-const Container = styled.div`
-  display: grid;
-  grid-template-columns: repeat(7, 1fr);
-
-  margin-bottom: 10px;
-`;
-
-const DayContainer = styled.div`
-  position: relative;
-`;
-
-const Cell = styled.div<{ today: boolean }>``;
-
-const LeftHighlight = styled.div`
-  position: absolute;
-  left: -20px;
-  width: 3px;
-  height: 100%;
-  background-color: black;
-`;
-
-const RightHighlight = styled.div`
-  position: absolute;
-  right: -20px;
-  width: 3px;
-  height: 100%;
-  background-color: black;
-`;
+const Highlight: React.FC<{ className: string }> = ({ className }) => (
+  <div
+    className={clsx('absolute border-2 border-gray-600 h-full', className)}
+  />
+);
 
 const Week: React.FC<Props> = ({ firstDay, renderDay }) => {
   const highlight = isEqual(
@@ -48,22 +24,20 @@ const Week: React.FC<Props> = ({ firstDay, renderDay }) => {
   );
 
   return (
-    <Container>
+    <div className="grid grid-cols-7 mb-3">
       {weekDays(firstDay).map((day, i) => {
-        const today = isEqual(startOfDay(new Date()), startOfDay(day));
-
         return (
-          <Cell key={i} today={today}>
+          <div key={i}>
             <DayHeader day={day} />
-            <DayContainer>
-              {i === 0 && highlight && <LeftHighlight />}
-              {i === 6 && highlight && <RightHighlight />}
+            <div className="relative">
+              {i === 0 && highlight && <Highlight className="-left-5" />}
+              {i === 6 && highlight && <Highlight className="-right-5" />}
               {renderDay(day)}
-            </DayContainer>
-          </Cell>
+            </div>
+          </div>
         );
       })}
-    </Container>
+    </div>
   );
 };
 

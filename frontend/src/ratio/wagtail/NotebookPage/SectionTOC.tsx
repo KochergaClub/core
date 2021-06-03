@@ -1,36 +1,28 @@
-import styled from 'styled-components';
+import clsx from 'clsx';
 
 import { RatioNotebookPageFragment } from '../fragments.generated';
-
-const Container = styled.div`
-  max-width: 800px;
-  margin: 0 auto;
-  @media screen {
-    min-height: 600px;
-  }
-  break-after: page;
-`;
-
-const Line = styled.a`
-  display: block;
-  color: black;
-  text-decoration: none;
-  border-bottom: 1px solid #888;
-  text-transform: uppercase;
-  margin-bottom: 12px;
-`;
+import styles from './styles.module.scss';
 
 export default function SectionTOC(props: { page: RatioNotebookPageFragment }) {
   return (
-    <Container>
-      {props.page.sections.map(section => {
+    <div
+      className={clsx(
+        'mx-auto max-w-3xl min-h-80 print:min-h-0',
+        styles['break-after-page']
+      )}
+    >
+      {props.page.sections.map((section) => {
         const sectionPage = section.value;
         return (
-          <Line key={sectionPage.id} href={`#section-${sectionPage.meta.slug}`}>
+          <a
+            className="block text-black no-underline border-b border-gray-400 uppercase mb-3"
+            key={sectionPage.id}
+            href={`#section-${sectionPage.meta.slug}`}
+          >
             {sectionPage.title}
-          </Line>
+          </a>
         );
       })}
-    </Container>
+    </div>
   );
 }

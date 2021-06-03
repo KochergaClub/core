@@ -2,19 +2,17 @@ import logging
 
 logger = logging.getLogger(__name__)
 
+import kocherga.cm.models
+import kocherga.cm.tools
+import kocherga.slack.client
+import kocherga.watchmen.models
+import kocherga.wiki
+import markdown
 from django.contrib.auth import get_user_model
 from django.core.mail import send_mail
 from django.template.loader import render_to_string
-from rest_framework.exceptions import APIException
-
-import markdown
 from html2text import html2text
-
-import kocherga.wiki
-import kocherga.cm.tools
-import kocherga.cm.models
-import kocherga.slack.client
-import kocherga.watchmen.models
+from rest_framework.exceptions import APIException
 
 from .models import Member
 
@@ -104,26 +102,25 @@ def add_watchman(
             createreturnurl='https://kocherga.club',
         )
 
-    logger.info('Inviting to slack')
-    sc = kocherga.slack.client.legacy_token_client()
-
-    # undocumented api - see https://github.com/ErikKalkoken/slackApiDoc/blob/master/users.admin.invite.md
-    sc_response = sc.api_call(
-        'users.admin.invite',
-        email=email,
-        first_name=full_name.split(' ')[0],
-        last_name=full_name.split(' ')[-1],
-    )
-    if not sc_response["ok"]:
-        if sc_response.get("error") in (
-            "already_in_team_invited_user",
-            "already_in_team",
-        ):
-            logger.info("Couldn't invite to Slack, already in team or invited")
-        else:
-            raise APIException(
-                "Couldn't invite to Slack: " + sc_response.get('error', 'unknown error')
-            )
+    ## Slack invite api (https://api.slack.com/methods/admin.users.invite) is disabled for non-enterprise grid users
+    # logger.info('Inviting to slack')
+    # sc = kocherga.slack.client.legacy_token_client()
+    # sc_response = sc.api_call(
+    #     'users.admin.invite',
+    #     email=email,
+    #     first_name=full_name.split(' ')[0],
+    #     last_name=full_name.split(' ')[-1],
+    # )
+    # if not sc_response["ok"]:
+    #     if sc_response.get("error") in (
+    #         "already_in_team_invited_user",
+    #         "already_in_team",
+    #     ):
+    #         logger.info("Couldn't invite to Slack, already in team or invited")
+    #     else:
+    #         raise APIException(
+    #             "Couldn't invite to Slack: " + sc_response.get('error', 'unknown error')
+    #         )
 
     cm_user = None
     if not skip_cm_user:

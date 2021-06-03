@@ -73,7 +73,7 @@ export const EventPicker: React.FC<Props> = ({ onChange }) => {
       styles={{
         menuPortal: (provided) => ({
           ...provided,
-          zIndex: 1100,
+          zIndex: 5000,
         }),
         container: (provided) => ({
           ...provided,

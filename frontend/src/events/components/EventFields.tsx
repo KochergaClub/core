@@ -82,7 +82,7 @@ const EventFields = (props: Props) => {
           isDisabled={props.disabled}
           menuPortalTarget={document.body}
           styles={{
-            menuPortal: (provided) => ({ ...provided, zIndex: 1100 }),
+            menuPortal: (provided) => ({ ...provided, zIndex: 5000 }),
           }}
         />
       </Column>

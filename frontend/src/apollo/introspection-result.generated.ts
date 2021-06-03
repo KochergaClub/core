@@ -19,6 +19,11 @@
       "ValidationError",
       "GenericError"
     ],
+    "AuthSetMyNamesResult": [
+      "AuthCurrentUser",
+      "GenericError",
+      "ValidationError"
+    ],
     "BecomeCommunityLeadCuratorResult": [
       "CommunityLead"
     ],

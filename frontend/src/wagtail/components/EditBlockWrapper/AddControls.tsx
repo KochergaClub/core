@@ -1,33 +1,20 @@
 import { useContext, useState } from 'react';
 import { FaPlusCircle } from 'react-icons/fa';
-import styled from 'styled-components';
 
-import { Button, Column, Modal } from '~/frontkit';
+import { Button, Modal } from '~/frontkit';
 import { allBlockComponents, KnownBlockFragment } from '~/wagtail/blocks';
 
 import { BlockFormModal } from '../BlockFormModal';
 import { EditBlocksContext } from '../EditWagtailBlocks';
 
-const AddControlsContainer = styled.div`
-  position: absolute;
-  bottom: -16px;
-  left: 50%;
-  transform: translate(-50%, 0);
-  z-index: 1; /* transform creates a new stacking context, so this is necessary for inner Dropdown */
-
-  & > a {
-    height: 32px;
-    display: block;
-  }
-`;
-
 interface Props {
   position: number;
+  show: boolean;
 }
 
 type Typename = KnownBlockFragment['__typename'];
 
-const AddControls: React.FC<Props> = ({ position }) => {
+export const AddControls: React.FC<Props> = ({ position, show }) => {
   const { dispatch } = useContext(EditBlocksContext);
   const [showModal, setShowModal] = useState(false);
   const [typename, setTypename] = useState<Typename | undefined>(undefined);
@@ -55,14 +42,20 @@ const AddControls: React.FC<Props> = ({ position }) => {
     closeModal();
   };
 
-  // TODO - load from server
+  // TODO - load from server?
   const typenames = Object.keys(allBlockComponents) as Typename[];
 
   return (
-    <AddControlsContainer className="controls">
-      <a href="#" onClick={act}>
-        <FaPlusCircle size={32} />
-      </a>
+    <div>
+      {show ? (
+        <a
+          href="#"
+          className="absolute -bottom-4 left-1/2 transform -translate-x-1/2 h-8 text-primary-500 bg-white"
+          onClick={act}
+        >
+          <FaPlusCircle size={32} />
+        </a>
+      ) : null}
       {typename ? (
         <BlockFormModal
           close={closeModal}
@@ -74,18 +67,16 @@ const AddControls: React.FC<Props> = ({ position }) => {
         <Modal>
           <Modal.Header close={closeModal}>Выберите тип блока</Modal.Header>
           <Modal.Body>
-            <Column>
+            <div className="space-x-1 space-y-1 max-w-xl">
               {typenames.map((typename) => (
                 <Button key={typename} onClick={() => pick(typename)}>
                   {typename}
                 </Button>
               ))}
-            </Column>
+            </div>
           </Modal.Body>
         </Modal>
       ) : null}
-    </AddControlsContainer>
+    </div>
   );
 };
-
-export default AddControls;

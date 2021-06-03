@@ -3,7 +3,7 @@ import React, { useEffect, useReducer } from 'react';
 
 import { AnyBlockFragment } from '../types';
 import AnyBlock from './AnyBlock';
-import EditBlockWrapper from './EditBlockWrapper';
+import { EditBlockWrapper } from './EditBlockWrapper';
 import EditControls from './EditControls';
 import { WagtailStreamFieldValidationErrorFragment } from './queries.generated';
 
@@ -55,12 +55,16 @@ type SetValidationErrorAction = {
   payload: WagtailStreamFieldValidationErrorFragment;
 };
 
+type ClearValidationErrorAction = {
+  type: 'CLEAR_VALIDATION_ERROR';
+};
 type Action =
   | DeleteBlockAction
   | EditBlockAction
   | AddBlockAction
   | SwapBlocksAction
   | SetValidationErrorAction
+  | ClearValidationErrorAction
   | ReplaceBlocksAction;
 
 interface State {
@@ -123,6 +127,11 @@ const reducer = (state: State, action: Action): State => {
       return {
         ...state,
         validation_error: action.payload,
+      };
+    case 'CLEAR_VALIDATION_ERROR':
+      return {
+        ...state,
+        validation_error: undefined,
       };
     case 'REPLACE_BLOCKS':
       return {
