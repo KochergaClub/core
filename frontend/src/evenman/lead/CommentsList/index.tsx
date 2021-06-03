@@ -1,7 +1,6 @@
 import { parseISO } from 'date-fns';
 import React from 'react';
 import { FaEdit, FaRegComment, FaTrash } from 'react-icons/fa';
-import styled from 'styled-components';
 
 import { TypedDocumentNode } from '@apollo/client';
 
@@ -10,7 +9,7 @@ import { ButtonWithModal, DropdownMenu, HumanizedDateTime, Markdown } from '~/co
 import { ModalAction, SmartMutationAction } from '~/components/DropdownMenu';
 import { SmartMutationModal } from '~/components/forms/SmartMutationModal';
 import { UserLink } from '~/components/UserLink';
-import { colors, Column, Row } from '~/frontkit';
+import { Column, Row } from '~/frontkit';
 
 import {
     CommentableFragment, CommentFragment, DeleteCommentDocument, EditCommentDocument
@@ -21,17 +20,11 @@ type CommentProps = {
   comment: CommentFragment;
 };
 
-const CommentIcon = styled(FaRegComment)`
-  color: ${colors.grey[400]};
-  margin-top: 4px;
-  flex-shrink: 0;
-`;
-
 const Comment: React.FC<CommentProps> = ({ comment, commentable }) => {
   return (
     <div>
       <Row gutter={8}>
-        <CommentIcon />
+        <FaRegComment className="mt-1 flex-shrink-0 text-gray-400" />
         <div>
           <Row vCentered gutter={8}>
             <strong>
@@ -91,10 +84,12 @@ const Comment: React.FC<CommentProps> = ({ comment, commentable }) => {
               />
             </DropdownMenu>
           </Row>
-          <Markdown source={comment.text} />
+          <div className="text-sm">
+            <Markdown source={comment.text} />
+          </div>
         </div>
       </Row>
-      <hr />
+      <hr className="border-t border-gray-200 my-5" />
     </div>
   );
 };

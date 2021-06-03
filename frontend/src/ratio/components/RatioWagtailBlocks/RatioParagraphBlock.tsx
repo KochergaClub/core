@@ -1,24 +1,11 @@
-import styled from 'styled-components';
-
 import { RatioParagraphBlockFragment as Props } from './fragments.generated';
-
-const Paragraph = styled.div`
-  > p {
-    text-align: justify;
-    page-break-inside: avoid;
-  }
-
-  ul,
-  ol {
-    margin-left: 30px;
-
-    > li {
-      margin-bottom: 8px;
-      page-break-inside: avoid; // broken <li> elements are especially bad
-    }
-  }
-`;
+import styles from './styles.module.scss';
 
 export default function RatioParagraphBlock(block: Props) {
-  return <Paragraph dangerouslySetInnerHTML={{ __html: block.value }} />;
+  return (
+    <div
+      className={styles.paragraph}
+      dangerouslySetInnerHTML={{ __html: block.value }}
+    />
+  );
 }

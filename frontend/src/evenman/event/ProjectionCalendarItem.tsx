@@ -19,6 +19,7 @@ const ProjectionControls: React.FC<Props> = ({ projection }) => {
   return (
     <Row vCentered gutter={16}>
       <MutationButton
+        kind="primary"
         mutation={EvenmanPrototypeCancelDateDocument}
         refetchQueries={['EvenmanEventsCalendar']}
         variables={{
@@ -29,6 +30,7 @@ const ProjectionControls: React.FC<Props> = ({ projection }) => {
         Пропустить
       </MutationButton>
       <MutationButton
+        kind="primary"
         mutation={EvenmanPrototypeNewEventDocument}
         refetchQueries={['EvenmanEventsCalendar']}
         variables={{
@@ -53,13 +55,13 @@ export const ProjectionCalendarItem: React.FC<Props> = ({ projection }) => {
   }, []);
 
   return (
-    <CalendarItemContainer>
-      <CalendarItemIcon>
-        <FaGhost color="black" size="11" />
-      </CalendarItemIcon>
-      <CalendarItemTitle onClick={openModal}>
-        {projection.prototype.title}
-      </CalendarItemTitle>
+    <>
+      <CalendarItemContainer onClick={openModal}>
+        <CalendarItemIcon>
+          <FaGhost color="black" size="11" />
+        </CalendarItemIcon>
+        <CalendarItemTitle>{projection.prototype.title}</CalendarItemTitle>
+      </CalendarItemContainer>
       {showModal && (
         <Modal>
           <Modal.Header close={closeModal}>
@@ -72,6 +74,6 @@ export const ProjectionCalendarItem: React.FC<Props> = ({ projection }) => {
           </Modal.Footer>
         </Modal>
       )}
-    </CalendarItemContainer>
+    </>
   );
 };

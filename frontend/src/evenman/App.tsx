@@ -7,7 +7,6 @@ import { WithNavSidebar } from '~/frontkit';
 
 import EventPrototypeScreen from './event-prototype/EventPrototypeScreen';
 import EventScreen from './event/EventScreen';
-import GlobalStyle from './GlobalStyle';
 import { LeadDetailsScreen } from './lead/LeadDetailsScreen';
 import { LeadScreen } from './lead/LeadScreen';
 import { PREFIX } from './routes';
@@ -87,7 +86,6 @@ const EvenmanApp: NextApolloPage = () => {
 
   return (
     <Page title="Event Manager" chrome="fullscreen">
-      <GlobalStyle />
       <WithNavSidebar
         tabs={tabs}
         header={{

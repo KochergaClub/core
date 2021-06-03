@@ -1,3 +1,4 @@
+import clsx from 'clsx';
 import { parseISO } from 'date-fns';
 import { Calendar, CalendarProps, stringOrDate } from 'react-big-calendar';
 import withDragAndDrop from 'react-big-calendar/lib/addons/dragAndDrop';
@@ -5,8 +6,8 @@ import withDragAndDrop from 'react-big-calendar/lib/addons/dragAndDrop';
 // This is a workaround.
 import { views } from 'react-big-calendar/lib/utils/constants';
 
-import { CalendarDndStyle, CalendarStyle } from './CalendarStyle';
 import { localizer } from './localizer';
+import styles from './styles.module.scss';
 import Toolbar from './Toolbar';
 
 const DragAndDropCalendar = withDragAndDrop<any, any>(Calendar);
@@ -37,9 +38,8 @@ const BigCalendarConfigured = <TEvent extends object, TResource extends object>(
   props: Props<TEvent, TResource>
 ) => {
   return (
-    <div className="mx-auto pt-2">
-      <CalendarStyle />
-      <CalendarDndStyle />
+    <div className={clsx('mx-auto pt-2', styles.kch)}>
+      {/* <CalendarDndStyle /> */}
       <DragAndDropCalendar
         selectable
         resizable

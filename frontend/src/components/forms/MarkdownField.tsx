@@ -31,7 +31,7 @@ export const MarkdownField = <T extends FieldValues>({
       error={get(form.formState.errors, name) as FieldError}
     >
       <textarea
-        className="p-2"
+        className="p-2 leading-normal"
         placeholder={placeholder}
         defaultValue={defaultValue}
         onKeyDown={(e) => {

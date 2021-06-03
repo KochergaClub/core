@@ -1,5 +1,5 @@
-import { useEffect } from 'react';
-import baseStyled, { ThemedBaseStyledInterface, ThemeProvider } from 'styled-components';
+import clsx from 'clsx';
+import { useContext, useEffect } from 'react';
 
 import { useQuery } from '@apollo/client';
 
@@ -7,22 +7,18 @@ import { NextApolloPage, withApollo } from '~/apollo';
 import { staticUrl } from '~/common/utils';
 import { ApolloQueryResults, Page } from '~/components';
 
-import HR from '../components/HR';
+import { HR } from '../components/HR';
 import NowData from '../components/NowData';
+import { NowTheme, NowThemeContext } from '../contexts';
 import { NowDocument } from '../queries.generated';
 
 export type ThemeName = 'default' | 'tv';
 
 interface Props {
-  theme: ThemeName;
+  themeName: ThemeName;
 }
 
-interface ThemeProps {
-  inverted: boolean;
-  tv: boolean;
-}
-
-const THEMES: { [k: string]: ThemeProps } = {
+const THEMES: { [k: string]: NowTheme } = {
   default: {
     inverted: false,
     tv: false,
@@ -33,56 +29,36 @@ const THEMES: { [k: string]: ThemeProps } = {
   },
 };
 
-const styled = baseStyled as ThemedBaseStyledInterface<ThemeProps>;
+const Container: React.FC = ({ children }) => {
+  const theme = useContext(NowThemeContext);
 
-const Container = styled.div`
-  width: 100%;
-  min-height: 100vh;
+  return (
+    <div
+      className={clsx(
+        'w-full min-h-screen',
+        theme.inverted && 'bg-black text-white'
+      )}
+    >
+      {children}
+    </div>
+  );
+};
 
-  ${props =>
-    props.theme.inverted
-      ? `
-background-color: black;
-color: white;
-`
-      : ''}
-`;
+const Main: React.FC = ({ children }) => {
+  const theme = useContext(NowThemeContext);
 
-const Main = styled.main`
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  margin: 0 auto;
-  padding-bottom: 50px;
+  return (
+    <div
+      className="flex flex-col justify-center align-center mx-auto pb-12"
+      style={{ maxWidth: theme.tv ? 800 : 350 }}
+    >
+      {children}
+    </div>
+  );
+};
 
-  ${props => (props.theme.tv ? 'max-width: 800px;' : 'max-width: 350px;')}
-`;
-
-const TopHeader = styled.header`
-  margin-top: 10px;
-  display: flex;
-  flex-direction: row;
-  justify-content: center;
-  align-items: center;
-  ${props => props.theme.tv && 'display: none;'}
-`;
-
-const TopHeaderLogo = styled.img`
-  width: 100px;
-  height: 100px;
-`;
-
-const TopHeaderLink = styled.a`
-  font-family: 'Intro';
-  font-size: 36px;
-  margin-left: 10px;
-  color: ${props => (props.theme.inverted ? 'white' : 'black')};
-  text-decoration: none;
-`;
-
-const NowPage: NextApolloPage<Props> = props => {
-  const { theme } = props;
+const NowPage: NextApolloPage<Props> = ({ themeName }) => {
+  const theme = THEMES[themeName];
 
   const nowQueryResults = useQuery(NowDocument);
 
@@ -95,33 +71,46 @@ const NowPage: NextApolloPage<Props> = props => {
 
   return (
     <Page title="Сейчас в Кочерге" chrome="none" noWhitespace>
-      <ThemeProvider theme={THEMES[theme]}>
+      <NowThemeContext.Provider value={theme}>
         <Container>
           <Main>
-            <TopHeader>
+            <header
+              className={clsx(
+                'mt-3 flex justify-center items-center',
+                theme.tv && 'hidden'
+              )}
+            >
               <a href="/">
-                <TopHeaderLogo src={staticUrl('logo.png')} />
+                <img className="w-24 h-24" src={staticUrl('logo.png')} />
               </a>
-              <TopHeaderLink href="/">Кочерга</TopHeaderLink>
-            </TopHeader>
+              <a
+                className={clsx(
+                  'font-intro ml-2 no-underline text-4xl',
+                  theme.inverted ? 'text-white' : 'text-black'
+                )}
+                href="/"
+              >
+                Кочерга
+              </a>
+            </header>
             <HR />
             <ApolloQueryResults {...nowQueryResults}>
               {({ data: { now } }) => <NowData now={now} />}
             </ApolloQueryResults>
           </Main>
         </Container>
-      </ThemeProvider>
+      </NowThemeContext.Provider>
     </Page>
   );
 };
 
 NowPage.getInitialProps = async ({ query }) => {
-  let theme: ThemeName = 'default';
+  let themeName: ThemeName = 'default';
   if (query.theme === 'tv') {
-    theme = query.theme;
+    themeName = query.theme;
   }
 
-  return { theme };
+  return { themeName };
 };
 
 export default withApollo(NowPage);

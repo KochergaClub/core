@@ -1,10 +1,3 @@
-import styled from 'styled-components';
-
-import { deviceMediaQueries } from '../sizes';
-
-export const ResponsivePadding = styled.div`
-  ${deviceMediaQueries['mobile']("padding: 0 10px")}
-  ${deviceMediaQueries['tablet']("padding: 0 20px")}
-  ${deviceMediaQueries['laptop']("padding: 0 40px")}
-  ${deviceMediaQueries['desktop']("padding: 0 80px")}
-`;
+export const ResponsivePadding: React.FC = ({ children }) => (
+  <div className="px-2.5 sm:px-5 lg:px-10 xl:px-20">{children}</div>
+);

@@ -23,14 +23,16 @@ export const DatePicker: React.FC<Props> = ({ value, onChange }) => {
   const endDate = endOfWeek(monthEndDate, { weekStartsOn: 1 });
 
   return (
-    <div className="flex flex-col rounded border border-gray-300">
-      <Header date={monthStartDate} onViewChange={setViewDate} />
-      <Calendar
-        start={startDate}
-        end={endDate}
-        selected={value}
-        onChange={onChange}
-      />
+    <div className="flex">
+      <div className="flex flex-col rounded border border-gray-300">
+        <Header date={monthStartDate} onViewChange={setViewDate} />
+        <Calendar
+          start={startDate}
+          end={endDate}
+          selected={value}
+          onChange={onChange}
+        />
+      </div>
     </div>
   );
 };

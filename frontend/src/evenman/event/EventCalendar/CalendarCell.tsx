@@ -23,7 +23,7 @@ export const CalendarCell: React.FC<Props> = ({
   }, []);
 
   return (
-    <div className="w-full overflow-auto">
+    <div className="w-full overflow-auto whitespace-nowrap">
       {events.map((event) => (
         <EventCalendarItem
           key={event.id}

@@ -1,6 +1,5 @@
 import React, { useCallback } from 'react';
 import { FaGlobeAfrica, FaLock } from 'react-icons/fa';
-import styled from 'styled-components';
 
 import { useQuery } from '@apollo/client';
 
@@ -9,16 +8,6 @@ import { AsyncButton, Button, Column, Row } from '~/frontkit';
 
 import { useUpdateMutation } from './hooks';
 import { EvenmanUnknownEventFragment, EvenmanUnknownEventsDocument } from './queries.generated';
-
-const ListContainer = styled.div`
-  background: white;
-  padding: 4px 8px;
-  min-width: 300px;
-`;
-
-const ControlButton = styled(AsyncButton).attrs({ size: 'small' })`
-  width: 40px;
-`;
 
 const ListItem = ({ event }: { event: EvenmanUnknownEventFragment }) => {
   const update = useUpdateMutation(event.id, {
@@ -41,12 +30,12 @@ const ListItem = ({ event }: { event: EvenmanUnknownEventFragment }) => {
     <Row stretch spaced>
       <small>{event.title}</small>
       <Row>
-        <ControlButton act={setPublic}>
+        <AsyncButton size="small" act={setPublic}>
           <FaGlobeAfrica style={{ color: 'green' }} />
-        </ControlButton>
-        <ControlButton act={setPrivate}>
+        </AsyncButton>
+        <AsyncButton size="small" act={setPrivate}>
           <FaLock style={{ color: 'red' }} />
-        </ControlButton>
+        </AsyncButton>
       </Row>
     </Row>
   );
@@ -63,7 +52,7 @@ const UnknownEventsDropdown: React.FC = () => {
 
   const renderList = () => {
     return (
-      <ListContainer>
+      <div className="bg-white px-2 py-1 min-w-64">
         {events.length ? (
           <Column>
             {events.map((event) => (
@@ -73,7 +62,7 @@ const UnknownEventsDropdown: React.FC = () => {
         ) : (
           <div>Нет событий для разметки</div>
         )}
-      </ListContainer>
+      </div>
     );
   };
 

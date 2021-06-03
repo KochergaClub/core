@@ -92,7 +92,7 @@ const EditableText: React.FC<Props> = ({ title, text, save, empty }) => {
     return (
       <Column stretch>
         <textarea
-          className="px-1 py-0.5 bg-primary-100"
+          className="px-1 py-0.5 bg-primary-100 leading-normal"
           ref={setTextarea}
           onKeyDown={editText}
           defaultValue={text}

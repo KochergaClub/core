@@ -1,27 +1,15 @@
-import styled from 'styled-components';
-
 import { Row } from '~/frontkit';
 
 import { RatioExerciseOnelineBlockFragment as Props } from './fragments.generated';
-
-const Text = styled.div`
-  color: hsl(21, 72%, 44%);
-  font-size: 1.2em;
-  font-style: italic;
-  margin-top: 20px;
-  margin-bottom: 10px;
-`;
-
-const Value = styled.div`
-  border-bottom: 1px solid #888;
-  flex: 1;
-`;
+import styles from './styles.module.scss';
 
 export default function RatioExerciseOnelineBlock(block: Props) {
   return (
     <Row stretch>
-      <Text>{block.exercise_oneline.text}:</Text>
-      <Value />
+      <div className={styles['exercise-header']}>
+        {block.exercise_oneline.text}:
+      </div>
+      <div className="border-b border-gray-500" />
     </Row>
   );
 }

@@ -4,18 +4,18 @@ import { AnimatePresence, motion } from 'framer-motion';
 import { useEffect, useState } from 'react';
 
 import MonthHeader from './MonthHeader';
-import Week from './Week';
+import { Week } from './Week';
 
 interface Props {
   date: Date;
   renderCell: (date: Date) => React.ReactNode;
-  renderHeader?: (date: Date) => React.ReactNode;
+  renderHeader: (date: Date) => React.ReactNode;
   weeks: number;
 }
 
-const WEEK_HEIGHT = 80;
+const WEEK_HEIGHT = 88;
 
-export const MonthCalendar = (props: Props) => {
+export const MonthCalendar: React.FC<Props> = (props) => {
   const [weeks, setWeeks] = useState<Date[]>([]);
 
   useEffect(() => {

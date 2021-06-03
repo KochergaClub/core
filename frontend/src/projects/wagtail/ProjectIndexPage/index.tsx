@@ -1,9 +1,8 @@
 import { useState } from 'react';
-import styled from 'styled-components';
 
 import { TL02 } from '~/blocks/TL02';
 import { Page } from '~/components';
-import { A, deviceMediaQueries, RichText } from '~/frontkit';
+import { RichText } from '~/frontkit';
 import { NextWagtailPage } from '~/wagtail/types';
 
 import {
@@ -11,46 +10,18 @@ import {
 } from './fragments.generated';
 import ProjectCard from './ProjectCard';
 
-const Grid = styled.div`
-  background-color: #eee;
-  padding: 30px 60px;
-
-  ${deviceMediaQueries.mobile(`
-    padding: 30px 0;
-  `)}
-
-  ${deviceMediaQueries.tablet(`
-    padding: 30px;
-  `)}
-
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-  grid-auto-columns: minmax(300px, auto);
-  grid-gap: 40px;
-  align-items: stretch;
-  justify-items: stretch;
-`;
-
-const ShowInactiveContainer = styled.div`
-  margin: 40px 0;
-  text-align: center;
-`;
-
-const ShowInactive = styled(A)`
-  text-decoration: underline;
-  text-decoration-style: dashed;
-`;
-
 interface ProjectsGridProps {
   projects: ProjectPage_SummaryFragment[];
 }
 
 const ProjectsGrid: React.FC<ProjectsGridProps> = ({ projects }) => (
-  <Grid>
-    {projects.map((project) => (
-      <ProjectCard key={project.id} {...project} />
-    ))}
-  </Grid>
+  <div className="bg-gray-100 py-8 sm:px-8 md:px-16">
+    <div className="max-w-7xl mx-auto grid gap-10 grid-cols-1 lg:grid-cols-2 xl:grid-cols-3">
+      {projects.map((project) => (
+        <ProjectCard key={project.id} {...project} />
+      ))}
+    </div>
+  </div>
 );
 
 const InactiveProjects: React.FC<ProjectsGridProps> = ({ projects }) => {
@@ -62,8 +33,9 @@ const InactiveProjects: React.FC<ProjectsGridProps> = ({ projects }) => {
       <ProjectsGrid projects={projects} />
     </>
   ) : (
-    <ShowInactiveContainer>
-      <ShowInactive
+    <div className="my-10 text-center">
+      <a
+        className="text-primary-link no-underline border-b border-dashed border-primary-link hover:border-solid"
         href="#"
         onClick={(e) => {
           e.preventDefault();
@@ -71,8 +43,8 @@ const InactiveProjects: React.FC<ProjectsGridProps> = ({ projects }) => {
         }}
       >
         Показать неактивные проекты
-      </ShowInactive>
-    </ShowInactiveContainer>
+      </a>
+    </div>
   );
 };
 
@@ -81,7 +53,6 @@ const ProjectIndexPage: NextWagtailPage<ProjectIndexPageFragment> = ({
 }) => {
   return (
     <Page title={page.title} description={page.meta.description}>
-      {/* TODO - move text to wagtail */}
       <TL02 title="Проекты Кочерги">
         <RichText
           dangerouslySetInnerHTML={{ __html: page.active_description }}

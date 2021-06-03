@@ -1,49 +1,25 @@
 import { useCallback } from 'react';
-import styled from 'styled-components';
 
 import { useMutation } from '@apollo/client';
 
-import { AsyncButton, colors, Column, fonts, Row, Toggle } from '~/frontkit';
+import { AsyncButton, Column, Row, Toggle } from '~/frontkit';
 
 import {
     MastermindDatingActivateVotingDocument, MastermindDatingParticipantFragment as Participant,
     MastermindDatingSetPresenceStatusDocument
 } from '../../queries.generated';
 
-const Photo = styled.img`
-  width: 200px;
-  height: 200px;
-  object-fit: contain;
-`;
-
-const EmptyPhotoContainer = styled.div`
-  width: 200px;
-  height: 200px;
-  border: 1px solid ${colors.grey[300]};
-  text-align: center;
-  font-size: ${fonts.sizes.XL3};
-  color: ${colors.grey[600]};
-  display: flex;
-  align-items: center;
-  justify-content: center;
-`;
+const Photo: React.FC<{ src: string }> = ({ src }) => (
+  <img src={src} className="w-48 h-48 object-contain" />
+);
 
 const EmptyPhoto = () => {
-  return <EmptyPhotoContainer>Нет фото</EmptyPhotoContainer>;
+  return (
+    <div className="w-48 h-48 border border-gray-300 grid place-items-center text-gray-500 text-3xl">
+      <div>Нет фото</div>
+    </div>
+  );
 };
-
-const Container = styled.div`
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  width: 250px;
-  margin-bottom: 80px;
-`;
-
-const Description = styled.small`
-  line-height: 1.3;
-  text-align: center;
-`;
 
 interface Props {
   participant: Participant;
@@ -83,7 +59,7 @@ const ParticipantCard: React.FC<Props> = (props) => {
   );
 
   return (
-    <Container key={participant.id}>
+    <div className="flex flex-col items-center mb-20 w-60" key={participant.id}>
       <Column centered>
         <span>{participant.user.email}</span>
         <strong>{participant.name || 'НЕ ЗАРЕГИСТРИРОВАН'}</strong>
@@ -97,8 +73,8 @@ const ParticipantCard: React.FC<Props> = (props) => {
         </Row>
         {participant.present && <VoteForm {...props} />}
       </Column>
-      <Description>{participant.desc}</Description>
-    </Container>
+      <div className="text-xs text-center">{participant.desc}</div>
+    </div>
   );
 };
 

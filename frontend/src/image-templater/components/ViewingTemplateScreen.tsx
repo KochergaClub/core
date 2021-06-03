@@ -3,11 +3,10 @@ import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { ParsedUrlQuery } from 'querystring';
 import React, { useCallback } from 'react';
-import styled from 'styled-components';
 
 import { ImageTemplateValueType } from '~/apollo/types.generated';
 import { PaddedBlock } from '~/components';
-import { A, colors, Column, Input, Label, Row } from '~/frontkit';
+import { A, Column, Input, Label, Row } from '~/frontkit';
 
 import { TemplateFragment } from '../queries.generated';
 import { imageTemplaterRootRoute } from '../routes';
@@ -62,9 +61,9 @@ const validateValues = (template: TemplateFragment, values: FormState) => {
   return errors;
 };
 
-const ErrorLabel = styled.div`
-  color: ${colors.accent[900]};
-`;
+const ErrorLabel: React.FC = ({ children }) => (
+  <div className="text-accent-900">{children}</div>
+);
 
 const Fields = ({ template }: { template: TemplateFragment }) => {
   return (

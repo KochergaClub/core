@@ -8,7 +8,7 @@ import { Column, Row } from '~/frontkit';
 
 import { EditableString } from '../../components/EditableString';
 import { MutedSpan } from '../../components/ui';
-import EditableDateSpan from '../EditableDateSpan';
+import { EditableDateTime } from '../EditableDateTime';
 import EventDropdownMenu from '../EventDropdownMenu';
 import { useUpdateMutation } from '../hooks';
 import { EvenmanEvent_DetailsFragment, EvenmanEventMoveDocument } from '../queries.generated';
@@ -58,10 +58,11 @@ const EventHeader: React.FC<Props> = ({ event }) => {
         </div>
 
         <div>
-          <EditableDateSpan
+          <EditableDateTime
+            title={event.title}
             date={parseISO(event.start)}
-            onChange={(date) =>
-              moveMutation({
+            onChange={async (date) =>
+              await moveMutation({
                 variables: {
                   event_id: event.id,
                   start: date.toISOString(),
@@ -70,14 +71,7 @@ const EventHeader: React.FC<Props> = ({ event }) => {
             }
           />
         </div>
-        <div
-          style={{
-            flex: 1,
-            display: 'flex',
-            justifyContent: 'flex-end',
-            alignSelf: 'flex-end',
-          }}
-        >
+        <div className="flex-1 flex justify-end self-end">
           <small>
             <MutedSpan>
               Создано: <DateSpan date={parseISO(event.created)} />

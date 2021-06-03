@@ -1,51 +1,10 @@
 import Link from 'next/link';
-import styled from 'styled-components';
+import React from 'react';
 
-import { fonts, Label } from '~/frontkit';
+import { LabelDiv } from '~/frontkit';
 import { projectRoute } from '~/projects/routes';
 
 import { ProjectPage_SummaryFragment } from './fragments.generated';
-
-const Card = styled.div`
-  background-color: white;
-  height: 100%;
-
-  img {
-    transition: opacity 0.3s;
-  }
-  &:hover img {
-    opacity: 0.8;
-  }
-`;
-
-const Inner = styled.div`
-  padding: 20px;
-  padding-top: 10px;
-`;
-
-const Header = styled.header`
-  font-size: ${fonts.sizes.XL};
-  line-height: 1.3;
-  font-weight: 600;
-`;
-
-const Summary = styled.div`
-  font-size: ${fonts.sizes.SM};
-  line-height: 1.5;
-  color: #333;
-`;
-
-const Image = styled.img`
-  width: 100%;
-  height: 200px;
-  object-fit: cover;
-`;
-
-const ActivitySummary = styled(Label)`
-  margin-top: 4px;
-  margin-bottom: 10px;
-  cursor: inherit; /* Label overrides cursor, but ActivitySummary is wrapped in Link so we'd prefer to inherit "pointer" */
-`;
 
 const ProjectCard = (props: ProjectPage_SummaryFragment) => {
   const url = projectRoute(props.meta.slug);
@@ -53,16 +12,23 @@ const ProjectCard = (props: ProjectPage_SummaryFragment) => {
   return (
     <Link href={url} passHref>
       <a className="no-underline text-black">
-        <Card>
-          <Image src={props.image.url} />
-          <Inner>
-            <Header>{props.title}</Header>
+        <div className="bg-white h-full group">
+          <img
+            className="w-full h-48 object-cover transition-opacity duration-300 group-hover:opacity-80"
+            src={props.image.url}
+          />
+          <div className="p-5 pt-2">
+            <header className="text-xl font-semibold leading-tight">
+              {props.title}
+            </header>
             {props.activity_summary && props.is_active && (
-              <ActivitySummary>{props.activity_summary}</ActivitySummary>
+              <LabelDiv className="mt-1">{props.activity_summary}</LabelDiv>
             )}
-            <Summary>{props.summary}</Summary>
-          </Inner>
-        </Card>
+            <div className="mt-2 text-sm text-gray-800 leading-normal">
+              {props.summary}
+            </div>
+          </div>
+        </div>
       </a>
     </Link>
   );

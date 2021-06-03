@@ -1,23 +1,16 @@
 import 'reveal.js/dist/reveal.css';
 import 'reveal.js/dist/theme/white.css';
 
+import clsx from 'clsx';
 import { useCallback } from 'react';
 import Reveal from 'reveal.js';
-import styled from 'styled-components';
 
 import RevealChart from '../plugins/chart';
 // import RevealNotes from 'reveal.js/plugin/notes/notes.js';
 import {
     PresentationPageFragment, SlideFragmentsBlockFragment
 } from '../wagtail/fragments.generated';
-
-const Container = styled.div`
-  width: 100vw;
-  height: 100vh;
-  .bad {
-    color: red;
-  }
-`;
+import styles from './styles.module.scss';
 
 const SlideFragment: React.FC<{
   fragment: SlideFragmentsBlockFragment['fragments'][0];
@@ -85,19 +78,18 @@ const RevealView: React.FC<{
       ],
     });
     deck.initialize();
-    console.log('intiialized');
   }, []);
 
   return (
-    <Container>
+    <div className="w-screen h-screen">
       <div ref={setRef} className="reveal">
-        <div className="slides">
+        <div className={clsx('slides', styles.kch)}>
           {slides.map((slide) => (
             <Slide key={slide.id} slide={slide} />
           ))}
         </div>
       </div>
-    </Container>
+    </div>
   );
 };
 

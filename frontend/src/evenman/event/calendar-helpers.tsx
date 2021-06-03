@@ -1,24 +1,18 @@
-import styled from 'styled-components';
+export const CalendarItemContainer: React.FC<{
+  onClick?: (e: React.SyntheticEvent) => void;
+}> = ({ children, onClick }) => (
+  <div
+    onClick={onClick}
+    className="cursor-pointer flex items-center relative h-4 text-xs isolate"
+  >
+    {children}
+  </div>
+);
 
-export const CalendarItemContainer = styled.div`
-  cursor: pointer;
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  position: relative;
-  height: 16px;
-  font-size: 11px;
-  z-index: 0; // force stacking context to make Progress z-index safe
-`;
+export const CalendarItemTitle: React.FC = ({ children }) => (
+  <div className="flex-1 overflow-hidden leading-none">{children}</div>
+);
 
-export const CalendarItemTitle = styled.div`
-  flex: 1;
-  overflow: hidden;
-  line-height: 1;
-`;
-
-export const CalendarItemIcon = styled.div`
-  line-height: 1;
-  margin-right: 2px;
-  margin-left: 2px;
-`;
+export const CalendarItemIcon: React.FC = ({ children }) => (
+  <div className="leading-none mx-0.5">{children}</div>
+);

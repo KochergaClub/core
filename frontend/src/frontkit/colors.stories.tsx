@@ -1,5 +1,4 @@
 import React from 'react';
-import styled from 'styled-components';
 
 import { colors, Column, Row } from './';
 
@@ -7,13 +6,14 @@ export default {
   title: 'Общее/Цвета',
 };
 
-const ColorBox = styled.div`
-  height: 50px;
-  flex: 1;
-  background-color: ${(props) => props.color};
-  text-align: center;
-  line-height: 50px;
-`;
+const ColorBox: React.FC<{ color: string }> = ({ children, color }) => (
+  <div
+    className="h-12 flex-1 flex justify-center items-center"
+    style={{ backgroundColor: color }}
+  >
+    {children}
+  </div>
+);
 
 export const AllColors = () => (
   <Column stretch>

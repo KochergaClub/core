@@ -1,24 +1,21 @@
-import styled from 'styled-components';
+export const Header: React.FC = ({ children }) => (
+  <header className="font-bold text-gray-500 mt-5 mb-3 py-1 border-b-2 border-gray-200">
+    {children}
+  </header>
+);
 
-import { colors } from '~/frontkit';
-
-export const Header = styled.header`
-  font-weight: bold;
-  color: ${colors.grey[500]};
-  margin-top: 20px;
-  margin-bottom: 12px;
-  padding: 4px 0;
-  border-bottom: 2px solid ${colors.grey[200]};
-`;
-
-export const IconLink = styled.a`
-  display: flex; // helps with vertical positioning
-  color: ${colors.grey[400]};
-  text-decoration: none;
-  &:hover {
-    color: black;
-  }
-`;
+export const IconLink: React.FC<{
+  href: string;
+  onClick: React.MouseEventHandler<HTMLAnchorElement>;
+}> = ({ href, onClick, children }) => (
+  <a
+    href={href}
+    onClick={onClick}
+    className="flex text-gray-400 no-underline hover:text-black"
+  >
+    {children}
+  </a>
+);
 
 export const UserText: React.FC = ({ children }) => (
   <div className="font-mono">{children}</div>
@@ -29,16 +26,11 @@ export const UserSpan: React.FC = ({ children }) => (
 );
 
 export const MutedSpan: React.FC = ({ children }) => (
-  <span className="text-gray-400">{children}</span>
+  <span className="text-gray-500">{children}</span>
 );
 
-export const NumberBadge = styled.div`
-  background-color: ${colors.primary[300]};
-  border-radius: 50%;
-  font-size: 12px;
-  min-width: 19px;
-  height: 19px;
-  line-height: 19px;
-  text-align: center;
-  vertical-align: middle;
-`;
+export const NumberBadge: React.FC = ({ children }) => (
+  <div className="bg-primary-300 rounded-full text-xs h-4 px-1.5 flex justify-center items-center">
+    {children}
+  </div>
+);
