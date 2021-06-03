@@ -18,8 +18,7 @@
     "paths": {
       "~/*": ["src/*"]
     },
-    // This would be nice to have, but fullcalendar types are buggy, see https://github.com/fullcalendar/fullcalendar/issues/5446
-    // Also, this fixes styled-components https://github.com/DefinitelyTyped/DefinitelyTyped/issues/33311 clusterfuck.
+    // TODO - reenable? most issues with this are resolved (but it's still slow)
     "skipLibCheck": true,
     "strict": true
   },
