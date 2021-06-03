@@ -10,7 +10,7 @@ import RevealChart from '../plugins/chart';
 import {
     PresentationPageFragment, SlideFragmentsBlockFragment
 } from '../wagtail/fragments.generated';
-import styles from './styles.module.scss';
+import styles from './styles.module.css';
 
 const SlideFragment: React.FC<{
   fragment: SlideFragmentsBlockFragment['fragments'][0];

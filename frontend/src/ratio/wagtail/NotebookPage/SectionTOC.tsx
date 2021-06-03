@@ -1,7 +1,7 @@
 import clsx from 'clsx';
 
 import { RatioNotebookPageFragment } from '../fragments.generated';
-import styles from './styles.module.scss';
+import styles from './styles.module.css';
 
 export default function SectionTOC(props: { page: RatioNotebookPageFragment }) {
   return (

@@ -27,12 +27,10 @@ const createServerLink = (req: NextApolloPageContext['req']) => {
       throw new Error('DJANGO_HOST should be set in env');
     }
 
-    // req can be empty:
-    // 1) when we do the last styled-components-extracting rendering pass in _document (UPD: this was fixed, see _document for ugly details).
-    // 2) when we init apollo client from getStaticProps which doesn't have access to req.
-    //
+    // `req` can be empty when we init apollo client from `getStaticProps`, which doesn't have access to `req`.
     // Note that we can't just pass `apolloClient` to WithApollo props, since it can't be serialized.
-    // This is ugly - it means that we do 3 rendering passes on all apollo pages, and that we create server-side ApolloClient twice.
+    // This is ugly - it means that we do 3 (is this still true since we got rid of styled-components?)
+    // rendering passes on all apollo pages, and that we create server-side ApolloClient twice.
     const cookieHeader = req ? req.headers.cookie : undefined;
 
     const cookies = cookie.parse(cookieHeader || '');

@@ -7,7 +7,7 @@ import withDragAndDrop from 'react-big-calendar/lib/addons/dragAndDrop';
 import { views } from 'react-big-calendar/lib/utils/constants';
 
 import { localizer } from './localizer';
-import styles from './styles.module.scss';
+import styles from './styles.module.css';
 import Toolbar from './Toolbar';
 
 const DragAndDropCalendar = withDragAndDrop<any, any>(Calendar);

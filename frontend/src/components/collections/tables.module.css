@@ -1,0 +1,17 @@
+.table {
+  border-collapse: collapse;
+
+  td,
+  th {
+    @apply border border-gray-300;
+    padding: 4px;
+  }
+}
+
+.table-header-cell {
+  font-weight: 500;
+  font-size: 10px;
+  text-transform: uppercase;
+  letter-spacing: 0.4px;
+  @apply text-gray-600;
+}

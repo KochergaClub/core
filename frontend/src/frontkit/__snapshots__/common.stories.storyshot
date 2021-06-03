@@ -1,56 +1,8 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`Storyshots Общее/Текст RichText 1`] = `
-.c1 {
-  margin: 32px 0;
-  height: 1px;
-  border: 0;
-  border-top: 1px solid hsl(210,12%,92%);
-}
-
-.c0 {
-  word-wrap: break-word;
-}
-
-.c0 a {
-  color: hsl(210,80%,50%);
-  -webkit-text-decoration: none;
-  text-decoration: none;
-}
-
-.c0 a:hover {
-  -webkit-text-decoration: underline;
-  text-decoration: underline;
-}
-
-.c0 hr {
-  margin: 32px 0;
-  height: 1px;
-  border: 0;
-  border-top: 1px solid hsl(210,12%,92%);
-}
-
-.c0 img {
-  max-width: 100%;
-  height: auto;
-}
-
-.c0 .responsive-object {
-  position: relative;
-}
-
-.c0 .responsive-object iframe,
-.c0 .responsive-object object,
-.c0 .responsive-object embed {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-}
-
 <div
-  className="c0"
+  className="rich-text"
 >
   <p>
     Внутри RichText автоматически работают кастомные стили
@@ -63,7 +15,7 @@ exports[`Storyshots Общее/Текст RichText 1`] = `
     .
   </p>
   <hr
-    className="c1"
+    className="hr"
   />
   <p>
     И для горизонтальных линий.
@@ -76,15 +28,8 @@ Array [
   <div>
     Текст над чертой (в div).
   </div>,
-  .c0 {
-  margin: 32px 0;
-  height: 1px;
-  border: 0;
-  border-top: 1px solid hsl(210,12%,92%);
-}
-
-<hr
-    className="c0"
+  <hr
+    className="hr"
   />,
   <div>
     Текст под чертой (в div).
@@ -92,15 +37,8 @@ Array [
   <p>
     Теперь тест отступа вокруг черты для параграфов. Этот текст в параграфе над чертой.
   </p>,
-  .c0 {
-  margin: 32px 0;
-  height: 1px;
-  border: 0;
-  border-top: 1px solid hsl(210,12%,92%);
-}
-
-<hr
-    className="c0"
+  <hr
+    className="hr"
   />,
   <p>
     А это текст в параграфе под чертой.
@@ -146,21 +84,10 @@ exports[`Storyshots Общее/Текст Список 1`] = `
 
 exports[`Storyshots Общее/Текст Ссылка 1`] = `
 Array [
-  .c0 {
-  color: hsl(210,80%,50%);
-  -webkit-text-decoration: none;
-  text-decoration: none;
-}
-
-.c0:hover {
-  -webkit-text-decoration: underline;
-  text-decoration: underline;
-}
-
-<div>
+  <div>
     Ссылки выглядят так: 
     <a
-      className="c0"
+      className="link"
       href="https://kocherga.club"
     >
       Кочерга

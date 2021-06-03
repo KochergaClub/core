@@ -1,7 +1,7 @@
 import clsx from 'clsx';
 import * as React from 'react';
 
-import styles from './Burger.module.scss';
+import styles from './Burger.module.css';
 
 export interface Props {
   opened?: boolean;

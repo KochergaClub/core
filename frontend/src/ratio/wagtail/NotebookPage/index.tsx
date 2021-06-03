@@ -8,7 +8,7 @@ import Frontpage from './Frontpage';
 import { PrintDocument } from './PrintDocument';
 import PrintFooter from './PrintFooter';
 import SectionTOC from './SectionTOC';
-import styles from './styles.module.scss';
+import styles from './styles.module.css';
 
 const NotebookPage: NextWagtailPage<RatioNotebookPageFragment> = ({ page }) => {
   const footer = <PrintFooter />;

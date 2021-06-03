@@ -1,33 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`Storyshots Components/WithSidebar Basic 1`] = `
-.c0 {
-  display: -webkit-box;
-  display: -webkit-flex;
-  display: -ms-flexbox;
-  display: flex;
-  -webkit-flex-direction: row;
-  -ms-flex-direction: row;
-  flex-direction: row;
-  width: 100%;
-  height: 100%;
-}
-
-.c1 {
-  background-color: hsl(210,20%,97%);
-  border-right: 1px solid hsl(210,12%,80%);
-  -webkit-align-self: stretch;
-  -ms-flex-item-align: stretch;
-  align-self: stretch;
-}
-
-.c2 {
-  -webkit-flex: 1;
-  -ms-flex: 1;
-  flex: 1;
-  overflow: auto;
-}
-
 <div
   style={
     Object {
@@ -36,17 +9,17 @@ exports[`Storyshots Components/WithSidebar Basic 1`] = `
   }
 >
   <div
-    className="c0"
+    className="flex h-full"
   >
     <div
-      className="c1"
+      className="bg-gray-100 border-r border-gray-300"
     >
       <h1>
         hello
       </h1>
     </div>
     <div
-      className="c2"
+      className="overflow-auto flex-1"
     >
       Main app content
     </div>
@@ -55,65 +28,6 @@ exports[`Storyshots Components/WithSidebar Basic 1`] = `
 `;
 
 exports[`Storyshots Components/WithSidebar With Column Nav 1`] = `
-.c3 {
-  position: relative;
-}
-
-.c4 {
-  padding: 8px 20px;
-  cursor: pointer;
-  font-size: 12px;
-  position: relative;
-  z-index: 1;
-}
-
-.c4:hover {
-  color: hsl(210,55%,55%);
-}
-
-.c5 {
-  width: 100%;
-  height: 100%;
-  position: absolute;
-  left: 0;
-  top: 0;
-  background-color: #ffffb3;
-}
-
-.c2 {
-  list-style-type: none;
-  padding: 0;
-  margin: 0;
-  position: relative;
-}
-
-.c0 {
-  display: -webkit-box;
-  display: -webkit-flex;
-  display: -ms-flexbox;
-  display: flex;
-  -webkit-flex-direction: row;
-  -ms-flex-direction: row;
-  flex-direction: row;
-  width: 100%;
-  height: 100%;
-}
-
-.c1 {
-  background-color: hsl(210,20%,97%);
-  border-right: 1px solid hsl(210,12%,80%);
-  -webkit-align-self: stretch;
-  -ms-flex-item-align: stretch;
-  align-self: stretch;
-}
-
-.c6 {
-  -webkit-flex: 1;
-  -ms-flex: 1;
-  flex: 1;
-  overflow: auto;
-}
-
 <div
   style={
     Object {
@@ -122,52 +36,51 @@ exports[`Storyshots Components/WithSidebar With Column Nav 1`] = `
   }
 >
   <div
-    className="c0"
+    className="flex h-full"
   >
     <div
-      className="c1"
+      className="bg-gray-100 border-r border-gray-300"
     >
       <nav>
         <ul
-          className="c2"
+          className="list-none p-0 relative z-0"
         >
           <li
-            className="c3"
+            className="relative"
           >
             <div
-              className="c4"
+              className="px-6 py-3 cursor-pointer text-xs hover:text-primary-500"
             >
               Item 1
             </div>
           </li>
           <li
-            className="c3"
+            className="relative"
           >
             <div
-              className="c4"
+              className="px-6 py-3 cursor-pointer text-xs hover:text-primary-500"
             >
               Item 2
             </div>
           </li>
           <li
-            className="c3"
-            selected={true}
+            className="relative"
           >
             <div
-              className="c4"
+              className="px-6 py-3 cursor-pointer text-xs hover:text-primary-500"
             >
               Item 3 (active)
             </div>
             <div
-              className="c5"
+              className="absolute -z-10 inset-0 bg-highlight"
               layoutId="highlight"
             />
           </li>
           <li
-            className="c3"
+            className="relative"
           >
             <div
-              className="c4"
+              className="px-6 py-3 cursor-pointer text-xs hover:text-primary-500"
             >
               Item 4
             </div>
@@ -176,7 +89,7 @@ exports[`Storyshots Components/WithSidebar With Column Nav 1`] = `
       </nav>
     </div>
     <div
-      className="c6"
+      className="overflow-auto flex-1"
     >
       Main app content
     </div>

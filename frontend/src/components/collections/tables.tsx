@@ -1,4 +1,4 @@
-import styles from './tables.module.scss';
+import styles from './tables.module.css';
 
 export const Table: React.FC = ({ children }) => (
   <table className={styles.table}>{children}</table>

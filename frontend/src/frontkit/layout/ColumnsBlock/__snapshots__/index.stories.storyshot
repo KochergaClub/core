@@ -1,63 +1,8 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`Storyshots Layout/ColumnsBlock Basic 1`] = `
-.c0 {
-  display: -webkit-box;
-  display: -webkit-flex;
-  display: -ms-flexbox;
-  display: flex;
-  max-width: 1400px;
-  margin: 0 auto;
-}
-
-.c0 > * {
-  -webkit-flex-basis: 0;
-  -ms-flex-preferred-size: 0;
-  flex-basis: 0;
-  -webkit-box-flex: 1;
-  -webkit-flex-grow: 1;
-  -ms-flex-positive: 1;
-  flex-grow: 1;
-}
-
-@media (max-width:639px) {
-  .c0 {
-    -webkit-flex-direction: column;
-    -ms-flex-direction: column;
-    flex-direction: column;
-  }
-
-  .c0 > * + * {
-    margin-top: 20px;
-  }
-}
-
-@media (min-width:640px) and (max-width:959px) {
-  .c0 {
-    -webkit-flex-direction: column;
-    -ms-flex-direction: column;
-    flex-direction: column;
-  }
-
-  .c0 > * + * {
-    margin-top: 20px;
-  }
-}
-
-@media (min-width:960px) and (max-width:1199px) {
-  .c0 > * + * {
-    margin-left: 40px;
-  }
-}
-
-@media (min-width:1200px) {
-  .c0 > * + * {
-    margin-left: 80px;
-  }
-}
-
 <div
-  className="c0"
+  className="grid gap-5 lg:gap-10 lg:grid-flow-col lg:auto-cols-fr xl:gap-20 max-w-screen-2xl"
 >
   <div
     style={
@@ -90,51 +35,8 @@ exports[`Storyshots Layout/ColumnsBlock Basic 1`] = `
 `;
 
 exports[`Storyshots Layout/ColumnsBlock Custom Spaces 1`] = `
-.c0 {
-  display: -webkit-box;
-  display: -webkit-flex;
-  display: -ms-flexbox;
-  display: flex;
-  max-width: 1400px;
-  margin: 0 auto;
-}
-
-.c0 > * {
-  -webkit-flex-basis: 0;
-  -ms-flex-preferred-size: 0;
-  flex-basis: 0;
-  -webkit-box-flex: 1;
-  -webkit-flex-grow: 1;
-  -ms-flex-positive: 1;
-  flex-grow: 1;
-}
-
-@media (max-width:639px) {
-  .c0 > * + * {
-    margin-left: 3px;
-  }
-}
-
-@media (min-width:640px) and (max-width:959px) {
-  .c0 > * + * {
-    margin-left: 10px;
-  }
-}
-
-@media (min-width:960px) and (max-width:1199px) {
-  .c0 > * + * {
-    margin-left: 10px;
-  }
-}
-
-@media (min-width:1200px) {
-  .c0 > * + * {
-    margin-left: 10px;
-  }
-}
-
 <div
-  className="c0"
+  className="grid gap-5 lg:gap-10 lg:grid-flow-col lg:auto-cols-fr xl:gap-20 max-w-screen-2xl"
 >
   <div
     style={

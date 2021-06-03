@@ -5,7 +5,7 @@ import { staticUrl } from '~/common/utils';
 
 import { RatioNotebookPageFragment } from '../fragments.generated';
 import PrintContext from './PrintContext';
-import styles from './styles.module.scss';
+import styles from './styles.module.css';
 
 interface Props {
   wagtailPage: RatioNotebookPageFragment;

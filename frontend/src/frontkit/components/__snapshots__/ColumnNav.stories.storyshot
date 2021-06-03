@@ -1,70 +1,37 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`Storyshots Components/ColumnNav Basic 1`] = `
-.c1 {
-  position: relative;
-}
-
-.c2 {
-  padding: 8px 20px;
-  cursor: pointer;
-  font-size: 12px;
-  position: relative;
-  z-index: 1;
-}
-
-.c2:hover {
-  color: hsl(210,55%,55%);
-}
-
-.c3 {
-  width: 100%;
-  height: 100%;
-  position: absolute;
-  left: 0;
-  top: 0;
-  background-color: #ffffb3;
-}
-
-.c0 {
-  list-style-type: none;
-  padding: 0;
-  margin: 0;
-  position: relative;
-}
-
 <nav>
   <ul
-    className="c0"
+    className="list-none p-0 relative z-0"
   >
     <li
-      className="c1"
+      className="relative"
     >
       <div
-        className="c2"
+        className="px-6 py-3 cursor-pointer text-xs hover:text-primary-500"
       >
         Item 1
       </div>
     </li>
     <li
-      className="c1"
-      selected={true}
+      className="relative"
     >
       <div
-        className="c2"
+        className="px-6 py-3 cursor-pointer text-xs hover:text-primary-500"
       >
         Item 2
       </div>
       <div
-        className="c3"
+        className="absolute -z-10 inset-0 bg-highlight"
         layoutId="highlight"
       />
     </li>
     <li
-      className="c1"
+      className="relative"
     >
       <div
-        className="c2"
+        className="px-6 py-3 cursor-pointer text-xs hover:text-primary-500"
       >
         Item 3
       </div>

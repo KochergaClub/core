@@ -9,7 +9,7 @@ interface ItemProps {
 const ColumnNavItem: React.FC<ItemProps> = ({ selected, select, children }) => {
   return (
     <li className="relative" onClick={select}>
-      <div className="px-6 py-4 cursor-pointer text-sm hover:text-primary-500">
+      <div className="px-6 py-3 cursor-pointer text-xs hover:text-primary-500">
         {children}
       </div>
       {selected && (

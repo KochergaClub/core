@@ -1,7 +1,7 @@
 import { Row } from '~/frontkit';
 
 import { RatioExerciseOnelineBlockFragment as Props } from './fragments.generated';
-import styles from './styles.module.scss';
+import styles from './styles.module.css';
 
 export default function RatioExerciseOnelineBlock(block: Props) {
   return (

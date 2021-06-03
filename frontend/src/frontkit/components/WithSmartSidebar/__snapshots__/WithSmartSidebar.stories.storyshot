@@ -1,27 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`Storyshots Components/WithSmartSidebar Basic 1`] = `
-.c0 {
-  display: -webkit-box;
-  display: -webkit-flex;
-  display: -ms-flexbox;
-  display: flex;
-  -webkit-flex-direction: row;
-  -ms-flex-direction: row;
-  flex-direction: row;
-  width: 100%;
-  height: 100%;
-  position: relative;
-}
-
-.c1 {
-  -webkit-flex: 1;
-  -ms-flex: 1;
-  flex: 1;
-  overflow: auto;
-  position: relative;
-}
-
 <div
   style={
     Object {
@@ -30,7 +9,7 @@ exports[`Storyshots Components/WithSmartSidebar Basic 1`] = `
   }
 >
   <div
-    className="c0"
+    className="flex h-full relative"
   >
     <iframe
       aria-hidden={true}
@@ -53,7 +32,7 @@ exports[`Storyshots Components/WithSmartSidebar Basic 1`] = `
       tabIndex={-1}
     />
     <div
-      className="c1"
+      className="flex-1 overflow-auto relative"
     >
       <div>
         Main app content
@@ -64,27 +43,6 @@ exports[`Storyshots Components/WithSmartSidebar Basic 1`] = `
 `;
 
 exports[`Storyshots Components/WithSmartSidebar With Column Nav 1`] = `
-.c0 {
-  display: -webkit-box;
-  display: -webkit-flex;
-  display: -ms-flexbox;
-  display: flex;
-  -webkit-flex-direction: row;
-  -ms-flex-direction: row;
-  flex-direction: row;
-  width: 100%;
-  height: 100%;
-  position: relative;
-}
-
-.c1 {
-  -webkit-flex: 1;
-  -ms-flex: 1;
-  flex: 1;
-  overflow: auto;
-  position: relative;
-}
-
 <div
   style={
     Object {
@@ -93,7 +51,7 @@ exports[`Storyshots Components/WithSmartSidebar With Column Nav 1`] = `
   }
 >
   <div
-    className="c0"
+    className="flex h-full relative"
   >
     <iframe
       aria-hidden={true}
@@ -116,7 +74,7 @@ exports[`Storyshots Components/WithSmartSidebar With Column Nav 1`] = `
       tabIndex={-1}
     />
     <div
-      className="c1"
+      className="flex-1 overflow-auto relative"
     >
       <div>
         <div>

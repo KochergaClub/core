@@ -1,74 +1,21 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`Storyshots Layout/Row Basic 1`] = `
-.c1 {
-  position: relative;
-  z-index: 0;
-  overflow: hidden;
-  cursor: pointer;
-  font-size: 14px;
-  font-weight: 500;
-  line-height: 24px;
-  padding: 4px 16px;
-  color: hsl(210,55%,35%);
-  border: none;
-  background: hsl(210,80%,95%);
-  border-radius: 4px;
-}
-
-.c1:hover {
-  background: hsl(210,55%,80%);
-}
-
-.c1:disabled {
-  color: hsl(210,12%,58%);
-  background: hsl(210,20%,97%);
-  box-shadow: inset 0 0px 2px hsl(210,12%,33%);
-}
-
-.c1:active {
-  -webkit-transform: scale(0.98);
-  -ms-transform: scale(0.98);
-  transform: scale(0.98);
-}
-
-.c1:focus {
-  outline: solid 1px hsl(210,55%,55%);
-}
-
-.c0 {
-  display: -webkit-box;
-  display: -webkit-flex;
-  display: -ms-flexbox;
-  display: flex;
-  -webkit-flex-direction: row;
-  -ms-flex-direction: row;
-  flex-direction: row;
-  -webkit-align-items: flex-start;
-  -webkit-box-align: flex-start;
-  -ms-flex-align: flex-start;
-  align-items: flex-start;
-}
-
-.c0 > * + * {
-  margin-left: 4px;
-}
-
 <div
-  className="c0"
+  className="flex items-start space-x-1"
 >
   <button
-    className="c1"
+    className=""
   >
     button 1
   </button>
   <button
-    className="c1"
+    className=""
   >
     button 2
   </button>
   <button
-    className="c1"
+    className=""
   >
     button 3
   </button>
@@ -76,74 +23,21 @@ exports[`Storyshots Layout/Row Basic 1`] = `
 `;
 
 exports[`Storyshots Layout/Row Custom Gutter 1`] = `
-.c1 {
-  position: relative;
-  z-index: 0;
-  overflow: hidden;
-  cursor: pointer;
-  font-size: 14px;
-  font-weight: 500;
-  line-height: 24px;
-  padding: 4px 16px;
-  color: hsl(210,55%,35%);
-  border: none;
-  background: hsl(210,80%,95%);
-  border-radius: 4px;
-}
-
-.c1:hover {
-  background: hsl(210,55%,80%);
-}
-
-.c1:disabled {
-  color: hsl(210,12%,58%);
-  background: hsl(210,20%,97%);
-  box-shadow: inset 0 0px 2px hsl(210,12%,33%);
-}
-
-.c1:active {
-  -webkit-transform: scale(0.98);
-  -ms-transform: scale(0.98);
-  transform: scale(0.98);
-}
-
-.c1:focus {
-  outline: solid 1px hsl(210,55%,55%);
-}
-
-.c0 {
-  display: -webkit-box;
-  display: -webkit-flex;
-  display: -ms-flexbox;
-  display: flex;
-  -webkit-flex-direction: row;
-  -ms-flex-direction: row;
-  flex-direction: row;
-  -webkit-align-items: flex-start;
-  -webkit-box-align: flex-start;
-  -ms-flex-align: flex-start;
-  align-items: flex-start;
-}
-
-.c0 > * + * {
-  margin-left: 20px;
-}
-
 <div
-  className="c0"
+  className="flex items-start space-x-5"
 >
   <button
-    className="c1"
+    className=""
   >
     button 1
   </button>
   <button
-    className="c1"
+    className=""
   >
     button 2
   </button>
   <button
-    className="c1"
+    className=""
   >
     button 3
   </button>
@@ -151,79 +45,21 @@ exports[`Storyshots Layout/Row Custom Gutter 1`] = `
 `;
 
 exports[`Storyshots Layout/Row Spaced 1`] = `
-.c1 {
-  position: relative;
-  z-index: 0;
-  overflow: hidden;
-  cursor: pointer;
-  font-size: 14px;
-  font-weight: 500;
-  line-height: 24px;
-  padding: 4px 16px;
-  color: hsl(210,55%,35%);
-  border: none;
-  background: hsl(210,80%,95%);
-  border-radius: 4px;
-}
-
-.c1:hover {
-  background: hsl(210,55%,80%);
-}
-
-.c1:disabled {
-  color: hsl(210,12%,58%);
-  background: hsl(210,20%,97%);
-  box-shadow: inset 0 0px 2px hsl(210,12%,33%);
-}
-
-.c1:active {
-  -webkit-transform: scale(0.98);
-  -ms-transform: scale(0.98);
-  transform: scale(0.98);
-}
-
-.c1:focus {
-  outline: solid 1px hsl(210,55%,55%);
-}
-
-.c0 {
-  display: -webkit-box;
-  display: -webkit-flex;
-  display: -ms-flexbox;
-  display: flex;
-  -webkit-flex-direction: row;
-  -ms-flex-direction: row;
-  flex-direction: row;
-  -webkit-align-items: flex-start;
-  -webkit-box-align: flex-start;
-  -ms-flex-align: flex-start;
-  align-items: flex-start;
-  -webkit-box-pack: justify;
-  -webkit-justify-content: space-between;
-  -ms-flex-pack: justify;
-  justify-content: space-between;
-  width: 100%;
-}
-
-.c0 > * + * {
-  margin-left: 4px;
-}
-
 <div
-  className="c0"
+  className="flex items-start justify-between w-full space-x-1"
 >
   <button
-    className="c1"
+    className=""
   >
     button 1
   </button>
   <button
-    className="c1"
+    className=""
   >
     button 2
   </button>
   <button
-    className="c1"
+    className=""
   >
     button 3
   </button>

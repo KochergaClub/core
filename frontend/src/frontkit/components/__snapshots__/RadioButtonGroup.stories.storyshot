@@ -1,44 +1,9 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`Storyshots Components/RadioButtonGroup Basic 1`] = `
-.c0 {
-  position: relative;
-  z-index: 0;
-  overflow: hidden;
-  cursor: pointer;
-  font-size: 14px;
-  font-weight: 500;
-  line-height: 24px;
-  padding: 4px 16px;
-  color: hsl(210,55%,35%);
-  border: none;
-  background: hsl(210,80%,95%);
-  border-radius: 4px;
-}
-
-.c0:hover {
-  background: hsl(210,55%,80%);
-}
-
-.c0:disabled {
-  color: hsl(210,12%,58%);
-  background: hsl(210,20%,97%);
-  box-shadow: inset 0 0px 2px hsl(210,12%,33%);
-}
-
-.c0:active {
-  -webkit-transform: scale(0.98);
-  -ms-transform: scale(0.98);
-  transform: scale(0.98);
-}
-
-.c0:focus {
-  outline: solid 1px hsl(210,55%,55%);
-}
-
 <div>
   <button
-    className="c0"
+    className=""
     disabled={true}
     onClick={[Function]}
     type="button"
@@ -46,7 +11,7 @@ exports[`Storyshots Components/RadioButtonGroup Basic 1`] = `
     Первая
   </button>
   <button
-    className="c0"
+    className=""
     disabled={false}
     onClick={[Function]}
     type="button"
@@ -54,7 +19,7 @@ exports[`Storyshots Components/RadioButtonGroup Basic 1`] = `
     Вторая
   </button>
   <button
-    className="c0"
+    className=""
     disabled={false}
     onClick={[Function]}
     type="button"

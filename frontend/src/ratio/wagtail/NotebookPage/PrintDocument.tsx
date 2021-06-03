@@ -4,7 +4,7 @@ import { useState } from 'react';
 
 import PageCountEditor from './PageCountEditor';
 import PrintContext from './PrintContext';
-import styles from './styles.module.scss';
+import styles from './styles.module.css';
 
 interface Props {
   header?: React.ReactNode;

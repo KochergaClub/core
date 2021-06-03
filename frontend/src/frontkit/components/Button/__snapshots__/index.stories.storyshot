@@ -1,0 +1,244 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Storyshots Components/Button All 1`] = `
+<div
+  className="flex items-start space-x-1"
+>
+  <div
+    className="flex flex-col items-start space-y-1"
+  >
+    <button
+      className=""
+    >
+      Кнопка
+    </button>
+    <button
+      className=""
+    >
+      Кнопка
+    </button>
+    <button
+      className=""
+    >
+      Кнопка
+    </button>
+    <button
+      className="bg-transparent hover:bg-transparent"
+    >
+      <div
+        className=""
+      />
+      Кнопка
+    </button>
+    <button
+      className="bg-transparent hover:bg-transparent"
+    >
+      <div
+        className=""
+      />
+      Кнопка
+    </button>
+    <button
+      className="bg-transparent hover:bg-transparent"
+    >
+      <div
+        className=""
+      />
+      Кнопка
+    </button>
+    <button
+      className=""
+      disabled={true}
+    >
+      Кнопка
+    </button>
+    <button
+      className=""
+      disabled={true}
+    >
+      Кнопка
+    </button>
+    <button
+      className=""
+      disabled={true}
+    >
+      Кнопка
+    </button>
+  </div>
+  <div
+    className="flex flex-col items-start space-y-1"
+  >
+    <button
+      className=""
+    >
+      Кнопка
+    </button>
+    <button
+      className=""
+    >
+      Кнопка
+    </button>
+    <button
+      className=""
+    >
+      Кнопка
+    </button>
+    <button
+      className="bg-transparent hover:bg-transparent"
+    >
+      <div
+        className=""
+      />
+      Кнопка
+    </button>
+    <button
+      className="bg-transparent hover:bg-transparent"
+    >
+      <div
+        className=""
+      />
+      Кнопка
+    </button>
+    <button
+      className="bg-transparent hover:bg-transparent"
+    >
+      <div
+        className=""
+      />
+      Кнопка
+    </button>
+    <button
+      className=""
+      disabled={true}
+    >
+      Кнопка
+    </button>
+    <button
+      className=""
+      disabled={true}
+    >
+      Кнопка
+    </button>
+    <button
+      className=""
+      disabled={true}
+    >
+      Кнопка
+    </button>
+  </div>
+  <div
+    className="flex flex-col items-start space-y-1"
+  >
+    <button
+      className=""
+    >
+      Кнопка
+    </button>
+    <button
+      className=""
+    >
+      Кнопка
+    </button>
+    <button
+      className=""
+    >
+      Кнопка
+    </button>
+    <button
+      className="bg-transparent hover:bg-transparent"
+    >
+      <div
+        className=""
+      />
+      Кнопка
+    </button>
+    <button
+      className="bg-transparent hover:bg-transparent"
+    >
+      <div
+        className=""
+      />
+      Кнопка
+    </button>
+    <button
+      className="bg-transparent hover:bg-transparent"
+    >
+      <div
+        className=""
+      />
+      Кнопка
+    </button>
+    <button
+      className=""
+      disabled={true}
+    >
+      Кнопка
+    </button>
+    <button
+      className=""
+      disabled={true}
+    >
+      Кнопка
+    </button>
+    <button
+      className=""
+      disabled={true}
+    >
+      Кнопка
+    </button>
+  </div>
+</div>
+`;
+
+exports[`Storyshots Components/Button Basic 1`] = `
+<button
+  className=""
+>
+  Текст на кнопке
+</button>
+`;
+
+exports[`Storyshots Components/Button Большая 1`] = `
+<button
+  className=""
+>
+  Большая кнопка
+</button>
+`;
+
+exports[`Storyshots Components/Button Во время выполнения действия 1`] = `
+<button
+  className="bg-transparent hover:bg-transparent"
+>
+  <div
+    className=""
+  />
+  Загружается...
+</button>
+`;
+
+exports[`Storyshots Components/Button Главная 1`] = `
+<button
+  className=""
+>
+  Привет
+</button>
+`;
+
+exports[`Storyshots Components/Button Маленькая 1`] = `
+<button
+  className=""
+  small={true}
+>
+  Привет
+</button>
+`;
+
+exports[`Storyshots Components/Button Неактивная 1`] = `
+<button
+  className=""
+  disabled={true}
+>
+  Нельзя нажать
+</button>
+`;

@@ -1,5 +1,5 @@
-// Table is needed for footer which doesn't overlap with the content
-// See: https://medium.com/@Idan_Co/the-ultimate-print-html-template-with-header-footer-568f415f6d2a
+/* Table is needed for footer which doesn't overlap with the content */
+/* See: https://medium.com/@Idan_Co/the-ultimate-print-html-template-with-header-footer-568f415f6d2a */
 
 .container {
   max-width: 800px;

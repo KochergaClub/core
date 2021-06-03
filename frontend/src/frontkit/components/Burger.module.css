@@ -14,7 +14,7 @@
     transform: rotate(0deg);
     transition: 0.25s ease-in-out;
     height: 3px;
-    // background-color is set from react
+    /* background-color is set from react */
 
     &:nth-child(1) {
       top: 0;

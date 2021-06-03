@@ -1,26 +1,22 @@
-import '@fullcalendar/react'; // side effects! please be careful with auto-sorting imports
-
-import { isPast, parseISO } from 'date-fns';
-import Router from 'next/router';
-import { useCallback, useEffect, useRef, useState } from 'react';
-
 import { useApolloClient, useQuery } from '@apollo/client';
 import { EventClickArg } from '@fullcalendar/core';
 import ruLocale from '@fullcalendar/core/locales/ru';
 import dayGridPlugin from '@fullcalendar/daygrid';
 import listPlugin from '@fullcalendar/list';
+import '@fullcalendar/react'; // side effects! please be careful with auto-sorting imports
 import FullCalendar from '@fullcalendar/react';
-
+import { isPast, parseISO } from 'date-fns';
+import Router from 'next/router';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import { formatDate } from '~/common/utils';
 import { AlertCard, ApolloQueryResults, PaddedBlock } from '~/components';
 import { A } from '~/frontkit';
-
 import {
   EventsPublicGoogleCalendarDocument,
   PublicEventsForCalendarDocument,
 } from '../../queries.generated';
 import { publicEventRoute } from '../../routes';
-import styles from './index.module.scss';
+import styles from './index.module.css';
 
 const PublicEventsCalendar: React.FC = () => {
   const googleCalendarQueryResults = useQuery(

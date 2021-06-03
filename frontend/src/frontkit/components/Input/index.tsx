@@ -1,7 +1,7 @@
 import clsx from 'clsx';
 import { forwardRef } from 'react';
 
-import styles from './index.module.scss';
+import styles from './index.module.css';
 
 export interface Props extends React.InputHTMLAttributes<HTMLInputElement> {
   scale?: 'normal' | 'big'; // not `size` because `size` is a native <input> attribute

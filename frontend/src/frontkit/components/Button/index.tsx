@@ -1,6 +1,6 @@
 import clsx from 'clsx';
 
-import styles from './index.module.scss';
+import styles from './index.module.css';
 
 export interface Props extends React.ButtonHTMLAttributes<HTMLButtonElement> {
   size?: 'tiny' | 'small' | 'normal' | 'big';
