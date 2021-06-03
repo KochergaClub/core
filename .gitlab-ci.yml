@@ -28,7 +28,6 @@ test-js:
   stage: test
   script:
     - export FRONTEND_IMAGE=$(cat build.json | jq -r '.builds[] | select(.imageName | endswith("/frontend")) | .tag')
-    - docker run --rm "$FRONTEND_IMAGE" npx tsc
     - docker run --rm "$FRONTEND_IMAGE" bash -c "npx jest --no-watchman --coverage"
   cache:
     <<: *build_cache
