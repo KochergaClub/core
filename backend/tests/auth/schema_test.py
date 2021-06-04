@@ -175,12 +175,20 @@ class TestSetPassword:
 
     SET_PASSWORD_MUTATION = """
     mutation SetPassword($old_password: String, $new_password: String!) {
-        authSetPassword(input: {
+        result: setMyPassword(input: {
           old_password: $old_password
           new_password: $new_password
         }) {
-            error
-            ok
+            __typename
+            ...on GenericError {
+                message
+            }
+            ...on ValidationError {
+                errors {
+                    name
+                    messages
+                }
+            }
         }
     }
     """
@@ -194,8 +202,7 @@ class TestSetPassword:
             self.SET_PASSWORD_MUTATION,
             {'new_password': self.NEW_PASSWORD},
         )
-        assert not res['authSetPassword']['error']
-        assert res['authSetPassword']['ok']
+        assert res['result']['__typename'] == 'SetMyPasswordOkResult'
         user.check_password(self.NEW_PASSWORD)
 
     def test_no_old_password(self, client):
@@ -209,9 +216,9 @@ class TestSetPassword:
             self.SET_PASSWORD_MUTATION,
             {'new_password': self.NEW_PASSWORD},
         )
-        assert not res['authSetPassword']['ok']
+        assert res['result']['__typename'] == 'ValidationError'
         assert (
-            res['authSetPassword']['error']
+            res['result']['errors'][0]['messages'][0]
             == 'Старый пароль не указан, но у пользователя есть пароль.'
         )
 
@@ -226,8 +233,7 @@ class TestSetPassword:
             self.SET_PASSWORD_MUTATION,
             {'old_password': self.PASSWORD, 'new_password': self.NEW_PASSWORD},
         )
-        assert not res['authSetPassword']['error']
-        assert res['authSetPassword']['ok']
+        assert res['result']['__typename'] == 'SetMyPasswordOkResult'
 
         user.check_password(self.NEW_PASSWORD)
 
