@@ -39,7 +39,7 @@ def test_list_by_staff(client, staff_user):
 
 UPDATE_SHIFT_MUTATION = """
 mutation UpdateShift($is_night: Boolean, $watchman_id: ID) {
-    watchmenUpdateShift(params: {
+    watchmenUpdateShift(input: {
         date: "2019-03-05"
         shift: "MORNING"
         is_night: $is_night
