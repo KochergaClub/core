@@ -217,10 +217,7 @@ class TestSetPassword:
             {'new_password': self.NEW_PASSWORD},
         )
         assert res['result']['__typename'] == 'ValidationError'
-        assert (
-            res['result']['errors'][0]['messages'][0]
-            == 'Старый пароль не указан, но у пользователя есть пароль.'
-        )
+        assert res['result']['errors'][0]['messages'][0] == 'Пароль не указан.'
 
     def test_success(self, client):
         user = get_user_model().objects.create_user(self.EMAIL)
