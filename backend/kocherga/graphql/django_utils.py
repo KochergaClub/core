@@ -362,8 +362,21 @@ class SmartMutationField(helpers.BaseFieldWithInput):
 
     @property
     @abstractmethod
-    def ok_result(self) -> g.ObjectType:
+    def ok_result(self) -> Union[Dict[str, Any], g.ObjectType]:
         ...
+
+    def wrapped_ok_result(self) -> g.ObjectType:
+        ok_result = self.ok_result
+        if type(ok_result) == dict:
+            # Unique anonymous result; note that anonymous result is NN by default.
+            # TODO - somehow check that we're in top-level mutation or query?
+            # FieldNameResult doesn't make much sense in nested fields...
+            return g.ObjectType(
+                self.result_object_name(postfix='OkResult'),
+                g.fields(ok_result),
+            )
+        else:
+            return g.as_type(ok_result)
 
     # TODO - make customizable through class-level flags (e.g. `catch_validation_errors = True`)
     error_class_to_graphql_type = {
@@ -384,19 +397,20 @@ class SmartMutationField(helpers.BaseFieldWithInput):
 
     @property
     def result(self):
+        wrapped_ok_result = self.wrapped_ok_result()
+
         def resolve_type(obj, info, *_):
             for (error_class, graphql_type) in self.error_class_to_graphql_type.items():
                 if isinstance(obj, error_class):
                     return graphql_type
 
-            return self.ok_result
-            # raise Exception(f"Can't recognize {obj} as allowed return type")
+            return wrapped_ok_result
 
         return g.NN(
             g.UnionType(
                 self.result_object_name(),
                 types=[
-                    self.ok_result,
+                    wrapped_ok_result,
                     *self.error_class_to_graphql_type.values(),
                 ],
                 resolve_type=resolve_type,

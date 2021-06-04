@@ -146,8 +146,8 @@ def field_with_permissions(
 
 
 class BaseField(ABC):
-    def result_object_name(self):
-        return capitalize_first_only(self.__class__.__name__) + 'Result'
+    def result_object_name(self, postfix='Result'):
+        return capitalize_first_only(self.__class__.__name__) + postfix
 
     def as_field(self):
         result = self.result

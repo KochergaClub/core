@@ -116,11 +116,14 @@ mutation Logout {
 }
 
 mutation SetPassword($old_password: String, $new_password: String!) {
-  result: authSetPassword(
+  result: setMyPassword(
     input: { old_password: $old_password, new_password: $new_password }
   ) {
-    ok
-    error
+    ... on SetMyPasswordOkResult {
+      ok
+    }
+    ...GenericError
+    ...ValidationError
   }
 }
 

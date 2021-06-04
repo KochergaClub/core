@@ -115,6 +115,11 @@
       "GenericError",
       "EventsWeeklyDigest"
     ],
+    "SetMyPasswordResult": [
+      "SetMyPasswordOkResult",
+      "GenericError",
+      "ValidationError"
+    ],
     "SlideFragmentsBlockValues": [
       "SlideFragmentsBlock_RichTextBlock",
       "SlideFragmentsBlock_RawHtmlBlock"

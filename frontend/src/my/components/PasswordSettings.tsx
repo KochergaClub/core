@@ -1,8 +1,6 @@
 import React, { useCallback, useState } from 'react';
 
-import { useMutation } from '@apollo/client';
-
-import { useCommonHotkeys } from '~/common/hooks';
+import { useCommonHotkeys, useSmartMutation } from '~/common/hooks';
 import { HintCard } from '~/components';
 import { ErrorMessage } from '~/components/forms';
 import { Button, Column, Input, Label } from '~/frontkit';
@@ -10,33 +8,33 @@ import { Button, Column, Input, Label } from '~/frontkit';
 import { SetPasswordDocument } from '../queries.generated';
 import HeadedFragment from './HeadedFragment';
 
-const SetPassword: React.FC = () => {
+export const PasswordSettings: React.FC = () => {
   const [oldPassword, setOldPassword] = useState('');
   const [newPassword, setNewPassword] = useState('');
 
   const [acting, setActing] = useState(false);
   const [error, setError] = useState<string | undefined>(undefined);
 
-  const [setPasswordMutation] = useMutation(SetPasswordDocument);
+  const setPasswordMutation = useSmartMutation(SetPasswordDocument, {
+    expectedTypename: 'SetMyPasswordOkResult',
+  });
 
   const act = useCallback(async () => {
     setActing(true);
 
-    const { data } = await setPasswordMutation({
+    const { ok, error, fieldErrors } = await setPasswordMutation({
       variables: {
         old_password: oldPassword,
         new_password: newPassword,
       },
     });
 
-    if (data?.result.error) {
-      setError(data.result.error);
-      setActing(false);
-      return;
-    }
-
-    if (!data?.result?.ok) {
-      setError('Неизвестная ошибка');
+    if (!ok) {
+      setError(
+        error ||
+          Object.values(fieldErrors || {}).join('. ') ||
+          'Неизвестная ошибка'
+      );
       setActing(false);
       return;
     }
@@ -93,5 +91,3 @@ const SetPassword: React.FC = () => {
     </HeadedFragment>
   );
 };
-
-export default SetPassword;

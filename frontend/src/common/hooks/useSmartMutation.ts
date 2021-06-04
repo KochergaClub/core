@@ -72,7 +72,7 @@ export const useSmartMutation = <V>(
         };
       }
       if (data.result.__typename === expectedTypename) {
-        return { ok: true };
+        return { ok: true }; // TODO - return data.result too? it can be useful in some cases
       }
 
       switch (data.result.__typename) {
@@ -89,7 +89,7 @@ export const useSmartMutation = <V>(
             fieldErrors: Object.fromEntries(
               (data.result as ValidationErrorFragment).errors.map((error) => [
                 error.name,
-                error.messages.join('. '),
+                error.messages.join(' '),
               ])
             ),
           };

@@ -6,8 +6,8 @@ import { ApolloQueryResults, PaddedBlock, Page } from '~/components';
 import { HR } from '~/frontkit';
 
 import EmailSettings from '../components/EmailSettings';
+import { PasswordSettings } from '../components/PasswordSettings';
 import { SetNames } from '../components/SetNames';
-import SetPassword from '../components/SetPassword';
 import { MySettingsPageDocument } from '../queries.generated';
 
 export const SettingsScreen: React.FC = () => {
@@ -23,7 +23,7 @@ export const SettingsScreen: React.FC = () => {
             <div>
               <SetNames user={my.user} />
               <HR />
-              <SetPassword />
+              <PasswordSettings />
               {/* {my.membership ? (
         <>
           <HR />

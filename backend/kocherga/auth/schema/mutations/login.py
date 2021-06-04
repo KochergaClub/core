@@ -102,46 +102,49 @@ class authLogin(helpers.BaseFieldWithInput):
 
 
 @c.class_field
-class authSetPassword(helpers.BaseFieldWithInput):
+class setMyPassword(django_utils.SmartMutationField):
     permissions = [authenticated]
     input = {
         # required if old password exists
         'old_password': Optional[str],
         'new_password': str,
     }
+    ok_result = {
+        'ok': bool,
+    }
 
-    # TODO - generalize into "SimpleMutationResult"?
-    result = g.NN(
-        g.ObjectType(
-            'AuthSetPasswordResult',
-            g.fields({'error': Optional[str], 'ok': Optional[bool]}),
-        )
-    )
-
-    def resolve(self, _, info, input):
-        old_password = input.get('old_password')
+    def smart_resolve(self, _, info, input):
+        old_password = input.get('old_password', '')
         new_password = input['new_password']
 
         user = info.context.user
 
-        if old_password:
+        if old_password != '':
             if not user.check_password(old_password):
-                return {'error': "Неверный старый пароль."}
+                raise django.core.exceptions.ValidationError(
+                    {
+                        'old_password': ['Неверный пароль.'],
+                    }
+                )
         else:
             if user.has_usable_password():
-                return {
-                    'error': "Старый пароль не указан, но у пользователя есть пароль."
-                }
+                raise django.core.exceptions.ValidationError(
+                    {
+                        'old_password': ['Пароль не указан.'],
+                    }
+                )
 
         try:
             validate_password(new_password)
         except django.core.exceptions.ValidationError as e:
-            return {
-                'ok': False,
-                'error': '\n'.join(e.messages),
-            }
+            raise django.core.exceptions.ValidationError(
+                {
+                    'new_password': e.messages,
+                }
+            )
 
         user.set_password(new_password)
+        user.full_clean()
         user.save()
 
         return {'ok': True}

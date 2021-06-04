@@ -95,16 +95,6 @@ input AuthSetMyNamesInput {
 
 union AuthSetMyNamesResult = AuthCurrentUser | GenericError | ValidationError
 
-input AuthSetPasswordInput {
-  old_password: String
-  new_password: String!
-}
-
-type AuthSetPasswordResult {
-  error: String
-  ok: Boolean
-}
-
 type AuthUser {
   id: ID!
   first_name: String!
@@ -1074,7 +1064,7 @@ type Mutation {
   addPermissionToAuthGroup(group_id: ID!, perm: String!): AuthGroup!
   removePermissionFromAuthGroup(group_id: ID!, perm: String!): AuthGroup!
   authLogin(input: AuthLoginInput!): AuthLoginResult!
-  authSetPassword(input: AuthSetPasswordInput!): AuthSetPasswordResult!
+  setMyPassword(input: SetMyPasswordInput!): SetMyPasswordResult!
   authLogout: AuthLogoutResult!
   authSendMagicLink(input: AuthSendMagicLinkInput!): AuthSendMagicLinkResult!
   authSetMyNames(input: AuthSetMyNamesInput!): AuthSetMyNamesResult!
@@ -1962,6 +1952,17 @@ input SendUniqueRatioPromocodeInput {
 union SendUniqueRatioPromocodeResult = BasicResult | GenericError
 
 union SendWeeklyDigestMailchimpResult = GenericError | EventsWeeklyDigest
+
+input SetMyPasswordInput {
+  old_password: String
+  new_password: String!
+}
+
+type SetMyPasswordOkResult {
+  ok: Boolean!
+}
+
+union SetMyPasswordResult = SetMyPasswordOkResult | GenericError | ValidationError
 
 input SetRatioTicketNotionLinkInput {
   id: ID!

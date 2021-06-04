@@ -114,17 +114,6 @@ export type AuthSetMyNamesInput = {
 
 export type AuthSetMyNamesResult = AuthCurrentUser | GenericError | ValidationError;
 
-export type AuthSetPasswordInput = {
-  old_password?: Maybe<Scalars['String']>;
-  new_password: Scalars['String'];
-};
-
-export type AuthSetPasswordResult = {
-  __typename?: 'AuthSetPasswordResult';
-  error?: Maybe<Scalars['String']>;
-  ok?: Maybe<Scalars['Boolean']>;
-};
-
 export type AuthUser = {
   __typename?: 'AuthUser';
   id: Scalars['ID'];
@@ -1218,7 +1207,7 @@ export type Mutation = {
   addPermissionToAuthGroup: AuthGroup;
   removePermissionFromAuthGroup: AuthGroup;
   authLogin: AuthLoginResult;
-  authSetPassword: AuthSetPasswordResult;
+  setMyPassword: SetMyPasswordResult;
   authLogout: AuthLogoutResult;
   authSendMagicLink: AuthSendMagicLinkResult;
   authSetMyNames: AuthSetMyNamesResult;
@@ -1389,8 +1378,8 @@ export type MutationAuthLoginArgs = {
 };
 
 
-export type MutationAuthSetPasswordArgs = {
-  input: AuthSetPasswordInput;
+export type MutationSetMyPasswordArgs = {
+  input: SetMyPasswordInput;
 };
 
 
@@ -3022,6 +3011,18 @@ export type SendUniqueRatioPromocodeInput = {
 export type SendUniqueRatioPromocodeResult = BasicResult | GenericError;
 
 export type SendWeeklyDigestMailchimpResult = GenericError | EventsWeeklyDigest;
+
+export type SetMyPasswordInput = {
+  old_password?: Maybe<Scalars['String']>;
+  new_password: Scalars['String'];
+};
+
+export type SetMyPasswordOkResult = {
+  __typename?: 'SetMyPasswordOkResult';
+  ok: Scalars['Boolean'];
+};
+
+export type SetMyPasswordResult = SetMyPasswordOkResult | GenericError | ValidationError;
 
 export type SetRatioTicketNotionLinkInput = {
   id: Scalars['ID'];

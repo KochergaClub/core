@@ -1,6 +1,5 @@
 import * as Types from '../../../apollo/types.generated';
 
-import { dedupeFragments } from '~/common/dedupeFragments';
 import { TypedDocumentNode as DocumentNode } from '@graphql-typed-document-node/core';
 export type SpecialOfferQueryVariables = Types.Exact<{ [key: string]: never; }>;
 
@@ -14,4 +13,4 @@ export type SpecialOfferQuery = (
 );
 
 
-export const SpecialOfferDocument: DocumentNode<SpecialOfferQuery, SpecialOfferQueryVariables> = dedupeFragments({ "kind": "Document", "definitions": [{ "kind": "OperationDefinition", "operation": "query", "name": { "kind": "Name", "value": "SpecialOffer" }, "selectionSet": { "kind": "SelectionSet", "selections": [{ "kind": "Field", "name": { "kind": "Name", "value": "specialOffer" }, "selectionSet": { "kind": "SelectionSet", "selections": [{ "kind": "Field", "name": { "kind": "Name", "value": "text" } }, { "kind": "Field", "name": { "kind": "Name", "value": "link" } }, { "kind": "Field", "name": { "kind": "Name", "value": "button_text" } }, { "kind": "Field", "name": { "kind": "Name", "value": "until" } }, { "kind": "Field", "name": { "kind": "Name", "value": "hide_duration" } }] } }] } }] });
+export const SpecialOfferDocument: DocumentNode<SpecialOfferQuery, SpecialOfferQueryVariables> = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"SpecialOffer"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"specialOffer"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"text"}},{"kind":"Field","name":{"kind":"Name","value":"link"}},{"kind":"Field","name":{"kind":"Name","value":"button_text"}},{"kind":"Field","name":{"kind":"Name","value":"until"}},{"kind":"Field","name":{"kind":"Name","value":"hide_duration"}}]}}]}}]};
