@@ -61,7 +61,7 @@ const RealmDetails: React.FC<Props> = ({ event }) => {
   }
 };
 
-const EventRealm: React.FC<Props> = ({ event }) => {
+export const EventRealm: React.FC<Props> = ({ event }) => {
   const [updateMutation, { loading }] = useMutation(EvenmanUpdateDocument);
 
   return (
@@ -99,5 +99,3 @@ const EventRealm: React.FC<Props> = ({ event }) => {
     </Column>
   );
 };
-
-export default EventRealm;

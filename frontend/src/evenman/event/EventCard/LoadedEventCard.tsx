@@ -11,7 +11,7 @@ import EventAnnounce from '../EventAnnounce';
 import { EventHeader } from '../EventHeader';
 import EventImages from '../EventImages';
 import EventPricingType from '../EventPricingType';
-import EventRealm from '../EventRealm';
+import { EventRealm } from '../EventRealm';
 import EventVisitors from '../EventVisitors';
 import { useUpdateMutation } from '../hooks';
 import { EvenmanEvent_DetailsFragment } from '../queries.generated';
