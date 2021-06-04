@@ -20,8 +20,6 @@ export { Toggle } from './components/Toggle';
 export { WithNavSidebar } from './components/WithNavSidebar';
 export { WithSidebar } from './components/WithSidebar';
 export { WithSmartSidebar } from './components/WithSmartSidebar';
-export { GlobalFonts } from './global/GlobalFonts';
-export { GlobalFontsString } from './global/GlobalFontsString';
 export {
   ToasterContext,
   useNotification,

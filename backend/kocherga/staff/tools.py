@@ -102,26 +102,6 @@ def add_watchman(
             createreturnurl='https://kocherga.club',
         )
 
-    ## Slack invite api (https://api.slack.com/methods/admin.users.invite) is disabled for non-enterprise grid users
-    # logger.info('Inviting to slack')
-    # sc = kocherga.slack.client.legacy_token_client()
-    # sc_response = sc.api_call(
-    #     'users.admin.invite',
-    #     email=email,
-    #     first_name=full_name.split(' ')[0],
-    #     last_name=full_name.split(' ')[-1],
-    # )
-    # if not sc_response["ok"]:
-    #     if sc_response.get("error") in (
-    #         "already_in_team_invited_user",
-    #         "already_in_team",
-    #     ):
-    #         logger.info("Couldn't invite to Slack, already in team or invited")
-    #     else:
-    #         raise APIException(
-    #             "Couldn't invite to Slack: " + sc_response.get('error', 'unknown error')
-    #         )
-
     cm_user = None
     if not skip_cm_user:
         logger.info('Adding to Cafe Manager')

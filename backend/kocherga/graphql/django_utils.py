@@ -9,7 +9,6 @@ from django.db import models
 from django.db.models.fields.reverse_related import ForeignObjectRel
 from kocherga.django.errors import BoxedError, GenericError
 from kocherga.error import PublicError
-from kocherga.events.models.announcement.fb import error_screenshot_path
 from kocherga.graphql.permissions import check_permissions
 
 import graphql
