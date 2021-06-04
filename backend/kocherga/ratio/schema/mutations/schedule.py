@@ -10,9 +10,9 @@ c = helpers.Collection()
 
 @c.class_field
 class ratioTrainingCopyScheduleFrom(helpers.BaseFieldWithInput):
-    def resolve(self, _, info, params):
-        from_training = models.Training.objects.get(slug=params['from_training_slug'])
-        to_training = models.Training.objects.get(slug=params['to_training_slug'])
+    def resolve(self, _, info, input):
+        from_training = models.Training.objects.get(slug=input['from_training_slug'])
+        to_training = models.Training.objects.get(slug=input['to_training_slug'])
         to_training.copy_schedule_from(from_training)
         return True
 
@@ -27,9 +27,9 @@ class ratioTrainingCopyScheduleFrom(helpers.BaseFieldWithInput):
 
 @c.class_field
 class ratioTrainingAddDay(helpers.BaseFieldWithInput):
-    def resolve(self, _, info, params):
-        training = models.Training.objects.get(slug=params['training_slug'])
-        date_str = params['date']
+    def resolve(self, _, info, input):
+        training = models.Training.objects.get(slug=input['training_slug'])
+        date_str = input['date']
         date = datetime.datetime.strptime(date_str, '%Y-%m-%d').date()
         training.add_day(date)
         return True

@@ -11,12 +11,12 @@ c = helpers.Collection()
 
 @c.class_field
 class cashierCreatePayment(helpers.BaseFieldWithInput):
-    def resolve(self, _, info, params):
-        user = get_user_model().objects.get(pk=params['whom'])
+    def resolve(self, _, info, input):
+        user = get_user_model().objects.get(pk=input['whom'])
         models.Payment.objects.create(
             whom=user,
-            amount=params['amount'],
-            comment=params['comment'],
+            amount=input['amount'],
+            comment=input['comment'],
         )
         return True
 

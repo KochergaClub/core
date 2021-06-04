@@ -21,8 +21,8 @@ c = helpers.Collection()
 
 @c.class_field
 class watchmenCreateWatchman(helpers.BaseFieldWithInput):
-    def resolve(self, _, info, params):
-        kocherga.staff.tools.add_watchman(**params)
+    def resolve(self, _, info, input):
+        kocherga.staff.tools.add_watchman(**input)
         return True
 
     permissions = [permissions.manage_watchmen]
@@ -57,16 +57,16 @@ class watchmenUpdateShift(helpers.UnionFieldMixin, helpers.BaseFieldWithInput):
         GenericError: kocherga.django.schema.types.GenericError,
     }
 
-    def resolve(self, _, info, params):
+    def resolve(self, _, info, input):
         # TODO - move to model
         (shift, _) = models.Shift.objects.get_or_create(
-            date=params['date'],
-            shift=params['shift'],
+            date=input['date'],
+            shift=input['shift'],
         )
-        shift.is_night = params.get('is_night', False)
-        if 'watchman_id' in params:
+        shift.is_night = input.get('is_night', False)
+        if 'watchman_id' in input:
             try:
-                shift.watchman = models.Watchman.objects.get(pk=params['watchman_id'])
+                shift.watchman = models.Watchman.objects.get(pk=input['watchman_id'])
             except models.Watchman.DoesNotExist:
                 return GenericError("Watchman does not exist")
         else:
@@ -89,9 +89,9 @@ class watchmenUpdateShift(helpers.UnionFieldMixin, helpers.BaseFieldWithInput):
 
 @c.class_field
 class watchmenSetWatchmanPriority(helpers.BaseFieldWithInput):
-    def resolve(self, _, info, params):
-        watchman = models.Watchman.objects.get(pk=params['watchman_id'])
-        watchman.priority = params['priority']
+    def resolve(self, _, info, input):
+        watchman = models.Watchman.objects.get(pk=input['watchman_id'])
+        watchman.priority = input['priority']
         watchman.full_clean()
         watchman.save()
         return True
@@ -107,9 +107,9 @@ class watchmenSetWatchmanPriority(helpers.BaseFieldWithInput):
 
 @c.class_field
 class watchmenSetWatchmanGrade(helpers.BaseFieldWithInput):
-    def resolve(self, _, info, params):
-        watchman = models.Watchman.objects.get(pk=params['watchman_id'])
-        watchman.grade = models.Grade.objects.get(pk=params['grade_id'])
+    def resolve(self, _, info, input):
+        watchman = models.Watchman.objects.get(pk=input['watchman_id'])
+        watchman.grade = models.Grade.objects.get(pk=input['grade_id'])
         watchman.full_clean()
         watchman.save()
         return True
