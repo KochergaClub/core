@@ -1,10 +1,10 @@
+import FullCalendar from '@fullcalendar/react';
 import { useApolloClient, useQuery } from '@apollo/client';
 import { EventClickArg } from '@fullcalendar/core';
 import ruLocale from '@fullcalendar/core/locales/ru';
 import dayGridPlugin from '@fullcalendar/daygrid';
 import listPlugin from '@fullcalendar/list';
 import '@fullcalendar/react'; // side effects! please be careful with auto-sorting imports
-import FullCalendar from '@fullcalendar/react';
 import { isPast, parseISO } from 'date-fns';
 import Router from 'next/router';
 import { useCallback, useEffect, useRef, useState } from 'react';
