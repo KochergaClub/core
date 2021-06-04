@@ -92,7 +92,7 @@ export const ShiftBox: React.FC<Props> = (props) => {
   const pickWatchman = async (watchman: WatchmanForPickerFragment) => {
     await updateMutation({
       variables: {
-        params: {
+        input: {
           date: props.shift.date,
           shift: props.shift.shift,
           watchman_id: watchman.id,
@@ -106,7 +106,7 @@ export const ShiftBox: React.FC<Props> = (props) => {
   const pickExtra = async (text: string) => {
     await updateMutation({
       variables: {
-        params: {
+        input: {
           date: props.shift.date,
           shift: props.shift.shift,
           is_night: text === 'Ночь',

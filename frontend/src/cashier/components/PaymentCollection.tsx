@@ -68,7 +68,7 @@ const PaymentCollection: React.FC = () => {
     async (values: CreatePaymentParams) => {
       await createPaymentMutation({
         variables: {
-          params: {
+          input: {
             ...values,
             amount: parseInt(values.amount, 10),
           },

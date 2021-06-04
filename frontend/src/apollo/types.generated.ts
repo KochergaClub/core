@@ -1420,22 +1420,22 @@ export type MutationCm2CloseOrderArgs = {
 
 
 export type MutationWatchmenCreateWatchmanArgs = {
-  params: WatchmenCreateWatchmanInput;
+  input: WatchmenCreateWatchmanInput;
 };
 
 
 export type MutationWatchmenUpdateShiftArgs = {
-  params: WatchmenUpdateShiftInput;
+  input: WatchmenUpdateShiftInput;
 };
 
 
 export type MutationWatchmenSetWatchmanPriorityArgs = {
-  params: WatchmenSetWatchmanPriorityInput;
+  input: WatchmenSetWatchmanPriorityInput;
 };
 
 
 export type MutationWatchmenSetWatchmanGradeArgs = {
-  params: WatchmenSetWatchmanGradeInput;
+  input: WatchmenSetWatchmanGradeInput;
 };
 
 
@@ -1445,7 +1445,7 @@ export type MutationKkmRegisterCheckArgs = {
 
 
 export type MutationCashierCreatePaymentArgs = {
-  params: CashierCreatePaymentInput;
+  input: CashierCreatePaymentInput;
 };
 
 
@@ -1655,12 +1655,12 @@ export type MutationRatioPaymentSetStatusArgs = {
 
 
 export type MutationRatioTrainingCopyScheduleFromArgs = {
-  params: RatioTrainingCopyScheduleFromInput;
+  input: RatioTrainingCopyScheduleFromInput;
 };
 
 
 export type MutationRatioTrainingAddDayArgs = {
-  params: RatioTrainingAddDayInput;
+  input: RatioTrainingAddDayInput;
 };
 
 

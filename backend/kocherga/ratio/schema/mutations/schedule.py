@@ -5,7 +5,6 @@ from kocherga.graphql.permissions import user_perm
 
 from ... import models
 
-
 c = helpers.Collection()
 
 
@@ -22,7 +21,6 @@ class ratioTrainingCopyScheduleFrom(helpers.BaseFieldWithInput):
         'from_training_slug': str,
         'to_training_slug': str,
     }
-    input_argument_name = 'params'  # TODO
 
     result = bool
 
@@ -41,7 +39,6 @@ class ratioTrainingAddDay(helpers.BaseFieldWithInput):
         'training_slug': str,
         'date': str,
     }
-    input_argument_name = 'params'  # TODO
 
     result = bool
 

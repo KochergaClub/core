@@ -31,7 +31,7 @@ export const EditTicketModal: React.FC<Props> = ({ close, ticket }) => {
       const values = unknownValues as Values;
       const { data } = await editTicketMutation({
         variables: {
-          params: {
+          input: {
             id: ticket.id,
             ticket_type: values.ticket_type,
             first_name: values.first_name,

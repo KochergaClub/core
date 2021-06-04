@@ -22,7 +22,6 @@ class cashierCreatePayment(helpers.BaseFieldWithInput):
 
     permissions = [user_perm('cashier.create')]
     input = {'amount': int, 'whom': 'ID!', 'comment': str}
-    input_argument_name = 'params'  # TODO
 
     result = g.Boolean
 

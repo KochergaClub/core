@@ -38,7 +38,7 @@ const WatchmanPriorityButton: React.FC<{
   const cb = useCallback(async () => {
     await setPriorityMutation({
       variables: {
-        params: {
+        input: {
           watchman_id: watchman.id,
           priority,
         },
@@ -79,7 +79,7 @@ const WatchmanItem = ({ watchman }: { watchman: WatchmanFragment }) => {
     async (grade: GradeFragment) => {
       await setGradeMutation({
         variables: {
-          params: {
+          input: {
             watchman_id: watchman.id,
             grade_id: grade.id,
           },

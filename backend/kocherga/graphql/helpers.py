@@ -202,14 +202,12 @@ class BaseFieldWithInput(BaseField):
                 capitalize_first_only(self.__class__.__name__) + 'Input',
                 g.input_fields(input),
             )
-        return {self.input_argument_name: g.NN(input)}
+        return {'input': g.NN(input)}
 
     @property
     @abstractmethod
     def input(self) -> Union[graphql.GraphQLInputObjectType, Dict[str, Any]]:
         ...
-
-    input_argument_name = 'input'
 
 
 class UnionFieldMixin:

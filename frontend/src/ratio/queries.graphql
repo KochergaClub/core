@@ -186,14 +186,14 @@ query RatioTrainingEmailPrototype($training_id: ID!, $type: String!) {
   content: ratioTrainingEmailPrototype(training_id: $training_id, type: $type)
 }
 
-mutation RatioAddTicket($params: RatioAddTicketInput!) {
-  ratioAddTicket(input: $params) {
+mutation RatioAddTicket($input: RatioAddTicketInput!) {
+  ratioAddTicket(input: $input) {
     ...RatioTicket
   }
 }
 
-mutation UpdateRatioTicket($params: UpdateRatioTicketInput!) {
-  updateRatioTicket(input: $params) {
+mutation UpdateRatioTicket($input: UpdateRatioTicketInput!) {
+  updateRatioTicket(input: $input) {
     ...RatioTicket
   }
 }
@@ -233,13 +233,13 @@ mutation RatioPaymentFiscalizedManually($payment_id: ID!) {
 }
 
 mutation RatioTrainingAddDay($input: RatioTrainingAddDayInput!) {
-  ratioTrainingAddDay(params: $input)
+  ratioTrainingAddDay(input: $input)
 }
 
 mutation RatioTrainingCopyScheduleFrom(
-  $params: RatioTrainingCopyScheduleFromInput!
+  $input: RatioTrainingCopyScheduleFromInput!
 ) {
-  ratioTrainingCopyScheduleFrom(params: $params)
+  ratioTrainingCopyScheduleFrom(input: $input)
 }
 
 mutation RatioTrainingSendEmail($input: RatioTrainingSendEmailInput!) {

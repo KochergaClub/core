@@ -32,7 +32,7 @@ export const CreateTicketButton: React.FC<Props> = ({ training }) => {
       const values = unknownValues as Values;
       const { data } = await addTicketMutation({
         variables: {
-          params: {
+          input: {
             training: training.id,
             ticket_type: values.ticket_type,
             email: values.email,

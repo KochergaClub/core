@@ -1074,13 +1074,13 @@ type Mutation {
   cm2CreateOrder(input: Cm2CreateOrderInput!): Cm2Order!
   cm2CreateCustomer(input: Cm2CreateCustomerInput!): Cm2Customer!
   cm2CloseOrder(id: ID!): Boolean!
-  watchmenCreateWatchman(params: WatchmenCreateWatchmanInput!): Boolean!
-  watchmenUpdateShift(params: WatchmenUpdateShiftInput!): WatchmenUpdateShiftResult!
-  watchmenSetWatchmanPriority(params: WatchmenSetWatchmanPriorityInput!): Boolean!
-  watchmenSetWatchmanGrade(params: WatchmenSetWatchmanGradeInput!): Boolean!
+  watchmenCreateWatchman(input: WatchmenCreateWatchmanInput!): Boolean!
+  watchmenUpdateShift(input: WatchmenUpdateShiftInput!): WatchmenUpdateShiftResult!
+  watchmenSetWatchmanPriority(input: WatchmenSetWatchmanPriorityInput!): Boolean!
+  watchmenSetWatchmanGrade(input: WatchmenSetWatchmanGradeInput!): Boolean!
   kkmRegisterCheck(input: KkmRegisterCheckInput!): KkmRegisterCheckResult!
   closeKkmShift: BasicResult!
-  cashierCreatePayment(params: CashierCreatePaymentInput!): Boolean
+  cashierCreatePayment(input: CashierCreatePaymentInput!): Boolean
   cashierRedeemPayment(id: ID!): Boolean
   updateYandexKassaPayment(input: UpdateYandexKassaPaymentInput!): UpdateYandexKassaPaymentResult!
   cancelYandexKassaPayment(input: CancelYandexKassaPaymentInput!): CancelYandexKassaPaymentResult!
@@ -1127,8 +1127,8 @@ type Mutation {
   ratioPaymentFiscalize(payment_id: ID!): Boolean!
   ratioPaymentFiscalizedManually(payment_id: ID!): RatioPaymentFiscalizedManuallyResult!
   ratioPaymentSetStatus(input: RatioPaymentSetStatusInput!): RatioPaymentSetStatusResult!
-  ratioTrainingCopyScheduleFrom(params: RatioTrainingCopyScheduleFromInput!): Boolean!
-  ratioTrainingAddDay(params: RatioTrainingAddDayInput!): Boolean!
+  ratioTrainingCopyScheduleFrom(input: RatioTrainingCopyScheduleFromInput!): Boolean!
+  ratioTrainingAddDay(input: RatioTrainingAddDayInput!): Boolean!
   createRatioTicketType(input: CreateRatioTicketTypeInput!): RatioTicketType!
   updateRatioTicketType(input: UpdateRatioTicketTypeInput!): RatioTicketType!
   deleteRatioTicketType(input: DeleteRatioTicketTypeInput!): BasicResult!

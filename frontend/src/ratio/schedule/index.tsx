@@ -38,7 +38,7 @@ const SchedulePage: React.FC<Props> = ({ training }) => {
     async (srcTraining: TrainingForPickerFragment) => {
       await copyScheduleFromMutation({
         variables: {
-          params: {
+          input: {
             from_training_slug: srcTraining.slug,
             to_training_slug: training.slug,
           },

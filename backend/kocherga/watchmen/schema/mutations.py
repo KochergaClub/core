@@ -37,7 +37,6 @@ class watchmenCreateWatchman(helpers.BaseFieldWithInput):
         'skip_cm_customer': Optional[bool],
         'skip_cm_user': Optional[bool],
     }
-    input_argument_name = 'params'
 
     result = bool
 
@@ -51,7 +50,6 @@ class watchmenUpdateShift(helpers.UnionFieldMixin, helpers.BaseFieldWithInput):
         'watchman_id': 'ID',
         'is_night': Optional[bool],
     }
-    input_argument_name = 'params'
 
     result_types = {
         models.Shift: types.WatchmenShift,
@@ -103,7 +101,6 @@ class watchmenSetWatchmanPriority(helpers.BaseFieldWithInput):
         'watchman_id': 'ID!',
         'priority': int,
     }
-    input_argument_name = 'params'
 
     result = bool
 
@@ -122,7 +119,6 @@ class watchmenSetWatchmanGrade(helpers.BaseFieldWithInput):
         'watchman_id': 'ID!',
         'grade_id': 'ID!',
     }
-    input_argument_name = 'params'
 
     result = bool
 
