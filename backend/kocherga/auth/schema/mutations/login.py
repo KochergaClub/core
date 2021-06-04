@@ -102,7 +102,7 @@ class authLogin(helpers.BaseFieldWithInput):
 
 
 @c.class_field
-class setMyPassword(django_utils.SmartMutationField):
+class setMyPassword(django_utils.SmartMutationMixin, helpers.BaseFieldWithInput):
     permissions = [authenticated]
     input = {
         # required if old password exists
@@ -150,6 +150,20 @@ class setMyPassword(django_utils.SmartMutationField):
         return {'ok': True}
 
 
+# @c.class_field
+# class requestPasswordReset(django_utils.SmartMutationMixin, helpers.BaseFieldWithInput):
+#     permissions = [authenticated]
+#     input = {
+#         'email': str,
+#     }
+#     ok_result = {
+#         'ok': bool,
+#     }
+
+#     def smart_resolve(self, _, info, input):
+#         raise NotImplementedError()
+
+
 @c.class_field
 class authLogout(helpers.BaseField):
     permissions = [authenticated]
@@ -169,6 +183,14 @@ class authSendMagicLink(helpers.BaseFieldWithInput):
     def resolve(self, _, info, input):
         email = input['email']
 
+        try:
+            validate_email(email)
+        except django.core.exceptions.ValidationError as e:
+            return {
+                'ok': False,
+                'error': '\n'.join(e.messages),
+            }
+
         magic_token = get_magic_token(email)
         params_str = urllib.parse.urlencode(
             {'token': magic_token, 'next': input.get('next', '/')}
@@ -184,14 +206,6 @@ class authSendMagicLink(helpers.BaseFieldWithInput):
             'auth/email/login.txt', {'magic_link': magic_link}
         )
 
-        try:
-            validate_email(email)
-        except django.core.exceptions.ValidationError as e:
-            return {
-                'ok': False,
-                'error': '\n'.join(e.messages),
-            }
-
         send_mail(
             subject='Войти на сайт Кочерги',
             from_email='robot@kocherga-club.ru',
@@ -204,7 +218,7 @@ class authSendMagicLink(helpers.BaseFieldWithInput):
 
 
 @c.class_field
-class authSetMyNames(django_utils.SmartMutationField):
+class authSetMyNames(django_utils.SmartMutationMixin, helpers.BaseFieldWithInput):
     permissions = [authenticated]
     input = {'first_name': str, 'last_name': str}
     ok_result = types.AuthCurrentUser

@@ -355,7 +355,7 @@ class DeleteMutation(helpers.UnionFieldMixin, helpers.BaseField):
 
 # Less flexible but more convenient variation of UnionFieldMixin.
 # Catches common exceptions and turns them into GraphQL error types.
-class SmartMutationField(helpers.BaseFieldWithInput):
+class SmartMutationMixin:
     @abstractmethod
     def smart_resolve(self, obj, info, input):
         ...
