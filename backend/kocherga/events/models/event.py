@@ -2,6 +2,10 @@ from __future__ import annotations
 
 import logging
 
+from django.core.mail import send_mail
+from django.template.loader import render_to_string
+from kocherga.email.tools import mjml2html
+
 logger = logging.getLogger(__name__)
 
 import base64
@@ -18,8 +22,9 @@ import kocherga.zoom.models
 import reversion
 import wagtail.search.index
 from django.conf import settings
-from django.db import models
+from django.db import models, transaction
 from django.utils import timezone
+from html2text import html2text
 from kocherga.dateutils import TZ, inflected_month, inflected_weekday
 from kocherga.django.managers import RelayQuerySetMixin
 from kocherga.timepad.models import Event as TimepadEvent
@@ -249,6 +254,47 @@ class Event(wagtail.search.index.Indexed, models.Model):
                 'uuid': self.uuid,
             }
         )
+
+    def cancel(self, notification_message: str):
+        if self.deleted:
+            raise Exception("Already deleted")
+
+        if self.event_type != 'public':
+            raise Exception("Can't cancel non-public event")
+
+        def on_commit():
+            from ..channels import job_send_event_cancellation_emails
+
+            job_send_event_cancellation_emails(
+                event_pk=self.pk, notification_message=notification_message
+            )
+
+        transaction.on_commit(on_commit)
+
+        self.delete()
+
+    def send_cancellation_emails(self, notification_message: str):
+        start_local = timezone.localtime(self.start)
+        template_vars = {
+            'event': self,
+            'notification_message': notification_message,
+            'event_date': f"{start_local.day} {inflected_month(start_local)}",
+        }
+        message = mjml2html(
+            render_to_string('events/email/cancelled.mjml', template_vars)
+        )
+
+        for ticket in self.tickets.all():
+            logger.info(
+                f'Sending cancellation email to {ticket.user.email} about event {self.pk} ({self.title})'
+            )
+            send_mail(
+                subject=f'{self.title}: ОТМЕНА',
+                from_email='Кочерга <info@kocherga-club.ru>',
+                message=html2text(message),
+                html_message=message,
+                recipient_list=[ticket.user.email],
+            )
 
     def notify_update(self, created=False):
         if self.deleted:

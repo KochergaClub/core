@@ -14,7 +14,7 @@ interface Props {
   close: () => void;
 }
 
-const EventDeleteModal: React.FC<Props> = ({ event, close }) => {
+export const EventDeleteModal: React.FC<Props> = ({ event, close }) => {
   const [deleted, setDeleted] = useState(false);
   const [deleteMutation] = useMutation(EvenmanEventDeleteDocument, {
     variables: { id: event.id },
@@ -50,5 +50,3 @@ const EventDeleteModal: React.FC<Props> = ({ event, close }) => {
     </Modal>
   );
 };
-
-export default EventDeleteModal;

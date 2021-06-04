@@ -33,6 +33,17 @@ def job_send_ticket_confirmation_email(ticket_id: int, signed_in: Optional[bool]
     )
 
 
+def job_send_event_cancellation_emails(event_pk: int, notification_message: str):
+    channel_send(
+        WORKER_CHANNEL,
+        {
+            "type": "send_event_cancellation_emails",
+            "event_pk": event_pk,
+            "notification_message": notification_message,
+        },
+    )
+
+
 def notify_slack_by_event_version(version_id: int):
     channel_send(
         WORKER_CHANNEL,
@@ -112,6 +123,12 @@ class EventsWorker(SyncConsumer):
         signed_in = message['signed_in']
         ticket = Ticket.objects.get(pk=ticket_id)
         ticket.send_confirmation_email(signed_in=signed_in)
+
+    def send_event_cancellation_emails(self, message):
+        event_pk = message['event_pk']
+        notification_message = message['notification_message']
+        event = Event.all_objects.get(pk=event_pk)
+        event.send_cancellation_emails(notification_message)
 
 
 workers = {

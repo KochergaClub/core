@@ -8,7 +8,7 @@ import EventShapeTimingDescription from '../../common/EventShapeTimingDescriptio
 import { Card, CardBody, CardHeader } from '../../components/Card';
 import { Header, MutedSpan } from '../../components/ui';
 import EventAnnounce from '../EventAnnounce';
-import EventHeader from '../EventHeader';
+import { EventHeader } from '../EventHeader';
 import EventImages from '../EventImages';
 import EventPricingType from '../EventPricingType';
 import EventRealm from '../EventRealm';

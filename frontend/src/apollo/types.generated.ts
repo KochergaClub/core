@@ -207,6 +207,13 @@ export type BlogPostPage = WagtailPage & {
   authors: Array<BlogPostAuthor>;
 };
 
+export type CancelEventInput = {
+  event_id: Scalars['ID'];
+  notification_message: Scalars['String'];
+};
+
+export type CancelEventResult = BasicResult | GenericError | ValidationError;
+
 export type CancelWeeklyDigestMailchimpResult = GenericError | EventsWeeklyDigest;
 
 export type CancelYandexKassaPaymentInput = {
@@ -1233,6 +1240,7 @@ export type Mutation = {
   eventCreate: EventCreateResult;
   eventUpdate: EventUpdateResult;
   eventDelete: BasicResult;
+  cancelEvent: CancelEventResult;
   eventGenerateZoomLink: EventUpdateResult;
   eventAddTag: EventUpdateResult;
   eventDeleteTag: EventUpdateResult;
@@ -1491,6 +1499,11 @@ export type MutationEventUpdateArgs = {
 
 export type MutationEventDeleteArgs = {
   input: EventDeleteInput;
+};
+
+
+export type MutationCancelEventArgs = {
+  input: CancelEventInput;
 };
 
 

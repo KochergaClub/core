@@ -1,15 +1,16 @@
 import { formatDistanceToNow, parseISO } from 'date-fns';
 import { ru } from 'date-fns/locale';
+import React from 'react';
 
 import { useMutation } from '@apollo/client';
 
 import { formatDate } from '~/common/utils';
-import { Column, Row } from '~/frontkit';
+import { Row } from '~/frontkit';
 
 import { EditableString } from '../../components/EditableString';
 import { MutedSpan } from '../../components/ui';
 import { EditableDateTime } from '../EditableDateTime';
-import EventDropdownMenu from '../EventDropdownMenu';
+import { EventDropdownMenu } from '../EventDropdownMenu';
 import { useUpdateMutation } from '../hooks';
 import { EvenmanEvent_DetailsFragment, EvenmanEventMoveDocument } from '../queries.generated';
 import EventTypeField from './EventTypeField';
@@ -28,35 +29,34 @@ interface Props {
   event: EvenmanEvent_DetailsFragment;
 }
 
-const EventHeader: React.FC<Props> = ({ event }) => {
+export const EventHeader: React.FC<Props> = ({ event }) => {
   const update = useUpdateMutation(event.id);
   const [moveMutation] = useMutation(EvenmanEventMoveDocument);
 
   return (
     // TODO - refactor messy layout with display: grid
-    <Column centered>
-      <Row spaced>
-        <div style={{ flex: 1 }}>
+    <div className="space-y-1">
+      <Row>
+        <div className="flex-1">
           <EventTypeField event={event} />
         </div>
-        <div style={{ fontSize: '1.4em' }}>
+        <div className="text-2xl">
           <EditableString
             value={event.title}
             renderValue={(ref) => <strong ref={ref}>{event.title}</strong>}
             save={(value) => update({ title: value })}
           />
         </div>
-        <div style={{ flex: 1, display: 'flex', justifyContent: 'flex-end' }}>
+        <div className="flex-1 flex justify-end">
           <EventDropdownMenu event={event} />
         </div>
       </Row>
-      <Row spaced>
-        <div style={{ flex: 1 }}>
+      <Row>
+        <div className="flex-1">
           {event.tickets.length ? (
             <div>Регистраций: {event.tickets.length}</div>
           ) : null}
         </div>
-
         <div>
           <EditableDateTime
             title={event.title}
@@ -79,8 +79,6 @@ const EventHeader: React.FC<Props> = ({ event }) => {
           </small>
         </div>
       </Row>
-    </Column>
+    </div>
   );
 };
-
-export default EventHeader;

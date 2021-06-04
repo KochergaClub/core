@@ -179,6 +179,13 @@ type BlogPostPage implements WagtailPage {
   authors: [BlogPostAuthor!]!
 }
 
+input CancelEventInput {
+  event_id: ID!
+  notification_message: String!
+}
+
+union CancelEventResult = BasicResult | GenericError | ValidationError
+
 union CancelWeeklyDigestMailchimpResult = GenericError | EventsWeeklyDigest
 
 input CancelYandexKassaPaymentInput {
@@ -1090,6 +1097,7 @@ type Mutation {
   eventCreate(input: EventCreateInput!): EventCreateResult!
   eventUpdate(input: EventUpdateInput!): EventUpdateResult!
   eventDelete(input: EventDeleteInput!): BasicResult!
+  cancelEvent(input: CancelEventInput!): CancelEventResult!
   eventGenerateZoomLink(input: EventGenerateZoomLinkInput!): EventUpdateResult!
   eventAddTag(input: EventAddTagInput!): EventUpdateResult!
   eventDeleteTag(input: EventDeleteTagInput!): EventUpdateResult!

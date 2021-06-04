@@ -4,7 +4,7 @@ import dateutil.parser
 import graphql
 import kocherga.projects.models
 import kocherga.wagtail.models
-from kocherga.graphql import g, helpers
+from kocherga.graphql import django_utils, g, helpers
 from kocherga.graphql.basic_types import BasicResult
 from kocherga.graphql.permissions import authenticated
 
@@ -170,6 +170,24 @@ class eventDelete(helpers.BaseFieldWithInput):
     permissions = [permissions.manage_events]
     input = {'event_id': 'ID!'}
     result = g.NN(BasicResult)
+
+
+@c.class_field
+class cancelEvent(django_utils.SmartMutationMixin, helpers.BaseFieldWithInput):
+    permissions = [permissions.manage_events]
+    input = {
+        'event_id': 'ID!',
+        'notification_message': str,
+    }
+    ok_result = BasicResult
+
+    def smart_resolve(self, _, info, input):
+        event_id = input['event_id']
+
+        event = models.Event.objects.get(uuid=event_id)
+        event.cancel(notification_message=input['notification_message'])
+
+        return {'ok': True}
 
 
 @c.class_field

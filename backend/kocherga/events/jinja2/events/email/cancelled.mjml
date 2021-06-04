@@ -1,0 +1,12 @@
+{% extends "email/simple-layout.mjml" %}
+{% block title %}{{ event.title | e }}: ОТМЕНА{% endblock %}
+{% block body %}
+<mj-section>
+  <mj-column>
+    <mj-text>Событие <b>{{ event.title | e }}</b>, запланированное на {{event_date}}, отменилось.</mj-text>
+    <mj-text>
+        {{ notification_message | e }}
+    </mj-text>
+  </mj-column>
+</mj-section>
+{% endblock %}

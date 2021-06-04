@@ -160,6 +160,12 @@ mutation EvenmanEventDelete($id: ID!) {
   }
 }
 
+mutation EvenmanCancelEvent($input: CancelEventInput!) {
+  result: cancelEvent(input: $input) {
+    ...GenericError
+  }
+}
+
 mutation EvenmanEventAddTag($id: ID!, $tag: String!) {
   result: eventAddTag(input: { event_id: $id, tag: $tag }) {
     ok

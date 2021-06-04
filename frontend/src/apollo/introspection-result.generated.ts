@@ -27,6 +27,11 @@
     "BecomeCommunityLeadCuratorResult": [
       "CommunityLead"
     ],
+    "CancelEventResult": [
+      "BasicResult",
+      "GenericError",
+      "ValidationError"
+    ],
     "CancelWeeklyDigestMailchimpResult": [
       "GenericError",
       "EventsWeeklyDigest"
