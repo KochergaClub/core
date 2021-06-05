@@ -31,7 +31,10 @@ wait_for_migrate:
 	@echo Waiting for migrate
 	$(K) wait --for=condition=complete job/core-django-migrate --timeout=1h
 
-dev_init: wait_for_migrate superuser wagtail_init restart_backend proxy
+test_mysql_db:
+	$(KDEV) exec $(shell $(KDEV) get po -l app=core-mysql -o name) -- sh -c 'mysql -uroot -p$$MYSQL_ROOT_PASSWORD -e '\''CREATE DATABASE IF NOT EXISTS test_kocherga; GRANT ALL PRIVILEGES ON `test_kocherga`.* TO `kocherga`@`%`'\'''
+
+dev_init: test_mysql_db wait_for_migrate superuser wagtail_init restart_backend proxy
 	echo OK
 
 ##### Tests #####
