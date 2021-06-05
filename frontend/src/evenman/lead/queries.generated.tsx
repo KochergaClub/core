@@ -1,7 +1,7 @@
 import * as Types from '../../apollo/types.generated';
 
 import { UserFragment } from '../../components/UserLink/fragments.generated';
-import { CommentableFragment } from './CommentsList/queries.generated';
+import { Commentable_CommunityInitiative_Fragment, Commentable_CommunityLead_Fragment } from './CommentsList/queries.generated';
 import { GenericErrorFragment, ValidationErrorFragment } from '../../apollo/common-fragments.generated';
 import { dedupeFragments } from '~/common/dedupeFragments';
 import { TypedDocumentNode as DocumentNode } from '@graphql-typed-document-node/core';
@@ -21,7 +21,7 @@ export type EvenmanLeadFragment = (
     { __typename: 'Event' }
     & Pick<Types.Event, 'id' | 'title' | 'start' | 'published'>
   )> }
-  & CommentableFragment
+  & Commentable_CommunityLead_Fragment
 );
 
 export type EvenmanLeadsQueryVariables = Types.Exact<{

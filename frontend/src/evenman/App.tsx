@@ -7,6 +7,7 @@ import { WithNavSidebar } from '~/frontkit';
 
 import EventPrototypeScreen from './event-prototype/EventPrototypeScreen';
 import EventScreen from './event/EventScreen';
+import { InitiativeScreen } from './initiative/InitiativeScreen';
 import { LeadDetailsScreen } from './lead/LeadDetailsScreen';
 import { LeadScreen } from './lead/LeadScreen';
 import { PREFIX } from './routes';
@@ -22,6 +23,10 @@ const tabs = [
   {
     title: 'Люди',
     name: 'Lead',
+  },
+  {
+    title: 'Инициативы',
+    name: 'Initiative',
   },
 ];
 
@@ -44,6 +49,8 @@ const EvenmanApp: NextApolloPage = () => {
         return <LeadScreen />;
       case 'LeadDetails':
         return <LeadDetailsScreen id={String(router.query.id)} />;
+      case 'Initiative':
+        return <InitiativeScreen />;
       default:
         return <div>Unknown route {name}</div>;
     }
@@ -63,6 +70,8 @@ const EvenmanApp: NextApolloPage = () => {
       return 'EventPrototype';
     } else if (route === `${PREFIX}/leads`) {
       return 'Lead';
+    } else if (route === `${PREFIX}/initiatives`) {
+      return 'Initiative';
     } else if (route === `${PREFIX}/leads/[id]`) {
       return 'LeadDetails';
     } else {
@@ -77,6 +86,7 @@ const EvenmanApp: NextApolloPage = () => {
       Event: PREFIX,
       EventPrototype: `${PREFIX}/event-prototypes`,
       Lead: `${PREFIX}/leads`,
+      Initiative: `${PREFIX}/initiatives`,
     };
     const path = name2path[name];
     if (path) {

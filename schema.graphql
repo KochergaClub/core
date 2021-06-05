@@ -5,6 +5,13 @@ input AddEventToCommunityLeadInput {
 
 union AddEventToCommunityLeadResult = CommunityLead
 
+input AddLeadToCommunityInitiativeInput {
+  initiative_id: ID!
+  lead_id: ID!
+}
+
+union AddLeadToCommunityInitiativeResult = CommunityInitiative | GenericError | ValidationError
+
 input AddTelegramChatByInviteLinkInput {
   invite_link: String!
 }
@@ -319,6 +326,13 @@ type Comment {
   author: AuthUser!
 }
 
+input CommentOnCommunityInitiativeInput {
+  initiative_id: ID!
+  text: String!
+}
+
+union CommentOnCommunityInitiativeResult = CommunityInitiative
+
 input CommentOnCommunityLeadInput {
   lead_id: ID!
   text: String!
@@ -329,6 +343,39 @@ union CommentOnCommunityLeadResult = CommunityLead
 interface Commentable {
   comments_count: Int!
   comments: [Comment!]!
+}
+
+type CommunityInitiative implements Commentable {
+  id: ID!
+  title: String!
+  description: String!
+  created: String!
+  updated: String!
+  leads: [CommunityLead!]!
+  created_by: AuthUser
+  curated_by: AuthUser
+  status: CommunityInitiativeStatus!
+  comments_count: Int!
+  comments: [Comment!]!
+}
+
+type CommunityInitiativeConnection {
+  pageInfo: PageInfo!
+  nodes: [CommunityInitiative!]!
+  edges: [CommunityInitiativeEdge!]!
+}
+
+type CommunityInitiativeEdge {
+  node: CommunityInitiative!
+}
+
+enum CommunityInitiativeStatus {
+  ACTIVE
+  INACTIVE
+}
+
+input CommunityInitiativesFilterInput {
+  status: CommunityInitiativeStatus
 }
 
 type CommunityLead implements Commentable {
@@ -370,6 +417,13 @@ input CommunityLeadsFilterInput {
   curated_by_empty: Boolean
   search: String
 }
+
+input CreateCommunityInitiativeInput {
+  title: String!
+  description: String
+}
+
+union CreateCommunityInitiativeResult = CommunityInitiative | ValidationError | GenericError
 
 input CreateCommunityLeadInput {
   name: String!
@@ -414,6 +468,8 @@ input DeleteCommentInput {
 }
 
 union DeleteCommentResult = BasicResult | GenericError
+
+union DeleteCommunityInitiativeResult = BasicResult
 
 union DeleteCommunityLeadResult = BasicResult
 
@@ -1189,6 +1245,11 @@ type Mutation {
   addEventToCommunityLead(input: AddEventToCommunityLeadInput!): AddEventToCommunityLeadResult!
   removeEventFromCommunityLead(input: RemoveEventFromCommunityLeadInput!): RemoveEventFromCommunityLeadResult!
   commentOnCommunityLead(input: CommentOnCommunityLeadInput!): CommentOnCommunityLeadResult!
+  createCommunityInitiative(input: CreateCommunityInitiativeInput!): CreateCommunityInitiativeResult!
+  deleteCommunityInitiative(id: ID!): DeleteCommunityInitiativeResult!
+  addLeadToCommunityInitiative(input: AddLeadToCommunityInitiativeInput!): AddLeadToCommunityInitiativeResult!
+  removeLeadFromCommunityInitiative(input: RemoveLeadFromCommunityInitiativeInput!): RemoveLeadFromCommunityInitiativeResult!
+  commentOnCommunityInitiative(input: CommentOnCommunityInitiativeInput!): CommentOnCommunityInitiativeResult!
   editComment(input: EditCommentInput!): EditCommentResult!
   deleteComment(input: DeleteCommentInput!): DeleteCommentResult!
 }
@@ -1459,6 +1520,7 @@ type Query {
   externalServices: [ExternalService!]!
   communityLeads(before: String, after: String, first: Int, last: Int, filter: CommunityLeadsFilterInput): CommunityLeadConnection!
   communityLead(input: CommunityLeadInput!): CommunityLead!
+  communityInitiatives(before: String, after: String, first: Int, last: Int, filter: CommunityInitiativesFilterInput): CommunityInitiativeConnection!
   my: My!
 }
 
@@ -1908,6 +1970,13 @@ input RemoveEventFromCommunityLeadInput {
 }
 
 union RemoveEventFromCommunityLeadResult = CommunityLead
+
+input RemoveLeadFromCommunityInitiativeInput {
+  initiative_id: ID!
+  lead_id: ID!
+}
+
+union RemoveLeadFromCommunityInitiativeResult = CommunityInitiative | GenericError | ValidationError
 
 input RemoveTildaPageInput {
   id: ID!

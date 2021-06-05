@@ -25,3 +25,27 @@ CommunityLead = django_utils.DjangoObjectType(
 )
 
 CommunityLeadConnection = helpers.ConnectionType(CommunityLead)
+
+# --------------------
+
+CommunityInitiativeStatus = g.EnumType(
+    'CommunityInitiativeStatus', models.Initiative.Status
+)
+
+CommunityInitiative = django_utils.DjangoObjectType(
+    'CommunityInitiative',
+    model=models.Initiative,
+    db_fields=['id', 'title', 'description', 'created', 'updated'],
+    related_fields={
+        'leads': CommunityLead,
+    },
+    extra_fields={
+        'created_by': auth_types.AuthUser,
+        'curated_by': auth_types.AuthUser,
+        'status': g.NN(CommunityInitiativeStatus),
+        **build_commentable_fields(permissions=[permissions.manage_crm]),
+    },
+    interfaces=[comment_types.Commentable],
+)
+
+CommunityInitiativeConnection = helpers.ConnectionType(CommunityInitiative)

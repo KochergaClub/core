@@ -67,4 +67,27 @@ class communityLead(helpers.BaseFieldWithInput):
     result = g.NN(types.CommunityLead)
 
 
+@c.class_field
+class communityInitiatives(helpers.BaseField):
+    def resolve(self, _, info, filter=None, **pager):
+        qs = models.Initiative.objects.all()
+        if filter:
+            if filter.get('status'):
+                qs = qs.filter(status=filter['status'])
+        return qs.relay_page(**pager)
+
+    permissions = [permissions.manage_crm]
+
+    FilterInput = g.InputObjectType(
+        'CommunityInitiativesFilterInput',
+        g.input_fields(
+            {
+                'status': types.CommunityInitiativeStatus,
+            }
+        ),
+    )
+    args = {**helpers.connection_args(), 'filter': FilterInput}
+    result = g.NN(types.CommunityInitiativeConnection)
+
+
 queries = c.as_dict()

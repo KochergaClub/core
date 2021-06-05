@@ -15,7 +15,16 @@ export type CommentFragment = (
   ) }
 );
 
-export type CommentableFragment = (
+export type Commentable_CommunityInitiative_Fragment = (
+  { __typename: 'CommunityInitiative' }
+  & Pick<Types.CommunityInitiative, 'comments_count'>
+  & { comments: Array<(
+    { __typename: 'Comment' }
+    & CommentFragment
+  )> }
+);
+
+export type Commentable_CommunityLead_Fragment = (
   { __typename: 'CommunityLead' }
   & Pick<Types.CommunityLead, 'comments_count'>
   & { comments: Array<(
@@ -23,6 +32,8 @@ export type CommentableFragment = (
     & CommentFragment
   )> }
 );
+
+export type CommentableFragment = Commentable_CommunityInitiative_Fragment | Commentable_CommunityLead_Fragment;
 
 export type DeleteCommentMutationVariables = Types.Exact<{
   id: Types.Scalars['ID'];

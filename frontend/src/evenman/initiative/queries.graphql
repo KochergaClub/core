@@ -1,0 +1,95 @@
+fragment EvenmanInitiative on CommunityInitiative {
+  id
+  created
+  updated
+  title
+  description
+  leads {
+    id
+    name
+  }
+  ...Commentable
+}
+
+fragment LeadForPicker on CommunityLead {
+  id
+  name
+}
+
+query SearchLeadsForPicker($query: String!) {
+  communityLeads(first: 20, filter: { search: $query }) {
+    edges {
+      node {
+        ...LeadForPicker
+      }
+    }
+  }
+}
+
+query EvenmanInitiatives(
+  $before: String
+  $after: String
+  $first: Int
+  $last: Int
+  $filter: CommunityInitiativesFilterInput
+) {
+  communityInitiatives(
+    before: $before
+    after: $after
+    first: $first
+    last: $last
+    filter: $filter
+  ) {
+    pageInfo {
+      hasNextPage
+      hasPreviousPage
+      startCursor
+      endCursor
+    }
+    edges {
+      node {
+        ...EvenmanInitiative
+      }
+    }
+  }
+}
+
+mutation CreateEvenmanInitiative($input: CreateCommunityInitiativeInput!) {
+  result: createCommunityInitiative(input: $input) {
+    ...EvenmanInitiative
+    ...GenericError
+    ...ValidationError
+  }
+}
+
+mutation DeleteEvenmanInitiative($id: ID!) {
+  deleteCommunityInitiative(id: $id) {
+    ... on BasicResult {
+      ok
+    }
+  }
+}
+
+mutation AddLeadToCommunityInitiative(
+  $input: AddLeadToCommunityInitiativeInput!
+) {
+  result: addLeadToCommunityInitiative(input: $input) {
+    ...EvenmanInitiative
+  }
+}
+
+mutation RemoveLeadFromCommunityInitiative(
+  $input: RemoveLeadFromCommunityInitiativeInput!
+) {
+  result: removeLeadFromCommunityInitiative(input: $input) {
+    ...EvenmanInitiative
+  }
+}
+
+mutation CommentOnCommunityInitiative(
+  $input: CommentOnCommunityInitiativeInput!
+) {
+  result: commentOnCommunityInitiative(input: $input) {
+    ...EvenmanInitiative
+  }
+}

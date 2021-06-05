@@ -9,6 +9,11 @@
     "AddEventToCommunityLeadResult": [
       "CommunityLead"
     ],
+    "AddLeadToCommunityInitiativeResult": [
+      "CommunityInitiative",
+      "GenericError",
+      "ValidationError"
+    ],
     "AddTelegramChatByInviteLinkResult": [
       "TelegramChat",
       "ValidationError",
@@ -43,11 +48,20 @@
     "ClearCommunityLeadCuratorResult": [
       "CommunityLead"
     ],
+    "CommentOnCommunityInitiativeResult": [
+      "CommunityInitiative"
+    ],
     "CommentOnCommunityLeadResult": [
       "CommunityLead"
     ],
     "Commentable": [
+      "CommunityInitiative",
       "CommunityLead"
+    ],
+    "CreateCommunityInitiativeResult": [
+      "CommunityInitiative",
+      "ValidationError",
+      "GenericError"
     ],
     "CreateCommunityLeadResult": [
       "CommunityLead",
@@ -67,6 +81,9 @@
     "DeleteCommentResult": [
       "BasicResult",
       "GenericError"
+    ],
+    "DeleteCommunityInitiativeResult": [
+      "BasicResult"
     ],
     "DeleteCommunityLeadResult": [
       "BasicResult"
@@ -107,6 +124,11 @@
     ],
     "RemoveEventFromCommunityLeadResult": [
       "CommunityLead"
+    ],
+    "RemoveLeadFromCommunityInitiativeResult": [
+      "CommunityInitiative",
+      "GenericError",
+      "ValidationError"
     ],
     "SearchItem": [
       "PageSearchItem",

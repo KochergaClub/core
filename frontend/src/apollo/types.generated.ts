@@ -18,6 +18,13 @@ export type AddEventToCommunityLeadInput = {
 
 export type AddEventToCommunityLeadResult = CommunityLead;
 
+export type AddLeadToCommunityInitiativeInput = {
+  initiative_id: Scalars['ID'];
+  lead_id: Scalars['ID'];
+};
+
+export type AddLeadToCommunityInitiativeResult = CommunityInitiative | GenericError | ValidationError;
+
 export type AddTelegramChatByInviteLinkInput = {
   invite_link: Scalars['String'];
 };
@@ -371,6 +378,13 @@ export type Comment = {
   author: AuthUser;
 };
 
+export type CommentOnCommunityInitiativeInput = {
+  initiative_id: Scalars['ID'];
+  text: Scalars['String'];
+};
+
+export type CommentOnCommunityInitiativeResult = CommunityInitiative;
+
 export type CommentOnCommunityLeadInput = {
   lead_id: Scalars['ID'];
   text: Scalars['String'];
@@ -381,6 +395,42 @@ export type CommentOnCommunityLeadResult = CommunityLead;
 export type Commentable = {
   comments_count: Scalars['Int'];
   comments: Array<Comment>;
+};
+
+export type CommunityInitiative = Commentable & {
+  __typename?: 'CommunityInitiative';
+  id: Scalars['ID'];
+  title: Scalars['String'];
+  description: Scalars['String'];
+  created: Scalars['String'];
+  updated: Scalars['String'];
+  leads: Array<CommunityLead>;
+  created_by?: Maybe<AuthUser>;
+  curated_by?: Maybe<AuthUser>;
+  status: CommunityInitiativeStatus;
+  comments_count: Scalars['Int'];
+  comments: Array<Comment>;
+};
+
+export type CommunityInitiativeConnection = {
+  __typename?: 'CommunityInitiativeConnection';
+  pageInfo: PageInfo;
+  nodes: Array<CommunityInitiative>;
+  edges: Array<CommunityInitiativeEdge>;
+};
+
+export type CommunityInitiativeEdge = {
+  __typename?: 'CommunityInitiativeEdge';
+  node: CommunityInitiative;
+};
+
+export enum CommunityInitiativeStatus {
+  Active = 'ACTIVE',
+  Inactive = 'INACTIVE'
+}
+
+export type CommunityInitiativesFilterInput = {
+  status?: Maybe<CommunityInitiativeStatus>;
 };
 
 export type CommunityLead = Commentable & {
@@ -426,6 +476,13 @@ export type CommunityLeadsFilterInput = {
   search?: Maybe<Scalars['String']>;
 };
 
+export type CreateCommunityInitiativeInput = {
+  title: Scalars['String'];
+  description?: Maybe<Scalars['String']>;
+};
+
+export type CreateCommunityInitiativeResult = CommunityInitiative | ValidationError | GenericError;
+
 export type CreateCommunityLeadInput = {
   name: Scalars['String'];
   description?: Maybe<Scalars['String']>;
@@ -469,6 +526,8 @@ export type DeleteCommentInput = {
 };
 
 export type DeleteCommentResult = BasicResult | GenericError;
+
+export type DeleteCommunityInitiativeResult = BasicResult;
 
 export type DeleteCommunityLeadResult = BasicResult;
 
@@ -1332,6 +1391,11 @@ export type Mutation = {
   addEventToCommunityLead: AddEventToCommunityLeadResult;
   removeEventFromCommunityLead: RemoveEventFromCommunityLeadResult;
   commentOnCommunityLead: CommentOnCommunityLeadResult;
+  createCommunityInitiative: CreateCommunityInitiativeResult;
+  deleteCommunityInitiative: DeleteCommunityInitiativeResult;
+  addLeadToCommunityInitiative: AddLeadToCommunityInitiativeResult;
+  removeLeadFromCommunityInitiative: RemoveLeadFromCommunityInitiativeResult;
+  commentOnCommunityInitiative: CommentOnCommunityInitiativeResult;
   editComment: EditCommentResult;
   deleteComment: DeleteCommentResult;
 };
@@ -1916,6 +1980,31 @@ export type MutationCommentOnCommunityLeadArgs = {
 };
 
 
+export type MutationCreateCommunityInitiativeArgs = {
+  input: CreateCommunityInitiativeInput;
+};
+
+
+export type MutationDeleteCommunityInitiativeArgs = {
+  id: Scalars['ID'];
+};
+
+
+export type MutationAddLeadToCommunityInitiativeArgs = {
+  input: AddLeadToCommunityInitiativeInput;
+};
+
+
+export type MutationRemoveLeadFromCommunityInitiativeArgs = {
+  input: RemoveLeadFromCommunityInitiativeInput;
+};
+
+
+export type MutationCommentOnCommunityInitiativeArgs = {
+  input: CommentOnCommunityInitiativeInput;
+};
+
+
 export type MutationEditCommentArgs = {
   input: EditCommentInput;
 };
@@ -2234,6 +2323,7 @@ export type Query = {
   externalServices: Array<ExternalService>;
   communityLeads: CommunityLeadConnection;
   communityLead: CommunityLead;
+  communityInitiatives: CommunityInitiativeConnection;
   my: My;
 };
 
@@ -2491,6 +2581,15 @@ export type QueryCommunityLeadsArgs = {
 
 export type QueryCommunityLeadArgs = {
   input: CommunityLeadInput;
+};
+
+
+export type QueryCommunityInitiativesArgs = {
+  before?: Maybe<Scalars['String']>;
+  after?: Maybe<Scalars['String']>;
+  first?: Maybe<Scalars['Int']>;
+  last?: Maybe<Scalars['Int']>;
+  filter?: Maybe<CommunityInitiativesFilterInput>;
 };
 
 export type RatioActivity = {
@@ -2968,6 +3067,13 @@ export type RemoveEventFromCommunityLeadInput = {
 };
 
 export type RemoveEventFromCommunityLeadResult = CommunityLead;
+
+export type RemoveLeadFromCommunityInitiativeInput = {
+  initiative_id: Scalars['ID'];
+  lead_id: Scalars['ID'];
+};
+
+export type RemoveLeadFromCommunityInitiativeResult = CommunityInitiative | GenericError | ValidationError;
 
 export type RemoveTildaPageInput = {
   id: Scalars['ID'];

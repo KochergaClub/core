@@ -1,13 +1,8 @@
 import get from 'lodash/get';
 import React from 'react';
-import {
-  Controller,
-  FieldError,
-  FieldPath,
-  FieldValues,
-  UseFormReturn,
-} from 'react-hook-form';
+import { Controller, FieldError, FieldPath, FieldValues, UseFormReturn } from 'react-hook-form';
 import Select from 'react-select';
+
 import { FieldContainer } from './FieldContainer';
 
 const tupleToSelectOption = (t: readonly [string, string]) => ({
@@ -49,6 +44,7 @@ export const SelectField = <T extends FieldValues>({
               placeholder="Выбрать..."
               value={option ? tupleToSelectOption(option) : undefined}
               options={options.map(tupleToSelectOption)}
+              isClearable={!required}
               menuPlacement="auto"
               onChange={(option) => {
                 if (option) {
@@ -57,6 +53,8 @@ export const SelectField = <T extends FieldValues>({
                   } else {
                     onChange('');
                   }
+                } else {
+                  onChange('');
                 }
               }}
               menuPortalTarget={
