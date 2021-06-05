@@ -100,7 +100,7 @@ class Initiative(index.Indexed, Commentable, models.Model):
     objects = RelayQuerySet.as_manager()
 
     search_fields = [
-        index.SearchField('name', partial_match=True, boost=10),
+        index.SearchField('title', partial_match=True, boost=10),
         index.SearchField('description'),
         index.FilterField('status'),
         index.FilterField('curated_by_id'),
