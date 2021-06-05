@@ -11,7 +11,7 @@ pyjwt
 mwclient
 termcolor
 pandas  # used in money.cashier.importer
-git+https://github.com/berekuk/pyppeteer.git@dev
+pyppeteer == 0.2.3  # 0.2.4 and later require pyee >= 8, which conflicts with slackeventsapi
 apscheduler
 fire
 python-gitlab
@@ -22,29 +22,29 @@ requests-toolbelt  # used in cafe-manager multipart POSTs
 slappy == 0.5.1
 feedgen
 telethon
-django == 3.1.*
+django == 3.2.*
 asgiref >= 3.3.0
 django-cors-headers
 django-rest-framework
 sentry-sdk[flask] >= 0.16.5
 tqdm
 gunicorn >= 19.9
-uvicorn[standard]
+uvicorn[standard] == 0.13.4  # pyppeteer is not ready yet for websocket 9.1
 aiogram >= 2.0
 channels >= 3
 channels_redis >= 3.2.0
 django-reversion >= 3.0.5
 # django-reversion-compare >= 0.9.0  # incompatible with django 3.1 for now
 redis >= 3.2
-wagtail == 2.11.1
-git+https://github.com/berekuk/wagtailmath.git@master
+wagtail == 2.13.*
+wagtailmath
 django-annoying >= 0.10.6
 wagtailgeowidget >= 5.0
 django-prometheus
 wagtail-condensedinlinepanel >= 0.5.3
 wagtail-orderable
 html2text
-ariadne == 0.12.0  # deprecated but still used in a few places
+ariadne  # deprecated but still used in a few places
 # aiodataloader  # not used for now, but we might need it in the future
 django-storages
 elasticsearch >= 7.0.0
@@ -60,7 +60,7 @@ pytest-django
 pytest-cov
 freezegun
 mypy
-black == 20.8b1
+black == 21.5b2
 flake8 >= 3.7
 codecov
 factory_boy

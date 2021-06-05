@@ -1,4 +1,4 @@
 [tool.black]
 line-length = 88
-target-version = ['py38']  # black with py39 is not released yet
+target-version = ['py39']
 skip-string-normalization = 'true'
