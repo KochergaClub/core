@@ -369,6 +369,10 @@ type CommunityInitiativeEdge {
   node: CommunityInitiative!
 }
 
+input CommunityInitiativeInput {
+  id: ID!
+}
+
 enum CommunityInitiativeStatus {
   ACTIVE
   INACTIVE
@@ -385,6 +389,7 @@ type CommunityLead implements Commentable {
   created: String!
   updated: String!
   events: [Event!]!
+  initiatives: [CommunityInitiative!]!
   created_by: AuthUser
   curated_by: AuthUser
   status: CommunityLeadStatus!
@@ -1246,6 +1251,7 @@ type Mutation {
   removeEventFromCommunityLead(input: RemoveEventFromCommunityLeadInput!): RemoveEventFromCommunityLeadResult!
   commentOnCommunityLead(input: CommentOnCommunityLeadInput!): CommentOnCommunityLeadResult!
   createCommunityInitiative(input: CreateCommunityInitiativeInput!): CreateCommunityInitiativeResult!
+  updateCommunityInitiative(input: UpdateCommunityInitiativeInput!): UpdateCommunityInitiativeResult!
   deleteCommunityInitiative(id: ID!): DeleteCommunityInitiativeResult!
   addLeadToCommunityInitiative(input: AddLeadToCommunityInitiativeInput!): AddLeadToCommunityInitiativeResult!
   removeLeadFromCommunityInitiative(input: RemoveLeadFromCommunityInitiativeInput!): RemoveLeadFromCommunityInitiativeResult!
@@ -1521,6 +1527,7 @@ type Query {
   communityLeads(before: String, after: String, first: Int, last: Int, filter: CommunityLeadsFilterInput): CommunityLeadConnection!
   communityLead(input: CommunityLeadInput!): CommunityLead!
   communityInitiatives(before: String, after: String, first: Int, last: Int, filter: CommunityInitiativesFilterInput): CommunityInitiativeConnection!
+  communityInitiative(input: CommunityInitiativeInput!): CommunityInitiative!
   my: My!
 }
 
@@ -2163,6 +2170,15 @@ type TimepadCategory {
   code: String!
   name: String!
 }
+
+input UpdateCommunityInitiativeInput {
+  id: ID!
+  title: String
+  description: String
+  status: String
+}
+
+union UpdateCommunityInitiativeResult = CommunityInitiative | ValidationError | GenericError
 
 input UpdateCommunityLeadInput {
   id: ID!

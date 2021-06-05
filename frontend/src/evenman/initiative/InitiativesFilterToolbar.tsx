@@ -1,10 +1,10 @@
 import React, { useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 
-import {
-    CommunityInitiativesFilterInput, CommunityInitiativeStatus
-} from '~/apollo/types.generated';
+import { CommunityInitiativesFilterInput } from '~/apollo/types.generated';
 import { SelectField } from '~/components/forms/SelectField';
+
+import { statusNames } from './utils';
 
 type Props = {
   filter: CommunityInitiativesFilterInput;
@@ -36,10 +36,11 @@ export const InitiativesFilterToolbar: React.FC<Props> = ({
           name="status"
           title="Статус"
           form={form}
-          options={[
-            [CommunityInitiativeStatus.Active, 'активный'],
-            [CommunityInitiativeStatus.Inactive, 'неактивный'],
-          ]}
+          options={
+            Object.entries(statusNames) as Array<
+              [keyof typeof statusNames, string]
+            >
+          }
         />
       </div>
     </div>

@@ -9,3 +9,7 @@ export const prototypeRoute = (id: string) =>
 
 export const leadsRoute = () => `${PREFIX}/leads`;
 export const leadDetailsRoute = (id: string) => `${PREFIX}/leads/${id}`;
+
+export const initiativesRoute = () => `${PREFIX}/initiatives`;
+export const initiativeDetailsRoute = (id: string) =>
+  `${PREFIX}/initiatives/${id}`;

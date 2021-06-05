@@ -424,6 +424,10 @@ export type CommunityInitiativeEdge = {
   node: CommunityInitiative;
 };
 
+export type CommunityInitiativeInput = {
+  id: Scalars['ID'];
+};
+
 export enum CommunityInitiativeStatus {
   Active = 'ACTIVE',
   Inactive = 'INACTIVE'
@@ -441,6 +445,7 @@ export type CommunityLead = Commentable & {
   created: Scalars['String'];
   updated: Scalars['String'];
   events: Array<Event>;
+  initiatives: Array<CommunityInitiative>;
   created_by?: Maybe<AuthUser>;
   curated_by?: Maybe<AuthUser>;
   status: CommunityLeadStatus;
@@ -1392,6 +1397,7 @@ export type Mutation = {
   removeEventFromCommunityLead: RemoveEventFromCommunityLeadResult;
   commentOnCommunityLead: CommentOnCommunityLeadResult;
   createCommunityInitiative: CreateCommunityInitiativeResult;
+  updateCommunityInitiative: UpdateCommunityInitiativeResult;
   deleteCommunityInitiative: DeleteCommunityInitiativeResult;
   addLeadToCommunityInitiative: AddLeadToCommunityInitiativeResult;
   removeLeadFromCommunityInitiative: RemoveLeadFromCommunityInitiativeResult;
@@ -1985,6 +1991,11 @@ export type MutationCreateCommunityInitiativeArgs = {
 };
 
 
+export type MutationUpdateCommunityInitiativeArgs = {
+  input: UpdateCommunityInitiativeInput;
+};
+
+
 export type MutationDeleteCommunityInitiativeArgs = {
   id: Scalars['ID'];
 };
@@ -2324,6 +2335,7 @@ export type Query = {
   communityLeads: CommunityLeadConnection;
   communityLead: CommunityLead;
   communityInitiatives: CommunityInitiativeConnection;
+  communityInitiative: CommunityInitiative;
   my: My;
 };
 
@@ -2590,6 +2602,11 @@ export type QueryCommunityInitiativesArgs = {
   first?: Maybe<Scalars['Int']>;
   last?: Maybe<Scalars['Int']>;
   filter?: Maybe<CommunityInitiativesFilterInput>;
+};
+
+
+export type QueryCommunityInitiativeArgs = {
+  input: CommunityInitiativeInput;
 };
 
 export type RatioActivity = {
@@ -3292,6 +3309,15 @@ export type TimepadCategory = {
   code: Scalars['String'];
   name: Scalars['String'];
 };
+
+export type UpdateCommunityInitiativeInput = {
+  id: Scalars['ID'];
+  title?: Maybe<Scalars['String']>;
+  description?: Maybe<Scalars['String']>;
+  status?: Maybe<Scalars['String']>;
+};
+
+export type UpdateCommunityInitiativeResult = CommunityInitiative | ValidationError | GenericError;
 
 export type UpdateCommunityLeadInput = {
   id: Scalars['ID'];

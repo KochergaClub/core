@@ -17,6 +17,10 @@ fragment EvenmanLead on CommunityLead {
     start
     published
   }
+  initiatives {
+    id
+    title
+  }
   ...Commentable
 }
 

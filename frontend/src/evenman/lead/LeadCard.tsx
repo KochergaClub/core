@@ -10,26 +10,50 @@ import { CommunityLeadStatus } from '~/apollo/types.generated';
 import { useUser } from '~/common/hooks';
 import { DropdownMenu, HumanizedDateTime, Markdown, MutationButton } from '~/components';
 import { CardSection } from '~/components/cards';
-import { ModalAction, MutationAction } from '~/components/DropdownMenu';
+import { ModalAction, MutationAction, SmartMutationAction } from '~/components/DropdownMenu';
 import { UserLink } from '~/components/UserLink';
 import { A, Badge, Column, Row } from '~/frontkit';
 
-import { evenmanEventRoute, leadDetailsRoute } from '../routes';
+import { RemoveLeadFromCommunityInitiativeDocument } from '../initiative/queries.generated';
+import { evenmanEventRoute, initiativeDetailsRoute, leadDetailsRoute } from '../routes';
 import { AddEventToLeadModal } from './AddEventToLeadModal';
 import { CommentsList } from './CommentsList';
 import { EditLeadModal } from './EditLeadModal';
 import {
     BecomeEvenmanLeadCuratorDocument, ClearEvenmanLeadCuratorDocument,
     CommentOnCommunityLeadDocument, DeleteEvenmanLeadDocument, EvenmanLeadFragment,
-    RemoveEventFromCommunityLeadDocument
+    RemoveEventFromCommunityLeadDocument, UpdateEvenmanLeadDocument
 } from './queries.generated';
 import { statusNames } from './utils';
 
-const Status: React.FC<{ status: CommunityLeadStatus }> = ({ status }) => {
-  return (
-    <Badge type={status === CommunityLeadStatus.Active ? 'good' : 'default'}>
-      {statusNames[status] || status}
+const LeadStatus: React.FC<{ lead: EvenmanLeadFragment }> = ({ lead }) => {
+  const render = () => (
+    <Badge
+      type={lead.status === CommunityLeadStatus.Active ? 'good' : 'default'}
+    >
+      {statusNames[lead.status] || status}
     </Badge>
+  );
+
+  return (
+    <DropdownMenu render={render}>
+      {(Object.keys(statusNames) as Array<keyof typeof statusNames>).map(
+        (status) => (
+          <SmartMutationAction
+            key={status}
+            title={statusNames[status]}
+            mutation={UpdateEvenmanLeadDocument}
+            expectedTypename="CommunityLead"
+            variables={{
+              input: {
+                id: lead.id,
+                status,
+              },
+            }}
+          />
+        )
+      )}
+    </DropdownMenu>
   );
 };
 
@@ -132,12 +156,10 @@ export const LeadCard: React.FC<Props> = ({ lead }) => {
             </Row>
           </small>
         ) : null}
-        <small>
-          <Row>
-            <div>Статус:</div>
-            <Status status={lead.status} />
-          </Row>
-        </small>
+        <div className="flex space-x-1 items-center">
+          <small>Статус:</small>
+          <LeadStatus lead={lead} />
+        </div>
       </Column>
       {lead.events.length ? (
         <CardSection title="События">
@@ -164,6 +186,30 @@ export const LeadCard: React.FC<Props> = ({ lead }) => {
       {lead.description ? (
         <CardSection title="Описание">
           <Markdown source={lead.description} />
+        </CardSection>
+      ) : null}
+      {lead.initiatives.length ? (
+        <CardSection title="Инициативы">
+          {lead.initiatives.map((initiative) => (
+            <div key={initiative.id} className="flex space-x-1 items-center">
+              <Link href={initiativeDetailsRoute(initiative.id)} passHref>
+                <A>{initiative.title}</A>
+              </Link>
+              <DropdownMenu>
+                <SmartMutationAction
+                  title="Отвязать"
+                  icon={FaTrash}
+                  mutation={RemoveLeadFromCommunityInitiativeDocument}
+                  // FIXME - should remove mutation be symmetrical? or return both objects?
+                  expectedTypename="CommunityInitiative"
+                  refetchQueries={['EvenmanLeads']}
+                  variables={{
+                    input: { initiative_id: initiative.id, lead_id: lead.id },
+                  }}
+                />
+              </DropdownMenu>
+            </div>
+          ))}
         </CardSection>
       ) : null}
       <CardSection title="Комментарии">

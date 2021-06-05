@@ -151,6 +151,11 @@
       "SlideFragmentsBlock_RichTextBlock",
       "SlideFragmentsBlock_RawHtmlBlock"
     ],
+    "UpdateCommunityInitiativeResult": [
+      "CommunityInitiative",
+      "ValidationError",
+      "GenericError"
+    ],
     "UpdateCommunityLeadResult": [
       "CommunityLead",
       "ValidationError",

@@ -1,4 +1,5 @@
 import { useRouter } from 'next/router';
+import React from 'react';
 
 import { NextApolloPage, withApollo } from '~/apollo';
 import { requireAuth } from '~/auth/utils';
@@ -7,6 +8,7 @@ import { WithNavSidebar } from '~/frontkit';
 
 import EventPrototypeScreen from './event-prototype/EventPrototypeScreen';
 import EventScreen from './event/EventScreen';
+import { InitiativeDetailsScreen } from './initiative/InitiativeDetailsScreen';
 import { InitiativeScreen } from './initiative/InitiativeScreen';
 import { LeadDetailsScreen } from './lead/LeadDetailsScreen';
 import { LeadScreen } from './lead/LeadScreen';
@@ -51,6 +53,8 @@ const EvenmanApp: NextApolloPage = () => {
         return <LeadDetailsScreen id={String(router.query.id)} />;
       case 'Initiative':
         return <InitiativeScreen />;
+      case 'InitiativeDetails':
+        return <InitiativeDetailsScreen id={String(router.query.id)} />;
       default:
         return <div>Unknown route {name}</div>;
     }
@@ -70,10 +74,12 @@ const EvenmanApp: NextApolloPage = () => {
       return 'EventPrototype';
     } else if (route === `${PREFIX}/leads`) {
       return 'Lead';
-    } else if (route === `${PREFIX}/initiatives`) {
-      return 'Initiative';
     } else if (route === `${PREFIX}/leads/[id]`) {
       return 'LeadDetails';
+    } else if (route === `${PREFIX}/initiatives`) {
+      return 'Initiative';
+    } else if (route === `${PREFIX}/initiatives/[id]`) {
+      return 'InitiativeDetails';
     } else {
       return '';
     }

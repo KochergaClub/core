@@ -2,6 +2,7 @@ fragment EvenmanInitiative on CommunityInitiative {
   id
   created
   updated
+  status
   title
   description
   leads {
@@ -54,8 +55,22 @@ query EvenmanInitiatives(
   }
 }
 
+query EvenmanInitiativeDetails($id: ID!) {
+  result: communityInitiative(input: { id: $id }) {
+    ...EvenmanInitiative
+  }
+}
+
 mutation CreateEvenmanInitiative($input: CreateCommunityInitiativeInput!) {
   result: createCommunityInitiative(input: $input) {
+    ...EvenmanInitiative
+    ...GenericError
+    ...ValidationError
+  }
+}
+
+mutation UpdateEvenmanInitiative($input: UpdateCommunityInitiativeInput!) {
+  result: updateCommunityInitiative(input: $input) {
     ...EvenmanInitiative
     ...GenericError
     ...ValidationError

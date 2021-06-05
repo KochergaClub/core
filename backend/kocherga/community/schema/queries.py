@@ -90,4 +90,16 @@ class communityInitiatives(helpers.BaseField):
     result = g.NN(types.CommunityInitiativeConnection)
 
 
+@c.class_field
+class communityInitiative(helpers.BaseFieldWithInput):
+    def resolve(self, _, info, input):
+        initiative = models.Initiative.objects.get(pk=input['id'])
+        return initiative
+
+    permissions = [permissions.manage_crm]
+
+    input = {'id': 'ID!'}
+    result = g.NN(types.CommunityInitiative)
+
+
 queries = c.as_dict()

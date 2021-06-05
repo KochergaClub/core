@@ -165,6 +165,14 @@ class createCommunityInitiative(django_utils.CreateMutation):
 
 
 @c.class_field
+class updateCommunityInitiative(django_utils.UpdateMutation):
+    permissions = [permissions.manage_crm]
+    model = models.Initiative
+    fields = ['title', 'description', 'status']
+    result_type = types.CommunityInitiative
+
+
+@c.class_field
 class deleteCommunityInitiative(django_utils.DeleteMutation):
     permissions = [permissions.manage_crm]
     model = models.Initiative

@@ -12,8 +12,9 @@ CommunityLead = django_utils.DjangoObjectType(
     'CommunityLead',
     model=models.Lead,
     db_fields=['id', 'name', 'description', 'created', 'updated'],
-    related_fields={
+    related_fields=lambda: {
         'events': event_types.Event,
+        'initiatives': CommunityInitiative,
     },
     extra_fields={
         'created_by': auth_types.AuthUser,
