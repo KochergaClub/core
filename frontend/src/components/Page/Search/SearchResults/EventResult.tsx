@@ -15,9 +15,7 @@ const EventResult: React.FC<{ item: EventSearchItemFragment }> = ({ item }) => {
     <ResultContainer url={publicEventRoute(item.event.id)}>
       <Label>Мероприятие</Label>
       <div>{item.event.title}</div>
-      <small className="block leading-none">
-        {formatDate(zonedStart, 'EEEE, d MMMM')}
-      </small>
+      <div className="text-xs">{formatDate(zonedStart, 'EEEE, d MMMM')}</div>
     </ResultContainer>
   );
 };

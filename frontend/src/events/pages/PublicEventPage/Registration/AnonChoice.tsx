@@ -56,14 +56,14 @@ const AnonChoice: React.FC<CommonProps> = (props) => {
           <Button
             kind="primary"
             onClick={() => setMode('sign-in')}
-            style={{ display: 'block', flex: 1 }}
+            className="block flex-1"
           >
             Войти
           </Button>
           <Button
             kind="danger"
             onClick={() => setMode('create-account')}
-            style={{ display: 'block', flex: 1 }}
+            className="block flex-1"
           >
             У меня ещё нет аккаунта
           </Button>

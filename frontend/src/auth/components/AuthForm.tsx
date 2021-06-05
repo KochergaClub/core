@@ -129,10 +129,10 @@ const AuthForm: React.FC<Props> = (props) => {
               onChange={(e) => setPassword(e.currentTarget.value)}
             />
           </FieldContainer>
-          <small className="text-xs mt-0.5">
+          <div className="text-xs mt-0.5">
             (если вы оставите это поле пустым, ссылка для логина придёт на
             почту)
-          </small>
+          </div>
         </div>
         <Button
           type="submit"

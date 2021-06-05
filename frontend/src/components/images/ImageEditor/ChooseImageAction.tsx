@@ -39,11 +39,11 @@ const ChooseImageModal: React.FC<ModalProps> = ({ close, save }) => {
       <Modal.Header close={close}>Выбор существующей картинки</Modal.Header>
       <Modal.Body {...hotkeys}>
         <Column stretch>
-          <small>
+          <div className="text-sm">
             Возможность искать картинки появится позже. Пока что можно пойти в{' '}
             <A href="/wagtail/images/">Wagtail</A> и найти ID картинки там
             (взять из URL-а).
-          </small>
+          </div>
           <Label>ID картинки в Wagtail:</Label>
           <Input
             type="number"

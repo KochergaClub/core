@@ -8,11 +8,9 @@ import { HR } from './HR';
 const Small: React.FC = ({ children }) => {
   const theme = useContext(NowThemeContext);
   return (
-    <small
-      className={clsx('text-gray-500', theme.tv ? 'text-base' : 'text-xs')}
-    >
+    <div className={clsx('text-gray-500', theme.tv ? 'text-base' : 'text-xs')}>
       {children}
-    </small>
+    </div>
   );
 };
 

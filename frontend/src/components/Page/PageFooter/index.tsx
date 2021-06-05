@@ -20,9 +20,9 @@ export const PageFooter: React.FC = () => {
           </div>
         </FooterGroup>
       </div>
-      <small className="text-xs leading-tight text-gray-500">
+      <div className="text-xs leading-tight text-gray-500">
         © 2015–2021 Центр рациональности Кочерга
-      </small>
+      </div>
     </footer>
   );
 };

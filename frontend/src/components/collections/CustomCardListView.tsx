@@ -24,7 +24,9 @@ function CardListView<I>(props: Props<I>) {
               key={props.item2key ? props.item2key(item) : i}
             >
               <Card muted={props.isMuted?.(item)}>
-                {props.renderItem(item)}
+                <motion.div layout="position">
+                  {props.renderItem(item)}
+                </motion.div>
               </Card>
             </motion.div>
           );

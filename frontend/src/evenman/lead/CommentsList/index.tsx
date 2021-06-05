@@ -5,10 +5,10 @@ import { FaEdit, FaRegComment, FaTrash } from 'react-icons/fa';
 import { TypedDocumentNode } from '@apollo/client';
 
 import { SmartMutationResult } from '~/common/hooks';
+import { userName } from '~/common/utils';
 import { ButtonWithModal, DropdownMenu, HumanizedDateTime, Markdown } from '~/components';
 import { ModalAction, SmartMutationAction } from '~/components/DropdownMenu';
 import { SmartMutationModal } from '~/components/forms/SmartMutationModal';
-import { UserLink } from '~/components/UserLink';
 import { Column, Row } from '~/frontkit';
 
 import {
@@ -24,18 +24,19 @@ const Comment: React.FC<CommentProps> = ({ comment, commentable }) => {
   return (
     <div>
       <Row gutter={8}>
-        <FaRegComment className="mt-1 flex-shrink-0 text-gray-400" />
+        <FaRegComment
+          className="mt-1.5 flex-shrink-0 text-gray-400"
+          size={14}
+        />
         <div>
-          <Row vCentered gutter={8}>
-            <strong>
-              <UserLink user={comment.author} />
-            </strong>
+          <Row vCentered gutter={4}>
+            <div className="text-xs font-bold">{userName(comment.author)}</div>
             <span>·</span>
-            <small>
+            <div className="text-xs">
               <em>
                 <HumanizedDateTime date={parseISO(comment.created)} />
               </em>
-            </small>
+            </div>
             <DropdownMenu>
               <ModalAction title="Редактировать" icon={FaEdit}>
                 {({ close }) => (
@@ -89,7 +90,7 @@ const Comment: React.FC<CommentProps> = ({ comment, commentable }) => {
           </div>
         </div>
       </Row>
-      <hr className="border-t border-gray-200 my-5" />
+      <hr className="border-t border-gray-200 my-2" />
     </div>
   );
 };

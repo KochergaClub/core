@@ -3,6 +3,8 @@ import { ru } from 'date-fns/locale';
 
 import { TypedDocumentNode as DocumentNode } from '@graphql-typed-document-node/core';
 
+import { UserFragment } from './fragments.generated';
+
 export const IS_SERVER = typeof window === 'undefined';
 
 // Note that if we get locations in multiple timezones we could load the location timezone from the server.
@@ -79,3 +81,6 @@ export const withFragments = <Operation, Variables>(
 };
 
 export const range = (n: number) => Array.from(Array(n).keys());
+
+export const userName = (user: UserFragment): string =>
+  user.first_name ? `${user.first_name} ${user.last_name}` : `Анон#${user.id}`;

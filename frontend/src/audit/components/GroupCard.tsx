@@ -7,7 +7,7 @@ import { MutationButton } from '~/components';
 import { Card } from '~/components/cards';
 import DropdownMenu, { LinkAction, ModalAction } from '~/components/DropdownMenu';
 import WagtailIcon from '~/components/icons/WagtailIcon';
-import { AsyncButton, Badge, Column, Row } from '~/frontkit';
+import { AsyncButton, Badge, Row } from '~/frontkit';
 
 import {
     AuthGroup_ForCardFragment, AuthGroupsDocument, AuthRemoveUserFromGroupDocument,
@@ -40,6 +40,13 @@ const PagePermissionBadge: React.FC<PagePermissionBadgeProps> = ({
   }
 };
 
+const Section: React.FC<{ title: string }> = ({ title, children }) => (
+  <div>
+    <div className="text-xs mb-1">{title}</div>
+    <div>{children}</div>
+  </div>
+);
+
 interface Props {
   group: AuthGroup_ForCardFragment;
 }
@@ -67,7 +74,7 @@ const GroupCard: React.FC<Props> = ({ group }) => {
 
   return (
     <Card>
-      <Column>
+      <div className="space-y-2">
         <Row stretch>
           <strong>{group.name}</strong>
           <DropdownMenu placement="bottom-start">
@@ -108,27 +115,26 @@ const GroupCard: React.FC<Props> = ({ group }) => {
             Удалить
           </MutationButton>
         </Row>
-        <small>Общие разрешения:</small>
-        <Row wrap>
-          {group.permissions.map((permission) => (
-            <Badge key={permission.id} hint={permission.perm}>
-              {permission.name}
-            </Badge>
-          ))}
-        </Row>
+        <Section title="Общие разрешения:">
+          <Row wrap>
+            {group.permissions.map((permission) => (
+              <Badge key={permission.id} hint={permission.perm}>
+                {permission.name}
+              </Badge>
+            ))}
+          </Row>
+        </Section>
         {group.wagtailPagePermissions.length ? (
-          <>
-            <small>Разрешения для страниц:</small>
+          <Section title="Разрешения для страниц:">
             <Row wrap>
               {group.wagtailPagePermissions.map((permission, i) => (
                 <PagePermissionBadge key={i} permission={permission} />
               ))}
             </Row>
-          </>
+          </Section>
         ) : null}
         {group.wagtailPagePermissions.length ? (
-          <>
-            <small>Разрешения для коллекций:</small>
+          <Section title="Разрешения для коллекций:">
             <Row wrap>
               {group.wagtailCollectionPermissions.map((permission, i) => (
                 <Badge key={permission.id} hint={permission.permission.perm}>
@@ -136,11 +142,10 @@ const GroupCard: React.FC<Props> = ({ group }) => {
                 </Badge>
               ))}
             </Row>
-          </>
+          </Section>
         ) : null}
         {group.users.length ? (
-          <>
-            <small>Пользователи:</small>
+          <Section title="Пользователи:">
             {group.users.map((user) => (
               <Row key={user.id}>
                 <UserInfo user={user} />
@@ -149,9 +154,9 @@ const GroupCard: React.FC<Props> = ({ group }) => {
                 </AsyncButton>
               </Row>
             ))}
-          </>
+          </Section>
         ) : null}
-      </Column>
+      </div>
     </Card>
   );
 };

@@ -8,10 +8,10 @@ import Tippy from '@tippyjs/react';
 
 import { CommunityLeadStatus } from '~/apollo/types.generated';
 import { useUser } from '~/common/hooks';
+import { userName } from '~/common/utils';
 import { DropdownMenu, HumanizedDateTime, Markdown, MutationButton } from '~/components';
 import { CardSection } from '~/components/cards';
 import { ModalAction, MutationAction, SmartMutationAction } from '~/components/DropdownMenu';
-import { UserLink } from '~/components/UserLink';
 import { A, Badge, Column, Row } from '~/frontkit';
 
 import { RemoveLeadFromCommunityInitiativeDocument } from '../initiative/queries.generated';
@@ -82,7 +82,7 @@ const LeadMoreInfo: React.FC<Props> = ({ lead }) => {
             <small>
               <Row>
                 <div>Кем создан:</div>
-                <UserLink user={lead.created_by} />
+                <div>{userName(lead.created_by)}</div>
               </Row>
             </small>
           )}
@@ -149,7 +149,7 @@ export const LeadCard: React.FC<Props> = ({ lead }) => {
             <Row>
               <div>Куратор:</div>
               {lead.curated_by ? (
-                <UserLink user={lead.curated_by} />
+                <div>{userName(lead.curated_by)}</div>
               ) : (
                 <Badge type="accent">отсутствует</Badge>
               )}

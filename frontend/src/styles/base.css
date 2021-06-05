@@ -36,7 +36,7 @@ samp {
   font-size: 1em;
 }
 small {
-  font-size: 80%;
+  @apply text-xs;
 }
 sub,
 sup {
