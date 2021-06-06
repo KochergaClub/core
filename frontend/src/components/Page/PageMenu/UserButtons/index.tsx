@@ -7,10 +7,12 @@ import { useLazyQuery, useMutation } from '@apollo/client';
 
 import { CurrentUserDocument } from '~/auth/queries.generated';
 import { WagtailPageContext } from '~/cms/contexts';
+import { getEditingModeByTypename } from '~/cms/wagtail-utils';
 import { ApolloQueryResults, DropdownMenu } from '~/components';
 import { Action, NextLinkAction } from '~/components/DropdownMenu';
 import { useNotification } from '~/frontkit';
 import { LogoutDocument } from '~/my/queries.generated';
+import { wagtailAdminPageEditLink } from '~/wagtail/routes';
 
 import { MenuKind } from '../../types';
 import LoginButton from './LoginButton';
@@ -33,10 +35,7 @@ const LogoutAction: React.FC = () => {
 };
 
 const EditWagtailPageAction: React.FC = () => {
-  const {
-    state: { editing },
-    dispatch,
-  } = useContext(WagtailPageContext);
+  const { state, dispatch } = useContext(WagtailPageContext);
 
   const [query, queryResults] = useLazyQuery(WagtailEditablePageDocument, {
     variables: { path: window.location.pathname },
@@ -50,13 +49,20 @@ const EditWagtailPageAction: React.FC = () => {
   }, [dispatch, query]);
 
   const act = useCallback(async () => {
-    if (!dispatch) {
+    if (!dispatch || !state.page) {
       return; // shouldn't happen
     }
-    dispatch({ type: 'EDIT' });
-  }, [dispatch]);
+    const editingMode = getEditingModeByTypename(state.page.__typename);
+    if (editingMode === 'wagtail') {
+      window.open(wagtailAdminPageEditLink(state.page.id), '_blank');
+    } else if (editingMode === 'wysiwyg') {
+      dispatch({ type: 'EDIT' });
+    } else {
+      // shouldn't happen
+    }
+  }, [dispatch, state.page]);
 
-  if (editing) {
+  if (state.editing) {
     return null; // already editing
   }
 
@@ -77,7 +83,7 @@ interface Props {
 
 const UserButtons: React.FC<Props> = (
   {
-    /* kind */
+    /* kind - unused for now */
   }
 ) => {
   const [getUser, queryResults] = useLazyQuery(CurrentUserDocument, {

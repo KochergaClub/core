@@ -16,6 +16,7 @@ import {
     PresentationIndexPage as RatioPresentationIndexPage, SectionIndexPage as RatioSectionIndexPage,
     SectionPage as RatioSectionPage
 } from '~/ratio/wagtail';
+import { WagtailEditingMode } from '~/wagtail/types';
 import FreeFormPage from '~/wagtail/wagtail/FreeFormPage';
 
 import { WagtailPagesDocument, WagtailPageTypeDocument } from '../queries.generated';
@@ -49,6 +50,12 @@ export const isKnownTypename = (
   typename: string
 ): typename is KnownWagtailPageTypename => {
   return allPageComponents.hasOwnProperty(typename);
+};
+
+export const getEditingModeByTypename = <T extends KnownWagtailPageTypename>(
+  typename: T
+): WagtailEditingMode => {
+  return allPageComponents[typename].editingMode || 'wagtail';
 };
 
 export const getFragmentByTypename = <T extends KnownWagtailPageTypename>(

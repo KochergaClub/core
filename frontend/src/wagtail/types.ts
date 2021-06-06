@@ -5,9 +5,12 @@ import { CommonWagtailPageFragment } from '~/cms/queries.generated';
 import { WagtailBlockStructureQuery } from './components/queries.generated';
 import { FreeFormPageFragment } from './wagtail/FreeFormPage/index.generated';
 
+export type WagtailEditingMode = 'wysiwyg' | 'wagtail';
+
 export interface NextWagtailPage<P extends CommonWagtailPageFragment> {
   (props: { page: P }): JSX.Element | null;
   fragment: TypedDocumentNode<P, unknown>;
+  editingMode?: WagtailEditingMode;
 }
 
 export type AnyBlockFragment = FreeFormPageFragment['body'][0];
