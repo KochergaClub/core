@@ -13,7 +13,7 @@ const ErrorPage: React.FC<Props> = ({ code }) => (
     <Head>
       <meta name="robots" content="noindex" />
     </Head>
-    <Page title={code2title[code]} chrome="none">
+    <Page title={code2title[code]} chrome="none" noWhitespace>
       <Page.Main>
         <ErrorBlock code={code} />
       </Page.Main>

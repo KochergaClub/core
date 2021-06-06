@@ -1,5 +1,4 @@
 import { staticUrl } from '~/common/utils';
-import { Column } from '~/frontkit';
 
 import { Code, code2title } from './codes';
 
@@ -10,17 +9,19 @@ interface Props {
 
 const ErrorBlock: React.FC<Props> = ({ code, title }) => {
   return (
-    <div className="mt-5 mb-12">
-      <Column centered gutter={40}>
-        <h1 style={{ fontSize: 40 }}>{code}</h1>
+    <div className="mt-16 mb-12">
+      <div className="flex flex-col items-center">
+        <div className="text-gray-600 text-8xl mb-4">{code}</div>
+        <div className="text-gray-700 text-xl sm:text-3xl mb-12">
+          {title || code2title[code]}
+        </div>
         <a href="/">
           <img
             src={staticUrl(`error-pages/${code}.jpg`)}
-            style={{ width: 'auto', height: 300 }}
+            className="max-w-xs sm:max-w-md"
           />
         </a>
-        <h1>{title || code2title[code]}</h1>
-      </Column>
+      </div>
     </div>
   );
 };
