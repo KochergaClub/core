@@ -1,4 +1,5 @@
 import { isAfter } from 'date-fns';
+import React, { useMemo } from 'react';
 
 import { Column } from '~/frontkit';
 
@@ -12,6 +13,7 @@ import { EventHeader } from '../EventHeader';
 import EventImages from '../EventImages';
 import EventPricingType from '../EventPricingType';
 import { EventRealm } from '../EventRealm';
+import { EventVideos } from '../EventVideos';
 import EventVisitors from '../EventVisitors';
 import { useUpdateMutation } from '../hooks';
 import { EvenmanEvent_DetailsFragment } from '../queries.generated';
@@ -27,12 +29,16 @@ const LoadedEventCard: React.FC<Props> = ({ event }) => {
 
   const isPublic = event.event_type === 'public';
 
+  const isPast = useMemo(() => isAfter(new Date(), new Date(event.start)), [
+    event.start,
+  ]);
+
   const renderVisitors = () => {
     if (event.realm === 'online') {
       return null; // we get statistics from zoom so we don't need to enter visitors manually
     }
 
-    if (isAfter(new Date(event.start), new Date())) {
+    if (!isPast) {
       return;
     }
     return <EventVisitors event={event} />;
@@ -114,15 +120,21 @@ const LoadedEventCard: React.FC<Props> = ({ event }) => {
                         Включите опцию выше, чтобы опубликовать событие на
                         сайте.
                       </MutedSpan>
-                      <div style={{ height: 40 }} />
                     </>
                   )}
                 </Column>
               </section>
               {event.published ? <EventAnnounce event={event} /> : null}
+              {isPast ? (
+                <section>
+                  <Header>Видеозаписи</Header>
+                  <EventVideos event={event} />
+                </section>
+              ) : null}
             </>
           )}
         </Column>
+        <div className="h-20" />
       </CardBody>
     </Card>
   );

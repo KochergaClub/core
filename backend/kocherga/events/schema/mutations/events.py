@@ -1,9 +1,11 @@
 from typing import Optional
 
 import dateutil.parser
+import django.db.utils
 import graphql
 import kocherga.projects.models
 import kocherga.wagtail.models
+from kocherga.error import PublicError
 from kocherga.graphql import django_utils, g, helpers
 from kocherga.graphql.basic_types import BasicResult
 from kocherga.graphql.permissions import authenticated
@@ -279,6 +281,36 @@ class eventGenerateOpenViduToken(helpers.BaseFieldWithInput):
     permissions = [authenticated]
     input = {'event_id': 'ID!'}
     result = {'token': str}
+
+
+@c.class_field
+class addYoutubeVideo(django_utils.SmartMutationMixin, helpers.BaseFieldWithInput):
+    def smart_resolve(self, _, info, input):
+        event = models.Event.objects.get(uuid=input['event_id'])
+
+        # TODO - check that video exists
+
+        try:
+            event.youtube_videos.create(
+                embed_id=input['embed_id']
+            )
+        except django.db.utils.IntegrityError:
+            raise PublicError("Видео уже существует.")
+
+        return event
+
+    permissions = [permissions.manage_events]
+    input = {
+        'event_id': 'ID!',
+        'embed_id': str,
+    }
+    ok_result = Event
+
+
+@c.class_field
+class deleteYoutubeVideo(django_utils.DeleteMutation):
+    model = models.YoutubeVideo
+    permissions = [permissions.manage_events]
 
 
 mutations = c.as_dict()

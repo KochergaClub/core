@@ -126,6 +126,14 @@
       "GenericError",
       "ValidationError"
     ],
+    "AddYoutubeVideoResult": [
+      "Event",
+      "GenericError",
+      "ValidationError"
+    ],
+    "DeleteYoutubeVideoResult": [
+      "BasicResult"
+    ],
     "CancelWeeklyDigestMailchimpResult": [
       "GenericError",
       "EventsWeeklyDigest"

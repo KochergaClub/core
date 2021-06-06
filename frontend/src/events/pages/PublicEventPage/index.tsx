@@ -7,7 +7,7 @@ import { useQuery } from '@apollo/client';
 import { NextApolloPage, withApollo } from '~/apollo';
 import { TL03 } from '~/blocks/TL03';
 import { formatDate, timezone } from '~/common/utils';
-import { ApolloQueryResults, Markdown, PaddedBlock, Page } from '~/components';
+import { ApolloQueryResults, Markdown, PaddedBlock, Page, YoutubeEmbed } from '~/components';
 import ErrorBlock from '~/error-pages/ErrorBlock';
 
 import AnyRegistration from './AnyRegistration';
@@ -69,9 +69,9 @@ export const PublicEventPage: NextApolloPage<Props> = ({ event_id }) => {
               <PaddedBlock>
                 <Markdown source={event.description} />
               </PaddedBlock>
-              <EventToCalendar event={event} />
               {inFuture ? (
                 <div>
+                  <EventToCalendar event={event} />
                   <a id="register" />
                   <section className="mb-32" ref={registrationRef}>
                     <TL03 title="Регистрация" grey />
@@ -85,6 +85,21 @@ export const PublicEventPage: NextApolloPage<Props> = ({ event_id }) => {
                       <Map />
                     </section>
                   ) : null}
+                </div>
+              ) : null}
+
+              {event.youtube_videos.length ? (
+                <div>
+                  <TL03 title="Видеозаписи" grey />
+                  <PaddedBlock>
+                    <div className="space-y-4 max-w-xl mx-auto">
+                      {event.youtube_videos.map((video) => (
+                        <div key={video.id}>
+                          <YoutubeEmbed embedId={video.embed_id} />
+                        </div>
+                      ))}
+                    </div>
+                  </PaddedBlock>
                 </div>
               ) : null}
             </div>

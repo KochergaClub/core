@@ -42,6 +42,10 @@ fragment Event_Details on Event {
       link
     }
   }
+  youtube_videos {
+    id
+    embed_id
+  }
 }
 
 query GetPublicEvent($event_id: ID!) {

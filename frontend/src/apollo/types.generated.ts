@@ -324,6 +324,7 @@ export type Event = {
   timing_description_override: Scalars['String'];
   tickets: Array<EventsTicket>;
   feedbacks: Array<EventsFeedback>;
+  youtube_videos: Array<EventsYoutubeVideo>;
 };
 
 
@@ -527,6 +528,12 @@ export type EventsFeedback = {
   source_website: Scalars['Boolean'];
   custom_source?: Maybe<Scalars['String']>;
   comment?: Maybe<Scalars['String']>;
+};
+
+export type EventsYoutubeVideo = {
+  __typename?: 'EventsYoutubeVideo';
+  id: Scalars['ID'];
+  embed_id: Scalars['String'];
 };
 
 export type TelegramChat = {
@@ -2331,6 +2338,8 @@ export type Mutation = {
   eventDeleteTag: EventUpdateResult;
   eventMove: EventUpdateResult;
   eventGenerateOpenViduToken: EventGenerateOpenViduTokenResult;
+  addYoutubeVideo: AddYoutubeVideoResult;
+  deleteYoutubeVideo: DeleteYoutubeVideoResult;
   eventPrototypeCreate: EventPrototypeUpdateResult;
   eventPrototypeUpdate: EventPrototypeUpdateResult;
   eventPrototypeCancelDate: BasicResult;
@@ -2620,6 +2629,16 @@ export type MutationEventMoveArgs = {
 
 export type MutationEventGenerateOpenViduTokenArgs = {
   input: EventGenerateOpenViduTokenInput;
+};
+
+
+export type MutationAddYoutubeVideoArgs = {
+  input: AddYoutubeVideoInput;
+};
+
+
+export type MutationDeleteYoutubeVideoArgs = {
+  id: Scalars['ID'];
 };
 
 
@@ -3314,6 +3333,15 @@ export type EventGenerateOpenViduTokenResult = {
 export type EventGenerateOpenViduTokenInput = {
   event_id: Scalars['ID'];
 };
+
+export type AddYoutubeVideoResult = Event | GenericError | ValidationError;
+
+export type AddYoutubeVideoInput = {
+  event_id: Scalars['ID'];
+  embed_id: Scalars['String'];
+};
+
+export type DeleteYoutubeVideoResult = BasicResult;
 
 export type EventPrototypeUpdateResult = {
   __typename?: 'EventPrototypeUpdateResult';

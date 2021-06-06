@@ -127,6 +127,11 @@ fragment EvenmanEvent_Details on Event {
   tickets {
     id
   }
+
+  youtube_videos {
+    id
+    embed_id
+  }
 }
 
 query EvenmanEvent($id: ID!) {
@@ -237,6 +242,21 @@ mutation EvenmanEventCreate($title: String!, $start: String!, $end: String!) {
     ok
     event {
       ...EvenmanEvent_Details
+    }
+  }
+}
+
+mutation EvenmanAddYoutubeVideo($input: AddYoutubeVideoInput!) {
+  result: addYoutubeVideo(input: $input) {
+    ...EvenmanEvent_Details
+    ...GenericError
+  }
+}
+
+mutation EvenmanDeleteYoutubeVideo($id: ID!) {
+  result: deleteYoutubeVideo(id: $id) {
+    ... on BasicResult {
+      ok
     }
   }
 }

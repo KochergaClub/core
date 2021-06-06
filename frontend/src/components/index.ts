@@ -17,3 +17,4 @@ export { default as Page } from './Page';
 export { ParentLinkInHeader } from './ParentLinkInHeader';
 export { RowWithIcon } from './RowWithIcon';
 export { Spinner } from './Spinner';
+export { YoutubeEmbed } from './YoutubeEmbed';

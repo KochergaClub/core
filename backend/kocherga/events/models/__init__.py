@@ -7,6 +7,7 @@ from .permissions import Permissions
 from .prototype import EventPrototype, EventPrototypeTag
 from .ticket import Ticket
 from .weekly_digest import WeeklyDigest
+from .youtube_video import YoutubeVideo
 
 __all__ = [
     'Event',
@@ -22,4 +23,5 @@ __all__ = [
     'GoogleEvent',
     'Feedback',
     'Permissions',
+    'YoutubeVideo',
 ]

@@ -80,6 +80,7 @@ def build_event_fields():
     from .feedback import EventsFeedback
     from .prototype import EventsPrototype
     from .ticket import EventsTicket
+    from .youtube_video import EventsYoutubeVideo
 
     return g.fields(
         {
@@ -150,6 +151,11 @@ def build_event_fields():
                 'feedbacks',
                 item_type=EventsFeedback,
                 permissions=[permissions.manage_events],
+            ),
+            'youtube_videos': django_utils.related_field(
+                models.Event,
+                'youtube_videos',
+                item_type=EventsYoutubeVideo,
             ),
         }
     )
