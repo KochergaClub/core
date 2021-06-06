@@ -97,16 +97,21 @@ class EventPrototype(models.Model):
         d += timedelta(days=self.weekday)
 
         if d < today:
-            d += timedelta(weeks=1)
+            days_ago = (today - d).days
+            weeks_ago = int(days_ago / 7)
+            if days_ago % 7 != 0:
+                weeks_ago += 1
+            d += timedelta(weeks=weeks_ago)
 
         existing_dates = set(e.start.date() for e in self.instances())
+        canceled_dates = set(self.canceled_dates_list)
 
         result: List[datetime] = []
         while len(result) < limit:
             if to_date and d > to_date:
                 break
 
-            if d not in existing_dates and d not in self.canceled_dates_list:
+            if d not in existing_dates and d not in canceled_dates:
                 result.append(
                     datetime.combine(
                         d, time(hour=self.hour, minute=self.minute), tzinfo=TZ
