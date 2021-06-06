@@ -38,7 +38,7 @@ class EventPrototype(models.Model):
     timing_description_override = models.CharField(max_length=255, blank=True)
 
     # These properties are located in event.TYPE_announcement.PROP on the event's instance,
-    # but we store them directly in prototype model for the sake of simplicity and for legacy reasons.
+    # but we store them directly in prototype model for the sake of simplicity.
     vk_group = models.CharField(max_length=40, blank=True)
     fb_group = models.CharField(max_length=40, blank=True)
     timepad_category_code = models.CharField(max_length=40, blank=True)
