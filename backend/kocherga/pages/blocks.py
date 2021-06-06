@@ -139,7 +139,7 @@ registry.register_list(
 )
 
 registry.register_list(
-    tag='front',
+    tag='landing',
     blocks=[
         (
             'hero_front',
@@ -174,6 +174,16 @@ registry.register_list(
                 ],
                 icon='home',
                 group='various',
+            ),
+        ),
+        (
+            'landing_hero',
+            blocks.StructBlock(
+                [
+                    ('image', ImageChooserBlock()),
+                    ('title', blocks.CharBlock(label='Заголовок')),
+                    ('text', blocks.CharBlock(label='Текст')),
+                ]
             ),
         ),
         (

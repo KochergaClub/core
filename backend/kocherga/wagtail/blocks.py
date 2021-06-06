@@ -1,7 +1,8 @@
-from typing import List, Any, Tuple, Dict
 from dataclasses import dataclass
+from typing import Any, Dict, List, Tuple
 
 import bleach
+
 import wagtail.core.blocks
 import wagtail.core.rich_text
 
@@ -94,6 +95,12 @@ class BlocksRegistry:
             if name in self.entries:
                 raise Exception("Duplicate name {name}, already registered")
             self.entries[name] = BlockRegistryEntry(block=block, tags=[tag])
+
+    def all(self):
+        return [
+            (name, entry.block)
+            for name, entry in self.entries.items()
+        ]
 
     def by_tag(self, tag: str):
         return [

@@ -29,44 +29,44 @@ export type AuthGroup_ForCardFragment = (
     { __typename: 'WagtailSpecificPagePermission' }
     & Pick<Types.WagtailSpecificPagePermission, 'permission_type'>
     & { page: (
-      { __typename: 'BlogIndexPage' }
-      & Pick<Types.BlogIndexPage, 'id'>
-    ) | (
-      { __typename: 'BlogPostPage' }
-      & Pick<Types.BlogPostPage, 'id'>
-    ) | (
-      { __typename: 'FaqPage' }
-      & Pick<Types.FaqPage, 'id'>
-    ) | (
-      { __typename: 'FolderPage' }
-      & Pick<Types.FolderPage, 'id'>
-    ) | (
-      { __typename: 'FreeFormPage' }
-      & Pick<Types.FreeFormPage, 'id'>
-    ) | (
-      { __typename: 'PresentationPage' }
-      & Pick<Types.PresentationPage, 'id'>
-    ) | (
-      { __typename: 'ProjectIndexPage' }
-      & Pick<Types.ProjectIndexPage, 'id'>
-    ) | (
-      { __typename: 'ProjectPage' }
-      & Pick<Types.ProjectPage, 'id'>
-    ) | (
-      { __typename: 'RatioNotebookIndexPage' }
-      & Pick<Types.RatioNotebookIndexPage, 'id'>
-    ) | (
-      { __typename: 'RatioNotebookPage' }
-      & Pick<Types.RatioNotebookPage, 'id'>
-    ) | (
       { __typename: 'RatioPresentationIndexPage' }
       & Pick<Types.RatioPresentationIndexPage, 'id'>
+    ) | (
+      { __typename: 'RatioSectionPage' }
+      & Pick<Types.RatioSectionPage, 'id'>
     ) | (
       { __typename: 'RatioSectionIndexPage' }
       & Pick<Types.RatioSectionIndexPage, 'id'>
     ) | (
-      { __typename: 'RatioSectionPage' }
-      & Pick<Types.RatioSectionPage, 'id'>
+      { __typename: 'RatioNotebookPage' }
+      & Pick<Types.RatioNotebookPage, 'id'>
+    ) | (
+      { __typename: 'RatioNotebookIndexPage' }
+      & Pick<Types.RatioNotebookIndexPage, 'id'>
+    ) | (
+      { __typename: 'ProjectPage' }
+      & Pick<Types.ProjectPage, 'id'>
+    ) | (
+      { __typename: 'ProjectIndexPage' }
+      & Pick<Types.ProjectIndexPage, 'id'>
+    ) | (
+      { __typename: 'FreeFormPage' }
+      & Pick<Types.FreeFormPage, 'id'>
+    ) | (
+      { __typename: 'FolderPage' }
+      & Pick<Types.FolderPage, 'id'>
+    ) | (
+      { __typename: 'BlogPostPage' }
+      & Pick<Types.BlogPostPage, 'id'>
+    ) | (
+      { __typename: 'BlogIndexPage' }
+      & Pick<Types.BlogIndexPage, 'id'>
+    ) | (
+      { __typename: 'FaqPage' }
+      & Pick<Types.FaqPage, 'id'>
+    ) | (
+      { __typename: 'PresentationPage' }
+      & Pick<Types.PresentationPage, 'id'>
     ) }
   )>, wagtailCollectionPermissions: Array<(
     { __typename: 'WagtailCollectionPermission' }

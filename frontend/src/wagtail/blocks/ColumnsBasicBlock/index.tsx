@@ -6,7 +6,7 @@ import { BlockComponent } from '../../types';
 import { ColumnsBasicBlockFragment as Props } from './index.generated';
 
 const OneColumn = (column: Props['basic_columns'][0]) => (
-  <div>
+  <div className="max-w-xl">
     <header className="text-2xl font-bold text-center">{column.header}</header>
     {column.text && (
       <RichText dangerouslySetInnerHTML={{ __html: column.text }} />

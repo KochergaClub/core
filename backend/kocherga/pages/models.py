@@ -1,13 +1,11 @@
 from datetime import timedelta
 
 from django.db import models
-from wagtail.core.fields import StreamField
-from wagtail.admin.edit_handlers import StreamFieldPanel
-
 from kocherga.django.models import SingletonModel
-from kocherga.wagtail.models import KochergaPage
-
 from kocherga.wagtail.blocks import registry as blocks_registry
+from kocherga.wagtail.models import KochergaPage
+from wagtail.admin.edit_handlers import StreamFieldPanel
+from wagtail.core.fields import StreamField
 
 # for side-effects - register in blocks registry
 from . import blocks  # noqa: F401
@@ -16,7 +14,7 @@ from . import blocks  # noqa: F401
 class FreeFormPage(KochergaPage):
     body = StreamField(
         sum(
-            [blocks_registry.by_tag(tag) for tag in ('basic', 'columns', 'various')],
+            [blocks_registry.by_tag(tag) for tag in ('basic', 'columns', 'various', 'landing')],
             start=[],
         )
     )
@@ -33,7 +31,7 @@ class FrontPage(KochergaPage):
         sum(
             [
                 blocks_registry.by_tag(tag)
-                for tag in ('basic', 'columns', 'various', 'front')
+                for tag in ('basic', 'columns', 'various', 'landing')
             ],
             start=[],
         )

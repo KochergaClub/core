@@ -5,78 +5,15 @@ import { TypedDocumentNode as DocumentNode } from '@graphql-typed-document-node/
 export type PageSearchItemFragment = (
   { __typename: 'PageSearchItem' }
   & { page: (
-    { __typename: 'BlogIndexPage' }
-    & Pick<Types.BlogIndexPage, 'id' | 'title'>
-    & { meta: (
-      { __typename: 'WagtailPageMeta' }
-      & Pick<Types.WagtailPageMeta, 'url'>
-    ) }
-  ) | (
-    { __typename: 'BlogPostPage' }
-    & Pick<Types.BlogPostPage, 'id' | 'title'>
-    & { meta: (
-      { __typename: 'WagtailPageMeta' }
-      & Pick<Types.WagtailPageMeta, 'url'>
-    ) }
-  ) | (
-    { __typename: 'FaqPage' }
-    & Pick<Types.FaqPage, 'id' | 'title'>
-    & { meta: (
-      { __typename: 'WagtailPageMeta' }
-      & Pick<Types.WagtailPageMeta, 'url'>
-    ) }
-  ) | (
-    { __typename: 'FolderPage' }
-    & Pick<Types.FolderPage, 'id' | 'title'>
-    & { meta: (
-      { __typename: 'WagtailPageMeta' }
-      & Pick<Types.WagtailPageMeta, 'url'>
-    ) }
-  ) | (
-    { __typename: 'FreeFormPage' }
-    & Pick<Types.FreeFormPage, 'id' | 'title'>
-    & { meta: (
-      { __typename: 'WagtailPageMeta' }
-      & Pick<Types.WagtailPageMeta, 'url'>
-    ) }
-  ) | (
-    { __typename: 'PresentationPage' }
-    & Pick<Types.PresentationPage, 'id' | 'title'>
-    & { meta: (
-      { __typename: 'WagtailPageMeta' }
-      & Pick<Types.WagtailPageMeta, 'url'>
-    ) }
-  ) | (
-    { __typename: 'ProjectIndexPage' }
-    & Pick<Types.ProjectIndexPage, 'id' | 'title'>
-    & { meta: (
-      { __typename: 'WagtailPageMeta' }
-      & Pick<Types.WagtailPageMeta, 'url'>
-    ) }
-  ) | (
-    { __typename: 'ProjectPage' }
-    & Pick<Types.ProjectPage, 'id' | 'title'>
-    & { meta: (
-      { __typename: 'WagtailPageMeta' }
-      & Pick<Types.WagtailPageMeta, 'url'>
-    ) }
-  ) | (
-    { __typename: 'RatioNotebookIndexPage' }
-    & Pick<Types.RatioNotebookIndexPage, 'id' | 'title'>
-    & { meta: (
-      { __typename: 'WagtailPageMeta' }
-      & Pick<Types.WagtailPageMeta, 'url'>
-    ) }
-  ) | (
-    { __typename: 'RatioNotebookPage' }
-    & Pick<Types.RatioNotebookPage, 'id' | 'title'>
-    & { meta: (
-      { __typename: 'WagtailPageMeta' }
-      & Pick<Types.WagtailPageMeta, 'url'>
-    ) }
-  ) | (
     { __typename: 'RatioPresentationIndexPage' }
     & Pick<Types.RatioPresentationIndexPage, 'id' | 'title'>
+    & { meta: (
+      { __typename: 'WagtailPageMeta' }
+      & Pick<Types.WagtailPageMeta, 'url'>
+    ) }
+  ) | (
+    { __typename: 'RatioSectionPage' }
+    & Pick<Types.RatioSectionPage, 'id' | 'title'>
     & { meta: (
       { __typename: 'WagtailPageMeta' }
       & Pick<Types.WagtailPageMeta, 'url'>
@@ -89,8 +26,71 @@ export type PageSearchItemFragment = (
       & Pick<Types.WagtailPageMeta, 'url'>
     ) }
   ) | (
-    { __typename: 'RatioSectionPage' }
-    & Pick<Types.RatioSectionPage, 'id' | 'title'>
+    { __typename: 'RatioNotebookPage' }
+    & Pick<Types.RatioNotebookPage, 'id' | 'title'>
+    & { meta: (
+      { __typename: 'WagtailPageMeta' }
+      & Pick<Types.WagtailPageMeta, 'url'>
+    ) }
+  ) | (
+    { __typename: 'RatioNotebookIndexPage' }
+    & Pick<Types.RatioNotebookIndexPage, 'id' | 'title'>
+    & { meta: (
+      { __typename: 'WagtailPageMeta' }
+      & Pick<Types.WagtailPageMeta, 'url'>
+    ) }
+  ) | (
+    { __typename: 'ProjectPage' }
+    & Pick<Types.ProjectPage, 'id' | 'title'>
+    & { meta: (
+      { __typename: 'WagtailPageMeta' }
+      & Pick<Types.WagtailPageMeta, 'url'>
+    ) }
+  ) | (
+    { __typename: 'ProjectIndexPage' }
+    & Pick<Types.ProjectIndexPage, 'id' | 'title'>
+    & { meta: (
+      { __typename: 'WagtailPageMeta' }
+      & Pick<Types.WagtailPageMeta, 'url'>
+    ) }
+  ) | (
+    { __typename: 'FreeFormPage' }
+    & Pick<Types.FreeFormPage, 'id' | 'title'>
+    & { meta: (
+      { __typename: 'WagtailPageMeta' }
+      & Pick<Types.WagtailPageMeta, 'url'>
+    ) }
+  ) | (
+    { __typename: 'FolderPage' }
+    & Pick<Types.FolderPage, 'id' | 'title'>
+    & { meta: (
+      { __typename: 'WagtailPageMeta' }
+      & Pick<Types.WagtailPageMeta, 'url'>
+    ) }
+  ) | (
+    { __typename: 'BlogPostPage' }
+    & Pick<Types.BlogPostPage, 'id' | 'title'>
+    & { meta: (
+      { __typename: 'WagtailPageMeta' }
+      & Pick<Types.WagtailPageMeta, 'url'>
+    ) }
+  ) | (
+    { __typename: 'BlogIndexPage' }
+    & Pick<Types.BlogIndexPage, 'id' | 'title'>
+    & { meta: (
+      { __typename: 'WagtailPageMeta' }
+      & Pick<Types.WagtailPageMeta, 'url'>
+    ) }
+  ) | (
+    { __typename: 'FaqPage' }
+    & Pick<Types.FaqPage, 'id' | 'title'>
+    & { meta: (
+      { __typename: 'WagtailPageMeta' }
+      & Pick<Types.WagtailPageMeta, 'url'>
+    ) }
+  ) | (
+    { __typename: 'PresentationPage' }
+    & Pick<Types.PresentationPage, 'id' | 'title'>
     & { meta: (
       { __typename: 'WagtailPageMeta' }
       & Pick<Types.WagtailPageMeta, 'url'>

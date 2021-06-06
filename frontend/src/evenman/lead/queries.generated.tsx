@@ -1,7 +1,7 @@
 import * as Types from '../../apollo/types.generated';
 
 import { UserFragment } from '../../common/fragments.generated';
-import { Commentable_CommunityInitiative_Fragment, Commentable_CommunityLead_Fragment } from './CommentsList/queries.generated';
+import { Commentable_CommunityLead_Fragment, Commentable_CommunityInitiative_Fragment } from './CommentsList/queries.generated';
 import { GenericErrorFragment, ValidationErrorFragment } from '../../apollo/common-fragments.generated';
 import { dedupeFragments } from '~/common/dedupeFragments';
 import { TypedDocumentNode as DocumentNode } from '@graphql-typed-document-node/core';

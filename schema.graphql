@@ -1,537 +1,235 @@
-input AddEventToCommunityLeadInput {
-  lead_id: ID!
-  event_id: ID!
+type WagtailStructBlockStructure implements WagtailBlockStructure {
+  label: String!
+  group: String
+  required: Boolean!
+  child_blocks: [WagtailStructBlockChildStructure!]!
 }
 
-union AddEventToCommunityLeadResult = CommunityLead
-
-input AddLeadToCommunityInitiativeInput {
-  initiative_id: ID!
-  lead_id: ID!
+interface WagtailBlockStructure {
+  label: String!
+  group: String
+  required: Boolean!
 }
 
-union AddLeadToCommunityInitiativeResult = CommunityInitiative | GenericError | ValidationError
-
-input AddTelegramChatByInviteLinkInput {
-  invite_link: String!
-}
-
-union AddTelegramChatByInviteLinkResult = TelegramChat | ValidationError | GenericError
-
-input AddTelegramChatInput {
-  username: String
-}
-
-union AddTelegramChatResult = TelegramChat | ValidationError | GenericError
-
-type AnalyticsBovStat {
-  date: String!
-  count: Int!
-  total_income: Int!
-}
-
-"""
-Describes the current user.
-
-If user is not signed in, `is_authenticated` field will be false and all other fields will be empty.
-"""
-type AuthCurrentUser {
-  id: ID!
-  is_authenticated: Boolean!
-  email: String
-  first_name: String
-  last_name: String
-  is_staff: Boolean
-  is_superuser: Boolean!
-  permissions: [String!]!
-}
-
-type AuthGroup {
-  id: ID!
-
-  """имя"""
+type WagtailStructBlockChildStructure {
   name: String!
-  permissions: [AuthPermission!]!
-  users: [AuthUser!]!
-  wagtailCollectionPermissions: [WagtailCollectionPermission!]!
-  wagtailPagePermissions: [WagtailPagePermission!]!
+  definition: WagtailBlockStructure!
 }
 
-input AuthLoginCredentialsInput {
-  email: String
-  password: String
-  token: String
+type WagtailListBlockStructure implements WagtailBlockStructure {
+  label: String!
+  group: String
+  required: Boolean!
+  child_block: WagtailBlockStructure!
 }
 
-input AuthLoginInput {
-  credentials: AuthLoginCredentialsInput!
-  result: String!
+type WagtailCharBlockStructure implements WagtailBlockStructure {
+  label: String!
+  group: String
+  required: Boolean!
 }
 
-type AuthLoginResult {
-  error: String
-  user: AuthCurrentUser
-  registered: Boolean
+type WagtailRichTextBlockStructure implements WagtailBlockStructure {
+  label: String!
+  group: String
+  required: Boolean!
 }
 
-type AuthLogoutResult {
-  ok: Boolean
+type WagtailBooleanBlockStructure implements WagtailBlockStructure {
+  label: String!
+  group: String
+  required: Boolean!
 }
 
-type AuthPermission {
-  id: ID!
+type WagtailStaticBlockStructure implements WagtailBlockStructure {
+  label: String!
+  group: String
+  required: Boolean!
+}
+
+type WagtailImageBlockStructure implements WagtailBlockStructure {
+  label: String!
+  group: String
+  required: Boolean!
+}
+
+type WagtailURLBlockStructure implements WagtailBlockStructure {
+  label: String!
+  group: String
+  required: Boolean!
+}
+
+type WagtailStructBlockValidationError implements WagtailBlockValidationError {
+  error_message: String!
+  errors: [WagtailStructBlockFieldValidationError!]!
+}
+
+interface WagtailBlockValidationError {
+  error_message: String!
+}
+
+type WagtailStructBlockFieldValidationError {
   name: String!
-  perm: String!
-  users: [AuthUser!]!
+  error: WagtailBlockValidationError
 }
 
-input AuthSendMagicLinkInput {
-  email: String!
-  next: String
+type WagtailListBlockValidationError implements WagtailBlockValidationError {
+  error_message: String!
+  errors: [WagtailBlockValidationError]!
 }
 
-type AuthSendMagicLinkResult {
-  ok: Boolean
-  error: String
+type WagtailAnyBlockValidationError implements WagtailBlockValidationError {
+  error_message: String!
 }
 
-input AuthSetMyNamesInput {
-  first_name: String!
-  last_name: String!
-}
-
-union AuthSetMyNamesResult = AuthCurrentUser | GenericError | ValidationError
-
-type AuthUser {
+type RatioPresentationIndexPage implements WagtailPage {
+  title: String!
   id: ID!
-  first_name: String!
-  last_name: String!
-  email: String
-  staff_member: StaffMember
-  external_accounts: [ExternalServiceAccount!]!
+  meta: WagtailPageMeta!
+  presentations: [PresentationPage!]!
 }
 
-type BasicCardBlock implements WagtailBlock {
+interface WagtailPage {
+  id: ID!
+  title: String!
+  meta: WagtailPageMeta!
+}
+
+type WagtailPageMeta {
+  slug: String!
+  description: String!
+  html_url: String! @deprecated(reason: "renamed to `url`")
+  url: String!
+  permissions: WagtailPagePermissions!
+  revisions: [WagtailPageRevision!]!
+  revision(id: ID!): WagtailPageRevision!
+}
+
+type WagtailPagePermissions {
+  can_edit: Boolean!
+}
+
+type WagtailPageRevision {
+  id: ID!
+  created_at: String!
+  as_page: WagtailPage!
+}
+
+type RatioSectionPage implements WagtailPage {
+  title: String!
+  id: ID!
+  meta: WagtailPageMeta!
+  body: [WagtailBlock!]!
+}
+
+interface WagtailBlock {
+  id: ID!
+}
+
+type RatioSectionIndexPage implements WagtailPage {
+  title: String!
+  id: ID!
+  meta: WagtailPageMeta!
+}
+
+type RatioNotebookPage implements WagtailPage {
+  title: String!
+  id: ID!
+  meta: WagtailPageMeta!
+  sections: [RatioNotebookSectionBlock!]!
+}
+
+type RatioNotebookIndexPage implements WagtailPage {
+  title: String!
+  id: ID!
+  meta: WagtailPageMeta!
+}
+
+type RatioNotebookSectionBlock implements WagtailBlock {
+  id: ID!
+  value: RatioSectionPage!
+}
+
+type RatioHeaderBlock implements WagtailBlock {
   id: ID!
   value: String!
 }
 
-type BasicResult {
-  ok: Boolean
-}
-
-type BasicTextBlock implements WagtailBlock {
+type RatioParagraphBlock implements WagtailBlock {
   id: ID!
-  value: BasicTextBlockValue!
+  value: String!
 }
 
-type BasicTextBlockValue {
-  text: String!
-  centered: Boolean!
-}
-
-input BecomeCommunityLeadCuratorInput {
+type RatioInsetBlock implements WagtailBlock {
   id: ID!
+  value: String!
 }
 
-union BecomeCommunityLeadCuratorResult = CommunityLead
-
-type BigContactsBlock implements WagtailBlock {
+type RatioExerciseBlock implements WagtailBlock {
   id: ID!
-  value: BigContactsBlockValue!
+  value: RatioExerciseBlockValue!
 }
 
-type BigContactsBlockValue {
-  map: WagtailGeo!
-  address: String!
-  phone: String!
-  email: String!
+type RatioExerciseBlockValue {
+  header: String!
+  lines_count: Int!
+  enumerate: Boolean!
+}
+
+type RatioExerciseOnelineBlock implements WagtailBlock {
+  id: ID!
+  value: RatioExerciseOnelineBlockValue!
+}
+
+type RatioExerciseOnelineBlockValue {
   text: String!
 }
 
-type BlogIndexPage implements WagtailPage {
+type RatioBriefingBlock implements WagtailBlock {
+  id: ID!
+  value: String!
+}
+
+type RatioMathBlock implements WagtailBlock {
+  id: ID!
+  value: String!
+}
+
+type ProjectPage implements WagtailPage {
   id: ID!
 
   """заголовок"""
   title: String!
   meta: WagtailPageMeta!
-
-  """Подзаголовок"""
-  subtitle: String!
-  posts: [BlogPostPage!]!
-}
-
-type BlogPostAuthor {
-  """Имя"""
-  name: String!
-
-  """Описание"""
-  description: String!
-  image(spec: String!): WagtailImageRendition!
-}
-
-type BlogPostPage implements WagtailPage {
-  id: ID!
-
-  """заголовок"""
-  title: String!
-  meta: WagtailPageMeta!
-
-  """Дата поста"""
-  date: String!
 
   """Короткое описание"""
   summary: String!
+
+  """Периодичность"""
+  activity_summary: String
+
+  """Активный"""
+  is_active: Boolean!
   body: String!
-  authors: [BlogPostAuthor!]!
-}
-
-input CancelEventInput {
-  event_id: ID!
-  notification_message: String!
-}
-
-union CancelEventResult = BasicResult | GenericError | ValidationError
-
-union CancelWeeklyDigestMailchimpResult = GenericError | EventsWeeklyDigest
-
-input CancelYandexKassaPaymentInput {
-  id: ID!
-}
-
-union CancelYandexKassaPaymentResult = YandexKassaPayment | GenericError
-
-input CashierCreatePaymentInput {
-  amount: Int!
-  whom: ID!
-  comment: String!
-}
-
-type CashierPayment {
-  id: ID!
-
-  """Сумма"""
-  amount: Int!
-
-  """Дата создания"""
-  created_dt: String!
-
-  """Дата получения"""
-  redeem_dt: String
-
-  """Комментарий"""
-  comment: String!
-  is_redeemed: Boolean!
-  whom: AuthUser!
-}
-
-type CashierPaymentConnection {
-  pageInfo: PageInfo!
-  nodes: [CashierPayment!]!
-  edges: [CashierPaymentEdge!]!
-}
-
-type CashierPaymentEdge {
-  node: CashierPayment!
-}
-
-input CheckRatioPromocodeInput {
-  ticket_type_id: ID!
-  code: String!
-}
-
-type CheckRatioPromocodeResult {
-  discounted_price: Int!
-}
-
-input ClearCommunityLeadCuratorInput {
-  id: ID!
-}
-
-union ClearCommunityLeadCuratorResult = CommunityLead
-
-input Cm2CreateCustomerInput {
-  card_id: Int!
-  first_name: String!
-  last_name: String!
-}
-
-input Cm2CreateOrderInput {
-  customer: ID
-}
-
-type Cm2Customer {
-  id: ID!
-  card_id: Int!
-  first_name: String!
-  last_name: String!
-  orders(before: String, after: String, first: Int, last: Int): Cm2OrderConnection!
-}
-
-type Cm2CustomerConnection {
-  pageInfo: PageInfo!
-  nodes: [Cm2Customer!]!
-  edges: [Cm2CustomerEdge!]!
-}
-
-type Cm2CustomerEdge {
-  node: Cm2Customer!
-}
-
-type Cm2Order {
-  id: ID!
-  start: String!
-  end: String
-  customer: Cm2Customer
-  value: Int!
-}
-
-type Cm2OrderConnection {
-  pageInfo: PageInfo!
-  nodes: [Cm2Order!]!
-  edges: [Cm2OrderEdge!]!
-}
-
-type Cm2OrderEdge {
-  node: Cm2Order!
-}
-
-type ColumnsBasicBlock implements WagtailBlock {
-  id: ID!
-  value: [ColumnsBasicBlockValue!]!
-}
-
-type ColumnsBasicBlockValue {
-  header: String!
-  text: String!
-}
-
-type ColumnsButtonsBlock implements WagtailBlock {
-  id: ID!
-  value: [ColumnsButtonsBlockValue!]!
-}
-
-type ColumnsButtonsBlockValue {
-  title: String!
-  text: String!
   image(spec: String!): WagtailImageRendition!
-  caption: String!
-  link: String!
+  upcoming_events: [Event!]!
+  telegram_chats: [TelegramChat!]!
 }
 
-type Comment {
+type WagtailImageRendition {
   id: ID!
-  created: String!
-  text: String!
-  author: AuthUser!
+  url: String!
+  width: Int!
+  height: Int!
+  original_image: WagtailImage!
 }
 
-input CommentOnCommunityInitiativeInput {
-  initiative_id: ID!
-  text: String!
-}
-
-union CommentOnCommunityInitiativeResult = CommunityInitiative
-
-input CommentOnCommunityLeadInput {
-  lead_id: ID!
-  text: String!
-}
-
-union CommentOnCommunityLeadResult = CommunityLead
-
-interface Commentable {
-  comments_count: Int!
-  comments: [Comment!]!
-}
-
-type CommunityInitiative implements Commentable {
+type WagtailImage {
   id: ID!
-  title: String!
-  description: String!
-  created: String!
-  updated: String!
-  leads: [CommunityLead!]!
-  created_by: AuthUser
-  curated_by: AuthUser
-  status: CommunityInitiativeStatus!
-  comments_count: Int!
-  comments: [Comment!]!
-}
-
-type CommunityInitiativeConnection {
-  pageInfo: PageInfo!
-  nodes: [CommunityInitiative!]!
-  edges: [CommunityInitiativeEdge!]!
-}
-
-type CommunityInitiativeEdge {
-  node: CommunityInitiative!
-}
-
-input CommunityInitiativeInput {
-  id: ID!
-}
-
-enum CommunityInitiativeStatus {
-  ACTIVE
-  INACTIVE
-}
-
-input CommunityInitiativesFilterInput {
-  status: CommunityInitiativeStatus
-}
-
-type CommunityLead implements Commentable {
-  id: ID!
-  name: String!
-  description: String!
-  created: String!
-  updated: String!
-  events: [Event!]!
-  initiatives: [CommunityInitiative!]!
-  created_by: AuthUser
-  curated_by: AuthUser
-  status: CommunityLeadStatus!
-  comments_count: Int!
-  comments: [Comment!]!
-}
-
-type CommunityLeadConnection {
-  pageInfo: PageInfo!
-  nodes: [CommunityLead!]!
-  edges: [CommunityLeadEdge!]!
-}
-
-type CommunityLeadEdge {
-  node: CommunityLead!
-}
-
-input CommunityLeadInput {
-  id: ID!
-}
-
-enum CommunityLeadStatus {
-  ACTIVE
-  INACTIVE
-}
-
-input CommunityLeadsFilterInput {
-  status: CommunityLeadStatus
-  curated_by_me: Boolean
-  curated_by_empty: Boolean
-  search: String
-}
-
-input CreateCommunityInitiativeInput {
-  title: String!
-  description: String
-}
-
-union CreateCommunityInitiativeResult = CommunityInitiative | ValidationError | GenericError
-
-input CreateCommunityLeadInput {
-  name: String!
-  description: String
-  status: String
-}
-
-union CreateCommunityLeadResult = CommunityLead | ValidationError | GenericError
-
-input CreateRatioPromocodeInput {
-  ticket_type_id: ID
-  training_id: ID
-  code: String!
-  discount: Int!
-  uses_max: Int
-}
-
-union CreateRatioPromocodeResult = RatioPromocode | ValidationError | GenericError
-
-input CreateRatioTicketTypeInput {
-  training_id: ID!
-  price: Int!
-  name: String!
-  discount_by_email: Int
-  discount_percent_by_email: Int
-}
-
-input CreateRatioTrainingInput {
-  name: String!
-  slug: String!
-  training_type: String
-  date: String
-  telegram_link: String
-  discount_by_email: Int
-  discount_percent_by_email: Int
-}
-
-union CreateRatioTrainingResult = RatioTraining | ValidationError | GenericError
-
-input DeleteCommentInput {
-  id: ID!
-}
-
-union DeleteCommentResult = BasicResult | GenericError
-
-union DeleteCommunityInitiativeResult = BasicResult
-
-union DeleteCommunityLeadResult = BasicResult
-
-input DeleteRatioTicketTypeInput {
-  id: ID!
-}
-
-union DeleteTelegramChatResult = BasicResult
-
-input EditCommentInput {
-  id: ID!
-  text: String!
-}
-
-union EditCommentResult = Comment | GenericError
-
-type EmailMailchimpCategory {
-  id: ID!
-  title: String!
-  category_id: String!
-  interests: [EmailMailchimpInterest!]!
-}
-
-type EmailMailchimpInterest {
-  id: ID!
-  interest_id: String!
-  name: String!
-  subscriber_count: Int!
-  category: EmailMailchimpCategory!
-}
-
-type EmailSubscribeChannel {
-  id: ID!
-  slug: String!
-  interests: [EmailMailchimpInterest!]!
-  log(before: String, after: String, first: Int, last: Int): EmailSubscribeChannelLogConnection!
-}
-
-input EmailSubscribeChannelCreateInput {
-  slug: String!
-  interest_ids: [ID!]!
-}
-
-type EmailSubscribeChannelLog {
-  id: ID!
-  dt: String!
-  email: String!
-}
-
-type EmailSubscribeChannelLogConnection {
-  pageInfo: PageInfo!
-  nodes: [EmailSubscribeChannelLog!]!
-  edges: [EmailSubscribeChannelLogEdge!]!
-}
-
-type EmailSubscribeChannelLogEdge {
-  node: EmailSubscribeChannelLog!
+  url: String!
+  width: Int!
+  height: Int!
+  rendition(spec: String!): WagtailImageRendition!
 }
 
 type Event {
@@ -568,193 +266,15 @@ type Event {
   feedbacks: [EventsFeedback!]!
 }
 
-input EventAddTagInput {
-  event_id: ID!
-  tag: String!
+enum EventsMarkupFormat {
+  SOURCE
+  PLAIN
 }
 
-input EventAnnounceInput {
-  event_id: ID!
-  target: EventAnnounceTarget!
-}
-
-enum EventAnnounceTarget {
-  VK
-  FB
-  TIMEPAD
-}
-
-type EventConnection {
-  pageInfo: PageInfo!
-  nodes: [Event!]!
-  edges: [EventEdge!]!
-}
-
-input EventCreateInput {
-  start: String!
-  end: String!
-  title: String!
-  description: String
-  location: String
-}
-
-type EventCreateResult {
-  ok: Boolean
-  event: Event!
-}
-
-input EventDeleteInput {
-  event_id: ID!
-}
-
-input EventDeleteTagInput {
-  event_id: ID!
-  tag: String!
-}
-
-type EventEdge {
-  node: Event!
-}
-
-input EventGenerateOpenViduTokenInput {
-  event_id: ID!
-}
-
-type EventGenerateOpenViduTokenResult {
-  token: String!
-}
-
-input EventGenerateZoomLinkInput {
-  event_id: ID!
-}
-
-input EventMoveInput {
-  event_id: ID!
-  start: String!
-}
-
-type EventNotification {
-  type: String!
-  id: ID!
-}
-
-input EventPrototypeAddTagInput {
-  id: ID!
-  tag: String!
-}
-
-input EventPrototypeCancelDateInput {
-  id: ID!
-  date: String!
-}
-
-input EventPrototypeCreateInput {
-  title: String!
-  summary: String
-  description: String
-  timing_description_override: String
-  location: String
-  weekday: Int!
-  hour: Int!
-  minute: Int!
-  length: Int!
-  project_slug: String
-  vk_group_name: String
-  timepad_category_code: String
-}
-
-input EventPrototypeDeleteTagInput {
-  id: ID!
-  tag: String!
-}
-
-input EventPrototypeNewEventInput {
-  id: ID!
-  ts: Int!
-}
-
-input EventPrototypeSetImageInput {
-  id: ID!
-  image_id: ID!
-}
-
-input EventPrototypeUpdateInput {
-  id: ID!
-  active: Boolean
-  title: String
-  summary: String
-  description: String
-  timing_description_override: String
-  location: String
-  weekday: Int
-  hour: Int
-  minute: Int
-  length: Int
-  project_slug: String
-  vk_group_name: String
-  timepad_category_code: String
-}
-
-type EventPrototypeUpdateResult {
-  ok: Boolean!
-  prototype: EventsPrototype!
-}
-
-type EventSearchItem {
-  event: Event!
-}
-
-input EventSetAnnounceUrlInput {
-  event_id: ID!
-  target: EventAnnounceTarget!
-  url: String!
-}
-
-input EventTimepadAnnouncementUpdateInput {
-  event_id: ID!
-  prepaid_tickets: Boolean
-  category_code: String
-}
-
-input EventUpdateInput {
-  event_id: ID!
-  start: String
-  end: String
-  published: Boolean
-  visitors: String
-  title: String
-  description: String
-  summary: String
-  event_type: String
-  registration_type: String
-  pricing_type: String
-  realm: String
-  timing_description_override: String
-  location: String
-  zoom_link: String
-  prototype_id: ID
-  project_slug: String
-  image_id: ID
-}
-
-type EventUpdateResult {
-  ok: Boolean
-  event: Event!
-}
-
-input EventVkAnnouncementSetImageInput {
-  event_id: ID!
-  image_id: ID!
-}
-
-input EventVkAnnouncementUpdateInput {
-  event_id: ID!
-  group: String
-}
-
-type EventsAnnouncementFb {
-  link: String!
-  group: String!
+type EventsAnnouncements {
+  timepad: EventsAnnouncementTimepad!
+  vk: EventsAnnouncementVk!
+  fb: EventsAnnouncementFb!
 }
 
 type EventsAnnouncementTimepad {
@@ -769,60 +289,17 @@ type EventsAnnouncementVk {
   image(spec: String!): WagtailImageRendition
 }
 
-type EventsAnnouncements {
-  timepad: EventsAnnouncementTimepad!
-  vk: EventsAnnouncementVk!
-  fb: EventsAnnouncementFb!
+type EventsAnnouncementFb {
+  link: String!
+  group: String!
 }
 
-type EventsFeedback {
+type MyEventsTicket {
   id: ID!
-  overall_score: Int
-  recommend_score: Int
-  content_score: Int
-  conductor_score: Int
-  source_friend: Boolean!
-  source_vk: Boolean!
-  source_fb: Boolean!
-  source_timepad: Boolean!
-  source_email: Boolean!
-  source_website: Boolean!
-  custom_source: String
-  comment: String
-}
-
-input EventsFeedbackCreateInput {
-  event_id: ID!
-  overall_score: Int
-  recommend_score: Int
-  content_score: Int
-  conductor_score: Int
-  source_friend: Boolean!
-  source_vk: Boolean!
-  source_fb: Boolean!
-  source_timepad: Boolean!
-  source_email: Boolean!
-  source_website: Boolean!
-  custom_source: String
-  comment: String
-}
-
-type EventsFeedbackCreateResult {
-  ok: Boolean
-  feedback: EventsFeedback!
-}
-
-input EventsFeedbackDeleteInput {
-  id: ID!
-}
-
-input EventsFilterInput {
-  event_type: String
-}
-
-type EventsGoogleCalendar {
-  id: ID!
-  url: String!
+  event: Event!
+  status: String!
+  created: String
+  zoom_link: String
 }
 
 type EventsGoogleEvent {
@@ -831,14 +308,27 @@ type EventsGoogleEvent {
   id: ID!
 }
 
-type EventsListBlock implements WagtailBlock {
+type ZoomMeeting {
   id: ID!
-  events: [Event!]!
+  zoom_id: String!
+  join_url: String!
+  instances: [ZoomMeetingInstance!]!
+  participants_count: Int
 }
 
-enum EventsMarkupFormat {
-  SOURCE
-  PLAIN
+type ZoomMeetingInstance {
+  id: ID!
+  zoom_uuid: String!
+  start_time: String!
+  end_time: String!
+  participants: [ZoomParticipant!]!
+}
+
+type ZoomParticipant {
+  id: ID!
+  name: String!
+  join_time: String!
+  leave_time: String!
 }
 
 type EventsPrototype {
@@ -862,44 +352,50 @@ type EventsPrototype {
   timepad_category: TimepadCategory
 }
 
+type VkGroup {
+  name: String!
+}
+
+type TimepadCategory {
+  id: ID!
+  code: String!
+  name: String!
+}
+
 type EventsTicket {
   id: ID!
   status: String!
   user: AuthUser!
 }
 
-type EventsWeeklyDigest {
+type AuthUser {
   id: ID!
-
-  """Дата начала недели"""
-  start: String!
-  image(spec: String!): WagtailImageRendition
-  mailchimp: EventsWeeklyDigestMailchimp!
-  telegram: EventsWeeklyDigestTelegram!
-  vk: EventsWeeklyDigestVk!
+  first_name: String!
+  last_name: String!
+  email: String
+  staff_member: StaffMember
+  external_accounts: [ExternalServiceAccount!]!
 }
 
-type EventsWeeklyDigestMailchimp {
-  link: String
-  is_sent: Boolean!
+type StaffMember {
+  id: ID!
+  short_name: String!
+  full_name: String!
+  role: String!
+  is_current: Boolean!
+  vk: String!
+  color: String!
+  user: AuthUser!
+  slack_user: SlackUser
 }
 
-input EventsWeeklyDigestPostMailchimpInput {
-  text_before: String
-  text_after: String
+type SlackUser {
+  slack_id: String!
+  image_url: String!
 }
 
-type EventsWeeklyDigestTelegram {
-  link: String
-}
-
-type EventsWeeklyDigestUpdateResult {
-  ok: Boolean
-  digest: EventsWeeklyDigest!
-}
-
-type EventsWeeklyDigestVk {
-  link: String
+interface ExternalServiceAccount {
+  service: ExternalService!
 }
 
 interface ExternalService {
@@ -907,37 +403,43 @@ interface ExternalService {
   accounts: [ExternalServiceAccount!]!
 }
 
-interface ExternalServiceAccount {
-  service: ExternalService!
-}
-
-type FaqEntry {
+type EventsFeedback {
   id: ID!
-
-  """Вопрос"""
-  question: String!
-  answer: String!
+  overall_score: Int
+  recommend_score: Int
+  content_score: Int
+  conductor_score: Int
+  source_friend: Boolean!
+  source_vk: Boolean!
+  source_fb: Boolean!
+  source_timepad: Boolean!
+  source_email: Boolean!
+  source_website: Boolean!
+  custom_source: String
+  comment: String
 }
 
-type FaqPage implements WagtailPage {
+type TelegramChat {
+  id: ID!
+  username: String!
+  title: String!
+  force_public: Boolean!
+  delisted: Boolean!
+  photo(spec: String!): WagtailImageRendition
+  project: ProjectPage
+  link: String!
+}
+
+type ProjectIndexPage implements WagtailPage {
   id: ID!
 
   """заголовок"""
   title: String!
   meta: WagtailPageMeta!
 
-  """Короткое описание"""
-  summary: String!
-  prev_page: FaqPage
-  next_page: FaqPage
-  entries: [FaqEntry!]!
-  subpages: [FaqPage!]!
-}
-
-type FolderPage implements WagtailPage {
-  title: String!
-  id: ID!
-  meta: WagtailPageMeta!
+  """Описание активных проектов"""
+  active_description: String!
+  projects(is_active: Boolean): [ProjectPage!]!
 }
 
 type FreeFormPage implements WagtailPage {
@@ -947,22 +449,87 @@ type FreeFormPage implements WagtailPage {
   body: [WagtailBlock!]!
 }
 
-type FrontPartnersBlock implements WagtailBlock {
+type FolderPage implements WagtailPage {
+  title: String!
   id: ID!
-  value: [FrontPartnersBlockValue!]!
+  meta: WagtailPageMeta!
 }
 
-type FrontPartnersBlockValue {
-  link: String!
+type BasicTextBlock implements WagtailBlock {
+  id: ID!
+  value: BasicTextBlockValue!
+}
+
+type BasicTextBlockValue {
+  text: String!
+  centered: Boolean!
+}
+
+type BasicCardBlock implements WagtailBlock {
+  id: ID!
+  value: String!
+}
+
+type SectionHeaderBlock implements WagtailBlock {
+  id: ID!
+  value: SectionHeaderBlockValue!
+}
+
+type SectionHeaderBlockValue {
+  header: String!
+  text: String!
+}
+
+type ColumnsBasicBlock implements WagtailBlock {
+  id: ID!
+  value: [ColumnsBasicBlockValue!]!
+}
+
+type ColumnsBasicBlockValue {
+  header: String!
+  text: String!
+}
+
+type ColumnsButtonsBlock implements WagtailBlock {
+  id: ID!
+  value: [ColumnsButtonsBlockValue!]!
+}
+
+type ColumnsButtonsBlockValue {
+  title: String!
+  text: String!
   image(spec: String!): WagtailImageRendition!
+  caption: String!
+  link: String!
 }
 
-type FrontSocialLinksBlock implements WagtailBlock {
+type BigContactsBlock implements WagtailBlock {
   id: ID!
+  value: BigContactsBlockValue!
 }
 
-type GenericError {
-  message: String!
+type BigContactsBlockValue {
+  map: WagtailGeo!
+  address: String!
+  phone: String!
+  email: String!
+  text: String!
+}
+
+type WagtailGeo {
+  lat: String!
+  lng: String!
+}
+
+type MailchimpSubscribeBlock implements WagtailBlock {
+  id: ID!
+  value: MailchimpSubscribeBlockValue!
+}
+
+type MailchimpSubscribeBlockValue {
+  news: Boolean!
+  events: Boolean!
+  trainings: Boolean!
 }
 
 type HeroFrontBlock implements WagtailBlock {
@@ -981,8 +548,969 @@ type HeroFrontBlock_buttonsValue {
   highlight: Boolean!
 }
 
+type LandingHeroBlock implements WagtailBlock {
+  id: ID!
+  value: LandingHeroBlockValue!
+}
+
+type LandingHeroBlockValue {
+  image(spec: String!): WagtailImageRendition!
+  title: String!
+  text: String!
+}
+
+type FrontPartnersBlock implements WagtailBlock {
+  id: ID!
+  value: [FrontPartnersBlockValue!]!
+}
+
+type FrontPartnersBlockValue {
+  link: String!
+  image(spec: String!): WagtailImageRendition!
+}
+
+type EventsListBlock implements WagtailBlock {
+  id: ID!
+  events: [Event!]!
+}
+
+type PhotoRibbonBlock implements WagtailBlock {
+  id: ID!
+  value(spec: String!): [WagtailImageRendition!]!
+}
+
 type HrBlock implements WagtailBlock {
   id: ID!
+}
+
+type FrontSocialLinksBlock implements WagtailBlock {
+  id: ID!
+}
+
+type BlogPostAuthor {
+  """Имя"""
+  name: String!
+
+  """Описание"""
+  description: String!
+  image(spec: String!): WagtailImageRendition!
+}
+
+type BlogPostPage implements WagtailPage {
+  id: ID!
+
+  """заголовок"""
+  title: String!
+  meta: WagtailPageMeta!
+
+  """Дата поста"""
+  date: String!
+
+  """Короткое описание"""
+  summary: String!
+  body: String!
+  authors: [BlogPostAuthor!]!
+}
+
+type BlogIndexPage implements WagtailPage {
+  id: ID!
+
+  """заголовок"""
+  title: String!
+  meta: WagtailPageMeta!
+
+  """Подзаголовок"""
+  subtitle: String!
+  posts: [BlogPostPage!]!
+}
+
+type FaqPage implements WagtailPage {
+  id: ID!
+
+  """заголовок"""
+  title: String!
+  meta: WagtailPageMeta!
+
+  """Короткое описание"""
+  summary: String!
+  prev_page: FaqPage
+  next_page: FaqPage
+  entries: [FaqEntry!]!
+  subpages: [FaqPage!]!
+}
+
+type FaqEntry {
+  id: ID!
+
+  """Вопрос"""
+  question: String!
+  answer: String!
+}
+
+type WikiAccount implements ExternalServiceAccount {
+  service: WikiExternalService!
+  name: String!
+}
+
+type WikiExternalService implements ExternalService {
+  slug: String!
+  accounts: [WikiAccount!]!
+}
+
+type SlackAccount implements ExternalServiceAccount {
+  service: SlackExternalService!
+  email: String!
+}
+
+type SlackExternalService implements ExternalService {
+  slug: String!
+  accounts: [SlackAccount!]!
+}
+
+type PresentationPage implements WagtailPage {
+  title: String!
+  id: ID!
+  meta: WagtailPageMeta!
+  slides: [WagtailBlock!]!
+}
+
+type SlideTitleBlock implements WagtailBlock {
+  id: ID!
+  value: String!
+}
+
+type SlideRichTextBlock implements WagtailBlock {
+  id: ID!
+  value: String!
+}
+
+type SlideRawHtmlBlock implements WagtailBlock {
+  id: ID!
+  value: String!
+}
+
+type SlideFragmentsBlock implements WagtailBlock {
+  id: ID!
+  value: [SlideFragmentsBlockValues!]!
+}
+
+union SlideFragmentsBlockValues = SlideFragmentsBlock_RichTextBlock | SlideFragmentsBlock_RawHtmlBlock
+
+type SlideFragmentsBlock_RichTextBlock implements WagtailBlock {
+  id: ID!
+  value: String!
+}
+
+type SlideFragmentsBlock_RawHtmlBlock implements WagtailBlock {
+  id: ID!
+  value: String!
+}
+
+type Query {
+  settings: Settings!
+  wagtailPage(page_id: ID, path: String, preview_token: String): WagtailPage @deprecated(reason: "Use wagtailPageOrPrivate instead")
+  wagtailPageOrPrivate(page_id: ID, path: String, preview_token: String): WagtailPageOrPrivateResult!
+  wagtailPages: [WagtailPage!]!
+  wagtailImage(input: WagtailImageInput!): WagtailImage
+  wagtailImageSearch(input: WagtailImageSearchInput!): WagtailImageSearchResult!
+  wagtailBlockStructure(input: WagtailBlockStructureInput!): WagtailBlockStructure!
+  wagtailRenderBlock(input: WagtailRenderBlockInput!): WagtailRenderBlockResult!
+  search(input: SearchInput!): SearchResult!
+  wagtailCollectionsForImageUpload: [WagtailCollection!]!
+  authGroupsAll: [AuthGroup!]!
+  authPermissionsAll: [AuthPermission!]!
+  searchUsers(input: SearchUsersInput!): SearchUsersResult!
+  zadarmaPbxCalls(before: String, after: String, first: Int, last: Int): ZadarmaPbxCallConnection!
+  zadarmaPbxCall(pbx_call_id: ID!): ZadarmaPbxCall!
+  importers: [Importer!]!
+  importer(module_name: String!): Importer!
+  now: NowInfo!
+  cm2Customers(search: String, before: String, after: String, first: Int, last: Int): Cm2CustomerConnection!
+  cm2Orders(status: String, before: String, after: String, first: Int, last: Int): Cm2OrderConnection!
+  cm2Customer(id: ID!): Cm2Customer!
+  cm2Order(id: ID!): Cm2Order!
+  watchmenWatchmenAll(currentStaff: Boolean, currentRole: Boolean): [WatchmenWatchman!]!
+  watchmenGradesAll: [WatchmenGrade!]!
+  watchmenShifts(from_date: String!, to_date: String!): [WatchmenShift!]!
+  kkmStatus: KkmStatusResult!
+  ofdFiscalDrives: [OfdFiscalDrive!]!
+  ofdDocuments(before: String, after: String, first: Int, last: Int): OfdDocumentConnection!
+  ofdShifts(before: String, after: String, first: Int, last: Int, filter: OfdShiftsFilterInput): OfdShiftConnection!
+  cashierPayments(before: String, after: String, first: Int, last: Int): CashierPaymentConnection!
+  analyticsBovStats: [AnalyticsBovStat!]!
+  events(before: String, after: String, first: Int, last: Int, search: String, filter: EventsFilterInput): EventConnection!
+  event(event_id: ID!): Event
+  eventsPrototype(id: ID!): EventsPrototype!
+  eventsPrototypes: [EventsPrototype!]!
+  publicEvents(before: String, after: String, first: Int, last: Int, from_date: String, project_id: ID): EventConnection!
+  publicEvent(event_id: ID!): Event
+  vkGroups: [VkGroup!]!
+  timepadCategories: [TimepadCategory!]!
+  eventsWeeklyDigestCurrent: EventsWeeklyDigest!
+  eventsPublicGoogleCalendar: EventsGoogleCalendar
+  staffMembersAll: [StaffMember!]!
+  staffMember(id: ID!): StaffMember!
+  ratioTrainings(before: String, after: String, first: Int, last: Int, filter: RatioTrainingsFilterInput): RatioTrainingConnection!
+  ratioTrainingBySlug(slug: String!): RatioTraining!
+  ratioTrainersAll: [RatioTrainer!]!
+  ratioTrainingEmailPrototype(training_id: ID!, type: String!): String!
+  ratioTicketTypes(input: RatioTicketTypesInput!): [RatioTicketType!]!
+  ratioTicketType(input: RatioTicketTypeInput!): RatioTicketType!
+  ratioOrders(before: String, after: String, first: Int, last: Int): RatioOrderConnection!
+  ratioTickets(before: String, after: String, first: Int, last: Int, filter: RatioTicketsFilterInput): RatioTicketConnection!
+  ratioTicket(id: ID!): RatioTicket!
+  ratioTestimonials(before: String, after: String, first: Int, last: Int): RatioTestimonialConnection!
+  mastermindDatingCohorts: [MastermindDatingCohort!]!
+  mastermindDatingCohortById(id: ID!): MastermindDatingCohort!
+  projects: [ProjectPage!]!
+  specialOffer: SpecialOffer
+  emailMailchimpCategoriesAll: [EmailMailchimpCategory!]!
+  emailSubscribeChannelsAll: [EmailSubscribeChannel!]!
+  imageTemplatesAll: [ImageTemplate!]!
+  imageTemplateBySlug(slug: String!): ImageTemplate!
+  publicTelegramChats: [TelegramChat!]!
+  allTelegramChats: [TelegramChat!]!
+  tildaPage(path: String!): TildaPage
+  tildaPages: [TildaPage!]!
+  externalServices: [ExternalService!]!
+  communityLeads(before: String, after: String, first: Int, last: Int, filter: CommunityLeadsFilterInput): CommunityLeadConnection!
+  communityLead(input: CommunityLeadInput!): CommunityLead!
+  communityInitiatives(before: String, after: String, first: Int, last: Int, filter: CommunityInitiativesFilterInput): CommunityInitiativeConnection!
+  communityInitiative(input: CommunityInitiativeInput!): CommunityInitiative!
+  my: My!
+}
+
+type Settings {
+  default_events_images_collection: WagtailCollection!
+  default_events_vk_images_collection: WagtailCollection!
+  weekly_digest_images_collection: WagtailCollection!
+  telegram_images_collection: WagtailCollection!
+  community_org_team_telegram_chat: TelegramChat
+}
+
+type WagtailCollection {
+  id: ID!
+  name: String!
+}
+
+union WagtailPageOrPrivateResult = WagtailPageContainer | WagtailPagePrivate
+
+type WagtailPageContainer {
+  page: WagtailPage
+}
+
+type WagtailPagePrivate {
+  message: String!
+}
+
+input WagtailImageInput {
+  id: ID!
+}
+
+type WagtailImageSearchResult {
+  results: [WagtailImage!]!
+}
+
+input WagtailImageSearchInput {
+  query: String!
+}
+
+input WagtailBlockStructureInput {
+  name: String!
+}
+
+type WagtailRenderBlockResult {
+  validation_error: WagtailStreamFieldValidationError
+  block: WagtailBlock
+}
+
+type WagtailStreamFieldValidationError {
+  block_errors: [WagtailStreamBlockValidationError!]!
+  non_block_error: String
+}
+
+type WagtailStreamBlockValidationError {
+  block_id: Int!
+  error: WagtailBlockValidationError
+}
+
+input WagtailRenderBlockInput {
+  type: String!
+  paramsJson: String!
+}
+
+type SearchResult {
+  results: [SearchItem!]!
+  more: Boolean!
+}
+
+union SearchItem = PageSearchItem | EventSearchItem
+
+type PageSearchItem {
+  page: WagtailPage!
+}
+
+type EventSearchItem {
+  event: Event!
+}
+
+input SearchInput {
+  query: String!
+  limit: Int
+}
+
+type AuthGroup {
+  id: ID!
+
+  """имя"""
+  name: String!
+  permissions: [AuthPermission!]!
+  users: [AuthUser!]!
+  wagtailCollectionPermissions: [WagtailCollectionPermission!]!
+  wagtailPagePermissions: [WagtailPagePermission!]!
+}
+
+type AuthPermission {
+  id: ID!
+  name: String!
+  perm: String!
+  users: [AuthUser!]!
+}
+
+type WagtailCollectionPermission {
+  id: ID!
+  permission: AuthPermission!
+  collection: WagtailCollection!
+}
+
+union WagtailPagePermission = WagtailRootPagePermission | WagtailSpecificPagePermission
+
+type WagtailRootPagePermission {
+  id: ID!
+  permission_type: String!
+}
+
+type WagtailSpecificPagePermission {
+  id: ID!
+  permission_type: String!
+  page: WagtailPage!
+}
+
+type SearchUsersResult {
+  results: [AuthUser!]!
+  more: Boolean!
+}
+
+input SearchUsersInput {
+  query: String!
+  limit: Int
+}
+
+type ZadarmaPbxCallConnection {
+  pageInfo: PageInfo!
+  nodes: [ZadarmaPbxCall!]!
+  edges: [ZadarmaPbxCallEdge!]!
+}
+
+type PageInfo {
+  hasNextPage: Boolean!
+  hasPreviousPage: Boolean!
+  startCursor: String
+  endCursor: String
+}
+
+type ZadarmaPbxCall {
+  pbx_call_id: String!
+  ts: String!
+  calls: [ZadarmaCall!]!
+  data: ZadarmaData
+  id: ID!
+}
+
+type ZadarmaCall {
+  call_id: String!
+  ts: String!
+  call_type: String!
+  disposition: String!
+  clid: String!
+  destination: String!
+  sip: String!
+  is_recorded: Int!
+  watchman: String!
+  record: String
+  id: ID!
+}
+
+type ZadarmaData {
+  staff_member: StaffMember
+}
+
+type ZadarmaPbxCallEdge {
+  node: ZadarmaPbxCall!
+}
+
+type Importer {
+  name: ID!
+  last_dt: String
+}
+
+type NowInfo {
+  total: Int!
+  customers: [NowCustomer!]!
+}
+
+type NowCustomer {
+  card_id: Int!
+  first_name: String!
+  last_name: String!
+}
+
+type Cm2CustomerConnection {
+  pageInfo: PageInfo!
+  nodes: [Cm2Customer!]!
+  edges: [Cm2CustomerEdge!]!
+}
+
+type Cm2Customer {
+  id: ID!
+  card_id: Int!
+  first_name: String!
+  last_name: String!
+  orders(before: String, after: String, first: Int, last: Int): Cm2OrderConnection!
+}
+
+type Cm2OrderConnection {
+  pageInfo: PageInfo!
+  nodes: [Cm2Order!]!
+  edges: [Cm2OrderEdge!]!
+}
+
+type Cm2Order {
+  id: ID!
+  start: String!
+  end: String
+  customer: Cm2Customer
+  value: Int!
+}
+
+type Cm2OrderEdge {
+  node: Cm2Order!
+}
+
+type Cm2CustomerEdge {
+  node: Cm2Customer!
+}
+
+type WatchmenWatchman {
+  id: ID!
+  priority: Int!
+  member: StaffMember!
+  grade: WatchmenGrade
+}
+
+type WatchmenGrade {
+  id: ID!
+
+  """Код"""
+  code: String!
+
+  """Повышающий коэффициент"""
+  multiplier: Float!
+}
+
+type WatchmenShift {
+  date: String!
+  shift: String!
+  is_night: Boolean!
+  id: ID!
+  watchman: WatchmenWatchman
+}
+
+type KkmStatusResult {
+  last_shift_closed: String
+}
+
+type OfdFiscalDrive {
+  id: ID!
+  fiscal_drive_number: String!
+}
+
+type OfdDocumentConnection {
+  pageInfo: PageInfo!
+  nodes: [OfdDocument!]!
+  edges: [OfdDocumentEdge!]!
+}
+
+type OfdDocument {
+  id: ID!
+  document_id: Int!
+  cash: Float!
+  electronic: Float!
+  check_type: String!
+  items: [OfdDocumentItem!]!
+  created: String!
+}
+
+type OfdDocumentItem {
+  id: ID!
+  name: String!
+  quantity: Float!
+  price: Float!
+  sum: Float!
+  product_type: Int!
+  payment_type: Int!
+}
+
+type OfdDocumentEdge {
+  node: OfdDocument!
+}
+
+type OfdShiftConnection {
+  pageInfo: PageInfo!
+  nodes: [OfdShift!]!
+  edges: [OfdShiftEdge!]!
+}
+
+type OfdShift {
+  id: ID!
+  shift_id: Int!
+  cash: Float!
+  electronic: Float!
+  close_dt: String
+  open_dt: String!
+}
+
+type OfdShiftEdge {
+  node: OfdShift!
+}
+
+input OfdShiftsFilterInput {
+  open_only: Boolean
+}
+
+type CashierPaymentConnection {
+  pageInfo: PageInfo!
+  nodes: [CashierPayment!]!
+  edges: [CashierPaymentEdge!]!
+}
+
+type CashierPayment {
+  id: ID!
+
+  """Сумма"""
+  amount: Int!
+
+  """Дата создания"""
+  created_dt: String!
+
+  """Дата получения"""
+  redeem_dt: String
+
+  """Комментарий"""
+  comment: String!
+  is_redeemed: Boolean!
+  whom: AuthUser!
+}
+
+type CashierPaymentEdge {
+  node: CashierPayment!
+}
+
+type AnalyticsBovStat {
+  date: String!
+  count: Int!
+  total_income: Int!
+}
+
+type EventConnection {
+  pageInfo: PageInfo!
+  nodes: [Event!]!
+  edges: [EventEdge!]!
+}
+
+type EventEdge {
+  node: Event!
+}
+
+input EventsFilterInput {
+  event_type: String
+}
+
+type EventsWeeklyDigest {
+  id: ID!
+
+  """Дата начала недели"""
+  start: String!
+  image(spec: String!): WagtailImageRendition
+  mailchimp: EventsWeeklyDigestMailchimp!
+  telegram: EventsWeeklyDigestTelegram!
+  vk: EventsWeeklyDigestVk!
+}
+
+type EventsWeeklyDigestMailchimp {
+  link: String
+  is_sent: Boolean!
+}
+
+type EventsWeeklyDigestTelegram {
+  link: String
+}
+
+type EventsWeeklyDigestVk {
+  link: String
+}
+
+type EventsGoogleCalendar {
+  id: ID!
+  url: String!
+}
+
+type RatioTrainingConnection {
+  pageInfo: PageInfo!
+  nodes: [RatioTraining!]!
+  edges: [RatioTrainingEdge!]!
+}
+
+type RatioTraining {
+  id: ID!
+
+  """Название"""
+  name: String!
+  slug: String!
+  training_type: String!
+
+  """Дата начала"""
+  date: String
+
+  """Телеграм-чат"""
+  telegram_link: String!
+  salaries_paid: Boolean!
+
+  """Сумма скидки одноразового промокода по E-mail'у"""
+  discount_by_email: Int!
+
+  """Процент скдики одноразового промокода по E-mail'у"""
+  discount_percent_by_email: Int!
+  promocode_email: String!
+  new_ticket_email: String!
+  notion_created_email: String!
+  tickets: [RatioTicket!]!
+  schedule: [RatioTrainingDay!]!
+  ticket_types: [RatioTicketType!]!
+  tickets_count: Int!
+  total_income: Int!
+  promocodes_count: Int!
+  promocodes(before: String, after: String, first: Int, last: Int): RatioPromocodeConnection!
+}
+
+type RatioTicket {
+  id: ID!
+  email: String!
+
+  """Имя"""
+  first_name: String!
+
+  """Фамилия"""
+  last_name: String!
+
+  """Дата регистрации"""
+  registration_date: String
+
+  """Дата создания"""
+  created: String!
+
+  """Статус"""
+  status: String!
+
+  """Тип билета"""
+  ticket_class: String!
+
+  """Размер оплаты"""
+  payment_amount: Int!
+  comment: String!
+  notion_link: String!
+  payments: [RatioPayment!]!
+  training: RatioTraining!
+  ticket_type: RatioTicketType
+  need_notion_link: Boolean!
+}
+
+type RatioPayment {
+  id: ID!
+
+  """Размер оплаты"""
+  amount: Int!
+
+  """Вид оплаты"""
+  payment_type: String!
+
+  """Статус"""
+  status: String!
+
+  """Статус фискального чека"""
+  fiscalization_status: String!
+  comment: String!
+
+  """Кастомный заголовок для чека"""
+  custom_kkm_title: String!
+  ticket: RatioTicket!
+}
+
+type RatioTicketType {
+  """Стоимость"""
+  price: Int!
+
+  """Название"""
+  name: String!
+
+  """Сумма скидки одноразового промокода по E-mail'у"""
+  discount_by_email: Int!
+
+  """Процент скдики одноразового промокода по E-mail'у"""
+  discount_percent_by_email: Int!
+  id: ID!
+  training: RatioTraining!
+  promocodes_count: Int!
+  promocodes(before: String, after: String, first: Int, last: Int): RatioPromocodeConnection!
+}
+
+type RatioPromocodeConnection {
+  pageInfo: PageInfo!
+  nodes: [RatioPromocode!]!
+  edges: [RatioPromocodeEdge!]!
+}
+
+type RatioPromocode {
+  id: ID!
+
+  """Промокод"""
+  code: String!
+
+  """Сумма скидки"""
+  discount: Int!
+
+  """Процент скидки"""
+  discount_percent: Int!
+
+  """Максимальное количество использований"""
+  uses_max: Int
+
+  """Количество использований"""
+  uses_count: Int!
+
+  """Создан для E-mail'а"""
+  for_email: String!
+}
+
+type RatioPromocodeEdge {
+  node: RatioPromocode!
+}
+
+type RatioTrainingDay {
+  id: ID!
+
+  """Дата"""
+  date: String!
+  activities: [RatioActivity!]!
+}
+
+type RatioActivity {
+  id: ID!
+
+  """Время"""
+  time: String!
+
+  """Тип"""
+  activity_type: String!
+
+  """Название"""
+  name: String!
+
+  """Локация"""
+  location: String!
+  trainer: RatioTrainer
+}
+
+type RatioTrainer {
+  id: ID!
+
+  """Короткое имя"""
+  short_name: String!
+
+  """Длинное имя"""
+  long_name: String!
+}
+
+type RatioTrainingEdge {
+  node: RatioTraining!
+}
+
+input RatioTrainingsFilterInput {
+  eternal: Boolean
+}
+
+input RatioTicketTypesInput {
+  id: ID
+  training_type: String
+}
+
+input RatioTicketTypeInput {
+  id: ID!
+}
+
+type RatioOrderConnection {
+  pageInfo: PageInfo!
+  nodes: [RatioOrder!]!
+  edges: [RatioOrderEdge!]!
+}
+
+type RatioOrder {
+  fulfilled: Boolean!
+  id: ID!
+  confirmation_token: String!
+  created: String!
+  email: String!
+  first_name: String!
+  last_name: String!
+  city: String!
+  ticket_type: RatioTicketType!
+  payment: YandexKassaPayment!
+  price: Int!
+  promocode: RatioPromocode
+}
+
+type YandexKassaPayment {
+  id: ID!
+  kassa_id: String!
+  is_paid: Boolean!
+  status: YandexKassaPaymentStatus!
+  waiting_for_capture: Boolean!
+}
+
+enum YandexKassaPaymentStatus {
+  pending
+  waiting_for_capture
+  succeeded
+  canceled
+}
+
+type RatioOrderEdge {
+  node: RatioOrder!
+}
+
+type RatioTicketConnection {
+  pageInfo: PageInfo!
+  nodes: [RatioTicket!]!
+  edges: [RatioTicketEdge!]!
+}
+
+type RatioTicketEdge {
+  node: RatioTicket!
+}
+
+input RatioTicketsFilterInput {
+  with_missing_payments: Boolean
+  with_unfiscalized_checks: Boolean
+  without_notion_link: Boolean
+}
+
+type RatioTestimonialConnection {
+  pageInfo: PageInfo!
+  nodes: [RatioTestimonial!]!
+  edges: [RatioTestimonialEdge!]!
+}
+
+type RatioTestimonial {
+  id: ID!
+  author_name: String!
+  author_description: String!
+  author_image(spec: String!): WagtailImageRendition
+  text: String!
+  product: RatioTestimonialProduct
+}
+
+type RatioTestimonialProduct {
+  id: ID!
+  title: String!
+  color: String!
+  link: String!
+}
+
+type RatioTestimonialEdge {
+  node: RatioTestimonial!
+}
+
+type MastermindDatingCohort {
+  id: ID!
+  leader_telegram_uid: String!
+  event: Event
+  participants: [MastermindDatingParticipant!]!
+  groups: [MastermindDatingGroup!]!
+}
+
+type MastermindDatingParticipant {
+  id: ID!
+  name: String!
+  desc: String!
+  voted_for: Boolean!
+  present: Boolean!
+  invite_email_sent: Boolean!
+  photo: String
+  user: AuthUser!
+  cohort: MastermindDatingCohort!
+}
+
+type MastermindDatingGroup {
+  id: ID!
+  telegram_invite_link: String!
+  participants: [MastermindDatingParticipant!]!
+}
+
+type SpecialOffer {
+  id: ID!
+  text: String!
+  link: String!
+  button_text: String!
+  until: String!
+  hide_duration: Int!
+}
+
+type EmailMailchimpCategory {
+  id: ID!
+  title: String!
+  category_id: String!
+  interests: [EmailMailchimpInterest!]!
+}
+
+type EmailMailchimpInterest {
+  id: ID!
+  interest_id: String!
+  name: String!
+  subscriber_count: Int!
+  category: EmailMailchimpCategory!
+}
+
+type EmailSubscribeChannel {
+  id: ID!
+  slug: String!
+  interests: [EmailMailchimpInterest!]!
+  log(before: String, after: String, first: Int, last: Int): EmailSubscribeChannelLogConnection!
+}
+
+type EmailSubscribeChannelLogConnection {
+  pageInfo: PageInfo!
+  nodes: [EmailSubscribeChannelLog!]!
+  edges: [EmailSubscribeChannelLogEdge!]!
+}
+
+type EmailSubscribeChannelLog {
+  id: ID!
+  dt: String!
+  email: String!
+}
+
+type EmailSubscribeChannelLogEdge {
+  node: EmailSubscribeChannelLog!
 }
 
 type ImageTemplate {
@@ -1002,11 +1530,6 @@ type ImageTemplateSchemaField {
   default: String
 }
 
-type ImageTemplateSizes {
-  width: Int!
-  height: Int!
-}
-
 enum ImageTemplateValueType {
   STRING
   INT
@@ -1014,112 +1537,182 @@ enum ImageTemplateValueType {
   DATE
 }
 
-input ImportTildaPageInput {
+type ImageTemplateSizes {
+  width: Int!
+  height: Int!
+}
+
+type TildaPage {
+  id: ID!
   page_id: Int!
-}
-
-union ImportTildaPageResult = TildaPage | GenericError
-
-type Importer {
-  name: ID!
-  last_dt: String
-}
-
-input KkmRegisterCheckInput {
-  email: String!
+  path: String!
+  body: String!
   title: String!
-  sum: Int!
-  sign_method_calculation: KkmSignMethodCalculation!
+  description: String!
+  show_header_and_footer: Boolean!
+  og_image(spec: String!): WagtailImageRendition
+  assets: [TildaAsset!]!
+  css: [TildaAsset!]!
+  js: [TildaAsset!]!
+  imported_dt: String!
 }
 
-type KkmRegisterCheckOkResult {
+type TildaAsset {
   url: String!
+  kind: String!
 }
 
-union KkmRegisterCheckResult = KkmRegisterCheckOkResult | GenericError
-
-enum KkmSignMethodCalculation {
-  """
-  ПРЕДОПЛАТА 100% (Полная предварительная оплата до момента передачи предмета расчета)
-  """
-  PRE_PAYMENT_100
-
-  """
-  ПРЕДОПЛАТА (Частичная предварительная оплата до момента передачи предмета расчета)
-  """
-  PRE_PAYMENT
-
-  """АВАНС"""
-  ADVANCE
-
-  """
-  ПОЛНЫЙ РАСЧЕТ (Полная оплата, в том числе с учетом аванса в момент передачи предмета расчета)
-  """
-  FULL_PAYMENT
-
-  """
-  ЧАСТИЧНЫЙ РАСЧЕТ И КРЕДИТ (Частичная оплата предмета расчета в момент его передачи с последующей оплатой в кредит)
-  """
-  PARTIAL_PAYMENT_AND_CREDIT
-
-  """
-  ПЕРЕДАЧА В КРЕДИТ (Передача предмета расчета без его оплаты в момент его передачи с последующей оплатой в кредит)
-  """
-  CREDIT_TRANSFER
-
-  """
-  ОПЛАТА КРЕДИТА (Оплата предмета расчета после его передачи с оплатой в кредит)
-  """
-  CREDIT_PAYMENT
+type CommunityLeadConnection {
+  pageInfo: PageInfo!
+  nodes: [CommunityLead!]!
+  edges: [CommunityLeadEdge!]!
 }
 
-type KkmStatusResult {
-  last_shift_closed: String
-}
-
-type MailchimpSubscribeBlock implements WagtailBlock {
-  id: ID!
-  value: MailchimpSubscribeBlockValue!
-}
-
-type MailchimpSubscribeBlockValue {
-  news: Boolean!
-  events: Boolean!
-  trainings: Boolean!
-}
-
-type MastermindDatingCohort {
-  id: ID!
-  leader_telegram_uid: String!
-  event: Event
-  participants: [MastermindDatingParticipant!]!
-  groups: [MastermindDatingGroup!]!
-}
-
-type MastermindDatingCohortMutationResult {
-  cohort: MastermindDatingCohort!
-}
-
-type MastermindDatingGroup {
-  id: ID!
-  telegram_invite_link: String!
-  participants: [MastermindDatingParticipant!]!
-}
-
-type MastermindDatingParticipant {
+type CommunityLead implements Commentable {
   id: ID!
   name: String!
-  desc: String!
-  voted_for: Boolean!
-  present: Boolean!
-  invite_email_sent: Boolean!
-  photo: String
-  user: AuthUser!
-  cohort: MastermindDatingCohort!
+  description: String!
+  created: String!
+  updated: String!
+  events: [Event!]!
+  initiatives: [CommunityInitiative!]!
+  created_by: AuthUser
+  curated_by: AuthUser
+  status: CommunityLeadStatus!
+  comments_count: Int!
+  comments: [Comment!]!
 }
 
-type MastermindDatingParticipantMutationResult {
-  participant: MastermindDatingParticipant!
+interface Commentable {
+  comments_count: Int!
+  comments: [Comment!]!
+}
+
+type Comment {
+  id: ID!
+  created: String!
+  text: String!
+  author: AuthUser!
+}
+
+type CommunityInitiative implements Commentable {
+  id: ID!
+  title: String!
+  description: String!
+  created: String!
+  updated: String!
+  leads: [CommunityLead!]!
+  created_by: AuthUser
+  curated_by: AuthUser
+  status: CommunityInitiativeStatus!
+  comments_count: Int!
+  comments: [Comment!]!
+}
+
+enum CommunityInitiativeStatus {
+  ACTIVE
+  INACTIVE
+}
+
+enum CommunityLeadStatus {
+  ACTIVE
+  INACTIVE
+}
+
+type CommunityLeadEdge {
+  node: CommunityLead!
+}
+
+input CommunityLeadsFilterInput {
+  status: CommunityLeadStatus
+  curated_by_me: Boolean
+  curated_by_empty: Boolean
+  search: String
+}
+
+input CommunityLeadInput {
+  id: ID!
+}
+
+type CommunityInitiativeConnection {
+  pageInfo: PageInfo!
+  nodes: [CommunityInitiative!]!
+  edges: [CommunityInitiativeEdge!]!
+}
+
+type CommunityInitiativeEdge {
+  node: CommunityInitiative!
+}
+
+input CommunityInitiativesFilterInput {
+  status: CommunityInitiativeStatus
+}
+
+input CommunityInitiativeInput {
+  id: ID!
+}
+
+type My {
+  user: AuthCurrentUser!
+  membership: MyCmCustomer
+  tickets(before: String, after: String, first: Int, last: Int): MyEventsTicketConnection!
+  email_subscription: MyEmailSubscription!
+}
+
+"""
+Describes the current user.
+
+If user is not signed in, `is_authenticated` field will be false and all other fields will be empty.
+"""
+type AuthCurrentUser {
+  id: ID!
+  is_authenticated: Boolean!
+  email: String
+  first_name: String
+  last_name: String
+  is_staff: Boolean
+  is_superuser: Boolean!
+  permissions: [String!]!
+}
+
+type MyCmCustomer {
+  """Номер карты"""
+  card_id: Int!
+  subscription_until: String
+  last_visit: String
+  total_spent: Int!
+
+  """Приватность"""
+  privacy_mode: String!
+  orders_count: Int!
+  orders: [MyCmOrder!]!
+}
+
+type MyCmOrder {
+  order_id: ID!
+  start_dt: String!
+  end_dt: String
+}
+
+type MyEventsTicketConnection {
+  pageInfo: PageInfo!
+  nodes: [MyEventsTicket!]!
+  edges: [MyEventsTicketEdge!]!
+}
+
+type MyEventsTicketEdge {
+  node: MyEventsTicket!
+}
+
+type MyEmailSubscription {
+  status: String!
+  interests: [MyEmailSubscriptionInterest!]
+}
+
+type MyEmailSubscriptionInterest {
+  id: ID!
+  name: String!
+  subscribed: Boolean
 }
 
 type Mutation {
@@ -1260,59 +1853,195 @@ type Mutation {
   deleteComment(input: DeleteCommentInput!): DeleteCommentResult!
 }
 
-type My {
-  user: AuthCurrentUser!
-  membership: MyCmCustomer
-  tickets(before: String, after: String, first: Int, last: Int): MyEventsTicketConnection!
-  email_subscription: MyEmailSubscription!
+input UpdateSettingsInput {
+  default_events_images_collection: ID
+  default_events_vk_images_collection: ID
+  weekly_digest_images_collection: ID
+  community_org_team_telegram_chat: ID
 }
 
-type MyCmCustomer {
-  """Номер карты"""
-  card_id: Int!
-  subscription_until: String
-  last_visit: String
-  total_spent: Int!
-
-  """Приватность"""
-  privacy_mode: String!
-  orders_count: Int!
-  orders: [MyCmOrder!]!
+type WagtailUploadImageFromUrlResult {
+  image: WagtailImage!
 }
 
-type MyCmOrder {
-  order_id: ID!
-  start_dt: String!
-  end_dt: String
+input WagtailUploadImageFromUrlInput {
+  url: String!
+  title: String!
+  basename: String!
+  collection_id: String!
 }
 
-type MyEmailSubscription {
-  status: String!
-  interests: [MyEmailSubscriptionInterest!]
+type BasicResult {
+  ok: Boolean
 }
 
-type MyEmailSubscriptionInterest {
-  id: ID!
+type AuthLoginResult {
+  error: String
+  user: AuthCurrentUser
+  registered: Boolean
+}
+
+input AuthLoginInput {
+  credentials: AuthLoginCredentialsInput!
+  result: String!
+}
+
+input AuthLoginCredentialsInput {
+  email: String
+  password: String
+  token: String
+}
+
+union SetMyPasswordResult = SetMyPasswordOkResult | GenericError | ValidationError
+
+type SetMyPasswordOkResult {
+  ok: Boolean!
+}
+
+type GenericError {
+  message: String!
+}
+
+type ValidationError {
+  errors: [ValidationErrorItem!]!
+}
+
+type ValidationErrorItem {
   name: String!
-  subscribed: Boolean
+  messages: [String!]!
 }
 
-type MyEventsTicket {
+input SetMyPasswordInput {
+  old_password: String
+  new_password: String!
+}
+
+type AuthLogoutResult {
+  ok: Boolean
+}
+
+type AuthSendMagicLinkResult {
+  ok: Boolean
+  error: String
+}
+
+input AuthSendMagicLinkInput {
+  email: String!
+  next: String
+}
+
+union AuthSetMyNamesResult = AuthCurrentUser | GenericError | ValidationError
+
+input AuthSetMyNamesInput {
+  first_name: String!
+  last_name: String!
+}
+
+input Cm2CreateOrderInput {
+  customer: ID
+}
+
+input Cm2CreateCustomerInput {
+  card_id: Int!
+  first_name: String!
+  last_name: String!
+}
+
+input WatchmenCreateWatchmanInput {
+  email: String!
+  short_name: String!
+  full_name: String!
+  password: String!
+  vk: String
+  gender: String!
+  skip_wiki: Boolean
+  skip_cm_customer: Boolean
+  skip_cm_user: Boolean
+}
+
+union WatchmenUpdateShiftResult = WatchmenShift | ValidationError | GenericError
+
+input WatchmenUpdateShiftInput {
+  date: String!
+  shift: String!
+  watchman_id: ID
+  is_night: Boolean
+}
+
+input WatchmenSetWatchmanPriorityInput {
+  watchman_id: ID!
+  priority: Int!
+}
+
+input WatchmenSetWatchmanGradeInput {
+  watchman_id: ID!
+  grade_id: ID!
+}
+
+union KkmRegisterCheckResult = KkmRegisterCheckOkResult | GenericError
+
+type KkmRegisterCheckOkResult {
+  url: String!
+}
+
+input KkmRegisterCheckInput {
+  email: String!
+  title: String!
+  sum: Int!
+  sign_method_calculation: KkmSignMethodCalculation!
+}
+
+enum KkmSignMethodCalculation {
+  """
+  ПРЕДОПЛАТА 100% (Полная предварительная оплата до момента передачи предмета расчета)
+  """
+  PRE_PAYMENT_100
+
+  """
+  ПРЕДОПЛАТА (Частичная предварительная оплата до момента передачи предмета расчета)
+  """
+  PRE_PAYMENT
+
+  """АВАНС"""
+  ADVANCE
+
+  """
+  ПОЛНЫЙ РАСЧЕТ (Полная оплата, в том числе с учетом аванса в момент передачи предмета расчета)
+  """
+  FULL_PAYMENT
+
+  """
+  ЧАСТИЧНЫЙ РАСЧЕТ И КРЕДИТ (Частичная оплата предмета расчета в момент его передачи с последующей оплатой в кредит)
+  """
+  PARTIAL_PAYMENT_AND_CREDIT
+
+  """
+  ПЕРЕДАЧА В КРЕДИТ (Передача предмета расчета без его оплаты в момент его передачи с последующей оплатой в кредит)
+  """
+  CREDIT_TRANSFER
+
+  """
+  ОПЛАТА КРЕДИТА (Оплата предмета расчета после его передачи с оплатой в кредит)
+  """
+  CREDIT_PAYMENT
+}
+
+input CashierCreatePaymentInput {
+  amount: Int!
+  whom: ID!
+  comment: String!
+}
+
+union UpdateYandexKassaPaymentResult = YandexKassaPayment | GenericError
+
+input UpdateYandexKassaPaymentInput {
   id: ID!
-  event: Event!
-  status: String!
-  created: String
-  zoom_link: String
 }
 
-type MyEventsTicketConnection {
-  pageInfo: PageInfo!
-  nodes: [MyEventsTicket!]!
-  edges: [MyEventsTicketEdge!]!
-}
+union CancelYandexKassaPaymentResult = YandexKassaPayment | GenericError
 
-type MyEventsTicketEdge {
-  node: MyEventsTicket!
+input CancelYandexKassaPaymentInput {
+  id: ID!
 }
 
 input MyEventsTicketRegisterAnonInput {
@@ -1321,264 +2050,228 @@ input MyEventsTicketRegisterAnonInput {
   subscribed_to_newsletter: Boolean
 }
 
-type NowCustomer {
-  card_id: Int!
-  first_name: String!
-  last_name: String!
+type EventCreateResult {
+  ok: Boolean
+  event: Event!
 }
 
-type NowInfo {
-  total: Int!
-  customers: [NowCustomer!]!
+input EventCreateInput {
+  start: String!
+  end: String!
+  title: String!
+  description: String
+  location: String
 }
 
-type OfdDocument {
-  id: ID!
-  document_id: Int!
-  cash: Float!
-  electronic: Float!
-  check_type: String!
-  items: [OfdDocumentItem!]!
-  created: String!
+type EventUpdateResult {
+  ok: Boolean
+  event: Event!
 }
 
-type OfdDocumentConnection {
-  pageInfo: PageInfo!
-  nodes: [OfdDocument!]!
-  edges: [OfdDocumentEdge!]!
+input EventUpdateInput {
+  event_id: ID!
+  start: String
+  end: String
+  published: Boolean
+  visitors: String
+  title: String
+  description: String
+  summary: String
+  event_type: String
+  registration_type: String
+  pricing_type: String
+  realm: String
+  timing_description_override: String
+  location: String
+  zoom_link: String
+  prototype_id: ID
+  project_slug: String
+  image_id: ID
 }
 
-type OfdDocumentEdge {
-  node: OfdDocument!
+input EventDeleteInput {
+  event_id: ID!
 }
 
-type OfdDocumentItem {
-  id: ID!
-  name: String!
-  quantity: Float!
-  price: Float!
-  sum: Float!
-  product_type: Int!
-  payment_type: Int!
+union CancelEventResult = BasicResult | GenericError | ValidationError
+
+input CancelEventInput {
+  event_id: ID!
+  notification_message: String!
 }
 
-type OfdFiscalDrive {
-  id: ID!
-  fiscal_drive_number: String!
+input EventGenerateZoomLinkInput {
+  event_id: ID!
 }
 
-type OfdShift {
-  id: ID!
-  shift_id: Int!
-  cash: Float!
-  electronic: Float!
-  close_dt: String
-  open_dt: String!
+input EventAddTagInput {
+  event_id: ID!
+  tag: String!
 }
 
-type OfdShiftConnection {
-  pageInfo: PageInfo!
-  nodes: [OfdShift!]!
-  edges: [OfdShiftEdge!]!
+input EventDeleteTagInput {
+  event_id: ID!
+  tag: String!
 }
 
-type OfdShiftEdge {
-  node: OfdShift!
+input EventMoveInput {
+  event_id: ID!
+  start: String!
 }
 
-input OfdShiftsFilterInput {
-  open_only: Boolean
-}
-
-type OpenviduGenerateRoomTokenResult {
+type EventGenerateOpenViduTokenResult {
   token: String!
 }
 
-type PageInfo {
-  hasNextPage: Boolean!
-  hasPreviousPage: Boolean!
-  startCursor: String
-  endCursor: String
+input EventGenerateOpenViduTokenInput {
+  event_id: ID!
 }
 
-type PageSearchItem {
-  page: WagtailPage!
+type EventPrototypeUpdateResult {
+  ok: Boolean!
+  prototype: EventsPrototype!
 }
 
-type PhotoRibbonBlock implements WagtailBlock {
-  id: ID!
-  value(spec: String!): [WagtailImageRendition!]!
-}
-
-input PostToTelegramChatInput {
-  id: ID!
-  message: String!
-}
-
-union PostToTelegramChatResult = BasicResult
-
-type PresentationPage implements WagtailPage {
+input EventPrototypeCreateInput {
   title: String!
+  summary: String
+  description: String
+  timing_description_override: String
+  location: String
+  weekday: Int!
+  hour: Int!
+  minute: Int!
+  length: Int!
+  project_slug: String
+  vk_group_name: String
+  timepad_category_code: String
+}
+
+input EventPrototypeUpdateInput {
   id: ID!
-  meta: WagtailPageMeta!
-  slides: [WagtailBlock!]!
+  active: Boolean
+  title: String
+  summary: String
+  description: String
+  timing_description_override: String
+  location: String
+  weekday: Int
+  hour: Int
+  minute: Int
+  length: Int
+  project_slug: String
+  vk_group_name: String
+  timepad_category_code: String
 }
 
-type ProjectIndexPage implements WagtailPage {
+input EventPrototypeCancelDateInput {
   id: ID!
-
-  """заголовок"""
-  title: String!
-  meta: WagtailPageMeta!
-
-  """Описание активных проектов"""
-  active_description: String!
-  projects(is_active: Boolean): [ProjectPage!]!
+  date: String!
 }
 
-type ProjectPage implements WagtailPage {
+input EventPrototypeNewEventInput {
   id: ID!
-
-  """заголовок"""
-  title: String!
-  meta: WagtailPageMeta!
-
-  """Короткое описание"""
-  summary: String!
-
-  """Периодичность"""
-  activity_summary: String
-
-  """Активный"""
-  is_active: Boolean!
-  body: String!
-  image(spec: String!): WagtailImageRendition!
-  upcoming_events: [Event!]!
-  telegram_chats: [TelegramChat!]!
+  ts: Int!
 }
 
-type Query {
-  settings: Settings!
-  wagtailPage(page_id: ID, path: String, preview_token: String): WagtailPage @deprecated(reason: "Use wagtailPageOrPrivate instead")
-  wagtailPageOrPrivate(page_id: ID, path: String, preview_token: String): WagtailPageOrPrivateResult!
-  wagtailPages: [WagtailPage!]!
-  wagtailImage(input: WagtailImageInput!): WagtailImage
-  wagtailImageSearch(input: WagtailImageSearchInput!): WagtailImageSearchResult!
-  wagtailBlockStructure(input: WagtailBlockStructureInput!): WagtailBlockStructure!
-  wagtailRenderBlock(input: WagtailRenderBlockInput!): WagtailRenderBlockResult!
-  search(input: SearchInput!): SearchResult!
-  wagtailCollectionsForImageUpload: [WagtailCollection!]!
-  authGroupsAll: [AuthGroup!]!
-  authPermissionsAll: [AuthPermission!]!
-  searchUsers(input: SearchUsersInput!): SearchUsersResult!
-  zadarmaPbxCalls(before: String, after: String, first: Int, last: Int): ZadarmaPbxCallConnection!
-  zadarmaPbxCall(pbx_call_id: ID!): ZadarmaPbxCall!
-  importers: [Importer!]!
-  importer(module_name: String!): Importer!
-  now: NowInfo!
-  cm2Customers(search: String, before: String, after: String, first: Int, last: Int): Cm2CustomerConnection!
-  cm2Orders(status: String, before: String, after: String, first: Int, last: Int): Cm2OrderConnection!
-  cm2Customer(id: ID!): Cm2Customer!
-  cm2Order(id: ID!): Cm2Order!
-  watchmenWatchmenAll(currentStaff: Boolean, currentRole: Boolean): [WatchmenWatchman!]!
-  watchmenGradesAll: [WatchmenGrade!]!
-  watchmenShifts(from_date: String!, to_date: String!): [WatchmenShift!]!
-  kkmStatus: KkmStatusResult!
-  ofdFiscalDrives: [OfdFiscalDrive!]!
-  ofdDocuments(before: String, after: String, first: Int, last: Int): OfdDocumentConnection!
-  ofdShifts(before: String, after: String, first: Int, last: Int, filter: OfdShiftsFilterInput): OfdShiftConnection!
-  cashierPayments(before: String, after: String, first: Int, last: Int): CashierPaymentConnection!
-  analyticsBovStats: [AnalyticsBovStat!]!
-  events(before: String, after: String, first: Int, last: Int, search: String, filter: EventsFilterInput): EventConnection!
-  event(event_id: ID!): Event
-  eventsPrototype(id: ID!): EventsPrototype!
-  eventsPrototypes: [EventsPrototype!]!
-  publicEvents(before: String, after: String, first: Int, last: Int, from_date: String, project_id: ID): EventConnection!
-  publicEvent(event_id: ID!): Event
-  vkGroups: [VkGroup!]!
-  timepadCategories: [TimepadCategory!]!
-  eventsWeeklyDigestCurrent: EventsWeeklyDigest!
-  eventsPublicGoogleCalendar: EventsGoogleCalendar
-  staffMembersAll: [StaffMember!]!
-  staffMember(id: ID!): StaffMember!
-  ratioTrainings(before: String, after: String, first: Int, last: Int, filter: RatioTrainingsFilterInput): RatioTrainingConnection!
-  ratioTrainingBySlug(slug: String!): RatioTraining!
-  ratioTrainersAll: [RatioTrainer!]!
-  ratioTrainingEmailPrototype(training_id: ID!, type: String!): String!
-  ratioTicketTypes(input: RatioTicketTypesInput!): [RatioTicketType!]!
-  ratioTicketType(input: RatioTicketTypeInput!): RatioTicketType!
-  ratioOrders(before: String, after: String, first: Int, last: Int): RatioOrderConnection!
-  ratioTickets(before: String, after: String, first: Int, last: Int, filter: RatioTicketsFilterInput): RatioTicketConnection!
-  ratioTicket(id: ID!): RatioTicket!
-  ratioTestimonials(before: String, after: String, first: Int, last: Int): RatioTestimonialConnection!
-  mastermindDatingCohorts: [MastermindDatingCohort!]!
-  mastermindDatingCohortById(id: ID!): MastermindDatingCohort!
-  projects: [ProjectPage!]!
-  specialOffer: SpecialOffer
-  emailMailchimpCategoriesAll: [EmailMailchimpCategory!]!
-  emailSubscribeChannelsAll: [EmailSubscribeChannel!]!
-  imageTemplatesAll: [ImageTemplate!]!
-  imageTemplateBySlug(slug: String!): ImageTemplate!
-  publicTelegramChats: [TelegramChat!]!
-  allTelegramChats: [TelegramChat!]!
-  tildaPage(path: String!): TildaPage
-  tildaPages: [TildaPage!]!
-  externalServices: [ExternalService!]!
-  communityLeads(before: String, after: String, first: Int, last: Int, filter: CommunityLeadsFilterInput): CommunityLeadConnection!
-  communityLead(input: CommunityLeadInput!): CommunityLead!
-  communityInitiatives(before: String, after: String, first: Int, last: Int, filter: CommunityInitiativesFilterInput): CommunityInitiativeConnection!
-  communityInitiative(input: CommunityInitiativeInput!): CommunityInitiative!
-  my: My!
-}
-
-type RatioActivity {
+input EventPrototypeAddTagInput {
   id: ID!
-
-  """Время"""
-  time: String!
-
-  """Тип"""
-  activity_type: String!
-
-  """Название"""
-  name: String!
-
-  """Локация"""
-  location: String!
-  trainer: RatioTrainer
+  tag: String!
 }
 
-input RatioAddTicketInput {
-  training: ID!
-  ticket_type: ID
-  email: String!
-  first_name: String
-  last_name: String
-  payment_amount: Int!
-  ticket_class: String
+input EventPrototypeDeleteTagInput {
+  id: ID!
+  tag: String!
+}
+
+input EventPrototypeSetImageInput {
+  id: ID!
+  image_id: ID!
+}
+
+type EventsWeeklyDigestUpdateResult {
+  ok: Boolean
+  digest: EventsWeeklyDigest!
+}
+
+input EventsWeeklyDigestPostMailchimpInput {
+  text_before: String
+  text_after: String
+}
+
+union CancelWeeklyDigestMailchimpResult = GenericError | EventsWeeklyDigest
+
+union SendWeeklyDigestMailchimpResult = GenericError | EventsWeeklyDigest
+
+input EventTimepadAnnouncementUpdateInput {
+  event_id: ID!
+  prepaid_tickets: Boolean
+  category_code: String
+}
+
+input EventVkAnnouncementUpdateInput {
+  event_id: ID!
+  group: String
+}
+
+input EventVkAnnouncementSetImageInput {
+  event_id: ID!
+  image_id: ID!
+}
+
+input EventAnnounceInput {
+  event_id: ID!
+  target: EventAnnounceTarget!
+}
+
+enum EventAnnounceTarget {
+  VK
+  FB
+  TIMEPAD
+}
+
+input EventSetAnnounceUrlInput {
+  event_id: ID!
+  target: EventAnnounceTarget!
+  url: String!
+}
+
+type EventsFeedbackCreateResult {
+  ok: Boolean
+  feedback: EventsFeedback!
+}
+
+input EventsFeedbackCreateInput {
+  event_id: ID!
+  overall_score: Int
+  recommend_score: Int
+  content_score: Int
+  conductor_score: Int
+  source_friend: Boolean!
+  source_vk: Boolean!
+  source_fb: Boolean!
+  source_timepad: Boolean!
+  source_email: Boolean!
+  source_website: Boolean!
+  custom_source: String
   comment: String
 }
 
-type RatioBriefingBlock implements WagtailBlock {
+input EventsFeedbackDeleteInput {
   id: ID!
-  value: String!
 }
 
-input RatioConfirmOrderInput {
-  order_id: ID!
+type RatioTrainingSendEmailResult {
+  draft_link: String!
 }
 
-enum RatioConfirmOrderOutcome {
-  NOT_FOUND
-  NOT_PAID
-  OK
-  ALREADY_FULFILLED
-  TICKET_ALREADY_EXISTS
+input RatioTrainingSendEmailInput {
+  training_id: ID!
+  title: String!
+  content: String!
 }
 
-type RatioConfirmOrderResult {
-  outcome: RatioConfirmOrderOutcome!
-}
+union RatioCreateOrderResult = RatioOrder | ValidationError | GenericError
 
 input RatioCreateOrderInput {
   ticket_type_id: ID!
@@ -1596,114 +2289,24 @@ input RatioCreateOrderPayerInput {
   last_name: String!
 }
 
-union RatioCreateOrderResult = RatioOrder | ValidationError | GenericError
-
-input RatioDeleteTrainingInput {
-  slug: String!
+type RatioConfirmOrderResult {
+  outcome: RatioConfirmOrderOutcome!
 }
 
-type RatioExerciseBlock implements WagtailBlock {
-  id: ID!
-  value: RatioExerciseBlockValue!
+enum RatioConfirmOrderOutcome {
+  NOT_FOUND
+  NOT_PAID
+  OK
+  ALREADY_FULFILLED
+  TICKET_ALREADY_EXISTS
 }
 
-type RatioExerciseBlockValue {
-  header: String!
-  lines_count: Int!
-  enumerate: Boolean!
+input RatioConfirmOrderInput {
+  order_id: ID!
 }
 
-type RatioExerciseOnelineBlock implements WagtailBlock {
-  id: ID!
-  value: RatioExerciseOnelineBlockValue!
-}
-
-type RatioExerciseOnelineBlockValue {
-  text: String!
-}
-
-type RatioHeaderBlock implements WagtailBlock {
-  id: ID!
-  value: String!
-}
-
-type RatioInsetBlock implements WagtailBlock {
-  id: ID!
-  value: String!
-}
-
-type RatioMathBlock implements WagtailBlock {
-  id: ID!
-  value: String!
-}
-
-type RatioNotebookIndexPage implements WagtailPage {
-  title: String!
-  id: ID!
-  meta: WagtailPageMeta!
-}
-
-type RatioNotebookPage implements WagtailPage {
-  title: String!
-  id: ID!
-  meta: WagtailPageMeta!
-  sections: [RatioNotebookSectionBlock!]!
-}
-
-type RatioNotebookSectionBlock implements WagtailBlock {
-  id: ID!
-  value: RatioSectionPage!
-}
-
-type RatioOrder {
-  fulfilled: Boolean!
-  id: ID!
-  confirmation_token: String!
-  created: String!
-  email: String!
-  first_name: String!
-  last_name: String!
-  city: String!
-  ticket_type: RatioTicketType!
-  payment: YandexKassaPayment!
-  price: Int!
-  promocode: RatioPromocode
-}
-
-type RatioOrderConnection {
-  pageInfo: PageInfo!
-  nodes: [RatioOrder!]!
-  edges: [RatioOrderEdge!]!
-}
-
-type RatioOrderEdge {
-  node: RatioOrder!
-}
-
-type RatioParagraphBlock implements WagtailBlock {
-  id: ID!
-  value: String!
-}
-
-type RatioPayment {
-  id: ID!
-
-  """Размер оплаты"""
-  amount: Int!
-
-  """Вид оплаты"""
-  payment_type: String!
-
-  """Статус"""
-  status: String!
-
-  """Статус фискального чека"""
-  fiscalization_status: String!
-  comment: String!
-
-  """Кастомный заголовок для чека"""
-  custom_kkm_title: String!
-  ticket: RatioTicket!
+type RatioPaymentAddResult {
+  payment: RatioPayment!
 }
 
 input RatioPaymentAddInput {
@@ -1715,11 +2318,11 @@ input RatioPaymentAddInput {
   comment: String
 }
 
-type RatioPaymentAddResult {
+type RatioPaymentFiscalizedManuallyResult {
   payment: RatioPayment!
 }
 
-type RatioPaymentFiscalizedManuallyResult {
+type RatioPaymentSetStatusResult {
   payment: RatioPayment!
 }
 
@@ -1728,203 +2331,9 @@ input RatioPaymentSetStatusInput {
   status: String!
 }
 
-type RatioPaymentSetStatusResult {
-  payment: RatioPayment!
-}
-
-type RatioPresentationIndexPage implements WagtailPage {
-  title: String!
-  id: ID!
-  meta: WagtailPageMeta!
-  presentations: [PresentationPage!]!
-}
-
-type RatioPromocode {
-  id: ID!
-
-  """Промокод"""
-  code: String!
-
-  """Сумма скидки"""
-  discount: Int!
-
-  """Процент скидки"""
-  discount_percent: Int!
-
-  """Максимальное количество использований"""
-  uses_max: Int
-
-  """Количество использований"""
-  uses_count: Int!
-
-  """Создан для E-mail'а"""
-  for_email: String!
-}
-
-type RatioPromocodeConnection {
-  pageInfo: PageInfo!
-  nodes: [RatioPromocode!]!
-  edges: [RatioPromocodeEdge!]!
-}
-
-type RatioPromocodeEdge {
-  node: RatioPromocode!
-}
-
-type RatioSectionIndexPage implements WagtailPage {
-  title: String!
-  id: ID!
-  meta: WagtailPageMeta!
-}
-
-type RatioSectionPage implements WagtailPage {
-  title: String!
-  id: ID!
-  meta: WagtailPageMeta!
-  body: [WagtailBlock!]!
-}
-
-type RatioTestimonial {
-  id: ID!
-  author_name: String!
-  author_description: String!
-  author_image(spec: String!): WagtailImageRendition
-  text: String!
-  product: RatioTestimonialProduct
-}
-
-type RatioTestimonialConnection {
-  pageInfo: PageInfo!
-  nodes: [RatioTestimonial!]!
-  edges: [RatioTestimonialEdge!]!
-}
-
-type RatioTestimonialEdge {
-  node: RatioTestimonial!
-}
-
-type RatioTestimonialProduct {
-  id: ID!
-  title: String!
-  color: String!
-  link: String!
-}
-
-type RatioTicket {
-  id: ID!
-  email: String!
-
-  """Имя"""
-  first_name: String!
-
-  """Фамилия"""
-  last_name: String!
-
-  """Дата регистрации"""
-  registration_date: String
-
-  """Дата создания"""
-  created: String!
-
-  """Статус"""
-  status: String!
-
-  """Тип билета"""
-  ticket_class: String!
-
-  """Размер оплаты"""
-  payment_amount: Int!
-  comment: String!
-  notion_link: String!
-  payments: [RatioPayment!]!
-  training: RatioTraining!
-  ticket_type: RatioTicketType
-  need_notion_link: Boolean!
-}
-
-type RatioTicketConnection {
-  pageInfo: PageInfo!
-  nodes: [RatioTicket!]!
-  edges: [RatioTicketEdge!]!
-}
-
-type RatioTicketEdge {
-  node: RatioTicket!
-}
-
-type RatioTicketType {
-  """Стоимость"""
-  price: Int!
-
-  """Название"""
-  name: String!
-
-  """Сумма скидки одноразового промокода по E-mail'у"""
-  discount_by_email: Int!
-
-  """Процент скдики одноразового промокода по E-mail'у"""
-  discount_percent_by_email: Int!
-  id: ID!
-  training: RatioTraining!
-  promocodes_count: Int!
-  promocodes(before: String, after: String, first: Int, last: Int): RatioPromocodeConnection!
-}
-
-input RatioTicketTypeInput {
-  id: ID!
-}
-
-input RatioTicketTypesInput {
-  id: ID
-  training_type: String
-}
-
-input RatioTicketsFilterInput {
-  with_missing_payments: Boolean
-  with_unfiscalized_checks: Boolean
-  without_notion_link: Boolean
-}
-
-type RatioTrainer {
-  id: ID!
-
-  """Короткое имя"""
-  short_name: String!
-
-  """Длинное имя"""
-  long_name: String!
-}
-
-type RatioTraining {
-  id: ID!
-
-  """Название"""
-  name: String!
-  slug: String!
-  training_type: String!
-
-  """Дата начала"""
-  date: String
-
-  """Телеграм-чат"""
-  telegram_link: String!
-  salaries_paid: Boolean!
-
-  """Сумма скидки одноразового промокода по E-mail'у"""
-  discount_by_email: Int!
-
-  """Процент скдики одноразового промокода по E-mail'у"""
-  discount_percent_by_email: Int!
-  promocode_email: String!
-  new_ticket_email: String!
-  notion_created_email: String!
-  tickets: [RatioTicket!]!
-  schedule: [RatioTrainingDay!]!
-  ticket_types: [RatioTicketType!]!
-  tickets_count: Int!
-  total_income: Int!
-  promocodes_count: Int!
-  promocodes(before: String, after: String, first: Int, last: Int): RatioPromocodeConnection!
+input RatioTrainingCopyScheduleFromInput {
+  from_training_slug: String!
+  to_training_slug: String!
 }
 
 input RatioTrainingAddDayInput {
@@ -1932,269 +2341,12 @@ input RatioTrainingAddDayInput {
   date: String!
 }
 
-type RatioTrainingConnection {
-  pageInfo: PageInfo!
-  nodes: [RatioTraining!]!
-  edges: [RatioTrainingEdge!]!
-}
-
-input RatioTrainingCopyScheduleFromInput {
-  from_training_slug: String!
-  to_training_slug: String!
-}
-
-type RatioTrainingDay {
-  id: ID!
-
-  """Дата"""
-  date: String!
-  activities: [RatioActivity!]!
-}
-
-type RatioTrainingEdge {
-  node: RatioTraining!
-}
-
-input RatioTrainingSendEmailInput {
+input CreateRatioTicketTypeInput {
   training_id: ID!
-  title: String!
-  content: String!
-}
-
-type RatioTrainingSendEmailResult {
-  draft_link: String!
-}
-
-input RatioTrainingsFilterInput {
-  eternal: Boolean
-}
-
-union RefreshTelegramChatDataResult = TelegramChat
-
-input RemoveEventFromCommunityLeadInput {
-  lead_id: ID!
-  event_id: ID!
-}
-
-union RemoveEventFromCommunityLeadResult = CommunityLead
-
-input RemoveLeadFromCommunityInitiativeInput {
-  initiative_id: ID!
-  lead_id: ID!
-}
-
-union RemoveLeadFromCommunityInitiativeResult = CommunityInitiative | GenericError | ValidationError
-
-input RemoveTildaPageInput {
-  id: ID!
-}
-
-input ReplaceRatioTicketNotionLinkInput {
-  id: ID!
-  notion_link: String!
-  send_email: Boolean!
-}
-
-input SearchInput {
-  query: String!
-  limit: Int
-}
-
-union SearchItem = PageSearchItem | EventSearchItem
-
-type SearchResult {
-  results: [SearchItem!]!
-  more: Boolean!
-}
-
-input SearchUsersInput {
-  query: String!
-  limit: Int
-}
-
-type SearchUsersResult {
-  results: [AuthUser!]!
-  more: Boolean!
-}
-
-type SectionHeaderBlock implements WagtailBlock {
-  id: ID!
-  value: SectionHeaderBlockValue!
-}
-
-type SectionHeaderBlockValue {
-  header: String!
-  text: String!
-}
-
-input SendUniqueRatioPromocodeInput {
-  ticket_type_id: ID
-  training_id: ID
-  email: String!
-}
-
-union SendUniqueRatioPromocodeResult = BasicResult | GenericError
-
-union SendWeeklyDigestMailchimpResult = GenericError | EventsWeeklyDigest
-
-input SetMyPasswordInput {
-  old_password: String
-  new_password: String!
-}
-
-type SetMyPasswordOkResult {
-  ok: Boolean!
-}
-
-union SetMyPasswordResult = SetMyPasswordOkResult | GenericError | ValidationError
-
-input SetRatioTicketNotionLinkInput {
-  id: ID!
-  notion_link: String!
-}
-
-type Settings {
-  default_events_images_collection: WagtailCollection!
-  default_events_vk_images_collection: WagtailCollection!
-  weekly_digest_images_collection: WagtailCollection!
-  telegram_images_collection: WagtailCollection!
-  community_org_team_telegram_chat: TelegramChat
-}
-
-type SlackAccount implements ExternalServiceAccount {
-  service: SlackExternalService!
-  email: String!
-}
-
-type SlackExternalService implements ExternalService {
-  slug: String!
-  accounts: [SlackAccount!]!
-}
-
-type SlackUser {
-  slack_id: String!
-  image_url: String!
-}
-
-type SlideFragmentsBlock implements WagtailBlock {
-  id: ID!
-  value: [SlideFragmentsBlockValues!]!
-}
-
-union SlideFragmentsBlockValues = SlideFragmentsBlock_RichTextBlock | SlideFragmentsBlock_RawHtmlBlock
-
-type SlideFragmentsBlock_RawHtmlBlock implements WagtailBlock {
-  id: ID!
-  value: String!
-}
-
-type SlideFragmentsBlock_RichTextBlock implements WagtailBlock {
-  id: ID!
-  value: String!
-}
-
-type SlideRawHtmlBlock implements WagtailBlock {
-  id: ID!
-  value: String!
-}
-
-type SlideRichTextBlock implements WagtailBlock {
-  id: ID!
-  value: String!
-}
-
-type SlideTitleBlock implements WagtailBlock {
-  id: ID!
-  value: String!
-}
-
-type SpecialOffer {
-  id: ID!
-  text: String!
-  link: String!
-  button_text: String!
-  until: String!
-  hide_duration: Int!
-}
-
-type StaffMember {
-  id: ID!
-  short_name: String!
-  full_name: String!
-  role: String!
-  is_current: Boolean!
-  vk: String!
-  color: String!
-  user: AuthUser!
-  slack_user: SlackUser
-}
-
-type Subscription {
-  watchmenScheduleUpdates: WatchmenScheduleUpdateNotification!
-  events: EventNotification!
-}
-
-type TelegramChat {
-  id: ID!
-  username: String!
-  title: String!
-  force_public: Boolean!
-  delisted: Boolean!
-  photo(spec: String!): WagtailImageRendition
-  project: ProjectPage
-  link: String!
-}
-
-type TildaAsset {
-  url: String!
-  kind: String!
-}
-
-type TildaPage {
-  id: ID!
-  page_id: Int!
-  path: String!
-  body: String!
-  title: String!
-  description: String!
-  show_header_and_footer: Boolean!
-  og_image(spec: String!): WagtailImageRendition
-  assets: [TildaAsset!]!
-  css: [TildaAsset!]!
-  js: [TildaAsset!]!
-  imported_dt: String!
-}
-
-type TimepadCategory {
-  id: ID!
-  code: String!
+  price: Int!
   name: String!
-}
-
-input UpdateCommunityInitiativeInput {
-  id: ID!
-  title: String
-  description: String
-  status: String
-}
-
-union UpdateCommunityInitiativeResult = CommunityInitiative | ValidationError | GenericError
-
-input UpdateCommunityLeadInput {
-  id: ID!
-  name: String
-  description: String
-  status: String
-}
-
-union UpdateCommunityLeadResult = CommunityLead | ValidationError | GenericError
-
-input UpdateRatioTicketInput {
-  id: ID!
-  first_name: String
-  last_name: String
-  notion_link: String
-  ticket_type: ID
+  discount_by_email: Int
+  discount_percent_by_email: Int
 }
 
 input UpdateRatioTicketTypeInput {
@@ -2204,6 +2356,54 @@ input UpdateRatioTicketTypeInput {
   discount_by_email: Int
   discount_percent_by_email: Int
 }
+
+input DeleteRatioTicketTypeInput {
+  id: ID!
+}
+
+input RatioAddTicketInput {
+  training: ID!
+  ticket_type: ID
+  email: String!
+  first_name: String
+  last_name: String
+  payment_amount: Int!
+  ticket_class: String
+  comment: String
+}
+
+input UpdateRatioTicketInput {
+  id: ID!
+  first_name: String
+  last_name: String
+  notion_link: String
+  ticket_type: ID
+}
+
+input SetRatioTicketNotionLinkInput {
+  id: ID!
+  notion_link: String!
+}
+
+input ReplaceRatioTicketNotionLinkInput {
+  id: ID!
+  notion_link: String!
+  send_email: Boolean!
+}
+
+union CreateRatioTrainingResult = RatioTraining | ValidationError | GenericError
+
+input CreateRatioTrainingInput {
+  name: String!
+  slug: String!
+  training_type: String
+  date: String
+  telegram_link: String
+  discount_by_email: Int
+  discount_percent_by_email: Int
+}
+
+union UpdateRatioTrainingResult = RatioTraining | ValidationError | GenericError
 
 input UpdateRatioTrainingInput {
   id: ID!
@@ -2218,86 +2418,48 @@ input UpdateRatioTrainingInput {
   notion_created_email: String
 }
 
-union UpdateRatioTrainingResult = RatioTraining | ValidationError | GenericError
-
-input UpdateSettingsInput {
-  default_events_images_collection: ID
-  default_events_vk_images_collection: ID
-  weekly_digest_images_collection: ID
-  community_org_team_telegram_chat: ID
+input RatioDeleteTrainingInput {
+  slug: String!
 }
 
-input UpdateTelegramChatInput {
-  id: ID!
-  force_public: Boolean
-  delisted: Boolean
-  project_slug: String
+union CreateRatioPromocodeResult = RatioPromocode | ValidationError | GenericError
+
+input CreateRatioPromocodeInput {
+  ticket_type_id: ID
+  training_id: ID
+  code: String!
+  discount: Int!
+  uses_max: Int
 }
 
-union UpdateTelegramChatResult = TelegramChat | ValidationError
-
-input UpdateYandexKassaPaymentInput {
-  id: ID!
+type CheckRatioPromocodeResult {
+  discounted_price: Int!
 }
 
-union UpdateYandexKassaPaymentResult = YandexKassaPayment | GenericError
-
-type ValidationError {
-  errors: [ValidationErrorItem!]!
+input CheckRatioPromocodeInput {
+  ticket_type_id: ID!
+  code: String!
 }
 
-type ValidationErrorItem {
-  name: String!
-  messages: [String!]!
+union SendUniqueRatioPromocodeResult = BasicResult | GenericError
+
+input SendUniqueRatioPromocodeInput {
+  ticket_type_id: ID
+  training_id: ID
+  email: String!
 }
 
-type VkGroup {
-  name: String!
+type MastermindDatingCohortMutationResult {
+  cohort: MastermindDatingCohort!
 }
 
-type WagtailAnyBlockValidationError implements WagtailBlockValidationError {
-  error_message: String!
+type MastermindDatingParticipantMutationResult {
+  participant: MastermindDatingParticipant!
 }
 
-interface WagtailBlock {
-  id: ID!
-}
-
-interface WagtailBlockStructure {
-  label: String!
-  group: String
-  required: Boolean!
-}
-
-input WagtailBlockStructureInput {
-  name: String!
-}
-
-interface WagtailBlockValidationError {
-  error_message: String!
-}
-
-type WagtailBooleanBlockStructure implements WagtailBlockStructure {
-  label: String!
-  group: String
-  required: Boolean!
-}
-
-type WagtailCharBlockStructure implements WagtailBlockStructure {
-  label: String!
-  group: String
-  required: Boolean!
-}
-
-type WagtailCollection {
-  id: ID!
-  name: String!
-}
-
-type WagtailCollectionPermission {
-  id: ID!
-  permission: AuthPermission!
-  collection: WagtailCollection!
+type WagtailEditPageBodyBlocksResult {
+  page: WagtailPage
+  validation_error: WagtailStreamFieldValidationError
 }
 
 input WagtailEditPageBodyBlocksInput {
@@ -2306,322 +2468,171 @@ input WagtailEditPageBodyBlocksInput {
   blocksJson: String!
 }
 
-type WagtailEditPageBodyBlocksResult {
-  page: WagtailPage
-  validation_error: WagtailStreamFieldValidationError
-}
-
-type WagtailGeo {
-  lat: String!
-  lng: String!
-}
-
-type WagtailImage {
-  id: ID!
-  url: String!
-  width: Int!
-  height: Int!
-  rendition(spec: String!): WagtailImageRendition!
-}
-
-type WagtailImageBlockStructure implements WagtailBlockStructure {
-  label: String!
-  group: String
-  required: Boolean!
-}
-
-input WagtailImageInput {
-  id: ID!
-}
-
-type WagtailImageRendition {
-  id: ID!
-  url: String!
-  width: Int!
-  height: Int!
-  original_image: WagtailImage!
-}
-
-input WagtailImageSearchInput {
-  query: String!
-}
-
-type WagtailImageSearchResult {
-  results: [WagtailImage!]!
-}
-
-type WagtailListBlockStructure implements WagtailBlockStructure {
-  label: String!
-  group: String
-  required: Boolean!
-  child_block: WagtailBlockStructure!
-}
-
-type WagtailListBlockValidationError implements WagtailBlockValidationError {
-  error_message: String!
-  errors: [WagtailBlockValidationError]!
-}
-
-interface WagtailPage {
-  id: ID!
-  title: String!
-  meta: WagtailPageMeta!
-}
-
-type WagtailPageContainer {
-  page: WagtailPage
-}
-
-type WagtailPageMeta {
+input EmailSubscribeChannelCreateInput {
   slug: String!
-  description: String!
-  html_url: String! @deprecated(reason: "renamed to `url`")
-  url: String!
-  permissions: WagtailPagePermissions!
-  revisions: [WagtailPageRevision!]!
-  revision(id: ID!): WagtailPageRevision!
+  interest_ids: [ID!]!
 }
 
-union WagtailPageOrPrivateResult = WagtailPageContainer | WagtailPagePrivate
+union AddTelegramChatResult = TelegramChat | ValidationError | GenericError
 
-union WagtailPagePermission = WagtailRootPagePermission | WagtailSpecificPagePermission
-
-type WagtailPagePermissions {
-  can_edit: Boolean!
+input AddTelegramChatInput {
+  username: String
 }
 
-type WagtailPagePrivate {
+union AddTelegramChatByInviteLinkResult = TelegramChat | ValidationError | GenericError
+
+input AddTelegramChatByInviteLinkInput {
+  invite_link: String!
+}
+
+union DeleteTelegramChatResult = BasicResult
+
+union UpdateTelegramChatResult = TelegramChat | ValidationError
+
+input UpdateTelegramChatInput {
+  id: ID!
+  force_public: Boolean
+  delisted: Boolean
+  project_slug: String
+}
+
+union RefreshTelegramChatDataResult = TelegramChat
+
+union PostToTelegramChatResult = BasicResult
+
+input PostToTelegramChatInput {
+  id: ID!
   message: String!
 }
 
-type WagtailPageRevision {
+union ImportTildaPageResult = TildaPage | GenericError
+
+input ImportTildaPageInput {
+  page_id: Int!
+}
+
+input RemoveTildaPageInput {
   id: ID!
-  created_at: String!
-  as_page: WagtailPage!
 }
 
-input WagtailRenderBlockInput {
-  type: String!
-  paramsJson: String!
+type OpenviduGenerateRoomTokenResult {
+  token: String!
 }
 
-type WagtailRenderBlockResult {
-  validation_error: WagtailStreamFieldValidationError
-  block: WagtailBlock
-}
+union CreateCommunityLeadResult = CommunityLead | ValidationError | GenericError
 
-type WagtailRichTextBlockStructure implements WagtailBlockStructure {
-  label: String!
-  group: String
-  required: Boolean!
-}
-
-type WagtailRootPagePermission {
-  id: ID!
-  permission_type: String!
-}
-
-type WagtailSpecificPagePermission {
-  id: ID!
-  permission_type: String!
-  page: WagtailPage!
-}
-
-type WagtailStaticBlockStructure implements WagtailBlockStructure {
-  label: String!
-  group: String
-  required: Boolean!
-}
-
-type WagtailStreamBlockValidationError {
-  block_id: Int!
-  error: WagtailBlockValidationError
-}
-
-type WagtailStreamFieldValidationError {
-  block_errors: [WagtailStreamBlockValidationError!]!
-  non_block_error: String
-}
-
-type WagtailStructBlockChildStructure {
+input CreateCommunityLeadInput {
   name: String!
-  definition: WagtailBlockStructure!
+  description: String
+  status: String
 }
 
-type WagtailStructBlockFieldValidationError {
-  name: String!
-  error: WagtailBlockValidationError
+union UpdateCommunityLeadResult = CommunityLead | ValidationError | GenericError
+
+input UpdateCommunityLeadInput {
+  id: ID!
+  name: String
+  description: String
+  status: String
 }
 
-type WagtailStructBlockStructure implements WagtailBlockStructure {
-  label: String!
-  group: String
-  required: Boolean!
-  child_blocks: [WagtailStructBlockChildStructure!]!
+union DeleteCommunityLeadResult = BasicResult
+
+union BecomeCommunityLeadCuratorResult = CommunityLead
+
+input BecomeCommunityLeadCuratorInput {
+  id: ID!
 }
 
-type WagtailStructBlockValidationError implements WagtailBlockValidationError {
-  error_message: String!
-  errors: [WagtailStructBlockFieldValidationError!]!
+union ClearCommunityLeadCuratorResult = CommunityLead
+
+input ClearCommunityLeadCuratorInput {
+  id: ID!
 }
 
-type WagtailURLBlockStructure implements WagtailBlockStructure {
-  label: String!
-  group: String
-  required: Boolean!
+union AddEventToCommunityLeadResult = CommunityLead
+
+input AddEventToCommunityLeadInput {
+  lead_id: ID!
+  event_id: ID!
 }
 
-input WagtailUploadImageFromUrlInput {
-  url: String!
+union RemoveEventFromCommunityLeadResult = CommunityLead
+
+input RemoveEventFromCommunityLeadInput {
+  lead_id: ID!
+  event_id: ID!
+}
+
+union CommentOnCommunityLeadResult = CommunityLead
+
+input CommentOnCommunityLeadInput {
+  lead_id: ID!
+  text: String!
+}
+
+union CreateCommunityInitiativeResult = CommunityInitiative | ValidationError | GenericError
+
+input CreateCommunityInitiativeInput {
   title: String!
-  basename: String!
-  collection_id: String!
+  description: String
 }
 
-type WagtailUploadImageFromUrlResult {
-  image: WagtailImage!
-}
+union UpdateCommunityInitiativeResult = CommunityInitiative | ValidationError | GenericError
 
-input WatchmenCreateWatchmanInput {
-  email: String!
-  short_name: String!
-  full_name: String!
-  password: String!
-  vk: String
-  gender: String!
-  skip_wiki: Boolean
-  skip_cm_customer: Boolean
-  skip_cm_user: Boolean
-}
-
-type WatchmenGrade {
+input UpdateCommunityInitiativeInput {
   id: ID!
+  title: String
+  description: String
+  status: String
+}
 
-  """Код"""
-  code: String!
+union DeleteCommunityInitiativeResult = BasicResult
 
-  """Повышающий коэффициент"""
-  multiplier: Float!
+union AddLeadToCommunityInitiativeResult = CommunityInitiative | GenericError | ValidationError
+
+input AddLeadToCommunityInitiativeInput {
+  initiative_id: ID!
+  lead_id: ID!
+}
+
+union RemoveLeadFromCommunityInitiativeResult = CommunityInitiative | GenericError | ValidationError
+
+input RemoveLeadFromCommunityInitiativeInput {
+  initiative_id: ID!
+  lead_id: ID!
+}
+
+union CommentOnCommunityInitiativeResult = CommunityInitiative
+
+input CommentOnCommunityInitiativeInput {
+  initiative_id: ID!
+  text: String!
+}
+
+union EditCommentResult = Comment | GenericError
+
+input EditCommentInput {
+  id: ID!
+  text: String!
+}
+
+union DeleteCommentResult = BasicResult | GenericError
+
+input DeleteCommentInput {
+  id: ID!
+}
+
+type Subscription {
+  watchmenScheduleUpdates: WatchmenScheduleUpdateNotification!
+  events: EventNotification!
 }
 
 type WatchmenScheduleUpdateNotification {
   updated: Boolean!
 }
 
-input WatchmenSetWatchmanGradeInput {
-  watchman_id: ID!
-  grade_id: ID!
-}
-
-input WatchmenSetWatchmanPriorityInput {
-  watchman_id: ID!
-  priority: Int!
-}
-
-type WatchmenShift {
-  date: String!
-  shift: String!
-  is_night: Boolean!
+type EventNotification {
+  type: String!
   id: ID!
-  watchman: WatchmenWatchman
-}
-
-input WatchmenUpdateShiftInput {
-  date: String!
-  shift: String!
-  watchman_id: ID
-  is_night: Boolean
-}
-
-union WatchmenUpdateShiftResult = WatchmenShift | ValidationError | GenericError
-
-type WatchmenWatchman {
-  id: ID!
-  priority: Int!
-  member: StaffMember!
-  grade: WatchmenGrade
-}
-
-type WikiAccount implements ExternalServiceAccount {
-  service: WikiExternalService!
-  name: String!
-}
-
-type WikiExternalService implements ExternalService {
-  slug: String!
-  accounts: [WikiAccount!]!
-}
-
-type YandexKassaPayment {
-  id: ID!
-  kassa_id: String!
-  is_paid: Boolean!
-  status: YandexKassaPaymentStatus!
-  waiting_for_capture: Boolean!
-}
-
-enum YandexKassaPaymentStatus {
-  pending
-  waiting_for_capture
-  succeeded
-  canceled
-}
-
-type ZadarmaCall {
-  call_id: String!
-  ts: String!
-  call_type: String!
-  disposition: String!
-  clid: String!
-  destination: String!
-  sip: String!
-  is_recorded: Int!
-  watchman: String!
-  record: String
-  id: ID!
-}
-
-type ZadarmaData {
-  staff_member: StaffMember
-}
-
-type ZadarmaPbxCall {
-  pbx_call_id: String!
-  ts: String!
-  calls: [ZadarmaCall!]!
-  data: ZadarmaData
-  id: ID!
-}
-
-type ZadarmaPbxCallConnection {
-  pageInfo: PageInfo!
-  nodes: [ZadarmaPbxCall!]!
-  edges: [ZadarmaPbxCallEdge!]!
-}
-
-type ZadarmaPbxCallEdge {
-  node: ZadarmaPbxCall!
-}
-
-type ZoomMeeting {
-  id: ID!
-  zoom_id: String!
-  join_url: String!
-  instances: [ZoomMeetingInstance!]!
-  participants_count: Int
-}
-
-type ZoomMeetingInstance {
-  id: ID!
-  zoom_uuid: String!
-  start_time: String!
-  end_time: String!
-  participants: [ZoomParticipant!]!
-}
-
-type ZoomParticipant {
-  id: ID!
-  name: String!
-  join_time: String!
-  leave_time: String!
 }

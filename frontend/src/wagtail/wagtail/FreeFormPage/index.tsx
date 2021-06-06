@@ -35,6 +35,7 @@ export const rawFragment = gql`
       ...HrBlock
       ...FrontPartnersBlock
       ...FrontSocialLinksBlock
+      ...LandingHeroBlock
     }
   }
 `;

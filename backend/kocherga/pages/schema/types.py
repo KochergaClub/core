@@ -64,11 +64,7 @@ def create_static_block(name: str):
     return g.ObjectType(name, interfaces=[WagtailBlock], fields=g.fields({'id': 'ID!'}))
 
 
-# TODO - save app on blocks registering instead? some other solution to keep this DRY?
-blocks = sum(
-    [blocks_registry.by_tag(tag) for tag in ('basic', 'columns', 'various', 'front')],
-    start=[],
-)
+blocks = blocks_registry.all()
 
 
 block_types = [

@@ -21,16 +21,16 @@ export type StaffMemberExternalAccountsFragment = (
     { __typename: 'AuthUser' }
     & Pick<Types.AuthUser, 'id'>
     & { external_accounts: Array<(
-      { __typename: 'SlackAccount' }
-      & { service: (
-        { __typename: 'SlackExternalService' }
-        & Pick<Types.SlackExternalService, 'slug'>
-      ) }
-    ) | (
       { __typename: 'WikiAccount' }
       & { service: (
         { __typename: 'WikiExternalService' }
         & Pick<Types.WikiExternalService, 'slug'>
+      ) }
+    ) | (
+      { __typename: 'SlackAccount' }
+      & { service: (
+        { __typename: 'SlackExternalService' }
+        & Pick<Types.SlackExternalService, 'slug'>
       ) }
     )> }
   ) }

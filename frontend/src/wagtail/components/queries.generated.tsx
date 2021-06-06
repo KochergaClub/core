@@ -9,46 +9,16 @@ export type WagtailStreamFieldValidationErrorFragment = (
     { __typename: 'WagtailStreamBlockValidationError' }
     & Pick<Types.WagtailStreamBlockValidationError, 'block_id'>
     & { error?: Types.Maybe<(
-      { __typename: 'WagtailAnyBlockValidationError' }
-      & Pick<Types.WagtailAnyBlockValidationError, 'error_message'>
+      { __typename: 'WagtailStructBlockValidationError' }
+      & Pick<Types.WagtailStructBlockValidationError, 'error_message'>
     ) | (
       { __typename: 'WagtailListBlockValidationError' }
       & Pick<Types.WagtailListBlockValidationError, 'error_message'>
     ) | (
-      { __typename: 'WagtailStructBlockValidationError' }
-      & Pick<Types.WagtailStructBlockValidationError, 'error_message'>
+      { __typename: 'WagtailAnyBlockValidationError' }
+      & Pick<Types.WagtailAnyBlockValidationError, 'error_message'>
     )> }
   )> }
-);
-
-export type StructureCommon_WagtailBooleanBlockStructure_Fragment = (
-  { __typename: 'WagtailBooleanBlockStructure' }
-  & Pick<Types.WagtailBooleanBlockStructure, 'label' | 'required'>
-);
-
-export type StructureCommon_WagtailCharBlockStructure_Fragment = (
-  { __typename: 'WagtailCharBlockStructure' }
-  & Pick<Types.WagtailCharBlockStructure, 'label' | 'required'>
-);
-
-export type StructureCommon_WagtailImageBlockStructure_Fragment = (
-  { __typename: 'WagtailImageBlockStructure' }
-  & Pick<Types.WagtailImageBlockStructure, 'label' | 'required'>
-);
-
-export type StructureCommon_WagtailListBlockStructure_Fragment = (
-  { __typename: 'WagtailListBlockStructure' }
-  & Pick<Types.WagtailListBlockStructure, 'label' | 'required'>
-);
-
-export type StructureCommon_WagtailRichTextBlockStructure_Fragment = (
-  { __typename: 'WagtailRichTextBlockStructure' }
-  & Pick<Types.WagtailRichTextBlockStructure, 'label' | 'required'>
-);
-
-export type StructureCommon_WagtailStaticBlockStructure_Fragment = (
-  { __typename: 'WagtailStaticBlockStructure' }
-  & Pick<Types.WagtailStaticBlockStructure, 'label' | 'required'>
 );
 
 export type StructureCommon_WagtailStructBlockStructure_Fragment = (
@@ -56,67 +26,42 @@ export type StructureCommon_WagtailStructBlockStructure_Fragment = (
   & Pick<Types.WagtailStructBlockStructure, 'label' | 'required'>
 );
 
+export type StructureCommon_WagtailListBlockStructure_Fragment = (
+  { __typename: 'WagtailListBlockStructure' }
+  & Pick<Types.WagtailListBlockStructure, 'label' | 'required'>
+);
+
+export type StructureCommon_WagtailCharBlockStructure_Fragment = (
+  { __typename: 'WagtailCharBlockStructure' }
+  & Pick<Types.WagtailCharBlockStructure, 'label' | 'required'>
+);
+
+export type StructureCommon_WagtailRichTextBlockStructure_Fragment = (
+  { __typename: 'WagtailRichTextBlockStructure' }
+  & Pick<Types.WagtailRichTextBlockStructure, 'label' | 'required'>
+);
+
+export type StructureCommon_WagtailBooleanBlockStructure_Fragment = (
+  { __typename: 'WagtailBooleanBlockStructure' }
+  & Pick<Types.WagtailBooleanBlockStructure, 'label' | 'required'>
+);
+
+export type StructureCommon_WagtailStaticBlockStructure_Fragment = (
+  { __typename: 'WagtailStaticBlockStructure' }
+  & Pick<Types.WagtailStaticBlockStructure, 'label' | 'required'>
+);
+
+export type StructureCommon_WagtailImageBlockStructure_Fragment = (
+  { __typename: 'WagtailImageBlockStructure' }
+  & Pick<Types.WagtailImageBlockStructure, 'label' | 'required'>
+);
+
 export type StructureCommon_WagtailUrlBlockStructure_Fragment = (
   { __typename: 'WagtailURLBlockStructure' }
   & Pick<Types.WagtailUrlBlockStructure, 'label' | 'required'>
 );
 
-export type StructureCommonFragment = StructureCommon_WagtailBooleanBlockStructure_Fragment | StructureCommon_WagtailCharBlockStructure_Fragment | StructureCommon_WagtailImageBlockStructure_Fragment | StructureCommon_WagtailListBlockStructure_Fragment | StructureCommon_WagtailRichTextBlockStructure_Fragment | StructureCommon_WagtailStaticBlockStructure_Fragment | StructureCommon_WagtailStructBlockStructure_Fragment | StructureCommon_WagtailUrlBlockStructure_Fragment;
-
-export type StructureL1_WagtailBooleanBlockStructure_Fragment = (
-  { __typename: 'WagtailBooleanBlockStructure' }
-  & StructureCommon_WagtailBooleanBlockStructure_Fragment
-);
-
-export type StructureL1_WagtailCharBlockStructure_Fragment = (
-  { __typename: 'WagtailCharBlockStructure' }
-  & StructureCommon_WagtailCharBlockStructure_Fragment
-);
-
-export type StructureL1_WagtailImageBlockStructure_Fragment = (
-  { __typename: 'WagtailImageBlockStructure' }
-  & StructureCommon_WagtailImageBlockStructure_Fragment
-);
-
-export type StructureL1_WagtailListBlockStructure_Fragment = (
-  { __typename: 'WagtailListBlockStructure' }
-  & { child_block: (
-    { __typename: 'WagtailBooleanBlockStructure' }
-    & StructureCommon_WagtailBooleanBlockStructure_Fragment
-  ) | (
-    { __typename: 'WagtailCharBlockStructure' }
-    & StructureCommon_WagtailCharBlockStructure_Fragment
-  ) | (
-    { __typename: 'WagtailImageBlockStructure' }
-    & StructureCommon_WagtailImageBlockStructure_Fragment
-  ) | (
-    { __typename: 'WagtailListBlockStructure' }
-    & StructureCommon_WagtailListBlockStructure_Fragment
-  ) | (
-    { __typename: 'WagtailRichTextBlockStructure' }
-    & StructureCommon_WagtailRichTextBlockStructure_Fragment
-  ) | (
-    { __typename: 'WagtailStaticBlockStructure' }
-    & StructureCommon_WagtailStaticBlockStructure_Fragment
-  ) | (
-    { __typename: 'WagtailStructBlockStructure' }
-    & StructureCommon_WagtailStructBlockStructure_Fragment
-  ) | (
-    { __typename: 'WagtailURLBlockStructure' }
-    & StructureCommon_WagtailUrlBlockStructure_Fragment
-  ) }
-  & StructureCommon_WagtailListBlockStructure_Fragment
-);
-
-export type StructureL1_WagtailRichTextBlockStructure_Fragment = (
-  { __typename: 'WagtailRichTextBlockStructure' }
-  & StructureCommon_WagtailRichTextBlockStructure_Fragment
-);
-
-export type StructureL1_WagtailStaticBlockStructure_Fragment = (
-  { __typename: 'WagtailStaticBlockStructure' }
-  & StructureCommon_WagtailStaticBlockStructure_Fragment
-);
+export type StructureCommonFragment = StructureCommon_WagtailStructBlockStructure_Fragment | StructureCommon_WagtailListBlockStructure_Fragment | StructureCommon_WagtailCharBlockStructure_Fragment | StructureCommon_WagtailRichTextBlockStructure_Fragment | StructureCommon_WagtailBooleanBlockStructure_Fragment | StructureCommon_WagtailStaticBlockStructure_Fragment | StructureCommon_WagtailImageBlockStructure_Fragment | StructureCommon_WagtailUrlBlockStructure_Fragment;
 
 export type StructureL1_WagtailStructBlockStructure_Fragment = (
   { __typename: 'WagtailStructBlockStructure' }
@@ -124,26 +69,26 @@ export type StructureL1_WagtailStructBlockStructure_Fragment = (
     { __typename: 'WagtailStructBlockChildStructure' }
     & Pick<Types.WagtailStructBlockChildStructure, 'name'>
     & { definition: (
-      { __typename: 'WagtailBooleanBlockStructure' }
-      & StructureCommon_WagtailBooleanBlockStructure_Fragment
-    ) | (
-      { __typename: 'WagtailCharBlockStructure' }
-      & StructureCommon_WagtailCharBlockStructure_Fragment
-    ) | (
-      { __typename: 'WagtailImageBlockStructure' }
-      & StructureCommon_WagtailImageBlockStructure_Fragment
+      { __typename: 'WagtailStructBlockStructure' }
+      & StructureCommon_WagtailStructBlockStructure_Fragment
     ) | (
       { __typename: 'WagtailListBlockStructure' }
       & StructureCommon_WagtailListBlockStructure_Fragment
     ) | (
+      { __typename: 'WagtailCharBlockStructure' }
+      & StructureCommon_WagtailCharBlockStructure_Fragment
+    ) | (
       { __typename: 'WagtailRichTextBlockStructure' }
       & StructureCommon_WagtailRichTextBlockStructure_Fragment
+    ) | (
+      { __typename: 'WagtailBooleanBlockStructure' }
+      & StructureCommon_WagtailBooleanBlockStructure_Fragment
     ) | (
       { __typename: 'WagtailStaticBlockStructure' }
       & StructureCommon_WagtailStaticBlockStructure_Fragment
     ) | (
-      { __typename: 'WagtailStructBlockStructure' }
-      & StructureCommon_WagtailStructBlockStructure_Fragment
+      { __typename: 'WagtailImageBlockStructure' }
+      & StructureCommon_WagtailImageBlockStructure_Fragment
     ) | (
       { __typename: 'WagtailURLBlockStructure' }
       & StructureCommon_WagtailUrlBlockStructure_Fragment
@@ -152,67 +97,67 @@ export type StructureL1_WagtailStructBlockStructure_Fragment = (
   & StructureCommon_WagtailStructBlockStructure_Fragment
 );
 
+export type StructureL1_WagtailListBlockStructure_Fragment = (
+  { __typename: 'WagtailListBlockStructure' }
+  & { child_block: (
+    { __typename: 'WagtailStructBlockStructure' }
+    & StructureCommon_WagtailStructBlockStructure_Fragment
+  ) | (
+    { __typename: 'WagtailListBlockStructure' }
+    & StructureCommon_WagtailListBlockStructure_Fragment
+  ) | (
+    { __typename: 'WagtailCharBlockStructure' }
+    & StructureCommon_WagtailCharBlockStructure_Fragment
+  ) | (
+    { __typename: 'WagtailRichTextBlockStructure' }
+    & StructureCommon_WagtailRichTextBlockStructure_Fragment
+  ) | (
+    { __typename: 'WagtailBooleanBlockStructure' }
+    & StructureCommon_WagtailBooleanBlockStructure_Fragment
+  ) | (
+    { __typename: 'WagtailStaticBlockStructure' }
+    & StructureCommon_WagtailStaticBlockStructure_Fragment
+  ) | (
+    { __typename: 'WagtailImageBlockStructure' }
+    & StructureCommon_WagtailImageBlockStructure_Fragment
+  ) | (
+    { __typename: 'WagtailURLBlockStructure' }
+    & StructureCommon_WagtailUrlBlockStructure_Fragment
+  ) }
+  & StructureCommon_WagtailListBlockStructure_Fragment
+);
+
+export type StructureL1_WagtailCharBlockStructure_Fragment = (
+  { __typename: 'WagtailCharBlockStructure' }
+  & StructureCommon_WagtailCharBlockStructure_Fragment
+);
+
+export type StructureL1_WagtailRichTextBlockStructure_Fragment = (
+  { __typename: 'WagtailRichTextBlockStructure' }
+  & StructureCommon_WagtailRichTextBlockStructure_Fragment
+);
+
+export type StructureL1_WagtailBooleanBlockStructure_Fragment = (
+  { __typename: 'WagtailBooleanBlockStructure' }
+  & StructureCommon_WagtailBooleanBlockStructure_Fragment
+);
+
+export type StructureL1_WagtailStaticBlockStructure_Fragment = (
+  { __typename: 'WagtailStaticBlockStructure' }
+  & StructureCommon_WagtailStaticBlockStructure_Fragment
+);
+
+export type StructureL1_WagtailImageBlockStructure_Fragment = (
+  { __typename: 'WagtailImageBlockStructure' }
+  & StructureCommon_WagtailImageBlockStructure_Fragment
+);
+
 export type StructureL1_WagtailUrlBlockStructure_Fragment = (
   { __typename: 'WagtailURLBlockStructure' }
   & StructureCommon_WagtailUrlBlockStructure_Fragment
 );
 
-export type StructureL1Fragment = StructureL1_WagtailBooleanBlockStructure_Fragment | StructureL1_WagtailCharBlockStructure_Fragment | StructureL1_WagtailImageBlockStructure_Fragment | StructureL1_WagtailListBlockStructure_Fragment | StructureL1_WagtailRichTextBlockStructure_Fragment | StructureL1_WagtailStaticBlockStructure_Fragment | StructureL1_WagtailStructBlockStructure_Fragment | StructureL1_WagtailUrlBlockStructure_Fragment;
-
-export type StructureL2_WagtailBooleanBlockStructure_Fragment = (
-  { __typename: 'WagtailBooleanBlockStructure' }
-  & StructureCommon_WagtailBooleanBlockStructure_Fragment
-);
-
-export type StructureL2_WagtailCharBlockStructure_Fragment = (
-  { __typename: 'WagtailCharBlockStructure' }
-  & StructureCommon_WagtailCharBlockStructure_Fragment
-);
-
-export type StructureL2_WagtailImageBlockStructure_Fragment = (
-  { __typename: 'WagtailImageBlockStructure' }
-  & StructureCommon_WagtailImageBlockStructure_Fragment
-);
-
-export type StructureL2_WagtailListBlockStructure_Fragment = (
-  { __typename: 'WagtailListBlockStructure' }
-  & { child_block: (
-    { __typename: 'WagtailBooleanBlockStructure' }
-    & StructureL1_WagtailBooleanBlockStructure_Fragment
-  ) | (
-    { __typename: 'WagtailCharBlockStructure' }
-    & StructureL1_WagtailCharBlockStructure_Fragment
-  ) | (
-    { __typename: 'WagtailImageBlockStructure' }
-    & StructureL1_WagtailImageBlockStructure_Fragment
-  ) | (
-    { __typename: 'WagtailListBlockStructure' }
-    & StructureL1_WagtailListBlockStructure_Fragment
-  ) | (
-    { __typename: 'WagtailRichTextBlockStructure' }
-    & StructureL1_WagtailRichTextBlockStructure_Fragment
-  ) | (
-    { __typename: 'WagtailStaticBlockStructure' }
-    & StructureL1_WagtailStaticBlockStructure_Fragment
-  ) | (
-    { __typename: 'WagtailStructBlockStructure' }
-    & StructureL1_WagtailStructBlockStructure_Fragment
-  ) | (
-    { __typename: 'WagtailURLBlockStructure' }
-    & StructureL1_WagtailUrlBlockStructure_Fragment
-  ) }
-  & StructureCommon_WagtailListBlockStructure_Fragment
-);
-
-export type StructureL2_WagtailRichTextBlockStructure_Fragment = (
-  { __typename: 'WagtailRichTextBlockStructure' }
-  & StructureCommon_WagtailRichTextBlockStructure_Fragment
-);
-
-export type StructureL2_WagtailStaticBlockStructure_Fragment = (
-  { __typename: 'WagtailStaticBlockStructure' }
-  & StructureCommon_WagtailStaticBlockStructure_Fragment
-);
+export type StructureL1Fragment = StructureL1_WagtailStructBlockStructure_Fragment | StructureL1_WagtailListBlockStructure_Fragment | StructureL1_WagtailCharBlockStructure_Fragment | StructureL1_WagtailRichTextBlockStructure_Fragment | StructureL1_WagtailBooleanBlockStructure_Fragment | StructureL1_WagtailStaticBlockStructure_Fragment | StructureL1_WagtailImageBlockStructure_Fragment | StructureL1_WagtailUrlBlockStructure_Fragment;
 
 export type StructureL2_WagtailStructBlockStructure_Fragment = (
   { __typename: 'WagtailStructBlockStructure' }
@@ -220,26 +165,26 @@ export type StructureL2_WagtailStructBlockStructure_Fragment = (
     { __typename: 'WagtailStructBlockChildStructure' }
     & Pick<Types.WagtailStructBlockChildStructure, 'name'>
     & { definition: (
-      { __typename: 'WagtailBooleanBlockStructure' }
-      & StructureL1_WagtailBooleanBlockStructure_Fragment
-    ) | (
-      { __typename: 'WagtailCharBlockStructure' }
-      & StructureL1_WagtailCharBlockStructure_Fragment
-    ) | (
-      { __typename: 'WagtailImageBlockStructure' }
-      & StructureL1_WagtailImageBlockStructure_Fragment
+      { __typename: 'WagtailStructBlockStructure' }
+      & StructureL1_WagtailStructBlockStructure_Fragment
     ) | (
       { __typename: 'WagtailListBlockStructure' }
       & StructureL1_WagtailListBlockStructure_Fragment
     ) | (
+      { __typename: 'WagtailCharBlockStructure' }
+      & StructureL1_WagtailCharBlockStructure_Fragment
+    ) | (
       { __typename: 'WagtailRichTextBlockStructure' }
       & StructureL1_WagtailRichTextBlockStructure_Fragment
+    ) | (
+      { __typename: 'WagtailBooleanBlockStructure' }
+      & StructureL1_WagtailBooleanBlockStructure_Fragment
     ) | (
       { __typename: 'WagtailStaticBlockStructure' }
       & StructureL1_WagtailStaticBlockStructure_Fragment
     ) | (
-      { __typename: 'WagtailStructBlockStructure' }
-      & StructureL1_WagtailStructBlockStructure_Fragment
+      { __typename: 'WagtailImageBlockStructure' }
+      & StructureL1_WagtailImageBlockStructure_Fragment
     ) | (
       { __typename: 'WagtailURLBlockStructure' }
       & StructureL1_WagtailUrlBlockStructure_Fragment
@@ -248,67 +193,67 @@ export type StructureL2_WagtailStructBlockStructure_Fragment = (
   & StructureCommon_WagtailStructBlockStructure_Fragment
 );
 
+export type StructureL2_WagtailListBlockStructure_Fragment = (
+  { __typename: 'WagtailListBlockStructure' }
+  & { child_block: (
+    { __typename: 'WagtailStructBlockStructure' }
+    & StructureL1_WagtailStructBlockStructure_Fragment
+  ) | (
+    { __typename: 'WagtailListBlockStructure' }
+    & StructureL1_WagtailListBlockStructure_Fragment
+  ) | (
+    { __typename: 'WagtailCharBlockStructure' }
+    & StructureL1_WagtailCharBlockStructure_Fragment
+  ) | (
+    { __typename: 'WagtailRichTextBlockStructure' }
+    & StructureL1_WagtailRichTextBlockStructure_Fragment
+  ) | (
+    { __typename: 'WagtailBooleanBlockStructure' }
+    & StructureL1_WagtailBooleanBlockStructure_Fragment
+  ) | (
+    { __typename: 'WagtailStaticBlockStructure' }
+    & StructureL1_WagtailStaticBlockStructure_Fragment
+  ) | (
+    { __typename: 'WagtailImageBlockStructure' }
+    & StructureL1_WagtailImageBlockStructure_Fragment
+  ) | (
+    { __typename: 'WagtailURLBlockStructure' }
+    & StructureL1_WagtailUrlBlockStructure_Fragment
+  ) }
+  & StructureCommon_WagtailListBlockStructure_Fragment
+);
+
+export type StructureL2_WagtailCharBlockStructure_Fragment = (
+  { __typename: 'WagtailCharBlockStructure' }
+  & StructureCommon_WagtailCharBlockStructure_Fragment
+);
+
+export type StructureL2_WagtailRichTextBlockStructure_Fragment = (
+  { __typename: 'WagtailRichTextBlockStructure' }
+  & StructureCommon_WagtailRichTextBlockStructure_Fragment
+);
+
+export type StructureL2_WagtailBooleanBlockStructure_Fragment = (
+  { __typename: 'WagtailBooleanBlockStructure' }
+  & StructureCommon_WagtailBooleanBlockStructure_Fragment
+);
+
+export type StructureL2_WagtailStaticBlockStructure_Fragment = (
+  { __typename: 'WagtailStaticBlockStructure' }
+  & StructureCommon_WagtailStaticBlockStructure_Fragment
+);
+
+export type StructureL2_WagtailImageBlockStructure_Fragment = (
+  { __typename: 'WagtailImageBlockStructure' }
+  & StructureCommon_WagtailImageBlockStructure_Fragment
+);
+
 export type StructureL2_WagtailUrlBlockStructure_Fragment = (
   { __typename: 'WagtailURLBlockStructure' }
   & StructureCommon_WagtailUrlBlockStructure_Fragment
 );
 
-export type StructureL2Fragment = StructureL2_WagtailBooleanBlockStructure_Fragment | StructureL2_WagtailCharBlockStructure_Fragment | StructureL2_WagtailImageBlockStructure_Fragment | StructureL2_WagtailListBlockStructure_Fragment | StructureL2_WagtailRichTextBlockStructure_Fragment | StructureL2_WagtailStaticBlockStructure_Fragment | StructureL2_WagtailStructBlockStructure_Fragment | StructureL2_WagtailUrlBlockStructure_Fragment;
-
-export type StructureL3_WagtailBooleanBlockStructure_Fragment = (
-  { __typename: 'WagtailBooleanBlockStructure' }
-  & StructureCommon_WagtailBooleanBlockStructure_Fragment
-);
-
-export type StructureL3_WagtailCharBlockStructure_Fragment = (
-  { __typename: 'WagtailCharBlockStructure' }
-  & StructureCommon_WagtailCharBlockStructure_Fragment
-);
-
-export type StructureL3_WagtailImageBlockStructure_Fragment = (
-  { __typename: 'WagtailImageBlockStructure' }
-  & StructureCommon_WagtailImageBlockStructure_Fragment
-);
-
-export type StructureL3_WagtailListBlockStructure_Fragment = (
-  { __typename: 'WagtailListBlockStructure' }
-  & { child_block: (
-    { __typename: 'WagtailBooleanBlockStructure' }
-    & StructureL2_WagtailBooleanBlockStructure_Fragment
-  ) | (
-    { __typename: 'WagtailCharBlockStructure' }
-    & StructureL2_WagtailCharBlockStructure_Fragment
-  ) | (
-    { __typename: 'WagtailImageBlockStructure' }
-    & StructureL2_WagtailImageBlockStructure_Fragment
-  ) | (
-    { __typename: 'WagtailListBlockStructure' }
-    & StructureL2_WagtailListBlockStructure_Fragment
-  ) | (
-    { __typename: 'WagtailRichTextBlockStructure' }
-    & StructureL2_WagtailRichTextBlockStructure_Fragment
-  ) | (
-    { __typename: 'WagtailStaticBlockStructure' }
-    & StructureL2_WagtailStaticBlockStructure_Fragment
-  ) | (
-    { __typename: 'WagtailStructBlockStructure' }
-    & StructureL2_WagtailStructBlockStructure_Fragment
-  ) | (
-    { __typename: 'WagtailURLBlockStructure' }
-    & StructureL2_WagtailUrlBlockStructure_Fragment
-  ) }
-  & StructureCommon_WagtailListBlockStructure_Fragment
-);
-
-export type StructureL3_WagtailRichTextBlockStructure_Fragment = (
-  { __typename: 'WagtailRichTextBlockStructure' }
-  & StructureCommon_WagtailRichTextBlockStructure_Fragment
-);
-
-export type StructureL3_WagtailStaticBlockStructure_Fragment = (
-  { __typename: 'WagtailStaticBlockStructure' }
-  & StructureCommon_WagtailStaticBlockStructure_Fragment
-);
+export type StructureL2Fragment = StructureL2_WagtailStructBlockStructure_Fragment | StructureL2_WagtailListBlockStructure_Fragment | StructureL2_WagtailCharBlockStructure_Fragment | StructureL2_WagtailRichTextBlockStructure_Fragment | StructureL2_WagtailBooleanBlockStructure_Fragment | StructureL2_WagtailStaticBlockStructure_Fragment | StructureL2_WagtailImageBlockStructure_Fragment | StructureL2_WagtailUrlBlockStructure_Fragment;
 
 export type StructureL3_WagtailStructBlockStructure_Fragment = (
   { __typename: 'WagtailStructBlockStructure' }
@@ -316,26 +261,26 @@ export type StructureL3_WagtailStructBlockStructure_Fragment = (
     { __typename: 'WagtailStructBlockChildStructure' }
     & Pick<Types.WagtailStructBlockChildStructure, 'name'>
     & { definition: (
-      { __typename: 'WagtailBooleanBlockStructure' }
-      & StructureL2_WagtailBooleanBlockStructure_Fragment
-    ) | (
-      { __typename: 'WagtailCharBlockStructure' }
-      & StructureL2_WagtailCharBlockStructure_Fragment
-    ) | (
-      { __typename: 'WagtailImageBlockStructure' }
-      & StructureL2_WagtailImageBlockStructure_Fragment
+      { __typename: 'WagtailStructBlockStructure' }
+      & StructureL2_WagtailStructBlockStructure_Fragment
     ) | (
       { __typename: 'WagtailListBlockStructure' }
       & StructureL2_WagtailListBlockStructure_Fragment
     ) | (
+      { __typename: 'WagtailCharBlockStructure' }
+      & StructureL2_WagtailCharBlockStructure_Fragment
+    ) | (
       { __typename: 'WagtailRichTextBlockStructure' }
       & StructureL2_WagtailRichTextBlockStructure_Fragment
+    ) | (
+      { __typename: 'WagtailBooleanBlockStructure' }
+      & StructureL2_WagtailBooleanBlockStructure_Fragment
     ) | (
       { __typename: 'WagtailStaticBlockStructure' }
       & StructureL2_WagtailStaticBlockStructure_Fragment
     ) | (
-      { __typename: 'WagtailStructBlockStructure' }
-      & StructureL2_WagtailStructBlockStructure_Fragment
+      { __typename: 'WagtailImageBlockStructure' }
+      & StructureL2_WagtailImageBlockStructure_Fragment
     ) | (
       { __typename: 'WagtailURLBlockStructure' }
       & StructureL2_WagtailUrlBlockStructure_Fragment
@@ -344,12 +289,67 @@ export type StructureL3_WagtailStructBlockStructure_Fragment = (
   & StructureCommon_WagtailStructBlockStructure_Fragment
 );
 
+export type StructureL3_WagtailListBlockStructure_Fragment = (
+  { __typename: 'WagtailListBlockStructure' }
+  & { child_block: (
+    { __typename: 'WagtailStructBlockStructure' }
+    & StructureL2_WagtailStructBlockStructure_Fragment
+  ) | (
+    { __typename: 'WagtailListBlockStructure' }
+    & StructureL2_WagtailListBlockStructure_Fragment
+  ) | (
+    { __typename: 'WagtailCharBlockStructure' }
+    & StructureL2_WagtailCharBlockStructure_Fragment
+  ) | (
+    { __typename: 'WagtailRichTextBlockStructure' }
+    & StructureL2_WagtailRichTextBlockStructure_Fragment
+  ) | (
+    { __typename: 'WagtailBooleanBlockStructure' }
+    & StructureL2_WagtailBooleanBlockStructure_Fragment
+  ) | (
+    { __typename: 'WagtailStaticBlockStructure' }
+    & StructureL2_WagtailStaticBlockStructure_Fragment
+  ) | (
+    { __typename: 'WagtailImageBlockStructure' }
+    & StructureL2_WagtailImageBlockStructure_Fragment
+  ) | (
+    { __typename: 'WagtailURLBlockStructure' }
+    & StructureL2_WagtailUrlBlockStructure_Fragment
+  ) }
+  & StructureCommon_WagtailListBlockStructure_Fragment
+);
+
+export type StructureL3_WagtailCharBlockStructure_Fragment = (
+  { __typename: 'WagtailCharBlockStructure' }
+  & StructureCommon_WagtailCharBlockStructure_Fragment
+);
+
+export type StructureL3_WagtailRichTextBlockStructure_Fragment = (
+  { __typename: 'WagtailRichTextBlockStructure' }
+  & StructureCommon_WagtailRichTextBlockStructure_Fragment
+);
+
+export type StructureL3_WagtailBooleanBlockStructure_Fragment = (
+  { __typename: 'WagtailBooleanBlockStructure' }
+  & StructureCommon_WagtailBooleanBlockStructure_Fragment
+);
+
+export type StructureL3_WagtailStaticBlockStructure_Fragment = (
+  { __typename: 'WagtailStaticBlockStructure' }
+  & StructureCommon_WagtailStaticBlockStructure_Fragment
+);
+
+export type StructureL3_WagtailImageBlockStructure_Fragment = (
+  { __typename: 'WagtailImageBlockStructure' }
+  & StructureCommon_WagtailImageBlockStructure_Fragment
+);
+
 export type StructureL3_WagtailUrlBlockStructure_Fragment = (
   { __typename: 'WagtailURLBlockStructure' }
   & StructureCommon_WagtailUrlBlockStructure_Fragment
 );
 
-export type StructureL3Fragment = StructureL3_WagtailBooleanBlockStructure_Fragment | StructureL3_WagtailCharBlockStructure_Fragment | StructureL3_WagtailImageBlockStructure_Fragment | StructureL3_WagtailListBlockStructure_Fragment | StructureL3_WagtailRichTextBlockStructure_Fragment | StructureL3_WagtailStaticBlockStructure_Fragment | StructureL3_WagtailStructBlockStructure_Fragment | StructureL3_WagtailUrlBlockStructure_Fragment;
+export type StructureL3Fragment = StructureL3_WagtailStructBlockStructure_Fragment | StructureL3_WagtailListBlockStructure_Fragment | StructureL3_WagtailCharBlockStructure_Fragment | StructureL3_WagtailRichTextBlockStructure_Fragment | StructureL3_WagtailBooleanBlockStructure_Fragment | StructureL3_WagtailStaticBlockStructure_Fragment | StructureL3_WagtailImageBlockStructure_Fragment | StructureL3_WagtailUrlBlockStructure_Fragment;
 
 export type WagtailBlockStructureQueryVariables = Types.Exact<{
   name: Types.Scalars['String'];
@@ -359,26 +359,26 @@ export type WagtailBlockStructureQueryVariables = Types.Exact<{
 export type WagtailBlockStructureQuery = (
   { __typename: 'Query' }
   & { result: (
-    { __typename: 'WagtailBooleanBlockStructure' }
-    & StructureL3_WagtailBooleanBlockStructure_Fragment
-  ) | (
-    { __typename: 'WagtailCharBlockStructure' }
-    & StructureL3_WagtailCharBlockStructure_Fragment
-  ) | (
-    { __typename: 'WagtailImageBlockStructure' }
-    & StructureL3_WagtailImageBlockStructure_Fragment
+    { __typename: 'WagtailStructBlockStructure' }
+    & StructureL3_WagtailStructBlockStructure_Fragment
   ) | (
     { __typename: 'WagtailListBlockStructure' }
     & StructureL3_WagtailListBlockStructure_Fragment
   ) | (
+    { __typename: 'WagtailCharBlockStructure' }
+    & StructureL3_WagtailCharBlockStructure_Fragment
+  ) | (
     { __typename: 'WagtailRichTextBlockStructure' }
     & StructureL3_WagtailRichTextBlockStructure_Fragment
+  ) | (
+    { __typename: 'WagtailBooleanBlockStructure' }
+    & StructureL3_WagtailBooleanBlockStructure_Fragment
   ) | (
     { __typename: 'WagtailStaticBlockStructure' }
     & StructureL3_WagtailStaticBlockStructure_Fragment
   ) | (
-    { __typename: 'WagtailStructBlockStructure' }
-    & StructureL3_WagtailStructBlockStructure_Fragment
+    { __typename: 'WagtailImageBlockStructure' }
+    & StructureL3_WagtailImageBlockStructure_Fragment
   ) | (
     { __typename: 'WagtailURLBlockStructure' }
     & StructureL3_WagtailUrlBlockStructure_Fragment
@@ -393,108 +393,18 @@ export type WagtailPageRevisionsQueryVariables = Types.Exact<{
 export type WagtailPageRevisionsQuery = (
   { __typename: 'Query' }
   & { result?: Types.Maybe<(
-    { __typename: 'BlogIndexPage' }
-    & Pick<Types.BlogIndexPage, 'id'>
-    & { meta: (
-      { __typename: 'WagtailPageMeta' }
-      & { revisions: Array<(
-        { __typename: 'WagtailPageRevision' }
-        & Pick<Types.WagtailPageRevision, 'id' | 'created_at'>
-      )> }
-    ) }
-  ) | (
-    { __typename: 'BlogPostPage' }
-    & Pick<Types.BlogPostPage, 'id'>
-    & { meta: (
-      { __typename: 'WagtailPageMeta' }
-      & { revisions: Array<(
-        { __typename: 'WagtailPageRevision' }
-        & Pick<Types.WagtailPageRevision, 'id' | 'created_at'>
-      )> }
-    ) }
-  ) | (
-    { __typename: 'FaqPage' }
-    & Pick<Types.FaqPage, 'id'>
-    & { meta: (
-      { __typename: 'WagtailPageMeta' }
-      & { revisions: Array<(
-        { __typename: 'WagtailPageRevision' }
-        & Pick<Types.WagtailPageRevision, 'id' | 'created_at'>
-      )> }
-    ) }
-  ) | (
-    { __typename: 'FolderPage' }
-    & Pick<Types.FolderPage, 'id'>
-    & { meta: (
-      { __typename: 'WagtailPageMeta' }
-      & { revisions: Array<(
-        { __typename: 'WagtailPageRevision' }
-        & Pick<Types.WagtailPageRevision, 'id' | 'created_at'>
-      )> }
-    ) }
-  ) | (
-    { __typename: 'FreeFormPage' }
-    & Pick<Types.FreeFormPage, 'id'>
-    & { meta: (
-      { __typename: 'WagtailPageMeta' }
-      & { revisions: Array<(
-        { __typename: 'WagtailPageRevision' }
-        & Pick<Types.WagtailPageRevision, 'id' | 'created_at'>
-      )> }
-    ) }
-  ) | (
-    { __typename: 'PresentationPage' }
-    & Pick<Types.PresentationPage, 'id'>
-    & { meta: (
-      { __typename: 'WagtailPageMeta' }
-      & { revisions: Array<(
-        { __typename: 'WagtailPageRevision' }
-        & Pick<Types.WagtailPageRevision, 'id' | 'created_at'>
-      )> }
-    ) }
-  ) | (
-    { __typename: 'ProjectIndexPage' }
-    & Pick<Types.ProjectIndexPage, 'id'>
-    & { meta: (
-      { __typename: 'WagtailPageMeta' }
-      & { revisions: Array<(
-        { __typename: 'WagtailPageRevision' }
-        & Pick<Types.WagtailPageRevision, 'id' | 'created_at'>
-      )> }
-    ) }
-  ) | (
-    { __typename: 'ProjectPage' }
-    & Pick<Types.ProjectPage, 'id'>
-    & { meta: (
-      { __typename: 'WagtailPageMeta' }
-      & { revisions: Array<(
-        { __typename: 'WagtailPageRevision' }
-        & Pick<Types.WagtailPageRevision, 'id' | 'created_at'>
-      )> }
-    ) }
-  ) | (
-    { __typename: 'RatioNotebookIndexPage' }
-    & Pick<Types.RatioNotebookIndexPage, 'id'>
-    & { meta: (
-      { __typename: 'WagtailPageMeta' }
-      & { revisions: Array<(
-        { __typename: 'WagtailPageRevision' }
-        & Pick<Types.WagtailPageRevision, 'id' | 'created_at'>
-      )> }
-    ) }
-  ) | (
-    { __typename: 'RatioNotebookPage' }
-    & Pick<Types.RatioNotebookPage, 'id'>
-    & { meta: (
-      { __typename: 'WagtailPageMeta' }
-      & { revisions: Array<(
-        { __typename: 'WagtailPageRevision' }
-        & Pick<Types.WagtailPageRevision, 'id' | 'created_at'>
-      )> }
-    ) }
-  ) | (
     { __typename: 'RatioPresentationIndexPage' }
     & Pick<Types.RatioPresentationIndexPage, 'id'>
+    & { meta: (
+      { __typename: 'WagtailPageMeta' }
+      & { revisions: Array<(
+        { __typename: 'WagtailPageRevision' }
+        & Pick<Types.WagtailPageRevision, 'id' | 'created_at'>
+      )> }
+    ) }
+  ) | (
+    { __typename: 'RatioSectionPage' }
+    & Pick<Types.RatioSectionPage, 'id'>
     & { meta: (
       { __typename: 'WagtailPageMeta' }
       & { revisions: Array<(
@@ -513,8 +423,98 @@ export type WagtailPageRevisionsQuery = (
       )> }
     ) }
   ) | (
-    { __typename: 'RatioSectionPage' }
-    & Pick<Types.RatioSectionPage, 'id'>
+    { __typename: 'RatioNotebookPage' }
+    & Pick<Types.RatioNotebookPage, 'id'>
+    & { meta: (
+      { __typename: 'WagtailPageMeta' }
+      & { revisions: Array<(
+        { __typename: 'WagtailPageRevision' }
+        & Pick<Types.WagtailPageRevision, 'id' | 'created_at'>
+      )> }
+    ) }
+  ) | (
+    { __typename: 'RatioNotebookIndexPage' }
+    & Pick<Types.RatioNotebookIndexPage, 'id'>
+    & { meta: (
+      { __typename: 'WagtailPageMeta' }
+      & { revisions: Array<(
+        { __typename: 'WagtailPageRevision' }
+        & Pick<Types.WagtailPageRevision, 'id' | 'created_at'>
+      )> }
+    ) }
+  ) | (
+    { __typename: 'ProjectPage' }
+    & Pick<Types.ProjectPage, 'id'>
+    & { meta: (
+      { __typename: 'WagtailPageMeta' }
+      & { revisions: Array<(
+        { __typename: 'WagtailPageRevision' }
+        & Pick<Types.WagtailPageRevision, 'id' | 'created_at'>
+      )> }
+    ) }
+  ) | (
+    { __typename: 'ProjectIndexPage' }
+    & Pick<Types.ProjectIndexPage, 'id'>
+    & { meta: (
+      { __typename: 'WagtailPageMeta' }
+      & { revisions: Array<(
+        { __typename: 'WagtailPageRevision' }
+        & Pick<Types.WagtailPageRevision, 'id' | 'created_at'>
+      )> }
+    ) }
+  ) | (
+    { __typename: 'FreeFormPage' }
+    & Pick<Types.FreeFormPage, 'id'>
+    & { meta: (
+      { __typename: 'WagtailPageMeta' }
+      & { revisions: Array<(
+        { __typename: 'WagtailPageRevision' }
+        & Pick<Types.WagtailPageRevision, 'id' | 'created_at'>
+      )> }
+    ) }
+  ) | (
+    { __typename: 'FolderPage' }
+    & Pick<Types.FolderPage, 'id'>
+    & { meta: (
+      { __typename: 'WagtailPageMeta' }
+      & { revisions: Array<(
+        { __typename: 'WagtailPageRevision' }
+        & Pick<Types.WagtailPageRevision, 'id' | 'created_at'>
+      )> }
+    ) }
+  ) | (
+    { __typename: 'BlogPostPage' }
+    & Pick<Types.BlogPostPage, 'id'>
+    & { meta: (
+      { __typename: 'WagtailPageMeta' }
+      & { revisions: Array<(
+        { __typename: 'WagtailPageRevision' }
+        & Pick<Types.WagtailPageRevision, 'id' | 'created_at'>
+      )> }
+    ) }
+  ) | (
+    { __typename: 'BlogIndexPage' }
+    & Pick<Types.BlogIndexPage, 'id'>
+    & { meta: (
+      { __typename: 'WagtailPageMeta' }
+      & { revisions: Array<(
+        { __typename: 'WagtailPageRevision' }
+        & Pick<Types.WagtailPageRevision, 'id' | 'created_at'>
+      )> }
+    ) }
+  ) | (
+    { __typename: 'FaqPage' }
+    & Pick<Types.FaqPage, 'id'>
+    & { meta: (
+      { __typename: 'WagtailPageMeta' }
+      & { revisions: Array<(
+        { __typename: 'WagtailPageRevision' }
+        & Pick<Types.WagtailPageRevision, 'id' | 'created_at'>
+      )> }
+    ) }
+  ) | (
+    { __typename: 'PresentationPage' }
+    & Pick<Types.PresentationPage, 'id'>
     & { meta: (
       { __typename: 'WagtailPageMeta' }
       & { revisions: Array<(

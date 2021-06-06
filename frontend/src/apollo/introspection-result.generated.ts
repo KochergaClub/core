@@ -6,31 +6,120 @@
       }
       const result: PossibleTypesResultData = {
   "possibleTypes": {
-    "AddEventToCommunityLeadResult": [
-      "CommunityLead"
+    "WagtailBlockStructure": [
+      "WagtailStructBlockStructure",
+      "WagtailListBlockStructure",
+      "WagtailCharBlockStructure",
+      "WagtailRichTextBlockStructure",
+      "WagtailBooleanBlockStructure",
+      "WagtailStaticBlockStructure",
+      "WagtailImageBlockStructure",
+      "WagtailURLBlockStructure"
     ],
-    "AddLeadToCommunityInitiativeResult": [
-      "CommunityInitiative",
+    "WagtailBlockValidationError": [
+      "WagtailStructBlockValidationError",
+      "WagtailListBlockValidationError",
+      "WagtailAnyBlockValidationError"
+    ],
+    "WagtailPage": [
+      "RatioPresentationIndexPage",
+      "RatioSectionPage",
+      "RatioSectionIndexPage",
+      "RatioNotebookPage",
+      "RatioNotebookIndexPage",
+      "ProjectPage",
+      "ProjectIndexPage",
+      "FreeFormPage",
+      "FolderPage",
+      "BlogPostPage",
+      "BlogIndexPage",
+      "FaqPage",
+      "PresentationPage"
+    ],
+    "WagtailBlock": [
+      "RatioNotebookSectionBlock",
+      "RatioHeaderBlock",
+      "RatioParagraphBlock",
+      "RatioInsetBlock",
+      "RatioExerciseBlock",
+      "RatioExerciseOnelineBlock",
+      "RatioBriefingBlock",
+      "RatioMathBlock",
+      "BasicTextBlock",
+      "BasicCardBlock",
+      "SectionHeaderBlock",
+      "ColumnsBasicBlock",
+      "ColumnsButtonsBlock",
+      "BigContactsBlock",
+      "MailchimpSubscribeBlock",
+      "HeroFrontBlock",
+      "LandingHeroBlock",
+      "FrontPartnersBlock",
+      "EventsListBlock",
+      "PhotoRibbonBlock",
+      "HrBlock",
+      "FrontSocialLinksBlock",
+      "SlideTitleBlock",
+      "SlideRichTextBlock",
+      "SlideRawHtmlBlock",
+      "SlideFragmentsBlock",
+      "SlideFragmentsBlock_RichTextBlock",
+      "SlideFragmentsBlock_RawHtmlBlock"
+    ],
+    "ExternalServiceAccount": [
+      "WikiAccount",
+      "SlackAccount"
+    ],
+    "ExternalService": [
+      "WikiExternalService",
+      "SlackExternalService"
+    ],
+    "SlideFragmentsBlockValues": [
+      "SlideFragmentsBlock_RichTextBlock",
+      "SlideFragmentsBlock_RawHtmlBlock"
+    ],
+    "WagtailPageOrPrivateResult": [
+      "WagtailPageContainer",
+      "WagtailPagePrivate"
+    ],
+    "SearchItem": [
+      "PageSearchItem",
+      "EventSearchItem"
+    ],
+    "WagtailPagePermission": [
+      "WagtailRootPagePermission",
+      "WagtailSpecificPagePermission"
+    ],
+    "Commentable": [
+      "CommunityLead",
+      "CommunityInitiative"
+    ],
+    "SetMyPasswordResult": [
+      "SetMyPasswordOkResult",
       "GenericError",
       "ValidationError"
-    ],
-    "AddTelegramChatByInviteLinkResult": [
-      "TelegramChat",
-      "ValidationError",
-      "GenericError"
-    ],
-    "AddTelegramChatResult": [
-      "TelegramChat",
-      "ValidationError",
-      "GenericError"
     ],
     "AuthSetMyNamesResult": [
       "AuthCurrentUser",
       "GenericError",
       "ValidationError"
     ],
-    "BecomeCommunityLeadCuratorResult": [
-      "CommunityLead"
+    "WatchmenUpdateShiftResult": [
+      "WatchmenShift",
+      "ValidationError",
+      "GenericError"
+    ],
+    "KkmRegisterCheckResult": [
+      "KkmRegisterCheckOkResult",
+      "GenericError"
+    ],
+    "UpdateYandexKassaPaymentResult": [
+      "YandexKassaPayment",
+      "GenericError"
+    ],
+    "CancelYandexKassaPaymentResult": [
+      "YandexKassaPayment",
+      "GenericError"
     ],
     "CancelEventResult": [
       "BasicResult",
@@ -41,35 +130,12 @@
       "GenericError",
       "EventsWeeklyDigest"
     ],
-    "CancelYandexKassaPaymentResult": [
-      "YandexKassaPayment",
-      "GenericError"
+    "SendWeeklyDigestMailchimpResult": [
+      "GenericError",
+      "EventsWeeklyDigest"
     ],
-    "ClearCommunityLeadCuratorResult": [
-      "CommunityLead"
-    ],
-    "CommentOnCommunityInitiativeResult": [
-      "CommunityInitiative"
-    ],
-    "CommentOnCommunityLeadResult": [
-      "CommunityLead"
-    ],
-    "Commentable": [
-      "CommunityInitiative",
-      "CommunityLead"
-    ],
-    "CreateCommunityInitiativeResult": [
-      "CommunityInitiative",
-      "ValidationError",
-      "GenericError"
-    ],
-    "CreateCommunityLeadResult": [
-      "CommunityLead",
-      "ValidationError",
-      "GenericError"
-    ],
-    "CreateRatioPromocodeResult": [
-      "RatioPromocode",
+    "RatioCreateOrderResult": [
+      "RatioOrder",
       "ValidationError",
       "GenericError"
     ],
@@ -78,81 +144,49 @@
       "ValidationError",
       "GenericError"
     ],
-    "DeleteCommentResult": [
-      "BasicResult",
-      "GenericError"
-    ],
-    "DeleteCommunityInitiativeResult": [
-      "BasicResult"
-    ],
-    "DeleteCommunityLeadResult": [
-      "BasicResult"
-    ],
-    "DeleteTelegramChatResult": [
-      "BasicResult"
-    ],
-    "EditCommentResult": [
-      "Comment",
-      "GenericError"
-    ],
-    "ExternalService": [
-      "SlackExternalService",
-      "WikiExternalService"
-    ],
-    "ExternalServiceAccount": [
-      "SlackAccount",
-      "WikiAccount"
-    ],
-    "ImportTildaPageResult": [
-      "TildaPage",
-      "GenericError"
-    ],
-    "KkmRegisterCheckResult": [
-      "KkmRegisterCheckOkResult",
-      "GenericError"
-    ],
-    "PostToTelegramChatResult": [
-      "BasicResult"
-    ],
-    "RatioCreateOrderResult": [
-      "RatioOrder",
+    "UpdateRatioTrainingResult": [
+      "RatioTraining",
       "ValidationError",
       "GenericError"
     ],
-    "RefreshTelegramChatDataResult": [
-      "TelegramChat"
-    ],
-    "RemoveEventFromCommunityLeadResult": [
-      "CommunityLead"
-    ],
-    "RemoveLeadFromCommunityInitiativeResult": [
-      "CommunityInitiative",
-      "GenericError",
-      "ValidationError"
-    ],
-    "SearchItem": [
-      "PageSearchItem",
-      "EventSearchItem"
+    "CreateRatioPromocodeResult": [
+      "RatioPromocode",
+      "ValidationError",
+      "GenericError"
     ],
     "SendUniqueRatioPromocodeResult": [
       "BasicResult",
       "GenericError"
     ],
-    "SendWeeklyDigestMailchimpResult": [
-      "GenericError",
-      "EventsWeeklyDigest"
+    "AddTelegramChatResult": [
+      "TelegramChat",
+      "ValidationError",
+      "GenericError"
     ],
-    "SetMyPasswordResult": [
-      "SetMyPasswordOkResult",
-      "GenericError",
+    "AddTelegramChatByInviteLinkResult": [
+      "TelegramChat",
+      "ValidationError",
+      "GenericError"
+    ],
+    "DeleteTelegramChatResult": [
+      "BasicResult"
+    ],
+    "UpdateTelegramChatResult": [
+      "TelegramChat",
       "ValidationError"
     ],
-    "SlideFragmentsBlockValues": [
-      "SlideFragmentsBlock_RichTextBlock",
-      "SlideFragmentsBlock_RawHtmlBlock"
+    "RefreshTelegramChatDataResult": [
+      "TelegramChat"
     ],
-    "UpdateCommunityInitiativeResult": [
-      "CommunityInitiative",
+    "PostToTelegramChatResult": [
+      "BasicResult"
+    ],
+    "ImportTildaPageResult": [
+      "TildaPage",
+      "GenericError"
+    ],
+    "CreateCommunityLeadResult": [
+      "CommunityLead",
       "ValidationError",
       "GenericError"
     ],
@@ -161,89 +195,56 @@
       "ValidationError",
       "GenericError"
     ],
-    "UpdateRatioTrainingResult": [
-      "RatioTraining",
+    "DeleteCommunityLeadResult": [
+      "BasicResult"
+    ],
+    "BecomeCommunityLeadCuratorResult": [
+      "CommunityLead"
+    ],
+    "ClearCommunityLeadCuratorResult": [
+      "CommunityLead"
+    ],
+    "AddEventToCommunityLeadResult": [
+      "CommunityLead"
+    ],
+    "RemoveEventFromCommunityLeadResult": [
+      "CommunityLead"
+    ],
+    "CommentOnCommunityLeadResult": [
+      "CommunityLead"
+    ],
+    "CreateCommunityInitiativeResult": [
+      "CommunityInitiative",
       "ValidationError",
       "GenericError"
     ],
-    "UpdateTelegramChatResult": [
-      "TelegramChat",
+    "UpdateCommunityInitiativeResult": [
+      "CommunityInitiative",
+      "ValidationError",
+      "GenericError"
+    ],
+    "DeleteCommunityInitiativeResult": [
+      "BasicResult"
+    ],
+    "AddLeadToCommunityInitiativeResult": [
+      "CommunityInitiative",
+      "GenericError",
       "ValidationError"
     ],
-    "UpdateYandexKassaPaymentResult": [
-      "YandexKassaPayment",
+    "RemoveLeadFromCommunityInitiativeResult": [
+      "CommunityInitiative",
+      "GenericError",
+      "ValidationError"
+    ],
+    "CommentOnCommunityInitiativeResult": [
+      "CommunityInitiative"
+    ],
+    "EditCommentResult": [
+      "Comment",
       "GenericError"
     ],
-    "WagtailBlock": [
-      "BasicCardBlock",
-      "BasicTextBlock",
-      "BigContactsBlock",
-      "ColumnsBasicBlock",
-      "ColumnsButtonsBlock",
-      "EventsListBlock",
-      "FrontPartnersBlock",
-      "FrontSocialLinksBlock",
-      "HeroFrontBlock",
-      "HrBlock",
-      "MailchimpSubscribeBlock",
-      "PhotoRibbonBlock",
-      "RatioBriefingBlock",
-      "RatioExerciseBlock",
-      "RatioExerciseOnelineBlock",
-      "RatioHeaderBlock",
-      "RatioInsetBlock",
-      "RatioMathBlock",
-      "RatioNotebookSectionBlock",
-      "RatioParagraphBlock",
-      "SectionHeaderBlock",
-      "SlideFragmentsBlock",
-      "SlideFragmentsBlock_RawHtmlBlock",
-      "SlideFragmentsBlock_RichTextBlock",
-      "SlideRawHtmlBlock",
-      "SlideRichTextBlock",
-      "SlideTitleBlock"
-    ],
-    "WagtailBlockStructure": [
-      "WagtailBooleanBlockStructure",
-      "WagtailCharBlockStructure",
-      "WagtailImageBlockStructure",
-      "WagtailListBlockStructure",
-      "WagtailRichTextBlockStructure",
-      "WagtailStaticBlockStructure",
-      "WagtailStructBlockStructure",
-      "WagtailURLBlockStructure"
-    ],
-    "WagtailBlockValidationError": [
-      "WagtailAnyBlockValidationError",
-      "WagtailListBlockValidationError",
-      "WagtailStructBlockValidationError"
-    ],
-    "WagtailPage": [
-      "BlogIndexPage",
-      "BlogPostPage",
-      "FaqPage",
-      "FolderPage",
-      "FreeFormPage",
-      "PresentationPage",
-      "ProjectIndexPage",
-      "ProjectPage",
-      "RatioNotebookIndexPage",
-      "RatioNotebookPage",
-      "RatioPresentationIndexPage",
-      "RatioSectionIndexPage",
-      "RatioSectionPage"
-    ],
-    "WagtailPageOrPrivateResult": [
-      "WagtailPageContainer",
-      "WagtailPagePrivate"
-    ],
-    "WagtailPagePermission": [
-      "WagtailRootPagePermission",
-      "WagtailSpecificPagePermission"
-    ],
-    "WatchmenUpdateShiftResult": [
-      "WatchmenShift",
-      "ValidationError",
+    "DeleteCommentResult": [
+      "BasicResult",
       "GenericError"
     ]
   }

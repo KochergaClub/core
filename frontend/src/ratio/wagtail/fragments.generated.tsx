@@ -1,6 +1,6 @@
 import * as Types from '../../apollo/types.generated';
 
-import { CommonWagtailPage_BlogIndexPage_Fragment, CommonWagtailPage_BlogPostPage_Fragment, CommonWagtailPage_FaqPage_Fragment, CommonWagtailPage_FolderPage_Fragment, CommonWagtailPage_FreeFormPage_Fragment, CommonWagtailPage_PresentationPage_Fragment, CommonWagtailPage_ProjectIndexPage_Fragment, CommonWagtailPage_ProjectPage_Fragment, CommonWagtailPage_RatioNotebookIndexPage_Fragment, CommonWagtailPage_RatioNotebookPage_Fragment, CommonWagtailPage_RatioPresentationIndexPage_Fragment, CommonWagtailPage_RatioSectionIndexPage_Fragment, CommonWagtailPage_RatioSectionPage_Fragment } from '../../cms/queries.generated';
+import { CommonWagtailPage_RatioPresentationIndexPage_Fragment, CommonWagtailPage_RatioSectionPage_Fragment, CommonWagtailPage_RatioSectionIndexPage_Fragment, CommonWagtailPage_RatioNotebookPage_Fragment, CommonWagtailPage_RatioNotebookIndexPage_Fragment, CommonWagtailPage_ProjectPage_Fragment, CommonWagtailPage_ProjectIndexPage_Fragment, CommonWagtailPage_FreeFormPage_Fragment, CommonWagtailPage_FolderPage_Fragment, CommonWagtailPage_BlogPostPage_Fragment, CommonWagtailPage_BlogIndexPage_Fragment, CommonWagtailPage_FaqPage_Fragment, CommonWagtailPage_PresentationPage_Fragment } from '../../cms/queries.generated';
 import { RatioHeaderBlockFragment, RatioParagraphBlockFragment, RatioInsetBlockFragment, RatioExerciseBlockFragment, RatioExerciseOnelineBlockFragment, RatioBriefingBlockFragment, RatioMathBlockFragment } from '../components/RatioWagtailBlocks/fragments.generated';
 import { TypedDocumentNode as DocumentNode } from '@graphql-typed-document-node/core';
 import { CommonWagtailPageFragmentDoc } from '../../cms/queries.generated';
@@ -13,45 +13,20 @@ export type RatioSectionIndexPageFragment = (
 export type RatioSectionPageFragment = (
   { __typename: 'RatioSectionPage' }
   & { body: Array<(
-    { __typename: 'BasicCardBlock' }
-    & Pick<Types.BasicCardBlock, 'id'>
+    { __typename: 'RatioNotebookSectionBlock' }
+    & Pick<Types.RatioNotebookSectionBlock, 'id'>
   ) | (
-    { __typename: 'BasicTextBlock' }
-    & Pick<Types.BasicTextBlock, 'id'>
+    { __typename: 'RatioHeaderBlock' }
+    & Pick<Types.RatioHeaderBlock, 'id'>
+    & RatioHeaderBlockFragment
   ) | (
-    { __typename: 'BigContactsBlock' }
-    & Pick<Types.BigContactsBlock, 'id'>
+    { __typename: 'RatioParagraphBlock' }
+    & Pick<Types.RatioParagraphBlock, 'id'>
+    & RatioParagraphBlockFragment
   ) | (
-    { __typename: 'ColumnsBasicBlock' }
-    & Pick<Types.ColumnsBasicBlock, 'id'>
-  ) | (
-    { __typename: 'ColumnsButtonsBlock' }
-    & Pick<Types.ColumnsButtonsBlock, 'id'>
-  ) | (
-    { __typename: 'EventsListBlock' }
-    & Pick<Types.EventsListBlock, 'id'>
-  ) | (
-    { __typename: 'FrontPartnersBlock' }
-    & Pick<Types.FrontPartnersBlock, 'id'>
-  ) | (
-    { __typename: 'FrontSocialLinksBlock' }
-    & Pick<Types.FrontSocialLinksBlock, 'id'>
-  ) | (
-    { __typename: 'HeroFrontBlock' }
-    & Pick<Types.HeroFrontBlock, 'id'>
-  ) | (
-    { __typename: 'HrBlock' }
-    & Pick<Types.HrBlock, 'id'>
-  ) | (
-    { __typename: 'MailchimpSubscribeBlock' }
-    & Pick<Types.MailchimpSubscribeBlock, 'id'>
-  ) | (
-    { __typename: 'PhotoRibbonBlock' }
-    & Pick<Types.PhotoRibbonBlock, 'id'>
-  ) | (
-    { __typename: 'RatioBriefingBlock' }
-    & Pick<Types.RatioBriefingBlock, 'id'>
-    & RatioBriefingBlockFragment
+    { __typename: 'RatioInsetBlock' }
+    & Pick<Types.RatioInsetBlock, 'id'>
+    & RatioInsetBlockFragment
   ) | (
     { __typename: 'RatioExerciseBlock' }
     & Pick<Types.RatioExerciseBlock, 'id'>
@@ -61,45 +36,73 @@ export type RatioSectionPageFragment = (
     & Pick<Types.RatioExerciseOnelineBlock, 'id'>
     & RatioExerciseOnelineBlockFragment
   ) | (
-    { __typename: 'RatioHeaderBlock' }
-    & Pick<Types.RatioHeaderBlock, 'id'>
-    & RatioHeaderBlockFragment
-  ) | (
-    { __typename: 'RatioInsetBlock' }
-    & Pick<Types.RatioInsetBlock, 'id'>
-    & RatioInsetBlockFragment
+    { __typename: 'RatioBriefingBlock' }
+    & Pick<Types.RatioBriefingBlock, 'id'>
+    & RatioBriefingBlockFragment
   ) | (
     { __typename: 'RatioMathBlock' }
     & Pick<Types.RatioMathBlock, 'id'>
     & RatioMathBlockFragment
   ) | (
-    { __typename: 'RatioNotebookSectionBlock' }
-    & Pick<Types.RatioNotebookSectionBlock, 'id'>
+    { __typename: 'BasicTextBlock' }
+    & Pick<Types.BasicTextBlock, 'id'>
   ) | (
-    { __typename: 'RatioParagraphBlock' }
-    & Pick<Types.RatioParagraphBlock, 'id'>
-    & RatioParagraphBlockFragment
+    { __typename: 'BasicCardBlock' }
+    & Pick<Types.BasicCardBlock, 'id'>
   ) | (
     { __typename: 'SectionHeaderBlock' }
     & Pick<Types.SectionHeaderBlock, 'id'>
   ) | (
-    { __typename: 'SlideFragmentsBlock' }
-    & Pick<Types.SlideFragmentsBlock, 'id'>
+    { __typename: 'ColumnsBasicBlock' }
+    & Pick<Types.ColumnsBasicBlock, 'id'>
   ) | (
-    { __typename: 'SlideFragmentsBlock_RawHtmlBlock' }
-    & Pick<Types.SlideFragmentsBlock_RawHtmlBlock, 'id'>
+    { __typename: 'ColumnsButtonsBlock' }
+    & Pick<Types.ColumnsButtonsBlock, 'id'>
   ) | (
-    { __typename: 'SlideFragmentsBlock_RichTextBlock' }
-    & Pick<Types.SlideFragmentsBlock_RichTextBlock, 'id'>
+    { __typename: 'BigContactsBlock' }
+    & Pick<Types.BigContactsBlock, 'id'>
   ) | (
-    { __typename: 'SlideRawHtmlBlock' }
-    & Pick<Types.SlideRawHtmlBlock, 'id'>
+    { __typename: 'MailchimpSubscribeBlock' }
+    & Pick<Types.MailchimpSubscribeBlock, 'id'>
+  ) | (
+    { __typename: 'HeroFrontBlock' }
+    & Pick<Types.HeroFrontBlock, 'id'>
+  ) | (
+    { __typename: 'LandingHeroBlock' }
+    & Pick<Types.LandingHeroBlock, 'id'>
+  ) | (
+    { __typename: 'FrontPartnersBlock' }
+    & Pick<Types.FrontPartnersBlock, 'id'>
+  ) | (
+    { __typename: 'EventsListBlock' }
+    & Pick<Types.EventsListBlock, 'id'>
+  ) | (
+    { __typename: 'PhotoRibbonBlock' }
+    & Pick<Types.PhotoRibbonBlock, 'id'>
+  ) | (
+    { __typename: 'HrBlock' }
+    & Pick<Types.HrBlock, 'id'>
+  ) | (
+    { __typename: 'FrontSocialLinksBlock' }
+    & Pick<Types.FrontSocialLinksBlock, 'id'>
+  ) | (
+    { __typename: 'SlideTitleBlock' }
+    & Pick<Types.SlideTitleBlock, 'id'>
   ) | (
     { __typename: 'SlideRichTextBlock' }
     & Pick<Types.SlideRichTextBlock, 'id'>
   ) | (
-    { __typename: 'SlideTitleBlock' }
-    & Pick<Types.SlideTitleBlock, 'id'>
+    { __typename: 'SlideRawHtmlBlock' }
+    & Pick<Types.SlideRawHtmlBlock, 'id'>
+  ) | (
+    { __typename: 'SlideFragmentsBlock' }
+    & Pick<Types.SlideFragmentsBlock, 'id'>
+  ) | (
+    { __typename: 'SlideFragmentsBlock_RichTextBlock' }
+    & Pick<Types.SlideFragmentsBlock_RichTextBlock, 'id'>
+  ) | (
+    { __typename: 'SlideFragmentsBlock_RawHtmlBlock' }
+    & Pick<Types.SlideFragmentsBlock_RawHtmlBlock, 'id'>
   )> }
   & CommonWagtailPage_RatioSectionPage_Fragment
 );
