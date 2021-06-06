@@ -22,7 +22,9 @@ const ProjectCard = (props: ProjectPage_SummaryFragment) => {
               {props.title}
             </header>
             {props.activity_summary && props.is_active && (
-              <LabelDiv className="mt-1">{props.activity_summary}</LabelDiv>
+              <div className="mt-1">
+                <LabelDiv>{props.activity_summary}</LabelDiv>
+              </div>
             )}
             <div className="mt-2 text-sm text-gray-800 leading-normal">
               {props.summary}

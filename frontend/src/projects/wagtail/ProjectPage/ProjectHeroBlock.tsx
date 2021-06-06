@@ -27,7 +27,7 @@ export const ProjectHeroBlock: React.FC<Props> = ({ project }) => (
       <HeroHeader>{project.title}</HeroHeader>
       <div className="text-white sm:text-2xl">{project.summary}</div>
       <Column gutter={10}>
-        <LabelDiv className="text-white">
+        <LabelDiv color="white">
           {project.is_active ? project.activity_summary : 'Неактивный проект'}
         </LabelDiv>
         {project.telegram_chats.length ? (
