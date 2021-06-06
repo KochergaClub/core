@@ -27,6 +27,7 @@ it('renders without crashing', async () => {
         link: '',
       },
     },
+    youtube_videos: [],
   };
 
   const mocks: MockedResponse[] = [
