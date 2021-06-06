@@ -51,6 +51,8 @@ elasticsearch >= 7.0.0
 python-docx
 bleach
 
+twisted < 21  # https://github.com/django/channels/issues/1639
+
 # dev-dependencies
 pywatchman
 pytest
