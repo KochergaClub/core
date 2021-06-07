@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 import sys, pathlib, os.path
 
 sys.path.append(os.path.abspath(str(pathlib.Path(__file__).parent.parent)))
