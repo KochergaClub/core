@@ -6,11 +6,10 @@ import datetime
 
 import jwt
 import requests
-
 from django.conf import settings
 
 
-def get_jwt_token():
+def get_jwt_token() -> str:
     return jwt.encode(
         payload={
             "iss": settings.ZOOM_API_KEY,
@@ -18,7 +17,7 @@ def get_jwt_token():
         },
         key=settings.ZOOM_API_SECRET,
         algorithm="HS256",
-    ).decode("utf-8")
+    )
 
 
 def api_call(method, url, data={}):

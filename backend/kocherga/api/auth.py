@@ -3,16 +3,14 @@ import logging
 logger = logging.getLogger(__name__)
 
 import datetime
-import jwt
 import json
 
+import jwt
 import requests
-
-from django.conf import settings
-from django.contrib.auth import get_user_model
 import rest_framework.authentication
 import rest_framework.exceptions
-
+from django.conf import settings
+from django.contrib.auth import get_user_model
 from kocherga.error import PublicError
 
 JWT_SECRET_KEY = settings.KOCHERGA_JWT_SECRET_KEY
@@ -63,7 +61,7 @@ def google_auth(request):
         key=JWT_SECRET_KEY,
         algorithm="HS256",
     )
-    return token.decode("utf-8")
+    return token
 
 
 class JWTAuthentication(rest_framework.authentication.BaseAuthentication):
