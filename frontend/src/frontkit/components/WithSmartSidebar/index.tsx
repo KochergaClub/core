@@ -15,7 +15,7 @@ const useIsMobile = () => {
     }
   }, [sizes.width]);
 
-  return [isMobile, resizeListener];
+  return [isMobile, resizeListener] as const;
 };
 
 interface Props {
