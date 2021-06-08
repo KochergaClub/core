@@ -5,8 +5,8 @@
   font-weight: 400;
   src: local(''),
     url('/static/fonts/roboto-v27-latin_cyrillic-regular.woff2') format('woff2'),
-    /* Chrome 26+, Opera 23+, Firefox 39+ */
-      url('/static/fonts/roboto-v27-latin_cyrillic-regular.woff') format('woff'); /* Chrome 6+, Firefox 3.6+, IE 9+, Safari 5.1+ */
+    url('/static/fonts/roboto-v27-latin_cyrillic-regular.woff') format('woff');
+  font-display: swap;
 }
 
 /* roboto-italic - latin_cyrillic */
@@ -16,8 +16,8 @@
   font-weight: 400;
   src: local(''),
     url('/static/fonts/roboto-v27-latin_cyrillic-italic.woff2') format('woff2'),
-    /* Chrome 26+, Opera 23+, Firefox 39+ */
-      url('/static/fonts/roboto-v27-latin_cyrillic-italic.woff') format('woff'); /* Chrome 6+, Firefox 3.6+, IE 9+, Safari 5.1+ */
+    url('/static/fonts/roboto-v27-latin_cyrillic-italic.woff') format('woff');
+  font-display: swap;
 }
 
 /* roboto-500 - latin_cyrillic */
@@ -27,8 +27,8 @@
   font-weight: 500;
   src: local(''),
     url('/static/fonts/roboto-v27-latin_cyrillic-500.woff2') format('woff2'),
-    /* Chrome 26+, Opera 23+, Firefox 39+ */
-      url('/static/fonts/roboto-v27-latin_cyrillic-500.woff') format('woff'); /* Chrome 6+, Firefox 3.6+, IE 9+, Safari 5.1+ */
+    url('/static/fonts/roboto-v27-latin_cyrillic-500.woff') format('woff');
+  font-display: swap;
 }
 
 /* roboto-500italic - latin_cyrillic */
@@ -39,9 +39,8 @@
   src: local(''),
     url('/static/fonts/roboto-v27-latin_cyrillic-500italic.woff2')
       format('woff2'),
-    /* Chrome 26+, Opera 23+, Firefox 39+ */
-      url('/static/fonts/roboto-v27-latin_cyrillic-500italic.woff')
-      format('woff'); /* Chrome 6+, Firefox 3.6+, IE 9+, Safari 5.1+ */
+    url('/static/fonts/roboto-v27-latin_cyrillic-500italic.woff') format('woff');
+  font-display: swap;
 }
 
 /* roboto-700 - latin_cyrillic */
@@ -51,8 +50,8 @@
   font-weight: 700;
   src: local(''),
     url('/static/fonts/roboto-v27-latin_cyrillic-700.woff2') format('woff2'),
-    /* Chrome 26+, Opera 23+, Firefox 39+ */
-      url('/static/fonts/roboto-v27-latin_cyrillic-700.woff') format('woff'); /* Chrome 6+, Firefox 3.6+, IE 9+, Safari 5.1+ */
+    url('/static/fonts/roboto-v27-latin_cyrillic-700.woff') format('woff');
+  font-display: swap;
 }
 
 /* roboto-700italic - latin_cyrillic */
@@ -63,7 +62,6 @@
   src: local(''),
     url('/static/fonts/roboto-v27-latin_cyrillic-700italic.woff2')
       format('woff2'),
-    /* Chrome 26+, Opera 23+, Firefox 39+ */
-      url('/static/fonts/roboto-v27-latin_cyrillic-700italic.woff')
-      format('woff'); /* Chrome 6+, Firefox 3.6+, IE 9+, Safari 5.1+ */
+    url('/static/fonts/roboto-v27-latin_cyrillic-700italic.woff') format('woff');
+  font-display: swap;
 }
