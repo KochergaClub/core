@@ -31,10 +31,6 @@ resource "aws_cloudfront_distribution" "website" {
   origin {
     domain_name = local.s3_domain
     origin_id   = "s3"
-
-    s3_origin_config {
-      origin_access_identity = ""
-    }
   }
 
   enabled         = true
