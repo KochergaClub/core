@@ -10,7 +10,7 @@ export const TLHeader: React.FC<{ size: 'normal' | 'large' }> = ({
 }) => (
   <div
     className={clsx(
-      'text-center font-semibold text-3xl',
+      'text-center font-bold text-3xl',
       {
         normal: 'sm:text-4xl',
         large: 'sm:text-6xl',

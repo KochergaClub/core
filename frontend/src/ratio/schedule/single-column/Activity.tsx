@@ -15,9 +15,7 @@ const Activity = ({ activity }: Props) => {
       return (
         <section className="mb-8">
           <time className="italic text-2xl">{formatTime(activity.time)}</time>
-          <header className="text-2xl font-semibold my-2">
-            {activity.name}
-          </header>
+          <header className="text-2xl font-bold my-2">{activity.name}</header>
           <EditableTrainer
             trainer_name={activity.trainer?.long_name}
             picked={async () => window.alert('not implemented')}

@@ -18,7 +18,7 @@ const ProjectCard = (props: ProjectPage_SummaryFragment) => {
             src={props.image.url}
           />
           <div className="p-5 pt-2">
-            <header className="text-xl font-semibold leading-tight">
+            <header className="text-xl font-bold leading-tight">
               {props.title}
             </header>
             {props.activity_summary && props.is_active && (
