@@ -4,11 +4,31 @@ import { staticUrl } from '~/common/utils';
 
 const GlobalStyle = () => (
   <Head>
-    <link
-      href="https://fonts.googleapis.com/css?family=Roboto:400,400i,500,500i,700,700i&display=block&subset=cyrillic"
-      rel="stylesheet"
-    />
     <link rel="preload" href={staticUrl('fonts/intro.woff2')} />
+    <link
+      rel="preload"
+      href={staticUrl('fonts/roboto-v27-latin_cyrillic-regular.woff2')}
+    />
+    <link
+      rel="preload"
+      href={staticUrl('fonts/roboto-v27-latin_cyrillic-italic.woff2')}
+    />
+    <link
+      rel="preload"
+      href={staticUrl('fonts/roboto-v27-latin_cyrillic-500.woff2')}
+    />
+    <link
+      rel="preload"
+      href={staticUrl('fonts/roboto-v27-latin_cyrillic-500italic.woff2')}
+    />
+    <link
+      rel="preload"
+      href={staticUrl('fonts/roboto-v27-latin_cyrillic-700.woff2')}
+    />
+    <link
+      rel="preload"
+      href={staticUrl('fonts/roboto-v27-latin_cyrillic-700italic.woff2')}
+    />
   </Head>
 );
 
