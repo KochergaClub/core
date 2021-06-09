@@ -6,51 +6,22 @@ from collections import defaultdict
 import numpy as np
 import pandas as pd
 
-from .metadata import METADATA, STRUCTURE
-
-# some data was already normalized manually before we apply these fixes
-column_specific_fixes = {
-    'speciality': {
-        'it': 'IT',
-        'ит': 'IT',
-        'информационные технологии': 'IT',
-        'экономист': 'Экономика',
-        'математик': 'Математика',
-        'программист': 'Программирование',
-        'психолог': 'Психология',
-        'журналист': 'Журналистика',
-        'юрист': 'Юриспруденция',
-    },
-    'country': {
-        'сша': 'США',
-        'germany': 'Германия',
-        'singapore': 'Сингапур',
-    },
-    'city': {
-        'мінск': 'Минск',
-        'singapore': 'Сингапур',
-    },
-    'hobby': {
-        'видеоигры': 'Компьютерные игры',
-        'videogames': 'Компьютерные игры',
-        'комп. игры': 'Компьютерные игры',
-        'чгк': 'Что? Где? Когда?',
-        'что?где?когда?': 'Что? Где? Когда?',
-    },
-}
+from .metadata import METADATA, STRUCTURE, SurveyField
 
 
-def normalize_one(column, value):
+def normalize_one(field: SurveyField, value):
+    column = field.key
     value = re.sub(r':\)$', '', value)
     if column != 'income':
         value = re.sub(r'\.$', '', value)
     value = value.strip()
     if value == '':
         return None
-    value = value[0].upper() + value[1:]
 
-    if column in column_specific_fixes:
-        value = column_specific_fixes[column].get(value.lower(), value)
+    if not value.startswith('http'):
+        value = value[0].upper() + value[1:]
+
+    value = field.aliases.get(value.lower(), value)
 
     if column == 'source' and 'gipsy' in value.lower():
         value = 'Покерный форум GipsyTeam.ru'
@@ -58,26 +29,10 @@ def normalize_one(column, value):
     return value
 
 
-def split_meetup_reasons(value):
+def split_values(field, value):
     # This is tricky because some answers included commas, but in some cases
     # commas were a separator of multiple answers.
-    presets = [
-        'Обсудить интересные темы',
-        'Узнать что-то новое',
-        'Пообщаться с единомышленниками',
-        'Социализироваться',
-        'Найти друзей',
-        'Помочь сообществу и людям',
-        'Попрактиковаться в чтении докладов и организационной деятельности',
-        'В моем городе нет встреч',
-        'Не получается по расписанию',
-        'Собираюсь, но откладываю',
-        'Не люблю людей и тусовки',
-        'Боюсь незнакомых людей',
-        'Люди на встречах занимаются не тем, чем мне хотелось бы',
-        'Считаю это неоправданной тратой времени',
-        'Мне не нравятся люди на встречах',
-    ]
+    presets = field.choices
 
     values = []
     for preset in presets:
@@ -89,7 +44,8 @@ def split_meetup_reasons(value):
     return values
 
 
-def normalize(column, value):
+def normalize(field, value):
+    column = field.key
     if not value:
         return [value]
 
@@ -116,9 +72,9 @@ def normalize(column, value):
     if type(value) == int:
         return [value]  # nothing to normalize
 
-    if column in ('meetups_why', 'meetups_why_not'):
-        values = split_meetup_reasons(value)
-    elif column in ('hobby', 'job', 'speciality'):
+    if field.choices:
+        values = split_values(field, value)
+    elif column in ('hobby', 'job', 'speciality', 'referer'):
         value = re.sub(
             r'\(.*?\)', '', value
         )  # get rid of (...), they are messing up with splitting-by-comma
@@ -126,7 +82,7 @@ def normalize(column, value):
     else:
         values = [value]
 
-    return [normalize_one(column, v) for v in values]
+    return [normalize_one(field, v) for v in values]
 
 
 def validate_structure():
@@ -158,7 +114,7 @@ class SurveyFieldData:
 
         values = []
         for value in original_values:
-            values.extend(normalize(column, value))
+            values.extend(normalize(self.field, value))
 
         # important for anonymization of our data!
         default = (
@@ -193,7 +149,7 @@ class SurveyFieldData:
         return values
 
     def to_dict(self):
-        result = self.field.to_dict()
+        result = self.field.asdict()
 
         column = self.field.key
         if column in ('income', 'iq'):  # income and iq are converted to intervals
@@ -239,12 +195,9 @@ def run(in_filename: str, out_filename: str):
 
     data = {}
 
-    columns = [field.key for field in METADATA.public_fields()]
-
-    for column in columns:
-        series = df[column]
+    for field in METADATA.public_fields():
+        series = df[field.key]
         values = []
-        field = METADATA.field_by_key(column)
         for value in series:
             if type(value) in (float, np.float64) and math.isnan(value):
                 value = None
@@ -254,7 +207,7 @@ def run(in_filename: str, out_filename: str):
                 value = int(value)
             values.append(value)
 
-        data[column] = SurveyFieldData(field, values).to_dict()
+        data[field.key] = SurveyFieldData(field, values).to_dict()
 
     with open(out_filename, mode='w') as js:
         print(

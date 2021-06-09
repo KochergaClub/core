@@ -17,10 +17,8 @@ export type Data = {
   custom_sort?: string[];
   sort: 'top' | 'numerical' | 'lexical' | 'last_int';
   multiple: boolean;
-  shortcuts: { [k: string]: string };
   show: 'text' | 'histogram';
   note?: string;
-  extract_other: boolean;
   other_values?: string[];
 };
 

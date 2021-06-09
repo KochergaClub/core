@@ -48,7 +48,7 @@ const HistogramV2 = ({
           let el = (
             <LeftRight>
               <div className="text-right leading-tight break-words self-center">
-                {histogram.data.shortcuts[item.name] || item.name}
+                {item.name}
               </div>
               <div className="flex items-center">
                 <div

@@ -1,60 +1,29 @@
-# SEMANTICS:
-# key:
-# - alphanumerical key for data.js
-#
-# type:
-# - defaults to 'str'
-# - can be 'int'
-#
-# sort:
-# - defaults to 'top'
-# - can be 'numerical', 'lexical' or 'last_int'
-#
-# limit:
-# - defaults to 5
-# - can be overriden to any number
-
-# 2018 column changes:
-# - REFACTOR: compass_freeform => compass_identity
-# - NEW: feminism
-# - NEW: relationship_type
-# - REFACTOR: income => income_currency + income_amount
-# - NEW: slang_80k
-# - NEW: online_telegram
-# - NEW: previous_surveys
-
-from collections import namedtuple
+import dataclasses
+from typing import Optional
 
 
-class SurveyField(
-    namedtuple(
-        "SurveyField",
-        [
-            "key",
-            "title",
-            "type",
-            "limit",
-            "sort",
-            "multiple",
-            "text_tail",
-            "show",
-            "shortcuts",
-            "private",
-            "extract_other",
-            "note",
-        ],
-        defaults=["str", 10, "top", False, False, "histogram", {}, False, False, None],
-    )
-):
-    __slots__ = ()
+@dataclasses.dataclass
+class SurveyField:
+    key: str
+    title: str
+    type: str = 'str'
+    limit: int = 10
+    sort: str = 'top'
+    multiple: bool = False
+    text_tail: bool = False
+    show: str = 'histogram'
+    aliases: dict = dataclasses.field(default_factory=dict)
+    choices: Optional[list[str]] = None
+    private: bool = False
+    note: Optional[str] = None
 
-    def to_dict(self):
-        return self._asdict()
+    def asdict(self):
+        return dataclasses.asdict(self)
 
 
+@dataclasses.dataclass
 class SurveyForm:
-    def __init__(self, fields):
-        self.fields = fields
+    fields: list[SurveyField]
 
     def field_by_key(self, key):
         return next(f for f in self.fields if f.key == key)
@@ -70,11 +39,11 @@ class SurveyForm:
         return [field for field in self.fields if not field.private]
 
     def to_dict(self):
-        return {field.key: field.to_dict() for field in self.public_fields()}
+        return {field.key: field.asdict() for field in self.public_fields()}
 
 
 METADATA = SurveyForm(
-    [
+    fields=[
         SurveyField(
             key="timestamp",
             title="Timestamp",
@@ -93,10 +62,21 @@ METADATA = SurveyForm(
         SurveyField(
             key="country",
             title="Страна проживания",
+            aliases={
+                'сша': 'США',
+                'germany': 'Германия',
+                'singapore': 'Сингапур',
+                'ireland': 'Ирландия',
+                'чешская республика': 'Чехия',
+            },
         ),
         SurveyField(
             key="city",
             title="Город",
+            aliases={
+                'мінск': 'Минск',
+                'singapore': 'Сингапур',
+            },
         ),
         SurveyField(
             key="age",
@@ -108,7 +88,6 @@ METADATA = SurveyForm(
         SurveyField(
             key="gender",
             title="Пол/гендер",
-            extract_other=True,
         ),
         SurveyField(
             key="education",
@@ -145,7 +124,19 @@ METADATA = SurveyForm(
             key="compass_identity",
             title="Выберите пункты, к которым вы готовы себя отнести",
             multiple=True,
-            extract_other=True,
+            choices=[
+                'Либерал',
+                'Демократ',
+                'Коммунист',
+                'Социалист',
+                'Либертарианец',
+                'Монархист',
+                'Технократ',
+                'Центрист',
+                'Анархист',
+                'Консерватор',
+                'Неореакционер',
+            ],
         ),
         SurveyField(
             key="iq",
@@ -169,7 +160,6 @@ METADATA = SurveyForm(
         SurveyField(
             key="religion",
             title="Отношение к религии",
-            extract_other=True,
         ),
         SurveyField(
             key="feminism",
@@ -180,12 +170,10 @@ METADATA = SurveyForm(
         SurveyField(
             key="family",
             title="Семейное положение",
-            extract_other=True,
         ),
         SurveyField(
             key="relationship_type",
             title="Предпочитаемый тип отношений",
-            extract_other=True,
         ),
         SurveyField(
             key="kids",
@@ -212,6 +200,13 @@ METADATA = SurveyForm(
             key="hobby",
             title="Хобби",
             multiple=True,
+            aliases={
+                'видеоигры': 'Компьютерные игры',
+                'videogames': 'Компьютерные игры',
+                'комп. игры': 'Компьютерные игры',
+                'чгк': 'Что? Где? Когда?',
+                'что?где?когда?': 'Что? Где? Когда?',
+            },
         ),
         SurveyField(
             key="happiness",
@@ -251,10 +246,18 @@ METADATA = SurveyForm(
         SurveyField(
             key="referer",
             title="Откуда вы узнали про рациональность?",
-            shortcuts={
-                "Через книгу «Гарри Поттер и методы рационального мышления»": "Через ГПиМРМ",
+            aliases={
+                "через книгу «гарри поттер и методы рационального мышления»": "Через ГПиМРМ",
             },
-            extract_other=True,
+            choices=[
+                'Через книгу «Гарри Поттер и методы рационального мышления»',
+                'Сам нашел/нашла сайт lesswrong.ru',
+                'Сам нашел/нашла сайт lesswrong.com',
+                'Через центр рациональности «Кочерга» (сайт, курсы или мероприятия, проводимые Кочергой)',
+                'Из проектов Пион Медведевой',
+                'От знакомых (в онлайне или офлайне)',
+            ],
+            multiple=True,
         ),
         SurveyField(
             key="sequences_knows",
@@ -263,7 +266,6 @@ METADATA = SurveyForm(
         SurveyField(
             key="sequences_language",
             title="На каком языке вы преимущественно читали цепочки?",
-            extract_other=True,
         ),
         SurveyField(
             key="sequences_russian",
@@ -413,6 +415,7 @@ METADATA = SurveyForm(
         SurveyField(
             key="goals_other",
             title="Может быть, у вас есть какие-то другие цели, связанные с рациональностью?",
+            show="text",
         ),
         SurveyField(
             key="endorse_self",
@@ -502,6 +505,17 @@ METADATA = SurveyForm(
             key="interest_2021",
             title="В каких областях жизни вы хотите применять рациональность в 2021 году?",
             multiple=True,
+            choices=[
+                'Работа и карьера',
+                'Образование',
+                'Личные отношения',
+                'Бизнес и свои проекты',
+                'Быт',
+                'Здоровье',
+                'Психологическое благополучие',
+                'Благотворительность',
+                'Улучшение мира',
+            ],
         ),
         SurveyField(
             key="priority",
@@ -579,7 +593,6 @@ METADATA = SurveyForm(
         SurveyField(
             key="meetups_city",
             title="Если вы были на офлайновых встречах (часто или один раз), в каком городе это было?",
-            extract_other=True,
         ),
         SurveyField(
             key="meetups_why",
@@ -587,10 +600,19 @@ METADATA = SurveyForm(
             limit=1000,
             multiple=True,
             text_tail=True,
-            shortcuts={
-                "Попрактиковаться в чтении докладов и организационной деятельности": "Попрактиковаться в чтении докладов и орг.деятельности",
+            aliases={
+                "попрактиковаться в чтении докладов и организационной деятельности": "Попрактиковаться в чтении докладов и орг.деятельности",
             },
-            extract_other=True,
+            choices=[
+                'Социализироваться',
+                'Узнать что-то новое',
+                'Найти друзей',
+                'Пообщаться с единомышленниками',
+                'Обсудить интересные темы',
+                'Помочь сообществу и его участникам',
+                'Сделать мир лучше',
+                'Попрактиковаться в чтении докладов и организационной деятельности',
+            ],
         ),
         SurveyField(
             key="meetups_why_not",
@@ -598,7 +620,17 @@ METADATA = SurveyForm(
             limit=1000,
             multiple=True,
             text_tail=True,
-            extract_other=True,
+            choices=[
+                'В моем городе нет встреч',
+                'Пандемия',
+                'Не получается по расписанию',
+                'Собираюсь, но откладываю',
+                'Не люблю людей и тусовки',
+                'Боюсь незнакомых людей',
+                'Считаю это неоправданной тратой времени',
+                'Мне не нравятся люди на встречах',
+                'Люди на встречах занимаются не тем, чем мне хотелось бы',
+            ],
         ),
         SurveyField(
             key="meetups_realm",
