@@ -15,11 +15,12 @@ export type Data = {
   limit: number;
   values: { value: number | string; count: number }[];
   custom_sort?: string[];
-  sort: 'top' | 'numerical' | 'lexical' | 'last_int';
+  sort: 'top' | 'numerical' | 'lexical' | 'last_int' | 'choices';
   multiple: boolean;
   show: 'text' | 'histogram';
   note?: string;
   other_values?: string[];
+  choices?: string[];
 };
 
 export type Histogram = {

@@ -1,5 +1,5 @@
 import dataclasses
-from typing import Optional
+from typing import Optional, TypedDict
 
 
 @dataclasses.dataclass
@@ -16,6 +16,9 @@ class SurveyField:
     choices: Optional[list[str]] = None
     private: bool = False
     note: Optional[str] = None
+
+    # example: [{ 0: '0-100', 100: '100-200', 200: '200+' }]
+    buckets: Optional[dict[int, str]] = None
 
     def asdict(self):
         return dataclasses.asdict(self)
@@ -40,6 +43,21 @@ class SurveyForm:
 
     def to_dict(self):
         return {field.key: field.asdict() for field in self.public_fields()}
+
+
+online_choices = [
+    'Не знаю, что это',
+    'Знаю, что это, но не читаю',
+    'Редко читаю',
+    'Часто читаю',
+    'Часто читаю и иногда пишу',
+    'Часто читаю и пишу',
+]
+slang_choices = [
+    'Знаю, что это',
+    'Слышал(а) эти слова, но не могу объяснить другому их значение',
+    'Мне это незнакомо',
+]
 
 
 METADATA = SurveyForm(
@@ -145,6 +163,23 @@ METADATA = SurveyForm(
             limit=1000,
             sort="last_int",
             note="Ваша честная оценка по итогам тестов, если вы проходили их в прошлом.",
+            buckets={
+                0: '<50 (вероятная ошибка)',
+                50: '50-59',
+                60: '60-69',
+                70: '70-79',
+                80: '80-89',
+                90: '90-99',
+                100: '100-109',
+                110: '110-119',
+                120: '120-129',
+                130: '130-139',
+                140: '140-149',
+                150: '150-159',
+                160: '160-169',
+                170: '170-199',
+                200: '200+ (вероятная ошибка)',
+            },
         ),
         SurveyField(
             key="english",
@@ -154,8 +189,16 @@ METADATA = SurveyForm(
             key="english_cefr",
             title="Английский язык по шкале CEFR",
             limit=1000,
-            sort="lexical",
+            sort="choices",
             note="См. https://en.wikipedia.org/wiki/Common_European_Framework_of_Reference_for_Languages",
+            choices=[
+                'A1',
+                'A2',
+                'B1',
+                'B2',
+                'C1',
+                'C2',
+            ],
         ),
         SurveyField(
             key="religion",
@@ -195,6 +238,25 @@ METADATA = SurveyForm(
             title="Уровень дохода в рублях, в месяц",
             type="int",
             sort="last_int",
+            buckets={
+                0: '<5000 руб.',
+                5000: '5000-9999 руб.',
+                10000: '10000-19999 руб.',
+                20000: '20000-29999 руб.',
+                30000: '30000-39999 руб.',
+                40000: '40000-49999 руб.',
+                50000: '50000-59999 руб.',
+                60000: '60000-69999 руб.',
+                70000: '70000-79999 руб.',
+                80000: '80000-89999 руб.',
+                90000: '90000-99999 руб.',
+                100000: '100000-109999 руб.',
+                110000: '110000-119999 руб.',
+                120000: '120000-129999 руб.',
+                130000: '130000-139999 руб.',
+                140000: '140000-149999 руб.',
+                150000: '>= 150000 руб.',
+            },
         ),
         SurveyField(
             key="hobby",
@@ -280,78 +342,116 @@ METADATA = SurveyForm(
         SurveyField(
             key="slang_bias",
             title="Знакомство с терминологией и культурой [Когнитивное искажение]",
+            sort='choices',
+            choices=slang_choices,
         ),
         SurveyField(
             key="slang_bayes",
             title="Знакомство с терминологией и культурой [Теорема Байеса]",
+            sort='choices',
+            choices=slang_choices,
         ),
         SurveyField(
             key="slang_epistemology",
             title="Знакомство с терминологией и культурой [Эпистемология]",
+            sort='choices',
+            choices=slang_choices,
         ),
         SurveyField(
             key="slang_agency",
             title="Знакомство с терминологией и культурой [Агентность]",
+            sort='choices',
+            choices=slang_choices,
         ),
         SurveyField(
             key="slang_two_systems",
             title="Знакомство с терминологией и культурой [Две системы мышления]",
+            sort='choices',
+            choices=slang_choices,
         ),
         SurveyField(
             key="slang_solstice",
             title="Знакомство с терминологией и культурой [Rational Solstice]",
+            sort='choices',
+            choices=slang_choices,
         ),
         SurveyField(
             key="slang_fallacymania",
             title="Знакомство с терминологией и культурой [Fallacymania]",
+            sort='choices',
+            choices=slang_choices,
         ),
         SurveyField(
             key="slang_ea",
             title="Знакомство с терминологией и культурой [Эффективный альтруизм]",
+            sort='choices',
+            choices=slang_choices,
         ),
         SurveyField(
             key="slang_street",
             title="Знакомство с терминологией и культурой [Уличная эпистемология]",
+            sort='choices',
+            choices=slang_choices,
         ),
         SurveyField(
             key="slang_nvc",
             title="Знакомство с терминологией и культурой [Ненасильственное общение]",
+            sort='choices',
+            choices=slang_choices,
         ),
         SurveyField(
             key="slang_80k",
             title="Знакомство с терминологией и культурой [80000 часов]",
+            sort='choices',
+            choices=slang_choices,
         ),
         SurveyField(
             key="slang_miri",
             title="Знакомство с терминологией и культурой [MIRI]",
+            sort='choices',
+            choices=slang_choices,
         ),
         SurveyField(
             key="slang_ssc",
             title="Знакомство с терминологией и культурой [Slate Star Codex]",
+            sort='choices',
+            choices=slang_choices,
         ),
         SurveyField(
             key="slang_hpmor",
             title="Знакомство с терминологией и культурой [Гарри Поттер и методы рационального мышления]",
+            sort='choices',
+            choices=slang_choices,
         ),
         SurveyField(
             key="slang_cfar",
             title="Знакомство с терминологией и культурой [CFAR]",
+            sort='choices',
+            choices=slang_choices,
         ),
         SurveyField(
             key="slang_kocherga",
             title="Знакомство с терминологией и культурой [Кочерга]",
+            sort='choices',
+            choices=slang_choices,
         ),
         SurveyField(
             key="slang_zareshai",
             title="Знакомство с терминологией и культурой [Зарешай]",
+            sort='choices',
+            choices=slang_choices,
         ),
         SurveyField(
             key="slang_rvalue",
             title="Знакомство с терминологией и культурой [R-value]",
+            sort='choices',
+            choices=slang_choices,
         ),
         SurveyField(
             key="slang_transhumanism",
             title="Знакомство с терминологией и культурой [Трансгуманизм]",
+            sort='choices',
+            choices=slang_choices,
         ),
         SurveyField(
             key="applied_familiarity",
@@ -530,52 +630,62 @@ METADATA = SurveyForm(
         SurveyField(
             key="online_slack",
             title="Онлайн-сообщества [Slack-чат lesswrong.ru]",
-            limit=1000,
+            sort='choices',
+            choices=online_choices,
         ),
         SurveyField(
             key="online_vk",
             title="Онлайн-сообщества [Вк-паблик «LessWrong по-русски»]",
-            limit=1000,
+            sort='choices',
+            choices=online_choices,
         ),
         SurveyField(
             key="online_lwcom",
             title="Онлайн-сообщества [lesswrong.com]",
-            limit=1000,
+            sort='choices',
+            choices=online_choices,
         ),
         SurveyField(
             key="online_ea",
             title="Онлайн-сообщества [forum.effectivealtruism.org]",
-            limit=1000,
+            sort='choices',
+            choices=online_choices,
         ),
         SurveyField(
             key="online_diaspora",
             title="Онлайн-сообщества [Прочая англоязычная блогосфера (slatestarcodex и другие)]",
-            limit=1000,
+            sort='choices',
+            choices=online_choices,
         ),
         SurveyField(
             key="online_reddit",
             title="Онлайн-сообщества [Reddit (/r/slatestarcodex или другие рацио-сабреддиты)]",
-            limit=1000,
+            sort='choices',
+            choices=online_choices,
         ),
         SurveyField(
             key="online_telegram_kocherga",
             title="Онлайн-сообщества [Телеграм-чаты Кочерги]",
-            limit=1000,
+            sort='choices',
+            choices=online_choices,
         ),
         SurveyField(
             key="online_telegram_pion",
             title="Онлайн-сообщества [Телеграм-чат и канал «Пион на каждый день»]",
             limit=1000,
+            choices=online_choices,
         ),
         SurveyField(
             key="online_telegram_rvalue",
             title="Онлайн-сообщества [Телеграм-чат сообщества R-value]",
-            limit=1000,
+            sort='choices',
+            choices=online_choices,
         ),
         SurveyField(
             key="online_telegram_spb",
             title="Онлайн-сообщества [Телеграм-чаты сообщества LessWrong SPb]",
-            limit=1000,
+            sort='choices',
+            choices=online_choices,
         ),
         SurveyField(
             key="online_other",
@@ -679,7 +789,12 @@ METADATA = SurveyForm(
 )
 
 
-STRUCTURE = [
+class StructureSection(TypedDict):
+    title: str
+    columns: list[str]
+
+
+STRUCTURE: list[StructureSection] = [
     {
         "title": "Общие данные",
         "columns": [

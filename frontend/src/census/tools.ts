@@ -20,11 +20,28 @@ export const data2histogram = (data: Data): Histogram => {
     return parseInt(match.slice(-1)[0]);
   };
 
-  const sorters = {
-    top: (a: string, b: string) => value2count[b] - value2count[a],
-    numerical: (a: string, b: string) => parseInt(a) - parseInt(b),
-    lexical: (a: string, b: string) => (b < a ? 1 : -1),
-    last_int: (a: string, b: string) => extractInt(a) - extractInt(b),
+  const sorters: { [k in Data['sort']]: (a: string, b: string) => number } = {
+    top: (a, b) => value2count[b] - value2count[a],
+    numerical: (a, b) => parseInt(a) - parseInt(b),
+    lexical: (a, b) => (a < b ? 1 : -1),
+    last_int: (a, b) => extractInt(a) - extractInt(b),
+    choices: (a, b) => {
+      if (data.choices) {
+        const aIndex = data.choices.indexOf(a);
+        const bIndex = data.choices.indexOf(b);
+        console.log(a, b, aIndex, bIndex);
+        if (aIndex >= 0 && bIndex < 0) {
+          return -1;
+        }
+        if (bIndex >= 0 && aIndex < 0) {
+          return 1;
+        }
+        if (aIndex >= 0 && bIndex >= 0) {
+          return aIndex < bIndex ? -1 : 1;
+        }
+      }
+      return value2count[b] - value2count[a];
+    },
   };
 
   const sortedItems = Object.keys(value2count).sort((a, b) => {
