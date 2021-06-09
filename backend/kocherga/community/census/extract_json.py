@@ -1,16 +1,12 @@
 import json
 import math
-import os
 import re
 from collections import defaultdict
-from pathlib import Path
 
 import numpy as np
 import pandas as pd
 
 from .metadata import METADATA, STRUCTURE
-
-BASE_DIR = str(Path(__file__).parent.parent)
 
 # some data was already normalized manually before we apply these fixes
 column_specific_fixes = {
@@ -89,13 +85,7 @@ def split_meetup_reasons(value):
             value = re.sub(re.escape(preset), 'PRESET', value)
             values.append(preset)
 
-    values.append(
-        ', '.join(
-            part
-            for part in value.split(', ')
-            if part != 'PRESET'
-        )
-    )
+    values.append(', '.join(part for part in value.split(', ') if part != 'PRESET'))
     return values
 
 
@@ -129,7 +119,9 @@ def normalize(column, value):
     if column in ('meetups_why', 'meetups_why_not'):
         values = split_meetup_reasons(value)
     elif column in ('hobby', 'job', 'speciality'):
-        value = re.sub(r'\(.*?\)', '', value)  # get rid of (...), they are messing up with splitting-by-comma
+        value = re.sub(
+            r'\(.*?\)', '', value
+        )  # get rid of (...), they are messing up with splitting-by-comma
         values = re.split(r',\s*', value)
     else:
         values = [value]
@@ -142,7 +134,9 @@ def validate_structure():
     for group in STRUCTURE:
         for column in group['columns']:
             if column not in [field.key for field in METADATA.fields]:
-                raise Exception(f"{column} from group structure is missing from metadata")
+                raise Exception(
+                    f"{column} from group structure is missing from metadata"
+                )
 
     # all public METADATA fields are in groups
     all_structure_fields = sum((group['columns'] for group in STRUCTURE), [])
@@ -167,7 +161,9 @@ class SurveyFieldData:
             values.extend(normalize(column, value))
 
         # important for anonymization of our data!
-        default = 0 if self.field.type == 'int' and column not in ('income', 'iq') else ''
+        default = (
+            0 if self.field.type == 'int' and column not in ('income', 'iq') else ''
+        )
         values = sorted(values, key=lambda x: x or default)
 
         # compress values
@@ -177,17 +173,21 @@ class SurveyFieldData:
 
         grouped_list = []
         if None in grouped:
-            grouped_list.append({
-                'value': None,
-                'count': grouped[None],
-            })
+            grouped_list.append(
+                {
+                    'value': None,
+                    'count': grouped[None],
+                }
+            )
             del grouped[None]
 
         for key in sorted(grouped.keys()):
-            grouped_list.append({
-                'value': key,
-                'count': grouped[key],
-            })
+            grouped_list.append(
+                {
+                    'value': key,
+                    'count': grouped[key],
+                }
+            )
 
         values = grouped_list
         return values
@@ -222,8 +222,8 @@ class SurveyFieldData:
         return result
 
 
-def load_df():
-    df = pd.read_csv(os.path.join(BASE_DIR, 'data', 'data.txt'), sep=',')
+def load_df(in_filename: str):
+    df = pd.read_csv(in_filename, sep=',')
 
     def mapper(rus_column):
         return METADATA.field_by_title(rus_column).key
@@ -232,8 +232,8 @@ def load_df():
     return df
 
 
-def run():
-    df = load_df()
+def run(in_filename: str, out_filename: str):
+    df = load_df(in_filename)
 
     validate_structure()
 
@@ -256,8 +256,11 @@ def run():
 
         data[column] = SurveyFieldData(field, values).to_dict()
 
-    with open(os.path.join(BASE_DIR, 'js', 'census.json'), mode='w') as js:
-        print(json.dumps({
-            'data': data,
-            'structure': STRUCTURE,
-            'total': df.index.size}, ensure_ascii=False), file=js)
+    with open(out_filename, mode='w') as js:
+        print(
+            json.dumps(
+                {'data': data, 'structure': STRUCTURE, 'total': df.index.size},
+                ensure_ascii=False,
+            ),
+            file=js,
+        )

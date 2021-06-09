@@ -1,6 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import useResizeAware from 'react-resize-aware';
 
+import { ItemPageHeader } from '~/blocks/ItemPageHeader';
+import { Spinner } from '~/components';
+
 import { MainContext } from '../contexts';
 import { Survey } from '../types';
 import { AllGroups } from './AllGroups';
@@ -28,25 +31,33 @@ export const CensusReport = () => {
   };
 
   return (
-    <div className="bg-white max-w-5xl mx-auto p-4 min-h-screen">
-      <RightSide>
-        <div className="relative">{resizeListener}</div>
-      </RightSide>
-      <MainContext.Provider value={context}>
-        <h1 className="text-center">
-          Итоги переписи русскоговорящих рационалистов-2021
-        </h1>
-        <Intro />
-        {survey ? (
-          <>
-            <Menu survey={survey} />
-            <AllGroups survey={survey} />
-          </>
-        ) : (
-          'Loading...'
-        )}
-        <Outro />
-      </MainContext.Provider>
+    <div>
+      <ItemPageHeader
+        title="Итоги переписи русскоговорящих рационалистов-2021"
+        sectionTitle="Переписи рационалистов"
+        sectionLink="/census"
+      />
+      <div className="bg-white max-w-5xl mx-auto p-4 min-h-screen">
+        <RightSide>
+          <div className="relative">{resizeListener}</div>
+        </RightSide>
+        <MainContext.Provider value={context}>
+          <div className="flex justify-center mb-8">
+            <Intro />
+          </div>
+          {survey ? (
+            <>
+              <Menu survey={survey} />
+              <AllGroups survey={survey} />
+              <div className="flex justify-center mt-8">
+                <Outro survey={survey} />
+              </div>
+            </>
+          ) : (
+            <Spinner size="block" />
+          )}
+        </MainContext.Provider>
+      </div>
     </div>
   );
 };

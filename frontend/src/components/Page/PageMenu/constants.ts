@@ -94,6 +94,7 @@ const publicMenuItems: Item[] = [
         mode: 'external',
       },
       { link: 'https://lesswrong.ru', title: 'LessWrong.ru', mode: 'external' },
+      { link: '/census', title: 'Перепись' },
     ],
   },
   {

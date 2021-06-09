@@ -1,9 +1,16 @@
 import React from 'react';
 
-import { TextBox } from './TextBox';
+import { HintCard } from '~/components';
+import { A } from '~/frontkit';
 
-export const Outro: React.FC = () => (
-  <TextBox>
+import { Survey } from '../types';
+
+interface Props {
+  survey: Survey;
+}
+
+export const Outro: React.FC<Props> = ({ survey }) => (
+  <HintCard>
     <h4>Подробности об обработке данных и технологиях</h4>
     <p>Перепись продолжалась с 13 по 28 февраля 2021.</p>
     <p>***</p>
@@ -20,7 +27,7 @@ export const Outro: React.FC = () => (
     </p>
     <p>
       Прочитать их ответы и скачать их для дальнейшего анализа можно{' '}
-      <a href="https://...">по этой ссылке</a>.
+      <A href="https://...">по этой ссылке</A>.
     </p>
     <p>
       (Зачем нужна опция про приватность? Учитывая количество вопросов,
@@ -31,7 +38,7 @@ export const Outro: React.FC = () => (
       Доступ к полным ответам на анкету был:
       <ul>
         <li>
-          у меня (<a href="https://berekuk.ru">Вячеслав Матюхин</a>, организатор
+          у меня (<A href="https://berekuk.ru">Вячеслав Матюхин</A>, организатор
           опроса)
         </li>
         <li>у компании Google</li>
@@ -41,7 +48,10 @@ export const Outro: React.FC = () => (
     <p>
       Некоторые ответы (не очень многие) были нормализованы. Скрипты для
       обработки данных можно увидеть{' '}
-      <a href="https://github.com/lesswrong-ru/survey/tree/2021/data">тут</a>.
+      <A href="https://gitlab.com/kocherga/core/-/tree/master/backend/kocherga/community/census">
+        тут
+      </A>
+      .
     </p>
     <p>
       Ответы на вопрос про IQ округлён до десятков, на вопрос про доход - до
@@ -50,8 +60,9 @@ export const Outro: React.FC = () => (
     <p>***</p>
     <p>
       Данные, из которых верстается страница итогов переписи, лежат в{' '}
-      <a href="/census-data/2021.json">отдельном файле</a>. Ответы отсортированы
-      по каждому вопросу отдельно для сохранения приватности участников.
+      <A href="/census-data/2021/data.json">отдельном файле</A>. Ответы
+      отсортированы по каждому вопросу отдельно для сохранения приватности
+      участников.
     </p>
-  </TextBox>
+  </HintCard>
 );

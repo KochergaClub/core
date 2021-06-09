@@ -1,1 +1,1 @@
-export { default } from '~/census/pages/CensusPage';
+export { default } from '~/census/pages/CensusIndexPage';

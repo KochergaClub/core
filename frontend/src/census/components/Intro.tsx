@@ -1,7 +1,9 @@
 import React, { useContext } from 'react';
 
+import { HintCard } from '~/components';
+import { A } from '~/frontkit';
+
 import { MainContext } from '../contexts';
-import { TextBox } from './TextBox';
 
 const Stats: React.FC = () => {
   const { total } = useContext(MainContext);
@@ -10,21 +12,23 @@ const Stats: React.FC = () => {
 };
 
 export const Intro: React.FC = () => (
-  <TextBox>
-    <p>Перепись проходила в феврале 2021.</p>
-    <p>
-      То, как выглядел оригинальный опрос, можно посмотреть{' '}
-      <a href="original-survey.pdf">тут (pdf)</a>.
-    </p>
-    <p>
-      Некоторые подробности об том, как обрабатывались результаты, можно узнать{' '}
-      <a href="#outro">в конце этой страницы</a>.
-    </p>
-    <p>
-      Прошлые переписи: <a href="https://lesswrong.ru/survey/2015/">2015</a>,{' '}
-      <a href="https://lesswrong.ru/survey/2016/">2016</a>,{' '}
-      <a href="https://lesswrong.ru/survey/2018/">2018</a>,{' '}
-    </p>
-    <Stats />
-  </TextBox>
+  <div className="flex justify-center">
+    <HintCard>
+      <p>Перепись проходила в феврале 2021.</p>
+      <p>
+        Форму опроса можно посмотреть{' '}
+        <A href="original-survey.pdf">тут (pdf)</A>.
+      </p>
+      <p>
+        Подробности об том, как обрабатывались результаты, можно узнать{' '}
+        <A href="#outro">в конце этой страницы</A>.
+      </p>
+      <p>
+        Прошлые переписи: <A href="https://lesswrong.ru/survey/2015/">2015</A>,{' '}
+        <A href="https://lesswrong.ru/survey/2016/">2016</A>,{' '}
+        <A href="https://lesswrong.ru/survey/2018/">2018</A>.
+      </p>
+      <Stats />
+    </HintCard>
+  </div>
 );

@@ -1,5 +1,7 @@
 import React from 'react';
 
+import { A } from '~/frontkit';
+
 import { Survey } from '../types';
 import { RightSide } from './RightSide';
 
@@ -9,13 +11,13 @@ export const Menu: React.FC<{ survey: Survey }> = ({ survey }) => (
       <ul className="p-0 list-none">
         {survey.structure.map((group, i) => (
           <li key={i}>
-            <a href={'#group-' + i}>{group.title}</a>
+            <A href={'#group-' + i}>{group.title}</A>
             <ul className="list-none">
               {group.columns.map((column) => (
                 <li key={column}>
-                  <a href={'#question-' + column}>
+                  <A href={'#question-' + column}>
                     {survey.data[column].title}
-                  </a>
+                  </A>
                 </li>
               ))}
             </ul>
