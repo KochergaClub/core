@@ -32,12 +32,17 @@ def normalize_one(field: SurveyField, value):
 def split_values(field, value):
     # This is tricky because some answers included commas, but in some cases
     # commas were a separator of multiple answers.
-    presets = field.choices
+    # We have to sort choices because shorter choice can be a substring of a longer choice,
+    # so we should start with replacing the longer ones.
+    presets = reversed(sorted(field.choices, key=lambda p: len(p)))
 
     values = []
-    for preset in presets:
+    for preset in reversed(sorted(presets, key=lambda p: len(p))):
         if preset in value:
-            value = re.sub(re.escape(preset), 'PRESET', value)
+            # choice value must be surrounded with commas, otherwise it was probably entered manually
+            value = re.sub(
+                r'(?:^|(?<=, ))' + re.escape(preset) + r'(?=, |$)', 'PRESET', value
+            )
             values.append(preset)
 
     other_parts = [part for part in value.split(', ') if part != 'PRESET']
@@ -154,8 +159,11 @@ def load_df(in_filename: str):
     return df
 
 
-def run(in_filename: str, out_filename: str):
+def run(in_filename: str, out_filename: str, drop_rows: list[int] = []):
     df = load_df(in_filename)
+
+    # for year 2021: drop_rows = [40, 41, 42, 136, 182, 376, 586]
+    df = df.drop(drop_rows)
 
     validate_structure()
 

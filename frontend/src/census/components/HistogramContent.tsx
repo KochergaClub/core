@@ -47,10 +47,10 @@ const HistogramV2 = ({
 
           let el = (
             <LeftRight>
-              <div className="text-right leading-tight break-words self-center">
+              <div className="text-right text-xs leading-tight break-words self-center">
                 {item.name}
               </div>
-              <div className="flex items-center">
+              <div className="flex items-center text-xs">
                 <div
                   className={clsx(
                     'h-4 flex items-center justify-end',

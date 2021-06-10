@@ -53,7 +53,7 @@ export const Block: React.FC<BlockProps> = (props) => {
   return (
     <section id={'question-' + props.name}>
       <div className="mb-2">
-        <RightSide>
+        <RightSide stretchOnMobile>
           <Title {...props} />
           {props.data.note && <Note>{props.data.note}</Note>}
           {props.data.multiple && (

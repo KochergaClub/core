@@ -14,7 +14,6 @@ export type Data = {
   title: string;
   limit: number;
   values: { value: number | string; count: number }[];
-  custom_sort?: string[];
   sort: 'top' | 'numerical' | 'lexical' | 'last_int' | 'choices';
   multiple: boolean;
   show: 'text' | 'histogram';

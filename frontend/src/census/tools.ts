@@ -44,20 +44,7 @@ export const data2histogram = (data: Data): Histogram => {
     },
   };
 
-  const sortedItems = Object.keys(value2count).sort((a, b) => {
-    if (data.custom_sort) {
-      const a_i = data.custom_sort.indexOf(a);
-      const b_i = data.custom_sort.indexOf(b);
-      if (a_i >= 0 && b_i >= 0) {
-        return a_i - b_i;
-      } else if (a_i < 0 && b_i >= 0) {
-        return 1;
-      } else if (a_i >= 0 && b_i < 0) {
-        return -1;
-      }
-    }
-    return sorters[data.sort](a, b);
-  });
+  const sortedItems = Object.keys(value2count).sort(sorters[data.sort]);
 
   const histogram: Histogram = {
     values: sortedItems.map((item, i) => {

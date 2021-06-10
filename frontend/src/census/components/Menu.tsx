@@ -6,9 +6,9 @@ import { Survey } from '../types';
 import { RightSide } from './RightSide';
 
 export const Menu: React.FC<{ survey: Survey }> = ({ survey }) => (
-  <RightSide>
+  <RightSide stretchOnMobile>
     <nav>
-      <ul className="p-0 list-none">
+      <ul className="p-0 text-xs list-none">
         {survey.structure.map((group, i) => (
           <li key={i}>
             <A href={'#group-' + i}>{group.title}</A>

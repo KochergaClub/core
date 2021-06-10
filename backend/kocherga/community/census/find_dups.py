@@ -4,11 +4,11 @@ from .extract_json import load_df
 
 
 def is_empty(value):
-    return (type(value) == float and math.isnan(value))
+    return (type(value) != str and math.isnan(value)) or str(value) == ''
 
 
-def find_dups():
-    df = load_df()
+def find_dups(filename: str):
+    df = load_df(filename)
 
     # FIXME - copy-paste
     columns = [
@@ -20,13 +20,12 @@ def find_dups():
     print('Total columns: {}'.format(len(columns)))
     print('Total rows: {}'.format(df.index.size))
 
-
     header = f"{'i':^4} | {'j':^4} | {'timestamp':^19} | {'timestamp':^19} | {'equal':^10} | {'different':^10} | {'empty_both':^10} | {'empty_x':^10} | {'empty_y':^10}"
     print(header)
     print('-' * len(header))
 
     for i in range(0, df.index.size):
-        for j in range(i+1, df.index.size):
+        for j in range(i + 1, df.index.size):
             x = df.iloc[i]
             y = df.iloc[j]
 
@@ -39,6 +38,7 @@ def find_dups():
             for column in columns:
                 vx = x[column]
                 vy = y[column]
+                # print(f'{column}/{vx}/{vy}')
                 if is_empty(vx):
                     if is_empty(vy):
                         empty_both += 1
@@ -53,11 +53,11 @@ def find_dups():
                         else:
                             different += 1
 
-            if different > 10:
+            if different > 5:
                 continue
             if equal < 10:
                 continue
             print(
-                f"{i:^4} | {j:^4} | {x['timestamp']} | {y['timestamp']} | {equal:^10} | {different:^10} | {empty_both:^10} | {empty_x:^10} | {empty_y:^10}",
-                flush=True
+                f"{i:^4} | {j:^4} | {x['timestamp']:^19} | {y['timestamp']:^19} | {equal:^10} | {different:^10} | {empty_both:^10} | {empty_x:^10} | {empty_y:^10}",
+                flush=True,
             )

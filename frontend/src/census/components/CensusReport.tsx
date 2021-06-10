@@ -18,7 +18,7 @@ export const CensusReport = () => {
   const [survey, setSurvey] = useState<Survey | undefined>();
 
   useEffect(() => {
-    fetch('/census-data/2021.json')
+    fetch('/census-data/2021/data.json')
       .then((res) => res.json())
       .then((result) => {
         setSurvey(result);

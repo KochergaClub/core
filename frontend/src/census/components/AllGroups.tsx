@@ -6,7 +6,7 @@ import { RightSide } from './RightSide';
 
 const Group: React.FC<{ id: number; title: string }> = (props) => (
   <div className="mb-8">
-    <RightSide>
+    <RightSide stretchOnMobile>
       <h2 className="underline text-3xl font-normal" id={'group-' + props.id}>
         {props.title}
       </h2>
