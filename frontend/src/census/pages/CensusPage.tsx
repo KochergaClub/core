@@ -7,7 +7,7 @@ import { CensusReport } from '../components/CensusReport';
 
 const CensusPage: NextApolloPage = () => {
   return (
-    <Page title="Перепись сообщества">
+    <Page title="Перепись русскоговорящих рационалистов-2021">
       <CensusReport />
     </Page>
   );
