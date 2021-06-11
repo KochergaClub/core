@@ -24,12 +24,19 @@ export const data2histogram = (data: Data): Histogram => {
     top: (a, b) => value2count[b] - value2count[a],
     numerical: (a, b) => parseInt(a) - parseInt(b),
     lexical: (a, b) => (a < b ? 1 : -1),
-    last_int: (a, b) => extractInt(a) - extractInt(b),
+    buckets: (a, b) => {
+      if (!data.buckets) {
+        throw new Error("Can't sort data without buckets configuration");
+      }
+      const bucketValues = Object.values(data.buckets);
+      const aIndex = bucketValues.indexOf(a);
+      const bIndex = bucketValues.indexOf(b);
+      return aIndex < bIndex ? -1 : 1;
+    },
     choices: (a, b) => {
       if (data.choices) {
         const aIndex = data.choices.indexOf(a);
         const bIndex = data.choices.indexOf(b);
-        console.log(a, b, aIndex, bIndex);
         if (aIndex >= 0 && bIndex < 0) {
           return -1;
         }

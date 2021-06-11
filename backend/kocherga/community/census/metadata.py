@@ -45,6 +45,11 @@ class SurveyForm:
         return {field.key: field.asdict() for field in self.public_fields()}
 
 
+psy_choices = [
+    'Нет',
+    'Да, я диагностировал(а) себя самостоятельно',
+    'Да, мне поставил диагноз специалист',
+]
 online_choices = [
     'Не знаю, что это',
     'Знаю, что это, но не читаю',
@@ -57,6 +62,26 @@ slang_choices = [
     'Знаю, что это',
     'Слышал(а) эти слова, но не могу объяснить другому их значение',
     'Мне это незнакомо',
+]
+goals_choices = [
+    'Безразлично',
+    'Возможно, интересно',
+    'Занимаюсь / хочу этим заниматься',
+    'Это моя главная цель',
+]
+endorse_choices = [
+    'Плохо / вредно / бесполезно',
+    'Скорее плохо',
+    'Нет мнения / не разбираюсь',
+    'Скорее хорошо',
+    'Отлично, радуюсь, что люди этим занимаются',
+]
+interest_choices = [
+    'Совсем неважно',
+    'Скорее неважно',
+    'Не знаю / непонятно',
+    'Скорее важно',
+    'Очень важно',
 ]
 
 
@@ -86,6 +111,7 @@ METADATA = SurveyForm(
                 'singapore': 'Сингапур',
                 'ireland': 'Ирландия',
                 'чешская республика': 'Чехия',
+                'poland': 'Польша',
             },
         ),
         SurveyField(
@@ -111,11 +137,29 @@ METADATA = SurveyForm(
             key="education",
             title="Образование",
             limit=1000,
-            note='"Неоконченное" включает как продолжающийся процесс, так и прерванный в прошлом.',
+            note='«Неоконченное» включает как продолжающийся процесс, так и прерванный в прошлом.',
+            sort='choices',
+            choices=[
+                'Неоконченное общее',
+                'Общее',
+                'Неоконченное высшее',
+                'Оконченное высшее (бакалавр, специалист, магистр)',
+                'Неоконченная аспирантура',
+                'Оконченная аспирантура',
+            ],
         ),
         SurveyField(
             key="higher_education",
             title="Высшая степень образования / академической степени",
+            sort='choices',
+            choices=[
+                'Школьный аттестат',
+                'Бакалавр',
+                'Специалист (5 лет обучения)',
+                'Магистр',
+                'Кандидат наук',
+                'Доктор наук',
+            ],
         ),
         SurveyField(
             key="speciality",
@@ -161,7 +205,7 @@ METADATA = SurveyForm(
             title="IQ",
             type="int",
             limit=1000,
-            sort="last_int",
+            sort="buckets",
             note="Ваша честная оценка по итогам тестов, если вы проходили их в прошлом.",
             buckets={
                 0: '<50 (вероятная ошибка)',
@@ -184,6 +228,14 @@ METADATA = SurveyForm(
         SurveyField(
             key="english",
             title="Английский язык",
+            sort="choices",
+            choices=[
+                'Практически не знаю',
+                'Читаю с трудом',
+                'Читаю, если необходимо',
+                'Свободно читаю',
+                'Свободно читаю и говорю',
+            ],
         ),
         SurveyField(
             key="english_cefr",
@@ -237,25 +289,31 @@ METADATA = SurveyForm(
             key="income_amount",
             title="Уровень дохода в рублях, в месяц",
             type="int",
-            sort="last_int",
+            sort="buckets",
+            limit=100,
+            note='Ответы округлены в меньшую сторону. Обратите внимание: до 100 тыс. руб. группировка по 10 тыс. руб., далее по 20 тыс. руб.',
             buckets={
-                0: '<5000 руб.',
-                5000: '5000-9999 руб.',
-                10000: '10000-19999 руб.',
-                20000: '20000-29999 руб.',
-                30000: '30000-39999 руб.',
-                40000: '40000-49999 руб.',
-                50000: '50000-59999 руб.',
-                60000: '60000-69999 руб.',
-                70000: '70000-79999 руб.',
-                80000: '80000-89999 руб.',
-                90000: '90000-99999 руб.',
-                100000: '100000-109999 руб.',
-                110000: '110000-119999 руб.',
-                120000: '120000-129999 руб.',
-                130000: '130000-139999 руб.',
-                140000: '140000-149999 руб.',
-                150000: '>= 150000 руб.',
+                0: '<10000 руб.',
+                10000: '10000 руб.',
+                20000: '20000 руб.',
+                30000: '30000 руб.',
+                40000: '40000 руб.',
+                50000: '50000 руб.',
+                60000: '60000 руб.',
+                70000: '70000 руб.',
+                80000: '80000 руб.',
+                90000: '90000 руб.',
+                100000: '100000 руб.',
+                120000: '120000 руб.',
+                140000: '140000 руб.',
+                160000: '160000 руб.',
+                180000: '180000 руб.',
+                200000: '200000 руб.',
+                220000: '220000 руб.',
+                240000: '240000 руб.',
+                260000: '260000 руб.',
+                280000: '280000 руб.',
+                300000: '>= 300000 руб.',
             },
         ),
         SurveyField(
@@ -268,6 +326,8 @@ METADATA = SurveyForm(
                 'комп. игры': 'Компьютерные игры',
                 'чгк': 'Что? Где? Когда?',
                 'что?где?когда?': 'Что? Где? Когда?',
+                'чтогдекогда?': 'Что? Где? Когда?',
+                'что где когда?': 'Что? Где? Когда?',
             },
         ),
         SurveyField(
@@ -280,30 +340,44 @@ METADATA = SurveyForm(
         SurveyField(
             key="psy_depression",
             title="Психические расстройства [Депрессия]",
+            sort='choices',
+            choices=psy_choices,
         ),
         SurveyField(
             key="psy_ocd",
             title="Психические расстройства [Обсессивно-компульсивное расстройство]",
+            sort='choices',
+            choices=psy_choices,
         ),
         SurveyField(
             key="psy_autism",
             title="Психические расстройства [Расстройства аутистического спектра]",
+            sort='choices',
+            choices=psy_choices,
         ),
         SurveyField(
             key="psy_bipolar",
             title="Психические расстройства [Биполярное расстройство]",
+            sort='choices',
+            choices=psy_choices,
         ),
         SurveyField(
             key="psy_anxiety",
             title="Психические расстройства [Тревожный невроз]",
+            sort='choices',
+            choices=psy_choices,
         ),
         SurveyField(
             key="psy_borderline",
             title="Психические расстройства [Пограничное расстройство личности]",
+            sort='choices',
+            choices=psy_choices,
         ),
         SurveyField(
             key="psy_schizo",
             title="Психические расстройства [Шизофрения]",
+            sort='choices',
+            choices=psy_choices,
         ),
         SurveyField(
             key="referer",
@@ -487,30 +561,44 @@ METADATA = SurveyForm(
         SurveyField(
             key="goals_self",
             title="Какие типичные цели рационалистов вы разделяете? [Улучшать свою жизнь с помощью рациональности]",
+            sort="choices",
+            choices=goals_choices,
         ),
         SurveyField(
             key="goals_teach",
             title="Какие типичные цели рационалистов вы разделяете? [Преподавать рациональность]",
+            sort="choices",
+            choices=goals_choices,
         ),
         SurveyField(
             key="goals_community",
             title="Какие типичные цели рационалистов вы разделяете? [Помогать построить сообщество рационалистов]",
+            sort="choices",
+            choices=goals_choices,
         ),
         SurveyField(
             key="goals_ea",
             title="Какие типичные цели рационалистов вы разделяете? [Заниматься эффективным альтруизмом]",
+            sort="choices",
+            choices=goals_choices,
         ),
         SurveyField(
             key="goals_aisafety",
             title="Какие типичные цели рационалистов вы разделяете? [Заниматься темой безопасного ИИ]",
+            sort="choices",
+            choices=goals_choices,
         ),
         SurveyField(
             key="goals_write",
             title="Какие типичные цели рационалистов вы разделяете? [Писать тексты по рациональности и на смежные темы]",
+            sort="choices",
+            choices=goals_choices,
         ),
         SurveyField(
             key="goals_transhumanism",
             title="Какие типичные цели рационалистов вы разделяете? [Заниматься трансгуманистическими проектами]",
+            sort="choices",
+            choices=goals_choices,
         ),
         SurveyField(
             key="goals_other",
@@ -520,86 +608,128 @@ METADATA = SurveyForm(
         SurveyField(
             key="endorse_self",
             title="Какие сферы интересов рационалистов вы одобряете? [Улучшение своей жизни с помощью техник рациональности]",
+            sort="choices",
+            choices=endorse_choices,
         ),
         SurveyField(
             key="endorse_ea",
             title="Какие сферы интересов рационалистов вы одобряете? [Эффективный альтруизм]",
+            sort="choices",
+            choices=endorse_choices,
         ),
         SurveyField(
             key="endorse_aisafety",
             title="Какие сферы интересов рационалистов вы одобряете? [Безопасный ИИ]",
+            sort="choices",
+            choices=endorse_choices,
         ),
         SurveyField(
             key="endorse_mindfulness",
             title="Какие сферы интересов рационалистов вы одобряете? [Медитация/майндфулнес]",
+            sort="choices",
+            choices=endorse_choices,
         ),
         SurveyField(
             key="endorse_biohacking",
             title="Какие сферы интересов рационалистов вы одобряете? [Биохакинг]",
+            sort="choices",
+            choices=endorse_choices,
         ),
         SurveyField(
             key="endorse_qs",
             title="Какие сферы интересов рационалистов вы одобряете? [Quantified self]",
+            sort="choices",
+            choices=endorse_choices,
         ),
         SurveyField(
             key="endorse_transhumanism",
             title="Какие сферы интересов рационалистов вы одобряете? [Трансгуманизм]",
+            sort="choices",
+            choices=endorse_choices,
         ),
         SurveyField(
             key="endorse_nvc",
             title="Какие сферы интересов рационалистов вы одобряете? [Ненасильственное общение]",
+            sort="choices",
+            choices=endorse_choices,
         ),
         SurveyField(
             key="endorse_street",
             title="Какие сферы интересов рационалистов вы одобряете? [Уличная эпистемология]",
+            sort="choices",
+            choices=endorse_choices,
         ),
         SurveyField(
             key="interest_habits",
             title="Какие из разделов рациональности для вас наиболее актуальны? [Навыки и привычки]",
+            sort="choices",
+            choices=interest_choices,
         ),
         SurveyField(
             key="interest_planning",
             title="Какие из разделов рациональности для вас наиболее актуальны? [Планирование]",
+            sort="choices",
+            choices=interest_choices,
         ),
         SurveyField(
             key="interest_goals",
             title="Какие из разделов рациональности для вас наиболее актуальны? [Целеполагание]",
+            sort="choices",
+            choices=interest_choices,
         ),
         SurveyField(
             key="interest_strategy",
             title="Какие из разделов рациональности для вас наиболее актуальны? [Стратегирование]",
+            sort="choices",
+            choices=interest_choices,
         ),
         SurveyField(
             key="interest_biases",
             title="Какие из разделов рациональности для вас наиболее актуальны? [Устранение когнитивных искажений]",
+            sort="choices",
+            choices=interest_choices,
         ),
         SurveyField(
             key="interest_beliefs",
             title="Какие из разделов рациональности для вас наиболее актуальны? [Работа над убеждениями]",
+            sort="choices",
+            choices=interest_choices,
         ),
         SurveyField(
             key="interest_uncertainty",
             title="Какие из разделов рациональности для вас наиболее актуальны? [Выборы в неопредённости]",
+            sort="choices",
+            choices=interest_choices,
         ),
         SurveyField(
             key="interest_bayes",
             title="Какие из разделов рациональности для вас наиболее актуальны? [Байесианство]",
+            sort="choices",
+            choices=interest_choices,
         ),
         SurveyField(
             key="interest_models",
             title="Какие из разделов рациональности для вас наиболее актуальны? [Моделирование сложных проблем]",
+            sort="choices",
+            choices=interest_choices,
         ),
         SurveyField(
             key="interest_integration",
             title="Какие из разделов рациональности для вас наиболее актуальны? [Проинтегрированность]",
+            sort="choices",
+            choices=interest_choices,
         ),
         SurveyField(
             key="interest_critical",
             title="Какие из разделов рациональности для вас наиболее актуальны? [Критическое восприятие информации]",
+            sort="choices",
+            choices=interest_choices,
         ),
         SurveyField(
             key="interest_world",
             title="Какие из разделов рациональности для вас наиболее актуальны? [Эффективное улучшение мира]",
+            sort="choices",
+            choices=interest_choices,
         ),
         SurveyField(
             key="interest_2021",
@@ -620,12 +750,33 @@ METADATA = SurveyForm(
         SurveyField(
             key="priority",
             title="На каком месте рациональность у вас в приоритетах?",
-            multiple=True,
+            sort='choices',
+            choices=[
+                'Самая важная тема в моей жизни',
+                'Среди топ-5',
+                'Среди топ-10',
+                'Среди топ-20',
+                'Среди топ-50',
+            ],
         ),
         SurveyField(
             key="blocks",
             title="Что больше всего мешает вам практиковать рациональность?",
             multiple=True,
+            choices=[
+                'Не понимаю/не знаю теорию',
+                'Нет конкретных инструментов',
+                'Тяжело понять, где и как я могу применить теорию на практике',
+                'Не вижу пользы',
+                'Не хватает сил и мотивации',
+                'Окружение не одобряет',
+                'Не хватает времени и внимания',
+                'Нет подходящих задач или проблем',
+                'У меня выгорание или депрессия',
+                'Не знаю, с чего начать',
+                'Кажется, ничего не мешает, но я все равно это не делаю',
+                'У меня всё отлично с применением рациональности',
+            ],
         ),
         SurveyField(
             key="online_slack",
@@ -672,7 +823,7 @@ METADATA = SurveyForm(
         SurveyField(
             key="online_telegram_pion",
             title="Онлайн-сообщества [Телеграм-чат и канал «Пион на каждый день»]",
-            limit=1000,
+            sort='choices',
             choices=online_choices,
         ),
         SurveyField(
@@ -747,6 +898,7 @@ METADATA = SurveyForm(
             title="При условии отсутствия пандемии и наличия встреч в вашем городе, какой формат встреч вы бы предпочли?",
             type="int",
             sort="numerical",
+            note="Середина (5) — «одинаково вероятно пойду и на онлайн, и на офлайн-встречу»; полюса — «пойду только на встречу такого вида, а на другую не пойду совсем». 1 = «онлайн», 10 = «офлайн».",
         ),
         SurveyField(
             key="other_communities",
@@ -759,6 +911,12 @@ METADATA = SurveyForm(
         SurveyField(
             key="previous_surveys",
             title="Участие в прошлых опросах",
+            sort="choices",
+            choices=[
+                'Участвовал(а) в опросе в 2015-м',
+                'Участвовал(а) в опросе в 2016-м',
+                'Участвовал(а) в опросе в 2018-м',
+            ],
         ),
         SurveyField(
             key="comments_like",

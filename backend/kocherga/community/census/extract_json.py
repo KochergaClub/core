@@ -57,6 +57,8 @@ def normalize(field: SurveyField, value):
     if field.buckets:
         if value is None:
             return [None]
+        if column == 'income_amount' and value > 0 and value < 500:
+            value *= 1000  # probably thousands
         assert type(value) in (float, int)
         boundaries = sorted(field.buckets.keys())
         for boundary in reversed(boundaries):
