@@ -20,7 +20,10 @@ def find_dups(filename: str):
     print('Total columns: {}'.format(len(columns)))
     print('Total rows: {}'.format(df.index.size))
 
-    header = f"{'i':^4} | {'j':^4} | {'timestamp':^19} | {'timestamp':^19} | {'equal':^10} | {'different':^10} | {'empty_both':^10} | {'empty_x':^10} | {'empty_y':^10}"
+    header = (
+        f"{'i':^4} | {'j':^4} | {'timestamp':^19} | {'timestamp':^19} | {'equal':^10} | {'different':^10}"
+        + " | {'empty_both':^10} | {'empty_x':^10} | {'empty_y':^10}"
+    )
     print(header)
     print('-' * len(header))
 
@@ -58,6 +61,7 @@ def find_dups(filename: str):
             if equal < 10:
                 continue
             print(
-                f"{i:^4} | {j:^4} | {x['timestamp']:^19} | {y['timestamp']:^19} | {equal:^10} | {different:^10} | {empty_both:^10} | {empty_x:^10} | {empty_y:^10}",
+                f"{i:^4} | {j:^4} | {x['timestamp']:^19} | {y['timestamp']:^19} | {equal:^10} | {different:^10}"
+                + " | {empty_both:^10} | {empty_x:^10} | {empty_y:^10}",
                 flush=True,
             )
