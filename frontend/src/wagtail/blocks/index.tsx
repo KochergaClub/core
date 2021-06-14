@@ -37,8 +37,16 @@ export type KnownBlockFragment = Parameters<
   ComponentsMap[keyof ComponentsMap]
 >[0];
 
+export type KnownBlockTypename = KnownBlockFragment['__typename'];
+
 export const isKnownBlock = (
   block: AnyBlockFragment
 ): block is KnownBlockFragment => {
   return allBlockComponents.hasOwnProperty(block.__typename);
+};
+
+export const isKnownBlockTypename = (
+  typename: string
+): typename is KnownBlockTypename => {
+  return allBlockComponents.hasOwnProperty(typename);
 };

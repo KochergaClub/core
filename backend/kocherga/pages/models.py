@@ -12,12 +12,7 @@ from . import blocks  # noqa: F401
 
 
 class FreeFormPage(KochergaPage):
-    body = StreamField(
-        sum(
-            [blocks_registry.by_tag(tag) for tag in ('basic', 'columns', 'various', 'landing')],
-            start=[],
-        )
-    )
+    body = StreamField(blocks_registry.all())
 
     content_panels = KochergaPage.content_panels + [
         StreamFieldPanel('body'),
@@ -27,15 +22,7 @@ class FreeFormPage(KochergaPage):
 
 
 class FrontPage(KochergaPage):
-    body = StreamField(
-        sum(
-            [
-                blocks_registry.by_tag(tag)
-                for tag in ('basic', 'columns', 'various', 'landing')
-            ],
-            start=[],
-        )
-    )
+    body = StreamField(blocks_registry.all())
 
     content_panels = KochergaPage.content_panels + [
         StreamFieldPanel('body'),

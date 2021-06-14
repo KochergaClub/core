@@ -1,3 +1,5 @@
+import clsx from 'clsx';
+
 import { gql } from '@apollo/client';
 
 import { PaddedBlock } from '~/components';
@@ -11,7 +13,7 @@ const BasicTextBlock: BlockComponent<Props> = (block) => {
     <PaddedBlock>
       <RichText
         dangerouslySetInnerHTML={{ __html: block.basic_text.text }}
-        className={block.basic_text.centered ? 'text-center' : ''}
+        className={clsx(block.basic_text.centered && 'text-center')}
       />
     </PaddedBlock>
   );

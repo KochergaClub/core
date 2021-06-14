@@ -70,6 +70,18 @@ query WagtailBlockStructure($name: String!) {
   }
 }
 
+query WagtailAllBlockStructures {
+  result: wagtailAllBlockStructures {
+    typename
+    structure {
+      ... on WagtailBlockStructure {
+        label
+        group
+      }
+    }
+  }
+}
+
 query WagtailPageRevisions($page_id: ID!) {
   result: wagtailPage(page_id: $page_id) {
     id

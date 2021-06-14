@@ -90,7 +90,6 @@ class BlocksRegistry:
         self.entries = {}
 
     def register_list(self, tag: str, blocks: List[Tuple[str, BlockType]]):
-        # TODO - check for duplicates (store entries in dict?)
         for (name, block) in blocks:
             if name in self.entries:
                 raise Exception("Duplicate name {name}, already registered")

@@ -902,6 +902,7 @@ export type Query = {
   wagtailImage?: Maybe<WagtailImage>;
   wagtailImageSearch: WagtailImageSearchResult;
   wagtailBlockStructure: WagtailBlockStructure;
+  wagtailAllBlockStructures: Array<WagtailBlockStructureWithName>;
   wagtailRenderBlock: WagtailRenderBlockResult;
   search: SearchResult;
   wagtailCollectionsForImageUpload: Array<WagtailCollection>;
@@ -1280,6 +1281,12 @@ export type WagtailImageSearchInput = {
 
 export type WagtailBlockStructureInput = {
   name: Scalars['String'];
+};
+
+export type WagtailBlockStructureWithName = {
+  __typename?: 'WagtailBlockStructureWithName';
+  typename: Scalars['String'];
+  structure: WagtailBlockStructure;
 };
 
 export type WagtailRenderBlockResult = {

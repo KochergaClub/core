@@ -1,5 +1,7 @@
 import logging
 
+from kocherga.wagtail.graphql_utils import wagtail_to_graphql_block_name
+
 logger = logging.getLogger(__name__)
 
 from typing import Optional
@@ -153,9 +155,8 @@ WagtailImageRendition = g.ObjectType(
 # WagtailBlock
 def resolve_WagtailBlock_type(obj, *_):
     # Naming type by convention.
-    # Example: type='grey' -> GreyWagtailBlock
-    camel_name = ''.join([part.capitalize() for part in obj.block.name.split('_')])
-    return camel_name + 'Block'
+    # Example: type='basic_grey' -> BasicGreyBlock
+    return wagtail_to_graphql_block_name(obj.block.name)
 
 
 WagtailBlock = g.InterfaceType(
@@ -332,7 +333,7 @@ WagtailStreamFieldValidationError = build_WagtailStreamFieldValidationError()
 # block structure types
 common_structure_fields = {
     'label': str,
-    'group': Optional[str],
+    'group': g.Field(g.String, resolve=lambda obj, info: obj.meta.group),
     'required': bool,
 }
 
@@ -393,6 +394,20 @@ ListBlockStructure = g.ObjectType(
     'WagtailListBlockStructure',
     interfaces=[BlockStructure],
     fields=g.fields({**common_structure_fields, 'child_block': g.NN(BlockStructure)}),
+)
+
+
+BlockStructureWithName = g.ObjectType(
+    'WagtailBlockStructureWithName',
+    fields=g.fields(
+        {
+            'typename': g.Field(
+                g.NN(g.String),
+                resolve=lambda obj, info: wagtail_to_graphql_block_name(obj['name']),
+            ),
+            'structure': g.NN(BlockStructure),
+        }
+    ),
 )
 
 

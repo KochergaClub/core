@@ -720,6 +720,7 @@ type Query {
   wagtailImage(input: WagtailImageInput!): WagtailImage
   wagtailImageSearch(input: WagtailImageSearchInput!): WagtailImageSearchResult!
   wagtailBlockStructure(input: WagtailBlockStructureInput!): WagtailBlockStructure!
+  wagtailAllBlockStructures: [WagtailBlockStructureWithName!]!
   wagtailRenderBlock(input: WagtailRenderBlockInput!): WagtailRenderBlockResult!
   search(input: SearchInput!): SearchResult!
   wagtailCollectionsForImageUpload: [WagtailCollection!]!
@@ -823,6 +824,11 @@ input WagtailImageSearchInput {
 
 input WagtailBlockStructureInput {
   name: String!
+}
+
+type WagtailBlockStructureWithName {
+  typename: String!
+  structure: WagtailBlockStructure!
 }
 
 type WagtailRenderBlockResult {

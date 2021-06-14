@@ -4,7 +4,12 @@ import wagtail.core.fields
 from kocherga.graphql import g, helpers
 
 from ...blocks import registry as blocks_registry
-from ..types import BlockStructure, WagtailBlock, WagtailStreamFieldValidationError
+from ..types import (
+    BlockStructure,
+    BlockStructureWithName,
+    WagtailBlock,
+    WagtailStreamFieldValidationError,
+)
 
 c = helpers.Collection()
 
@@ -24,7 +29,16 @@ class wagtailBlockStructure(helpers.BaseFieldWithInput):
     result = g.NN(BlockStructure)
 
 
-queries = c.as_dict()
+@c.class_field
+class wagtailAllBlockStructures(helpers.BaseField):
+    def resolve(self, _, info):
+        return [
+            {'name': pair[0], 'structure': pair[1]} for pair in blocks_registry.all()
+        ]
+
+    permissions = []
+
+    result = g.NNList(BlockStructureWithName)
 
 
 @c.class_field
@@ -72,3 +86,6 @@ class wagtailRenderBlock(helpers.BaseFieldWithInput):
         'validation_error': WagtailStreamFieldValidationError,
         'block': WagtailBlock,
     }
+
+
+queries = c.as_dict()

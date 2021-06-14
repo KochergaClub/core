@@ -385,6 +385,42 @@ export type WagtailBlockStructureQuery = (
   ) }
 );
 
+export type WagtailAllBlockStructuresQueryVariables = Types.Exact<{ [key: string]: never; }>;
+
+
+export type WagtailAllBlockStructuresQuery = (
+  { __typename: 'Query' }
+  & { result: Array<(
+    { __typename: 'WagtailBlockStructureWithName' }
+    & Pick<Types.WagtailBlockStructureWithName, 'typename'>
+    & { structure: (
+      { __typename: 'WagtailStructBlockStructure' }
+      & Pick<Types.WagtailStructBlockStructure, 'label' | 'group'>
+    ) | (
+      { __typename: 'WagtailListBlockStructure' }
+      & Pick<Types.WagtailListBlockStructure, 'label' | 'group'>
+    ) | (
+      { __typename: 'WagtailCharBlockStructure' }
+      & Pick<Types.WagtailCharBlockStructure, 'label' | 'group'>
+    ) | (
+      { __typename: 'WagtailRichTextBlockStructure' }
+      & Pick<Types.WagtailRichTextBlockStructure, 'label' | 'group'>
+    ) | (
+      { __typename: 'WagtailBooleanBlockStructure' }
+      & Pick<Types.WagtailBooleanBlockStructure, 'label' | 'group'>
+    ) | (
+      { __typename: 'WagtailStaticBlockStructure' }
+      & Pick<Types.WagtailStaticBlockStructure, 'label' | 'group'>
+    ) | (
+      { __typename: 'WagtailImageBlockStructure' }
+      & Pick<Types.WagtailImageBlockStructure, 'label' | 'group'>
+    ) | (
+      { __typename: 'WagtailURLBlockStructure' }
+      & Pick<Types.WagtailUrlBlockStructure, 'label' | 'group'>
+    ) }
+  )> }
+);
+
 export type WagtailPageRevisionsQueryVariables = Types.Exact<{
   page_id: Types.Scalars['ID'];
 }>;
@@ -531,5 +567,7 @@ export const StructureL1FragmentDoc: DocumentNode<StructureL1Fragment, unknown> 
 export const StructureL2FragmentDoc: DocumentNode<StructureL2Fragment, unknown> = {"kind":"Document","definitions":[{"kind":"FragmentDefinition","name":{"kind":"Name","value":"StructureL2"},"typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"WagtailBlockStructure"}},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"FragmentSpread","name":{"kind":"Name","value":"StructureCommon"}},{"kind":"InlineFragment","typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"WagtailListBlockStructure"}},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"child_block"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"FragmentSpread","name":{"kind":"Name","value":"StructureL1"}}]}}]}},{"kind":"InlineFragment","typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"WagtailStructBlockStructure"}},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"child_blocks"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"name"}},{"kind":"Field","name":{"kind":"Name","value":"definition"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"FragmentSpread","name":{"kind":"Name","value":"StructureL1"}}]}}]}}]}}]}},...StructureCommonFragmentDoc.definitions,...StructureL1FragmentDoc.definitions]};
 export const StructureL3FragmentDoc: DocumentNode<StructureL3Fragment, unknown> = {"kind":"Document","definitions":[{"kind":"FragmentDefinition","name":{"kind":"Name","value":"StructureL3"},"typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"WagtailBlockStructure"}},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"FragmentSpread","name":{"kind":"Name","value":"StructureCommon"}},{"kind":"InlineFragment","typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"WagtailListBlockStructure"}},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"child_block"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"FragmentSpread","name":{"kind":"Name","value":"StructureL2"}}]}}]}},{"kind":"InlineFragment","typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"WagtailStructBlockStructure"}},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"child_blocks"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"name"}},{"kind":"Field","name":{"kind":"Name","value":"definition"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"FragmentSpread","name":{"kind":"Name","value":"StructureL2"}}]}}]}}]}}]}},...StructureCommonFragmentDoc.definitions,...StructureL2FragmentDoc.definitions]};
 export const WagtailBlockStructureDocument: DocumentNode<WagtailBlockStructureQuery, WagtailBlockStructureQueryVariables> = dedupeFragments({ "kind": "Document", "definitions": [{ "kind": "OperationDefinition", "operation": "query", "name": { "kind": "Name", "value": "WagtailBlockStructure" }, "variableDefinitions": [{ "kind": "VariableDefinition", "variable": { "kind": "Variable", "name": { "kind": "Name", "value": "name" } }, "type": { "kind": "NonNullType", "type": { "kind": "NamedType", "name": { "kind": "Name", "value": "String" } } } }], "selectionSet": { "kind": "SelectionSet", "selections": [{ "kind": "Field", "alias": { "kind": "Name", "value": "result" }, "name": { "kind": "Name", "value": "wagtailBlockStructure" }, "arguments": [{ "kind": "Argument", "name": { "kind": "Name", "value": "input" }, "value": { "kind": "ObjectValue", "fields": [{ "kind": "ObjectField", "name": { "kind": "Name", "value": "name" }, "value": { "kind": "Variable", "name": { "kind": "Name", "value": "name" } } }] } }], "selectionSet": { "kind": "SelectionSet", "selections": [{ "kind": "FragmentSpread", "name": { "kind": "Name", "value": "StructureL3" } }] } }] } }, ...StructureL3FragmentDoc.definitions] });
+
+export const WagtailAllBlockStructuresDocument: DocumentNode<WagtailAllBlockStructuresQuery, WagtailAllBlockStructuresQueryVariables> = dedupeFragments({ "kind": "Document", "definitions": [{ "kind": "OperationDefinition", "operation": "query", "name": { "kind": "Name", "value": "WagtailAllBlockStructures" }, "selectionSet": { "kind": "SelectionSet", "selections": [{ "kind": "Field", "alias": { "kind": "Name", "value": "result" }, "name": { "kind": "Name", "value": "wagtailAllBlockStructures" }, "selectionSet": { "kind": "SelectionSet", "selections": [{ "kind": "Field", "name": { "kind": "Name", "value": "typename" } }, { "kind": "Field", "name": { "kind": "Name", "value": "structure" }, "selectionSet": { "kind": "SelectionSet", "selections": [{ "kind": "InlineFragment", "typeCondition": { "kind": "NamedType", "name": { "kind": "Name", "value": "WagtailBlockStructure" } }, "selectionSet": { "kind": "SelectionSet", "selections": [{ "kind": "Field", "name": { "kind": "Name", "value": "label" } }, { "kind": "Field", "name": { "kind": "Name", "value": "group" } }] } }] } }] } }] } }] });
 
 export const WagtailPageRevisionsDocument: DocumentNode<WagtailPageRevisionsQuery, WagtailPageRevisionsQueryVariables> = dedupeFragments({ "kind": "Document", "definitions": [{ "kind": "OperationDefinition", "operation": "query", "name": { "kind": "Name", "value": "WagtailPageRevisions" }, "variableDefinitions": [{ "kind": "VariableDefinition", "variable": { "kind": "Variable", "name": { "kind": "Name", "value": "page_id" } }, "type": { "kind": "NonNullType", "type": { "kind": "NamedType", "name": { "kind": "Name", "value": "ID" } } } }], "selectionSet": { "kind": "SelectionSet", "selections": [{ "kind": "Field", "alias": { "kind": "Name", "value": "result" }, "name": { "kind": "Name", "value": "wagtailPage" }, "arguments": [{ "kind": "Argument", "name": { "kind": "Name", "value": "page_id" }, "value": { "kind": "Variable", "name": { "kind": "Name", "value": "page_id" } } }], "selectionSet": { "kind": "SelectionSet", "selections": [{ "kind": "Field", "name": { "kind": "Name", "value": "id" } }, { "kind": "Field", "name": { "kind": "Name", "value": "meta" }, "selectionSet": { "kind": "SelectionSet", "selections": [{ "kind": "Field", "name": { "kind": "Name", "value": "revisions" }, "selectionSet": { "kind": "SelectionSet", "selections": [{ "kind": "Field", "name": { "kind": "Name", "value": "id" } }, { "kind": "Field", "name": { "kind": "Name", "value": "created_at" } }] } }] } }] } }] } }] });

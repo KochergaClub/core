@@ -1,11 +1,10 @@
-from kocherga.wagtail.blocks import (SafeRichTextBlock, URLOrAbsolutePathBlock,
-                                     registry)
+from kocherga.wagtail.blocks import SafeRichTextBlock, URLOrAbsolutePathBlock, registry
 from wagtail.core import blocks
 from wagtail.images.blocks import ImageChooserBlock
 from wagtailgeowidget.blocks import GeoBlock
 
 registry.register_list(
-    tag='basic',
+    tag='any',
     blocks=[
         (
             'basic_text',
@@ -45,7 +44,7 @@ registry.register_list(
 )
 
 registry.register_list(
-    tag='columns',
+    tag='any',
     blocks=[
         (
             'columns_basic',
@@ -81,7 +80,7 @@ registry.register_list(
 
 
 registry.register_list(
-    tag='various',
+    tag='any',
     blocks=[
         (
             'events_list',
@@ -139,7 +138,7 @@ registry.register_list(
 )
 
 registry.register_list(
-    tag='landing',
+    tag='any',
     blocks=[
         (
             'hero_front',
@@ -173,7 +172,7 @@ registry.register_list(
                     ),
                 ],
                 icon='home',
-                group='various',
+                group='landing',
             ),
         ),
         (
@@ -183,7 +182,8 @@ registry.register_list(
                     ('image', ImageChooserBlock()),
                     ('title', blocks.CharBlock(label='Заголовок')),
                     ('text', blocks.CharBlock(label='Текст')),
-                ]
+                ],
+                group='landing',
             ),
         ),
         (
@@ -198,13 +198,13 @@ registry.register_list(
                         ('image', ImageChooserBlock()),
                     ]
                 ),
-                group='various',
+                group='landing',
                 label='Партнёры',
             ),
         ),
         (
             'front_social_links',
-            blocks.StaticBlock(group='various', label='Ссылки на соцсети'),
+            blocks.StaticBlock(group='landing', label='Ссылки на соцсети'),
         ),
     ],
 )

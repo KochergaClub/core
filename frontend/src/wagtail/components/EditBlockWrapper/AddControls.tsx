@@ -1,23 +1,56 @@
-import { useContext, useState } from 'react';
+import React, { useContext, useState } from 'react';
 import { FaPlusCircle } from 'react-icons/fa';
 
+import { useQuery } from '@apollo/client';
+
+import { ApolloQueryResults } from '~/components';
 import { Button, Modal } from '~/frontkit';
-import { allBlockComponents, KnownBlockFragment } from '~/wagtail/blocks';
+import { isKnownBlockTypename, KnownBlockFragment, KnownBlockTypename } from '~/wagtail/blocks';
 
 import { BlockFormModal } from '../BlockFormModal';
 import { EditBlocksContext } from '../EditWagtailBlocks';
+import { WagtailAllBlockStructuresDocument } from '../queries.generated';
 
 interface Props {
   position: number;
   show: boolean;
 }
 
-type Typename = KnownBlockFragment['__typename'];
+const TypenamePicker: React.FC<{
+  close: () => void;
+  pick: (t: string) => void;
+}> = ({ close, pick }) => {
+  const queryResults = useQuery(WagtailAllBlockStructuresDocument);
+
+  return (
+    <Modal>
+      <Modal.Header close={close}>Выберите тип блока</Modal.Header>
+      <Modal.Body>
+        <ApolloQueryResults {...queryResults}>
+          {({ data: { result } }) => (
+            <div className="grid grid-cols-2 max-w-xl gap-1">
+              {result.map(({ typename, structure }) => (
+                <React.Fragment key={typename}>
+                  <div>{structure.group}</div>
+                  <Button onClick={() => pick(typename)}>
+                    {structure.label}
+                  </Button>
+                </React.Fragment>
+              ))}
+            </div>
+          )}
+        </ApolloQueryResults>
+      </Modal.Body>
+    </Modal>
+  );
+};
 
 export const AddControls: React.FC<Props> = ({ position, show }) => {
   const { dispatch } = useContext(EditBlocksContext);
   const [showModal, setShowModal] = useState(false);
-  const [typename, setTypename] = useState<Typename | undefined>(undefined);
+  const [typename, setTypename] = useState<KnownBlockTypename | undefined>(
+    undefined
+  );
 
   const act = (e: React.SyntheticEvent) => {
     e.preventDefault();
@@ -29,9 +62,13 @@ export const AddControls: React.FC<Props> = ({ position, show }) => {
     setTypename(undefined);
   };
 
-  const pick = (typename: Typename) => {
+  const pick = (typename: string) => {
     setShowModal(false);
-    setTypename(typename);
+    if (isKnownBlockTypename(typename)) {
+      setTypename(typename);
+    } else {
+      window.alert(`Тип ${typename} не настроен на фронтенде`);
+    }
   };
 
   const add = async (block: KnownBlockFragment) => {
@@ -42,15 +79,12 @@ export const AddControls: React.FC<Props> = ({ position, show }) => {
     closeModal();
   };
 
-  // TODO - load from server?
-  const typenames = Object.keys(allBlockComponents) as Typename[];
-
   return (
     <div>
       {show ? (
         <a
           href="#"
-          className="absolute -bottom-4 left-1/2 transform -translate-x-1/2 h-8 text-primary-500 bg-white"
+          className="absolute z-20 -bottom-4 left-1/2 transform -translate-x-1/2 h-8 text-primary-500 bg-white rounded-full"
           onClick={act}
         >
           <FaPlusCircle size={32} />
@@ -64,18 +98,7 @@ export const AddControls: React.FC<Props> = ({ position, show }) => {
           modalTitle={`Создание блока ${typename}`}
         />
       ) : showModal ? (
-        <Modal>
-          <Modal.Header close={closeModal}>Выберите тип блока</Modal.Header>
-          <Modal.Body>
-            <div className="space-x-1 space-y-1 max-w-xl">
-              {typenames.map((typename) => (
-                <Button key={typename} onClick={() => pick(typename)}>
-                  {typename}
-                </Button>
-              ))}
-            </div>
-          </Modal.Body>
-        </Modal>
+        <TypenamePicker close={closeModal} pick={pick} />
       ) : null}
     </div>
   );

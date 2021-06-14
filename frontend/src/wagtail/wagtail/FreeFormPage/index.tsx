@@ -42,4 +42,6 @@ export const rawFragment = gql`
 
 FreeFormPage.fragment = FreeFormPageFragmentDoc;
 
+FreeFormPage.editingMode = 'wysiwyg';
+
 export default FreeFormPage;
