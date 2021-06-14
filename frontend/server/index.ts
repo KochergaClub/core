@@ -64,6 +64,7 @@ async function main() {
       console.error(e);
       try {
         res.status(500).send({ error: 'Backend is down' });
+        res.end();
       } catch (e) {
         console.error('Failed to send error: ' + String(e));
       }
