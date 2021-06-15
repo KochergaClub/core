@@ -717,6 +717,20 @@ export type LandingHeroBlockValueImageArgs = {
   spec: Scalars['String'];
 };
 
+export type LandingTextBlock = WagtailBlock & {
+  __typename?: 'LandingTextBlock';
+  id: Scalars['ID'];
+  value: LandingTextBlockValue;
+};
+
+export type LandingTextBlockValue = {
+  __typename?: 'LandingTextBlockValue';
+  text: Scalars['String'];
+  centered: Scalars['Boolean'];
+  large: Scalars['Boolean'];
+  gray: Scalars['Boolean'];
+};
+
 export type FrontPartnersBlock = WagtailBlock & {
   __typename?: 'FrontPartnersBlock';
   id: Scalars['ID'];

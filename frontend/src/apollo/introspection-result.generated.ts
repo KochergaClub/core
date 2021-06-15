@@ -54,6 +54,7 @@
       "MailchimpSubscribeBlock",
       "HeroFrontBlock",
       "LandingHeroBlock",
+      "LandingTextBlock",
       "FrontPartnersBlock",
       "EventsListBlock",
       "PhotoRibbonBlock",

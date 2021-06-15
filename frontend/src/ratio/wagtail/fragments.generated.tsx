@@ -71,6 +71,9 @@ export type RatioSectionPageFragment = (
     { __typename: 'LandingHeroBlock' }
     & Pick<Types.LandingHeroBlock, 'id'>
   ) | (
+    { __typename: 'LandingTextBlock' }
+    & Pick<Types.LandingTextBlock, 'id'>
+  ) | (
     { __typename: 'FrontPartnersBlock' }
     & Pick<Types.FrontPartnersBlock, 'id'>
   ) | (

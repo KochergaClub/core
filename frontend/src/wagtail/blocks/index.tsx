@@ -10,6 +10,7 @@ import FrontSocialLinksBlock from './FrontSocialLinksBlock';
 import HeroFrontBlock from './HeroFrontBlock';
 import HrBlock from './HrBlock';
 import LandingHeroBlock from './LandingHeroBlock';
+import LandingTextBlock from './LandingTextBlock';
 import MailchimpSubscribeBlock from './MailchimpSubscribeBlock';
 import PhotoRibbonBlock from './PhotoRibbonBlock';
 import SectionHeaderBlock from './SectionHeaderBlock';
@@ -29,6 +30,7 @@ export const allBlockComponents = {
   FrontPartnersBlock,
   FrontSocialLinksBlock,
   LandingHeroBlock,
+  LandingTextBlock,
 };
 
 type ComponentsMap = typeof allBlockComponents;

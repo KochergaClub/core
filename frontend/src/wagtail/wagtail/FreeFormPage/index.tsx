@@ -36,6 +36,7 @@ export const rawFragment = gql`
       ...FrontPartnersBlock
       ...FrontSocialLinksBlock
       ...LandingHeroBlock
+      ...LandingTextBlock
     }
   }
 `;

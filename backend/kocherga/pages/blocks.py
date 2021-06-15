@@ -187,6 +187,20 @@ registry.register_list(
             ),
         ),
         (
+            'landing_text',
+            blocks.StructBlock(
+                [
+                    ('text', SafeRichTextBlock()),
+                    ('centered', blocks.BooleanBlock(required=False)),
+                    ('large', blocks.BooleanBlock(required=False)),
+                    ('gray', blocks.BooleanBlock(required=False)),
+                ],
+                group='landing',
+                label='Текст',
+                icon='doc-full',
+            ),
+        ),
+        (
             'front_partners',
             blocks.ListBlock(
                 blocks.StructBlock(

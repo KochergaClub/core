@@ -565,6 +565,18 @@ type LandingHeroBlockValue {
   text: String!
 }
 
+type LandingTextBlock implements WagtailBlock {
+  id: ID!
+  value: LandingTextBlockValue!
+}
+
+type LandingTextBlockValue {
+  text: String!
+  centered: Boolean!
+  large: Boolean!
+  gray: Boolean!
+}
+
 type FrontPartnersBlock implements WagtailBlock {
   id: ID!
   value: [FrontPartnersBlockValue!]!
