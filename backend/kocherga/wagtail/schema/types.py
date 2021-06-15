@@ -4,8 +4,6 @@ from kocherga.wagtail.graphql_utils import wagtail_to_graphql_block_name
 
 logger = logging.getLogger(__name__)
 
-from typing import Optional
-
 import kocherga.wagtail.blocks
 import wagtail.core.blocks
 import wagtail.images.blocks
