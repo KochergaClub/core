@@ -1,15 +1,13 @@
 import { Page } from '~/components';
-
 import { NextWagtailPage } from '~/wagtail/types';
 
-import { FaqPageFragment, FaqPageFragmentDoc } from '../fragments.generated';
-
-import EntryListBlock from '../components/EntryListBlock';
 import EntryIndexBlock from '../components/EntryIndexBlock';
-import SubpagesBlock from '../components/SubpagesBlock';
+import EntryListBlock from '../components/EntryListBlock';
 import FAQPageHeader from '../components/FAQPageHeader';
 import NavigationBlock from '../components/NavigationBlock';
 import NoEntriesBlock from '../components/NoEntriesBlock';
+import { SubpagesBlock } from '../components/SubpagesBlock';
+import { FaqPageFragment, FaqPageFragmentDoc } from '../fragments.generated';
 
 const FAQPage: NextWagtailPage<FaqPageFragment> = ({ page }) => {
   return (

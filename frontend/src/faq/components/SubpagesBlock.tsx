@@ -6,17 +6,22 @@ interface Props {
   subpages: FaqPage_SummaryFragment[];
 }
 
-const SubpagesBlock: React.FC<Props> = ({ subpages }) => (
-  <PaddedBlock>
-    {subpages.map((subpage) => (
-      <AnotherPageSummary
-        key={subpage.id}
-        href={subpage.meta.url}
-        title={subpage.title}
-        description={subpage.summary}
-      />
-    ))}
-  </PaddedBlock>
-);
-
-export default SubpagesBlock;
+export const SubpagesBlock: React.FC<Props> = ({ subpages }) => {
+  if (!subpages.length) {
+    return null;
+  }
+  return (
+    <PaddedBlock>
+      <div className="space-y-10">
+        {subpages.map((subpage) => (
+          <AnotherPageSummary
+            key={subpage.id}
+            href={subpage.meta.url}
+            title={subpage.title}
+            description={subpage.summary}
+          />
+        ))}
+      </div>
+    </PaddedBlock>
+  );
+};

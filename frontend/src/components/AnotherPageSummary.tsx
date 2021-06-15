@@ -11,7 +11,7 @@ export const AnotherPageSummary: React.FC<Props> = ({
   title,
   description,
 }) => (
-  <section className="border-b border-gray-200 mb-10">
+  <section className="border-b border-gray-200">
     <header className="mb-1">
       <A className="text-2xl" href={href}>
         {title}

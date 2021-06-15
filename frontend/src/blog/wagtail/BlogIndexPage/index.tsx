@@ -11,9 +11,11 @@ const BlogIndexPage: NextWagtailPage<BlogIndexPageFragment> = ({ page }) => {
       <PageHeader title={page.title} bottom={page.subtitle} />
       <Page.Main>
         <PaddedBlock width="small">
-          {page.posts.map((summary, i) => (
-            <Summary key={i} {...summary} />
-          ))}
+          <div className="space-y-10">
+            {page.posts.map((summary, i) => (
+              <Summary key={i} {...summary} />
+            ))}
+          </div>
         </PaddedBlock>
       </Page.Main>
     </Page>

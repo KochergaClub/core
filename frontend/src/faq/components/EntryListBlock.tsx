@@ -8,15 +8,15 @@ interface Props {
 }
 
 const EntryCard: React.FC<{ entry: FaqEntryFragment }> = ({ entry }) => (
-  <div className="mb-4" id={`entry${entry.id}`}>
-    <header className="font-bold">{entry.question}</header>
+  <div id={`entry${entry.id}`}>
+    <header className="font-bold text-xl">{entry.question}</header>
     <RichText dangerouslySetInnerHTML={{ __html: entry.answer }} />
   </div>
 );
 
 const EntryList: React.FC<Props> = ({ entries }) => {
   return (
-    <div>
+    <div className="space-y-8">
       {entries.map((entry) => (
         <EntryCard key={entry.id} entry={entry} />
       ))}
