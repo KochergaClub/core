@@ -10,7 +10,6 @@ import { LandingTextBlockFragment as Props } from './index.generated';
 
 const LandingTextBlock: BlockComponent<Props> = (block) => {
   const { landing_text: value } = block;
-  console.log(block);
   return (
     <div className={clsx(value.gray && 'bg-gray-100')}>
       <PaddedBlock>

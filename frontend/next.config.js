@@ -67,8 +67,8 @@ const rawConfig = {
   assetPrefix: process.env.NEXT_PUBLIC_CDN_DOMAIN
     ? `https://${process.env.NEXT_PUBLIC_CDN_DOMAIN}`
     : '',
-  future: {
-    webpack5: true,
+  eslint: {
+    ignoreDuringBuilds: true,
   },
 };
 

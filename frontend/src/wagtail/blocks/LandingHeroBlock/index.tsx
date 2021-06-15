@@ -4,7 +4,6 @@ import { BlockComponent } from '../../types';
 import { LandingHeroBlockFragment as Props } from './index.generated';
 
 const LandingHeroBlock: BlockComponent<Props> = (props) => {
-  console.log(JSON.stringify(props));
   return (
     <div
       className="bg-black px-5 sm:px-10 py-20 bg-cover bg-center"
