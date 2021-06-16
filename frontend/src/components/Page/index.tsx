@@ -11,7 +11,7 @@ import { PageFooter } from './PageFooter';
 import PageMenu from './PageMenu';
 import { PageTitle } from './PageTitle';
 import { MenuKind, OpenGraph } from './types';
-import VkMessagesWidget from './VkMessagesWidget';
+import { VkMessagesWidget } from './VkMessagesWidget';
 
 interface Props {
   title: string;

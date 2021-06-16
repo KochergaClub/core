@@ -1,7 +1,11 @@
 import { differenceInCalendarDays, parseISO } from 'date-fns';
+import Link from 'next/link';
+import React from 'react';
 
 import { AlertCard } from '~/components';
+import { publicEventRoute, publicEventsRootRoute } from '~/events/routes';
 import { RichText } from '~/frontkit';
+import { projectsListRoute } from '~/projects/routes';
 
 import { ProjectPage_SummaryForEventFragment } from './queries.generated';
 import { CommonProps } from './types';
@@ -34,7 +38,10 @@ const ProjectInfo: React.FC<CommonProps> = ({ event }) => {
   if (!project) {
     return (
       <Wrapper>
-        Посмотрите, что будет в Кочерге <a href="/events">в ближайшие дни.</a>
+        Посмотрите, что будет в Кочерге{' '}
+        <Link href={publicEventsRootRoute()}>
+          <a>в ближайшие дни.</a>
+        </Link>
       </Wrapper>
     );
   }
@@ -43,8 +50,15 @@ const ProjectInfo: React.FC<CommonProps> = ({ event }) => {
     return (
       <Wrapper>
         Проект <ProjectLink project={project} /> больше не активен, но вы можете
-        посмотреть на <a href="/projects">другие проекты Кочерги</a> или на{' '}
-        <a href="/events">расписание ближайших событий</a>.
+        посмотреть на{' '}
+        <Link href={projectsListRoute()}>
+          <a>другие проекты Кочерги</a>
+        </Link>{' '}
+        или на{' '}
+        <Link href={publicEventsRootRoute()}>
+          <a>расписание ближайших событий</a>
+        </Link>
+        .
       </Wrapper>
     );
   }
@@ -54,7 +68,10 @@ const ProjectInfo: React.FC<CommonProps> = ({ event }) => {
     return (
       <Wrapper>
         Ближайшее событие проекта <ProjectLink project={project} />:{' '}
-        <a href={`/events/${upcomingEvent.id}`}>{upcomingEvent.title}</a>.
+        <Link href={publicEventRoute(upcomingEvent.id)}>
+          <a>{upcomingEvent.title}</a>
+        </Link>
+        .
       </Wrapper>
     );
   }

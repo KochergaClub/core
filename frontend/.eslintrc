@@ -1,0 +1,8 @@
+{
+  "extends": "next",
+  "rules": {
+    "@next/next/no-img-element": "off",
+    "jsx-a11y/alt-text": "off",
+    "import/no-anonymous-default-export": "off"
+  }
+}

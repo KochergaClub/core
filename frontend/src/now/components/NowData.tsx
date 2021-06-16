@@ -1,5 +1,8 @@
 import clsx from 'clsx';
-import { useContext } from 'react';
+import Link from 'next/link';
+import React, { useContext } from 'react';
+
+import { myRoute } from '~/my/routes';
 
 import { NowThemeContext } from '../contexts';
 import { NowFragment } from '../queries.generated';
@@ -24,11 +27,6 @@ const NowData: React.FC<Props> = ({ now: { total, customers } }) => {
   const inflect =
     (total % 100 < 10 || total % 100 > 20) &&
     [2, 3, 4].indexOf(total % 10) >= 0;
-
-  customers = [
-    { __typename: 'NowCustomer', first_name: 'fish', last_name: 'furry' },
-    { __typename: 'NowCustomer', first_name: 'dog', last_name: 'golden' },
-  ];
 
   return (
     <div>
@@ -80,9 +78,9 @@ const NowData: React.FC<Props> = ({ now: { total, customers } }) => {
             {theme.tv ? (
               'личном кабинете'
             ) : (
-              <a className="link" href="/my">
-                личном кабинете
-              </a>
+              <Link href={myRoute()}>
+                <a className="link">личном кабинете</a>
+              </Link>
             )}
             .
           </Small>

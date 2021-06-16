@@ -6,7 +6,7 @@ declare global {
   }
 }
 
-const VkMessagesWidget: React.FC = () => {
+export const VkMessagesWidget: React.FC = () => {
   const widgetId = process.env.NEXT_PUBLIC_VK_MESSAGES_WIDGET_ID;
 
   useEffect(() => {
@@ -30,10 +30,8 @@ const VkMessagesWidget: React.FC = () => {
 
   return (
     <>
-      <script src="https://vk.com/js/api/openapi.js?158" />
+      <script defer src="https://vk.com/js/api/openapi.js?158" />
       <div id="vk_community_messages" />
     </>
   );
 };
-
-export default VkMessagesWidget;

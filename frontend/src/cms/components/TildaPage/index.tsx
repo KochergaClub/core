@@ -79,7 +79,7 @@ const TildaPage: React.FC<Props> = (props) => {
           <link rel="stylesheet" href={asset.url} key={asset.url} />
         ))}
         {props.js.map((asset) => (
-          <script src={asset.url} key={asset.url} />
+          <script src={asset.url} key={asset.url} /> // eslint-disable-line @next/next/no-sync-scripts
         ))}
       </Head>
       <Page

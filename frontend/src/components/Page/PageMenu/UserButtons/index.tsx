@@ -110,15 +110,13 @@ const UserButtons: React.FC<Props> = (
         user.is_authenticated ? (
           <DropdownMenu
             render={() => (
-              <FaUserCircle
-                size="24"
-                color="white"
-                style={{ display: 'block' }}
-              />
+              <FaUserCircle size="24" color="white" className="block" />
             )}
           >
             <Link href="/my">
-              <div className="text-xs text-center px-3 py-1">{user.email}</div>
+              <a className="block no-underline text-black text-xs text-center px-3 py-1">
+                {user.email}
+              </a>
             </Link>
             <NextLinkAction href="/my" icon={FaUser} title="Личный кабинет" />
             {user.is_staff ? (

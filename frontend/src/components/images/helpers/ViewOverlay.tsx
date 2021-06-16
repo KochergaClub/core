@@ -9,6 +9,7 @@ const ViewOverlay: React.FC<Props> = ({ link }) => (
     className="absolute top-1.5 right-1.5 text-white"
     href={link}
     target="_blank"
+    rel="noreferrer"
   >
     <FaExternalLinkAlt />
   </a>

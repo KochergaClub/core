@@ -14,7 +14,12 @@ import UserButtons from './UserButtons';
 const LOGO_HEIGHT = 50;
 
 const LogoImage = () => (
-  <img src={staticUrl('menu-logo.png')} width="190" height={LOGO_HEIGHT} />
+  <img
+    src={staticUrl('menu-logo.png')}
+    alt="Логотип"
+    width="190"
+    height={LOGO_HEIGHT}
+  />
 );
 
 const Logo: React.FC<Props> = ({ kind }) => {
