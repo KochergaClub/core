@@ -1,6 +1,6 @@
 import React, { useCallback } from 'react';
 
-import { TypedDocumentNode, useMutation } from '@apollo/client';
+import { BaseMutationOptions, TypedDocumentNode, useMutation } from '@apollo/client';
 
 import { ConfirmModal } from '../ConfirmModal';
 import { Action } from './Action';
@@ -10,7 +10,7 @@ import { CommonActionProps } from './types';
 interface Props<V extends Record<string, unknown>> extends CommonActionProps {
   mutation: TypedDocumentNode<unknown, V>;
   variables?: V;
-  refetchQueries?: string[];
+  refetchQueries?: BaseMutationOptions['refetchQueries'];
   confirmText?: string;
 }
 

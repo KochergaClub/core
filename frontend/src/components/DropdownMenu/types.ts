@@ -1,4 +1,4 @@
 export interface CommonActionProps {
   title: string;
-  icon?: React.ElementType;
+  icon?: React.ElementType<{ className?: string }>;
 }

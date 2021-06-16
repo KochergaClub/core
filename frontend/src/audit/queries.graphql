@@ -24,6 +24,10 @@ fragment AuthGroup_ForCard on AuthGroup {
       permission_type
       page {
         id
+        title
+        meta {
+          url
+        }
       }
     }
     ... on WagtailRootPagePermission {

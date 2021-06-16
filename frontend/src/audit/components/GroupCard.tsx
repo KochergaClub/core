@@ -1,17 +1,14 @@
-import React, { useCallback } from 'react';
-import { FaMinus, FaPlus, FaUser } from 'react-icons/fa';
+import React from 'react';
+import { FaMinus, FaPlus, FaTrash, FaUser } from 'react-icons/fa';
 
-import { useMutation } from '@apollo/client';
-
-import { MutationButton } from '~/components';
 import { Card } from '~/components/cards';
-import DropdownMenu, { LinkAction, ModalAction } from '~/components/DropdownMenu';
+import DropdownMenu, { LinkAction, ModalAction, MutationAction } from '~/components/DropdownMenu';
 import WagtailIcon from '~/components/icons/WagtailIcon';
-import { AsyncButton, Badge, Row } from '~/frontkit';
+import { A, Badge, Row } from '~/frontkit';
 
 import {
     AuthGroup_ForCardFragment, AuthGroupsDocument, AuthRemoveUserFromGroupDocument,
-    DeleteAuthGroupDocument, MaybeStaffUserFragment
+    DeleteAuthGroupDocument
 } from '../queries.generated';
 import AddMemberToGroupModal from './AddMemberToGroupModal';
 import { AddPermissionToGroupModal } from './AddPermissionToGroupModal';
@@ -19,65 +16,122 @@ import AddUserToGroupModal from './AddUserToGroupModal';
 import { RemovePermissionFromGroupModal } from './RemovePermissionFromGroupModal';
 import UserInfo from './UserInfo';
 
-interface PagePermissionBadgeProps {
-  permission: AuthGroup_ForCardFragment['wagtailPagePermissions'][0];
-}
-
-const PagePermissionBadge: React.FC<PagePermissionBadgeProps> = ({
-  permission,
-}) => {
-  switch (permission.__typename) {
-    case 'WagtailSpecificPagePermission':
-      return (
-        <Badge>
-          {permission.permission_type} for {permission.page.id}
-        </Badge>
-      );
-    case 'WagtailRootPagePermission':
-      return <Badge>{permission.permission_type}</Badge>;
-    default:
-      return <Badge type="accent">Неизвестный вид доступа</Badge>;
-  }
-};
-
 const Section: React.FC<{ title: string }> = ({ title, children }) => (
   <div>
-    <div className="text-xs mb-1">{title}</div>
+    <div className="text-sm mb-1">{title}</div>
     <div>{children}</div>
   </div>
 );
+
+const PagePermissionsSection: React.FC<{
+  permissions: AuthGroup_ForCardFragment['wagtailPagePermissions'];
+}> = ({ permissions }) => {
+  if (!permissions.length) {
+    return null;
+  }
+
+  // TODO - pre-group permissions on server side instead
+  const permissionsByPage: { [k: string]: typeof permissions } = {};
+
+  for (const permission of permissions) {
+    const key =
+      permission.__typename === 'WagtailRootPagePermission'
+        ? 'ROOT'
+        : permission.page.id;
+    if (!permissionsByPage[key]) {
+      permissionsByPage[key] = [];
+    }
+    permissionsByPage[key].push(permission);
+  }
+
+  return (
+    <Section title="Разрешения для страниц:">
+      <div className="flex">
+        <div className="grid justify-items-start items-center gap-x-2 gap-y-1">
+          {Object.entries(permissionsByPage).map(([key, pagePermissions]) => {
+            return (
+              <React.Fragment key={key}>
+                <div className="col-start-1">
+                  {(() => {
+                    switch (pagePermissions[0].__typename) {
+                      case 'WagtailSpecificPagePermission':
+                        return (
+                          <A href={pagePermissions[0].page.meta.url}>
+                            {pagePermissions[0].page.title}
+                          </A>
+                        );
+                      case 'WagtailRootPagePermission':
+                        return <div>Все страницы</div>;
+                    }
+                  })()}
+                </div>
+                <div className="col-start-2 flex space-x-1">
+                  {pagePermissions.map((permission, i) => (
+                    <Badge key={i}>{permission.permission_type}</Badge>
+                  ))}
+                </div>
+              </React.Fragment>
+            );
+          })}
+        </div>
+      </div>
+    </Section>
+  );
+};
+
+const CollectionPermissionsSection: React.FC<{
+  permissions: AuthGroup_ForCardFragment['wagtailCollectionPermissions'];
+}> = ({ permissions }) => {
+  if (!permissions.length) {
+    return null;
+  }
+
+  const permissionsByCollection: { [k: string]: typeof permissions } = {};
+
+  for (const permission of permissions) {
+    const key = permission.collection.id;
+    if (!permissionsByCollection[key]) {
+      permissionsByCollection[key] = [];
+    }
+    permissionsByCollection[key].push(permission);
+  }
+  return (
+    <Section title="Разрешения для коллекций:">
+      <div className="flex">
+        <div className="grid justify-items-start items-center gap-x-2 gap-y-1">
+          {Object.entries(permissionsByCollection).map(
+            ([key, collectionPermissions]) => (
+              <React.Fragment key={key}>
+                <div className="col-start-1">
+                  {collectionPermissions[0].collection.name}
+                </div>
+                <div className="col-start-2 flex space-x-1">
+                  {collectionPermissions.map((permission, i) => (
+                    <Badge key={i} hint={permission.permission.perm}>
+                      {permission.permission.name}
+                    </Badge>
+                  ))}
+                </div>
+              </React.Fragment>
+            )
+          )}
+        </div>
+      </div>
+    </Section>
+  );
+};
 
 interface Props {
   group: AuthGroup_ForCardFragment;
 }
 
-const GroupCard: React.FC<Props> = ({ group }) => {
-  const [removeUserFromGroupMutation] = useMutation(
-    AuthRemoveUserFromGroupDocument,
-    {
-      refetchQueries: [{ query: AuthGroupsDocument }],
-      awaitRefetchQueries: true,
-    }
-  );
-
-  const removeUserCb = useCallback(
-    async (user: MaybeStaffUserFragment) => {
-      await removeUserFromGroupMutation({
-        variables: {
-          group_id: group.id,
-          user_id: user.id,
-        },
-      });
-    },
-    [group, removeUserFromGroupMutation]
-  );
-
+export const GroupCard: React.FC<Props> = ({ group }) => {
   return (
     <Card>
-      <div className="space-y-2">
+      <div className="space-y-4">
         <Row stretch>
           <strong>{group.name}</strong>
-          <DropdownMenu placement="bottom-start">
+          <DropdownMenu>
             <LinkAction
               href={`/wagtail/groups/${group.id}/`}
               title="Редактировать в Wagtail"
@@ -103,55 +157,46 @@ const GroupCard: React.FC<Props> = ({ group }) => {
                 <RemovePermissionFromGroupModal close={close} group={group} />
               )}
             </ModalAction>
+            <MutationAction
+              mutation={DeleteAuthGroupDocument}
+              variables={{ id: group.id }}
+              refetchQueries={['AuthGroups']}
+              confirmText="Группа будет удалена, и все участники группы потеряют права доступа, привязанные к группе."
+              title="Удалить группу"
+              icon={FaTrash}
+            />
           </DropdownMenu>
-          <MutationButton
-            mutation={DeleteAuthGroupDocument}
-            variables={{ id: group.id }}
-            kind="danger"
-            size="small"
-            refetchQueries={['AuthGroups']}
-            confirmText="Группа будет удалена, и все участники группы потеряют права доступа, привязанные к группе."
-          >
-            Удалить
-          </MutationButton>
         </Row>
         <Section title="Общие разрешения:">
-          <Row wrap>
+          <div className="flex flex-wrap space-x-1">
             {group.permissions.map((permission) => (
-              <Badge key={permission.id} hint={permission.perm}>
-                {permission.name}
-              </Badge>
+              <div key={permission.id} className="mb-1 flex">
+                <Badge hint={permission.perm}>{permission.name}</Badge>
+              </div>
             ))}
-          </Row>
+          </div>
         </Section>
-        {group.wagtailPagePermissions.length ? (
-          <Section title="Разрешения для страниц:">
-            <Row wrap>
-              {group.wagtailPagePermissions.map((permission, i) => (
-                <PagePermissionBadge key={i} permission={permission} />
-              ))}
-            </Row>
-          </Section>
-        ) : null}
-        {group.wagtailPagePermissions.length ? (
-          <Section title="Разрешения для коллекций:">
-            <Row wrap>
-              {group.wagtailCollectionPermissions.map((permission, i) => (
-                <Badge key={permission.id} hint={permission.permission.perm}>
-                  {permission.collection.name} / {permission.permission.name}
-                </Badge>
-              ))}
-            </Row>
-          </Section>
-        ) : null}
+        <PagePermissionsSection permissions={group.wagtailPagePermissions} />
+        <CollectionPermissionsSection
+          permissions={group.wagtailCollectionPermissions}
+        />
         {group.users.length ? (
           <Section title="Пользователи:">
             {group.users.map((user) => (
               <Row key={user.id}>
                 <UserInfo user={user} />
-                <AsyncButton size="small" act={async () => removeUserCb(user)}>
-                  удалить
-                </AsyncButton>
+                <DropdownMenu>
+                  <MutationAction
+                    mutation={AuthRemoveUserFromGroupDocument}
+                    variables={{
+                      group_id: group.id,
+                      user_id: user.id,
+                    }}
+                    refetchQueries={[{ query: AuthGroupsDocument }]}
+                    title="Удалить"
+                    icon={FaTrash}
+                  />
+                </DropdownMenu>
               </Row>
             ))}
           </Section>
@@ -160,5 +205,3 @@ const GroupCard: React.FC<Props> = ({ group }) => {
     </Card>
   );
 };
-
-export default GroupCard;

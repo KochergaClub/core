@@ -4,7 +4,7 @@ import { ApolloQueryResults } from '~/components';
 import { CardList } from '~/components/cards';
 
 import { AuthGroupsDocument } from '../queries.generated';
-import GroupCard from './GroupCard';
+import { GroupCard } from './GroupCard';
 
 const GroupsList: React.FC = () => {
   const queryResults = useQuery(AuthGroupsDocument);

@@ -30,43 +30,95 @@ export type AuthGroup_ForCardFragment = (
     & Pick<Types.WagtailSpecificPagePermission, 'permission_type'>
     & { page: (
       { __typename: 'RatioPresentationIndexPage' }
-      & Pick<Types.RatioPresentationIndexPage, 'id'>
+      & Pick<Types.RatioPresentationIndexPage, 'id' | 'title'>
+      & { meta: (
+        { __typename: 'WagtailPageMeta' }
+        & Pick<Types.WagtailPageMeta, 'url'>
+      ) }
     ) | (
       { __typename: 'RatioSectionPage' }
-      & Pick<Types.RatioSectionPage, 'id'>
+      & Pick<Types.RatioSectionPage, 'id' | 'title'>
+      & { meta: (
+        { __typename: 'WagtailPageMeta' }
+        & Pick<Types.WagtailPageMeta, 'url'>
+      ) }
     ) | (
       { __typename: 'RatioSectionIndexPage' }
-      & Pick<Types.RatioSectionIndexPage, 'id'>
+      & Pick<Types.RatioSectionIndexPage, 'id' | 'title'>
+      & { meta: (
+        { __typename: 'WagtailPageMeta' }
+        & Pick<Types.WagtailPageMeta, 'url'>
+      ) }
     ) | (
       { __typename: 'RatioNotebookPage' }
-      & Pick<Types.RatioNotebookPage, 'id'>
+      & Pick<Types.RatioNotebookPage, 'id' | 'title'>
+      & { meta: (
+        { __typename: 'WagtailPageMeta' }
+        & Pick<Types.WagtailPageMeta, 'url'>
+      ) }
     ) | (
       { __typename: 'RatioNotebookIndexPage' }
-      & Pick<Types.RatioNotebookIndexPage, 'id'>
+      & Pick<Types.RatioNotebookIndexPage, 'id' | 'title'>
+      & { meta: (
+        { __typename: 'WagtailPageMeta' }
+        & Pick<Types.WagtailPageMeta, 'url'>
+      ) }
     ) | (
       { __typename: 'ProjectPage' }
-      & Pick<Types.ProjectPage, 'id'>
+      & Pick<Types.ProjectPage, 'id' | 'title'>
+      & { meta: (
+        { __typename: 'WagtailPageMeta' }
+        & Pick<Types.WagtailPageMeta, 'url'>
+      ) }
     ) | (
       { __typename: 'ProjectIndexPage' }
-      & Pick<Types.ProjectIndexPage, 'id'>
+      & Pick<Types.ProjectIndexPage, 'id' | 'title'>
+      & { meta: (
+        { __typename: 'WagtailPageMeta' }
+        & Pick<Types.WagtailPageMeta, 'url'>
+      ) }
     ) | (
       { __typename: 'FreeFormPage' }
-      & Pick<Types.FreeFormPage, 'id'>
+      & Pick<Types.FreeFormPage, 'id' | 'title'>
+      & { meta: (
+        { __typename: 'WagtailPageMeta' }
+        & Pick<Types.WagtailPageMeta, 'url'>
+      ) }
     ) | (
       { __typename: 'FolderPage' }
-      & Pick<Types.FolderPage, 'id'>
+      & Pick<Types.FolderPage, 'id' | 'title'>
+      & { meta: (
+        { __typename: 'WagtailPageMeta' }
+        & Pick<Types.WagtailPageMeta, 'url'>
+      ) }
     ) | (
       { __typename: 'BlogPostPage' }
-      & Pick<Types.BlogPostPage, 'id'>
+      & Pick<Types.BlogPostPage, 'id' | 'title'>
+      & { meta: (
+        { __typename: 'WagtailPageMeta' }
+        & Pick<Types.WagtailPageMeta, 'url'>
+      ) }
     ) | (
       { __typename: 'BlogIndexPage' }
-      & Pick<Types.BlogIndexPage, 'id'>
+      & Pick<Types.BlogIndexPage, 'id' | 'title'>
+      & { meta: (
+        { __typename: 'WagtailPageMeta' }
+        & Pick<Types.WagtailPageMeta, 'url'>
+      ) }
     ) | (
       { __typename: 'FaqPage' }
-      & Pick<Types.FaqPage, 'id'>
+      & Pick<Types.FaqPage, 'id' | 'title'>
+      & { meta: (
+        { __typename: 'WagtailPageMeta' }
+        & Pick<Types.WagtailPageMeta, 'url'>
+      ) }
     ) | (
       { __typename: 'PresentationPage' }
-      & Pick<Types.PresentationPage, 'id'>
+      & Pick<Types.PresentationPage, 'id' | 'title'>
+      & { meta: (
+        { __typename: 'WagtailPageMeta' }
+        & Pick<Types.WagtailPageMeta, 'url'>
+      ) }
     ) }
   )>, wagtailCollectionPermissions: Array<(
     { __typename: 'WagtailCollectionPermission' }
@@ -207,7 +259,7 @@ export type AuthPermissionsForPickerQuery = (
 
 export const AuthPermissionFragmentDoc: DocumentNode<AuthPermissionFragment, unknown> = {"kind":"Document","definitions":[{"kind":"FragmentDefinition","name":{"kind":"Name","value":"AuthPermission"},"typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"AuthPermission"}},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"name"}},{"kind":"Field","name":{"kind":"Name","value":"perm"}}]}}]};
 export const MaybeStaffUserFragmentDoc: DocumentNode<MaybeStaffUserFragment, unknown> = {"kind":"Document","definitions":[{"kind":"FragmentDefinition","name":{"kind":"Name","value":"MaybeStaffUser"},"typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"AuthUser"}},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"email"}},{"kind":"Field","name":{"kind":"Name","value":"staff_member"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"full_name"}}]}}]}}]};
-export const AuthGroup_ForCardFragmentDoc: DocumentNode<AuthGroup_ForCardFragment, unknown> = {"kind":"Document","definitions":[{"kind":"FragmentDefinition","name":{"kind":"Name","value":"AuthGroup_ForCard"},"typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"AuthGroup"}},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"name"}},{"kind":"Field","name":{"kind":"Name","value":"permissions"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"FragmentSpread","name":{"kind":"Name","value":"AuthPermission"}}]}},{"kind":"Field","name":{"kind":"Name","value":"wagtailPagePermissions"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"InlineFragment","typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"WagtailSpecificPagePermission"}},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"permission_type"}},{"kind":"Field","name":{"kind":"Name","value":"page"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}}]}}]}},{"kind":"InlineFragment","typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"WagtailRootPagePermission"}},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"permission_type"}}]}}]}},{"kind":"Field","name":{"kind":"Name","value":"wagtailCollectionPermissions"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"collection"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"name"}}]}},{"kind":"Field","name":{"kind":"Name","value":"permission"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"FragmentSpread","name":{"kind":"Name","value":"AuthPermission"}}]}}]}},{"kind":"Field","name":{"kind":"Name","value":"users"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"FragmentSpread","name":{"kind":"Name","value":"MaybeStaffUser"}}]}}]}},...AuthPermissionFragmentDoc.definitions,...MaybeStaffUserFragmentDoc.definitions]};
+export const AuthGroup_ForCardFragmentDoc: DocumentNode<AuthGroup_ForCardFragment, unknown> = {"kind":"Document","definitions":[{"kind":"FragmentDefinition","name":{"kind":"Name","value":"AuthGroup_ForCard"},"typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"AuthGroup"}},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"name"}},{"kind":"Field","name":{"kind":"Name","value":"permissions"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"FragmentSpread","name":{"kind":"Name","value":"AuthPermission"}}]}},{"kind":"Field","name":{"kind":"Name","value":"wagtailPagePermissions"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"InlineFragment","typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"WagtailSpecificPagePermission"}},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"permission_type"}},{"kind":"Field","name":{"kind":"Name","value":"page"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"title"}},{"kind":"Field","name":{"kind":"Name","value":"meta"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"url"}}]}}]}}]}},{"kind":"InlineFragment","typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"WagtailRootPagePermission"}},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"permission_type"}}]}}]}},{"kind":"Field","name":{"kind":"Name","value":"wagtailCollectionPermissions"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"collection"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"name"}}]}},{"kind":"Field","name":{"kind":"Name","value":"permission"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"FragmentSpread","name":{"kind":"Name","value":"AuthPermission"}}]}}]}},{"kind":"Field","name":{"kind":"Name","value":"users"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"FragmentSpread","name":{"kind":"Name","value":"MaybeStaffUser"}}]}}]}},...AuthPermissionFragmentDoc.definitions,...MaybeStaffUserFragmentDoc.definitions]};
 export const AuthGroupsDocument: DocumentNode<AuthGroupsQuery, AuthGroupsQueryVariables> = dedupeFragments({ "kind": "Document", "definitions": [{ "kind": "OperationDefinition", "operation": "query", "name": { "kind": "Name", "value": "AuthGroups" }, "selectionSet": { "kind": "SelectionSet", "selections": [{ "kind": "Field", "alias": { "kind": "Name", "value": "groups" }, "name": { "kind": "Name", "value": "authGroupsAll" }, "selectionSet": { "kind": "SelectionSet", "selections": [{ "kind": "FragmentSpread", "name": { "kind": "Name", "value": "AuthGroup_ForCard" } }] } }] } }, ...AuthGroup_ForCardFragmentDoc.definitions] });
 
 export const AuthAddUserToGroupDocument: DocumentNode<AuthAddUserToGroupMutation, AuthAddUserToGroupMutationVariables> = dedupeFragments({ "kind": "Document", "definitions": [{ "kind": "OperationDefinition", "operation": "mutation", "name": { "kind": "Name", "value": "AuthAddUserToGroup" }, "variableDefinitions": [{ "kind": "VariableDefinition", "variable": { "kind": "Variable", "name": { "kind": "Name", "value": "user_id" } }, "type": { "kind": "NonNullType", "type": { "kind": "NamedType", "name": { "kind": "Name", "value": "ID" } } } }, { "kind": "VariableDefinition", "variable": { "kind": "Variable", "name": { "kind": "Name", "value": "group_id" } }, "type": { "kind": "NonNullType", "type": { "kind": "NamedType", "name": { "kind": "Name", "value": "ID" } } } }], "selectionSet": { "kind": "SelectionSet", "selections": [{ "kind": "Field", "name": { "kind": "Name", "value": "authAddUserToGroup" }, "arguments": [{ "kind": "Argument", "name": { "kind": "Name", "value": "user_id" }, "value": { "kind": "Variable", "name": { "kind": "Name", "value": "user_id" } } }, { "kind": "Argument", "name": { "kind": "Name", "value": "group_id" }, "value": { "kind": "Variable", "name": { "kind": "Name", "value": "group_id" } } }] }] } }] });
