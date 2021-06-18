@@ -27,7 +27,7 @@ export const InitiativesFilterToolbar: React.FC<Props> = ({
     onChange({
       status: watchStatus || null,
     });
-  }, [watchStatus]);
+  }, [watchStatus]); // eslint-disable-line react-hooks/exhaustive-deps
 
   return (
     <div className="flex">

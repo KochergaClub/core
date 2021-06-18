@@ -1,8 +1,13 @@
 {
-  "extends": "next",
+  "extends": [
+    // "plugin:@typescript-eslint/recommended",
+    "next"
+  ],
   "rules": {
-    "@next/next/no-img-element": "off",
+    "@next/next/no-img-element": "off", // we avoid next/image for now
     "jsx-a11y/alt-text": "off",
-    "import/no-anonymous-default-export": "off"
-  }
+    "import/no-anonymous-default-export": "off",
+    "@typescript-eslint/explicit-module-boundary-types": "off" // type inferences are nice
+  },
+  "ignorePatterns": ["**/*.stories.tsx", "**/*.test.tsx", "**/*.generated.tsx", "**/*.generated.ts"]
 }
