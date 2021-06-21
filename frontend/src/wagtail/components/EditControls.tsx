@@ -1,5 +1,5 @@
 import { FragmentDefinitionNode } from 'graphql';
-import { useCallback, useContext, useState } from 'react';
+import React, { useCallback, useContext, useState } from 'react';
 import { FaExternalLinkAlt } from 'react-icons/fa';
 
 import { gql, TypedDocumentNode, useApolloClient } from '@apollo/client';
@@ -11,7 +11,7 @@ import {
 import { dedupeFragments } from '~/common/dedupeFragments';
 import { withFragments } from '~/common/utils';
 import { AsyncButtonWithConfirm } from '~/components';
-import { A, AsyncButton, Row, useNotification } from '~/frontkit';
+import { A, AsyncButton, Button, ControlsFooter, Modal, Row, useNotification } from '~/frontkit';
 
 import { useBlockStructureLoader } from '../hooks';
 import { wagtailAdminPageEditLink } from '../routes';
@@ -83,6 +83,52 @@ const buildSaveDocument = (
   );
 };
 
+const SaveButton: React.FC<{
+  stopEditing: () => void;
+  save: () => Promise<void>;
+}> = ({ stopEditing, save }) => {
+  const [justSaved, setJustSaved] = useState(false);
+
+  const pickContinueEditing = () => {
+    setJustSaved(false);
+  };
+
+  const pickStopEditing = () => {
+    setJustSaved(false);
+    stopEditing();
+  };
+
+  const saveAndAsk = async () => {
+    await save();
+    setJustSaved(true);
+  };
+
+  return (
+    <>
+      <AsyncButton act={saveAndAsk} kind="primary">
+        Сохранить
+      </AsyncButton>
+      {justSaved ? (
+        <Modal>
+          <Modal.Header close={() => setJustSaved(false)}>
+            Страница сохранена
+          </Modal.Header>
+          <Modal.Footer>
+            <ControlsFooter>
+              <Button onClick={pickContinueEditing}>
+                Продолжить редактирование
+              </Button>
+              <Button onClick={pickStopEditing}>
+                Прекратить редактирование
+              </Button>
+            </ControlsFooter>
+          </Modal.Footer>
+        </Modal>
+      ) : null}
+    </>
+  );
+};
+
 export const EditControls: React.FC<Props> = ({ blocks }) => {
   const {
     state: { page },
@@ -92,12 +138,18 @@ export const EditControls: React.FC<Props> = ({ blocks }) => {
   // page can be overriden by <PageRevisions />, so we keep another instance of page around for when we stop editing
   const [savedPage, setSavedPage] = useState(page);
 
+  const stopEditing = useCallback(async () => {
+    if (!pageDispatch || !savedPage) {
+      return; // shouldn't happen if WagtailPageContext is configured properly
+    }
+    pageDispatch({ type: 'SET_PAGE', payload: savedPage });
+    pageDispatch({ type: 'STOP_EDITING' });
+  }, [savedPage, pageDispatch]);
+
   const { dispatch: editDispatch } = useContext(EditBlocksContext);
 
   const apolloClient = useApolloClient();
-
   const notify = useNotification();
-
   const serializeBlocks = useBlocksSerializer();
 
   const save = useCallback(async () => {
@@ -166,14 +218,6 @@ export const EditControls: React.FC<Props> = ({ blocks }) => {
     setSavedPage(savedPage);
   }, [apolloClient, blocks, page, notify, editDispatch, serializeBlocks]);
 
-  const stopEditing = useCallback(async () => {
-    if (!pageDispatch || !savedPage) {
-      return; // shouldn't happen if WagtailPageContext is configured properly
-    }
-    pageDispatch({ type: 'SET_PAGE', payload: savedPage });
-    pageDispatch({ type: 'STOP_EDITING' });
-  }, [savedPage, pageDispatch]);
-
   if (!page) {
     throw new Error('WagtailPageContext is not configured');
   }
@@ -198,9 +242,7 @@ export const EditControls: React.FC<Props> = ({ blocks }) => {
           >
             Прекратить редактирование
           </AsyncButtonWithConfirm>
-          <AsyncButton act={save} kind="primary">
-            Сохранить
-          </AsyncButton>
+          <SaveButton stopEditing={stopEditing} save={save} />
         </div>
       </div>
     </div>
