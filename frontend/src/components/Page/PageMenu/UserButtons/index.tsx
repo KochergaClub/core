@@ -7,12 +7,11 @@ import { useLazyQuery, useMutation } from '@apollo/client';
 
 import { CurrentUserDocument } from '~/auth/queries.generated';
 import { WagtailPageContext } from '~/cms/contexts';
-import { getEditingModeByTypename } from '~/cms/wagtail-utils';
 import { ApolloQueryResults, DropdownMenu } from '~/components';
 import { Action, NextLinkAction } from '~/components/DropdownMenu';
 import { useNotification } from '~/frontkit';
 import { LogoutDocument } from '~/my/queries.generated';
-import { wagtailAdminPageEditLink } from '~/wagtail/routes';
+import { useEditWagtailPage } from '~/wagtail/hooks';
 
 import { MenuKind } from '../../types';
 import LoginButton from './LoginButton';
@@ -48,19 +47,7 @@ const EditWagtailPageAction: React.FC = () => {
     query();
   }, [dispatch, query]);
 
-  const act = useCallback(async () => {
-    if (!dispatch || !state.page) {
-      return; // shouldn't happen
-    }
-    const editingMode = getEditingModeByTypename(state.page.__typename);
-    if (editingMode === 'wagtail') {
-      window.open(wagtailAdminPageEditLink(state.page.id), '_blank');
-    } else if (editingMode === 'wysiwyg') {
-      dispatch({ type: 'EDIT' });
-    } else {
-      // shouldn't happen
-    }
-  }, [dispatch, state.page]);
+  const act = useEditWagtailPage();
 
   if (state.editing) {
     return null; // already editing
