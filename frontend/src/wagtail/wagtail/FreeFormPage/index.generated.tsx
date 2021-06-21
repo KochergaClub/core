@@ -1,144 +1,101 @@
 import * as Types from '../../../apollo/types.generated';
 
 import { CommonWagtailPage_RatioPresentationIndexPage_Fragment, CommonWagtailPage_RatioSectionPage_Fragment, CommonWagtailPage_RatioSectionIndexPage_Fragment, CommonWagtailPage_RatioNotebookPage_Fragment, CommonWagtailPage_RatioNotebookIndexPage_Fragment, CommonWagtailPage_ProjectPage_Fragment, CommonWagtailPage_ProjectIndexPage_Fragment, CommonWagtailPage_FreeFormPage_Fragment, CommonWagtailPage_FolderPage_Fragment, CommonWagtailPage_BlogPostPage_Fragment, CommonWagtailPage_BlogIndexPage_Fragment, CommonWagtailPage_FaqPage_Fragment, CommonWagtailPage_PresentationPage_Fragment } from '../../../cms/queries.generated';
-import { BasicTextBlockFragment } from '../../blocks/BasicTextBlock/index.generated';
-import { SectionHeaderBlockFragment } from '../../blocks/SectionHeaderBlock/index.generated';
-import { BasicCardBlockFragment } from '../../blocks/BasicCardBlock/index.generated';
-import { ColumnsBasicBlockFragment } from '../../blocks/ColumnsBasicBlock/index.generated';
-import { ColumnsButtonsBlockFragment } from '../../blocks/ColumnsButtonsBlock/index.generated';
-import { EventsListBlockFragment } from '../../blocks/EventsListBlock/index.generated';
-import { BigContactsBlockFragment } from '../../blocks/BigContactsBlock/index.generated';
-import { PhotoRibbonBlockFragment } from '../../blocks/PhotoRibbonBlock/index.generated';
-import { MailchimpSubscribeBlockFragment } from '../../blocks/MailchimpSubscribeBlock/index.generated';
-import { HeroFrontBlockFragment } from '../../blocks/HeroFrontBlock/index.generated';
-import { HrBlockFragment } from '../../blocks/HrBlock/index.generated';
-import { FrontPartnersBlockFragment } from '../../blocks/FrontPartnersBlock/index.generated';
-import { FrontSocialLinksBlockFragment } from '../../blocks/FrontSocialLinksBlock/index.generated';
-import { LandingHeroBlockFragment } from '../../blocks/LandingHeroBlock/index.generated';
-import { LandingTextBlockFragment } from '../../blocks/LandingTextBlock/index.generated';
+import { AnyWagtailBlock_RatioNotebookSectionBlock_Fragment, AnyWagtailBlock_RatioHeaderBlock_Fragment, AnyWagtailBlock_RatioParagraphBlock_Fragment, AnyWagtailBlock_RatioInsetBlock_Fragment, AnyWagtailBlock_RatioExerciseBlock_Fragment, AnyWagtailBlock_RatioExerciseOnelineBlock_Fragment, AnyWagtailBlock_RatioBriefingBlock_Fragment, AnyWagtailBlock_RatioMathBlock_Fragment, AnyWagtailBlock_BasicTextBlock_Fragment, AnyWagtailBlock_BasicCardBlock_Fragment, AnyWagtailBlock_SectionHeaderBlock_Fragment, AnyWagtailBlock_ColumnsBasicBlock_Fragment, AnyWagtailBlock_ColumnsButtonsBlock_Fragment, AnyWagtailBlock_BigContactsBlock_Fragment, AnyWagtailBlock_MailchimpSubscribeBlock_Fragment, AnyWagtailBlock_HeroFrontBlock_Fragment, AnyWagtailBlock_LandingHeroBlock_Fragment, AnyWagtailBlock_LandingTextBlock_Fragment, AnyWagtailBlock_FrontPartnersBlock_Fragment, AnyWagtailBlock_EventsListBlock_Fragment, AnyWagtailBlock_PhotoRibbonBlock_Fragment, AnyWagtailBlock_HrBlock_Fragment, AnyWagtailBlock_FrontSocialLinksBlock_Fragment, AnyWagtailBlock_SlideTitleBlock_Fragment, AnyWagtailBlock_SlideRichTextBlock_Fragment, AnyWagtailBlock_SlideRawHtmlBlock_Fragment, AnyWagtailBlock_SlideFragmentsBlock_Fragment, AnyWagtailBlock_SlideFragmentsBlock_RichTextBlock_Fragment, AnyWagtailBlock_SlideFragmentsBlock_RawHtmlBlock_Fragment } from '../../fragments.generated';
 import { TypedDocumentNode as DocumentNode } from '@graphql-typed-document-node/core';
 import { CommonWagtailPageFragmentDoc } from '../../../cms/queries.generated';
-import { BasicTextBlockFragmentDoc } from '../../blocks/BasicTextBlock/index.generated';
-import { SectionHeaderBlockFragmentDoc } from '../../blocks/SectionHeaderBlock/index.generated';
-import { BasicCardBlockFragmentDoc } from '../../blocks/BasicCardBlock/index.generated';
-import { ColumnsBasicBlockFragmentDoc } from '../../blocks/ColumnsBasicBlock/index.generated';
-import { ColumnsButtonsBlockFragmentDoc } from '../../blocks/ColumnsButtonsBlock/index.generated';
-import { EventsListBlockFragmentDoc } from '../../blocks/EventsListBlock/index.generated';
-import { BigContactsBlockFragmentDoc } from '../../blocks/BigContactsBlock/index.generated';
-import { PhotoRibbonBlockFragmentDoc } from '../../blocks/PhotoRibbonBlock/index.generated';
-import { MailchimpSubscribeBlockFragmentDoc } from '../../blocks/MailchimpSubscribeBlock/index.generated';
-import { HeroFrontBlockFragmentDoc } from '../../blocks/HeroFrontBlock/index.generated';
-import { HrBlockFragmentDoc } from '../../blocks/HrBlock/index.generated';
-import { FrontPartnersBlockFragmentDoc } from '../../blocks/FrontPartnersBlock/index.generated';
-import { FrontSocialLinksBlockFragmentDoc } from '../../blocks/FrontSocialLinksBlock/index.generated';
-import { LandingHeroBlockFragmentDoc } from '../../blocks/LandingHeroBlock/index.generated';
-import { LandingTextBlockFragmentDoc } from '../../blocks/LandingTextBlock/index.generated';
+import { AnyWagtailBlockFragmentDoc } from '../../fragments.generated';
 export type FreeFormPageFragment = (
   { __typename: 'FreeFormPage' }
   & { body: Array<(
     { __typename: 'RatioNotebookSectionBlock' }
-    & Pick<Types.RatioNotebookSectionBlock, 'id'>
+    & AnyWagtailBlock_RatioNotebookSectionBlock_Fragment
   ) | (
     { __typename: 'RatioHeaderBlock' }
-    & Pick<Types.RatioHeaderBlock, 'id'>
+    & AnyWagtailBlock_RatioHeaderBlock_Fragment
   ) | (
     { __typename: 'RatioParagraphBlock' }
-    & Pick<Types.RatioParagraphBlock, 'id'>
+    & AnyWagtailBlock_RatioParagraphBlock_Fragment
   ) | (
     { __typename: 'RatioInsetBlock' }
-    & Pick<Types.RatioInsetBlock, 'id'>
+    & AnyWagtailBlock_RatioInsetBlock_Fragment
   ) | (
     { __typename: 'RatioExerciseBlock' }
-    & Pick<Types.RatioExerciseBlock, 'id'>
+    & AnyWagtailBlock_RatioExerciseBlock_Fragment
   ) | (
     { __typename: 'RatioExerciseOnelineBlock' }
-    & Pick<Types.RatioExerciseOnelineBlock, 'id'>
+    & AnyWagtailBlock_RatioExerciseOnelineBlock_Fragment
   ) | (
     { __typename: 'RatioBriefingBlock' }
-    & Pick<Types.RatioBriefingBlock, 'id'>
+    & AnyWagtailBlock_RatioBriefingBlock_Fragment
   ) | (
     { __typename: 'RatioMathBlock' }
-    & Pick<Types.RatioMathBlock, 'id'>
+    & AnyWagtailBlock_RatioMathBlock_Fragment
   ) | (
     { __typename: 'BasicTextBlock' }
-    & Pick<Types.BasicTextBlock, 'id'>
-    & BasicTextBlockFragment
+    & AnyWagtailBlock_BasicTextBlock_Fragment
   ) | (
     { __typename: 'BasicCardBlock' }
-    & Pick<Types.BasicCardBlock, 'id'>
-    & BasicCardBlockFragment
+    & AnyWagtailBlock_BasicCardBlock_Fragment
   ) | (
     { __typename: 'SectionHeaderBlock' }
-    & Pick<Types.SectionHeaderBlock, 'id'>
-    & SectionHeaderBlockFragment
+    & AnyWagtailBlock_SectionHeaderBlock_Fragment
   ) | (
     { __typename: 'ColumnsBasicBlock' }
-    & Pick<Types.ColumnsBasicBlock, 'id'>
-    & ColumnsBasicBlockFragment
+    & AnyWagtailBlock_ColumnsBasicBlock_Fragment
   ) | (
     { __typename: 'ColumnsButtonsBlock' }
-    & Pick<Types.ColumnsButtonsBlock, 'id'>
-    & ColumnsButtonsBlockFragment
+    & AnyWagtailBlock_ColumnsButtonsBlock_Fragment
   ) | (
     { __typename: 'BigContactsBlock' }
-    & Pick<Types.BigContactsBlock, 'id'>
-    & BigContactsBlockFragment
+    & AnyWagtailBlock_BigContactsBlock_Fragment
   ) | (
     { __typename: 'MailchimpSubscribeBlock' }
-    & Pick<Types.MailchimpSubscribeBlock, 'id'>
-    & MailchimpSubscribeBlockFragment
+    & AnyWagtailBlock_MailchimpSubscribeBlock_Fragment
   ) | (
     { __typename: 'HeroFrontBlock' }
-    & Pick<Types.HeroFrontBlock, 'id'>
-    & HeroFrontBlockFragment
+    & AnyWagtailBlock_HeroFrontBlock_Fragment
   ) | (
     { __typename: 'LandingHeroBlock' }
-    & Pick<Types.LandingHeroBlock, 'id'>
-    & LandingHeroBlockFragment
+    & AnyWagtailBlock_LandingHeroBlock_Fragment
   ) | (
     { __typename: 'LandingTextBlock' }
-    & Pick<Types.LandingTextBlock, 'id'>
-    & LandingTextBlockFragment
+    & AnyWagtailBlock_LandingTextBlock_Fragment
   ) | (
     { __typename: 'FrontPartnersBlock' }
-    & Pick<Types.FrontPartnersBlock, 'id'>
-    & FrontPartnersBlockFragment
+    & AnyWagtailBlock_FrontPartnersBlock_Fragment
   ) | (
     { __typename: 'EventsListBlock' }
-    & Pick<Types.EventsListBlock, 'id'>
-    & EventsListBlockFragment
+    & AnyWagtailBlock_EventsListBlock_Fragment
   ) | (
     { __typename: 'PhotoRibbonBlock' }
-    & Pick<Types.PhotoRibbonBlock, 'id'>
-    & PhotoRibbonBlockFragment
+    & AnyWagtailBlock_PhotoRibbonBlock_Fragment
   ) | (
     { __typename: 'HrBlock' }
-    & Pick<Types.HrBlock, 'id'>
-    & HrBlockFragment
+    & AnyWagtailBlock_HrBlock_Fragment
   ) | (
     { __typename: 'FrontSocialLinksBlock' }
-    & Pick<Types.FrontSocialLinksBlock, 'id'>
-    & FrontSocialLinksBlockFragment
+    & AnyWagtailBlock_FrontSocialLinksBlock_Fragment
   ) | (
     { __typename: 'SlideTitleBlock' }
-    & Pick<Types.SlideTitleBlock, 'id'>
+    & AnyWagtailBlock_SlideTitleBlock_Fragment
   ) | (
     { __typename: 'SlideRichTextBlock' }
-    & Pick<Types.SlideRichTextBlock, 'id'>
+    & AnyWagtailBlock_SlideRichTextBlock_Fragment
   ) | (
     { __typename: 'SlideRawHtmlBlock' }
-    & Pick<Types.SlideRawHtmlBlock, 'id'>
+    & AnyWagtailBlock_SlideRawHtmlBlock_Fragment
   ) | (
     { __typename: 'SlideFragmentsBlock' }
-    & Pick<Types.SlideFragmentsBlock, 'id'>
+    & AnyWagtailBlock_SlideFragmentsBlock_Fragment
   ) | (
     { __typename: 'SlideFragmentsBlock_RichTextBlock' }
-    & Pick<Types.SlideFragmentsBlock_RichTextBlock, 'id'>
+    & AnyWagtailBlock_SlideFragmentsBlock_RichTextBlock_Fragment
   ) | (
     { __typename: 'SlideFragmentsBlock_RawHtmlBlock' }
-    & Pick<Types.SlideFragmentsBlock_RawHtmlBlock, 'id'>
+    & AnyWagtailBlock_SlideFragmentsBlock_RawHtmlBlock_Fragment
   )> }
   & CommonWagtailPage_FreeFormPage_Fragment
 );
 
-export const FreeFormPageFragmentDoc: DocumentNode<FreeFormPageFragment, unknown> = {"kind":"Document","definitions":[{"kind":"FragmentDefinition","name":{"kind":"Name","value":"FreeFormPage"},"typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"FreeFormPage"}},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"FragmentSpread","name":{"kind":"Name","value":"CommonWagtailPage"}},{"kind":"Field","name":{"kind":"Name","value":"body"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"__typename"}},{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"FragmentSpread","name":{"kind":"Name","value":"BasicTextBlock"}},{"kind":"FragmentSpread","name":{"kind":"Name","value":"SectionHeaderBlock"}},{"kind":"FragmentSpread","name":{"kind":"Name","value":"BasicCardBlock"}},{"kind":"FragmentSpread","name":{"kind":"Name","value":"ColumnsBasicBlock"}},{"kind":"FragmentSpread","name":{"kind":"Name","value":"ColumnsButtonsBlock"}},{"kind":"FragmentSpread","name":{"kind":"Name","value":"EventsListBlock"}},{"kind":"FragmentSpread","name":{"kind":"Name","value":"BigContactsBlock"}},{"kind":"FragmentSpread","name":{"kind":"Name","value":"PhotoRibbonBlock"}},{"kind":"FragmentSpread","name":{"kind":"Name","value":"MailchimpSubscribeBlock"}},{"kind":"FragmentSpread","name":{"kind":"Name","value":"HeroFrontBlock"}},{"kind":"FragmentSpread","name":{"kind":"Name","value":"HrBlock"}},{"kind":"FragmentSpread","name":{"kind":"Name","value":"FrontPartnersBlock"}},{"kind":"FragmentSpread","name":{"kind":"Name","value":"FrontSocialLinksBlock"}},{"kind":"FragmentSpread","name":{"kind":"Name","value":"LandingHeroBlock"}},{"kind":"FragmentSpread","name":{"kind":"Name","value":"LandingTextBlock"}}]}}]}},...CommonWagtailPageFragmentDoc.definitions,...BasicTextBlockFragmentDoc.definitions,...SectionHeaderBlockFragmentDoc.definitions,...BasicCardBlockFragmentDoc.definitions,...ColumnsBasicBlockFragmentDoc.definitions,...ColumnsButtonsBlockFragmentDoc.definitions,...EventsListBlockFragmentDoc.definitions,...BigContactsBlockFragmentDoc.definitions,...PhotoRibbonBlockFragmentDoc.definitions,...MailchimpSubscribeBlockFragmentDoc.definitions,...HeroFrontBlockFragmentDoc.definitions,...HrBlockFragmentDoc.definitions,...FrontPartnersBlockFragmentDoc.definitions,...FrontSocialLinksBlockFragmentDoc.definitions,...LandingHeroBlockFragmentDoc.definitions,...LandingTextBlockFragmentDoc.definitions]};
+export const FreeFormPageFragmentDoc: DocumentNode<FreeFormPageFragment, unknown> = {"kind":"Document","definitions":[{"kind":"FragmentDefinition","name":{"kind":"Name","value":"FreeFormPage"},"typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"FreeFormPage"}},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"FragmentSpread","name":{"kind":"Name","value":"CommonWagtailPage"}},{"kind":"Field","name":{"kind":"Name","value":"body"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"FragmentSpread","name":{"kind":"Name","value":"AnyWagtailBlock"}}]}}]}},...CommonWagtailPageFragmentDoc.definitions,...AnyWagtailBlockFragmentDoc.definitions]};

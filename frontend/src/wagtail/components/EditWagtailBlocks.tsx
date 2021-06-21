@@ -2,7 +2,7 @@ import { AnimatePresence, motion } from 'framer-motion';
 import React, { useEffect, useReducer } from 'react';
 
 import { AnyBlockFragment } from '../types';
-import AnyBlock from './AnyBlock';
+import { AnyBlock } from './AnyBlock';
 import { EditBlockWrapper } from './EditBlockWrapper';
 import { EditControls } from './EditControls';
 import { WagtailStreamFieldValidationErrorFragment } from './queries.generated';

@@ -7,7 +7,7 @@ import { Spinner } from '~/components';
 
 import { useEditWagtailPage } from '../hooks';
 import { AnyBlockFragment } from '../types';
-import AnyBlock from './AnyBlock';
+import { AnyBlock } from './AnyBlock';
 
 const EditWagtailBlocks = dynamic(
   async () => (await import('./EditWagtailBlocks')).EditWagtailBlocks,
@@ -15,9 +15,12 @@ const EditWagtailBlocks = dynamic(
     loading: () => <Spinner size="block" />, // eslint-disable-line react/display-name
   }
 );
-const PreviewWagtailBlocks = dynamic(() => import('./PreviewWagtailBlocks'), {
-  loading: () => <Spinner size="block" />, // eslint-disable-line react/display-name
-});
+const PreviewWagtailBlocks = dynamic(
+  async () => (await import('./PreviewWagtailBlocks')).PreviewWagtailBlocks,
+  {
+    loading: () => <Spinner size="block" />, // eslint-disable-line react/display-name
+  }
+);
 
 const ViewWagtailBlocks: React.FC<Props> = ({ blocks }) => {
   const edit = useEditWagtailPage();

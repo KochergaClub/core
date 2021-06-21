@@ -17,11 +17,9 @@ const renderKnownBlock = <T extends KnownTypename>(
   return <BlockComponent {...(block as any)} />; // Almost there... sorry. I'll figure this out later.
 };
 
-const AnyBlock = (block: AnyBlockFragment) => {
+export const AnyBlock: React.FC<AnyBlockFragment> = (block) => {
   if (isKnownBlock(block)) {
     return renderKnownBlock(block);
   }
   return <DebugBlock typename={block.__typename || 'UNKNOWN'} />;
 };
-
-export default AnyBlock;

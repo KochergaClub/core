@@ -20,23 +20,7 @@ export const rawFragment = gql`
   fragment FreeFormPage on FreeFormPage {
     ...CommonWagtailPage
     body {
-      __typename
-      id
-      ...BasicTextBlock
-      ...SectionHeaderBlock
-      ...BasicCardBlock
-      ...ColumnsBasicBlock
-      ...ColumnsButtonsBlock
-      ...EventsListBlock
-      ...BigContactsBlock
-      ...PhotoRibbonBlock
-      ...MailchimpSubscribeBlock
-      ...HeroFrontBlock
-      ...HrBlock
-      ...FrontPartnersBlock
-      ...FrontSocialLinksBlock
-      ...LandingHeroBlock
-      ...LandingTextBlock
+      ...AnyWagtailBlock
     }
   }
 `;

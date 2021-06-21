@@ -9,6 +9,7 @@ import { TL03 } from '~/blocks/TL03';
 import { formatDate, timezone } from '~/common/utils';
 import { ApolloQueryResults, Markdown, PaddedBlock, Page, YoutubeEmbed } from '~/components';
 import ErrorBlock from '~/error-pages/ErrorBlock';
+import { WagtailBlocks } from '~/wagtail/components/WagtailBlocks';
 
 import AnyRegistration from './AnyRegistration';
 import EventAnnouncements from './EventAnnouncements';
@@ -66,9 +67,12 @@ export const PublicEventPage: NextApolloPage<Props> = ({ event_id }) => {
 
               <ProjectInfo event={event} />
               <EventAnnouncements event={event} />
-              <PaddedBlock>
-                <Markdown source={event.description} />
-              </PaddedBlock>
+              {event.description ? (
+                <PaddedBlock>
+                  <Markdown source={event.description} />
+                </PaddedBlock>
+              ) : null}
+              <WagtailBlocks blocks={event.stream_body} />
               {inFuture ? (
                 <div>
                   <EventToCalendar event={event} />

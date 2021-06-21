@@ -14,6 +14,7 @@ it('renders without crashing', async () => {
     title: 'Test event',
     summary: 'Test event summary',
     description: 'Test event description',
+    stream_body: [],
     image: null,
     realm: 'online',
     registration_type: 'native',

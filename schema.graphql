@@ -245,6 +245,7 @@ type Event {
   id: ID!
   event_id: ID!
   description(format: EventsMarkupFormat): String!
+  stream_body: [WagtailBlock!]!
   image(spec: String!): WagtailImageRendition
   project: ProjectPage
   public_tags: [String!]!

@@ -25,6 +25,9 @@ fragment Event_Details on Event {
   title
   summary
   description
+  stream_body {
+    ...AnyWagtailBlock
+  }
   image(spec: "original") {
     url
   }

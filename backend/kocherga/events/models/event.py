@@ -5,6 +5,7 @@ import logging
 from django.core.mail import send_mail
 from django.template.loader import render_to_string
 from kocherga.email.tools import mjml2html
+from wagtail.admin.edit_handlers import FieldPanel, StreamFieldPanel
 
 logger = logging.getLogger(__name__)
 
@@ -27,7 +28,12 @@ from django.utils import timezone
 from html2text import html2text
 from kocherga.dateutils import TZ, inflected_month, inflected_weekday
 from kocherga.django.managers import RelayQuerySetMixin
+
+# for side-effects - register in blocks registry
+from kocherga.pages import blocks  # noqa: F401
 from kocherga.timepad.models import Event as TimepadEvent
+from kocherga.wagtail.blocks import registry as blocks_registry
+from wagtail.core.fields import StreamField
 
 
 def parse_iso8601(s):
@@ -118,6 +124,7 @@ class Event(wagtail.search.index.Indexed, models.Model):
     summary = models.TextField(blank=True)
 
     description = models.TextField(blank=True)
+    stream_body = StreamField(blocks_registry.all(), blank=True)
 
     deleted = models.BooleanField(default=False)
 
@@ -195,6 +202,12 @@ class Event(wagtail.search.index.Indexed, models.Model):
 
     objects = EventManager()
     all_objects = AllEventManager()  # for rare cases when we need deleted events
+
+    panels = [
+        FieldPanel('title'),
+        FieldPanel('description'),
+        StreamFieldPanel('stream_body'),
+    ]
 
     class Meta:
         db_table = "events"

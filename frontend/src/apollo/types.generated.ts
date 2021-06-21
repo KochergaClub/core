@@ -305,6 +305,7 @@ export type Event = {
   id: Scalars['ID'];
   event_id: Scalars['ID'];
   description: Scalars['String'];
+  stream_body: Array<WagtailBlock>;
   image?: Maybe<WagtailImageRendition>;
   project?: Maybe<ProjectPage>;
   public_tags: Array<Scalars['String']>;

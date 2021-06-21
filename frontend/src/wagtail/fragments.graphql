@@ -1,0 +1,19 @@
+fragment AnyWagtailBlock on WagtailBlock {
+  __typename
+  id
+  ...BasicTextBlock
+  ...SectionHeaderBlock
+  ...BasicCardBlock
+  ...ColumnsBasicBlock
+  ...ColumnsButtonsBlock
+  ...EventsListBlock
+  ...BigContactsBlock
+  ...PhotoRibbonBlock
+  ...MailchimpSubscribeBlock
+  ...HeroFrontBlock
+  ...HrBlock
+  ...FrontPartnersBlock
+  ...FrontSocialLinksBlock
+  ...LandingHeroBlock
+  ...LandingTextBlock
+}

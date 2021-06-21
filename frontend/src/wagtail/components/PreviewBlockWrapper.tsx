@@ -69,7 +69,7 @@ const Controls: React.FC<Props & { showControls: boolean }> = ({
 
 export const PreviewBlockWrapper: React.FC<Props> = ({ block, children }) => {
   const [hoverRef, isHovered] = useHover();
-  // TODO - extract preview-specific stuff into dynamically loaded component, to reduce JS bundle size?
+
   return (
     <div ref={hoverRef}>
       <BlockWithControls

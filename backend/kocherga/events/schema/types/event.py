@@ -2,6 +2,7 @@ from kocherga.graphql import django_utils, g, helpers
 from kocherga.graphql.permissions import check_permissions
 from kocherga.projects.schema.types import ProjectPage
 from kocherga.wagtail import graphql_utils as wagtail_utils
+from kocherga.wagtail.schema.types import WagtailBlock
 from kocherga.zoom.schema import types as zoom_types
 
 from ... import markup, models, permissions
@@ -103,6 +104,7 @@ def build_event_fields():
                 g.NN(g.ID), resolve=lambda obj, info: obj.uuid
             ),  # deprecated, use `id` instead
             'description': description_field(),
+            'stream_body': g.NNList(WagtailBlock),
             'image': wagtail_utils.image_rendition_field(models.Event, 'image'),
             'project': ProjectPage,
             'public_tags': g.Field(g.NNList(g.String), resolve=resolve_public_tags),

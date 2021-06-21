@@ -1,12 +1,12 @@
 import { AnyBlockFragment } from '../types';
-import AnyBlock from './AnyBlock';
+import { AnyBlock } from './AnyBlock';
 import { PreviewBlockWrapper } from './PreviewBlockWrapper';
 
 interface Props {
   blocks: AnyBlockFragment[];
 }
 
-export default function PreviewWagtailBlocks({ blocks }: Props) {
+export const PreviewWagtailBlocks: React.FC<Props> = ({ blocks }: Props) => {
   return (
     <div>
       {blocks.map((block) => (
@@ -16,4 +16,4 @@ export default function PreviewWagtailBlocks({ blocks }: Props) {
       ))}
     </div>
   );
-}
+};
