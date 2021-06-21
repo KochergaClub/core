@@ -21,7 +21,7 @@ metadata:
   labels:
     release: {{ .Release.Name }}
 spec:
-  replicas: 2
+  replicas: {{ if .Values.dev }}1{{ else }}2{{ end }}
   selector:
     matchLabels: 
       app: {{ .Release.Name }}-django
