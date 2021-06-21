@@ -4,7 +4,7 @@ import React, { useEffect, useReducer } from 'react';
 import { AnyBlockFragment } from '../types';
 import AnyBlock from './AnyBlock';
 import { EditBlockWrapper } from './EditBlockWrapper';
-import EditControls from './EditControls';
+import { EditControls } from './EditControls';
 import { WagtailStreamFieldValidationErrorFragment } from './queries.generated';
 
 interface Props {
@@ -142,7 +142,7 @@ const reducer = (state: State, action: Action): State => {
   }
 };
 
-const EditWagtailBlocks: React.FC<Props> = ({ blocks }) => {
+export const EditWagtailBlocks: React.FC<Props> = ({ blocks }) => {
   // copying blocks data since we're going to edit them on frontend
   const [state, dispatch] = useReducer(reducer, { blocks: [] });
 
@@ -188,5 +188,3 @@ const EditWagtailBlocks: React.FC<Props> = ({ blocks }) => {
     </EditBlocksContext.Provider>
   );
 };
-
-export default EditWagtailBlocks;

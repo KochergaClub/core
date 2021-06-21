@@ -83,7 +83,7 @@ const buildSaveDocument = (
   );
 };
 
-const EditControls: React.FC<Props> = ({ blocks }) => {
+export const EditControls: React.FC<Props> = ({ blocks }) => {
   const {
     state: { page },
     dispatch: pageDispatch,
@@ -180,7 +180,7 @@ const EditControls: React.FC<Props> = ({ blocks }) => {
 
   return (
     <div className="fixed bottom-0 w-full border-t-2 border-accent-700 bg-white p-5 z-30">
-      <Row spaced vCentered wrap>
+      <div className="flex flex-col space-y-2 md:space-y-0 md:justify-between md:flex-row">
         <A href={wagtailAdminPageEditLink(page.id)} target="_blank">
           <small>
             <Row vCentered>
@@ -189,7 +189,7 @@ const EditControls: React.FC<Props> = ({ blocks }) => {
             </Row>
           </small>
         </A>
-        <Row gutter={8} vCentered wrap>
+        <div className="flex flex-col space-y-1 items-start md:space-x-2 md:space-y-0 md:flex-row md:items-center">
           <PageRevisions />
           <AsyncButtonWithConfirm
             act={stopEditing}
@@ -201,10 +201,8 @@ const EditControls: React.FC<Props> = ({ blocks }) => {
           <AsyncButton act={save} kind="primary">
             Сохранить
           </AsyncButton>
-        </Row>
-      </Row>
+        </div>
+      </div>
     </div>
   );
 };
-
-export default EditControls;

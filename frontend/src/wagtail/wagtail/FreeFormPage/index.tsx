@@ -2,7 +2,7 @@ import { gql } from '@apollo/client';
 
 import { Page } from '~/components';
 
-import WagtailBlocks from '../../components/WagtailBlocks';
+import { WagtailBlocks } from '../../components/WagtailBlocks';
 import { NextWagtailPage } from '../../types';
 import { FreeFormPageFragment, FreeFormPageFragmentDoc } from './index.generated';
 import { SpecialOffer } from './SpecialOffer';

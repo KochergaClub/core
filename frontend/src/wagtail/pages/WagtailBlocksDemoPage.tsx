@@ -1,7 +1,7 @@
 import { NextApolloPage, withApollo, withStaff } from '~/apollo';
 import { WagtailPageContext } from '~/cms/contexts';
 import { Page } from '~/components';
-import WagtailBlocks from '~/wagtail/components/WagtailBlocks';
+import { WagtailBlocks } from '~/wagtail/components/WagtailBlocks';
 import { AnyBlockFragment } from '~/wagtail/types';
 
 const WagtailBlocksDemoPage: NextApolloPage = () => {
