@@ -26,6 +26,7 @@ class SafeRichTextBlock(wagtail.core.blocks.RichTextBlock):
                     'img',
                     'ol',
                     'ul',
+                    'li',
                     'h1',
                     'h2',
                     'h3',
