@@ -77,6 +77,9 @@ export type PresentationPageFragment = (
     { __typename: 'SectionHeaderBlock' }
     & Pick<Types.SectionHeaderBlock, 'id'>
   ) | (
+    { __typename: 'AnchorBlock' }
+    & Pick<Types.AnchorBlock, 'id'>
+  ) | (
     { __typename: 'ColumnsBasicBlock' }
     & Pick<Types.ColumnsBasicBlock, 'id'>
   ) | (

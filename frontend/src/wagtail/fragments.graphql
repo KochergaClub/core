@@ -12,6 +12,7 @@ fragment AnyWagtailBlock on WagtailBlock {
   ...MailchimpSubscribeBlock
   ...HeroFrontBlock
   ...HrBlock
+  ...AnchorBlock
   ...FrontPartnersBlock
   ...FrontSocialLinksBlock
   ...LandingHeroBlock

@@ -487,6 +487,11 @@ type SectionHeaderBlockValue {
   text: String!
 }
 
+type AnchorBlock implements WagtailBlock {
+  id: ID!
+  value: String!
+}
+
 type ColumnsBasicBlock implements WagtailBlock {
   id: ID!
   value: [ColumnsBasicBlockValue!]!

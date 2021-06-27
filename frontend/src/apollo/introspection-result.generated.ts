@@ -48,6 +48,7 @@
       "BasicTextBlock",
       "BasicCardBlock",
       "SectionHeaderBlock",
+      "AnchorBlock",
       "ColumnsBasicBlock",
       "ColumnsButtonsBlock",
       "BigContactsBlock",

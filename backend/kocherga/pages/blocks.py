@@ -1,3 +1,4 @@
+from django.core import validators
 from kocherga.wagtail.blocks import SafeRichTextBlock, URLOrAbsolutePathBlock, registry
 from wagtail.core import blocks
 from wagtail.images.blocks import ImageChooserBlock
@@ -38,6 +39,14 @@ registry.register_list(
             'hr',
             blocks.StaticBlock(
                 group='basic', label='Горизонтальная линия', icon='horizontalrule'
+            ),
+        ),
+        (
+            'anchor',
+            blocks.CharBlock(
+                validators=[validators.validate_slug],
+                label='Якорь',
+                icon='tag',
             ),
         ),
     ],

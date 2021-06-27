@@ -615,6 +615,12 @@ export type SectionHeaderBlockValue = {
   text: Scalars['String'];
 };
 
+export type AnchorBlock = WagtailBlock & {
+  __typename?: 'AnchorBlock';
+  id: Scalars['ID'];
+  value: Scalars['String'];
+};
+
 export type ColumnsBasicBlock = WagtailBlock & {
   __typename?: 'ColumnsBasicBlock';
   id: Scalars['ID'];

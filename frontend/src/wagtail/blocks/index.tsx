@@ -1,4 +1,5 @@
 import { AnyBlockFragment } from '../types';
+import AnchorBlock from './AnchorBlock';
 import BasicCardBlock from './BasicCardBlock';
 import BasicTextBlock from './BasicTextBlock';
 import BigContactsBlock from './BigContactsBlock';
@@ -27,6 +28,7 @@ export const allBlockComponents = {
   PhotoRibbonBlock,
   MailchimpSubscribeBlock,
   HrBlock,
+  AnchorBlock,
   FrontPartnersBlock,
   FrontSocialLinksBlock,
   LandingHeroBlock,
