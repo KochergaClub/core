@@ -51,6 +51,7 @@
       "AnchorBlock",
       "ColumnsBasicBlock",
       "ColumnsButtonsBlock",
+      "ImageWithTextBlock",
       "BigContactsBlock",
       "MailchimpSubscribeBlock",
       "HeroFrontBlock",

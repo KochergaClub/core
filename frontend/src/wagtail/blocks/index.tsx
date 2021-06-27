@@ -10,6 +10,7 @@ import FrontPartnersBlock from './FrontPartnersBlock';
 import FrontSocialLinksBlock from './FrontSocialLinksBlock';
 import HeroFrontBlock from './HeroFrontBlock';
 import HrBlock from './HrBlock';
+import ImageWithTextBlock from './ImageWithTextBlock';
 import LandingHeroBlock from './LandingHeroBlock';
 import LandingTextBlock from './LandingTextBlock';
 import MailchimpSubscribeBlock from './MailchimpSubscribeBlock';
@@ -22,6 +23,7 @@ export const allBlockComponents = {
   BasicTextBlock,
   ColumnsBasicBlock,
   ColumnsButtonsBlock,
+  ImageWithTextBlock,
   EventsListBlock,
   BigContactsBlock,
   HeroFrontBlock,

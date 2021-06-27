@@ -1,6 +1,6 @@
 import * as Types from '../../../apollo/types.generated';
 
-import { AnyWagtailBlock_RatioNotebookSectionBlock_Fragment, AnyWagtailBlock_RatioHeaderBlock_Fragment, AnyWagtailBlock_RatioParagraphBlock_Fragment, AnyWagtailBlock_RatioInsetBlock_Fragment, AnyWagtailBlock_RatioExerciseBlock_Fragment, AnyWagtailBlock_RatioExerciseOnelineBlock_Fragment, AnyWagtailBlock_RatioBriefingBlock_Fragment, AnyWagtailBlock_RatioMathBlock_Fragment, AnyWagtailBlock_BasicTextBlock_Fragment, AnyWagtailBlock_BasicCardBlock_Fragment, AnyWagtailBlock_SectionHeaderBlock_Fragment, AnyWagtailBlock_AnchorBlock_Fragment, AnyWagtailBlock_ColumnsBasicBlock_Fragment, AnyWagtailBlock_ColumnsButtonsBlock_Fragment, AnyWagtailBlock_BigContactsBlock_Fragment, AnyWagtailBlock_MailchimpSubscribeBlock_Fragment, AnyWagtailBlock_HeroFrontBlock_Fragment, AnyWagtailBlock_LandingHeroBlock_Fragment, AnyWagtailBlock_LandingTextBlock_Fragment, AnyWagtailBlock_FrontPartnersBlock_Fragment, AnyWagtailBlock_EventsListBlock_Fragment, AnyWagtailBlock_PhotoRibbonBlock_Fragment, AnyWagtailBlock_HrBlock_Fragment, AnyWagtailBlock_FrontSocialLinksBlock_Fragment, AnyWagtailBlock_SlideTitleBlock_Fragment, AnyWagtailBlock_SlideRichTextBlock_Fragment, AnyWagtailBlock_SlideRawHtmlBlock_Fragment, AnyWagtailBlock_SlideFragmentsBlock_Fragment, AnyWagtailBlock_SlideFragmentsBlock_RichTextBlock_Fragment, AnyWagtailBlock_SlideFragmentsBlock_RawHtmlBlock_Fragment } from '../../../wagtail/fragments.generated';
+import { AnyWagtailBlock_RatioNotebookSectionBlock_Fragment, AnyWagtailBlock_RatioHeaderBlock_Fragment, AnyWagtailBlock_RatioParagraphBlock_Fragment, AnyWagtailBlock_RatioInsetBlock_Fragment, AnyWagtailBlock_RatioExerciseBlock_Fragment, AnyWagtailBlock_RatioExerciseOnelineBlock_Fragment, AnyWagtailBlock_RatioBriefingBlock_Fragment, AnyWagtailBlock_RatioMathBlock_Fragment, AnyWagtailBlock_BasicTextBlock_Fragment, AnyWagtailBlock_BasicCardBlock_Fragment, AnyWagtailBlock_SectionHeaderBlock_Fragment, AnyWagtailBlock_AnchorBlock_Fragment, AnyWagtailBlock_ColumnsBasicBlock_Fragment, AnyWagtailBlock_ColumnsButtonsBlock_Fragment, AnyWagtailBlock_ImageWithTextBlock_Fragment, AnyWagtailBlock_BigContactsBlock_Fragment, AnyWagtailBlock_MailchimpSubscribeBlock_Fragment, AnyWagtailBlock_HeroFrontBlock_Fragment, AnyWagtailBlock_LandingHeroBlock_Fragment, AnyWagtailBlock_LandingTextBlock_Fragment, AnyWagtailBlock_FrontPartnersBlock_Fragment, AnyWagtailBlock_EventsListBlock_Fragment, AnyWagtailBlock_PhotoRibbonBlock_Fragment, AnyWagtailBlock_HrBlock_Fragment, AnyWagtailBlock_FrontSocialLinksBlock_Fragment, AnyWagtailBlock_SlideTitleBlock_Fragment, AnyWagtailBlock_SlideRichTextBlock_Fragment, AnyWagtailBlock_SlideRawHtmlBlock_Fragment, AnyWagtailBlock_SlideFragmentsBlock_Fragment, AnyWagtailBlock_SlideFragmentsBlock_RichTextBlock_Fragment, AnyWagtailBlock_SlideFragmentsBlock_RawHtmlBlock_Fragment } from '../../../wagtail/fragments.generated';
 import { dedupeFragments } from '~/common/dedupeFragments';
 import { TypedDocumentNode as DocumentNode } from '@graphql-typed-document-node/core';
 import { AnyWagtailBlockFragmentDoc } from '../../../wagtail/fragments.generated';
@@ -66,6 +66,9 @@ export type Event_DetailsFragment = (
   ) | (
     { __typename: 'ColumnsButtonsBlock' }
     & AnyWagtailBlock_ColumnsButtonsBlock_Fragment
+  ) | (
+    { __typename: 'ImageWithTextBlock' }
+    & AnyWagtailBlock_ImageWithTextBlock_Fragment
   ) | (
     { __typename: 'BigContactsBlock' }
     & AnyWagtailBlock_BigContactsBlock_Fragment

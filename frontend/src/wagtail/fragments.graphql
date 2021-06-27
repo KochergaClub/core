@@ -6,6 +6,7 @@ fragment AnyWagtailBlock on WagtailBlock {
   ...BasicCardBlock
   ...ColumnsBasicBlock
   ...ColumnsButtonsBlock
+  ...ImageWithTextBlock
   ...EventsListBlock
   ...BigContactsBlock
   ...PhotoRibbonBlock

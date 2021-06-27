@@ -44,9 +44,10 @@ registry.register_list(
         (
             'anchor',
             blocks.CharBlock(
-                validators=[validators.validate_slug],
+                group='basic',
                 label='Якорь',
                 icon='tag',
+                validators=[validators.validate_slug],
             ),
         ),
     ],
@@ -82,6 +83,15 @@ registry.register_list(
                 ),
                 group='columns',
                 label='Колонки с кнопками',
+            ),
+        ),
+        (
+            'image_with_text',
+            blocks.StructBlock(
+                [
+                    ('text', SafeRichTextBlock()),
+                    ('image', ImageChooserBlock()),
+                ],
             ),
         ),
     ],

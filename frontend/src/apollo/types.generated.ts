@@ -653,6 +653,23 @@ export type ColumnsButtonsBlockValueImageArgs = {
   spec: Scalars['String'];
 };
 
+export type ImageWithTextBlock = WagtailBlock & {
+  __typename?: 'ImageWithTextBlock';
+  id: Scalars['ID'];
+  value: ImageWithTextBlockValue;
+};
+
+export type ImageWithTextBlockValue = {
+  __typename?: 'ImageWithTextBlockValue';
+  text: Scalars['String'];
+  image: WagtailImageRendition;
+};
+
+
+export type ImageWithTextBlockValueImageArgs = {
+  spec: Scalars['String'];
+};
+
 export type BigContactsBlock = WagtailBlock & {
   __typename?: 'BigContactsBlock';
   id: Scalars['ID'];

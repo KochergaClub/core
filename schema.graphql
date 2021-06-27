@@ -515,6 +515,16 @@ type ColumnsButtonsBlockValue {
   link: String!
 }
 
+type ImageWithTextBlock implements WagtailBlock {
+  id: ID!
+  value: ImageWithTextBlockValue!
+}
+
+type ImageWithTextBlockValue {
+  text: String!
+  image(spec: String!): WagtailImageRendition!
+}
+
 type BigContactsBlock implements WagtailBlock {
   id: ID!
   value: BigContactsBlockValue!

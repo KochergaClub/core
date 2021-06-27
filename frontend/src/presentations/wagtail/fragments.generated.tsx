@@ -86,6 +86,9 @@ export type PresentationPageFragment = (
     { __typename: 'ColumnsButtonsBlock' }
     & Pick<Types.ColumnsButtonsBlock, 'id'>
   ) | (
+    { __typename: 'ImageWithTextBlock' }
+    & Pick<Types.ImageWithTextBlock, 'id'>
+  ) | (
     { __typename: 'BigContactsBlock' }
     & Pick<Types.BigContactsBlock, 'id'>
   ) | (
