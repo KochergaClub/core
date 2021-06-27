@@ -92,6 +92,8 @@ registry.register_list(
                     ('text', SafeRichTextBlock()),
                     ('image', ImageChooserBlock()),
                 ],
+                group='columns',
+                label='Картинка и текст рядом',
             ),
         ),
     ],
