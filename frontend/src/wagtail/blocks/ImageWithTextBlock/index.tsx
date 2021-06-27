@@ -5,7 +5,7 @@ import { gql } from '@apollo/client';
 import { ColumnsBlock, ResponsivePadding, RichText } from '~/frontkit';
 
 import { BlockComponent } from '../../types';
-import { AnchorBlockFragment as Props } from './index.generated';
+import { ImageWithTextBlockFragment as Props } from './index.generated';
 
 const ImageWithTextBlock: BlockComponent<Props> = ({
   image_with_text: value,
