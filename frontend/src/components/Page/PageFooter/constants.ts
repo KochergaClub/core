@@ -6,17 +6,21 @@ export const footerParts = [
       { link: '/events', title: 'Мероприятия' },
     ],
   },
-  {
-    title: 'Обучение',
-    items: [
-      { link: '/rationality/online', title: 'Онлайн-курс' },
-      { link: '/rationality/corporate', title: 'Для бизнеса' },
-      { link: 'https://lesswrong.ru', title: 'Lesswrong.ru' },
-    ],
-  },
+  // {
+  //   title: 'Обучение',
+  //   items: [
+  //     { link: '/rationality/online', title: 'Онлайн-курс' },
+  //     { link: '/rationality/corporate', title: 'Для бизнеса' },
+  //     { link: 'https://lesswrong.ru', title: 'Lesswrong.ru' },
+  //   ],
+  // },
   {
     title: 'Материалы',
-    items: [{ link: '/blog', title: 'Блог' }],
+    items: [
+      { link: '/blog', title: 'Блог' },
+      { link: '/rationality/resources', title: 'Ресурсы по рациональности' },
+      { link: 'https://lesswrong.ru', title: 'LessWrong.ru' },
+    ],
   },
   {
     title: 'Мета',

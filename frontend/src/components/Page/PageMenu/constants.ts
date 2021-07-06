@@ -37,57 +37,58 @@ const publicMenuItems: Item[] = [
       },
     ],
   },
-  {
-    title: 'Обучение',
-    items: [
-      {
-        link: '/rationality',
-        title: 'Рациональность',
-        mode: 'external', // this is important! tilda pages can't work with client-side navigation!
-      },
-      {
-        link: '/rationality/start',
-        title: 'Шаблон Смоделируй и начни',
-        highlight: true,
-        mode: 'external', // this is important! tilda pages can't work with client-side navigation!
-      },
-      {
-        link: '/rationality/online',
-        title: 'Онлайн-курс Рациональность в деле',
-        highlight: true,
-        mode: 'external', // this is important! tilda pages can't work with client-side navigation!
-      },
-      {
-        link: '/rationality/corporate',
-        title: 'Для бизнеса',
-        mode: 'external', // this is important! tilda pages can't work with client-side navigation!
-      },
-      {
-        link: '/workshop/country',
-        title: 'Выездной воркшоп',
-        mode: 'external', // this is important! tilda pages can't work with client-side navigation!
-      },
-      {
-        link: '/rationality/integration',
-        title: 'Интеграция',
-        mode: 'external', // this is important! tilda pages can't work with client-side navigation!
-      },
-      {
-        link: '/rationality/dojo',
-        title: 'Додзё',
-        mode: 'external', // this is important! tilda pages can't work with client-side navigation!
-      },
-      {
-        link: '/3week',
-        title: 'Трёхнедельный курс',
-        mode: 'external', // this is important! tilda pages can't work with client-side navigation!
-      },
-    ],
-  },
+  // {
+  //   title: 'Обучение',
+  //   items: [
+  //     {
+  //       link: '/rationality',
+  //       title: 'Рациональность',
+  //       mode: 'external', // this is important! tilda pages can't work with client-side navigation!
+  //     },
+  //     {
+  //       link: '/rationality/start',
+  //       title: 'Шаблон Смоделируй и начни',
+  //       highlight: true,
+  //       mode: 'external', // this is important! tilda pages can't work with client-side navigation!
+  //     },
+  //     {
+  //       link: '/rationality/online',
+  //       title: 'Онлайн-курс Рациональность в деле',
+  //       highlight: true,
+  //       mode: 'external', // this is important! tilda pages can't work with client-side navigation!
+  //     },
+  //     {
+  //       link: '/rationality/corporate',
+  //       title: 'Для бизнеса',
+  //       mode: 'external', // this is important! tilda pages can't work with client-side navigation!
+  //     },
+  //     {
+  //       link: '/workshop/country',
+  //       title: 'Выездной воркшоп',
+  //       mode: 'external', // this is important! tilda pages can't work with client-side navigation!
+  //     },
+  //     {
+  //       link: '/rationality/integration',
+  //       title: 'Интеграция',
+  //       mode: 'external', // this is important! tilda pages can't work with client-side navigation!
+  //     },
+  //     {
+  //       link: '/rationality/dojo',
+  //       title: 'Додзё',
+  //       mode: 'external', // this is important! tilda pages can't work with client-side navigation!
+  //     },
+  //     {
+  //       link: '/3week',
+  //       title: 'Трёхнедельный курс',
+  //       mode: 'external', // this is important! tilda pages can't work with client-side navigation!
+  //     },
+  //   ],
+  // },
   {
     title: 'Материалы',
     items: [
       { link: '/blog', title: 'Блог' },
+      { link: '/rationality/resources', title: 'Ресурсы по рациональности' },
       {
         link: 'https://www.youtube.com/c/КочергаКлуб',
         title: 'YouTube',
