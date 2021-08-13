@@ -20,7 +20,8 @@
     },
     // TODO - reenable? most issues with this are resolved (but it's still slow)
     "skipLibCheck": true,
-    "strict": true
+    "strict": true,
+    "incremental": true
   },
   "exclude": [
     "node_modules",
