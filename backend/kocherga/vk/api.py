@@ -2,18 +2,17 @@ import logging
 
 logger = logging.getLogger(__name__)
 
-from django.conf import settings
-
-import time
-import requests
 import json
+import time
 import urllib.parse
 
+import requests
 from captcha_solver import CaptchaSolver
+from django.conf import settings
 
 captcha_solver = CaptchaSolver("rucaptcha", api_key=settings.KOCHERGA_RUCAPTCHA_KEY)
 
-API_VERSION = "5.80"
+API_VERSION = "5.81"
 
 
 def api_key():
