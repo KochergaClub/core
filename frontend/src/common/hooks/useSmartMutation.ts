@@ -45,7 +45,7 @@ export const useSmartMutation = <V>(
         mutationResult = await mutationCb({
           variables,
         });
-      } catch (e: any) {
+      } catch (e) {
         const errors = e.graphQLErrors as GraphQLError[];
 
         const error = errors.length

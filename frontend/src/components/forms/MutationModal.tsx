@@ -54,7 +54,7 @@ export function MutationModal<S extends FormShape, Variables>({
             : { input: values },
         });
         return; // mutation succeeded
-      } catch (e: any) {
+      } catch (e) {
         const errors = e.graphQLErrors as GraphQLError[];
 
         const error = errors.length

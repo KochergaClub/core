@@ -70,8 +70,6 @@ const rawConfig = {
   eslint: {
     ignoreDuringBuilds: true,
   },
-  experimental: { esmExternals: false }, // https://github.com/vercel/next.js/issues/30330#issuecomment-952172377
-  swcMinify: true,
 };
 
 module.exports = withBundleAnalyzer(withSourceMaps(rawConfig));
