@@ -26,8 +26,9 @@ export const footerParts = [
     title: 'Мета',
     items: [
       { link: '/faq', title: 'F.A.Q.' },
-      { link: '/#contacts', title: 'Контакты' },
       { link: '/patreon', title: 'Помочь' },
+      { link: '/jobs', title: 'Поучаствовать' },
+      { link: '/#contacts', title: 'Контакты' },
     ],
   },
 ];
