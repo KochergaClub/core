@@ -34,7 +34,7 @@ export const FormShapeModal = <S extends FormShape>({
       let postResult: ModalPostResult;
       try {
         postResult = (await post(values as any)) || { close: true };
-      } catch (e) {
+      } catch (e: any) {
         postResult = {
           close: false,
           error: e.message ? `Ошибка: ${e.message}` : 'Неизвестная ошибка',

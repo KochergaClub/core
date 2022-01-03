@@ -65,15 +65,13 @@ const JoinSettings: React.FC<Props> = ({ ov, joinSession }) => {
   const [error, setError] = useState<DOMException | undefined>(undefined);
   const previewRef = useRef<HTMLVideoElement | null>();
 
-  const [
-    publisherProperties,
-    setPublisherProperties,
-  ] = useState<LimitedPublisherProperties>({
-    audioSource: undefined,
-    videoSource: undefined,
-    publishAudio: true,
-    publishVideo: true,
-  });
+  const [publisherProperties, setPublisherProperties] =
+    useState<LimitedPublisherProperties>({
+      audioSource: undefined,
+      videoSource: undefined,
+      publishAudio: true,
+      publishVideo: true,
+    });
 
   // configure initial MediaStream
   useEffect(() => {
@@ -88,7 +86,7 @@ const JoinSettings: React.FC<Props> = ({ ov, joinSession }) => {
           publishVideo: true,
         });
         setDevices(devices);
-      } catch (e) {
+      } catch (e: any) {
         setError(e);
       }
     })();

@@ -1,7 +1,7 @@
 process.env.TZ = 'Europe/Moscow';
 
 import express from 'express';
-import http from 'http';
+import http, { ServerResponse } from 'http';
 import httpProxy from 'http-proxy';
 import next from 'next';
 import * as yargs from 'yargs';
@@ -60,7 +60,7 @@ async function main() {
   });
 
   app.all(/^\/(?:api|static|media|wagtail|admin)(?:$|\/)/, (req, res) => {
-    proxy.web(req, res, {}, (e) => {
+    proxy.web(req, res as ServerResponse, {}, (e) => {
       console.error(e);
       try {
         res.status(500).send({ error: 'Backend is down' });
@@ -71,9 +71,10 @@ async function main() {
     });
   });
   httpServer.on('upgrade', (req, socket, head) => {
-    if (!req.url.startsWith('/ws/')) {
-      console.log('not a typical websocket');
-      socket.end();
+    if (!req.url?.startsWith('/ws/')) {
+      // not a typical websocket; might be next.js in dev
+      return;
+      // socket.end();
     }
     wsProxy.ws(req, socket, head, {}, (e) => {
       console.error(e);
