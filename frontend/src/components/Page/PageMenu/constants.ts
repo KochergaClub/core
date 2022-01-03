@@ -103,6 +103,7 @@ const publicMenuItems: Item[] = [
     items: [
       { link: '/faq', title: 'F.A.Q.' },
       { link: '/patreon', title: 'Помочь', mode: 'external' },
+      { link: '/jobs', title: 'Поучаствовать' },
       { link: '/#contacts', title: 'Контакты' },
     ],
   },
