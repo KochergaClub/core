@@ -70,7 +70,7 @@
     "jest": "^26.4.2",
     "localtunnel": "^2.0.0",
     "lodash": "^4.17.21",
-    "next": "^12.0.0",
+    "next": "^12.0.5",
     "next-plugin-graphql": "0.0.2",
     "nodemon": "^2.0.7",
     "nprogress": "^0.2.0",
